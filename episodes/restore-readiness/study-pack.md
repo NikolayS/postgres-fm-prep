@@ -1,5 +1,7 @@
 # Study pack for Kirk
 
+Historical statements below are paraphrases, not quotations. Each attribution links to the individual original message, with author and date; technical claims link to versioned documentation or pinned source. Experiment proposals and co-host questions are our preparation suggestions, not positions attributed to PostgreSQL contributors.
+
 ## The episode in one sentence
 
 A logical restore can finish successfully while the restored database still lacks the optimizer information and physical visibility state needed for efficient queries.
@@ -10,58 +12,69 @@ The proposed title is **“Your restore finished. Is your database ready?”** T
 
 There are two different maintenance jobs:
 
-- **ANALYZE** samples data to collect optimizer information: value frequencies, distinct counts, histograms, correlation and related statistics. It also refreshes relation estimates. It does not build the physical visibility map in PG18.
-- **VACUUM** maintains heap visibility and the visibility map, among other jobs. Ordinary VACUUM does not replace the distribution sampling done by ANALYZE. VACUUM ANALYZE requests both.
+- **ANALYZE** samples data to collect optimizer information: value frequencies, distinct counts, histograms, correlation and related statistics. It also refreshes relation estimates. It does not build the physical visibility map in PG18. [PG18 ANALYZE documentation](https://www.postgresql.org/docs/18/sql-analyze.html); [PG18.0 analysis implementation, `do_analyze_rel`](https://github.com/postgres/postgres/blob/3d6a828938a5fa0444275d3d2f67b64ec3199eb7/src/backend/commands/analyze.c).
+- **VACUUM** maintains heap visibility and the visibility map, among other jobs. Ordinary VACUUM does not replace the distribution sampling done by ANALYZE. VACUUM ANALYZE requests both. [PG18 routine vacuuming](https://www.postgresql.org/docs/18/routine-vacuuming.html); [VACUUM options](https://www.postgresql.org/docs/18/sql-vacuum.html).
 
-An **Index Only Scan can still visit the heap**. The index supplies the requested values, but the executor checks the visibility map to determine whether heap visibility checks can be skipped. Inspect `Heap Fetches` and total buffer accesses, not just the plan-node name.
+An **Index Only Scan can still visit the heap**. The index supplies the requested values, but the executor checks the visibility map to determine whether heap visibility checks can be skipped. Inspect `Heap Fetches` and total buffer accesses, not just the plan-node name. [PG18 index-only scans](https://www.postgresql.org/docs/18/indexes-index-only-scans.html).
 
-The map belongs to physical heap pages. Logical dump/restore recreates rows in new storage and transaction history; it does not copy the source's VM fork. This differs from physical recovery and pg_upgrade's reuse of relation files.
+The map belongs to physical heap pages. Logical dump/restore recreates rows in new storage and transaction history; it does not copy the source's VM fork. This differs from physical recovery and pg_upgrade's reuse of relation files. This distinction follows from the [physical VM layout](https://www.postgresql.org/docs/18/storage-vm.html), [logical dump/restore description](https://www.postgresql.org/docs/18/backup-dump.html), and [pg_upgrade file-reuse description](https://www.postgresql.org/docs/18/pgupgrade.html).
 
-All-visible and all-frozen are also different. The all-visible property enables avoiding heap checks. A plain VACUUM can make pages all-visible without making all of them all-frozen.
+All-visible and all-frozen are also different. The all-visible property enables avoiding heap checks. A plain VACUUM can make pages all-visible without making all of them all-frozen. [PG18 visibility-map bit definitions](https://www.postgresql.org/docs/18/storage-vm.html).
 
 ## PG18 defaults: the important distinction
 
-| Program | PG18 default | Consequence |
-| --- | --- | --- |
-| pg_dump | Does not export optimizer statistics | Explicit `--statistics` is needed to include supported statistics |
-| pg_restore | Imports statistics included in the archive | It cannot recover statistics omitted by the exporter |
-| pg_upgrade | Transfers most optimizer statistics | This is a different workflow from logical dump/restore |
+| Program | PG18 default | Consequence | Primary source |
+| --- | --- | --- | --- |
+| pg_dump | Does not export optimizer statistics | Explicit `--statistics` is needed to include supported statistics | [pg_dump](https://www.postgresql.org/docs/18/app-pgdump.html) |
+| pg_restore | Imports statistics included in the archive | It cannot recover statistics omitted by the exporter | [pg_restore](https://www.postgresql.org/docs/18/app-pgrestore.html) |
+| pg_upgrade | Transfers most optimizer statistics | This is a different workflow from logical dump/restore | [pg_upgrade](https://www.postgresql.org/docs/18/pgupgrade.html) |
 
-PG18 does not transport collected extended-statistics data behind CREATE STATISTICS, although the object definitions can be restored. Expression-index statistics are a different category and have support in PG18. Custom statistics supplied by extensions and cumulative activity counters are additional distinctions.
+PG18 does not transport collected extended-statistics data behind CREATE STATISTICS, although the object definitions can be restored. Expression-index statistics are a different category and have support in PG18. Custom statistics supplied by extensions and cumulative activity counters are additional distinctions. [PG18 pg_dump notes on included and excluded statistics](https://www.postgresql.org/docs/18/app-pgdump.html).
 
-A null `last_analyze` timestamp does not prove optimizer statistics are absent after importing them. Likewise, a large `pg_class.relallvisible` value is an estimate used by planning, not proof that the destination's actual VM is populated.
+A null `last_analyze` timestamp does not prove optimizer statistics are absent after importing them. Likewise, a large `pg_class.relallvisible` value is an estimate used by planning, not proof that the destination's actual VM is populated. This is an inference from the separation of [cumulative statistics](https://www.postgresql.org/docs/18/monitoring-stats.html) and the [statistics-import functions](https://www.postgresql.org/docs/18/functions-admin.html#FUNCTIONS-ADMIN-STATSMOD); [PG18.0 relation-statistics import](https://github.com/postgres/postgres/blob/3d6a828938a5fa0444275d3d2f67b64ec3199eb7/src/backend/statistics/relation_stats.c) updates catalog estimates, not VM bits.
 
-The details of restore ordering matter: post-data index creation can update relation estimates. Disabling autovacuum can change that behavior. We must measure the normal restore path before drawing conclusions from a deliberately isolated lab.
+The details of restore ordering matter: post-data index creation can update relation estimates. Disabling autovacuum can change that behavior. We must measure the normal restore path before drawing conclusions from a deliberately isolated lab. Source-based qualification: [PG18.0 `index_update_stats`](https://github.com/postgres/postgres/blob/3d6a828938a5fa0444275d3d2f67b64ec3199eb7/src/backend/catalog/index.c) and [the change explaining autovacuum-disabled behavior](https://github.com/postgres/postgres/commit/d611f8b1587b8f30caa7c0da99ae5d28e914d54f).
 
 ## A connection to our previous discussion
 
-On January 14, 2025, Jian He proposed `--include-analyze` for dump/restore after a livestream and credited **Andrey Borodin, Nikolay Samokhvalov and Kirk Wolak**. Tom Lane questioned whether statistics transport superseded the proposal; Nathan Bossart expected transport to be faster and useful for pg_upgrade.
+On January 14, 2025, **Jian He** proposed `--include-analyze` for dump/restore after a livestream and credited **Andrey Borodin, Nikolay Samokhvalov and Kirk Wolak**. [Jian He, “Support --include-analyze in pg_dump, pg_dumpall, pg_restore,” January 14, 2025](https://www.postgresql.org/message-id/CACJufxGx_YLLxmnZVMuUApiVYqjKrydvEQqD3qxhwM6e0_8jrQ%40mail.gmail.com).
 
-Later, PG18 settled on statistics export being off by default. This creates a useful episode question: if transporting statistics can replace some analysis work, what should an operational backup workflow do when the general-purpose exporter omits them by default?
+**Tom Lane** questioned whether the ongoing statistics import/export work superseded the proposal. [Tom Lane, reply, January 14, 2025](https://www.postgresql.org/message-id/681450.1736865139%40sss.pgh.pa.us).
 
-Avoid framing this as a contradiction that proves anyone wrong. pg_dump serves multiple workflows. The default debate included whether a dump should represent canonical schema/data or also changing, derived metadata; compatibility expectations and extra work mattered too.
+**Nathan Bossart** expected transporting statistics to be faster than analyzing everything and useful to pg_upgrade. [Nathan Bossart, reply, January 14, 2025](https://www.postgresql.org/message-id/Z4aPZWJ7E-EsnYlm%40nathan).
+
+Later, PG18 settled on statistics export being off by default. [Committed default change, May 27, 2025](https://github.com/postgres/postgres/commit/34eb2a80d5a3ea1392e4a9f16ebac54e96d0c6ed). This creates our episode question: if transporting statistics can replace some analysis work, what should an operational backup workflow do when the general-purpose exporter omits them by default?
+
+The default debate contained several distinct arguments:
+
+- **Greg Sabino Mullane** argued for a canonical representation of schema/data, with changing derived metadata opt-in. [Greg Sabino Mullane, May 10, 2025](https://www.postgresql.org/message-id/CAKAnmmL35eCAX-XoqwFzauaoJekyM5aNQpTaWDU2GvjeChkyog%40mail.gmail.com).
+- **Robert Haas** emphasized user expectations. [Robert Haas, April 2, 2025](https://www.postgresql.org/message-id/CA%2BTgmoYXspGT4dc3jY8B_eJgsT7m%3DiwqF1i4te3HyG8FdTr1nA%40mail.gmail.com).
+- **Jeff Davis** discussed starting opt-in and the implications for future scripts. [Jeff Davis, April 1, 2025](https://www.postgresql.org/message-id/db541ea000b2371c323c1f5c00ebca2c3a3e28c0.camel%40j-davis.com).
+- **Robert Haas** also raised additional time and memory costs earlier in the discussion. [Robert Haas, March 6, 2025](https://www.postgresql.org/message-id/CA%2BTgmoYGuEC%3DE4TbomRyqO8%2BUav%3D90G0dYXw%3DrA1d5UmRB76Yg%40mail.gmail.com).
+
+These are attributed arguments, not a claim of unanimous agreement. Our suggested framing is to compare the workflows pg_dump serves rather than present the outcome as proof that a contributor was wrong.
 
 ## History in two minutes
 
-- **2002:** explicitly adding ANALYZE to restore scripts is debated. User convenience competes with control and the expectation of recurring automatic maintenance.
-- **2003:** Tom reconsiders per-table ANALYZE now that analysis is cheaper. Documentation gains a recommendation to analyze after restore.
-- **2012 and 2015:** statistics transport runs into catalog compatibility, representation and validation problems. Function-based loading is discussed years before PG18.
-- **2013 onward:** using COPY FREEZE during restore is proposed, but transaction and visibility requirements make it more complicated than changing one keyword.
-- **PG18:** portable statistics support ships; exporting them remains an explicit choice.
+- **2002:** Christopher Kings-Lynne proposes adding ANALYZE after restore; Tom Lane argues for addressing routine maintenance through automatic background work. [Christopher Kings-Lynne, April 3, 2002](https://www.postgresql.org/message-id/GNELIHDDFBOCMGBFGEFOOEOPCBAA.chriskl%40familyhealth.com.au); [Tom Lane, April 3, 2002](https://www.postgresql.org/message-id/10511.1017856566%40sss.pgh.pa.us).
+- **2003:** Tom Lane reconsiders per-table ANALYZE given its lower cost. Bruce Momjian later reports committing a documentation recommendation to analyze after restore. [Tom Lane, February 27, 2003](https://www.postgresql.org/message-id/27615.1046376756%40sss.pgh.pa.us); [Bruce Momjian, March 18, 2003 UTC](https://www.postgresql.org/message-id/200303180001.h2I01lA26847%40candle.pha.pa.us).
+- **2012:** Bruce Momjian raises cross-version fragility; Peter Eisentraut proposes a version-aware function to import statistics. [Bruce Momjian, March 13, 2012](https://www.postgresql.org/message-id/20120313031037.GH10441%40momjian.us); [Peter Eisentraut, March 14, 2012](https://www.postgresql.org/message-id/1331757641.22638.5.camel%40vanquo.pezone.net).
+- **2015:** Tom Lane describes function-based loading and the catalog-compatibility and validation problems with raw pg_statistic INSERTs. [Tom Lane, December 23, 2015](https://www.postgresql.org/message-id/6221.1450840565%40sss.pgh.pa.us).
+- **2013 and 2025:** Bruce Momjian asks about COPY FREEZE in single-transaction restores; Dimitrios Apostolou later posts a restore-freezing patch with transaction/TRUNCATE prerequisites. These are proposals, not evidence of a shipped restore option. [Bruce Momjian, January 25, 2013](https://www.postgresql.org/message-id/20130125152433.GY21914%40momjian.us); [Dimitrios Apostolou, June 10, 2025](https://www.postgresql.org/message-id/ff258f33-00d3-a944-9517-b3cccb662722%40gmx.net); [documented COPY FREEZE requirements](https://www.postgresql.org/docs/18/sql-copy.html).
+- **PG18:** portable statistics support ships; exporting them remains an explicit choice. [PG18 release notes](https://www.postgresql.org/docs/18/release-18.html); [pg_dump defaults](https://www.postgresql.org/docs/18/app-pgdump.html).
 
 ## What we know versus what we need to measure
 
-Earlier synthetic experiments already show that **statistics can be present while the VM is missing**. A repeated 200,000-row example recorded natural root buffer accesses decreasing from 3,313 to 34 after plain VACUUM. This is a bounded mechanism observation, not a latency multiplier, and it did not run pg_dump/pg_restore.
-
+The [earlier synthetic-observation summary](existing-observations.md) describes statistics being present while VM coverage was missing. Its underlying measurement artifacts are not published in this repository, so that page is a secondary summary, not a publicly reproducible result. Use the documented [index-only-scan mechanism](https://www.postgresql.org/docs/18/indexes-index-only-scans.html) for the explanation; reserve new quantitative claims for experiments with inspectable evidence.
 The new core experiment should restore the same archive into fresh databases and compare four arms: no maintenance, ANALYZE, VACUUM, and VACUUM ANALYZE. Then compare default export with statistics-enabled export. Use one skewed-predicate/join query and one covering-index query.
 
 We want estimated/actual rows, natural plans, root buffer totals, heap fetches, actual VM coverage and relation estimates. No prediction becomes a result until measured. If the expected plan change does not occur, explain why rather than tuning until a dramatic chart appears.
 
-A small expression-index example is useful if time permits: ANALYZE before an expression index exists cannot collect that index's expression statistics. A final pass can therefore matter. Avoid prescribing an unconditional expensive sequence when workload priorities can guide the work.
+A small expression-index example is useful if time permits: ANALYZE before an expression index exists cannot collect that index's expression statistics. A final pass can therefore matter. [PG18 CREATE INDEX notes on expression-index statistics](https://www.postgresql.org/docs/18/sql-createindex.html). Our recommendation is to prioritize maintenance by workload rather than prescribe an unconditional expensive sequence.
 
 ## PG19: a short caveat
 
-The inspected PG19 release-candidate source adds extended-statistics transport and conditional VM marking during eligible reads. A query may change VM coverage while it is being measured. This is not a promise that one SELECT fills every VM bit, nor that VACUUM is obsolete. Keep the core demonstration on pinned PG18; make PG19 a brief version-boundary note unless there is time for a separate controlled run.
+The inspected PG19 release-candidate source adds extended-statistics transport and conditional VM marking during eligible reads. A query may change VM coverage while it is being measured. This is not a promise that one SELECT fills every VM bit, nor that VACUUM is obsolete. Keep the core demonstration on pinned PG18; make PG19 a brief version-boundary note unless there is time for a separate controlled run. Sources: [PG19 release notes](https://www.postgresql.org/docs/19/release-19.html), [extended-statistics dump integration](https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64), and [on-access VM implementation at inspected commit 0da632e084842c36ec31d87adfc401b54ed7d7b2](https://github.com/postgres/postgres/blob/0da632e084842c36ec31d87adfc401b54ed7d7b2/src/backend/access/heap/pruneheap.c). The version qualification refers to the source inspected on October 20, 2026 UTC.
 
 ## Proposed 28-minute conversation
 
@@ -80,7 +93,7 @@ Questions to challenge each other with:
 2. What evidence tells us that ANALYZE was enough—or that VACUUM is still needed?
 3. Should pg_restore offer an explicit post-commit maintenance phase?
 4. When is inherited statistics data less useful than fresh sampling?
-5. Does parallel maintenance mean many tables at once or a faster scan of one huge table? (`vacuumdb --jobs` and `--parallel` do different work.)
+5. Does parallel maintenance mean many tables at once or a faster scan of one huge table? ([PG18 vacuumdb documents the different work performed by `--jobs` and `--parallel`](https://www.postgresql.org/docs/18/app-vacuumdb.html).)
 6. How do we prove readiness with a representative workload rather than one lucky fast query?
 
 ## Essential reading

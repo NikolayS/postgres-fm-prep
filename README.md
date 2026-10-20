@@ -27,3 +27,5 @@ The episode's `README.md` is its entry point. Keep its research, study pack, exp
 ## Public material
 
 Keep this repository suitable for public reading. Include technical research, public sources, approved observations and preparation notes. Exclude private communications, credentials, customer information and confidential planning. State the versions, measurement conditions and limits behind technical claims.
+
+Attribute contributors’ positions with a direct link to the original message, author and date beside the paraphrase or quotation. Cite technical facts where they appear, distinguish source evidence from interpretation, and explicitly identify observations whose supporting measurements are not publicly available. A general reading list does not replace claim-level provenance.

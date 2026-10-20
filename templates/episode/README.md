@@ -36,6 +36,10 @@ Add links as documents are created. Common choices:
 
 List what is established, what has been measured, and what remains proposed. For experiments, record the applicable versions, decisive observations and limits. Do not turn predictions into results.
 
+## Sources and attribution
+
+Link each attributed position to the individual original message and name its author and date. Put versioned documentation or pinned source links beside technical claims. Distinguish quotations, paraphrases, interpretations and proposals. Link measured results to inspectable evidence; when that evidence is not public or is incomplete, state the limitation. Keep the reading list as a convenience, not a substitute for these citations.
+
 ## Open questions
 
 Add the remaining questions and any work needed before recording.
