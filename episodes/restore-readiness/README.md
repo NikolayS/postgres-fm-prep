@@ -9,7 +9,9 @@ The question: what performance-relevant state is missing after a logical Postgre
 ## Start here
 
 - [Kirk's study pack](study-pack.md) — a short reading guide, core distinctions and co-host questions.
-- [Restore documentation audit](restore-docs-audit.md) — 12-page sample, direct-versus-linked guidance, counts and source metadata.
+- [Expanded documentation audit](restore-docs-expanded.md) — 28 pages, all source URLs, positive counterexamples, counts and source metadata.
+- [Autovacuum fairness](autovacuum-readiness.md) — PG13 improvements, asynchronous completion and possible plan symptoms.
+- [Proposed maintenance option](maintenance-option.md) — why statistics transport is incomplete and what an opt-in pg_restore phase could do.
 - [Research report](research.md) — historical discussions, PG18 defaults, visibility maps, version boundaries and operator considerations.
 - [Additional DBLab Forge experiments](experiments.md) — a bounded plan for a few hours, with priorities, decisive measurements and stop rules.
 - [Existing experimental observations](existing-observations.md) — what earlier synthetic examples show and what they do not.
@@ -17,11 +19,9 @@ The question: what performance-relevant state is missing after a logical Postgre
 
 ## Documentation audit at a glance
 
-![Audit of 12 selected restore guides: 4 recommend ANALYZE, 0 recommend post-restore VACUUM, and 0 explain VM readiness. Crediting two named linked guides raises statistics coverage to 6 of 12.](assets/restore-docs-audit-summary.png)
+![Expanded audit of 28 selected pages: 8 recommend analysis, 3 recommend vacuuming, and 1 explains visibility-map readiness.](assets/restore-docs-expanded-summary.png)
 
-[Download the infographic](assets/restore-docs-audit-summary.png). Counts are generated from the [published dataset](restore-docs-audit.json); [rendering source](assets/render_docs_audit.py).
-
-[Read the detailed audit and all source URLs](restore-docs-audit.md#detailed-source-register--full-urls).
+[Expanded report: 28 pages](restore-docs-expanded.md) · [Original 12-page baseline](restore-docs-audit.md) · [Download image](assets/restore-docs-expanded-summary.png).
 
 ## Current status
 

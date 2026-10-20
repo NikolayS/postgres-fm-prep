@@ -32,7 +32,7 @@ Keep historical reasoning distinct from present engineering constraints. VACUUM 
 
 ### Documentation gap: a bounded audit
 
-Use the [12-page audit](restore-docs-audit.md): eight pages omit direct statistics-gathering advice and none directly explains VM readiness. Name the positive examples and Azure/pgAdmin linked-guidance qualifications. Show the denominator and audit date; do not claim a traffic-weighted or representative industry percentage. This measures guidance coverage, independently of the performance experiments.
+Use the [expanded 28-page audit](restore-docs-expanded.md): twenty pages omit direct statistics-gathering advice, three recommend vacuuming, and one explains VM readiness. Name Aiven, Supabase and Dalibo as positive examples; preserve linked-guidance and page-scope qualifications. Show the denominator, original/additional cohorts and audit date; do not claim a representative industry percentage. This measures guidance coverage independently of the performance experiments.
 
 ## 5. What to do after restoring
 
@@ -46,6 +46,10 @@ Give a short decision sequence:
 6. Validate sustained behavior of the representative workload.
 
 Do not prescribe VACUUM FULL. Do not imply ANALYZE fixes every bad plan or every slow query.
+
+### Credit the progress: insert-triggered autovacuum
+
+Explain [PG13's insert-triggered autovacuum](autovacuum-readiness.md), separate from autoanalyze. Show the enabled-autovacuum control and any maintenance completed during restore. Frame the problem as a potential asynchronous readiness gap, not guaranteed poor performance or absent automation.
 
 ## 6. What remains open
 

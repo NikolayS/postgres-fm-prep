@@ -21,6 +21,10 @@ The map belongs to physical heap pages. Logical dump/restore recreates rows in n
 
 All-visible and all-frozen are also different. The all-visible property enables avoiding heap checks. A plain VACUUM can make pages all-visible without making all of them all-frozen. [PG18 visibility-map bit definitions](https://www.postgresql.org/docs/18/storage-vm.html).
 
+## Fairness: autovacuum can catch up
+
+**PG13 added insert-triggered autovacuum**, which helps restored/insert-only tables build visibility coverage and spread freezing work. Autoanalyze already handled inserts. The issue is the absence of a restore-specific completion barrier, not an absence of automatic maintenance. Some tables may be maintained during restore; others may lag. Poor performance before catch-up is workload-dependent, not inevitable. [PG13 release notes](https://www.postgresql.org/docs/13/release-13.html); [controls, limitations and a fair experiment](autovacuum-readiness.md).
+
 ## PG18 defaults: the important distinction
 
 | Program | PG18 default | Consequence | Primary source |
@@ -102,15 +106,13 @@ The inspected PG19 release-candidate source adds extended-statistics transport a
 
 ## What restore guides tell readers
 
-![Audit of 12 selected restore guides: 4 recommend ANALYZE, 0 recommend post-restore VACUUM, and 0 explain VM readiness. Crediting two named linked guides raises statistics coverage to 6 of 12.](assets/restore-docs-audit-summary.png)
+![Expanded audit of 28 selected pages: 8 recommend analysis, 3 recommend vacuuming, and 1 explains visibility-map readiness.](assets/restore-docs-expanded-summary.png)
 
-[Download the infographic](assets/restore-docs-audit-summary.png). Counts are generated from the [published dataset](restore-docs-audit.json); [rendering source](assets/render_docs_audit.py).
+Our [expanded October 20 audit](restore-docs-expanded.md) inspected 28 selected logical restore/import guides, posts and tutorials. **20/28 omit direct statistics-gathering advice; 3/28 recommend vacuuming; 1/28 explains physical VM readiness.** Aiven and Supabase explicitly recommend vacuuming, and Dalibo explains the VM mechanism. The [original twelve-page audit](restore-docs-audit.md) remains available unchanged as the baseline; the new report adds sixteen pages and records all URLs and source limitations.
 
-Our [October 20 documentation audit](restore-docs-audit.md) inspected twelve selected logical restore/import pages. **Eight of twelve omit direct advice to gather optimizer statistics; none directly explains visibility-map readiness.** PostgreSQL's two pages, DigitalOcean and TigerData do recommend analysis. Azure provides that advice in a linked companion; pgAdmin links to upstream guidance. This is a convenience sample of exact pages, not a population estimate or a verdict on entire providers. Use the audit's row-level sources and qualifications when presenting the numbers.
+This is a page-level convenience sample, not an industry-wide rate. Linked advice and automatic service behavior are separate. PostgresAI's own VM-positive how-to is disclosed as an affiliated comparator outside the sample. Keep PG13's insert-triggered autovacuum in the discussion: the issue is potentially delayed query readiness, not inevitably bad performance or nonexistent automation.
 
-A [second AWS dump/restore guide, inspected as a follow-up](restore-docs-audit.md#follow-up-a-second-aws-restore-guide), also omits these four topics. Both inspected AWS pages have the gap; this does not establish a claim about every RDS guide. The follow-up is outside the original chart denominator.
-
-Suggested question for the episode: when a guide ends at a successful restore, what should its query-readiness checklist add?
+For the feature discussion, use the [proposed --vacuum-analyze contract](maintenance-option.md). PG18 omits collected extended-statistics data and physical VM transport. Tom Lane's [September 17, 2008 suggestion](https://www.postgresql.org/message-id/13358.1221663140%40sss.pgh.pa.us) already proposed pg_restore scheduling analysis for loaded tables; the history is more nuanced than blanket upstream opposition.
 
 ## Proposed 28-minute conversation
 

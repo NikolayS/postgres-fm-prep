@@ -75,6 +75,16 @@ Proposed resource bounds: local disposable instance, at most 4 CPUs and 4 GiB RA
 
 Stop an arm for data mismatches, restore errors, missing plans, unexpected effective settings, background maintenance contamination, timeout or insufficient storage. Preserve the unsuccessful attempt. Allow one bounded diagnosis/fix/retry for a concrete execution defect; do not rerun repeatedly to obtain the desired plot. At the hard stop, deliver the verified subset and list what remains untested.
 
+### Plan changes versus heap fetches
+
+For the covering-index query, retain the planner's natural choice at every observation point. Record estimated all-visible fraction and actual VM coverage together with row estimates, node type, root buffers and Index Only Scan heap fetches when that node exists. Possible findings include bitmap-to-index-only transitions, other plan changes, or an unchanged Index Only Scan with falling heap fetches. None is guaranteed. Do not label a bitmap plan as defective without comparing measured work and latency under equivalent cache conditions. [Mechanisms and source](autovacuum-readiness.md#two-plan-symptoms-to-distinguish).
+
+## Fairness control: normal autovacuum
+
+Reserve up to 30 minutes within the existing four-hour budget for one extra fresh restore with normal autovacuum enabled. Use normal effective thresholds from table creation onward: omit or reset elevated per-table thresholds inherited from the core fixture before loading. Record global and table settings, maintenance activity during restore, optimizer statistics and VM coverage at restore completion and at bounded follow-up points. Repeat representative queries under the same conditions; avoid claiming a universal latency penalty or catch-up time. If the window expires, record maintenance as unfinished within that window. This control distinguishes the mechanism from the user-visible asynchronous readiness gap. [Why this matters since PG13](autovacuum-readiness.md).
+
+If time is tight, prioritize this control over the optional expression-index/COPY FREEZE micro-labs; do not expand the overall deadline.
+
 ## Optional work, in priority order
 
 Only start an optional test after the core results and clean rerun are complete, and only if it fits the remaining four-hour window:

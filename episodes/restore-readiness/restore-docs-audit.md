@@ -1,5 +1,7 @@
 # Do restore guides prepare the database for queries?
 
+**Preserved original sample.** For the wider podcast edition, see the [expanded 28-page audit](restore-docs-expanded.md). The original counts and chart below are unchanged.
+
 Audit date: **October 20, 2026 UTC**. Scope: **12 selected logical restore/import documentation pages**, from 11 publishers: two PostgreSQL core pages and ten provider/tool pages. [Machine-readable CSV](restore-docs-audit.csv) · [JSON with source metadata](restore-docs-audit.json).
 
 ## Results
