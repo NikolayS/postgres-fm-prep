@@ -364,6 +364,15 @@ the overlay. The talk holds and
 goes silent at `outStart`; the overlay plays its full duration over the frozen
 frame and then over the moving talk.
 
+Do not overexplain (Nik, 2026-10-20): a quote strip is the quote only, no
+attribution or "closing takeaway" line; no subtitles or footnotes that restate
+the obvious. Keep only what is needed to read the fact correctly ("Buffers,
+not latency", "selected sample", the PG version). Text strips and quotes use
+the hand-drawn yellow marker style (`Marker` in `src/Band.tsx`: dark text on
+a roughened, slightly tilted yellow stroke, swiped in left-to-right over
+0.5 s); the main takeaway of an episode is shown two or three times at the
+moments the hosts say it, 5-6 s each, no freeze.
+
 Editor's-note policy: one line, neutral, prefix "Editor's note:" in the accent
 colour; only for on-air slips that change a fact (numbers, versions, what a
 command does); never for slips the host corrects on air; cite the source in the

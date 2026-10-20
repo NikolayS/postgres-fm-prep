@@ -26,6 +26,33 @@ const Wipe: React.FC<{frame: number; fps: number; delay: number; children: React
   );
 };
 
+// Hand-drawn yellow marker stroke behind dark text (Nik, 2026-10-20: "yellow-highlighted, like by hand").
+// The stroke is an SVG rect roughened by a turbulence displacement, tilted a little (seeded by the
+// text), and revealed left-to-right like a marker swipe over `swipe` seconds.
+const Marker: React.FC<{frame: number; fps: number; delay: number; seed: number; swipe?: number; fontSize: number; children: React.ReactNode}> = ({frame, fps, delay, seed, swipe = 0.5, fontSize, children}) => {
+  const f = frame - delay * fps;
+  const w = interpolate(f, [0, swipe * fps], [0, 104], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.quad)});
+  const textIn = interpolate(f, [0.1 * fps, 0.4 * fps], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+  const tilt = ((seed * 9301 + 49297) % 233280) / 233280 * 1.6 - 0.8; // -0.8..0.8 deg
+  const id = `rough${seed}`;
+  return (
+    <div style={{position: 'relative', display: 'inline-block', padding: '10px 30px 12px 26px', fontSize, fontWeight: 700, color: '#111', lineHeight: 1.2, whiteSpace: 'nowrap', transform: `rotate(${tilt}deg)`}}>
+      <svg style={{position: 'absolute', left: -8, top: -4, width: 'calc(100% + 16px)', height: 'calc(100% + 8px)', clipPath: `inset(0 ${Math.max(0, 104 - w)}% 0 0)`}}>
+        <defs>
+          <filter id={id} x="-5%" y="-10%" width="110%" height="120%" filterUnits="objectBoundingBox">
+            <feTurbulence type="fractalNoise" baseFrequency="0.035 0.12" numOctaves={2} seed={seed} result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale={9} xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </defs>
+        <rect x="6" y="8" width="calc(100% - 12px)" height="calc(100% - 16px)" rx="6" fill="rgba(255,214,0,0.86)" filter={`url(#${id})`} />
+        <rect x="10" y="14" width="calc(100% - 22px)" height="calc(100% - 28px)" rx="4" fill="rgba(255,225,60,0.55)" filter={`url(#${id})`} style={{mixBlendMode: 'multiply'}} />
+      </svg>
+      <span style={{position: 'relative', opacity: textIn}}>{children}</span>
+    </div>
+  );
+};
+const seedOf = (s: string) => Math.abs([...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7)) % 1000;
+
 export const Band: React.FC<BandProps> = (p) => {
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
@@ -48,26 +75,30 @@ export const Band: React.FC<BandProps> = (p) => {
 
   let body: React.ReactNode = null;
   if (p.kind === 'strip') {
+    // Text strips and takeaways: marker highlight; optional second line (p.sub) in a small dark strip.
     body = (
-      <Wipe frame={frame} fps={fps} delay={0}>
-        <div style={strip}>
-          {p.prefix ? <span style={{color: accent, marginRight: 14}}>{p.prefix}</span> : null}
+      <div style={{display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-start'}}>
+        <Marker frame={frame} fps={fps} delay={0} seed={seedOf(p.text ?? '')} fontSize={46}>
+          {p.prefix ? <span style={{marginRight: 14, fontWeight: 500}}>{p.prefix}</span> : null}
           {p.text}
-        </div>
-      </Wipe>
+        </Marker>
+        {p.sub ? (
+          <Wipe frame={frame} fps={fps} delay={0.5}>
+            <div style={{...strip, fontSize: 30, fontWeight: 500, background: 'rgba(17,17,17,0.85)', padding: '6px 22px', marginLeft: 26}}>{p.sub}</div>
+          </Wipe>
+        ) : null}
+      </div>
     );
   } else if (p.kind === 'quote') {
-    // Quote: white strip with a left accent bar; optional attribution strip under it (p.sub).
+    // Quote: marker highlight with quote marks; optional attribution strip under it (p.sub).
     body = (
-      <div style={{display: 'flex', flexDirection: 'column', gap: 8}}>
-        <Wipe frame={frame} fps={fps} delay={0}>
-          <div style={{...strip, background: '#fff', color: '#111', fontSize: 44, fontWeight: 700, borderLeft: `12px solid ${accent}`, paddingLeft: 22}}>
-            {'“'}{p.text}{'”'}
-          </div>
-        </Wipe>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-start'}}>
+        <Marker frame={frame} fps={fps} delay={0} seed={seedOf(p.text ?? '')} fontSize={44}>
+          {'“'}{p.text}{'”'}
+        </Marker>
         {p.sub ? (
-          <Wipe frame={frame} fps={fps} delay={0.4}>
-            <div style={{...strip, fontSize: 28, fontWeight: 500, background: 'rgba(17,17,17,0.85)', padding: '6px 22px'}}>{p.sub}</div>
+          <Wipe frame={frame} fps={fps} delay={0.5}>
+            <div style={{...strip, fontSize: 28, fontWeight: 500, background: 'rgba(17,17,17,0.85)', padding: '6px 22px', marginLeft: 26}}>{p.sub}</div>
           </Wipe>
         ) : null}
       </div>
