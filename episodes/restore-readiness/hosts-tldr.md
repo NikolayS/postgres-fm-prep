@@ -32,7 +32,7 @@
 
 ## Three additions worth making room for
 
-- **Partitioned parents are a real autovacuum exception.** In the new PG18/19 runs, all leaves were observed analyzed within 15 seconds, while parent statistics were still missing after more than eight minutes. The parent-dependent query estimated 200 rows against 100,000 actual; explicit parent analysis repaired the estimate and plan. PG19 improves `--analyze-only` and `--analyze-in-stages`; default `--analyze` still excludes parents. Autovacuum's parent behavior is unchanged. Ask: “What does waiting never fix?”
+- **Partitioned parents are a real autovacuum exception.** In the new PG18/19 runs, all leaves were observed analyzed within 15 seconds, while parent statistics were still missing after more than eight minutes. The parent-dependent query estimated 200 rows against 100,000 actual; explicit parent analysis repaired the estimate and plan. PG19 improves `--analyze-only` and `--analyze-in-stages`; default `--analyze` still excludes parents. Autovacuum's parent behavior is unchanged. Distinguish the client from SQL: database-wide SQL VACUUM ANALYZE does analyze parents on tested PG17/19. Ask: “What does waiting never fix?”
 - **A logical copy changes the benchmark.** It rebuilds storage and indexes while losing some physical preparation. Ask: “Is our restored copy representative of production?”
 - **Make readiness an explicit output.** A proposed manifest could record stats, completed/skipped maintenance, workload checks and replica replay. Ask: “What evidence should a human—or an agent—require before opening traffic?”
 

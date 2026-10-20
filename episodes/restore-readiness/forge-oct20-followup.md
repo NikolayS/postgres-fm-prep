@@ -47,6 +47,8 @@ Each row below used a fresh restore, matching client/server versions, autovacuum
 
 [PG18 raw states](evidence/forge/oct20-followup/runs/vdb_pg18/steps), [PG19 raw states](evidence/forge/oct20-followup/runs/vdb_pg19/steps). The summary files render zero matching pg_stats rows as an empty field; the states and zero analyze_count corroborate the absence.
 
+**Important distinction, verified during the Supabase docs review:** SQL `VACUUM VERBOSE ANALYZE;` itself includes partitioned-parent analysis on tested PostgreSQL 17.11 and 19rc1. The exclusion above is in the vacuumdb client's automatic target selection. Do not infer that Supabase's existing SQL maintenance command misses parents. [Server relation selection and analysis](https://github.com/postgres/postgres/blob/REL_19_RC1/src/backend/commands/vacuum.c), [client target filter](https://github.com/postgres/postgres/blob/REL_19_RC1/src/bin/scripts/vacuuming.c#L649-L677).
+
 Operationally, explicitly analyze required parents, for example `ANALYZE public.orders_p;`, or use SQL `ANALYZE;` with appropriate privileges to analyze the database. Account for its recursive work and cost. Do not infer that `vacuumdb --analyze` covered parents simply because its name includes “analyze.” [SQL ANALYZE](https://www.postgresql.org/docs/19/sql-analyze.html), [PG19 client change](https://www.postgresql.org/docs/19/release-19.html#RELEASE-19-SERVER-APPLICATIONS).
 
 ## 3. FREEZE now versus a later forced freezing pass

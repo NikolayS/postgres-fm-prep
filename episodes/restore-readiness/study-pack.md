@@ -50,6 +50,8 @@ All-visible and all-frozen are also different. The all-visible property enables 
 | Does autovacuum analyze partitioned parents? | No | Still no | [Parent-statistics guidance](https://www.postgresql.org/docs/19/routine-vacuuming.html#VACUUM-FOR-STATISTICS) |
 | Which vacuumdb no-target analysis modes include parents? | Earlier behavior skipped them | `--analyze-only` and `--analyze-in-stages` now include them; `--analyze` still excludes them | [PG19 change](https://www.postgresql.org/docs/19/release-19.html#RELEASE-19-SERVER-APPLICATIONS), [vacuumdb](https://www.postgresql.org/docs/19/app-vacuumdb.html) |
 
+**Do not confuse the client with SQL:** `vacuumdb --analyze` skips partitioned parents in its automatic selection, but database-wide SQL `VACUUM ANALYZE;` includes their analysis on tested PG17.11 and PG19rc1. [Clarification and source](forge-oct20-followup.md#2-vacuumdb-is-not-interchangeable-with-bare-sql-analyze).
+
 Expression-index statistics already have support in PG18; they are not collected extended-statistics data. PG19 transport still does not mean every kind of statistics is copied: extension-specific statistics and cumulative activity counters remain distinct. [PG19 pg_dump limitations](https://www.postgresql.org/docs/19/app-pgdump.html).
 
 **pg_upgrade is a separate path:** it reuses physical relation files and, from PG18, transfers most optimizer statistics. Our PG17→18 upgrade controls retained VM and column statistics. Don't apply logical-restore conclusions blindly to physical upgrade, and don't claim every counter or every statistic is preserved. [Upgrade evidence](forge-results.md#6-physical-upgrade-and-copy-freeze-are-different-paths).
