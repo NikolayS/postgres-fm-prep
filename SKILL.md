@@ -348,9 +348,14 @@ the channel's own videos only. "Built live" or "the idea came up in this
 session" wording must match what the session actually did (check captions:
 `yt-dlp --write-auto-sub`).
 
-SFX: tick (strips), pop (a number or chip lands), whoosh (full-screen in and
-out), clack (each staged fact or thumbnail; -3 dB vs pop). All synthesized by
-`scripts/sfx-synth.sh`. `DUMP_PROPS=<dir> bun scripts/render-all.ts <id>`
+SFX: low-frequency and soft only (Nik, 2026-10-20: "sounds are annoying,
+should be low frequency, like wind or a low smash"). Family from
+`scripts/sfx-synth.sh`: `air` (short puff, strips and chips), `thud1-3` (sub
+hit 80->55 Hz, lowpass 800 Hz; a number or fact lands; variants rotate so
+repeats differ), `wind1-2` (pink-noise swell, lowpass 1.5 / 1.0 kHz;
+full-screen in and out). No bright clicks or ticks; keep every hit under the
+voice. Helpers `tick/pop/clack/whoosh` in items.ts keep the old role names
+and map to these files. The regular host gets no intro card; only the guest. `DUMP_PROPS=<dir> bun scripts/render-all.ts <id>`
 writes the props JSON for `bunx remotion still` QA frames.
 
 Freezes: on number cards where the number is the point (2-2.5 s) and on intro

@@ -38,7 +38,7 @@ async function worker() {
 await Promise.all(Array.from({length: CONC}, worker));
 
 mkdirSync(join(OUT, 'sfx'), {recursive: true});
-for (const f of ['tick.wav', 'pop.wav', 'whoosh.wav', 'clack.wav', 'LICENSE.txt']) copyFileSync(join(ROOT, 'sfx', f), join(OUT, 'sfx', f));
+for (const f of ['wind1.wav', 'wind2.wav', 'air.wav', 'thud1.wav', 'thud2.wav', 'thud3.wav', 'LICENSE.txt']) copyFileSync(join(ROOT, 'sfx', f), join(OUT, 'sfx', f));
 const r2 = (x: number) => Math.round(x * 100) / 100;
 const manifest = ITEMS.map((it) => ({id: it.id, outStart: it.outStart, duration: it.duration, dur: it.duration, file: `${it.id}.mov`, placement: it.placement, freezeSec: it.freezeSec, sfx: it.sfx.map((s) => ({...s, at: r2(s.at)})), source: it.source ?? null}));
 writeFileSync(join(OUT, 'manifest.json'), JSON.stringify({video: 'video1876562600-edited.mp4', fps: 25, width: 1920, height: 1080, timeBase: 'edited.mp4 seconds, before intro and freeze shifts', band: {x: 24, y: 912, w: 1576, h: 140}, overlays: manifest}, null, 2));

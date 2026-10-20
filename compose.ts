@@ -3,11 +3,12 @@
 //   bun compose.ts <layout.json> <edited.mp4> <out.mp4> --intro intro.mp3 --outro outro.mp3
 //                  [--until S | --tail S] [--preset fast] [--card 4] [--end 10] [--duck -15]
 //
-// Picture: title card (C s, layers fade/slide in) -> 0.5 s crossfade -> the show with the
-// layout.ts filtergraph -> 0.6 s crossfade -> end card (E s). One encode.
+// Picture: fade from black -> title card (C s, layers fade/slide in) -> 0.8 s crossfade ->
+// the show with the layout.ts filtergraph -> end card (E s) -> logo video (config "logo") ->
+// credit card (config "credit"), joined by 0.8 s crossfades -> fade to black. One encode.
 // Sound: the intro is played at full level over the card, ducks by --duck dB just before
-// the first words and fades out by C + 6 s. The outro bed enters ducked 10 s before the
-// show ends, rises after the sign-off and ends with the end card. Music cues are first
+// the first words and plays on ducked to its own ending. The outro bed enters ducked (up to
+// --bed-lead s) before the show ends, rises after the sign-off and ends with the episode. Music cues are first
 // set to -18 LUFS; the final mix is two-pass loudnorm to -16 LUFS, -1.5 dBTP.
 // --until S keeps only the first S s of the show (intro demo; no outro). --tail S keeps
 // only the last S s (outro demo; no title card, no intro). --from S starts later (no card).
@@ -16,7 +17,7 @@
 import { $ } from "bun";
 import { mkdirSync } from "fs";
 import { dirname, join, resolve } from "path";
-import { chromeHtml, filtergraph, highlightHtml, renderHtml, type LayoutConfig } from "./layout";
+import { filtergraph, prepareUi, renderHtml, type LayoutConfig } from "./layout";
 import type { Detection } from "./detect-tiles";
 
 const FONT = `-apple-system,"SF Pro Display","Helvetica Neue",sans-serif`;
@@ -35,7 +36,8 @@ async function lufs(f: string): Promise<number> {
 }
 
 // Background shared by both cards (same look as the layout background, no holes).
-function bgHtml(w: number, h: number) {
+function bgHtml(w: number, h: number, light = false) {
+  if (light) return `<!doctype html><html><head><style>html,body{margin:0;width:${w}px;height:${h}px;overflow:hidden;background:${LIGHT_BG}}</style></head><body></body></html>`;
   return `<!doctype html><html><head><style>html,body{margin:0;width:${w}px;height:${h}px;overflow:hidden}</style></head><body>
 <svg width="${w}" height="${h}"><defs>
 <radialGradient id="g" cx="18%" cy="0%" r="110%"><stop offset="0" stop-color="#16263F"/><stop offset="0.55" stop-color="#0D1625"/><stop offset="1" stop-color="#0A0F1A"/></radialGradient>
@@ -43,8 +45,19 @@ function bgHtml(w: number, h: number) {
 <rect width="${w}" height="${h}" fill="url(#g)"/><rect width="${w}" height="${h}" fill="url(#d)"/></svg></body></html>`;
 }
 
+// postgres.ai look for the cards after its wordmark: warm light background, Archivo, orange.
+const LIGHT_BG = "#eeeae2";
+const ARCHIVO = "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap";
+
 // One transparent layer: a block of text at (left, top).
-function layerHtml(w: number, h: number, top: number, inner: string) {
+function layerHtml(w: number, h: number, top: number, inner: string, light = false) {
+  if (light) return `<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="${ARCHIVO}"><style>html,body{margin:0;width:${w}px;height:${h}px;overflow:hidden;background:transparent}
+.b{position:absolute;left:160px;top:${top}px;width:${w - 320}px;font-family:"Archivo","Helvetica Neue",Arial,sans-serif;color:#0d0d10}
+.kicker{font-size:40px;font-weight:500;color:#55524c}
+.big{font-size:104px;font-weight:900;letter-spacing:-1px;line-height:1.05}.big i{font-style:normal;color:rgb(255,98,18)}
+.lead{font-size:50px;font-weight:500;line-height:1.25;max-width:1500px;text-wrap:balance}
+.links{font-family:${MONO};font-size:36px;color:#55524c}.links span{color:#0d0d10}
+</style></head><body><div class="b">${inner}</div></body></html>`;
   return `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;width:${w}px;height:${h}px;overflow:hidden;background:transparent}
 .b{position:absolute;left:160px;top:${top}px;width:${w - 320}px;font-family:${FONT};color:#E8EDF5}
 .mark{font-family:${MONO};font-weight:700;font-size:44px;letter-spacing:1px}.mark i{font-style:normal;color:#4F8AD1}
@@ -57,13 +70,13 @@ function layerHtml(w: number, h: number, top: number, inner: string) {
 
 type Layer = { png: string; st: number; d: number; dy: number };
 
-async function card(work: string, name: string, w: number, h: number, parts: { top: number; html: string; st: number }[]): Promise<{ bg: string; layers: Layer[] }> {
+async function card(work: string, name: string, w: number, h: number, parts: { top: number; html: string; st: number }[], light = false): Promise<{ bg: string; layers: Layer[] }> {
   const bg = join(work, `${name}-bg.png`);
-  await renderHtml(bgHtml(w, h), w, h, bg);
+  await renderHtml(bgHtml(w, h, light), w, h, bg);
   const layers: Layer[] = [];
   for (const [i, p] of parts.entries()) {
     const png = join(work, `${name}-l${i}.png`);
-    await renderHtml(layerHtml(w, h, p.top, p.html), w, h, png);
+    await renderHtml(layerHtml(w, h, p.top, p.html, light), w, h, png);
     layers.push({ png, st: p.st, d: 0.7, dy: 24 });
   }
   return { bg, layers };
@@ -71,7 +84,7 @@ async function card(work: string, name: string, w: number, h: number, parts: { t
 
 // Overlay manifest (from the overlay agent): times are edited.mp4 seconds.
 type Sfx = { file: string; at: number; gain?: number }; // gain is ignored: see --sfx-rel
-type Overlay = { file: string; outStart: number; dur: number; placement?: "band" | "full"; freezeSec?: number; sfx?: Sfx[] };
+type Overlay = { file: string; outStart: number; dur: number; placement?: "band" | "full" | "center"; freezeSec?: number; sfx?: Sfx[] };
 type Freeze = { at: number; sec: number };
 
 // Edited time -> final time: the title card first, then every freeze that starts before t.
@@ -111,10 +124,14 @@ if (import.meta.main) {
   const full = await duration(input);
   const to = flag("--until") ? Number(flag("--until")) : full;
   const from = flag("--tail") ? full - Number(flag("--tail")) : Number(flag("--from") ?? 0);
-  const C = from > 0 ? 0 : Number(flag("--card") ?? 4), E = Number(flag("--end") ?? 10), DUCK = Number(flag("--duck") ?? -15);
-  const X1 = 0.5, X2 = 0.6, MUSIC_LUFS = -18, SFX_M = Number(flag("--sfx-lufs") ?? -20);
+  const C = from > 0 ? 0 : Number(flag("--card") ?? 5), E = Number(flag("--end") ?? 8), DUCK = Number(flag("--duck") ?? -15);
+  const X1 = 0.8, X2 = 0.8, MUSIC_LUFS = -18, SFX_M = Number(flag("--sfx-lufs") ?? -20);
+  const FADE_IN = 1.0, FADE_OUT = 2.0; // from black / to black, picture and sound
+  const BED_LEAD = Number(flag("--bed-lead") ?? 30); // longest outro-bed lead under the closing talk
 
-  const c: LayoutConfig & { links?: string[]; cardTitle?: string } = await Bun.file(configPath).json();
+  // logo: a video played after the end card (path relative to the config); credit: a light
+  // card after it ({kicker, big, lead, sec}).
+  const c: LayoutConfig & { links?: string[]; cardTitle?: string; logo?: string; credit?: { kicker?: string; big: string; lead?: string; sec?: number } } = await Bun.file(configPath).json();
   const base = dirname(resolve(configPath));
   const tiles: Detection = typeof c.tiles === "string" ? await Bun.file(resolve(base, c.tiles)).json() : c.tiles;
   const segments = c.cuts ? (await Bun.file(resolve(base, c.cuts)).json()).segments : null;
@@ -134,15 +151,10 @@ if (import.meta.main) {
   const F = freezes.reduce((a, f) => a + f.sec, 0);
   const fin = (t: number) => toFinal(t, C, freezes); // window time -> final time
 
+  // "center" overlays: the hosts move aside for that window (window time, before freezes).
+  c.center = [...(c.center ?? []), ...overlays.filter((o) => o.placement === "center").map((o) => ({ from: o.outStart, to: o.outStart + o.dur }))];
   // UI layers for the show (same as layout.ts).
-  const uiPng = join(work, "ui.png");
-  await renderHtml(chromeHtml(c), w, h, uiPng);
-  const hlPngs: string[] = [];
-  for (const [i, hl] of (c.highlight ?? []).entries()) {
-    const png = join(work, `hl${i}.png`);
-    await renderHtml(highlightHtml(c, c.place[hl.tile]), w, h, png);
-    hlPngs.push(png);
-  }
+  const uiPngs = await prepareUi(c, work);
 
   const hosts = Object.values(c.place).filter((p) => p.label && !p.small)
     .map((p) => `<b>${esc(p.label!)}</b>${p.sub ? ` (${esc(p.sub)})` : ""}`).join(" &nbsp;&middot;&nbsp; ");
@@ -161,14 +173,27 @@ if (import.meta.main) {
     { top: 680, html: `<div class="hosts">${hosts}</div>`, st: 1.0 },
     { top: 770, html: `<div class="links">${links}</div>`, st: 1.4 },
   ]);
+  const logo = c.logo ? resolve(base, c.logo) : null;
+  const logoLen = logo ? await duration(logo) : 0;
+  const cr = c.credit;
+  const crc = cr ? await card(work, "credit", w, h, [
+    ...(cr.kicker ? [{ top: 250, html: `<div class="kicker">${esc(cr.kicker)}</div>`, st: 0.2 }] : []),
+    { top: 320, html: `<div class="big">${esc(cr.big)}</div>`, st: 0.4 },
+    ...(cr.lead ? [{ top: 470, html: `<div class="lead">${esc(cr.lead)}</div>`, st: 0.7 }] : []),
+    { top: 800, html: `<div class="links">${(c.links ?? ["postgres.fm", "postgres.ai"]).map((l) => `<span>${esc(l)}</span>`).join(" &nbsp;&middot;&nbsp; ")}</div>`, st: 1.1 },
+  ], true) : null;
+  const crLen = cr?.sec ?? 7;
 
   const showLen = to - from;
   const withOutro = !!outro && to >= full - 0.01;
   const showEndFinal = C + showLen + F; // final time where the show (with freezes) ends
-  const total = withOutro ? showEndFinal - X2 + E : showEndFinal;
+  // After the show: end card, then the logo video, then the credit card, each joined by an
+  // X2 crossfade. Starts of each part in final time:
+  const endStart = showEndFinal - X2, logoStart = endStart + E - X2, creditStart = logoStart + (logo ? logoLen - X2 : 0);
+  const total = withOutro ? (cr ? creditStart + crLen : logo ? logoStart + logoLen : endStart + E) : showEndFinal;
 
-  // Inputs: 0 show, 1 ui, 2.. highlights (fixed by layout.ts), then cards, music, overlays, SFX.
-  const inputs: string[][] = [[...(from ? ["-ss", from.toFixed(3)] : []), ...(to < full ? ["-t", showLen.toFixed(3)] : []), "-i", input], ["-loop", "1", "-framerate", String(fps), "-i", uiPng], ...hlPngs.map((p) => ["-loop", "1", "-framerate", String(fps), "-i", p])];
+  // Inputs: 0 show, 1.. the layout.ts layers, then cards, music, overlays, SFX.
+  const inputs: string[][] = [[...(from ? ["-ss", from.toFixed(3)] : []), ...(to < full ? ["-t", showLen.toFixed(3)] : []), "-i", input], ...uiPngs.map((p) => ["-loop", "1", "-framerate", String(fps), "-i", p])];
   const add = (a: string[]) => inputs.push(a) - 1;
   const still = (png: string, len: number) => add(["-loop", "1", "-framerate", String(fps), "-t", String(len), "-i", png]);
 
@@ -200,8 +225,18 @@ if (import.meta.main) {
   }
   if (withOutro) {
     buildCard("ecard", ec, E);
-    g.push(`[${vout}][ecard]xfade=transition=fade:duration=${X2}:offset=${(showEndFinal - X2).toFixed(3)}[v2]`);
+    g.push(`[${vout}][ecard]xfade=transition=fade:duration=${X2}:offset=${endStart.toFixed(3)}[v2]`);
     vout = "v2";
+    if (logo) {
+      g.push(`[${add(["-i", logo])}:v]format=yuv420p,setsar=1,fps=${fps},settb=1/${fps}[logo]`);
+      g.push(`[${vout}][logo]xfade=transition=fade:duration=${X2}:offset=${logoStart.toFixed(3)}[v3]`);
+      vout = "v3";
+    }
+    if (crc) {
+      buildCard("ccard", crc, crLen);
+      g.push(`[${vout}][ccard]xfade=transition=fade:duration=${X2}:offset=${creditStart.toFixed(3)}[v4]`);
+      vout = "v4";
+    }
   }
   // Overlays: full-frame alpha video at 0,0 from their final start time.
   for (const [i, o] of overlays.entries()) {
@@ -211,6 +246,13 @@ if (import.meta.main) {
     g.push(`[${k}:v]setpts=PTS-STARTPTS+${T.toFixed(3)}/TB,format=yuva420p[ov${i}]`);
     g.push(`[${vout}][ov${i}]overlay=0:0:eof_action=pass:enable='between(t,${T.toFixed(3)},${(T + dur).toFixed(3)})'[vo${i}]`);
     vout = `vo${i}`;
+  }
+
+  // Fade from black at the start (full episode only) and to black at the end.
+  const vf = [...(C > 0 ? [`fade=t=in:st=0:d=${FADE_IN}`] : []), ...(withOutro ? [`fade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}`] : [])];
+  if (vf.length) {
+    g.push(`[${vout}]${vf.join(",")}[vfade]`);
+    vout = "vfade";
   }
 
   const db = (expr: string) => `volume='pow(10,(${expr})/20)':eval=frame`;
@@ -250,7 +292,7 @@ if (import.meta.main) {
     const ii = add(["-i", intro]);
     const introLen = await duration(intro);
     const duckAt = C + 0.1; // the edit keeps 0.3 s of room tone before the first word
-    ga.push(`[${ii}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gi.toFixed(2)}dB,${db(`if(lt(t,${duckAt}),0,${DUCK}*min(1,(t-${duckAt})/0.5))`)},afade=t=out:st=${Math.min(introLen - 1, C + 1.5)}:d=${Math.min(4.5, introLen - C - 1.5)}[mi]`);
+    ga.push(`[${ii}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gi.toFixed(2)}dB,${db(`if(lt(t,${duckAt}),0,${DUCK}*min(1,(t-${duckAt})/0.5))`)},afade=t=out:st=${Math.min(introLen - 1, C + 2)}:d=${Math.max(1, introLen - C - 3).toFixed(2)}[mi]`);
     mix.push("[mi]");
   }
   if (withOutro) {
@@ -259,7 +301,7 @@ if (import.meta.main) {
     const outroLen = await duration(outro!);
     const signOff = showEndFinal - 1.0; // sign-off ends about 1 s before the show (room tone tail)
     // Line the bed's natural ending up with the end of the end card; skip its head if long.
-    const start = Math.max(total - outroLen, showEndFinal - 10);
+    const start = Math.max(total - outroLen, showEndFinal - BED_LEAD);
     const skip = Math.max(0, start - (total - outroLen));
     const rel = (t: number) => (t - start).toFixed(3);
     ga.push(`[${oi}:a]atrim=start=${skip.toFixed(3)},asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,volume=${go.toFixed(2)}dB,${db(`if(lt(t,${rel(signOff)}),${DUCK},${DUCK}*max(0,1-(t-${rel(signOff)})/1.2))`)},afade=t=in:d=1.5,adelay=${Math.round(start * 1000)}:all=1[mo]`);
@@ -286,7 +328,7 @@ if (import.meta.main) {
     const m = ga[i].match(/\[(\w+)\]$/);
     if (m && mix.includes(`[${m[1]}]`)) ga[i] = ga[i].replace(/\[(\w+)\]$/, ",asetpts=N/SR/TB[$1]");
   }
-  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB,aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`);
+  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB${C > 0 ? `,afade=t=in:d=${FADE_IN / 2}` : ""}${withOutro ? `,afade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}` : ""},aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`);
   // The pre-limit keeps true peaks low enough for loudnorm's linear mode: its dynamic mode
   // (used when peaks are too high) lost the first seconds of the mix in a full-length run.
 
@@ -304,7 +346,9 @@ if (import.meta.main) {
   // Time map for chapters and later layers: edited time -> final time.
   await Bun.write(output.replace(/\.mp4$/, "") + ".time-map.json", JSON.stringify({
     formula: "final = card + (edited - from) + sum(freeze.sec for freezes with at < edited - from)",
-    card: C, from, total: Number(total.toFixed(3)), showEnd: Number(showEndFinal.toFixed(3)), endCard: withOutro ? { start: Number((showEndFinal - X2).toFixed(3)), sec: E } : null,
+    card: C, from, total: Number(total.toFixed(3)), showEnd: Number(showEndFinal.toFixed(3)), endCard: withOutro ? { start: Number(endStart.toFixed(3)), sec: E } : null,
+    logo: withOutro && logo ? { start: Number(logoStart.toFixed(3)), sec: logoLen } : null,
+    credit: withOutro && cr ? { start: Number(creditStart.toFixed(3)), sec: crLen } : null,
     freezes: freezes.map((f) => ({ edited: Number((f.at + from).toFixed(3)), sec: f.sec, finalStart: Number(fin(f.at).toFixed(3)) })),
   }, null, 2));
   // The limiter runs at 4x rate so AAC true peaks stay under -1.5 dBTP.

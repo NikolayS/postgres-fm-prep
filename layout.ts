@@ -6,14 +6,16 @@
 // layout.json: tile rectangles come from detect-tiles.ts (source time intervals); with
 // "cuts" (render.ts cuts.json) they are mapped to the edited timeline. --from/--dur cut a
 // preview window (output seconds); --still T writes one PNG at output time T instead of video.
-// Text and the background are drawn by headless Chrome into one PNG with transparent holes
-// where the tiles go (this ffmpeg has no drawtext), so fonts and rounded corners look right.
+// Text, background, masks and labels are drawn by headless Chrome into PNGs (this ffmpeg has
+// no drawtext), so fonts and rounded corners look right. Tiles are masked boxes on top of
+// the background, so they can move: "center" windows slide the hosts to the edges.
 import { $ } from "bun";
 import { mkdirSync } from "fs";
 import { dirname, join, resolve } from "path";
 import type { Detection, Rect } from "./detect-tiles";
 
-export type Place = { x: number; y: number; w: number; h: number; label?: string; sub?: string; radius?: number; focusX?: number; focusY?: number; small?: boolean };
+export type Place = { x: number; y: number; w: number; h: number; label?: string; sub?: string; radius?: number; focusX?: number; focusY?: number; small?: boolean;
+  center?: { x: number; y: number; w: number } }; // where the tile goes in the "center" state (keeps aspect)
 export type LayoutConfig = {
   canvas: { w: number; h: number; fps: number };
   tiles: string | Detection; // detect-tiles.ts output (path relative to the config, or inline)
@@ -24,6 +26,8 @@ export type LayoutConfig = {
   place: Record<string, Place>; // tile name -> position on the canvas
   highlight?: { tile: string; from: number | string; to: number | string }[]; // source times: the tile speaks
   sharpen?: number; // cas strength, 0 = off
+  center?: { from: number; to: number }[]; // edited seconds: hosts move aside, middle free for a chart
+  transition?: number; // center move duration, s (default 0.6)
 };
 
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
@@ -74,45 +78,43 @@ function roundRect(x: number, y: number, w: number, h: number, r: number) {
 
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 
-// Background + frames + labels, with transparent holes for the tiles.
+const LABEL_H = 72; // label strip under a host tile (part of the tile box, so it moves with it)
+const FONT = `-apple-system,"SF Pro Display","Helvetica Neue",sans-serif`;
+const MONO = `"JetBrains Mono",ui-monospace,monospace`;
+const page = (w: number, h: number, css: string, body: string, bg = "transparent") =>
+  `<!doctype html><html><head><meta charset="utf-8"><style>html,body{margin:0;width:${w}px;height:${h}px;overflow:hidden;background:${bg}}${css}</style></head><body>${body}</body></html>`;
+
+// Opaque background: gradient, dot grid, the title line, and the labels of small (fixed) tiles.
 export function chromeHtml(c: LayoutConfig): string {
   const { w, h } = c.canvas;
   const places = Object.values(c.place);
-  const holes = places.map((p) => roundRect(p.x, p.y, p.w, p.h, p.radius ?? 16)).join("");
-  const frames = places.map((p) => `<path d="${roundRect(p.x + 0.5, p.y + 0.5, p.w - 1, p.h - 1, p.radius ?? 16)}" fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>`).join("");
-  const labels = places
-    .filter((p) => p.label)
-    .map((p) =>
-      p.small
-        ? `<div class="small" style="left:${p.x}px;top:${p.y - 34}px;width:${p.w}px">${esc(p.label!)}</div>`
-        : `<div class="lt" style="left:${p.x}px;top:${p.y + p.h + 22}px"><span class="bar"></span><span class="name">${esc(p.label!)}</span>${p.sub ? `<span class="sub">&nbsp;&middot;&nbsp;${esc(p.sub)}</span>` : ""}</div>`,
-    )
-    .join("");
+  const small = places.filter((p) => p.small && p.label).map((p) => `<div class="small" style="left:${p.x}px;top:${p.y - 34}px">${esc(p.label!)}</div>`).join("");
   const top = c.show || c.title
     ? `<div class="top"><span class="show">${esc(c.show ?? "")}</span>${c.title ? `<span class="title">${esc(c.title)}</span>` : ""}</div>`
     : "";
-  return `<!doctype html><html><head><meta charset="utf-8"><style>
-html,body{margin:0;width:${w}px;height:${h}px;overflow:hidden;background:transparent}
-svg{position:absolute;left:0;top:0}
-.lt,.small,.top{position:absolute;font-family:-apple-system,"SF Pro Display","Helvetica Neue",sans-serif;color:#E8EDF5;white-space:nowrap}
-.lt{display:flex;align-items:center;font-size:30px;letter-spacing:0.2px}
-.lt .bar{display:inline-block;width:4px;height:30px;border-radius:2px;background:#4F8AD1;margin-right:14px}
-.lt .name{font-weight:600}
-.lt .sub{color:#93A4BD;font-weight:400}
-.small{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:17px;color:#93A4BD;text-align:left;letter-spacing:0.3px}
+  return page(w, h, `svg{position:absolute;left:0;top:0}
+.small,.top{position:absolute;font-family:${FONT};white-space:nowrap}
+.small{font-family:${MONO};font-size:17px;color:#93A4BD;letter-spacing:0.3px}
 .top{left:${Math.min(...places.map((p) => p.x))}px;top:44px;font-size:22px;display:flex;gap:18px;align-items:baseline}
-.top .show{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:700;color:#E8EDF5;letter-spacing:0.5px}
-.top .title{color:#7F90A8}
-</style></head><body>
-<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
-<defs>
+.top .show{font-family:${MONO};font-weight:700;color:#E8EDF5;letter-spacing:0.5px}
+.top .title{color:#7F90A8}`, `<svg width="${w}" height="${h}"><defs>
 <radialGradient id="g" cx="18%" cy="0%" r="110%"><stop offset="0" stop-color="#16263F"/><stop offset="0.55" stop-color="#0D1625"/><stop offset="1" stop-color="#0A0F1A"/></radialGradient>
-<pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.045)"/></pattern>
-</defs>
-<path fill-rule="evenodd" fill="url(#g)" d="M0,0H${w}V${h}H0Z${holes}"/>
-<path fill-rule="evenodd" fill="url(#dots)" d="M0,0H${w}V${h}H0Z${holes}"/>
-${frames}
-</svg>${top}${labels}</body></html>`;
+<pattern id="dots" width="32" height="32" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.045)"/></pattern></defs>
+<rect width="${w}" height="${h}" fill="url(#g)"/><rect width="${w}" height="${h}" fill="url(#dots)"/></svg>${top}${small}`, "#0A0F1A");
+}
+
+// Tile box = the tile plus (for hosts) its label strip. Mask: white rounded tile, black elsewhere.
+export const boxSize = (p: Place) => ({ w: p.w, h: p.h + (p.small || !p.label ? 0 : LABEL_H) });
+export function maskHtml(p: Place): string {
+  const b = boxSize(p);
+  return page(b.w, b.h, "", `<svg width="${b.w}" height="${b.h}"><path d="${roundRect(0, 0, p.w, p.h, p.radius ?? 16)}" fill="#fff"/></svg>`, "#000");
+}
+export function labelHtml(p: Place, text = true): string {
+  const b = boxSize(p);
+  return page(b.w, b.h, `.lt{position:absolute;left:0;top:${p.h + 22}px;display:flex;align-items:center;font-family:${FONT};font-size:30px;color:#E8EDF5;white-space:nowrap}
+.bar{display:inline-block;width:4px;height:30px;border-radius:2px;background:#4F8AD1;margin-right:14px}.name{font-weight:600}.sub{color:#93A4BD}
+.edge{position:absolute;left:0;top:0;width:${p.w - 2}px;height:${p.h - 2}px;border:1px solid rgba(255,255,255,0.10);border-radius:${p.radius ?? 16}px}`,
+    `<div class="edge"></div>${text && p.label && !p.small ? `<div class="lt"><span class="bar"></span><span class="name">${esc(p.label)}</span>${p.sub ? `<span class="sub">&nbsp;&middot;&nbsp;${esc(p.sub)}</span>` : ""}</div>` : ""}`);
 }
 
 // Glow frame for a speaking tile (transparent elsewhere).
@@ -130,7 +132,7 @@ async function duration(f: string) {
 export async function renderHtml(html: string, w: number, h: number, png: string) {
   const file = png.replace(/\.png$/, ".html");
   await Bun.write(file, html);
-  await $`${CHROME} --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --default-background-color=00000000 --window-size=${w},${h} --screenshot=${png} file://${file}`.quiet();
+  await $`${CHROME} --headless=new --disable-gpu --hide-scrollbars --force-device-scale-factor=1 --default-background-color=00000000 --virtual-time-budget=4000 --window-size=${w},${h} --screenshot=${png} file://${file}`.quiet();
 }
 
 async function load(configPath: string) {
@@ -141,44 +143,92 @@ async function load(configPath: string) {
   return { c, tiles, segments: (cuts?.segments ?? null) as [number, number][] | null };
 }
 
-// ffmpeg filtergraph: one crop+scale per (layout, tile), each shown only while its layout is on.
-export function filtergraph(c: LayoutConfig, tiles: Detection, segments: [number, number][] | null, from = 0) {
-  const fps = c.canvas.fps ?? FPS_DEFAULT;
-  const enable = (iv: [number, number][]) => iv.map(([a, b]) => `between(t,${(a - from).toFixed(3)},${(b - from - 0.001).toFixed(3)})`).join("+");
-  const chains: string[] = [];
-  const shown: { label: string; place: Place; when: string }[] = [];
-  for (const L of tiles.layouts) {
-    const iv = tiles.intervals.filter((i) => i.layout === L.id).flatMap((i) => mapToOutput(i.start, i.end, segments, fps));
-    const visible = iv.filter(([, b]) => b > from);
-    if (!visible.length) continue;
-    for (const [name, p] of Object.entries(c.place)) {
-      const r = L.tiles[name];
-      if (!r) continue;
-      const k = cropFor(r, c.crop, p);
-      const label = `t_${L.id}_${name}`;
-      const sharp = (c.sharpen ?? 0.25) > 0 ? `,cas=${c.sharpen ?? 0.25}` : "";
-      chains.push(`[SRC]crop=${k.w}:${k.h}:${k.x}:${k.y},scale=${p.w}:${p.h}:flags=lanczos${sharp},setsar=1[${label}]`);
-      shown.push({ label, place: p, when: enable(visible) });
+// Render the still layers once: background, then per place a mask, a label and an edge-only
+// layer, then
+// one glow per highlight row. The returned order is the input order the graph expects.
+export async function prepareUi(c: LayoutConfig, work: string): Promise<string[]> {
+  const out = [join(work, "bg.png")];
+  await renderHtml(chromeHtml(c), c.canvas.w, c.canvas.h, out[0]);
+  for (const [name, p] of Object.entries(c.place)) {
+    const b = boxSize(p);
+    for (const [kind, html] of [["mask", maskHtml(p)], ["label", labelHtml(p)], ["edge", labelHtml(p, false)]] as const) {
+      const png = join(work, `${kind}-${name}.png`);
+      await renderHtml(html, b.w, b.h, png);
+      out.push(png);
     }
   }
-  // The background is drawn on a branch of the video itself (not a color source), so it
-  // is in step with the tiles: no blank first frame after a seek, and it ends with the video.
-  const n = chains.length;
-  const parts = [`[0:v]split=${n + 1}${chains.map((_, i) => `[s${i}]`).join("")}[sbg]`, ...chains.map((ch, i) => ch.replace("[SRC]", `[s${i}]`))];
-  parts.push(`[sbg]scale=${c.canvas.w}:${c.canvas.h},setsar=1,drawbox=x=0:y=0:w=iw:h=ih:color=0x0A0F1A:t=fill[bg0]`);
+  for (const [i, h] of (c.highlight ?? []).entries()) {
+    const png = join(work, `hl${i}.png`);
+    await renderHtml(highlightHtml(c, c.place[h.tile]), c.canvas.w, c.canvas.h, png);
+    out.push(png);
+  }
+  return out;
+}
+
+// Smooth 0..1 "center state" weight over window time t: ease-in-out ramps of `d` s at
+// both ends of every window.
+function centerWeight(windows: [number, number][], d: number): string {
+  const st = (x: string) => `(pow(clip(${x},0,1),2)*(3-2*clip(${x},0,1)))`;
+  return windows.map(([a, b]) => `(${st(`(t-${a.toFixed(3)})/${d}`)}-${st(`(t-${(b - d).toFixed(3)})/${d}`)})`).join("+") || "0";
+}
+
+// ffmpeg filtergraph. Per tile: one crop+scale per Zoom layout (shown while that layout is
+// on), merged, then the rounded mask and label, then the move/scale of the "center" state.
+// Inputs: 0 = video, then the prepareUi() layers from index `base`.
+export function filtergraph(c: LayoutConfig, tiles: Detection, segments: [number, number][] | null, from = 0, base = 1) {
+  const fps = c.canvas.fps ?? FPS_DEFAULT;
+  const enable = (iv: [number, number][]) => iv.map(([a, b]) => `between(t,${(a - from).toFixed(3)},${(b - from - 0.001).toFixed(3)})`).join("+");
+  const sharp = (c.sharpen ?? 0.25) > 0 ? `,cas=${c.sharpen ?? 0.25}` : "";
+  const names = Object.keys(c.place);
+  const used = tiles.layouts
+    .map((L) => ({ L, iv: tiles.intervals.filter((i) => i.layout === L.id).flatMap((i) => mapToOutput(i.start, i.end, segments, fps)).filter(([, b]) => b > from) }))
+    .filter((u) => u.iv.length);
+  const variants = names.flatMap((n) => used.filter((u) => u.L.tiles[n]).map((u) => ({ n, u })));
+  const parts = [`[0:v]split=${variants.length + 1}${variants.map((_, i) => `[s${i}]`).join("")}[sbg]`];
+  parts.push(`[sbg]scale=${c.canvas.w}:${c.canvas.h},setsar=1,format=yuv420p[sb];[sb][${base}:v]overlay=0:0[bg0]`);
+  const D = c.transition ?? 0.6;
+  const windows = (c.center ?? []).map((w) => [w.from - from, w.to - from] as [number, number]).filter(([, b]) => b > 0);
+  const e = centerWeight(windows, D);
   let cur = "bg0";
-  shown.forEach((s, i) => {
-    parts.push(`[${cur}][${s.label}]overlay=${s.place.x}:${s.place.y}:enable='${s.when}'[bg${i + 1}]`);
-    cur = `bg${i + 1}`;
-  });
-  parts.push(`[${cur}][1:v]overlay=0:0[ui]`);
-  cur = "ui";
-  // Highlights: inputs 2.., one per highlight row, fade in/out 0.3 s.
+  // Small tiles first, so a moving host tile passes over them.
+  const order = [...names].sort((a, b) => Number(!!c.place[b].small) - Number(!!c.place[a].small));
+  for (const n of order) {
+    const p = c.place[n], bx = boxSize(p);
+    const vs = variants.map((v, i) => ({ ...v, i })).filter((v) => v.n === n);
+    if (!vs.length) continue;
+    vs.forEach((v) => {
+      const k = cropFor(v.u.L.tiles[n], c.crop, p);
+      parts.push(`[s${v.i}]crop=${k.w}:${k.h}:${k.x}:${k.y},scale=${p.w}:${p.h}:flags=lanczos${sharp},setsar=1[v${v.i}]`);
+    });
+    // Merge the Zoom-layout variants: later ones on top while their layout is on.
+    let t = `v${vs[0].i}`;
+    for (const v of vs.slice(1)) {
+      parts.push(`[${t}][v${v.i}]overlay=0:0:enable='${enable(v.u.iv)}'[m${v.i}]`);
+      t = `m${v.i}`;
+    }
+    const mi = base + 1 + names.indexOf(n) * 3;
+    parts.push(`[${t}]format=yuva420p${bx.h > p.h ? `,pad=${bx.w}:${bx.h}:0:0:color=black@0` : ""}[p_${n}];[${mi}:v]format=gray[mk_${n}];[p_${n}][mk_${n}]alphamerge[a_${n}]`);
+    const q = p.center;
+    if (q && windows.length) {
+      // The name label fades out while the tile is aside: blend the labelled box into the
+      // edge-only box by the same weight (only inside the windows, so it costs little).
+      const on = windows.map(([a, b]) => `between(t,${a.toFixed(3)},${b.toFixed(3)})`).join("+");
+      parts.push(`[a_${n}]split[a1_${n}][a2_${n}];[a1_${n}][${mi + 1}:v]overlay=0:0:format=yuv420[wl_${n}];[a2_${n}][${mi + 2}:v]overlay=0:0:format=yuv420[nl_${n}]`);
+      parts.push(`[wl_${n}][nl_${n}]blend=all_expr='A+(B-A)*(${e.replace(/\bt\b/g, "T")})':enable='${on}'[box_${n}]`);
+      const k = q.w / p.w; // box scales with the tile
+      const lerp = (a: number, b: number) => `(${a}+(${b - a})*(${e}))`;
+      parts.push(`[box_${n}]scale=w='trunc(${lerp(bx.w, bx.w * k)}/2)*2':h='trunc(${lerp(bx.h, bx.h * k)}/2)*2':eval=frame:flags=bicubic[bs_${n}]`);
+      parts.push(`[${cur}][bs_${n}]overlay=x='${lerp(p.x, q.x)}':y='${lerp(p.y, q.y)}':eval=frame[o_${n}]`);
+    } else parts.push(`[a_${n}][${mi + 1}:v]overlay=0:0:format=yuv420[box_${n}];[${cur}][box_${n}]overlay=${p.x}:${p.y}[o_${n}]`);
+    cur = `o_${n}`;
+  }
+  // Highlights: one glow layer per highlight row, fade in/out 0.3 s.
+  const hlBase = base + 1 + names.length * 3;
   (c.highlight ?? []).forEach((h, i) => {
     const iv = merge(mapToOutput(sec(h.from), sec(h.to), segments, fps)).map(([a, b]) => [a - from, b - from] as [number, number]).filter(([, b]) => b > 0);
     iv.forEach(([a, b], j) => {
       const lab = `hl${i}_${j}`;
-      parts.push(`[${2 + i}:v]format=rgba,fade=in:st=${Math.max(0, a).toFixed(2)}:d=0.3:alpha=1,fade=out:st=${b.toFixed(2)}:d=0.4:alpha=1[${lab}]`);
+      parts.push(`[${hlBase + i}:v]format=rgba,fade=in:st=${Math.max(0, a).toFixed(2)}:d=0.3:alpha=1,fade=out:st=${b.toFixed(2)}:d=0.4:alpha=1[${lab}]`);
       parts.push(`[${cur}][${lab}]overlay=0:0:enable='between(t,${Math.max(0, a - 0.1).toFixed(2)},${(b + 0.5).toFixed(2)})'[${lab}o]`);
       cur = `${lab}o`;
     });
@@ -194,14 +244,7 @@ if (import.meta.main) {
   const { c, tiles, segments } = await load(configPath);
   const work = join(dirname(resolve(output)), ".layout");
   mkdirSync(work, { recursive: true });
-  const uiPng = join(work, "ui.png");
-  await renderHtml(chromeHtml(c), c.canvas.w, c.canvas.h, uiPng);
-  const hlPngs: string[] = [];
-  for (const [i, h] of (c.highlight ?? []).entries()) {
-    const png = join(work, `hl${i}.png`);
-    await renderHtml(highlightHtml(c, c.place[h.tile]), c.canvas.w, c.canvas.h, png);
-    hlPngs.push(png);
-  }
+  const pngs = await prepareUi(c, work);
   const still = flag("--still");
   const from = still !== undefined ? Number(still) : Number(flag("--from") ?? 0);
   const dur = still !== undefined ? 1 / c.canvas.fps : flag("--dur") ? Number(flag("--dur")) : undefined;
@@ -211,7 +254,7 @@ if (import.meta.main) {
   const seek = from > 0 ? ["-ss", String(from)] : [];
   // Looped PNG inputs never end: always bound the output length.
   const len = ["-t", String(dur ?? (await duration(input)) - from)];
-  const loops = [uiPng, ...hlPngs].flatMap((p) => ["-loop", "1", "-framerate", String(c.canvas.fps), "-i", p]);
+  const loops = pngs.flatMap((p) => ["-loop", "1", "-framerate", String(c.canvas.fps), "-i", p]);
   const enc = still !== undefined
     ? ["-frames:v", "1"]
     : ["-map", "0:a?", "-c:v", "libx264", "-preset", flag("--preset") ?? "medium", "-crf", "19", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart"];

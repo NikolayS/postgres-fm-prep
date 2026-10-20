@@ -24,11 +24,17 @@ const shot = (name: string, chip: string, rect?: Partial<{x: number; y: number; 
 type Sfx = {file: string; at: number; gain: number};
 export type Item = {id: string; comp: 'shot' | 'number' | 'band' | 'full' | 'intro' | 'hacking'; outStart: number; duration: number; placement: 'band' | 'full'; freezeSec: number; sfx: Sfx[]; props: Record<string, unknown>; source?: string};
 
-const tick = (at: number, gain = 2.0): Sfx => ({file: 'sfx/tick.wav', at, gain});
-const pop = (at: number, gain = 3.5): Sfx => ({file: 'sfx/pop.wav', at, gain});
-const whoosh = (at: number, gain = 1.0): Sfx => ({file: 'sfx/whoosh.wav', at, gain});
-// clack: sharp accent for staged facts/thumbnails; -3 dB vs pop (pop gain 3.5 -> 2.5).
-const clack = (at: number, gain = 2.5): Sfx => ({file: 'sfx/clack.wav', at, gain});
+// Low-frequency, soft SFX family (see scripts/sfx-synth.sh). The names keep their roles:
+// tick = short air puff (strips, chips), pop = sub thud (a number lands), clack = quieter thud
+// variant for staged facts, whoosh = wind swell (full-screen in/out). Variants rotate so
+// repeated hits are not identical. Gains are relative; the packager normalizes.
+let nThud = 0, nWind = 0;
+const THUDS = ['sfx/thud1.wav', 'sfx/thud2.wav', 'sfx/thud3.wav'];
+const WINDS = ['sfx/wind1.wav', 'sfx/wind2.wav'];
+const tick = (at: number, gain = 1.0): Sfx => ({file: 'sfx/air.wav', at, gain});
+const pop = (at: number, gain = 1.0): Sfx => ({file: THUDS[nThud++ % THUDS.length], at, gain});
+const whoosh = (at: number, gain = 0.8): Sfx => ({file: WINDS[nWind++ % WINDS.length], at, gain});
+const clack = (at: number, gain = 0.7): Sfx => pop(at, gain);
 const shotSfx = (dur: number) => [whoosh(0), tick(2.0, 2.5), whoosh(dur - 0.3, 0.7)];
 const NOTE = "Editor's note:";
 
@@ -45,9 +51,7 @@ const PLAYLIST = 'https://www.youtube.com/playlist?list=PLH8y1BNPAKjKDdJA7sDmFWU
 // outStart = seconds in edited.mp4 time (final EDL, 202 cuts), before intro/freeze shifts.
 export const ITEMS: Item[] = [
   // Host intros: freeze right after the host's name is said; photo = square crop of the host's own tile (public/face-*.png).
-  {id: '00-nik-intro', comp: 'intro', outStart: 3.6, duration: 3.8, placement: 'full', freezeSec: 3.8, sfx: introSfx(3, 3.8),
-    props: {name: 'Nik Samokhvalov', company: 'PostgresAI', photo: 'face-nik.png', side: 'right', facts: ['Founder, PostgresAI', 'Co-host, Postgres.FM', 'Named in 33 Postgres commits']},
-    source: 'https://postgres.fm'},
+  // The regular host gets no intro card (Nik, 2026-10-20); only the guest.
   {id: '01-kirk-intro', comp: 'intro', outStart: 12.9, duration: 7, placement: 'full', freezeSec: 7, sfx: introSfx(4, 7),
     props: {name: 'Kirk Wolak', company: 'Software Architect, KiraSoft', photo: 'face-kirk.png', side: 'left', facts: ['Co-host, Hacking Postgres series', 'GSoC mentor: B-Tree merge', 'psql patch author, PostgreSQL 17', 'Credited in PG 16 and 17 release notes']},
     source: 'https://postgres.fm/people/kirk-wolak'},
