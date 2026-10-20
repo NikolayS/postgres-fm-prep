@@ -1,21 +1,29 @@
 # Postgres.FM preparation
 
-Research and recording preparation for **“Your restore finished. Is your database ready?”** with Nikolay Samokhvalov and Kirk Wolak.
+Research, study packs, experiment plans and recording notes for individual Postgres.FM episodes.
 
-The question: what performance-relevant state is missing after a logical PostgreSQL dump/restore, what PG18 statistics transport changes, and what operators should verify before returning traffic.
+## Episodes
 
-## Start here
+| Episode | Status | Materials |
+| --- | --- | --- |
+| Your restore finished. Is your database ready? | Preparation; additional experiments proposed | [Episode overview](episodes/restore-readiness/README.md) · [Study pack](episodes/restore-readiness/study-pack.md) |
 
-- [Kirk's study pack](study-pack.md) — a short reading guide, core distinctions and co-host questions.
-- [Research report](research.md) — historical discussions, PG18 defaults, visibility maps, version boundaries and operator considerations.
-- [Additional DBLab Forge experiments](experiments.md) — a bounded plan for a few hours, with priorities, decisive measurements and stop rules.
-- [Existing experimental observations](existing-observations.md) — what earlier synthetic examples show and what they do not.
-- [Blog outline](blog-outline.md) — the article structure and evidence still needed.
+## Repository structure
 
-## Current status
+Each episode lives in `episodes/<topic-slug>/`. Use a short, stable topic name; put recording dates and episode numbers in the episode overview once confirmed.
 
-Research was assembled on 2026-10-20 UTC. The next recording/article target is October 20, with study material needed that morning Pacific time.
+The episode's `README.md` is its entry point. Keep its research, study pack, experiment plans, observations and article material together so relative links remain local to that episode. Add an `assets/` directory when there are figures to include.
 
-The additional experiments are **proposed, not executed**. Earlier observations are clearly labelled and are not an end-to-end dump/restore benchmark. No universal query-latency speedup is claimed.
+[The episode template](templates/episode/README.md) provides a starting point. Document names are conventions, not requirements: create only the materials an episode needs.
 
-PG18 is the core demonstration target. PG19 is a short, explicitly release-candidate-qualified follow-up unless the core work is complete early.
+## Add an episode
+
+1. Create `episodes/<topic-slug>/` and copy the episode template into its `README.md`.
+2. Fill in the question, participants, status, deadlines and planned discussion.
+3. Add the relevant documents and link them from that overview.
+4. Add an entry to the episode table above.
+5. As work progresses, distinguish proposed experiments from measured results. Add recording and publication links when available.
+
+## Public material
+
+Keep this repository suitable for public reading. Include technical research, public sources, approved observations and preparation notes. Exclude private communications, credentials, customer information and confidential planning. State the versions, measurement conditions and limits behind technical claims.
