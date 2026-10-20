@@ -100,7 +100,7 @@ svg{position:absolute;left:0;top:0}
 .lt .name{font-weight:600}
 .lt .sub{color:#93A4BD;font-weight:400}
 .small{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:17px;color:#93A4BD;text-align:left;letter-spacing:0.3px}
-.top{left:64px;top:44px;font-size:22px;display:flex;gap:18px;align-items:baseline}
+.top{left:${Math.min(...places.map((p) => p.x))}px;top:44px;font-size:22px;display:flex;gap:18px;align-items:baseline}
 .top .show{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:700;color:#E8EDF5;letter-spacing:0.5px}
 .top .title{color:#7F90A8}
 </style></head><body>

@@ -1,7 +1,7 @@
 // Final episode: title card + laid-out show + end card, with intro/outro music.
 //
 //   bun compose.ts <layout.json> <edited.mp4> <out.mp4> --intro intro.mp3 --outro outro.mp3
-//                  [--until S] [--preset fast] [--card 4] [--end 10] [--duck -15]
+//                  [--until S | --tail S] [--preset fast] [--card 4] [--end 10] [--duck -15]
 //
 // Picture: title card (C s, layers fade/slide in) -> 0.5 s crossfade -> the show with the
 // layout.ts filtergraph -> 0.6 s crossfade -> end card (E s). One encode.
@@ -9,7 +9,8 @@
 // the first words and fades out by C + 6 s. The outro bed enters ducked 10 s before the
 // show ends, rises after the sign-off and ends with the end card. Music cues are first
 // set to -18 LUFS; the final mix is two-pass loudnorm to -16 LUFS, -1.5 dBTP.
-// --until S keeps only the first S s of the show (for an intro demo; no outro).
+// --until S keeps only the first S s of the show (intro demo; no outro). --tail S keeps
+// only the last S s (outro demo; no title card, no intro).
 import { $ } from "bun";
 import { mkdirSync } from "fs";
 import { dirname, join, resolve } from "path";
@@ -71,9 +72,10 @@ if (import.meta.main) {
   const flag = (n: string) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined; };
   const [configPath, input, output] = args;
   const intro = flag("--intro"), outro = flag("--outro");
-  if (!output || !intro) { console.error("usage: bun compose.ts <layout.json> <edited.mp4> <out.mp4> --intro a.mp3 [--outro b.mp3] [--until S] [--preset fast]"); process.exit(2); }
   const until = flag("--until") ? Number(flag("--until")) : undefined;
-  const C = Number(flag("--card") ?? 4), E = Number(flag("--end") ?? 10), DUCK = Number(flag("--duck") ?? -15);
+  const tail = flag("--tail") ? Number(flag("--tail")) : undefined;
+  if (!output || (!intro && tail === undefined)) { console.error("usage: bun compose.ts <layout.json> <edited.mp4> <out.mp4> --intro a.mp3 [--outro b.mp3] [--until S | --tail S] [--preset fast]"); process.exit(2); }
+  const C = tail !== undefined ? 0 : Number(flag("--card") ?? 4), E = Number(flag("--end") ?? 10), DUCK = Number(flag("--duck") ?? -15);
   const X1 = 0.5, X2 = 0.6, MUSIC_LUFS = -18;
 
   const c: LayoutConfig & { links?: string[]; cardTitle?: string } = await Bun.file(configPath).json();
@@ -108,21 +110,23 @@ if (import.meta.main) {
   const ec = await card(work, "end", w, h, [
     { top: 300, html: mark, st: 0.3 },
     { top: 400, html: title, st: 0.6 },
-    { top: 640, html: `<div class="hosts">${hosts}</div>`, st: 1.0 },
-    { top: 740, html: `<div class="links">${links}</div>`, st: 1.4 },
+    { top: 680, html: `<div class="hosts">${hosts}</div>`, st: 1.0 },
+    { top: 770, html: `<div class="links">${links}</div>`, st: 1.4 },
   ]);
 
-  const showLen = until ?? (await duration(input));
+  const full = await duration(input);
+  const from = tail !== undefined ? full - tail : 0;
+  const showLen = until ?? full - from;
   const withOutro = !!outro && until === undefined;
   const total = withOutro ? C + showLen - X2 + E : C + showLen;
 
   // Inputs: 0 show, 1 ui, 2.. highlights (fixed by layout.ts), then card layers, then music.
-  const inputs: string[][] = [[...(until ? ["-t", String(until)] : []), "-i", input], ["-loop", "1", "-framerate", String(fps), "-i", uiPng], ...hlPngs.map((p) => ["-loop", "1", "-framerate", String(fps), "-i", p])];
+  const inputs: string[][] = [[...(until ? ["-t", String(until)] : []), ...(from ? ["-ss", from.toFixed(3)] : []), "-i", input], ["-loop", "1", "-framerate", String(fps), "-i", uiPng], ...hlPngs.map((p) => ["-loop", "1", "-framerate", String(fps), "-i", p])];
   const add = (a: string[]) => inputs.push(a) - 1;
   const still = (png: string, len: number) => add(["-loop", "1", "-framerate", String(fps), "-t", String(len), "-i", png]);
 
   const g: string[] = [];
-  const lay = filtergraph(c, tiles, segments, 0);
+  const lay = filtergraph(c, tiles, segments, from);
   g.push(lay.graph.replace(/\[0:v\]split/, "[0:v]setpts=PTS-STARTPTS,split"));
   g.push(`[${lay.out}]format=yuv420p,setsar=1,fps=${fps},settb=1/${fps}[show]`);
   // Card: background + layers sliding up while fading in (ease-out).
@@ -138,24 +142,30 @@ if (import.meta.main) {
     });
     g.push(`[${cur}]format=yuv420p,setsar=1,fps=${fps},settb=1/${fps}[${name}]`);
   };
-  buildCard("tcard", tc, C + X1);
-  g.push(`[tcard][show]xfade=transition=fade:duration=${X1}:offset=${C}[v1]`);
-  let vout = "v1";
+  let vout = "show";
+  if (C > 0) {
+    buildCard("tcard", tc, C + X1);
+    g.push(`[tcard][show]xfade=transition=fade:duration=${X1}:offset=${C}[v1]`);
+    vout = "v1";
+  }
   if (withOutro) {
     buildCard("ecard", ec, E);
-    g.push(`[v1][ecard]xfade=transition=fade:duration=${X2}:offset=${(C + showLen - X2).toFixed(3)}[v2]`);
+    g.push(`[${vout}][ecard]xfade=transition=fade:duration=${X2}:offset=${(C + showLen - X2).toFixed(3)}[v2]`);
     vout = "v2";
   }
 
   // Audio. Gains set each cue to MUSIC_LUFS first.
-  const gi = MUSIC_LUFS - (await lufs(intro));
-  const ii = add(["-i", intro]);
-  const introLen = await duration(intro);
-  const duckAt = C + 0.1; // the edit keeps 0.3 s of room tone before the first word
   const db = (expr: string) => `volume='pow(10,(${expr})/20)':eval=frame`;
   g.push(`[0:a]asetpts=PTS-STARTPTS,adelay=${Math.round(C * 1000)}:all=1,apad=whole_dur=${total.toFixed(3)}[voice]`);
-  g.push(`[${ii}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gi.toFixed(2)}dB,${db(`if(lt(t,${duckAt}),0,${DUCK}*min(1,(t-${duckAt})/0.5))`)},afade=t=out:st=${Math.min(introLen - 1, C + 1.5)}:d=${Math.min(4.5, introLen - C - 1.5)}[mi]`);
-  const mix = ["[voice]", "[mi]"];
+  const mix = ["[voice]"];
+  if (intro && C > 0) {
+    const gi = MUSIC_LUFS - (await lufs(intro));
+    const ii = add(["-i", intro]);
+    const introLen = await duration(intro);
+    const duckAt = C + 0.1; // the edit keeps 0.3 s of room tone before the first word
+    g.push(`[${ii}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gi.toFixed(2)}dB,${db(`if(lt(t,${duckAt}),0,${DUCK}*min(1,(t-${duckAt})/0.5))`)},afade=t=out:st=${Math.min(introLen - 1, C + 1.5)}:d=${Math.min(4.5, introLen - C - 1.5)}[mi]`);
+    mix.push("[mi]");
+  }
   if (withOutro) {
     const go = MUSIC_LUFS - (await lufs(outro!));
     const oi = add(["-i", outro!]);
@@ -179,7 +189,7 @@ if (import.meta.main) {
   const js = p1.stderr.toString().match(/\{[^{}]*"input_i"[^{}]*\}/);
   if (!js) throw new Error(`loudnorm pass 1 failed:\n${p1.stderr.toString().slice(-2000)}`);
   const m = JSON.parse(js[0]);
-  g.push(`[mix]loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true,aresample=48000[aout]`);
+  g.push(`[mix]loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true,aresample=48000,alimiter=limit=0.79:level=false:attack=1:release=50[aout]`);
   await Bun.write(graphFile, g.join(";\n"));
   await $`ffmpeg -y -v error ${flat} -filter_complex_script ${graphFile} -map [${vout}] -map [aout] -t ${total.toFixed(3)} -c:v libx264 -preset ${flag("--preset") ?? "medium"} -crf 19 -pix_fmt yuv420p -r ${fps} -c:a aac -b:a 192k -movflags +faststart ${output}`;
   console.log(`wrote ${output} (${total.toFixed(2)} s)`);
