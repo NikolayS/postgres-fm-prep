@@ -40,3 +40,5 @@ PG18 is the core demonstration target. PG19 is a short, explicitly release-candi
 - [PG19 on physical standbys and episode angles](pg19-standby-and-episode-angles.md) — primary-only initiation, replay, possible conflicts and optional follow-up.
 
 - [Hint bits, standby reads and FREEZE](hint-bits-standbys-freeze.md) — three kinds of preparation and a practical decision guide.
+
+- [Forge engineer notes: reviewed additions](engineer-notes-synthesis.md) — partitioned parents, tooling, freezing lifecycle, benchmark fidelity and readiness-manifest ideas.

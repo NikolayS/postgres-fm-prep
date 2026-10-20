@@ -7,7 +7,7 @@
 
 **Successful restore is a data milestone. Query readiness needs its own checks.** Stats, physical visibility and the work paid by the first reader are separate concerns.
 
-## Seven thinking points
+## Seven core thinking points
 
 1. **ANALYZE and VACUUM solve different problems.** In our PG18 fixture, ANALYZE fixed the join plan; VACUUM enabled the efficient covering-index path; both were needed for both benefits. An Index Only Scan label alone proves little: check heap fetches. [Four-arm comparison](forge-results.md).
    - Ask: “What does our application need before we let traffic back in?”
@@ -29,6 +29,26 @@
 
 7. **The experiment itself can change the answer.** A first read changes physical state. Disabling autovacuum also changes whether index creation preserves imported estimates. Warm-up and isolation settings are part of the result. [Controls and history](forge-results.md).
    - Ask: “What would falsify our explanation—and did we test it?”
+
+## Three additions worth making room for
+
+- **Partitioned parents are a real autovacuum exception.** Leaves can be analyzed while parent statistics remain missing. PG19 improves `--analyze-only` and `--analyze-in-stages`; default `--analyze` still excludes parents. Autovacuum's parent behavior is unchanged. Ask: “What does waiting never fix?”
+- **A logical copy changes the benchmark.** It rebuilds storage and indexes while losing some physical preparation. Ask: “Is our restored copy representative of production?”
+- **Make readiness an explicit output.** A proposed manifest could record stats, completed/skipped maintenance, workload checks and replica replay. Ask: “What evidence should a human—or an agent—require before opening traffic?”
+
+[Engineer-notes synthesis, source links and corrections](engineer-notes-synthesis.md). Optional extensions there: pgcopydb already schedules VACUUM ANALYZE, Debian's wrapper schedules ANALYZE, plus lifecycle FREEZE costs and checkpoint timing. Newly reported partition-track timings and pending FREEZE runs have not yet been validated for this briefing.
+
+## A simple recording arc
+
+**Hook:** a successful logical restore can leave the first query doing unexpected work.
+
+**Explain:** estimates, physical visibility and hint preparation.
+
+**Demonstrate:** ANALYZE versus VACUUM, then the WAL surprise.
+
+**Complicate honestly:** PG19's better second read, replicas and partitioned parents.
+
+**Close:** operations today; proposals for future tooling. Keep low-level record names in the article.
 
 ## Keep only three numbers in the spoken story
 

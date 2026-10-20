@@ -190,3 +190,7 @@ The [full research report](research.md) contains the longer history and primary 
 ## Hint bits and FREEZE
 
 Add a short distinction between statistics, visibility preparation, and future freezing work. Standby hints can differ locally even though PG19 VM preparation originates on the primary. Hint-only dirtying is conditional on checksum/wal_log_hints settings. FREEZE may help stable data but is not required for Index Only Scans. [Full decision guide](hint-bits-standbys-freeze.md).
+
+## Additional questions from the Forge engineer
+
+The [reviewed synthesis](engineer-notes-synthesis.md) adds partitioned-parent statistics, tooling policy differences, bulk-load freezing schedules, logical-copy benchmark fidelity and a possible readiness manifest. It distinguishes primary-source facts from new PDF-only timing claims and pending runs. Use the [host TL;DR](hosts-tldr.md) for the revised recording arc.

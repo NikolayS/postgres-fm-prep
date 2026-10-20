@@ -87,3 +87,7 @@ Use the [Forge follow-up](first-read-writes.md#forge-follow-up-why-this-bookkeep
 ## Strong closing angle: the read-replica blind spot
 
 Explain that PG19 read-time VM preparation originates outside recovery; physical standbys receive it through replay. A primary-only benchmark does not demonstrate local repair by replica reads. End with the optional question of a primary SELECT generating a standby snapshot conflict. Label both as source-derived implications, with conflict occurrence unmeasured. [Evidence and six ranked discussion angles](pg19-standby-and-episode-angles.md).
+
+## Add depth without overloading the narrative
+
+From the [engineer-notes synthesis](engineer-notes-synthesis.md), prioritize a short partitioned-parent warning in operations and a readiness-manifest idea in future work. Use logical-copy benchmark fidelity as an optional closing question. Do not import the PDF's absolute claims about IOS, worker timing, synchronized freezing, or universal physical-copy recommendations.
