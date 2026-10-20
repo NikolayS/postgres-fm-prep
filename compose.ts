@@ -243,7 +243,7 @@ if (import.meta.main) {
     }
     ga.push(`[${cur}]anull[talk]`);
   } else ga.push(`[0:a]asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo[talk]`);
-  ga.push(`[talk]adelay=${Math.round(C * 1000)}:all=1,apad=whole_dur=${total.toFixed(3)}[voice]`);
+  ga.push(`[talk]asetpts=PTS-STARTPTS,adelay=${Math.round(C * 1000)}:all=1,apad=whole_dur=${total.toFixed(3)}[voice]`);
   const mix = ["[voice]"];
   if (intro && C > 0) {
     const gi = MUSIC_LUFS - (await lufs(intro));
@@ -280,16 +280,25 @@ if (import.meta.main) {
       ga.push(`[${k}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gain.toFixed(2)}dB,adelay=${Math.round((fin(o.t) + s.at) * 1000)}:all=1[sfx${si}]`);
       mix.push(`[sfx${si++}]`);
     }
-  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)}[mix]`);
+  // amix starts at the latest first timestamp of its inputs (an mp3 or a delayed SFX may not
+  // start at 0), which dropped the first 4 s once: number every input from sample 0.
+  for (let i = 0; i < ga.length; i++) {
+    const m = ga[i].match(/\[(\w+)\]$/);
+    if (m && mix.includes(`[${m[1]}]`)) ga[i] = ga[i].replace(/\[(\w+)\]$/, ",asetpts=N/SR/TB[$1]");
+  }
+  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB,aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`);
+  // The pre-limit keeps true peaks low enough for loudnorm's linear mode: its dynamic mode
+  // (used when peaks are too high) lost the first seconds of the mix in a full-length run.
 
   // Pass 1: loudness of the mix (audio only, so the video chain is not decoded).
   const flat = inputs.flat();
+  await Bun.write(join(work, "inputs.json"), JSON.stringify(flat)); // to re-run a graph by hand
   await Bun.write(join(work, "audio.txt"), `${ga.join(";\n")};\n[mix]loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json[out]`);
   const p1 = await $`ffmpeg -hide_banner -nostats ${flat} -filter_complex_script ${join(work, "audio.txt")} -map [out] -f null -`.nothrow().quiet();
   const js = p1.stderr.toString().match(/\{[^{}]*"input_i"[^{}]*\}/);
   if (!js) throw new Error(`loudnorm pass 1 failed:\n${p1.stderr.toString().slice(-2000)}`);
   const m = JSON.parse(js[0]);
-  ga.push(`[mix]loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true,aresample=48000,alimiter=limit=0.79:level=false:attack=1:release=50[aout]`);
+  ga.push(`[mix]loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true,aresample=192000,alimiter=limit=0.75:level=false:attack=1:release=50,aresample=48000,asetpts=N/SR/TB[aout]`);
   const graphFile = join(work, "graph.txt");
   await Bun.write(graphFile, [...g, ...ga].join(";\n"));
   // Time map for chapters and later layers: edited time -> final time.
@@ -298,6 +307,17 @@ if (import.meta.main) {
     card: C, from, total: Number(total.toFixed(3)), showEnd: Number(showEndFinal.toFixed(3)), endCard: withOutro ? { start: Number((showEndFinal - X2).toFixed(3)), sec: E } : null,
     freezes: freezes.map((f) => ({ edited: Number((f.at + from).toFixed(3)), sec: f.sec, finalStart: Number(fin(f.at).toFixed(3)) })),
   }, null, 2));
+  // The limiter runs at 4x rate so AAC true peaks stay under -1.5 dBTP.
+  if (args.includes("--audio-only")) {
+    // Re-make only the sound of an existing render (same inputs and timing), then remux.
+    const m4a = join(work, "audio.m4a"), tmp = output.replace(/\.mp4$/, ".remux.mp4");
+    await Bun.write(join(work, "audio2.txt"), ga.join(";\n"));
+    await $`ffmpeg -y -v error ${flat} -filter_complex_script ${join(work, "audio2.txt")} -map [aout] -t ${total.toFixed(3)} -c:a aac -b:a 192k ${m4a}`;
+    await $`ffmpeg -y -v error -i ${output} -i ${m4a} -map 0:v -map 1:a -c copy -movflags +faststart ${tmp}`;
+    await $`mv ${tmp} ${output}`;
+    console.log(`remuxed new audio into ${output}`);
+    process.exit(0);
+  }
   await $`ffmpeg -y -v error ${flat} -filter_complex_script ${graphFile} -map [${vout}] -map [aout] -t ${total.toFixed(3)} -c:v libx264 -preset ${flag("--preset") ?? "medium"} -crf 19 -pix_fmt yuv420p -r ${fps} -c:a aac -b:a 192k -movflags +faststart ${output}`;
   console.log(`wrote ${output} (${total.toFixed(2)} s; ${freezes.length} freezes, ${overlays.length} overlays, ${si} sfx)`);
 }

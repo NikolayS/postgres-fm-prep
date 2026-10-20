@@ -381,3 +381,9 @@ Review checklist before the final composite:
 - Final layout used on 2026-10-20: `layout.example.json` with big faces
   (924x594 at y 110), robot 240x135 at 1656,790; overlay band x 24-1600,
   y 912-1052. Full render with 22 overlays: about 45 min (fast preset).
+- Verify a final: `bun $S/av-sync.ts edited.mp4 final.mp4 final.time-map.json
+  20 300 1500 2900` (audio and video lag vs the map; expect |A/V| < 20 ms),
+  ebur128 (-16 LUFS, true peak <= -1.5), stream durations equal. Lesson
+  (2026-10-20): amix began at the latest first timestamp of its inputs and
+  dropped the 4 s title-card audio; every amix input is now renumbered from
+  sample 0. `--audio-only` re-makes the sound of an existing render and remuxes.
