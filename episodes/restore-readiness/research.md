@@ -173,3 +173,5 @@ The [Forge synthesis](forge-results.md) records supplied campaign results; the [
 ## October 20 additions: first-reader writes and PG19 control
 
 See [the WAL mechanism and experimental controls](first-read-writes.md), and [the independent PG19rc1 single-field reproducer](evidence/pg19-relallvisible/README.md). The latter qualifies the imported-estimate concern: it initially overstates physical VM coverage but improves repeated-query buffer work in this case. Physical upgrade and logical reload warrant separate policy discussion.
+
+Forge subsequently added a mechanistic WAL explanation in commit `8f8598a7b0c11ddfcf8276cf7b3f6133b8dca61b`. The [reviewed follow-up](first-read-writes.md#forge-follow-up-why-this-bookkeeping-needs-crash-protection) adds pg_xact versus snapshot visibility, hint-image recovery, PG19 record-path details and the tentative COPY buffer-ring interpretation. It preserves the distinction between measured counters and source-based attribution, and qualifies COPY FREEZE and total-write-cost claims.

@@ -79,3 +79,7 @@ The deadline is a reason to reduce scope. If a comparison remains incomplete, om
 Use [first-read-writes.md](first-read-writes.md) for the explanation: 26.94 MiB statement WAL on a 27.19-MiB heap, 3,449 FPIs, checksum/checkpoint controls, and the distinction between dirtied buffers and physical writes. Avoid suggesting checksum removal or inferring replica lag from unmeasured effects.
 
 Include the [PG19rc1 single-field control](evidence/pg19-relallvisible/README.md): first-query work nearly equal, second query favors retained estimate after read-time VM updates. Frame destination-derived relallvisible as a policy question; distinguish physical pg_upgrade from logical reload.
+
+### Explain the crash-safety distinction
+
+Use the [Forge follow-up](first-read-writes.md#forge-follow-up-why-this-bookkeeping-needs-crash-protection): a hint can be recomputed, but a torn checksummed page needs repair; a VM bit authorizes skipping heap checks. Distinguish pg_xact from WAL. Do not claim two heap images per page, identical VACUUM/SELECT write amplification, or WAL-free COPY FREEZE. The 16-MiB COPY-ring explanation for 1,432 newly dirtied buffers is a source-based hypothesis, not a controlled result.

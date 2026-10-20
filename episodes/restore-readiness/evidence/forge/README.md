@@ -20,3 +20,7 @@ The manifest records original case-relative file paths and hashes, plus publishe
 Core: PG18.6 and PG19rc1 package builds; master 20devel at `ddd468cacf0d5d6f124c39439505ab93d31ac65b`; additional default-archive comparison on PG17.11. Host: 4 vCPU, 16 GiB RAM, Ubuntu 24.04.4, x86-64. Core settings include shared_buffers 2GB, work_mem 64MB, maintenance_work_mem 512MB, parallel query and index maintenance disabled, JIT off, checksums on. Core tables used elevated vacuum/analyze/insert thresholds of 2,000,000,000; stock-autovacuum controls removed them. Main fixture 63 MiB, three fresh restores per core arm. First-read experiments add an unindexed table and explicitly vary checkpoints/checksums. The larger fixture uses different settings and a single observation per timed step; see the report for its limitations.
 
 These are recorded results from the supplied experiments. No claim is made that every experiment was independently rerun for this publication.
+
+## Subsequent WAL explanation
+
+The [reviewed WAL follow-up](../../first-read-writes.md#forge-follow-up-why-this-bookkeeping-needs-crash-protection) incorporates the explanatory addition from Forge commit `8f8598a7b0c11ddfcf8276cf7b3f6133b8dca61b`. [Separate provenance record](wal-followup-provenance.json) pins that source; it does not alter the original snapshot manifest or claim new measurements.

@@ -115,6 +115,18 @@ Three fresh restores per arm. These are root buffer accesses in a small cached f
 
 The larger fixture also shows that vacuuming costs time and WAL: about 4 seconds and 1.6 GB of cluster WAL in a deliberately checkpointed, single-run comparison. Budget for maintenance; don't call it free. See the [full limitations](forge-results.md#5-larger-fixture-budget-for-readiness).
 
+## Follow-up talking points: why reads write
+
+Forge's [new explanation and source review](first-read-writes.md#forge-follow-up-why-this-bookkeeping-needs-crash-protection) adds these useful distinctions:
+
+- COMMIT records transaction status; it does not visit every loaded tuple to set committed hint bits. `pg_xact` is not WAL, and committed does not mean visible to every snapshot.
+- Losing a hint is harmless; a torn checksummed page is not. This explains why a tiny bookkeeping change can need a full-page image.
+- A VM bit lets the executor skip heap checks. PG19's on-access implementation logs this state through `XLOG_HEAP2_PRUNE_ON_ACCESS`; the experiment did not decode individual record types.
+- More WAL records do not necessarily mean more full-page images. PG19's 6,897 records included 3,450 FPIs, not two heap images per page.
+- VACUUM schedules work before users; equal total write costs are unproven. COPY FREEZE can avoid later preparation but does not make loading write-free.
+
+Co-host prompt: **“Why can we lose a hint bit safely, but not trust an incorrectly set visibility-map bit?”**
+
 ## New PG19rc1 control: a useful twist for the conversation
 
 The independently repeated [single-field experiment](evidence/pg19-relallvisible/README.md) isolates imported `relallvisible`: 345 versus 0, with both destination VMs empty. It selects IOS versus bitmap. First-read buffer work is almost equal (648 versus 644); second-read work favors IOS (7 versus 325) after the first reads populate VM bits. Do not carry PG18's adverse result forward as a demonstrated PG19 regression.

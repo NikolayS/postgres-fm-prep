@@ -1,0 +1,17 @@
+{
+  "source_repository": "https://gitlab.com/postgres-ai/forge",
+  "source_commit": "8f8598a7b0c11ddfcf8276cf7b3f6133b8dca61b",
+  "source_path": "cases/restore-readiness-01/README.md",
+  "source_sha256": "56df02963ff9e56d660a6aa85bd0d07d98476827944c6cb2aba977a99637c8df",
+  "review_date_utc": "2026-10-20",
+  "scope": "Explanatory addition only; no new experiment execution. Reviewed against PG19rc1 source and existing public measurements. Source is access-restricted; public synthesis retains qualifications and corrections.",
+  "primary_source_revision": "REL_19_RC1 (0b8bff042a997fe50fcd1c4c83b9ef1cc9ed8a89)",
+  "public_synthesis": "../../first-read-writes.md",
+  "corrections": [
+    "PG19 on-access record path uses XLOG_HEAP2_PRUNE_ON_ACCESS; exact observed record mix not decoded.",
+    "215077 bytes = 210.04 KiB.",
+    "No claim that each visibility record carries a second heap FPI.",
+    "No claim of equal total write amplification or WAL-free COPY FREEZE.",
+    "pg_xact commit status is distinct from WAL and is only part of snapshot visibility."
+  ]
+}

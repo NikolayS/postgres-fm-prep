@@ -80,6 +80,8 @@ A useful upstream question: preserve this estimate when heap/VM state transfers 
 
 **Detailed explanation for the episode:** [hint bits, full-page images, checkpoint controls, and PG19 VM writes](first-read-writes.md).
 
+The [October 20 Forge follow-up](first-read-writes.md#forge-follow-up-why-this-bookkeeping-needs-crash-protection) explains commit-status caching, torn-page protection, and PG19's distinct visibility WAL path. It also records corrections to overly broad claims about equal write amplification, COPY FREEZE and record attribution. This is new interpretation of existing runs.
+
 Fourth table `events`: 200,000 rows, 3,480 heap pages, no index. Three fresh restores per treatment. `full_page_writes=on`, `wal_log_hints=off`, `wal_compression=off`; PG18.6 tested with checksums on and off; PG19rc1 only with checksums on. WAL here comes from **the statement's EXPLAIN WAL counters**.
 
 | Statement / condition | Shared blocks dirtied | WAL bytes |
