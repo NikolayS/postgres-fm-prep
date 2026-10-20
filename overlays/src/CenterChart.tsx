@@ -4,7 +4,7 @@ import {font} from './font';
 // Charts for the "center" placement: the packager moves the host tiles to the
 // edges (560x360 at y 360) and leaves x 600-1320 free. Everything is drawn
 // inside CENTER on transparent alpha; the talk continues under it.
-export const CENTER = {x: 600, y: 120, w: 720, h: 860};
+export const CENTER = {x: 615, y: 120, w: 690, h: 860}; // 15 px clear of each host tile
 
 type Donut = {value: number; of: number; label: string};
 type Bar = {value: number; label: string; sub?: string};
@@ -82,7 +82,7 @@ export const CenterChart: React.FC<CenterChartProps> = (p) => {
             const h = Math.max(8, (b.value / max) * H) * g;
             const num = Math.round(b.value * g);
             return (
-              <div key={i} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: 220, opacity: s(at)}}>
+              <div key={i} style={{display: 'flex', flexDirection: 'column', alignItems: 'center', width: 212, opacity: s(at)}}>
                 <div style={{fontSize: 60, fontWeight: 700, color: '#fff', fontVariantNumeric: 'tabular-nums', lineHeight: 1}}>{fmt(num)}</div>
                 <div style={{fontSize: 26, fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: 10}}>{p.unit ?? ''}</div>
                 <div style={{width: 150, height: h, background: i === bars.length - 1 ? accent : '#fff', borderRadius: '8px 8px 0 0'}} />
@@ -93,7 +93,7 @@ export const CenterChart: React.FC<CenterChartProps> = (p) => {
         <div style={{height: 3, background: 'rgba(255,255,255,0.3)', margin: '0 10px'}} />
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', padding: '12px 10px 0'}}>
           {bars.map((b, i) => (
-            <div key={i} style={{width: 220, textAlign: 'center', opacity: s(T.itemAt + i * stagger)}}>
+            <div key={i} style={{width: 212, textAlign: 'center', opacity: s(T.itemAt + i * stagger)}}>
               <div style={{fontSize: 27, fontWeight: 600, color: '#fff', lineHeight: 1.2, whiteSpace: 'nowrap', letterSpacing: -0.3}}>{b.label}</div>
               {b.sub ? <div style={{fontSize: 26, fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginTop: 4, lineHeight: 1.2}}>{b.sub}</div> : null}
             </div>
@@ -105,7 +105,7 @@ export const CenterChart: React.FC<CenterChartProps> = (p) => {
 
   return (
     <AbsoluteFill style={{fontFamily: 'Inter, sans-serif', opacity: fadeOut}}>
-      <div style={{position: 'absolute', left: CENTER.x, top: CENTER.y, width: CENTER.w, height: CENTER.h, background: 'rgba(8,8,10,0.86)', borderRadius: 18, padding: '28px 28px 24px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', opacity: panel, transform: `scale(${0.96 + 0.04 * panel})`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)'}}>
+      <div style={{position: 'absolute', left: CENTER.x, top: CENTER.y, width: CENTER.w, height: CENTER.h, background: 'rgba(8,8,10,0.86)', borderRadius: 18, padding: '28px 24px 24px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column', opacity: panel, transform: `scale(${0.96 + 0.04 * panel})`, boxShadow: '0 20px 60px rgba(0,0,0,0.5)'}}>
         <div style={{opacity: s(T.title)}}>
           <div style={{fontSize: 38, fontWeight: 700, color: '#fff', lineHeight: 1.2}}>{p.title}</div>
           {p.sub ? <div style={{fontSize: 28, fontWeight: 500, color: accent, marginTop: 6, lineHeight: 1.25}}>{p.sub}</div> : null}
