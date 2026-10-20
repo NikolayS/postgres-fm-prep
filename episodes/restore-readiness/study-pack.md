@@ -102,6 +102,10 @@ The inspected PG19 release-candidate source adds extended-statistics transport a
 
 ## What restore guides tell readers
 
+![Audit of 12 selected restore guides: 4 recommend ANALYZE, 0 recommend post-restore VACUUM, and 0 explain VM readiness. Crediting two named linked guides raises statistics coverage to 6 of 12.](assets/restore-docs-audit-summary.png)
+
+[Download the infographic](assets/restore-docs-audit-summary.png). Counts are generated from the [published dataset](restore-docs-audit.json); [rendering source](assets/render_docs_audit.py).
+
 Our [October 20 documentation audit](restore-docs-audit.md) inspected twelve selected logical restore/import pages. **Eight of twelve omit direct advice to gather optimizer statistics; none directly explains visibility-map readiness.** PostgreSQL's two pages, DigitalOcean and TigerData do recommend analysis. Azure provides that advice in a linked companion; pgAdmin links to upstream guidance. This is a convenience sample of exact pages, not a population estimate or a verdict on entire providers. Use the audit's row-level sources and qualifications when presenting the numbers.
 
 Suggested question for the episode: when a guide ends at a successful restore, what should its query-readiness checklist add?

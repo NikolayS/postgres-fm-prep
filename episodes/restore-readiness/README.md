@@ -15,6 +15,14 @@ The question: what performance-relevant state is missing after a logical Postgre
 - [Existing experimental observations](existing-observations.md) — what earlier synthetic examples show and what they do not.
 - [Blog outline](blog-outline.md) — the article structure and evidence still needed.
 
+## Documentation audit at a glance
+
+![Audit of 12 selected restore guides: 4 recommend ANALYZE, 0 recommend post-restore VACUUM, and 0 explain VM readiness. Crediting two named linked guides raises statistics coverage to 6 of 12.](assets/restore-docs-audit-summary.png)
+
+[Download the infographic](assets/restore-docs-audit-summary.png). Counts are generated from the [published dataset](restore-docs-audit.json); [rendering source](assets/render_docs_audit.py).
+
+[Read the detailed audit and all source URLs](restore-docs-audit.md#detailed-source-register--full-urls).
+
 ## Current status
 
 Research was assembled on 2026-10-20 UTC. The next recording/article target is October 20, with study material needed that morning Pacific time.

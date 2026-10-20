@@ -4,6 +4,10 @@ Audit date: **October 20, 2026 UTC**. Scope: **12 selected logical restore/impor
 
 ## Results
 
+![Audit of 12 selected restore guides: 4 recommend ANALYZE, 0 recommend post-restore VACUUM, and 0 explain VM readiness. Crediting two named linked guides raises statistics coverage to 6 of 12.](assets/restore-docs-audit-summary.png)
+
+[Download the infographic](assets/restore-docs-audit-summary.png). Counts are generated from the [published dataset](restore-docs-audit.json); [rendering source](assets/render_docs_audit.py).
+
 | Direct guidance on the inspected page | All 12 pages | Ten provider/tool pages | Two PostgreSQL core pages |
 | --- | --- | --- | --- |
 | Recommends post-restore ANALYZE or gathering optimizer statistics | 4/12 (33.3%) | 2/10 (20%) | 2/2 (100%) |
@@ -40,6 +44,113 @@ This is a descriptive result for this sample, not an estimate of all PostgreSQL 
 - **pgAdmin links upstream.** Its [Restore Dialog page](https://www.pgadmin.org/docs/pgadmin4/9.18/restore_dialog.html) links to pg_dump and pg_restore documentation. The latter has analysis advice. Crediting both Azure's companion and pgAdmin's upstream link raises coverage to **6/12 (50%)**. Again, this is a named sensitivity check, not a complete multi-hop documentation audit.
 - **PostgreSQL does document the mechanism elsewhere.** The two selected core pages link to the maintenance chapter's statistics/autovacuum sections. The [same chapter explains visibility-map maintenance](https://www.postgresql.org/docs/18/routine-vacuuming.html#VACUUM-FOR-VISIBILITY-MAP), and [index-only-scan documentation explains heap checks](https://www.postgresql.org/docs/18/indexes-index-only-scans.html). The finding is that the restore pages do not make the physical-readiness connection directly.
 - **DigitalOcean's VACUUM text is a link title.** Its [After Importing section](https://docs.digitalocean.com/products/databases/postgresql/how-to/migrate/#after-importing) recommends ANALYZE and links to a wiki introduction whose title includes VACUUM. A keyword count would wrongly turn this into a direct post-restore VACUUM recommendation.
+
+## Detailed source register — full URLs
+
+These are all twelve pages in the denominator, including the positive examples. Each link identifies the exact inspected page; the section locator describes where to check its restore workflow. The findings apply to the captured version on October 20, 2026 UTC.
+
+### 1. PostgreSQL 18 — SQL Dump
+
+[https://www.postgresql.org/docs/18/backup-dump.html](https://www.postgresql.org/docs/18/backup-dump.html)
+
+- **Inspect:** Restoring the Dump.
+- **Finding:** Recommends ANALYZE and explains optimizer statistics; links to maintenance and bulk-loading guidance.
+- **Captured:** 2026-10-20T03:42:43.672433+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 2. PostgreSQL 18 — pg_restore
+
+[https://www.postgresql.org/docs/18/app-pgrestore.html](https://www.postgresql.org/docs/18/app-pgrestore.html)
+
+- **Inspect:** Notes.
+- **Finding:** Conditional advice; also documents importing statistics already in the archive.
+- **Captured:** 2026-10-20T03:42:43.920276+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 3. Neon — PostgreSQL Restore Database
+
+[https://neon.com/postgresql/administration/restore-database](https://neon.com/postgresql/administration/restore-database)
+
+- **Inspect:** PostgreSQL Restore Database example.
+- **Finding:** Example ends with table listing and exiting psql; no direct statistics or VM readiness guidance.
+- **Captured:** 2026-10-20T03:42:43.891244+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 4. Supabase — Backup and Restore using the CLI
+
+[https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore](https://supabase.com/docs/guides/platform/migrating-within-supabase/backup-restore)
+
+- **Inspect:** Restore backup using CLI / Special considerations.
+- **Finding:** Covers restore steps and platform-specific considerations; none of the four audited topics appears in the page text.
+- **Captured:** 2026-10-20T03:42:45.346534+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 5. TigerData — Migrate with downtime
+
+[https://www.tigerdata.com/docs/migrate/migrate-with-downtime](https://www.tigerdata.com/docs/migrate/migrate-with-downtime)
+
+- **Inspect:** Validate your Tiger Cloud service and restart your app.
+- **Finding:** All four source tabs include ANALYZE before verification and application restart.
+- **Captured:** 2026-10-20T03:42:44.849585+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 6. AWS RDS — Importing data from PostgreSQL on an Amazon EC2 instance
+
+[https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PostgreSQL.Procedural.Importing.EC2.html](https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/PostgreSQL.Procedural.Importing.EC2.html)
+
+- **Inspect:** Import procedure.
+- **Finding:** Covers dump, target creation and restore; no direct post-restore statistics or VM readiness guidance.
+- **Captured:** 2026-10-20T03:42:43.385042+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 7. Azure — Migrate using dump and restore
+
+[https://learn.microsoft.com/en-us/azure/postgresql/migrate/how-to-migrate-using-dump-and-restore](https://learn.microsoft.com/en-us/azure/postgresql/migrate/how-to-migrate-using-dump-and-restore)
+
+- **Inspect:** Restore / Next steps.
+- **Finding:** Main page lacks these topics; explicitly linked best-practices page DOES recommend analysis after restore. See linked-guidance discussion.
+- **Captured:** 2026-10-20T03:42:43.988935+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 8. Google Cloud SQL — Import and export SQL dump files
+
+[https://docs.cloud.google.com/sql/docs/postgres/import-export/import-export-sql](https://docs.cloud.google.com/sql/docs/postgres/import-export/import-export-sql)
+
+- **Inspect:** Import data from a SQL dump file.
+- **Finding:** Import workflow and permissions; no direct post-import statistics or VM readiness guidance.
+- **Captured:** 2026-10-20T03:42:45.163908+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 9. DigitalOcean — Migrate a PostgreSQL database
+
+[https://docs.digitalocean.com/products/databases/postgresql/how-to/migrate/](https://docs.digitalocean.com/products/databases/postgresql/how-to/migrate/)
+
+- **Inspect:** After Importing.
+- **Finding:** Recommends ANALYZE for query planning. VACUUM occurs in a linked wiki title, not a direct instruction to vacuum after restore.
+- **Captured:** 2026-10-20T03:42:44.428497+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 10. Heroku — Heroku Postgres Backups
+
+[https://devcenter.heroku.com/articles/heroku-postgres-backups](https://devcenter.heroku.com/articles/heroku-postgres-backups)
+
+- **Inspect:** Restore a Backup / Visibility.
+- **Finding:** Visibility section concerns backup connections and credentials, not the visibility map. No direct statistics or VM readiness guidance.
+- **Captured:** 2026-10-20T03:42:44.670008+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 11. pgAdmin 4 9.18 — Restore Dialog
+
+[https://www.pgadmin.org/docs/pgadmin4/9.18/restore_dialog.html](https://www.pgadmin.org/docs/pgadmin4/9.18/restore_dialog.html)
+
+- **Inspect:** Restore Dialog.
+- **Finding:** Documents UI controls and success notification; links to upstream pg_dump/pg_restore. No direct maintenance/readiness guidance.
+- **Captured:** 2026-10-20T03:42:43.767902+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### 12. Crunchy Bridge — From Heroku Postgres
+
+[https://docs.crunchybridge.com/migrate/heroku_dump_restore](https://docs.crunchybridge.com/migrate/heroku_dump_restore)
+
+- **Inspect:** Manual migration / Update DATABASE_URL and exit maintenance mode.
+- **Finding:** Manual logical migration includes ownership and cutover; advises staging validation but no direct statistics or VM readiness step. Physical-backup section excluded.
+- **Captured:** 2026-10-20T03:42:43.878323+00:00. HTML and extracted-text SHA-256 values are in the [source dataset](restore-docs-audit.json).
+
+### Companion and explanatory sources — outside the denominator
+
+- Azure best practices (credited in the linked-guidance comparison): [https://learn.microsoft.com/en-us/azure/postgresql/troubleshoot/how-to-pgdump-restore](https://learn.microsoft.com/en-us/azure/postgresql/troubleshoot/how-to-pgdump-restore).
+- PostgreSQL visibility-map maintenance: [https://www.postgresql.org/docs/18/routine-vacuuming.html#VACUUM-FOR-VISIBILITY-MAP](https://www.postgresql.org/docs/18/routine-vacuuming.html#VACUUM-FOR-VISIBILITY-MAP).
+- PostgreSQL index-only scan behavior: [https://www.postgresql.org/docs/18/indexes-index-only-scans.html](https://www.postgresql.org/docs/18/indexes-index-only-scans.html).
+- PostgreSQL pg_dump reference, linked by pgAdmin: [https://www.postgresql.org/docs/18/app-pgdump.html](https://www.postgresql.org/docs/18/app-pgdump.html). pgAdmin's pg_restore destination is already listed as sample page 2; do not count it again.
 
 ## Method and limits
 
