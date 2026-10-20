@@ -152,6 +152,18 @@ These are all twelve pages in the denominator, including the positive examples. 
 - PostgreSQL index-only scan behavior: [https://www.postgresql.org/docs/18/indexes-index-only-scans.html](https://www.postgresql.org/docs/18/indexes-index-only-scans.html).
 - PostgreSQL pg_dump reference, linked by pgAdmin: [https://www.postgresql.org/docs/18/app-pgdump.html](https://www.postgresql.org/docs/18/app-pgdump.html). pgAdmin's pg_restore destination is already listed as sample page 2; do not count it again.
 
+## Follow-up: a second AWS restore guide
+
+Added after the original sample was completed; **excluded from the twelve-page denominator and infographic** because this was a user-supplied follow-up, not part of the original selection.
+
+**AWS Database Migration Guide — PostgreSQL pg_dump and pg_restore utility**
+
+[https://docs.aws.amazon.com/dms/latest/sbs/chap-manageddatabases.postgresql-rds-postgresql-full-load-pd_dump.html](https://docs.aws.amazon.com/dms/latest/sbs/chap-manageddatabases.postgresql-rds-postgresql-full-load-pd_dump.html)
+
+The page's workflow covers export, target database creation, importing with pg_restore, optional roles/users and factors affecting duration. The complete retrieved article contains no ANALYZE recommendation, optimizer-statistics discussion, post-restore VACUUM advice or physical visibility-map explanation. Inspect **Example**, **Import Dump Files**, and **Migrate Database Roles and Users**. Retrieved **2026-10-20T03:49:48.007860+00:00**; source hashes and classifications are in the JSON's supplementary sources.
+
+Together with the RDS EC2-import guide in the main sample, **both AWS pages inspected omit these four topics directly**. This supports a two-page AWS finding, not the claim that every RDS guide omits them or that RDS performs no automatic maintenance. Keep the original sample totals unchanged when using this additional example.
+
 ## Method and limits
 
 1. **Selection:** the user-supplied Neon tutorial, two upstream PostgreSQL restore references as a baseline, and logical restore/import guides from AWS, Azure, Google Cloud, DigitalOcean, Heroku, Supabase, TigerData, Crunchy Bridge and pgAdmin. Publishers were selected for relevance and ecosystem coverage, without screening for whether they mention maintenance. Pages were located by subject/site search and current documentation navigation. This is a purposive convenience sample, not a random sample or a “top 12” ranking.

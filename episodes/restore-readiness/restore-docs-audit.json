@@ -229,6 +229,24 @@
       "html_sha256": "7f353f07520327a3c8f7a751b3401a35fc69a3866c81c1644f07a36180f157d8",
       "included_in_primary_denominator": false,
       "note": "Azure main page explicitly links here. Post-restore ANALYZE advice; VACUUM example is pre-dump."
+    },
+    {
+      "id": "supplement-aws-dms",
+      "url": "https://docs.aws.amazon.com/dms/latest/sbs/chap-manageddatabases.postgresql-rds-postgresql-full-load-pd_dump.html",
+      "resolved_url": "https://docs.aws.amazon.com/dms/latest/sbs/chap-manageddatabases.postgresql-rds-postgresql-full-load-pd_dump.html",
+      "retrieved_utc": "2026-10-20T03:49:48.007860+00:00",
+      "http_status": 200,
+      "html_sha256": "1bc49fdf01300d7f33daeb79dae2ccadf51dc5b6213640f29ef90ada6dd5ffe7",
+      "title": "AWS Database Migration Guide — PostgreSQL pg_dump and pg_restore utility",
+      "included_in_primary_denominator": false,
+      "selection": "User-supplied follow-up after the original 12-page sample was completed.",
+      "analyze_action": false,
+      "optimizer_statistics": false,
+      "post_restore_vacuum": false,
+      "visibility_map_readiness": false,
+      "section": "Example / Import Dump Files / Migrate Database Roles and Users",
+      "note": "Workflow covers export, target creation, import, optional roles/users and duration factors. No direct statistics-gathering, VACUUM or physical visibility-map readiness guidance.",
+      "text_sha256": "0530ec1be887f10556c776fcc68a34917a3a4ea06d58c45670a7bb311d5a133d"
     }
   ]
 }

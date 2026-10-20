@@ -108,6 +108,8 @@ The inspected PG19 release-candidate source adds extended-statistics transport a
 
 Our [October 20 documentation audit](restore-docs-audit.md) inspected twelve selected logical restore/import pages. **Eight of twelve omit direct advice to gather optimizer statistics; none directly explains visibility-map readiness.** PostgreSQL's two pages, DigitalOcean and TigerData do recommend analysis. Azure provides that advice in a linked companion; pgAdmin links to upstream guidance. This is a convenience sample of exact pages, not a population estimate or a verdict on entire providers. Use the audit's row-level sources and qualifications when presenting the numbers.
 
+A [second AWS dump/restore guide, inspected as a follow-up](restore-docs-audit.md#follow-up-a-second-aws-restore-guide), also omits these four topics. Both inspected AWS pages have the gap; this does not establish a claim about every RDS guide. The follow-up is outside the original chart denominator.
+
 Suggested question for the episode: when a guide ends at a successful restore, what should its query-readiness checklist add?
 
 ## Proposed 28-minute conversation
