@@ -1,5 +1,7 @@
 # Why a first SELECT after restore can generate WAL
 
+**New maintenance-cost evidence:** the [October 20 follow-up](forge-oct20-followup.md) compares FREEZE and compression after fresh restores. Initial WAL numbers there are cluster LSN deltas; later VACUUM VERBOSE counters have a narrower scope. The new data strengthen the case for scheduling preparation, without proving equal total write cost for SELECT and VACUUM.
+
 [Study pack](study-pack.md) · [Forge results and chart](forge-results.md#4-first-select-reads-can-cause-writes)
 
 ## The episode explanation

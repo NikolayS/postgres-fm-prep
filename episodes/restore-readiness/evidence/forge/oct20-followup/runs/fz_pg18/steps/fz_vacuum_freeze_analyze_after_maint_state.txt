@@ -1,0 +1,10 @@
+pg_class|accounts|172440|1.0000853e+07|172414|172414|1534|40|1
+pg_class|customers|13744|2e+06|13723|13723|1533|41|1
+pg_class|orders|7360|1e+06|7353|7353|1535|39|1
+vm|accounts|172440|172414|172414
+vm|customers|13744|13723|13723
+vm|orders|7360|7353|7353
+ERROR:  could not identify an ordering operator for type xid
+LINE 3: select 'xmin', 'accounts', count(distinct xmin), min(xmin::t...
+                                                  ^
+DETAIL:  Aggregates with DISTINCT must be able to sort their inputs.

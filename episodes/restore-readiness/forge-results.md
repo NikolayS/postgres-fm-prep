@@ -1,5 +1,7 @@
 # Forge results: restore success versus workload readiness
 
+**New measured tracks:** see [October 20 follow-up](forge-oct20-followup.md) for partitioned-parent statistics, a PG17-source statistics dump using PG18 tools, tested vacuumdb mode coverage, FREEZE residual work and WAL compression. The original results below retain their original scope.
+
 [Episode home](README.md) · [Kirk's study pack](study-pack.md) · [Data and provenance](evidence/forge/README.md)
 
 Results supplied October 19, 2026 Pacific time (October 20 UTC), from Forge case `restore-readiness-01`. This report separates measured results, explanations and open questions. The Forge sections synthesize supplied experiments; the separate PG19rc1 control below was newly executed and independently repeated. No confirmed PostgreSQL bug is claimed.

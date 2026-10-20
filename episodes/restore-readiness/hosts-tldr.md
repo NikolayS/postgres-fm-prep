@@ -15,7 +15,7 @@
 2. **Statistics transport helps, but is not a physical clone.** PG18 can transport selected statistics when requested; collected extended statistics are a gap there, addressed in PG19. Neither logically restores the source VM. pg_upgrade is different because it transfers physical files. [Versioned evidence](forge-results.md).
    - Ask: “Which source facts still describe the newly loaded heap?”
 
-3. **Autovacuum deserves credit—and time is the issue.** Normal autovacuum repaired the small test restores in observed intervals of roughly 5–68 seconds. That is not an SLA. Do we accept asynchronous preparation or require it before traffic? [Timing and limits](forge-results.md).
+3. **Autovacuum deserves credit—but time is not the only issue.** Normal autovacuum repaired the small test restores in observed intervals of roughly 5–68 seconds. That is not an SLA, and partitioned-parent statistics are an exception that waiting does not repair. Do we accept asynchronous preparation or require it before traffic? [Timing and limits](forge-results.md).
    - Ask: “Is the first user part of our restore procedure without knowing it?”
 
 4. **A read can do writes.** One first count on a 27.19-MiB PG18 heap generated 26.94 MiB of WAL under the tested checksum/checkpoint settings. Hint-bit changes and full-page images explain the scale; PG19 adds conditional read-time VM work. VACUUM can schedule work earlier, but it is not free. [Controls and explanation](first-read-writes.md).
@@ -32,11 +32,11 @@
 
 ## Three additions worth making room for
 
-- **Partitioned parents are a real autovacuum exception.** Leaves can be analyzed while parent statistics remain missing. PG19 improves `--analyze-only` and `--analyze-in-stages`; default `--analyze` still excludes parents. Autovacuum's parent behavior is unchanged. Ask: “What does waiting never fix?”
+- **Partitioned parents are a real autovacuum exception.** In the new PG18/19 runs, all leaves were observed analyzed within 15 seconds, while parent statistics were still missing after more than eight minutes. The parent-dependent query estimated 200 rows against 100,000 actual; explicit parent analysis repaired the estimate and plan. PG19 improves `--analyze-only` and `--analyze-in-stages`; default `--analyze` still excludes parents. Autovacuum's parent behavior is unchanged. Ask: “What does waiting never fix?”
 - **A logical copy changes the benchmark.** It rebuilds storage and indexes while losing some physical preparation. Ask: “Is our restored copy representative of production?”
 - **Make readiness an explicit output.** A proposed manifest could record stats, completed/skipped maintenance, workload checks and replica replay. Ask: “What evidence should a human—or an agent—require before opening traffic?”
 
-[Engineer-notes synthesis, source links and corrections](engineer-notes-synthesis.md). Optional extensions there: pgcopydb already schedules VACUUM ANALYZE, Debian's wrapper schedules ANALYZE, plus lifecycle FREEZE costs and checkpoint timing. Newly reported partition-track timings and pending FREEZE runs have not yet been validated for this briefing.
+[Engineer-notes synthesis, source links and corrections](engineer-notes-synthesis.md). Optional extensions there: pgcopydb already schedules VACUUM ANALYZE, Debian's wrapper schedules ANALYZE, plus lifecycle FREEZE costs and checkpoint timing. The [October 20 follow-up](forge-oct20-followup.md) now reviews the underlying partition, vacuumdb and FREEZE/compression outputs. PG18 explicit FREEZE added little measured initial cost and greatly reduced a later forced freezing pass; PG19 ordinary VACUUM already froze the same pages. These are single-run results, not universal cost promises.
 
 ## A simple recording arc
 

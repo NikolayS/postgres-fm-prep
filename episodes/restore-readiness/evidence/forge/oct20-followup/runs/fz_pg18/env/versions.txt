@@ -1,0 +1,5 @@
+server: postgres (PostgreSQL) 18.6 (Ubuntu 18.6-1.pgdg24.04+2)
+shared_buffers=2GB maintenance_work_mem=512MB checksums=on vacuum_freeze_min_age=50000000 vacuum_freeze_table_age=150000000 autovacuum_freeze_max_age=200000000 wal_compression=off
+vacuum_max_eager_freeze_failure_rate=0.03
+4
+Mem:           15610        5001         490        4362       14822       10609

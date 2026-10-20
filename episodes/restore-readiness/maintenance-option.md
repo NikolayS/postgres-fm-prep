@@ -1,5 +1,7 @@
 # Should pg_restore offer --vacuum-analyze?
 
+**New design evidence:** the [October 20 follow-up](forge-oct20-followup.md) demonstrates why a maintenance phase needs explicit parent-analysis coverage: database-wide vacuumdb --analyze skipped parents on both tested versions. It also motivates an optional FREEZE policy and WAL budget; single-run results do not justify forcing FREEZE universally.
+
 Episode discussion proposal, not an implemented PostgreSQL option or an upstream patch. Version scope: PostgreSQL 18 unless stated otherwise.
 
 ## Why statistics transport does not close the question

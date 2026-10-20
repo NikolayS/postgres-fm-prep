@@ -1,5 +1,7 @@
 # Give autovacuum credit — then measure when the database is ready
 
+**Measured partition exception:** the [October 20 follow-up](forge-oct20-followup.md) confirms that all leaves can be observed analyzed within 15 seconds while the parent remains without statistics after more than eight minutes. Leaf statistics helped one query but did not repair the parent-dependent group estimate (200 versus 100,000 actual). Explicit parent analysis or usable imported parent statistics supplied the missing information.
+
 ## PG13 changed the insert-only case
 
 PostgreSQL 13 introduced vacuum triggers based on inserts, alongside the older update/delete-driven behavior. The release notes explicitly identify all-visible marking for index-only scans and spreading out freezing work as benefits. They credit Laurenz Albe and Darafei Praliaskouski. A restored table does not need to accumulate dead tuples before it can receive useful automatic vacuuming. [PG13 release notes](https://www.postgresql.org/docs/13/release-13.html).

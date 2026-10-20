@@ -49,7 +49,7 @@ A logical reload creates tuples with destination transaction IDs; source data ag
 
 **Ordinary VACUUM is enough to aim for all-visible coverage; FREEZE is not an extra prerequisite for Index Only Scans.** Ordinary vacuum may already freeze tuples opportunistically, so inspect actual all-frozen coverage before assuming an extra FREEZE pass helps. [VACUUM FREEZE semantics](https://www.postgresql.org/docs/19/sql-vacuum.html), [freezing guidance](https://www.postgresql.org/docs/19/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND).
 
-Forge's larger fixture compared VACUUM and VACUUM FREEZE once. Those observations do not establish a timing winner or lifetime WAL savings. A fair follow-up would compare initial and later maintenance cost, all-visible/all-frozen coverage and WAL under identical checkpoint conditions. [Existing measurements](forge-results.md#5-larger-fixture-budget-for-readiness).
+The [October 20 follow-up](forge-oct20-followup.md) now compares initial maintenance with a later forced aggressive vacuum. On PG18.6, VACUUM ANALYZE versus VACUUM (FREEZE, ANALYZE) took 3.28 versus 3.50 seconds initially; the later accounts pass took 2.78 versus 0.026 seconds. PG19rc1 ordinary VACUUM already froze the same 172,414 pages. This strengthens the case for evaluating FREEZE during a stable-data restore window, but does not establish a universal winner. Each arm ran once; initial maintenance was database-wide, the later command targeted one table, and WAL figures are cluster LSN deltas. The later pass used zero age thresholds, not actual XID aging. The PG19 cause remains unisolated.
 
 ## Spoken version
 

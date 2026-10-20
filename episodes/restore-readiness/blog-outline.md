@@ -1,5 +1,7 @@
 # Blog outline: your restore finished—now make it ready
 
+**Latest editorial changes:** use [October 20 follow-up](forge-oct20-followup.md) for a concrete parent-statistics example (200 estimated versus 100,000 actual after leaf autoanalysis), the PG18-client/PG17-source statistics-import escape route, and the conditional FREEZE case. State that PG19 ordinary vacuum already froze the tested pages. Keep compression as a short cost sidebar; do not convert buffer ratios into speedups or documentation omissions into claims about managed-service internals.
+
 Target: a practical article accompanying the Postgres.FM recording. This is an outline, not a finished article. The [Forge results](forge-results.md) now supply measured evidence and four charts.
 
 ## Opening
@@ -53,7 +55,7 @@ Explain [PG13's insert-triggered autovacuum](autovacuum-readiness.md), separate 
 
 ## 6. What remains open
 
-PG19rc1 read-time VM, eligible COPY FREEZE loads, and pg_upgrade now have measured comparisons. Keep them as version/path distinctions. Open work includes the single-field relallvisible control, clean-cluster large autovacuum timing and the unexplained parallel statistics-import result.
+PG19rc1 read-time VM, eligible COPY FREEZE loads, and pg_upgrade now have measured comparisons. Keep them as version/path distinctions. The single-field relallvisible control is now complete and linked in the study pack. Open work includes clean-cluster large autovacuum timing and the unexplained parallel statistics-import result.
 
 ## Evidence required before publication
 

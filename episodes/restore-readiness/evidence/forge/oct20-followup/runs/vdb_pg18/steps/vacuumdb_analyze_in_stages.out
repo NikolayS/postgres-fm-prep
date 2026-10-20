@@ -1,0 +1,4 @@
+vacuumdb: processing database "vdb_analyze_in_stages": Generating minimal optimizer statistics (1 target)
+vacuumdb: processing database "vdb_analyze_in_stages": Generating medium optimizer statistics (10 targets)
+vacuumdb: processing database "vdb_analyze_in_stages": Generating default (full) optimizer statistics
+rc=0

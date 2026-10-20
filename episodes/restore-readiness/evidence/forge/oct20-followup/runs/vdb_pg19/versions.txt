@@ -1,0 +1,2 @@
+server: postgres (PostgreSQL) 19rc1 (Ubuntu 19~rc1-1.pgdg24.04+1)
+vacuumdb: vacuumdb (PostgreSQL) 19rc1 (Ubuntu 19~rc1-1.pgdg24.04+1)

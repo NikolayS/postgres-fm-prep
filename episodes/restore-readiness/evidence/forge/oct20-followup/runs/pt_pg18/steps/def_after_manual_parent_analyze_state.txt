@@ -1,0 +1,42 @@
+pg_class|customers|r|1328|200000|1274
+pg_class|orders_p|p|-1|400000|0
+pg_class|orders_p_0|r|384|50576|372
+pg_class|orders_p_0_customer_id_idx|i|78|50576|0
+pg_class|orders_p_1|r|384|50300|370
+pg_class|orders_p_1_customer_id_idx|i|78|50300|0
+pg_class|orders_p_2|r|384|50284|370
+pg_class|orders_p_2_customer_id_idx|i|78|50284|0
+pg_class|orders_p_3|r|384|49792|367
+pg_class|orders_p_3_customer_id_idx|i|77|49792|0
+pg_class|orders_p_4|r|384|49928|368
+pg_class|orders_p_4_customer_id_idx|i|77|49928|0
+pg_class|orders_p_5|r|384|49612|365
+pg_class|orders_p_5_customer_id_idx|i|77|49612|0
+pg_class|orders_p_6|r|384|49600|365
+pg_class|orders_p_6_customer_id_idx|i|77|49600|0
+pg_class|orders_p_7|r|384|49908|367
+pg_class|orders_p_7_customer_id_idx|i|77|49908|0
+pg_class|orders_p_customer_id_idx|I|0|0|0
+pg_stats_rows|customers|f|2
+pg_stats_rows|orders_p|t|3
+pg_stats_rows|orders_p_0|f|3
+pg_stats_rows|orders_p_1|f|3
+pg_stats_rows|orders_p_2|f|3
+pg_stats_rows|orders_p_3|f|3
+pg_stats_rows|orders_p_4|f|3
+pg_stats_rows|orders_p_5|f|3
+pg_stats_rows|orders_p_6|f|3
+pg_stats_rows|orders_p_7|f|3
+parent_ndistinct|customer_id|-0.2551575|t
+parent_ndistinct|id|-1|t
+parent_ndistinct|status|2|t
+maint|customers|200000|0|0|0|1|0|1|2026-10-20 13:15:06.344639+00|2026-10-20 13:15:06.489263+00|
+maint|orders_p|0|0|0|0|0|1|0|||2026-10-20 13:23:08.014531+00
+maint|orders_p_0|50576|0|0|0|1|1|1|2026-10-20 13:15:06.574526+00|2026-10-20 13:15:06.622121+00|2026-10-20 13:23:08.040965+00
+maint|orders_p_1|50300|0|0|0|1|1|1|2026-10-20 13:15:06.635618+00|2026-10-20 13:15:06.671129+00|2026-10-20 13:23:08.064888+00
+maint|orders_p_2|50284|0|0|0|1|1|1|2026-10-20 13:15:06.682723+00|2026-10-20 13:15:06.705762+00|2026-10-20 13:23:08.087763+00
+maint|orders_p_3|49792|0|0|0|1|1|1|2026-10-20 13:15:06.717287+00|2026-10-20 13:15:06.741133+00|2026-10-20 13:23:08.110233+00
+maint|orders_p_4|49928|0|0|0|1|1|1|2026-10-20 13:15:06.752703+00|2026-10-20 13:15:06.777793+00|2026-10-20 13:23:08.132067+00
+maint|orders_p_5|49612|0|0|0|1|1|1|2026-10-20 13:15:06.789292+00|2026-10-20 13:15:06.81386+00|2026-10-20 13:23:08.15266+00
+maint|orders_p_6|49600|0|0|0|1|1|1|2026-10-20 13:15:06.50178+00|2026-10-20 13:15:06.524765+00|2026-10-20 13:23:08.174491+00
+maint|orders_p_7|49908|0|0|0|1|1|1|2026-10-20 13:15:06.53612+00|2026-10-20 13:15:06.562091+00|2026-10-20 13:23:08.196599+00

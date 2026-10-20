@@ -1,0 +1,3 @@
+analyze parent_pg_stats_rows= parent_analyze_count=0
+analyze_only parent_pg_stats_rows=3 parent_analyze_count=1
+analyze_in_stages parent_pg_stats_rows=3 parent_analyze_count=3

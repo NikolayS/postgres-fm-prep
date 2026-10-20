@@ -1,0 +1,30 @@
+INFO:  aggressively vacuuming "fz_analyze.public.accounts"
+INFO:  finished vacuuming "fz_analyze.public.accounts": index scans: 0
+pages: 0 removed, 172440 remain, 172440 scanned (100.00% of total), 0 eagerly scanned
+tuples: 0 removed, 10000000 remain, 0 are dead but not yet removable
+removable cutoff: 1233, which was 0 XIDs old when operation ended
+new relfrozenxid: 1233, which is 48 XIDs ahead of previous value
+frozen: 172414 pages from table (99.98% of total) had 10000000 tuples frozen
+visibility map: 162678 pages set all-visible, 172414 pages set all-frozen (9736 were all-visible)
+index scan not needed: 0 pages from table (0.00% of total) had 0 dead item identifiers removed
+I/O timings: read: 2.008 ms, write: 0.158 ms
+avg read rate: 1.231 MB/s, avg write rate: 481.294 MB/s
+buffer usage: 344577 hits, 441 reads, 172466 dirtied
+WAL usage: 172460 records, 172468 full page images, 1415785742 bytes, 1404576468 full page image bytes, 153732 buffers full
+memory usage: dead item storage 0.02 MB accumulated across 0 resets (limit 512.00 MB each)
+system usage: CPU: user: 0.95 s, system: 1.00 s, elapsed: 2.79 s
+INFO:  aggressively vacuuming "fz_analyze.pg_toast.pg_toast_17315"
+INFO:  finished vacuuming "fz_analyze.pg_toast.pg_toast_17315": index scans: 0
+pages: 0 removed, 0 remain, 0 scanned (100.00% of total), 0 eagerly scanned
+tuples: 0 removed, 0 remain, 0 are dead but not yet removable
+removable cutoff: 1233, which was 0 XIDs old when operation ended
+new relfrozenxid: 1233, which is 48 XIDs ahead of previous value
+frozen: 0 pages from table (100.00% of total) had 0 tuples frozen
+visibility map: 0 pages set all-visible, 0 pages set all-frozen (0 were all-visible)
+index scan not needed: 0 pages from table (100.00% of total) had 0 dead item identifiers removed
+I/O timings: read: 0.029 ms, write: 0.000 ms
+avg read rate: 32.964 MB/s, avg write rate: 0.000 MB/s
+buffer usage: 33 hits, 1 reads, 0 dirtied
+WAL usage: 1 records, 0 full page images, 258 bytes, 0 full page image bytes, 0 buffers full
+memory usage: dead item storage 0.02 MB accumulated across 0 resets (limit 512.00 MB each)
+system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s

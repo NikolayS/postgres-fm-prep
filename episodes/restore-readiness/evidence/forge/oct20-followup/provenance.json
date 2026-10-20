@@ -1,0 +1,746 @@
+{
+  "source_repository": "https://gitlab.com/postgres-ai/forge",
+  "source_branch": "case/restore-readiness-01",
+  "source_commit": "edbc442b4c12887649b207c8e1d5de39e68f3829",
+  "review_date": "2026-10-20",
+  "scope": "Selected raw experimental outputs; not the full Forge implementation or a complete reproduction bundle. No new executions performed for this update.",
+  "files": [
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/env/versions.txt",
+      "public_path": "runs/fz_pg18/env/versions.txt",
+      "sha256": "22ea1dd6603b0856ea9f5628f2e391dddbe3bff185555b6a0cd4263864a94476"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/aggressive_after_analyze.out",
+      "public_path": "runs/fz_pg18/steps/aggressive_after_analyze.out",
+      "sha256": "7b088b46dcd4bdc9ad1d5a6fe1764d04728ea0ef77ded875eb222db1b9323baa"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/aggressive_after_vacuum.out",
+      "public_path": "runs/fz_pg18/steps/aggressive_after_vacuum.out",
+      "sha256": "5c5b2b04c1edc734b8f7db3cd359a9058cc2a62b37d88d4f001370f799fcccef"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/aggressive_after_vacuum_analyze.out",
+      "public_path": "runs/fz_pg18/steps/aggressive_after_vacuum_analyze.out",
+      "sha256": "69442171c64e7f53639d99d934c5d5658b799abfe73a55f26aa31be599154c6f"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/aggressive_after_vacuum_freeze.out",
+      "public_path": "runs/fz_pg18/steps/aggressive_after_vacuum_freeze.out",
+      "sha256": "41ca6908bbce61aacaf4f8081789a21dfa5d87e3478dd0d705fb7d4caa0ad2ce"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/aggressive_after_vacuum_freeze_analyze.out",
+      "public_path": "runs/fz_pg18/steps/aggressive_after_vacuum_freeze_analyze.out",
+      "sha256": "8808a5845a60601ba97bebb248b6180fb7ba2845f0645702542c1cd25115f017"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_analyze_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_analyze_after_aggressive_state.txt",
+      "sha256": "f1befa5731e47ad76abbe10b97e4146633af86eb1dc42c6f8ef762a61b351f0b"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_analyze_after_maint_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_analyze_after_maint_state.txt",
+      "sha256": "c2287762c883ab3fea1c43c4b6dd18a706d9b600ea24307f536079f6e72dee68"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_analyze_after_restore_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_analyze_after_restore_state.txt",
+      "sha256": "292f0f64df87ab146acefc7f7031072c008f4ec74fa14d067c1928f4f5d7773f"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_after_aggressive_state.txt",
+      "sha256": "418d3290d81eaac3adcca9c53f3d857ef94fc2b1df8a40446d6940efa4a45f74"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_after_maint_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_after_maint_state.txt",
+      "sha256": "f96e09f6cea67847fdfdd2b6e35f0a9703abd27a9a1afa5518cfcc9658245f82"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_after_restore_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_after_restore_state.txt",
+      "sha256": "8442bec51fdd2fefcbf65427cb422dfd14d82e0145c3b0541fcbbc67f429740d"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_analyze_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_analyze_after_aggressive_state.txt",
+      "sha256": "a8da6c1629957a140f7ad412249e9ffe3ccf7d827dec6785074568975f9f8229"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_analyze_after_maint_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_analyze_after_maint_state.txt",
+      "sha256": "d760223efb1ce8ea60e7d2e63f6003882cadb551d707d4d092a6c5189d88c8b3"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_analyze_after_restore_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_analyze_after_restore_state.txt",
+      "sha256": "6ff10b30420dded2c422647fe5ef72111ef89ca7d311e03933d814e54092ca64"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_after_aggressive_state.txt",
+      "sha256": "cc9f35ab3b72cb65f32c789ff055f7700ebf03bd17932440af8ec35f613ec8c8"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_after_maint_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_after_maint_state.txt",
+      "sha256": "eec77aa9f257588bcf13a8234d8e68336b4e970969ee052ff4aef30f981cba8f"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_after_restore_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_after_restore_state.txt",
+      "sha256": "44fdaf1788fc4e5ac72972faa9a89c79a83c84af4b68c8e918612e4024f4caf3"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_analyze_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_analyze_after_aggressive_state.txt",
+      "sha256": "bcb838d1645b735114199d52d6456f58fc903f4212edf19b105a08445843e108"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_analyze_after_maint_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_analyze_after_maint_state.txt",
+      "sha256": "1c41909be4ac57973d0c7b504f666674bc6803e2679d9b273d8befbdba934cf2"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_analyze_after_restore_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_analyze_after_restore_state.txt",
+      "sha256": "746e4a58ab092731d3c64e25b638295dbaab7bb2d376bb505d3b34b7cf90c20b"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_lz4_after_maint_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_lz4_after_maint_state.txt",
+      "sha256": "d65f611316a75f73f2b101bf6639a6509ce7b93663d52248ea2a2aaa34b1f8a3"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_lz4_after_restore_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_lz4_after_restore_state.txt",
+      "sha256": "e3b7b0b06d12ed6c07c11b71a0cae40bbf0104a542b74044dd00027a50a01c59"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_zstd_after_maint_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_zstd_after_maint_state.txt",
+      "sha256": "63bae426d8facf2cbb1257da06b63ffe431a624accc627c6a655f83a7a294fae"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_freeze_zstd_after_restore_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_freeze_zstd_after_restore_state.txt",
+      "sha256": "b70a8308c21a2e15c59b163ee040aa7aba2dccdd77a15545c894292878371ae0"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_lz4_after_maint_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_lz4_after_maint_state.txt",
+      "sha256": "6cd39d051aaa115fa7c364e963e12407ffce2337ec19c245e0803efb70e9db84"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_lz4_after_restore_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_lz4_after_restore_state.txt",
+      "sha256": "1987b027fefeb46c955ff01c830d43b76fff9f348af947a996c49eb15f1f37b6"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_zstd_after_maint_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_zstd_after_maint_state.txt",
+      "sha256": "1b0746009d032bb0db7315fff07e1a699ebab6f1b71a5055c8a5a509883f04fb"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/fz_vacuum_zstd_after_restore_state.txt",
+      "public_path": "runs/fz_pg18/steps/fz_vacuum_zstd_after_restore_state.txt",
+      "sha256": "3b55edf9b3b0a61078a8a2b010902ef3f46dfa9c3a0f5d0a560d200adef8be3e"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps.csv",
+      "public_path": "runs/fz_pg18/steps.csv",
+      "sha256": "a868e39691a2094a9188d2dfeb5751cd76ffead4b5b7d9b004b411785658c368"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/env/versions.txt",
+      "public_path": "runs/fz_pg19/env/versions.txt",
+      "sha256": "2957de55b8cf578853deefe8426f3ecc7164b1dbea3a467dd5a05a4eaf3dc79e"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/aggressive_after_analyze.out",
+      "public_path": "runs/fz_pg19/steps/aggressive_after_analyze.out",
+      "sha256": "4371de7d20019157cfbd960784a2329e79e647bc886a66fd09b9127c0a4617fd"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/aggressive_after_vacuum.out",
+      "public_path": "runs/fz_pg19/steps/aggressive_after_vacuum.out",
+      "sha256": "7c25b4f333bf60020affbf53b7d2d4ea4097936fba11e1bc5a89a7e314bd99ab"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/aggressive_after_vacuum_analyze.out",
+      "public_path": "runs/fz_pg19/steps/aggressive_after_vacuum_analyze.out",
+      "sha256": "3c68a9e3a86d68888af740e44242eca411a2b0e5f13d43909c9e70e0cdb313bd"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/aggressive_after_vacuum_freeze.out",
+      "public_path": "runs/fz_pg19/steps/aggressive_after_vacuum_freeze.out",
+      "sha256": "0e2dacd1675a3642d147b5128787ca763e153874ed483b68b4686282cc30944c"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/aggressive_after_vacuum_freeze_analyze.out",
+      "public_path": "runs/fz_pg19/steps/aggressive_after_vacuum_freeze_analyze.out",
+      "sha256": "ffc76fb56252ab6fa3068efd7765601355636788b72bcd48602a9a2733a6833a"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_analyze_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_analyze_after_aggressive_state.txt",
+      "sha256": "8f233b3f8be1bbc4f6ab2a0ed6dc756e75f778b9f67c8909b8c758f1cb8aecc7"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_analyze_after_maint_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_analyze_after_maint_state.txt",
+      "sha256": "726026c658bd82e554a2c52e0364d2664ee4951ebc6fd9ea1dedb05e6157fcd8"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_analyze_after_restore_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_analyze_after_restore_state.txt",
+      "sha256": "a3e9302bccf1d4177014b59165d68157f3ee8bed4ba19282e23b827ff2ee8349"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_after_aggressive_state.txt",
+      "sha256": "ae8543a703d028d6d789f9cd5d3659631114bb2533e736185666d317472f98b9"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_after_maint_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_after_maint_state.txt",
+      "sha256": "804cc4fc3916f3c6ddc6b01efc8aaf8c9561f81b2494dab4eef37de247ba02c5"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_after_restore_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_after_restore_state.txt",
+      "sha256": "43b91d104496308e2523d57fb7379f76bd3bccda8050df32e0abbe1e0135f654"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_analyze_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_analyze_after_aggressive_state.txt",
+      "sha256": "d5dbc55b4bfb691cd42e51ac4729537e89306c643cac96ba133763fa8ef767d4"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_analyze_after_maint_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_analyze_after_maint_state.txt",
+      "sha256": "08485d43af24e3bd820fcd8c3ab3cef96e3a2e92e19f355eec4207a0c03f6d57"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_analyze_after_restore_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_analyze_after_restore_state.txt",
+      "sha256": "a341d4f15068b2da4722638f154217a84e6185b957862517a78fb996b5bea44f"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_after_aggressive_state.txt",
+      "sha256": "c308a8720537f4e733180186fed07c5d50ee6bf972138410af8b2db755df9a99"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_after_maint_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_after_maint_state.txt",
+      "sha256": "0f0050d2767e87591176f59ea3a6f9254e53f440b4d97ccdf5ccf944aebbd529"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_after_restore_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_after_restore_state.txt",
+      "sha256": "15e8d81bd537545b8559a70acf604f1b7a76b412c0555a1b75b9261d7b1f18e9"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_analyze_after_aggressive_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_analyze_after_aggressive_state.txt",
+      "sha256": "ab678e70d652a91a8a385f2eb7ef4fd4ffb70d5914c32acad16e0560ba629b3a"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_analyze_after_maint_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_analyze_after_maint_state.txt",
+      "sha256": "4a58f3ff5624fe846a971858ad4498fe3be19f38c14197fc1f2b2f05d9e1d2f5"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_analyze_after_restore_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_analyze_after_restore_state.txt",
+      "sha256": "96685ac2d18e4b50a2b8b99388797c92ed57da8d12a1e82dd9b41988c334b85e"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_lz4_after_maint_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_lz4_after_maint_state.txt",
+      "sha256": "42ac3bd2ce443326a752c88f6a30cd52933f67fad34107c98f5834870170a296"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_lz4_after_restore_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_lz4_after_restore_state.txt",
+      "sha256": "49babae5bc5abd4b2fc1784b946467d829148db705745aa3d203e64e4a8078af"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_zstd_after_maint_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_zstd_after_maint_state.txt",
+      "sha256": "48027719a1a54727a3b0a3359fb4d7850a7bc52340966561d9446ee98d24e80f"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_freeze_zstd_after_restore_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_freeze_zstd_after_restore_state.txt",
+      "sha256": "d60aa9a5260f09fdc9b5196fe31648ac417dffb295069c8bf61f485229488955"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_lz4_after_maint_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_lz4_after_maint_state.txt",
+      "sha256": "998e180917fd0be446faeef0eeb03ec30285791522b5d18c25b66c3cfb8f98b5"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_lz4_after_restore_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_lz4_after_restore_state.txt",
+      "sha256": "69a46ca7ee98632715159e418ea1e80ee171ac35f8572972d47a9fc5da714871"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_zstd_after_maint_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_zstd_after_maint_state.txt",
+      "sha256": "9c3239c2bf3f665cf6ae9975ec930975f02b512e608fce69c107f95db4271c65"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/fz_vacuum_zstd_after_restore_state.txt",
+      "public_path": "runs/fz_pg19/steps/fz_vacuum_zstd_after_restore_state.txt",
+      "sha256": "ce18bbbdbc5ee08c04ead3a0a33afd04861833aaba1ad81ec35ae202db7f7c30"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps.csv",
+      "public_path": "runs/fz_pg19/steps.csv",
+      "sha256": "cc1128f74c8ff081c1deb3e75fb1609c1e25e8534bacae547ca5afd3f1dc5cd0"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/dumps/stats.toc.order.txt",
+      "public_path": "runs/pt_pg18/dumps/stats.toc.order.txt",
+      "sha256": "a49da03edaadd1093e2d1125308e54d1d125412435f1a1c5f3583e4e20415c66"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/dumps/xver_stats_entries.txt",
+      "public_path": "runs/pt_pg18/dumps/xver_stats_entries.txt",
+      "sha256": "5378796307535df3ec8d8b15a2e2dc5641419c3d3060cfe32238c0fa973f7aa3"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_after_manual_parent_analyze_qj.json",
+      "public_path": "runs/pt_pg18/steps/def_after_manual_parent_analyze_qj.json",
+      "sha256": "579f3489071e6e2780f13b2b4133a592b6785c6d9643281eca091969f64dd9da"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_after_manual_parent_analyze_qp.json",
+      "public_path": "runs/pt_pg18/steps/def_after_manual_parent_analyze_qp.json",
+      "sha256": "42f30ca65893e985c5156b72530e938da54773e1c76174ea3cf0c3e899440c89"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_after_manual_parent_analyze_state.txt",
+      "public_path": "runs/pt_pg18/steps/def_after_manual_parent_analyze_state.txt",
+      "sha256": "0165fcdbbc75d4a9668e9a54b1bde2cf173190a012f56b7170071ce5b3a6a909"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_children_done_qj.json",
+      "public_path": "runs/pt_pg18/steps/def_children_done_qj.json",
+      "sha256": "8246bf69e408bb3de3362c77f98d5681d1dfef35943e6fb1edaaa60a01636b2f"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_children_done_qp.json",
+      "public_path": "runs/pt_pg18/steps/def_children_done_qp.json",
+      "sha256": "63377e040c122db31e6e06591c3321046d175977a04a60f01d59aa5cdc18ce55"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_children_done_state.txt",
+      "public_path": "runs/pt_pg18/steps/def_children_done_state.txt",
+      "sha256": "7b45638f208af34d4e2d0c92bc089cbe8943429e1bf8758c89d2177b1892aed7"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_final_qj.json",
+      "public_path": "runs/pt_pg18/steps/def_final_qj.json",
+      "sha256": "4f72d2ae3e60bc0af55bca54d0bf325ecafb8f8491ce85dd1e934544b482eb96"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_final_qp.json",
+      "public_path": "runs/pt_pg18/steps/def_final_qp.json",
+      "sha256": "d59b847e014c88bf453085a97f2eb3f5c24d155aa2c45cfdb911292640c2093f"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_final_state.txt",
+      "public_path": "runs/pt_pg18/steps/def_final_state.txt",
+      "sha256": "7b45638f208af34d4e2d0c92bc089cbe8943429e1bf8758c89d2177b1892aed7"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_immediate_qj.json",
+      "public_path": "runs/pt_pg18/steps/def_immediate_qj.json",
+      "sha256": "f56bb27a2f9d5564d54f1ecf5639a9c2f3cea0d75cadf53400e72f1bbfdd9cd7"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_immediate_qp.json",
+      "public_path": "runs/pt_pg18/steps/def_immediate_qp.json",
+      "sha256": "8c63bffca416689c1a40051ca6d312ef1f6a3152a56ffac11770acc1bb9fb159"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_immediate_state.txt",
+      "public_path": "runs/pt_pg18/steps/def_immediate_state.txt",
+      "sha256": "db467c6ec28d2aadb9fc1277fadc5f577123f73aa679896ec107a8e8ec8890fd"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_poll.log",
+      "public_path": "runs/pt_pg18/steps/def_poll.log",
+      "sha256": "9bb9d393e79f7b9385e37b276a86514001ebf3304b3fe011717282505078bbbb"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/def_timeline.csv",
+      "public_path": "runs/pt_pg18/steps/def_timeline.csv",
+      "sha256": "0fa3dffbc4af06d56e9f5982b76857bac7c64853fecb761b431d628dd2cbfdff"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/old_source_version.txt",
+      "public_path": "runs/pt_pg18/steps/old_source_version.txt",
+      "sha256": "1e5ba9b8aabfd701ded7c453b5d37dab3d2cfa66b0b08c013d41dcbc80c39fb1"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/restore_def.rc",
+      "public_path": "runs/pt_pg18/steps/restore_def.rc",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/restore_def_done_at.txt",
+      "public_path": "runs/pt_pg18/steps/restore_def_done_at.txt",
+      "sha256": "1efb424257acf1b081919e0efd58d2592670e8d324083249469c86ccc0b6c430"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/restore_stats.rc",
+      "public_path": "runs/pt_pg18/steps/restore_stats.rc",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/restore_xver.rc",
+      "public_path": "runs/pt_pg18/steps/restore_xver.rc",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/source_qj.json",
+      "public_path": "runs/pt_pg18/steps/source_qj.json",
+      "sha256": "1482d152409aba167166853b6bd438e529e3e8b03644a366372d1f0674bebd79"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/source_qp.json",
+      "public_path": "runs/pt_pg18/steps/source_qp.json",
+      "sha256": "cb420bc8b666e6d4cf98dcabfa2093ee2a75dd0de6e72664627941d248cae9b3"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/stats_immediate_qj.json",
+      "public_path": "runs/pt_pg18/steps/stats_immediate_qj.json",
+      "sha256": "74bb4d6fcee8c5f41cc96cc0aa8317706ce34054dca61edbc9080bfe950fdd78"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/stats_immediate_qp.json",
+      "public_path": "runs/pt_pg18/steps/stats_immediate_qp.json",
+      "sha256": "5f200be614d75455b029fc45fc81b3b3c52d7eca73fa837a4c02c5faaa568168"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/stats_immediate_state.txt",
+      "public_path": "runs/pt_pg18/steps/stats_immediate_state.txt",
+      "sha256": "eec299d8ec3f4dc30c8d55e14a9d9d87c74c2e0b46da9d8999965f96c3c12c2e"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/xver_immediate_qj.json",
+      "public_path": "runs/pt_pg18/steps/xver_immediate_qj.json",
+      "sha256": "3eb70d888c307eb5edbe6d2bdc219677f9bf5ff88c4505e0b6456f59eab6de87"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/xver_immediate_qp.json",
+      "public_path": "runs/pt_pg18/steps/xver_immediate_qp.json",
+      "sha256": "f0c2d26f94daa1f9b17dc08f8a3b66edb2fd295fab01ad926ecdbdf2dcaa0f67"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/steps/xver_immediate_state.txt",
+      "public_path": "runs/pt_pg18/steps/xver_immediate_state.txt",
+      "sha256": "1b490c4ee47b4354fb37029fb06d358b6f923584c3edb53df46182bebeb4684f"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/dumps/stats.toc.order.txt",
+      "public_path": "runs/pt_pg19/dumps/stats.toc.order.txt",
+      "sha256": "8acc4e1ce0af47bea4c17934dadd2b4e0f5609da28079a67ff3307e1e64a5604"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_after_manual_parent_analyze_qj.json",
+      "public_path": "runs/pt_pg19/steps/def_after_manual_parent_analyze_qj.json",
+      "sha256": "5e1f49749033f9042391432b3cf75cb303daefba270c25a93331a9e72eb8ef83"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_after_manual_parent_analyze_qp.json",
+      "public_path": "runs/pt_pg19/steps/def_after_manual_parent_analyze_qp.json",
+      "sha256": "e3bb427c14ad2c3f6ca771301643c77d156974b9dcf78bd5093fd595c85c1799"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_after_manual_parent_analyze_state.txt",
+      "public_path": "runs/pt_pg19/steps/def_after_manual_parent_analyze_state.txt",
+      "sha256": "d93b5720a9d973a42d63c000bab65a3e0a1390e8321efbc7ac73a69bc99d000e"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_children_done_qj.json",
+      "public_path": "runs/pt_pg19/steps/def_children_done_qj.json",
+      "sha256": "bc05ec8131d82d9eda679b5934b88bbe2e090a31982d252e9528b7c61fe2e49d"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_children_done_qp.json",
+      "public_path": "runs/pt_pg19/steps/def_children_done_qp.json",
+      "sha256": "254a9198d7f5c0ee4f21bfee0f5c6f11db7a8bfb4bf8f3e342d00bdda2719b5a"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_children_done_state.txt",
+      "public_path": "runs/pt_pg19/steps/def_children_done_state.txt",
+      "sha256": "5b7fac2fd91a72cee9c52da173917b82f8f157e210eea891558099f4e989d0fc"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_final_qj.json",
+      "public_path": "runs/pt_pg19/steps/def_final_qj.json",
+      "sha256": "779e5de30c3258588ce1cd3976d6b3d196bac6e06d23666ae93c0357bd1050f2"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_final_qp.json",
+      "public_path": "runs/pt_pg19/steps/def_final_qp.json",
+      "sha256": "54611d02896c27cc0ba345bdc22e442fcdb3b4f5d97d0a4c0d5d6eada304bd02"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_final_state.txt",
+      "public_path": "runs/pt_pg19/steps/def_final_state.txt",
+      "sha256": "5b7fac2fd91a72cee9c52da173917b82f8f157e210eea891558099f4e989d0fc"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_immediate_qj.json",
+      "public_path": "runs/pt_pg19/steps/def_immediate_qj.json",
+      "sha256": "be8179462a04023f38c8ea2b1d83e436a947c32fc5663e7d12b3f16e12898592"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_immediate_qp.json",
+      "public_path": "runs/pt_pg19/steps/def_immediate_qp.json",
+      "sha256": "83eb38e9d678923d601d06442ea14f3f9effa2ab71e4bc8433f3643c1bd86766"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_immediate_state.txt",
+      "public_path": "runs/pt_pg19/steps/def_immediate_state.txt",
+      "sha256": "db467c6ec28d2aadb9fc1277fadc5f577123f73aa679896ec107a8e8ec8890fd"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_poll.log",
+      "public_path": "runs/pt_pg19/steps/def_poll.log",
+      "sha256": "852e31f24cb8894915f4081a8ff165f7dcbde06089d6f73264a83355859cde91"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/def_timeline.csv",
+      "public_path": "runs/pt_pg19/steps/def_timeline.csv",
+      "sha256": "5b89894d7f1b29bb78abe8e57ed07b6ec14b6b812d579be640dbbccd5bacbf8a"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/restore_def.rc",
+      "public_path": "runs/pt_pg19/steps/restore_def.rc",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/restore_def_done_at.txt",
+      "public_path": "runs/pt_pg19/steps/restore_def_done_at.txt",
+      "sha256": "73b42e538054e02a58083dd281acd41edacf9744d024cc145f6956c4ee1c4b7e"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/restore_stats.rc",
+      "public_path": "runs/pt_pg19/steps/restore_stats.rc",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/source_qj.json",
+      "public_path": "runs/pt_pg19/steps/source_qj.json",
+      "sha256": "91face3bfe8d56a6eb8d1132d4a9a61115b3d63b20a1e78542f5a96eb63c282b"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/source_qp.json",
+      "public_path": "runs/pt_pg19/steps/source_qp.json",
+      "sha256": "de754e8a6c440aae1fe4c0a4a9dd7d96ff0ced50836edf24c7fa23b7eeb16b41"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/stats_immediate_qj.json",
+      "public_path": "runs/pt_pg19/steps/stats_immediate_qj.json",
+      "sha256": "ab869993a62da085545ac8e29793b2edda6bf51aebf8b27ca5af0bf830aadeca"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/stats_immediate_qp.json",
+      "public_path": "runs/pt_pg19/steps/stats_immediate_qp.json",
+      "sha256": "03fe9b53f0ba2730bf3857142fb7f5355152fa6144ae42489460eceef219eb46"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/steps/stats_immediate_state.txt",
+      "public_path": "runs/pt_pg19/steps/stats_immediate_state.txt",
+      "sha256": "336f41cb99bd913246841a28e01938ffbaf29494a107f89a05f32dc007fb3a1e"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg18/steps/analyze_after.txt",
+      "public_path": "runs/vdb_pg18/steps/analyze_after.txt",
+      "sha256": "c55f1287b7190eaf941ecb34667a2cc4a6ab14e56470437f02d0a02ff3cbb227"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg18/steps/analyze_in_stages_after.txt",
+      "public_path": "runs/vdb_pg18/steps/analyze_in_stages_after.txt",
+      "sha256": "3b5327299cae032ff35f1cfc18ff13406a9dcfdbf7989db47c0c1487d2bbeb1e"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg18/steps/analyze_only_after.txt",
+      "public_path": "runs/vdb_pg18/steps/analyze_only_after.txt",
+      "sha256": "6ce10e9ae19a07b73cd448575f7d0066c61da246800a65db652b0502d7f0a417"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg18/summary.txt",
+      "public_path": "runs/vdb_pg18/summary.txt",
+      "sha256": "977ccfc1e7cc604c1ba9fe9d97f32f82a524d351fea662cdad40089e30fbaf2c"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg19/steps/analyze_after.txt",
+      "public_path": "runs/vdb_pg19/steps/analyze_after.txt",
+      "sha256": "c55f1287b7190eaf941ecb34667a2cc4a6ab14e56470437f02d0a02ff3cbb227"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg19/steps/analyze_in_stages_after.txt",
+      "public_path": "runs/vdb_pg19/steps/analyze_in_stages_after.txt",
+      "sha256": "2ee73cf768a278841b15d3a46c4aff3e426dc49504b279b403902889da586723"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg19/steps/analyze_only_after.txt",
+      "public_path": "runs/vdb_pg19/steps/analyze_only_after.txt",
+      "sha256": "1f14d1097b16035c76d10d6e07a9be679885ff34a5c625a59a0cd540aa08e942"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg19/summary.txt",
+      "public_path": "runs/vdb_pg19/summary.txt",
+      "sha256": "a134377a37b06835ced4ffb0ece03560d485b75aeec87117183f050daa64ff51"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/env/versions.txt",
+      "public_path": "runs/pt_pg18/env/versions.txt",
+      "sha256": "81871620e0d364f73b9d88f95ee64b391bebf5bc65d6492738fa4e5d0dc96657"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/source_state.txt",
+      "public_path": "runs/pt_pg18/source_state.txt",
+      "sha256": "0ba1963a1cd80fe468b4bb7fa0d985fb4b8591d189894939d390d7e36e6eed8b"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg18/dumps/xver_stats.rc",
+      "public_path": "runs/pt_pg18/dumps/xver_stats.rc",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/env/versions.txt",
+      "public_path": "runs/pt_pg19/env/versions.txt",
+      "sha256": "849f2a12580eaf1008e444f357a19adf3608ae3552a5eef07dbe17ea55a03f1b"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/pt_pg19/source_state.txt",
+      "public_path": "runs/pt_pg19/source_state.txt",
+      "sha256": "cba69c8e5822d0901030006fb72ce2ec78897fce0d9051ecd6103b9821444993"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg18/versions.txt",
+      "public_path": "runs/vdb_pg18/versions.txt",
+      "sha256": "195f9ff218c94351c0cc16ea5c912873f7f3445bd5887da3cb8e92ff0c79a735"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg18/steps/vacuumdb_analyze_in_stages.out",
+      "public_path": "runs/vdb_pg18/steps/vacuumdb_analyze_in_stages.out",
+      "sha256": "efe122e635bd78ecbc294c378092d08e63b500fc038d9cca79cc07bbff8a1f9d"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg18/steps/vacuumdb_analyze_only.out",
+      "public_path": "runs/vdb_pg18/steps/vacuumdb_analyze_only.out",
+      "sha256": "6b11864632120d30c8f50c2dfd0f48ea9e543ee96b84ea937ba1b0fecb30e4e6"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg18/steps/vacuumdb_analyze.out",
+      "public_path": "runs/vdb_pg18/steps/vacuumdb_analyze.out",
+      "sha256": "001dc13d84d77f5f1f8ece0737cde6a811b67524e79c489e41eeb1e09bbf07e4"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg19/versions.txt",
+      "public_path": "runs/vdb_pg19/versions.txt",
+      "sha256": "ebc8046977e47f9f0dccdf8aba86dbdd3cb5ec792384662b3d1de4fc4144c35d"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg19/steps/vacuumdb_analyze_in_stages.out",
+      "public_path": "runs/vdb_pg19/steps/vacuumdb_analyze_in_stages.out",
+      "sha256": "efe122e635bd78ecbc294c378092d08e63b500fc038d9cca79cc07bbff8a1f9d"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg19/steps/vacuumdb_analyze_only.out",
+      "public_path": "runs/vdb_pg19/steps/vacuumdb_analyze_only.out",
+      "sha256": "6b11864632120d30c8f50c2dfd0f48ea9e543ee96b84ea937ba1b0fecb30e4e6"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/vdb_pg19/steps/vacuumdb_analyze.out",
+      "public_path": "runs/vdb_pg19/steps/vacuumdb_analyze.out",
+      "sha256": "001dc13d84d77f5f1f8ece0737cde6a811b67524e79c489e41eeb1e09bbf07e4"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/after_vacuum_analyze_q1.json",
+      "public_path": "runs/fz_pg18/steps/after_vacuum_analyze_q1.json",
+      "sha256": "c2a08ad5a017546ce5271b0794ef01353cacd39c67ab611740b6e034a6578bb7"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/after_analyze_q1.json",
+      "public_path": "runs/fz_pg18/steps/after_analyze_q1.json",
+      "sha256": "834801cadcb8265184bca152d10c2b1ff23d6f4c8ab25d726889738be3348377"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/after_vacuum_q1.json",
+      "public_path": "runs/fz_pg18/steps/after_vacuum_q1.json",
+      "sha256": "194dd87b20501a1b24e9a9c6090acaafeb5bb560a94103e4b45b6fa02a5b1b57"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/after_vacuum_freeze_analyze_q1.json",
+      "public_path": "runs/fz_pg18/steps/after_vacuum_freeze_analyze_q1.json",
+      "sha256": "e42dc69c0f2c104b1e937d390d2b2f5ede07e457835e90901f3906860f5cf99a"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg18/steps/after_vacuum_freeze_q1.json",
+      "public_path": "runs/fz_pg18/steps/after_vacuum_freeze_q1.json",
+      "sha256": "756463d30c4d76fca8ba781c1fb8b07464168b81ec4278d13668de9a575cddca"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/after_vacuum_analyze_q1.json",
+      "public_path": "runs/fz_pg19/steps/after_vacuum_analyze_q1.json",
+      "sha256": "badbcc2fe5d37220780ef36c75e235677891a395507d1da3318788265cf5c282"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/after_analyze_q1.json",
+      "public_path": "runs/fz_pg19/steps/after_analyze_q1.json",
+      "sha256": "edc4a13951b2badff7a8a3c325965b173c146e0c9dec5e9701d3b32233a280a2"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/after_vacuum_q1.json",
+      "public_path": "runs/fz_pg19/steps/after_vacuum_q1.json",
+      "sha256": "3cd1f9639c68e3bfbbea17b0271fbb89f9aebbbd378c76c66453e48fbade7cbe"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/after_vacuum_freeze_analyze_q1.json",
+      "public_path": "runs/fz_pg19/steps/after_vacuum_freeze_analyze_q1.json",
+      "sha256": "c77fb8339eaad5d368405823eec062ae7859db0aa07636381048c530e986e626"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/runs/fz_pg19/steps/after_vacuum_freeze_q1.json",
+      "public_path": "runs/fz_pg19/steps/after_vacuum_freeze_q1.json",
+      "sha256": "20ba9414072e8510984eec697f4e4e0f6f8c9036702104109143141d2291ed94"
+    }
+  ],
+  "reviewed_source_files_not_republished": [
+    {
+      "source_path": "cases/restore-readiness-01/README.md",
+      "sha256": "cd34af81f2ffe51eab7dcaf1d04ac3d12863b3ade6ac4f0022d557e216980425"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/harness/partition_track.sh",
+      "sha256": "e22c33ee6981d2778462cb24609c9c9a2737e46b07a134d933327b001c25cd33"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/harness/freeze_track.sh",
+      "sha256": "82893e35989c5770a46ad6a22c65f5d048b1487adf3abf9e0bd3eef4f395a5b0"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/harness/vacuumdb_partition_check.sh",
+      "sha256": "36bf33ea7175d1e41219da01eb6d3640363d321baa110244612511e9d8150f7f"
+    },
+    {
+      "source_path": "cases/restore-readiness-01/analysis/tooling_audit.md",
+      "sha256": "ef900d797627d784b92126499099b08bf8e69e3b8440b2e12c47250863b71f51"
+    }
+  ]
+}

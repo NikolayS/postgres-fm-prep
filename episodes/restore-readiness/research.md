@@ -1,5 +1,7 @@
 # Your restore finished. Why are queries still slow?
 
+**Latest evidence:** the [October 20 follow-up](forge-oct20-followup.md) adds reviewed parent-statistics, vacuumdb-mode and freeze/compression results. Parent autoanalysis is a persistent gap, not merely delayed readiness; PG18 explicit FREEZE reduced a later forced pass at little observed initial cost, while PG19 plain VACUUM already froze those pages. These single-run results do not establish universal costs or the cause of the PG19 difference.
+
 Postgres.FM preparation for Nikolay Samokhvalov and Kirk Wolak. Research as of 2026-10-20 UTC.
 
 **Scope:** historical research, source inspection, documentation audit, and synthesis of supplied Forge experiments. The [new results report](forge-results.md) contains measured outcomes, four charts and public evidence. The supplied Forge campaign was synthesized without rerunning it; a subsequent [isolated PG19rc1 control](evidence/pg19-relallvisible/README.md) was executed and independently repeated in fresh containers. No newly confirmed PostgreSQL defect is claimed.

@@ -1,5 +1,7 @@
 # Study pack for Kirk
 
+**Latest experiment update:** [October 20 follow-up](forge-oct20-followup.md) — parent estimates stayed at 200 versus 100,000 actual after leaf autoanalysis; PG18 FREEZE reduced a later forced freezing pass; PG19 plain VACUUM already froze the tested pages. Raw evidence and qualifications are linked.
+
 **Updated October 20, 2026. PG19 statements refer to the tested release candidate, 19rc1.**
 
 **Short on time? Read the [host TL;DR](hosts-tldr.md) first.** This pack compares PG18 with PG19 up front, then covers the experiments, operator choices and historical context.
@@ -122,7 +124,7 @@ This strengthens the argument for scheduling physical preparation before latency
 
 ## Additional questions from the Forge engineer
 
-The [reviewed synthesis](engineer-notes-synthesis.md) adds partitioned-parent statistics, tooling policy differences, bulk-load freezing schedules, logical-copy benchmark fidelity and a possible readiness manifest. It distinguishes primary-source facts from new PDF-only timing claims and pending runs. Use the [host TL;DR](hosts-tldr.md) for the revised recording arc.
+The [reviewed synthesis](engineer-notes-synthesis.md) adds partitioned-parent statistics, tooling policy differences, bulk-load freezing schedules, logical-copy benchmark fidelity and a possible readiness manifest. The [October 20 follow-up](forge-oct20-followup.md) now verifies the underlying partition, vacuumdb, freeze and compression outputs, replacing the earlier PDF-only/pending status. All leaves were observed analyzed within 15 seconds; parent statistics were still missing after more than eight minutes. A PG18 dump client also carried parent statistics from a PG17 source. Use the [host TL;DR](hosts-tldr.md) for the revised recording arc.
 
 ## Close with two sets of recommendations
 
@@ -132,7 +134,7 @@ The [reviewed synthesis](engineer-notes-synthesis.md) adds partitioned-parent st
 2. Decide whether to schedule VACUUM/ANALYZE before traffic. Inspect actual VM, heap fetches and representative plans; a positive relallvisible alone is not readiness.
 3. Explicitly account for partitioned-parent analysis and vacuumdb mode/client version.
 4. Separate first and repeated execution; the first can change physical state. Budget preparation I/O/WAL and check replay on the server serving replica queries.
-5. Consider FREEZE for stable data as a lifecycle choice, with measured cost. Don't imply every table needs it.
+5. Consider FREEZE for stable data as a lifecycle choice. The new PG18 test found little added initial cost and much less later forced freezing work; PG19 ordinary vacuum already froze those pages. Measure the cost and do not imply every table needs it.
 
 ### Future PostgreSQL and tooling ideas
 

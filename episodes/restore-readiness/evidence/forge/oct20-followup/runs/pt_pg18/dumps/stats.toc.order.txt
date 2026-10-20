@@ -1,0 +1,46 @@
+36:3509; 0 16551 TABLE DATA public customers postgres
+37:3510; 0 16566 TABLE DATA public orders_p_0 postgres
+38:3511; 0 16574 TABLE DATA public orders_p_1 postgres
+39:3512; 0 16582 TABLE DATA public orders_p_2 postgres
+40:3513; 0 16590 TABLE DATA public orders_p_3 postgres
+41:3514; 0 16598 TABLE DATA public orders_p_4 postgres
+42:3515; 0 16606 TABLE DATA public orders_p_5 postgres
+43:3516; 0 16614 TABLE DATA public orders_p_6 postgres
+44:3517; 0 16622 TABLE DATA public orders_p_7 postgres
+45:3525; 0 0 STATISTICS DATA public customers 
+46:3526; 0 0 STATISTICS DATA public orders_p 
+47:3527; 0 0 STATISTICS DATA public orders_p_0 
+48:3528; 0 0 STATISTICS DATA public orders_p_1 
+49:3529; 0 0 STATISTICS DATA public orders_p_2 
+50:3530; 0 0 STATISTICS DATA public orders_p_3 
+51:3531; 0 0 STATISTICS DATA public orders_p_4 
+52:3532; 0 0 STATISTICS DATA public orders_p_5 
+53:3533; 0 0 STATISTICS DATA public orders_p_6 
+54:3534; 0 0 STATISTICS DATA public orders_p_7 
+56:3535; 0 0 STATISTICS DATA public customers_pkey 
+57:3336; 1259 16630 INDEX public orders_p_customer_id_idx postgres
+58:3338; 1259 16631 INDEX public orders_p_0_customer_id_idx postgres
+59:3536; 0 0 STATISTICS DATA public orders_p_0_customer_id_idx 
+60:3340; 1259 16632 INDEX public orders_p_1_customer_id_idx postgres
+61:3537; 0 0 STATISTICS DATA public orders_p_1_customer_id_idx 
+62:3342; 1259 16633 INDEX public orders_p_2_customer_id_idx postgres
+63:3538; 0 0 STATISTICS DATA public orders_p_2_customer_id_idx 
+64:3344; 1259 16634 INDEX public orders_p_3_customer_id_idx postgres
+65:3539; 0 0 STATISTICS DATA public orders_p_3_customer_id_idx 
+66:3346; 1259 16635 INDEX public orders_p_4_customer_id_idx postgres
+67:3540; 0 0 STATISTICS DATA public orders_p_4_customer_id_idx 
+68:3348; 1259 16636 INDEX public orders_p_5_customer_id_idx postgres
+69:3541; 0 0 STATISTICS DATA public orders_p_5_customer_id_idx 
+70:3350; 1259 16637 INDEX public orders_p_6_customer_id_idx postgres
+71:3542; 0 0 STATISTICS DATA public orders_p_6_customer_id_idx 
+72:3352; 1259 16638 INDEX public orders_p_7_customer_id_idx postgres
+73:3543; 0 0 STATISTICS DATA public orders_p_7_customer_id_idx 
+74:3544; 0 0 STATISTICS DATA public orders_p_customer_id_idx 
+75:3354; 0 0 INDEX ATTACH public orders_p_0_customer_id_idx postgres
+76:3355; 0 0 INDEX ATTACH public orders_p_1_customer_id_idx postgres
+77:3356; 0 0 INDEX ATTACH public orders_p_2_customer_id_idx postgres
+78:3357; 0 0 INDEX ATTACH public orders_p_3_customer_id_idx postgres
+79:3358; 0 0 INDEX ATTACH public orders_p_4_customer_id_idx postgres
+80:3359; 0 0 INDEX ATTACH public orders_p_5_customer_id_idx postgres
+81:3360; 0 0 INDEX ATTACH public orders_p_6_customer_id_idx postgres
+82:3361; 0 0 INDEX ATTACH public orders_p_7_customer_id_idx postgres

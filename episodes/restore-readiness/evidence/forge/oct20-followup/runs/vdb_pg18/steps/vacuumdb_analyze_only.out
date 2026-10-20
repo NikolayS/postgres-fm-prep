@@ -1,0 +1,2 @@
+vacuumdb: vacuuming database "vdb_analyze_only"
+rc=0

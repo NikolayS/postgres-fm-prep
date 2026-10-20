@@ -1,5 +1,7 @@
 # Restore guidance: expanded audit of 28 pages
 
+**Separate tooling follow-up:** [October 20 follow-up](forge-oct20-followup.md) reviews new maintenance experiments and distinguishes tool behavior from advice on documentation pages. This does not change the 28-page sample or its counts.
+
 **Podcast edition · October 20, 2026 UTC.** Twenty-eight distinct logical restore/import pages from **21 publishers**: the original twelve, eight more provider pages and eight practical posts/training tutorials. [CSV](restore-docs-expanded.csv) · [JSON, definitions and source hashes](restore-docs-expanded.json) · [Original twelve-page audit](restore-docs-audit.md).
 
 ![Expanded audit: 8 of 28 recommend analysis, 3 recommend vacuuming, and 1 explains visibility-map readiness. This is a selected page sample, not a representative survey.](assets/restore-docs-expanded-summary.png)

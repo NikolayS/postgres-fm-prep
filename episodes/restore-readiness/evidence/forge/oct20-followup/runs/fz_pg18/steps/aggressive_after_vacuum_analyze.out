@@ -1,0 +1,28 @@
+INFO:  aggressively vacuuming "fz_vacuum_analyze.public.accounts"
+INFO:  finished vacuuming "fz_vacuum_analyze.public.accounts": index scans: 0
+pages: 0 removed, 172440 remain, 172440 scanned (100.00% of total), 0 eagerly scanned
+tuples: 0 removed, 10000000 remain, 0 are dead but not yet removable
+removable cutoff: 1516, which was 0 XIDs old when operation ended
+new relfrozenxid: 1516, which is 47 XIDs ahead of previous value
+frozen: 172414 pages from table (99.98% of total) had 10000000 tuples frozen
+visibility map: 0 pages set all-visible, 172414 pages set all-frozen (172414 were all-visible)
+index scan not needed: 0 pages from table (0.00% of total) had 0 dead item identifiers removed
+I/O timings: read: 0.000 ms, write: 0.000 ms
+avg read rate: 0.000 MB/s, avg write rate: 486.295 MB/s
+buffer usage: 344992 hits, 0 reads, 172421 dirtied
+WAL usage: 344829 records, 172424 full page images, 1424214048 bytes, 150849 buffers full
+system usage: CPU: user: 0.98 s, system: 0.92 s, elapsed: 2.77 s
+INFO:  aggressively vacuuming "fz_vacuum_analyze.pg_toast.pg_toast_17594"
+INFO:  finished vacuuming "fz_vacuum_analyze.pg_toast.pg_toast_17594": index scans: 0
+pages: 0 removed, 0 remain, 0 scanned (100.00% of total), 0 eagerly scanned
+tuples: 0 removed, 0 remain, 0 are dead but not yet removable
+removable cutoff: 1516, which was 0 XIDs old when operation ended
+new relfrozenxid: 1516, which is 39 XIDs ahead of previous value
+frozen: 0 pages from table (100.00% of total) had 0 tuples frozen
+visibility map: 0 pages set all-visible, 0 pages set all-frozen (0 were all-visible)
+index scan not needed: 0 pages from table (100.00% of total) had 0 dead item identifiers removed
+I/O timings: read: 0.000 ms, write: 0.000 ms
+avg read rate: 0.000 MB/s, avg write rate: 0.000 MB/s
+buffer usage: 33 hits, 0 reads, 0 dirtied
+WAL usage: 1 records, 0 full page images, 258 bytes, 0 buffers full
+system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s

@@ -2,7 +2,7 @@
 
 [Host TL;DR](hosts-tldr.md) · [Study pack](study-pack.md)
 
-Reviewed October 20, 2026 against the supplied eight-page PDF, existing measurements, and the primary sources linked below. The supplied document is an editorial input, not independent proof of every claim. Its pending experiments remain pending here unless underlying results have been reviewed. The source PDF is not republished.
+Reviewed October 20, 2026 against the supplied eight-page PDF, existing measurements, and the primary sources linked below. The supplied document is an editorial input, not independent proof of every claim. The subsequently supplied partition, freeze and vacuumdb outputs are now reviewed in the [October 20 follow-up](forge-oct20-followup.md). The source PDF is not republished.
 
 ## 1. Partitioned parents: waiting is not always the solution
 
@@ -10,7 +10,7 @@ This is the most useful operational addition. Autovacuum analyzes leaf partition
 
 PG19 also changes the **vacuumdb client's** no-explicit-target behavior for `--analyze-only` and `--analyze-in-stages`: those modes now include partitioned tables. **The PG19 no-target `--analyze` mode still excludes partitioned parents.** This is not a server-side autovacuum fix; distinguish the installed client version and selected mode. [vacuumdb documentation](https://www.postgresql.org/docs/19/app-vacuumdb.html). [PG19 release notes](https://www.postgresql.org/docs/19/release-19.html#RELEASE-19-SERVER-APPLICATIONS).
 
-The supplied PDF reports leaves analyzed in 13–15 seconds while a parent remained unanalyzed over 480 seconds. We have not reviewed the underlying outputs for that new track, so do not present those timings as verified campaign results yet. The documented mechanism is sufficient for the episode.
+The raw outputs now confirm all leaves were observed analyzed within 15 seconds, while parent statistics remained missing after more than eight minutes. The nominal 480-second polling budget excluded query overhead. The parent-dependent query estimated 200 rows against 100,000 actual; explicit analysis repaired its estimate and plan. See the [October 20 follow-up](forge-oct20-followup.md) for plans, source files and the successful PG18-client/PG17-source statistics import.
 
 **Question:** “When does 'wait for autovacuum' mean wait for something that will never analyze this object?”
 
@@ -39,7 +39,7 @@ Keep the existing [page-level documentation audit](restore-docs-expanded.md) as 
 
 Bulk restoration can concentrate tuple transaction ages into a relatively narrow range, making the future freezing schedule worth considering. The exact distribution depends on restore transaction boundaries, parallelism, table age metadata and subsequent maintenance. It does not prove the entire database will require freezing simultaneously.
 
-For largely immutable data, ask whether establishing frozen state during the restore window is worthwhile. For rapidly changing data, the benefit may be smaller. Don't extrapolate lifetime savings or equal costs from the one-run larger fixture. The notes list further FREEZE/compression variants as running; those are not completed results in this synthesis. [Current decision guide](hint-bits-standbys-freeze.md).
+For largely immutable data, ask whether establishing frozen state during the restore window is worthwhile. For rapidly changing data, the benefit may be smaller. The new single-run arms now show a small initial FREEZE cost difference and much less later forced freezing work on PG18.6; PG19rc1 ordinary VACUUM already established the same all-frozen coverage. Compression reduced cluster WAL deltas with a time tradeoff. Do not extrapolate lifetime savings, PG17 coverage or universally free freezing. See the [October 20 follow-up](forge-oct20-followup.md) for the failed xmin-capture limitation and exact measurement scopes. [Current decision guide](hint-bits-standbys-freeze.md).
 
 **Question:** “Do we optimize the restore deadline, the first hour of traffic, or maintenance over the next year?”
 

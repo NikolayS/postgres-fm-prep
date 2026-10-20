@@ -1,5 +1,7 @@
 # A bounded restore experiment for the podcast
 
+**Status update, October 20:** this file preserves the original plan. The [October 20 follow-up](forge-oct20-followup.md) now records completed partition, cross-version statistics import, vacuumdb coverage and freeze/compression tracks. A later aggressive vacuum was simulated, not observed after natural XID aging. The primary/standby experiment remains unexecuted; isolating the PG19 freezing cause and repeated lifecycle-cost comparisons remain open.
+
 **Historical plan; results now available:** see [Forge results and evidence](forge-results.md). Core and several optional tracks were executed by Forge; the original scope and resource suggestions below are preserved as a proposal, not a description of the actual environment. The report records deviations and remaining unmeasured items.
 
 Original proposal for DBLab Forge. Target: first results within 60–90 minutes and a complete, checked preparation package within 3–4 hours. If the core takes longer, drop optional work rather than broaden the experiment.
