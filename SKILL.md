@@ -263,3 +263,36 @@ bun $S/compose.ts layout.json out-edited.mp4 final.mp4 --intro a-intro.mp3 --out
   distribution and music libraries; 17 min generation / 30 min download per
   month; Starter is marked "For Individual Use Only", so use Creator or
   higher for a company show.
+
+## Cover (YouTube 1280x720 and square 3000x3000)
+
+Tooling in `cover/`. Rules and the full cover system are in
+`cover/system.md` (two text levels, 66 px minimum font, emotion matches
+the hook, no neutral faces). Steps per episode, about 10 minutes:
+
+1. Frames: `ffmpeg -i rec.mp4 -vf "fps=1,crop=W:H:X:Y" tiles/%04d.png` per
+   host tile (tile positions shift when Zoom re-lays out the gallery; check
+   a few frames).
+2. Score: `swiftc -O -o facescore facescore.swift` once, then
+   `./facescore tiles/*.png > scores.csv` (macOS Vision: landmarks, glare,
+   sharpness, hand on face, brow raise, head pose).
+3. Rank: `bun pick2.ts scores.csv <prefix> <maxGlare> words.json` writes
+   one HTML sheet per expression class (laughing, smiling, surprised,
+   skeptical, thinking), ranked by intensity; render each with
+   `bun render.ts sheet.html sheet.png 1920 612`. `pick.ts` is the older
+   smile-only ranker.
+4. Cutout: `./prep.sh <nik|kirk> frame.png <faceX> out.png` (background
+   removal via @imgly/background-removal-node, light denoise/sharpen and
+   exposure match, face-centred crop). Prefer frames where the head does
+   not overlap anything the cutout model keeps (Nik's orange chair logo).
+   `LOGOFIX=1` enables `logo-fix.ts` (can nibble skin); `alpha-box.ts`
+   clears hand-picked boxes. Always check the edge at 300%.
+5. Compose: copy `concept-a-v3.html` or `concept-b-v3.html`, replace
+   `img/NIK.png` and `img/KIRK.png`, edit the two text lines, then
+   `bun render.ts page.html out.png` (square: `... 1000 1000 3`).
+6. Check at 320x180 (`ffmpeg -vf scale=320:180`): every text element and
+   both faces must still read.
+
+Fonts (Anton, Archivo Black, Bebas Neue, Inter; OFL) are in `cover/fonts/`.
+`bun install` in `cover/` brings playwright-core, the background remover
+and pngjs; rendering uses the local Google Chrome binary.

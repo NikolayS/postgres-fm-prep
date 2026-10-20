@@ -1,0 +1,40 @@
+@import url("fonts/all.css");
+:root {
+  --ink: #0b0e14;
+  --paper: #f3efe6;
+  --amber: #ffb400;
+  --ok: #3dff8a;
+  --red: #ff3b3b;
+  --blue: #5aa9ff;
+  --mute: #8a93a6;
+  --display: "Anton", "Archivo Black", Impact, sans-serif;
+  --mono: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+  --sans: "Inter", -apple-system, sans-serif;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { width: 1280px; height: 720px; overflow: hidden; background: var(--ink); color: var(--paper); font-family: var(--sans); position: relative; }
+.canvas { position: absolute; inset: 0; overflow: hidden; }
+.hook { font-family: var(--display); text-transform: uppercase; line-height: 0.92; letter-spacing: 0.01em; }
+.mono { font-family: var(--mono); }
+.mark { position: absolute; left: 48px; bottom: 44px; display: flex; align-items: center; gap: 12px; font-family: var(--sans); font-weight: 800; font-size: 26px; letter-spacing: -0.01em; }
+.mark .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--red); box-shadow: 0 0 0 4px rgba(255,59,59,0.25); }
+.mark .ep { font-family: var(--mono); font-weight: 600; color: var(--mute); font-size: 22px; margin-left: 4px; }
+.host { position: absolute; bottom: 0; }
+.host img { display: block; }
+.host.fade img { -webkit-mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); mask-image: linear-gradient(to bottom, #000 78%, transparent 100%); }
+.tile { position: absolute; border-radius: 10px; overflow: hidden; box-shadow: 0 12px 40px rgba(0,0,0,0.6); border: 3px solid rgba(255,255,255,0.12); background: #000; }
+.tile img { display: block; width: 100%; }
+.tile .label { position: absolute; left: 0; bottom: 0; background: rgba(0,0,0,0.75); color: #fff; font-size: 14px; padding: 3px 8px; font-family: var(--sans); }
+.check { display: inline-block; width: 0.75em; height: 0.75em; border-right: 0.16em solid currentColor; border-bottom: 0.16em solid currentColor; transform: rotate(45deg) translate(-0.1em, -0.15em); }
+.grain { position: absolute; inset: 0; pointer-events: none; opacity: 0.08; background-image: radial-gradient(rgba(255,255,255,0.6) 0.6px, transparent 0.7px); background-size: 3px 3px; mix-blend-mode: overlay; }
+/* standard host placement: Nik big at right, Kirk smaller, overlapping */
+.host.nik { right: -16px; bottom: -6px; width: 640px; z-index: 3; }
+.host.nik img { width: 640px; }
+.host.kirk { right: 520px; bottom: 0; width: 440px; z-index: 2; }
+.host.kirk img { width: 440px; }
+/* v3: guest at Nik's face size, same eye level, fully visible */
+.v3 .host.nik { right: -16px; bottom: -6px; width: 640px; }
+.v3 .host.kirk { right: 520px; bottom: -30px; width: 600px; }
+.v3 .host.kirk img { width: 600px; }
+.v3 .host.fade img { -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 100%); mask-image: linear-gradient(to bottom, #000 82%, transparent 100%); }
