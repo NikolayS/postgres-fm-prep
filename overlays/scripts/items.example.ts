@@ -22,7 +22,7 @@ const shot = (name: string, chip: string, rect?: Partial<{x: number; y: number; 
 };
 
 type Sfx = {file: string; at: number; gain: number};
-export type Item = {id: string; comp: 'shot' | 'number' | 'band' | 'full' | 'intro' | 'hacking'; outStart: number; duration: number; placement: 'band' | 'full'; freezeSec: number; sfx: Sfx[]; props: Record<string, unknown>; source?: string};
+export type Item = {id: string; comp: 'shot' | 'number' | 'band' | 'full' | 'intro' | 'hacking' | 'center'; outStart: number; duration: number; placement: 'band' | 'full' | 'center'; freezeSec: number; sfx: Sfx[]; props: Record<string, unknown>; source?: string};
 
 // Low-frequency, soft SFX family (see scripts/sfx-synth.sh). The names keep their roles:
 // tick = short air puff (strips, chips), pop = sub thud (a number lands), clack = quieter thud
@@ -65,15 +65,21 @@ export const ITEMS: Item[] = [
       ],
       chip: 'youtube.com/@PostgresTV, playlist: Hacking Postgres'},
     source: PLAYLIST},
-  {id: '04-docs-audit-chart', comp: 'full', outStart: 124.6, duration: 6, placement: 'full', freezeSec: 0, sfx: [whoosh(0), tick(0.6)],
-    props: {image: 'docs-audit-chart.png', imageWidth: 1600, imageHeight: 1050, chip: 'postgres-fm-prep: restore-docs-expanded (28 pages)', prefix: NOTE, text: 'selected sample of 28 docs pages: 8 mention ANALYZE, 3 mention VACUUM, 1 explains the visibility map'},
-    source: 'https://github.com/NikolayS/postgres-fm-prep/tree/main/episodes/restore-readiness'},
   {id: '05-backups-episode', comp: 'band', outStart: 197.3, duration: 4, placement: 'band', freezeSec: 0, sfx: [tick(0), tick(0.5)],
     props: {kind: 'chips', chips: ['Postgres.FM: Backups', 'postgres.fm/episodes/backups']}, source: 'https://postgres.fm/episodes/backups'},
   {id: '06-pgdump-statistics', comp: 'shot', outStart: 269.7, duration: 5.5, placement: 'full', freezeSec: 0, sfx: shotSfx(5.5),
     props: shot('pgdump18-statistics', 'postgresql.org/docs/18/app-pgdump.html', {width: 160}), source: 'https://www.postgresql.org/docs/18/app-pgdump.html'},
-  {id: '08-covering-query', comp: 'number', outStart: 476.0, duration: 4, placement: 'full', freezeSec: 2.5, sfx: [tick(0), pop(1.7)],
-    props: {title: 'Covering-index query, buffer accesses', before: 3301, after: 34, beforeLabel: 'right after pg_restore', afterLabel: 'after VACUUM', footnote: 'PG 18.6, small test fixture (DBLab Forge). Buffers, not latency.'}},
+  // Center charts (CenterChart): the packager parks the host tiles at the edges; the talk continues (no freeze).
+  // Verify every number against the source file and keep file:line in the plan.
+  {id: '08-three-bars', comp: 'center', outStart: 464.0, duration: 12, placement: 'center', freezeSec: 0, sfx: [tick(0), tick(0.8), tick(1.3), pop(1.8)],
+    props: {kind: 'bars', title: 'One query, three restores', sub: 'covering-index query, buffer accesses, PG 18.6', unit: 'buffers',
+      bars: [{value: 3301, label: 'Restore only', sub: 'Bitmap Heap Scan'}, {value: 3301, label: 'ANALYZE', sub: 'Bitmap Heap Scan'}, {value: 34, label: 'VACUUM ANALYZE', sub: 'Index Only Scan, 0 heap fetches'}],
+      footnote: 'Small cached fixture, three fresh restores per arm (DBLab Forge). Buffers, not latency.'}},
+  {id: '15-docs-donuts', comp: 'center', outStart: 1476.5, duration: 14, placement: 'center', freezeSec: 0, sfx: [tick(0), tick(0.8), tick(1.3), tick(1.8)],
+    props: {kind: 'donuts', title: '28 docs pages on restore', sub: 'selected sample: managed platforms and tools',
+      donuts: [{value: 8, of: 28, label: 'mention ANALYZE'}, {value: 3, of: 28, label: 'mention VACUUM'}, {value: 1, of: 28, label: 'explains the visibility map'}],
+      footnote: '20 of 28 say nothing about statistics or VACUUM. Source: postgres-fm-prep, restore-readiness.'},
+    source: 'https://github.com/NikolayS/postgres-fm-prep/tree/main/episodes/restore-readiness'},
   {id: '09-xmin-xmax', comp: 'shot', outStart: 656.7, duration: 5, placement: 'full', freezeSec: 0, sfx: shotSfx(5),
     props: shot('sys-xmin', 'postgresql.org/docs/18/ddl-system-columns.html', {width: 70}), source: 'https://www.postgresql.org/docs/18/ddl-system-columns.html'},
   {id: '10-scary-story', comp: 'band', outStart: 807.7, duration: 3, placement: 'band', freezeSec: 0, sfx: [pop(0, 2.5)],
