@@ -106,3 +106,23 @@ cover when both appear in a feed.
    `1000 1000 3` for the square.
 4. Check at 320x180 (`ffmpeg -vf scale=320:180`). If the key word or a face
    does not read, cut words, not size.
+
+## Lessons from the first episode (2026-10-20)
+
+- Glare: the lens check must catch bluish-white screen reflections, not
+  only pure white. `facescore` counts bright low-saturation pixels in the
+  eye box (`glare` column); compare the two lenses, a frame fails when
+  one lens is clearly brighter than the other. Calibration: a visibly
+  reflective frame scored 0.029, a clean one 0.0015; reject above 0.01.
+- Reject frames where the chair logo or the chair wing touches the head
+  contour (`frame-check.ts`: orange pixels within 40 px outside the face
+  box, or a dark cool-grey band along the contour). Colour-based mask
+  repair (`logo-fix.ts`) nibbles skin and ears; a clean frame beats a
+  patched one every time. Patch only tiny remnants inside a lens, by
+  mirroring neighbouring pixels, then feather alpha.
+- A cool-grey chair sliver that the cutout keeps along hair and jaw is
+  removed with `bun chair-cut.ts in.png out.png y0 y1 xMax` (per-row run
+  from the left edge, 3x3 alpha feather). Check the whole edge at 300%
+  before and after.
+- Mic over the mouth or eyes, neutral mid-word faces and closed eyes are
+  hard rejects; laughing beats smiling; intensity first.

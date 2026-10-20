@@ -36,6 +36,31 @@ func brightFrac(_ g: [Float], _ w: Int, _ h: Int, _ r: CGRect, _ th: Float) -> F
     return Float(b) / Float(n)
 }
 
+func rgba(_ img: CGImage) -> [UInt8] {
+    let w = img.width, h = img.height
+    var buf = [UInt8](repeating: 0, count: w * h * 4)
+    let cs = CGColorSpaceCreateDeviceRGB()
+    let ctx = CGContext(data: &buf, width: w, height: h, bitsPerComponent: 8, bytesPerRow: w * 4, space: cs, bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue)!
+    ctx.draw(img, in: CGRect(x: 0, y: 0, width: w, height: h))
+    return buf
+}
+
+// reflection: bright and nearly grey/blue-white pixels (screen glare), skin is warmer and darker
+func glareFrac(_ p: [UInt8], _ w: Int, _ h: Int, _ r: CGRect) -> Float {
+    let x0 = max(0, Int(r.minX)), x1 = min(w - 1, Int(r.maxX))
+    let y0 = max(0, Int(r.minY)), y1 = min(h - 1, Int(r.maxY))
+    if x1 <= x0 || y1 <= y0 { return 1 }
+    var n = 0, b = 0
+    for y in y0...y1 { for x in x0...x1 {
+        n += 1
+        let i = (y * w + x) * 4
+        let rr = Int(p[i]), gg = Int(p[i+1]), bb = Int(p[i+2])
+        let mx = max(rr, max(gg, bb)), mn = min(rr, min(gg, bb))
+        if mn > 165 && (mx - mn) < 45 && bb >= rr - 10 { b += 1 }
+    } }
+    return Float(b) / Float(n)
+}
+
 func dist(_ a: CGPoint, _ b: CGPoint) -> CGFloat { hypot(a.x - b.x, a.y - b.y) }
 
 let files = CommandLine.arguments.dropFirst()
@@ -43,6 +68,7 @@ print("file,faceW,yaw,roll,eyeOpen,mouthOpen,glare,sharp,smile,pitch,hand,faceX,
 for f in files {
     guard let ns = NSImage(contentsOfFile: f), let cg = ns.cgImage(forProposedRect: nil, context: nil, hints: nil) else { continue }
     let (g, w, h) = gray(cg)
+    let px = rgba(cg)
     let req = VNDetectFaceLandmarksRequest()
     let hreq = VNDetectHumanHandPoseRequest(); hreq.maximumHandCount = 2
     let handler = VNImageRequestHandler(cgImage: cg, options: [:])
@@ -73,8 +99,10 @@ for f in files {
     let mouthOpen = openness(lips)
     // smile proxy: outer lips width relative to face width
     let smile = outer.isEmpty ? 0 : box(outer, pad: 0).width / fr.width
-    let pad = fr.width * 0.06
-    let glare = le.isEmpty || re.isEmpty ? 1 : max(brightFrac(g, w, h, box(le, pad: pad), 235), brightFrac(g, w, h, box(re, pad: pad), 235))
+    let pad = fr.width * 0.10
+    // lens glare: bright, low-saturation area over the whole lens (screen reflections are
+    // bluish-white around 190-230, not 255), so threshold 185 over the eye box padded to lens size
+    let glare = le.isEmpty || re.isEmpty ? 1 : max(glareFrac(px, w, h, box(le, pad: pad)), glareFrac(px, w, h, box(re, pad: pad)))
     let sharp = lapVar(g, w, h, fr)
     let yaw = face.yaw?.doubleValue ?? 0, roll = face.roll?.doubleValue ?? 0
     let pitch = face.pitch?.doubleValue ?? 0

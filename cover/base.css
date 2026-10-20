@@ -37,4 +37,4 @@ body { width: 1280px; height: 720px; overflow: hidden; background: var(--ink); c
 .v3 .host.nik { right: -16px; bottom: -6px; width: 640px; }
 .v3 .host.kirk { right: 520px; bottom: -30px; width: 600px; }
 .v3 .host.kirk img { width: 600px; }
-.v3 .host.fade img { -webkit-mask-image: linear-gradient(to bottom, #000 82%, transparent 100%); mask-image: linear-gradient(to bottom, #000 82%, transparent 100%); }
+.v3 .host.fade img { -webkit-mask-image: none; mask-image: none; }  /* guest crop ends below the canvas; no fade needed */
