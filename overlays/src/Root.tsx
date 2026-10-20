@@ -3,6 +3,8 @@ import {ShotCard} from './ShotCard';
 import {NumberPop} from './NumberPop';
 import {Band} from './Band';
 import {FullCard} from './FullCard';
+import {IntroCard} from './IntroCard';
+import {HackingInsert} from './HackingInsert';
 
 const FPS = 25;
 const W = 1920;
@@ -72,6 +74,26 @@ export const Root = () => (
       durationInFrames={5 * FPS}
       calculateMetadata={meta}
       defaultProps={{prefix: "Editor's note:", text: '28 selected docs pages: 8 mention ANALYZE, 3 mention VACUUM.', durationSec: 5}}
+    />
+    <Composition
+      id="intro"
+      component={IntroCard}
+      fps={FPS}
+      width={W}
+      height={H}
+      durationInFrames={7 * FPS}
+      calculateMetadata={meta}
+      defaultProps={{name: 'Kirk Wolak', company: 'KiraSoft', photo: 'face-kirk.png', side: 'left' as const, facts: ['Co-host, Hacking Postgres series', 'GSoC mentor'], durationSec: 7}}
+    />
+    <Composition
+      id="hacking"
+      component={HackingInsert}
+      fps={FPS}
+      width={W}
+      height={H}
+      durationInFrames={7 * FPS}
+      calculateMetadata={meta}
+      defaultProps={{title: 'Hacking Postgres', sub: 'since Jan 2023', thumbs: ['thumbs/-UaAXJSTj6c.jpg'], shipped: [{cover: 'thumbs/WLoMpg8A4WU.jpg', session: 'Jan 2023', release: 'PostgreSQL 17'}], chip: 'youtube.com/@PostgresTV', durationSec: 7}}
     />
   </>
 );

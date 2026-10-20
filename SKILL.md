@@ -327,8 +327,35 @@ Placement:
   charts (`FullCard`). They dim the whole frame to about 22% so they never
   fight a face.
 
-Freezes: only on number cards where the number is the point; 2-2.5 s;
-`freezeSec` in the manifest, never baked into the overlay. The talk holds and
+Host intros (`IntroCard`, vDud guest-intro grammar): the talk freezes right
+after the name is said; a round photo (square crop of the host's own tile,
+`public/face-<host>.png`) pops on the side where the host sits, the name
+wipes in (92 px), the company chip (40 px), then 3-4 facts pop in one by one
+(40 px, 0.45 s apart, one clack each). Host first and short (about 4 s),
+guest longer (about 7 s). `freezeSec` = card duration. Facts: under 40
+characters, each with a public source (commit messages with Author /
+Reviewed-by, release-note contributor lists, postgres.fm people pages, company
+sites) written to `facts.md` before the render; nothing unverified goes on
+screen, and release-note facts are checked with a tag compare
+(`api.github.com/repos/postgres/postgres/compare/REL_17_0...<sha>` = "behind"
+means the commit is in 17.0).
+
+Playlist inserts (`HackingInsert`): title strip, six recent thumbnails pop in
+0.18 s apart (clack each), the grid shrinks to a top row, two "session ->
+release" cards land with a pop on the release chip, then the playlist chip;
+7 s freeze. Thumbnails come from `i.ytimg.com/vi/<id>/maxresdefault.jpg` for
+the channel's own videos only. "Built live" or "the idea came up in this
+session" wording must match what the session actually did (check captions:
+`yt-dlp --write-auto-sub`).
+
+SFX: tick (strips), pop (a number or chip lands), whoosh (full-screen in and
+out), clack (each staged fact or thumbnail; -3 dB vs pop). All synthesized by
+`scripts/sfx-synth.sh`. `DUMP_PROPS=<dir> bun scripts/render-all.ts <id>`
+writes the props JSON for `bunx remotion still` QA frames.
+
+Freezes: on number cards where the number is the point (2-2.5 s) and on intro
+and playlist cards (whole card); `freezeSec` in the manifest, never baked into
+the overlay. The talk holds and
 goes silent at `outStart`; the overlay plays its full duration over the frozen
 frame and then over the moving talk.
 

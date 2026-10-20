@@ -12,6 +12,12 @@ import {ITEMS} from './items';
 
 const only = new Set(process.argv.slice(2));
 const todo = ITEMS.filter((it) => only.size === 0 || only.has(it.id));
+// DUMP_PROPS=<dir>: write <id>.props.json for the selected items and stop (for `remotion still` QA).
+if (process.env.DUMP_PROPS) {
+  mkdirSync(process.env.DUMP_PROPS, {recursive: true});
+  for (const it of todo) writeFileSync(join(process.env.DUMP_PROPS, `${it.id}.props.json`), JSON.stringify({...it.props, durationSec: it.duration}));
+  process.exit(0);
+}
 const CONC = 3;
 let next = 0;
 const failed: string[] = [];
@@ -32,8 +38,9 @@ async function worker() {
 await Promise.all(Array.from({length: CONC}, worker));
 
 mkdirSync(join(OUT, 'sfx'), {recursive: true});
-for (const f of ['tick.wav', 'pop.wav', 'whoosh.wav', 'LICENSE.txt']) copyFileSync(join(ROOT, 'sfx', f), join(OUT, 'sfx', f));
-const manifest = ITEMS.map((it) => ({id: it.id, outStart: it.outStart, duration: it.duration, file: `${it.id}.mov`, placement: it.placement, freezeSec: it.freezeSec, sfx: it.sfx, source: it.source ?? null}));
+for (const f of ['tick.wav', 'pop.wav', 'whoosh.wav', 'clack.wav', 'LICENSE.txt']) copyFileSync(join(ROOT, 'sfx', f), join(OUT, 'sfx', f));
+const r2 = (x: number) => Math.round(x * 100) / 100;
+const manifest = ITEMS.map((it) => ({id: it.id, outStart: it.outStart, duration: it.duration, dur: it.duration, file: `${it.id}.mov`, placement: it.placement, freezeSec: it.freezeSec, sfx: it.sfx.map((s) => ({...s, at: r2(s.at)})), source: it.source ?? null}));
 writeFileSync(join(OUT, 'manifest.json'), JSON.stringify({video: 'video1876562600-edited.mp4', fps: 25, width: 1920, height: 1080, timeBase: 'edited.mp4 seconds, before intro and freeze shifts', band: {x: 24, y: 912, w: 1576, h: 140}, overlays: manifest}, null, 2));
 console.log(`manifest: ${join(OUT, 'manifest.json')}; failed: ${failed.length ? failed.join(', ') : 'none'}`);
 if (failed.length) process.exit(1);
