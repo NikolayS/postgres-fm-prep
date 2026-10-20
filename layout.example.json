@@ -1,0 +1,17 @@
+{
+  "canvas": { "w": 1920, "h": 1080, "fps": 25 },
+  "tiles": "work/tiles.json",
+  "cuts": "out-edited.cuts.json",
+  "show": "PostgresFM",
+  "title": "Your restore finished. Is your database ready?",
+  "cardTitle": "Your restore finished.\nIs your database ready?",
+  "links": ["postgres.fm", "postgres.ai"],
+  "crop": { "top": 0.012, "bottom": 0.072, "left": 0.008, "right": 0.008 },
+  "place": {
+    "nik":   { "x": 64,   "y": 150, "w": 880, "h": 495, "label": "Nikolay Samokhvalov", "sub": "PostgresAI", "focusY": -0.6 },
+    "kirk":  { "x": 976,  "y": 150, "w": 880, "h": 495, "label": "Kirk Wolak", "focusY": -0.6 },
+    "robot": { "x": 1536, "y": 836, "w": 320, "h": 180, "label": "samograph (AI)", "small": true, "radius": 12 }
+  },
+  "highlight": [{ "tile": "robot", "from": "43:34", "to": "43:54" }],
+  "sharpen": 0.25
+}

@@ -214,3 +214,52 @@ words JSON next to the output too, so a veto re-render works later. The
    tone on each side (levels under -70 dBFS clamped; Zoom gates silence), and
    the silence left at the join (< 0.12 s = butt-join). Worst 10 printed. A
    step over 30 dB usually means a word tail was clipped: listen to it.
+
+## Layout, music and cards (packaging)
+
+Scripts for the picture and the intro/outro, on top of the edited mp4. They
+need Google Chrome (headless, draws text and the background into PNGs: this
+ffmpeg has no drawtext) and, for music, `ELEVENLABS_API_KEY`.
+
+```bash
+S=~/.claude/skills/podcast-edit
+# 1. Tiles and layout changes in the SOURCE (Zoom gallery; names in reading order)
+bun $S/detect-tiles.ts in.mp4 --out work/tiles.json --names robot,nik,kirk
+# 2. Copy layout.example.json, set tiles/cuts paths, names, labels, highlight times
+bun $S/layout.ts layout.json out-edited.mp4 still.png --still 200
+bun $S/layout.ts layout.json out-edited.mp4 layout-preview.mp4 --from 110 --dur 60 --preset fast
+# 3. Music options (3 intro + outro pairs, prompts in music.ts or --options file)
+bun $S/music.ts generate work/music --model music_v2_5
+# 4. Final: title card + show + end card + music, -16 LUFS / -1.5 dBTP
+bun $S/compose.ts layout.json out-edited.mp4 intro-demo.mp4 --intro work/music/a-pulse-intro.mp3 --until 36 --preset fast
+bun $S/compose.ts layout.json out-edited.mp4 final.mp4 --intro a-intro.mp3 --outro a-outro.mp3
+```
+
+- `detect-tiles.ts`: one sample every 10 s finds stable layouts (2+ equal
+  samples); between them every frame (25 fps) goes to the nearest layout, so
+  Zoom resizes and flips are found to the frame. Tile rects: non-black mask
+  with holes closed (dark rooms have pure-black pixels), row bands by extent,
+  touching tiles split by 16:9. Output: `layouts` (rects per tile name) and
+  `intervals` (source times). Edit the JSON to override.
+- `layout.ts`: per (layout, tile) a crop (trim border and the Zoom name label,
+  `crop` fractions; `focusX/Y` -1..1) + lanczos scale + light `cas` sharpen,
+  shown only while its layout is on (source intervals mapped to output time
+  with `segments` from cuts.json). Because crops are relative to the tile, a
+  Zoom resize does not move the faces. `highlight` (source times) adds a glow
+  frame on a tile, fade 0.3 s. Speed about 1.4x realtime on Apple Silicon.
+- `compose.ts`: title card 4 s (layers fade and slide in) -> 0.5 s crossfade
+  -> show -> 0.6 s crossfade -> end card 10 s (`cardTitle` with "\n" breaks,
+  `links`). Music cues are set to -18 LUFS. The intro plays at full level on
+  the card, ducks `--duck` -15 dB 0.1 s into the show (the edit keeps 0.3 s
+  of room tone before the first word) and is gone by card + 6 s. The outro bed
+  enters ducked 10 s before the show ends, rises over 1.2 s after the
+  sign-off, and its natural ending lines up with the end of the end card.
+  Two-pass loudnorm (audio-only first pass) to -16 LUFS, -1.5 dBTP.
+- `music.ts`: ElevenLabs `POST /v1/music`, `force_instrumental`,
+  mp3_44100_128 (Starter cannot download 192 kbps). `seed` cannot be used with
+  `prompt`. Each option writes a `.json` provenance record (prompt, model,
+  date). Licence (Eleven Music terms, checked 2026-10-20): Starter allows
+  online and offline commercial use except film, TV, radio, music-streaming
+  distribution and music libraries; 17 min generation / 30 min download per
+  month; Starter is marked "For Individual Use Only", so use Creator or
+  higher for a company show.
