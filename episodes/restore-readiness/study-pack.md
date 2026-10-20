@@ -69,6 +69,12 @@ These are attributed arguments, not a claim of unanimous agreement. Our suggeste
 
 **The crucial second date is PostgreSQL 14 (2021).** COPY FREEZE began setting page visibility flags and the visibility map, including all-visible and all-frozen bits for eligible pages. Before this change, freezing the individual tuples did not populate those page-level flags. The commit credits Anastasia Lubennikova, Pavan Deolasee and Jeff Janes. Its regression tests also cover mixed ordinary COPY and COPY FREEZE: pages containing ordinary, unfrozen inserts must not simply be marked all-visible/all-frozen. [PG14 release notes](https://www.postgresql.org/docs/14/release-14.html); [implementation and regression cases, commit 7db0cd2](https://github.com/postgres/postgres/commit/7db0cd2145f2bce84cac92402e205e4d2b045bf2).
 
+### Practical companion reading
+
+[Hans-Jürgen Schönig, CYBERTEC: “Speed up PostgreSQL data loading with COPY (FREEZE)”](https://www.cybertec-postgresql.com/en/loading-data-in-the-most-efficient-way/) (page dated August 2014; updated July 19, 2023) walks through bulk loading, the create/truncate eligibility error, and freezing's effect on later hint-bit work. Treat its timings as the author's example, not our measurements.
+
+**Keep the mechanisms separate:** the article attributes much of its load-time improvement to `wal_level = minimal` and truncating in the loading transaction. PostgreSQL documents that eligible ordinary COPY can also avoid data WAL under those conditions; FREEZE is not itself a switch to disable WAL. Keep WAL settings and transaction setup identical when comparing ordinary COPY with COPY FREEZE. [PG18 bulk-loading documentation](https://www.postgresql.org/docs/18/populate.html#POPULATE-COPY). For the visibility-map version boundary, use the PG14 release notes and commit above.
+
 ### What makes a load eligible?
 
 In PG18, FREEZE applies to COPY FROM. The table must have been created or truncated in the current **subtransaction**; the loading transaction must have no open cursors or older snapshots. A partitioned-table target or foreign-table target is unsupported. Merely having an empty table is insufficient. The documentation also warns that successfully loaded frozen rows have unusual visibility to other sessions, departing from normal MVCC rules. These requirements are why an operator should not blindly add FREEZE to every COPY statement. [PG18 COPY requirements and visibility warning](https://www.postgresql.org/docs/18/sql-copy.html).
@@ -121,5 +127,7 @@ Questions to challenge each other with:
 3. [Index-only scans](https://www.postgresql.org/docs/18/indexes-index-only-scans.html) — why heap fetches can remain.
 4. [January 2025 include-analyze proposal](https://www.postgresql.org/message-id/flat/CACJufxGx_YLLxmnZVMuUApiVYqjKrydvEQqD3qxhwM6e0_8jrQ%40mail.gmail.com) — the proposal crediting Andrey, Nikolay and Kirk, and the responses.
 5. [PG18 vacuumdb](https://www.postgresql.org/docs/18/app-vacuumdb.html) — jobs, parallel workers, staged analysis and missing-only analysis.
+
+6. [Hans-Jürgen Schönig, CYBERTEC: COPY (FREEZE)](https://www.cybertec-postgresql.com/en/loading-data-in-the-most-efficient-way/) — practical bulk-loading example; read with the WAL-setting qualification above.
 
 The [full research report](research.md) contains the longer history and primary sources. The [experiment plan](experiments.md) identifies what can realistically be completed in a few hours.
