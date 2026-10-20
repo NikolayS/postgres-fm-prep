@@ -64,7 +64,8 @@ export const Root = () => (
       height={H}
       durationInFrames={4 * FPS}
       calculateMetadata={meta}
-      defaultProps={{kind: 'lower' as const, name: 'Kirk Wolak', sub: 'co-host of the Postgres hacking sessions', durationSec: 5}}
+      // No `sub` here: Remotion merges defaultProps into --props, so a default sub would leak into every strip.
+      defaultProps={{kind: 'strip' as const, text: 'VACUUM ANALYZE after restore', durationSec: 5}}
     />
     <Composition
       id="full"

@@ -35,9 +35,10 @@ const Marker: React.FC<{frame: number; fps: number; delay: number; seed: number;
   const textIn = interpolate(f, [0.1 * fps, 0.4 * fps], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
   const tilt = ((seed * 9301 + 49297) % 233280) / 233280 * 1.6 - 0.8; // -0.8..0.8 deg
   const id = `rough${seed}`;
+  // The swipe clip covers stroke and text together, so no text shows ahead of the marker.
   return (
-    <div style={{position: 'relative', display: 'inline-block', padding: '10px 30px 12px 26px', fontSize, fontWeight: 700, color: '#111', lineHeight: 1.2, whiteSpace: 'nowrap', transform: `rotate(${tilt}deg)`}}>
-      <svg style={{position: 'absolute', left: -8, top: -4, width: 'calc(100% + 16px)', height: 'calc(100% + 8px)', clipPath: `inset(0 ${Math.max(0, 104 - w)}% 0 0)`}}>
+    <div style={{position: 'relative', display: 'inline-block', padding: '10px 30px 12px 26px', fontSize, fontWeight: 700, color: '#111', lineHeight: 1.2, whiteSpace: 'nowrap', transform: `rotate(${tilt}deg)`, clipPath: `inset(-6px ${Math.max(0, 104 - w)}% -6px -10px)`}}>
+      <svg style={{position: 'absolute', left: -8, top: -4, width: 'calc(100% + 16px)', height: 'calc(100% + 8px)'}}>
         <defs>
           <filter id={id} x="-5%" y="-10%" width="110%" height="120%" filterUnits="objectBoundingBox">
             <feTurbulence type="fractalNoise" baseFrequency="0.035 0.12" numOctaves={2} seed={seed} result="n" />
