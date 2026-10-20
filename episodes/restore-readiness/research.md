@@ -2,7 +2,7 @@
 
 Postgres.FM preparation for Nikolay Samokhvalov and Kirk Wolak. Research as of 2026-10-20 UTC.
 
-**Scope:** historical research, source inspection, documentation audit, and synthesis of supplied Forge experiments. The [new results report](forge-results.md) contains measured outcomes, four charts and public evidence. Preparing these materials did not execute new database experiments. No newly confirmed PostgreSQL defect is claimed.
+**Scope:** historical research, source inspection, documentation audit, and synthesis of supplied Forge experiments. The [new results report](forge-results.md) contains measured outcomes, four charts and public evidence. The supplied Forge campaign was synthesized without rerunning it; a subsequent [isolated PG19rc1 control](evidence/pg19-relallvisible/README.md) was executed and independently repeated in fresh containers. No newly confirmed PostgreSQL defect is claimed.
 
 ## New experimental evidence
 
@@ -89,7 +89,7 @@ An Index Only Scan can still have many heap fetches: the executor checks the rea
 
 ANALYZE collects distributions and refreshes relation estimates from the existing map; it does not build PG18 VM bits. VACUUM updates physical visibility and relation estimates, but does not replace distribution sampling. These actions are distinct without being perfectly orthogonal. [ANALYZE source](https://github.com/postgres/postgres/blob/REL_18_0/src/backend/commands/analyze.c), [maintenance documentation](https://www.postgresql.org/docs/18/routine-vacuuming.html)
 
-**Source-derived concern, now observed in the supplied Forge diagnostic:** importing high source `relallvisible` into a new heap can produce optimistic index-only-scan costing without physical VM coverage. But normal post-data index creation can overwrite those estimates. PG18 deliberately suppresses that heap-estimate refresh when autovacuum is disabled globally or per table. Consequently, “disable autovacuum for a clean experiment” changes more than background timing. Compare default ordering, stats-last ordering, and enabled/disabled controls. The [new Forge results](forge-results.md#3-pg18-imported-statistics-useful-with-two-distinct-gaps) observed the mismatch and extra heap fetches with per-table autovacuum disabled. A single-field control and independent execution of a minimized reproducer remain before calling it a confirmed defect. [Index source](https://github.com/postgres/postgres/blob/REL_18_0/src/backend/catalog/index.c), [associated change](https://github.com/postgres/postgres/commit/d611f8b1587b8f30caa7c0da99ae5d28e914d54f)
+**Source-derived concern, now observed in the supplied Forge diagnostic:** importing high source `relallvisible` into a new heap can produce optimistic index-only-scan costing without physical VM coverage. But normal post-data index creation can overwrite those estimates. PG18 deliberately suppresses that heap-estimate refresh when autovacuum is disabled globally or per table. Consequently, “disable autovacuum for a clean experiment” changes more than background timing. Compare default ordering, stats-last ordering, and enabled/disabled controls. The [new Forge results](forge-results.md#3-pg18-imported-statistics-useful-with-two-distinct-gaps) observed the mismatch and extra heap fetches with per-table autovacuum disabled. The subsequent [PG19rc1 single-field control](evidence/pg19-relallvisible/README.md) was independently executed: it confirms plan sensitivity but finds a repeated-query benefit from retaining the imported estimate. A defect or universally better policy is not established; the PG18 comparison still lacks that isolated control. [Index source](https://github.com/postgres/postgres/blob/REL_18_0/src/backend/catalog/index.c), [associated change](https://github.com/postgres/postgres/commit/d611f8b1587b8f30caa7c0da99ae5d28e914d54f)
 
 See the [COPY FREEZE study section](study-pack.md#copy-freeze-old-feature-newer-visibility-map-behavior) for the 9.3/14 distinction, exact eligibility requirements, MVCC caveat and restore integration constraints.
 
@@ -167,4 +167,9 @@ This report uses official PostgreSQL documentation, public mailing-list archives
 
 Source snapshots inspected: PG18 `e79df9dd9f34115c13b038c7b22a8c3903e76e9b`, PG19 `0da632e084842c36ec31d87adfc401b54ed7d7b2`, and PG18.0 `3d6a828938a5fa0444275d3d2f67b64ec3199eb7`. The PG19 snapshot is release-candidate code. Runtime conclusions about a proposed experiment require its own recorded execution.
 
-No new database experiment has been run for this preparation package. The existing measurements are narrowly described in [existing observations](existing-observations.md). The [experiment plan](experiments.md) and [blog outline](blog-outline.md) identify what still needs to be measured before new performance claims are made.
+The [Forge synthesis](forge-results.md) records supplied campaign results; the [independent PG19rc1 control](evidence/pg19-relallvisible/README.md) adds two fresh container executions. Earlier [existing observations](existing-observations.md) and the [experiment plan](experiments.md) remain historical context; use the results reports to distinguish completed work from open follow-ups. Multi-user performance remains unmeasured.
+
+
+## October 20 additions: first-reader writes and PG19 control
+
+See [the WAL mechanism and experimental controls](first-read-writes.md), and [the independent PG19rc1 single-field reproducer](evidence/pg19-relallvisible/README.md). The latter qualifies the imported-estimate concern: it initially overstates physical VM coverage but improves repeated-query buffer work in this case. Physical upgrade and logical reload warrant separate policy discussion.

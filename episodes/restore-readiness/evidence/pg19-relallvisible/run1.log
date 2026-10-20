@@ -1,0 +1,182 @@
++ export PATH=/opt/pg19/bin:/opt/pg19/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
++ PATH=/opt/pg19/bin:/opt/pg19/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
++ export PGHOST=/tmp
++ PGHOST=/tmp
++ export PGUSER=pgtest
++ PGUSER=pgtest
++ export PGPORT=5432
++ PGPORT=5432
++ initdb -D /home/pgtest/data --data-checksums --no-locale
+The files belonging to this database system will be owned by user "pgtest".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "C".
+The default database encoding has accordingly been set to "SQL_ASCII".
+The default text search configuration will be set to "english".
+
+Data page checksums are enabled.
+
+creating directory /home/pgtest/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... Etc/UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /home/pgtest/data -l logfile start
+
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
++ cat
++ pg_ctl -D /home/pgtest/data -l /home/pgtest/server.log -w start
+waiting for server to start.... done
+server started
++ psql -X -d postgres -c 'select version(); show debug_assertions; show autovacuum; show data_checksums;'
+                                             version                                              
+--------------------------------------------------------------------------------------------------
+ PostgreSQL 19rc1 on aarch64-unknown-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+(1 row)
+
+ debug_assertions 
+------------------
+ on
+(1 row)
+
+ autovacuum 
+------------
+ on
+(1 row)
+
+ data_checksums 
+----------------
+ on
+(1 row)
+
++ postgres --version
+postgres (PostgreSQL) 19rc1
++ pg_dump --version
+pg_dump (PostgreSQL) 19rc1
++ pg_restore --version
+pg_restore (PostgreSQL) 19rc1
++ pg_config --configure
+ '--prefix=/opt/pg19' '--enable-cassert' '--enable-debug' '--without-icu'
++ bash /tmp/reproduce.sh
+CREATE EXTENSION
+CREATE TABLE
+INSERT 0 20000
+CREATE INDEX
+VACUUM
+ pg_restore_relation_stats 
+---------------------------
+ t
+(1 row)
+
+ current_database | relpages | reltuples | relallvisible | heap_pages | all_visible 
+------------------+----------+-----------+---------------+------------+-------------
+ rvis_imported    |      345 |     20000 |           345 |        408 |           0
+(1 row)
+
+                                                QUERY PLAN                                                
+----------------------------------------------------------------------------------------------------------
+ Index Only Scan using t_id_idx on t  (cost=0.29..287.93 rows=1182 width=4) (actual rows=1000.00 loops=1)
+   Index Cond: ((id >= 10001) AND (id <= 11000))
+   Heap Fetches: 323
+   Index Searches: 1
+   Buffers: shared hit=643 read=5 dirtied=1 written=1
+ Planning:
+   Buffers: shared hit=36 read=1
+(7 rows)
+
+ relallvisible | all_visible 
+---------------+-------------
+           345 |         319
+(1 row)
+
+                                                QUERY PLAN                                                
+----------------------------------------------------------------------------------------------------------
+ Index Only Scan using t_id_idx on t  (cost=0.29..287.93 rows=1182 width=4) (actual rows=1000.00 loops=1)
+   Index Cond: ((id >= 10001) AND (id <= 11000))
+   Heap Fetches: 4
+   Index Searches: 1
+   Buffers: shared hit=7
+(5 rows)
+
+ current_database | relpages | reltuples | relallvisible | heap_pages | all_visible 
+------------------+----------+-----------+---------------+------------+-------------
+ rvis_zero        |      345 |     20000 |             0 |        408 |           0
+(1 row)
+
+                                               QUERY PLAN                                                
+---------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on t  (cost=24.40..450.13 rows=1182 width=4) (actual rows=1000.00 loops=1)
+   Recheck Cond: ((id >= 10001) AND (id <= 11000))
+   Heap Blocks: exact=320
+   Buffers: shared hit=639 read=5 dirtied=1 written=1
+   ->  Bitmap Index Scan on t_id_idx  (cost=0.00..24.11 rows=1182 width=0) (actual rows=1000.00 loops=1)
+         Index Cond: ((id >= 10001) AND (id <= 11000))
+         Index Searches: 1
+         Buffers: shared read=5
+ Planning:
+   Buffers: shared hit=36 read=1
+(10 rows)
+
+ relallvisible | all_visible 
+---------------+-------------
+             0 |         319
+(1 row)
+
+                                               QUERY PLAN                                                
+---------------------------------------------------------------------------------------------------------
+ Bitmap Heap Scan on t  (cost=24.40..450.13 rows=1182 width=4) (actual rows=1000.00 loops=1)
+   Recheck Cond: ((id >= 10001) AND (id <= 11000))
+   Heap Blocks: exact=320
+   Buffers: shared hit=325
+   ->  Bitmap Index Scan on t_id_idx  (cost=0.00..24.11 rows=1182 width=0) (actual rows=1000.00 loops=1)
+         Index Cond: ((id >= 10001) AND (id <= 11000))
+         Index Searches: 1
+         Buffers: shared hit=5
+(8 rows)
+
++ for db in rvis_src rvis_imported rvis_zero
++ psql -X -v ON_ERROR_STOP=1 rvis_src -c 'select current_database(), count(*), md5(string_agg(id::text || pad, '\'','\'' order by id)) from t; select relname, vacuum_count, analyze_count, autovacuum_count, autoanalyze_count from pg_stat_user_tables;'
+ current_database | count |               md5                
+------------------+-------+----------------------------------
+ rvis_src         | 20000 | c1b2596f97706280802c63710b6f15d5
+(1 row)
+
+ relname | vacuum_count | analyze_count | autovacuum_count | autoanalyze_count 
+---------+--------------+---------------+------------------+-------------------
+ t       |            1 |             1 |                0 |                 0
+(1 row)
+
++ for db in rvis_src rvis_imported rvis_zero
++ psql -X -v ON_ERROR_STOP=1 rvis_imported -c 'select current_database(), count(*), md5(string_agg(id::text || pad, '\'','\'' order by id)) from t; select relname, vacuum_count, analyze_count, autovacuum_count, autoanalyze_count from pg_stat_user_tables;'
+ current_database | count |               md5                
+------------------+-------+----------------------------------
+ rvis_imported    | 20000 | c1b2596f97706280802c63710b6f15d5
+(1 row)
+
+ relname | vacuum_count | analyze_count | autovacuum_count | autoanalyze_count 
+---------+--------------+---------------+------------------+-------------------
+ t       |            0 |             0 |                0 |                 0
+(1 row)
+
++ for db in rvis_src rvis_imported rvis_zero
++ psql -X -v ON_ERROR_STOP=1 rvis_zero -c 'select current_database(), count(*), md5(string_agg(id::text || pad, '\'','\'' order by id)) from t; select relname, vacuum_count, analyze_count, autovacuum_count, autoanalyze_count from pg_stat_user_tables;'
+ current_database | count |               md5                
+------------------+-------+----------------------------------
+ rvis_zero        | 20000 | c1b2596f97706280802c63710b6f15d5
+(1 row)
+
+ relname | vacuum_count | analyze_count | autovacuum_count | autoanalyze_count 
+---------+--------------+---------------+------------------+-------------------
+ t       |            0 |             0 |                0 |                 0
+(1 row)
+

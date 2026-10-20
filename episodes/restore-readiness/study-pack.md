@@ -108,12 +108,18 @@ Three fresh restores per arm. These are root buffer accesses in a small cached f
 **Five additions for Kirk:**
 
 - **Give autovacuum credit:** twelve small restores reached observed automatic vacuum-and-analysis completion roughly 5–68 seconds after restore. In the larger fixture, smaller tables were ready before restore finished; accounts took about 384 seconds until both jobs were observed complete amid competing databases. These are observations, not an SLA. [Corrected timing chart](assets/forge/fig4_stock_autovacuum_arrival.png).
-- **A SELECT can write:** the first count on an unindexed PG18 heap generated 28,251,777 WAL bytes with checksums and an intervening checkpoint; the corresponding tested read after VACUUM generated none. Maintenance moves work before users arrive. [WAL chart and conditions](forge-results.md#4-first-select-reads-can-cause-writes).
+- **A SELECT can write:** the first count on an unindexed PG18 heap generated 28,251,777 WAL bytes with checksums and an intervening checkpoint; the corresponding tested read after VACUUM generated none. Maintenance moves work before users arrive. [WAL chart and conditions](forge-results.md#4-first-select-reads-can-cause-writes). [Detailed explanation and co-host prompts](first-read-writes.md): hint-bit changes can require full-page images; PG19 additionally does conditional VM work. Dirtied buffers are not disk writes.
 - **PG18 stats are incomplete:** expression-index statistics arrived, collected extended statistics did not. A correlated predicate estimated 3,371 rows after stats import versus 10,213 actual; ANALYZE brought it to 10,050. PG19rc1 transported the extended statistics too.
 - **Imported visibility counts deserve scrutiny:** with per-table autovacuum disabled, imported `relallvisible` survived over an empty VM and the natural Index Only Scan made 10,000 heap fetches. This is a candidate concern, not a proven novel bug; importing/preserving estimates was discussed upstream. [Evidence and history](forge-results.md#3-pg18-imported-statistics-useful-with-two-distinct-gaps).
 - **Different loading paths:** two pg_upgrade --link runs preserved VM and column statistics. Eligible COPY FREEZE loads established visible/frozen bits, but ordinary pg_restore did not use FREEZE. Do not generalize either result to every restore.
 
 The larger fixture also shows that vacuuming costs time and WAL: about 4 seconds and 1.6 GB of cluster WAL in a deliberately checkpointed, single-run comparison. Budget for maintenance; don't call it free. See the [full limitations](forge-results.md#5-larger-fixture-budget-for-readiness).
+
+## New PG19rc1 control: a useful twist for the conversation
+
+The independently repeated [single-field experiment](evidence/pg19-relallvisible/README.md) isolates imported `relallvisible`: 345 versus 0, with both destination VMs empty. It selects IOS versus bitmap. First-read buffer work is almost equal (648 versus 644); second-read work favors IOS (7 versus 325) after the first reads populate VM bits. Do not carry PG18's adverse result forward as a demonstrated PG19 regression.
+
+Ask: **Should a logical restore inherit a count describing the source's physical visibility state?** pg_upgrade preserves heap/VM state together; logical reload does not. Deriving the count from the destination is a reasonable proposal, with PG19's repeated-query benefit as a counterpoint. No fix is established and no upstream report has been sent as part of this preparation.
 
 ## PG19: a short caveat
 

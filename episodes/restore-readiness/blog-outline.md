@@ -72,3 +72,10 @@ The deadline is a reason to reduce scope. If a comparison remains incomplete, om
 - Add the [larger-fixture cost table](forge-results.md#5-larger-fixture-budget-for-readiness): readiness consumes time and WAL, and similar buffer totals may describe very different work.
 - Add the extended-statistics example: PG18 expression stats arrived; CREATE STATISTICS data required ANALYZE.
 - Close with the workload acceptance criteria and the practical choices, not a universal speedup claim.
+
+
+## Add to the draft: first users can pay for physical preparation
+
+Use [first-read-writes.md](first-read-writes.md) for the explanation: 26.94 MiB statement WAL on a 27.19-MiB heap, 3,449 FPIs, checksum/checkpoint controls, and the distinction between dirtied buffers and physical writes. Avoid suggesting checksum removal or inferring replica lag from unmeasured effects.
+
+Include the [PG19rc1 single-field control](evidence/pg19-relallvisible/README.md): first-query work nearly equal, second query favors retained estimate after read-time VM updates. Frame destination-derived relallvisible as a policy question; distinguish physical pg_upgrade from logical reload.

@@ -2,7 +2,7 @@
 
 [Episode home](README.md) · [Kirk's study pack](study-pack.md) · [Data and provenance](evidence/forge/README.md)
 
-Results supplied October 19, 2026 Pacific time (October 20 UTC), from Forge case `restore-readiness-01`. This report separates measured results, explanations and open questions. It is a synthesis of supplied experiments, not a new execution or a claim of a confirmed PostgreSQL bug.
+Results supplied October 19, 2026 Pacific time (October 20 UTC), from Forge case `restore-readiness-01`. This report separates measured results, explanations and open questions. The Forge sections synthesize supplied experiments; the separate PG19rc1 control below was newly executed and independently repeated. No confirmed PostgreSQL bug is claimed.
 
 ## The five points to use on air
 
@@ -66,11 +66,19 @@ PG18 restored CREATE STATISTICS definitions, but `pg_statistic_ext_data` remaine
 
 With **per-table `autovacuum_enabled = false` and cluster autovacuum on**, three PG18.6 restores reproduced the earlier diagnostic: imported `relallvisible = 3449`, actual all-visible VM pages = 0. The natural Index Only Scan fetched 10,000 heap tuples and made 10,032 root buffer accesses. The default archive chose a Bitmap Heap Scan with 3,301 accesses. With normal table settings, index creation refreshed the estimate to zero instead.
 
-This is a candidate planning concern, not a wrong-results finding or an isolated single-field proof. Dump ordering, statistics and settings all matter; resetting only `relallvisible` remains a useful follow-up control. [Additional-track CSV](assets/forge/tracks_measurements.csv).
+This is a candidate planning concern, not a wrong-results finding or an isolated single-field proof. Dump ordering, statistics and settings all matter; the PG18 comparison did not isolate only `relallvisible`. The new PG19rc1 control below does. [Additional-track CSV](assets/forge/tracks_measurements.csv).
 
 **Do not say hackers overlooked it.** Importing the field and preserving relation statistics through index creation were deliberate: [Stephen Frost, March 8, 2024](https://www.postgresql.org/message-id/Zer%2B8KR36gzST29w%40tamriel.snowman.net); [Jeff Davis, March 4, 2025](https://www.postgresql.org/message-id/ca81cbf6e6ea2af838df972801ad4da52640a503.camel%40j-davis.com). [Ashutosh Bapat, March 5, 2025](https://www.postgresql.org/message-id/CAExHW5sEjLx-8r85%2Br%3DmL%3Do4jVx2Y0D-mRzGTZxcfNm4YSeRSQ%40mail.gmail.com) cautioned that refreshing statistics improves plans. Our search did not find explicit discussion of this precise empty-VM/index-only-cost consequence; that is not proof of absence.
 
+### New: isolated PG19rc1 control, independently reproduced
+
+Two fresh PG19rc1 container runs changed only `relallvisible` after restoring the same archive twice. With imported 345 versus control 0, both actual VMs initially empty, the natural plans were Index Only Scan versus Bitmap Heap Scan. First-query root buffer accesses were nearly equal: **648 versus 644**. After both reads established 319 VM bits, the second executions used **7 versus 325** accesses; IOS heap fetches fell from 323 to 4. This confirms plan sensitivity but does **not** demonstrate a PG19 slowdown or prove zeroing the count is better.
+
+A useful upstream question: preserve this estimate when heap/VM state transfers together (pg_upgrade), and derive it from destination state after logical reload? PG19's read-time VM updates complicate that policy. [Exact reproducer, both execution logs, build identity and limits](evidence/pg19-relallvisible/README.md). The separate PG18 Forge observations above retain their own version and experimental scope.
+
 ## 4. First SELECT: reads can cause writes
+
+**Detailed explanation for the episode:** [hint bits, full-page images, checkpoint controls, and PG19 VM writes](first-read-writes.md).
 
 Fourth table `events`: 200,000 rows, 3,480 heap pages, no index. Three fresh restores per treatment. `full_page_writes=on`, `wal_log_hints=off`, `wal_compression=off`; PG18.6 tested with checksums on and off; PG19rc1 only with checksums on. WAL here comes from **the statement's EXPLAIN WAL counters**.
 
@@ -127,4 +135,4 @@ This is a **custom bulk-load experiment**, not a pg_restore feature. The inspect
 - **Version boundaries:** PG18 expression/extended statistics, PG19rc1 read-time VM, pg_upgrade's physical state, eligible COPY FREEZE.
 - **Close:** workload-specific readiness checks; supported statistics import plus any necessary analysis; deliberate vacuum when predictable heap visibility matters. Discuss an optional restore maintenance phase and its cost, rather than treating maintenance as free.
 
-Remaining experiments: isolate `relallvisible` alone; repeat large autovacuum arrivals on a clean cluster; explain the parallel import anomaly; separately control checkpoint timing in the PG19rc1 exception. Multi-user latency and throughput are unmeasured. These are follow-ups, not reasons to withhold the completed evidence.
+Remaining experiments: repeat the isolated `relallvisible` control on PG18 (PG19rc1 is now complete); repeat large autovacuum arrivals on a clean cluster; explain the parallel import anomaly; separately control checkpoint timing in the PG19rc1 exception. Multi-user latency and throughput are unmeasured. These are follow-ups, not reasons to withhold the completed evidence.
