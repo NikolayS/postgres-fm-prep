@@ -64,3 +64,7 @@ Suggested 30–45-minute experiment only if infrastructure is already available;
 4. Only if time remains, design a separate old-standby-snapshot arm to test conflict behavior. Define the snapshot horizon and feedback settings explicitly; do not assume a long-running query alone guarantees a conflict.
 
 Stop on setup failures, inability to isolate background work, or the time limit. Publish negative/inconclusive outcomes. A data-equality scan itself can prepare the primary heap, so perform it after the measured sequence or use a separate control.
+
+## Separate standby mechanism: hint bits
+
+The recovery guard above concerns VM preparation, not every physical change caused by reading. [Standby hint-bit dirtying and FREEZE](hint-bits-standbys-freeze.md) explains the checksum/wal_log_hints conditions and why local hints can differ. Do not equate no local VM-building with no local hint work.

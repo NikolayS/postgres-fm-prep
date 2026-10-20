@@ -186,3 +186,7 @@ Questions to challenge each other with:
 6. [Hans-Jürgen Schönig, CYBERTEC: COPY (FREEZE)](https://www.cybertec-postgresql.com/en/loading-data-in-the-most-efficient-way/) — practical bulk-loading example; read with the WAL-setting qualification above.
 
 The [full research report](research.md) contains the longer history and primary sources. The [Forge results](forge-results.md) contain completed measurements; the [original experiment plan](experiments.md) remains for comparison.
+
+## Hint bits and FREEZE
+
+Add a short distinction between statistics, visibility preparation, and future freezing work. Standby hints can differ locally even though PG19 VM preparation originates on the primary. Hint-only dirtying is conditional on checksum/wal_log_hints settings. FREEZE may help stable data but is not required for Index Only Scans. [Full decision guide](hint-bits-standbys-freeze.md).

@@ -38,6 +38,10 @@
 
 These are buffer/WAL measurements, **not latency speedups**. Put the other numbers in the companion evidence.
 
+## Short sidebar: hints and FREEZE
+
+**Yes, first-read physical work is another reason to consider scheduled post-restore VACUUM.** Standby hint-bit updates differ from VM updates: hints can be local, and dirtying depends on checksums/wal_log_hints; standby SELECTs generate no new WAL. FREEZE is optional future-maintenance planning for stable data. All-visible is enough for Index Only Scans; all-frozen is a different goal. [Decision guide and exact source](hint-bits-standbys-freeze.md).
+
 ## End in two parts
 
 **Operations today:** establish usable statistics; decide whether physical preparation should precede traffic; inspect representative plans, heap fetches and actual VM; check the serving replica's replay state where relevant. Measure cold/first and repeated queries separately. Budget maintenance I/O and WAL. [Practical guidance](study-pack.md).

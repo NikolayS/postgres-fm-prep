@@ -95,3 +95,7 @@ Follow-up: “Who should pay that cost: an explicit readiness phase, asynchronou
 ## Physical standby qualification
 
 The PG19 on-access path returns during recovery. Standby SELECTs do not originate these VM changes; WAL replay applies primary-generated changes. A read-only transaction on a primary is different from hot standby. [Code, operational consequences and potential replay conflicts](pg19-standby-and-episode-angles.md). This is source-verified, not a new replication experiment.
+
+## Standby hints and optional freezing
+
+[This companion guide](hint-bits-standbys-freeze.md) distinguishes in-memory hints, dirty transitions, WAL and disk writes on physical standbys. It also explains why scheduled VACUUM can reduce first-user preparation work, while FREEZE remains a separate lifecycle choice for stable data.
