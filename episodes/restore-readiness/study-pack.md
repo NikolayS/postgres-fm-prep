@@ -1,5 +1,7 @@
 # Study pack for Kirk
 
+**Short on time? Read the [host TL;DR](hosts-tldr.md) first.**
+
 Historical statements below are paraphrases, not quotations. Each attribution links to the individual original message, with author and date; technical claims link to versioned documentation or pinned source. Experiment proposals and co-host questions are our preparation suggestions, not positions attributed to PostgreSQL contributors.
 
 ## The episode in one sentence

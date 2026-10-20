@@ -8,6 +8,8 @@ The question: what performance-relevant state is missing after a logical Postgre
 
 ## Start here
 
+- **[Host TL;DR for Nikolay and Kirk](hosts-tldr.md)** — seven thinking points, three memorable numbers, and the closing recommendations.
+
 - [New Forge results and four charts](forge-results.md) — core matrix, normal autovacuum, first-read WAL, larger fixture, upgrade, extended statistics and COPY FREEZE.
 - [Kirk's study pack](study-pack.md) — a short reading guide, core distinctions and co-host questions.
 - [Expanded documentation audit](restore-docs-expanded.md) — 28 pages, all source URLs, positive counterexamples, counts and source metadata.
