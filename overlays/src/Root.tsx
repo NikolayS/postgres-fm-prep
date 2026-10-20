@@ -5,6 +5,7 @@ import {Band} from './Band';
 import {FullCard} from './FullCard';
 import {IntroCard} from './IntroCard';
 import {HackingInsert} from './HackingInsert';
+import {CenterChart} from './CenterChart';
 
 const FPS = 25;
 const W = 1920;
@@ -94,6 +95,16 @@ export const Root = () => (
       durationInFrames={7 * FPS}
       calculateMetadata={meta}
       defaultProps={{title: 'Hacking Postgres', sub: 'since Jan 2023', thumbs: ['thumbs/-UaAXJSTj6c.jpg'], shipped: [{cover: 'thumbs/WLoMpg8A4WU.jpg', session: 'Jan 2023', release: 'PostgreSQL 17'}], chip: 'youtube.com/@PostgresTV', durationSec: 7}}
+    />
+    <Composition
+      id="center"
+      component={CenterChart}
+      fps={FPS}
+      width={W}
+      height={H}
+      durationInFrames={12 * FPS}
+      calculateMetadata={meta}
+      defaultProps={{kind: 'bars' as const, title: 'Buffer accesses', bars: [{value: 3301, label: 'Restore only'}, {value: 3301, label: 'ANALYZE only'}, {value: 34, label: 'VACUUM ANALYZE'}], unit: 'buffers', durationSec: 12}}
     />
   </>
 );
