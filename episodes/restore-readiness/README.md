@@ -34,3 +34,5 @@ PG18 is the core demonstration target. PG19 is a short, explicitly release-candi
 
 - [Why the first SELECT can generate WAL](first-read-writes.md) — hint bits, FPIs, checkpoint controls, and PG19 read-time VM work.
 - [Independent PG19rc1 control](evidence/pg19-relallvisible/README.md) — exact reproducer and two execution logs isolating relallvisible.
+
+- [PG19 on physical standbys and episode angles](pg19-standby-and-episode-angles.md) — primary-only initiation, replay, possible conflicts and optional follow-up.

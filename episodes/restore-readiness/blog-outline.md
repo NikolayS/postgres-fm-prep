@@ -83,3 +83,7 @@ Include the [PG19rc1 single-field control](evidence/pg19-relallvisible/README.md
 ### Explain the crash-safety distinction
 
 Use the [Forge follow-up](first-read-writes.md#forge-follow-up-why-this-bookkeeping-needs-crash-protection): a hint can be recomputed, but a torn checksummed page needs repair; a VM bit authorizes skipping heap checks. Distinguish pg_xact from WAL. Do not claim two heap images per page, identical VACUUM/SELECT write amplification, or WAL-free COPY FREEZE. The 16-MiB COPY-ring explanation for 1,432 newly dirtied buffers is a source-based hypothesis, not a controlled result.
+
+## Strong closing angle: the read-replica blind spot
+
+Explain that PG19 read-time VM preparation originates outside recovery; physical standbys receive it through replay. A primary-only benchmark does not demonstrate local repair by replica reads. End with the optional question of a primary SELECT generating a standby snapshot conflict. Label both as source-derived implications, with conflict occurrence unmeasured. [Evidence and six ranked discussion angles](pg19-standby-and-episode-angles.md).

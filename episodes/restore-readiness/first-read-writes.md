@@ -91,3 +91,7 @@ Suggested exchange:
 > Nik: “It learned visibility information while reading and changed page bookkeeping. With checksums and this checkpoint schedule, protecting those changes meant logging thousands of full-page images. In PG19, reads can also build visibility-map state. Restore completion is not necessarily the end of physical preparation.”
 
 Follow-up: “Who should pay that cost: an explicit readiness phase, asynchronous autovacuum, or the first users?”
+
+## Physical standby qualification
+
+The PG19 on-access path returns during recovery. Standby SELECTs do not originate these VM changes; WAL replay applies primary-generated changes. A read-only transaction on a primary is different from hot standby. [Code, operational consequences and potential replay conflicts](pg19-standby-and-episode-angles.md). This is source-verified, not a new replication experiment.

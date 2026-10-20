@@ -137,6 +137,12 @@ Ask: **Should a logical restore inherit a count describing the source's physical
 
 The inspected PG19 release-candidate source adds extended-statistics transport and conditional VM marking during eligible reads. A query may change VM coverage while it is being measured. This is not a promise that one SELECT fills every VM bit, nor that VACUUM is obsolete. Keep the core demonstration on PG18. The new PG19rc1 runs show that ANALYZE after eligible reads can refresh the visibility estimate and change the natural plan; reads alone need not do so. [Measured results](forge-results.md#4-first-select-reads-can-cause-writes). Sources: [PG19 release notes](https://www.postgresql.org/docs/19/release-19.html), [extended-statistics dump integration](https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64), and [on-access VM implementation at inspected commit 0da632e084842c36ec31d87adfc401b54ed7d7b2](https://github.com/postgres/postgres/blob/0da632e084842c36ec31d87adfc401b54ed7d7b2/src/backend/access/heap/pruneheap.c). The version qualification refers to the source inspected on October 20, 2026 UTC.
 
+## PG19 on replicas: an important limit
+
+**Physical standby reads do not locally populate the VM through this feature.** The RC1 code exits the on-access path during recovery; primary-generated changes arrive through WAL replay. Thus routing reads to replicas does not trigger primary-side preparation, and repeated standby reads alone cannot supply this VM repair. Replay lag can leave VM coverage temporarily different.
+
+An additional source-derived possibility: an all-visible change triggered by a primary SELECT can conflict with an older standby snapshot during replay. This has not been reproduced in our experiments. [Exact code, qualifications, six discussion angles, and a bounded follow-up plan](pg19-standby-and-episode-angles.md).
+
 ## What restore guides tell readers
 
 ![Expanded audit of 28 selected pages: 8 recommend analysis, 3 recommend vacuuming, and 1 explains visibility-map readiness.](assets/restore-docs-expanded-summary.png)

@@ -106,3 +106,7 @@ Defer the PG13/PG14 historical comparison and mixed ordinary/frozen-load cases u
 Send the reading material as soon as the verified core is available: a four-arm outcome table, two selected plan excerpts, the PG18 export/import default distinction, the historical discussion links, and a short list of questions to challenge during recording. If experiments are unfinished, supply the reading packet on time with those sections marked “not yet measured.”
 
 The companion article should contain two derived figures: one for estimates/loops/buffer work on the skewed join, and one for VM coverage/heap fetches/buffers on the covering-index query. Include exact versions, fixture scale, relevant controls, result ranges and limits. Distinguish observations, source-based explanations and proposed follow-ups. A restore's successful exit and readiness for a particular workload are separate acceptance criteria.
+
+## New optional follow-up: physical standby
+
+The [30–45-minute primary/standby proposal](pg19-standby-and-episode-angles.md#optional-bounded-follow-up-primary-versus-standby) tests local standby reads versus replayed VM changes. It is unexecuted and optional; do not delay the episode for it.
