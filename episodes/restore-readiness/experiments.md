@@ -1,6 +1,8 @@
 # A bounded restore experiment for the podcast
 
-Proposal for DBLab Forge. These tests have not been run. Target: first results within 60–90 minutes and a complete, checked preparation package within 3–4 hours. If the core takes longer, drop optional work rather than broaden the experiment.
+**Historical plan; results now available:** see [Forge results and evidence](forge-results.md). Core and several optional tracks were executed by Forge; the original scope and resource suggestions below are preserved as a proposal, not a description of the actual environment. The report records deviations and remaining unmeasured items.
+
+Original proposal for DBLab Forge. Target: first results within 60–90 minutes and a complete, checked preparation package within 3–4 hours. If the core takes longer, drop optional work rather than broaden the experiment.
 
 ## What needs new evidence
 

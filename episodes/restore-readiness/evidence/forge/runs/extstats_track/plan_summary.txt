@@ -1,0 +1,84 @@
+pg18 src
+    a: est=10090 act=10213.0 err=1.01 [Seq Scan] x3
+    b: est=20 act=20.0 err=1.0 [Aggregate] x3
+    c: est=819 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10090 act=10213.0 err=1.01 [Bitmap Heap Scan] x3
+    e: est=3170 act=2974.0 err=1.07 [Seq Scan] x3
+pg18 ext_def_1
+    a: est=8 act=10213.0 err=1276.62 [Seq Scan] x3
+    b: est=30000 act=20.0 err=1500.0 [Aggregate] x3
+    c: est=1500 act=794.0 err=1.89 [Bitmap Heap Scan] x3
+    d: est=1500 act=10213.0 err=6.81 [Bitmap Heap Scan] x3
+    e: est=1500 act=2974.0 err=1.98 [Seq Scan] x3
+pg18 ext_def_2
+    a: est=8 act=10213.0 err=1276.62 [Seq Scan] x3
+    b: est=30000 act=20.0 err=1500.0 [Aggregate] x3
+    c: est=1500 act=794.0 err=1.89 [Bitmap Heap Scan] x3
+    d: est=1500 act=10213.0 err=6.81 [Bitmap Heap Scan] x3
+    e: est=1500 act=2974.0 err=1.98 [Seq Scan] x3
+pg18 ext_st_1
+    a: est=3371 act=10213.0 err=3.03 [Seq Scan] x3
+    b: est=100 act=20.0 err=5.0 [Aggregate] x3
+    c: est=819 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10090 act=10213.0 err=1.01 [Bitmap Heap Scan] x3
+    e: est=3170 act=2974.0 err=1.07 [Seq Scan] x3
+pg18 ext_st_2
+    a: est=3371 act=10213.0 err=3.03 [Seq Scan] x3
+    b: est=100 act=20.0 err=5.0 [Aggregate] x3
+    c: est=819 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10090 act=10213.0 err=1.01 [Bitmap Heap Scan] x3
+    e: est=3170 act=2974.0 err=1.07 [Seq Scan] x3
+pg18 ext_sta_1
+    a: est=10050 act=10213.0 err=1.02 [Seq Scan] x3
+    b: est=20 act=20.0 err=1.0 [Aggregate] x3
+    c: est=819 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10050 act=10213.0 err=1.02 [Bitmap Heap Scan] x3
+    e: est=3000 act=2974.0 err=1.01 [Seq Scan] x3
+pg18 ext_sta_2
+    a: est=10020 act=10213.0 err=1.02 [Seq Scan] x3
+    b: est=20 act=20.0 err=1.0 [Aggregate] x3
+    c: est=815 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10020 act=10213.0 err=1.02 [Bitmap Heap Scan] x3
+    e: est=3140 act=2974.0 err=1.06 [Seq Scan] x3
+pg19 src
+    a: est=10250 act=10213.0 err=1.0 [Seq Scan] x3
+    b: est=20 act=20.0 err=1.0 [Aggregate] x3
+    c: est=819 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10250 act=10213.0 err=1.0 [Bitmap Heap Scan] x3
+    e: est=2970 act=2974.0 err=1.0 [Seq Scan] x3
+pg19 ext_def_1
+    a: est=8 act=10213.0 err=1276.62 [Seq Scan] x3
+    b: est=30000 act=20.0 err=1500.0 [Aggregate] x3
+    c: est=1500 act=794.0 err=1.89 [Bitmap Heap Scan] x3
+    d: est=1500 act=10213.0 err=6.81 [Bitmap Heap Scan] x3
+    e: est=1500 act=2974.0 err=1.98 [Seq Scan] x3
+pg19 ext_def_2
+    a: est=8 act=10213.0 err=1276.62 [Seq Scan] x3
+    b: est=30000 act=20.0 err=1500.0 [Aggregate] x3
+    c: est=1500 act=794.0 err=1.89 [Bitmap Heap Scan] x3
+    d: est=1500 act=10213.0 err=6.81 [Bitmap Heap Scan] x3
+    e: est=1500 act=2974.0 err=1.98 [Seq Scan] x3
+pg19 ext_st_1
+    a: est=10250 act=10213.0 err=1.0 [Seq Scan] x3
+    b: est=20 act=20.0 err=1.0 [Aggregate] x3
+    c: est=819 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10250 act=10213.0 err=1.0 [Bitmap Heap Scan] x3
+    e: est=2970 act=2974.0 err=1.0 [Seq Scan] x3
+pg19 ext_st_2
+    a: est=10250 act=10213.0 err=1.0 [Seq Scan] x3
+    b: est=20 act=20.0 err=1.0 [Aggregate] x3
+    c: est=819 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10250 act=10213.0 err=1.0 [Bitmap Heap Scan] x3
+    e: est=2970 act=2974.0 err=1.0 [Seq Scan] x3
+pg19 ext_sta_1
+    a: est=10260 act=10213.0 err=1.0 [Seq Scan] x3
+    b: est=20 act=20.0 err=1.0 [Aggregate] x3
+    c: est=819 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10260 act=10213.0 err=1.0 [Bitmap Heap Scan] x3
+    e: est=2930 act=2974.0 err=1.02 [Seq Scan] x3
+pg19 ext_sta_2
+    a: est=10270 act=10213.0 err=1.01 [Seq Scan] x3
+    b: est=20 act=20.0 err=1.0 [Aggregate] x3
+    c: est=816 act=794.0 err=1.03 [Bitmap Heap Scan] x3
+    d: est=10270 act=10213.0 err=1.01 [Bitmap Heap Scan] x3
+    e: est=2930 act=2974.0 err=1.02 [Seq Scan] x3

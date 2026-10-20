@@ -8,6 +8,7 @@ The question: what performance-relevant state is missing after a logical Postgre
 
 ## Start here
 
+- [New Forge results and four charts](forge-results.md) — core matrix, normal autovacuum, first-read WAL, larger fixture, upgrade, extended statistics and COPY FREEZE.
 - [Kirk's study pack](study-pack.md) — a short reading guide, core distinctions and co-host questions.
 - [Expanded documentation audit](restore-docs-expanded.md) — 28 pages, all source URLs, positive counterexamples, counts and source metadata.
 - [Autovacuum fairness](autovacuum-readiness.md) — PG13 improvements, asynchronous completion and possible plan symptoms.
@@ -27,6 +28,6 @@ The question: what performance-relevant state is missing after a logical Postgre
 
 Research was assembled on 2026-10-20 UTC. The next recording/article target is October 20, with study material needed that morning Pacific time.
 
-The additional experiments are **proposed, not executed**. Earlier observations are clearly labelled and are not an end-to-end dump/restore benchmark. No universal query-latency speedup is claimed.
+The [Forge experiments have supplied results](forge-results.md), including the core matrix and additional tracks. The original plan is retained as a historical proposal. Public charts and selected evidence accompany the synthesis; single-run costs and unisolated explanations are qualified. No universal query-latency speedup is claimed.
 
 PG18 is the core demonstration target. PG19 is a short, explicitly release-candidate-qualified follow-up unless the core work is complete early.

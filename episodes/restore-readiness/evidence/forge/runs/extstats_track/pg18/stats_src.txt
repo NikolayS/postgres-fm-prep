@@ -1,0 +1,43 @@
+== pg_class
+     relname     | relkind | relpages | reltuples | relallvisible 
+-----------------+---------+----------+-----------+---------------
+ ev_day_idx      | i       |      272 |    300000 |             0
+ ev_lcountry_idx | i       |      262 |    300000 |             0
+ events          | r       |     2508 |    300000 |             0
+ events_pkey     | i       |      825 |    300000 |             0
+
+== pg_stats
+    tablename    |  attname   | n_distinct | null_frac | mcv_n | hist |  correlation   
+-----------------+------------+------------+-----------+-------+------+----------------
+ ev_day_idx      | date_trunc |        365 |         0 |     4 | t    |   0.0025341704
+ ev_lcountry_idx | lower      |         20 |         0 |    20 | f    |      0.0767597
+ events          | country    |         20 |         0 |    20 | f    |      0.0767597
+ events          | created_at |         -1 |         0 |     0 | t    | -0.00019675707
+ events          | id         |         -1 |         0 |     0 | t    |              1
+ events          | kind       |          4 |         0 |     4 | f    |     0.65456516
+ events          | region     |          5 |         0 |     5 | f    |     0.21801265
+
+== pg_statistic_ext_data
+ stxname | stxkind | stxdinherit | nd | dep | mcv 
+---------+---------+-------------+----+-----+-----
+ ev_dep  | {f}     | f           | f  | t   | f
+ ev_mcv  | {m}     | f           | f  | f   | t
+ ev_nd   | {d}     | f           | t  | f   | f
+
+== pg_stats_ext
+ statistics_name |  n_distinct  |     dependencies     | mcv_n 
+-----------------+--------------+----------------------+-------
+ ev_dep          |              | {"4 => 3": 1.000000} |     0
+ ev_mcv          |              |                      |    20
+ ev_nd           | {"3, 4": 20} |                      |     0
+
+== activity
+ relname | n_live_tup | analyze_count | autoanalyze_count | vacuum_count | autovacuum_count 
+---------+------------+---------------+-------------------+--------------+------------------
+ events  |     600000 |             1 |                 0 |            0 |                0
+
+== content
+ count  |               md5                
+--------+----------------------------------
+ 300000 | 059c7eccfb38eea223389c39b68902f9
+

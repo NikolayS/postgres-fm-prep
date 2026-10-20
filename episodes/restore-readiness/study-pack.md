@@ -91,18 +91,33 @@ That integration was already being discussed by **Bruce Momjian on January 25, 2
 
 **Episode takeaway:** an eligible modern COPY FREEZE load can establish visibility during loading, without a separate vacuum pass just to establish those VM bits. It does not collect optimizer distributions: ANALYZE or supported statistics import remains a separate concern. This follows from the [VM implementation](https://github.com/postgres/postgres/commit/7db0cd2145f2bce84cac92402e205e4d2b045bf2) and [ANALYZE's documented role](https://www.postgresql.org/docs/18/sql-analyze.html). Freezing rows, populating visibility bits and collecting statistics are three distinct operations.
 
-## What we know versus what we need to measure
+## New measured evidence: read before recording
 
-The [earlier synthetic-observation summary](existing-observations.md) describes statistics being present while VM coverage was missing. Its underlying measurement artifacts are not published in this repository, so that page is a secondary summary, not a publicly reproducible result. Use the documented [index-only-scan mechanism](https://www.postgresql.org/docs/18/indexes-index-only-scans.html) for the explanation; reserve new quantitative claims for experiments with inspectable evidence.
-The new core experiment should restore the same archive into fresh databases and compare four arms: no maintenance, ANALYZE, VACUUM, and VACUUM ANALYZE. Then compare default export with statistics-enabled export. Use one skewed-predicate/join query and one covering-index query.
+[Full Forge synthesis, four charts and public evidence](forge-results.md).
 
-We want estimated/actual rows, natural plans, root buffer totals, heap fetches, actual VM coverage and relation estimates. No prediction becomes a result until measured. If the expected plan change does not occur, explain why rather than tuning until a dramatic chart appears.
+| PG18.6 treatment | Join: plan / buffer accesses | Covering query: plan / buffer accesses |
+| --- | --- | --- |
+| Restore only | Nested Loop / 396,608 | Bitmap Heap Scan / 3,301 |
+| ANALYZE | Hash Join / 2,096 | Bitmap Heap Scan / 3,301 |
+| VACUUM | Nested Loop / 396,608 | Index Only Scan / 34, zero heap fetches |
+| VACUUM ANALYZE | Hash Join / 2,096 | Index Only Scan / 34, zero heap fetches |
+| Statistics-enabled dump, no maintenance | Hash Join / 2,096 | Bitmap Heap Scan / 3,301 |
 
-A small expression-index example is useful if time permits: ANALYZE before an expression index exists cannot collect that index's expression statistics. A final pass can therefore matter. [PG18 CREATE INDEX notes on expression-index statistics](https://www.postgresql.org/docs/18/sql-createindex.html). Our recommendation is to prioritize maintenance by workload rather than prescribe an unconditional expensive sequence.
+Three fresh restores per arm. These are root buffer accesses in a small cached fixture, **not latency speedups**. PG17.11 reproduced the four default-archive arms. [Chart 1: join](assets/forge/fig1_skewed_join_pg18.png), [chart 2: visibility](assets/forge/fig2_covering_query_pg18_pg19.png).
+
+**Five additions for Kirk:**
+
+- **Give autovacuum credit:** twelve small restores reached observed automatic vacuum-and-analysis completion roughly 5–68 seconds after restore. In the larger fixture, smaller tables were ready before restore finished; accounts took about 384 seconds until both jobs were observed complete amid competing databases. These are observations, not an SLA. [Corrected timing chart](assets/forge/fig4_stock_autovacuum_arrival.png).
+- **A SELECT can write:** the first count on an unindexed PG18 heap generated 28,251,777 WAL bytes with checksums and an intervening checkpoint; the corresponding tested read after VACUUM generated none. Maintenance moves work before users arrive. [WAL chart and conditions](forge-results.md#4-first-select-reads-can-cause-writes).
+- **PG18 stats are incomplete:** expression-index statistics arrived, collected extended statistics did not. A correlated predicate estimated 3,371 rows after stats import versus 10,213 actual; ANALYZE brought it to 10,050. PG19rc1 transported the extended statistics too.
+- **Imported visibility counts deserve scrutiny:** with per-table autovacuum disabled, imported `relallvisible` survived over an empty VM and the natural Index Only Scan made 10,000 heap fetches. This is a candidate concern, not a proven novel bug; importing/preserving estimates was discussed upstream. [Evidence and history](forge-results.md#3-pg18-imported-statistics-useful-with-two-distinct-gaps).
+- **Different loading paths:** two pg_upgrade --link runs preserved VM and column statistics. Eligible COPY FREEZE loads established visible/frozen bits, but ordinary pg_restore did not use FREEZE. Do not generalize either result to every restore.
+
+The larger fixture also shows that vacuuming costs time and WAL: about 4 seconds and 1.6 GB of cluster WAL in a deliberately checkpointed, single-run comparison. Budget for maintenance; don't call it free. See the [full limitations](forge-results.md#5-larger-fixture-budget-for-readiness).
 
 ## PG19: a short caveat
 
-The inspected PG19 release-candidate source adds extended-statistics transport and conditional VM marking during eligible reads. A query may change VM coverage while it is being measured. This is not a promise that one SELECT fills every VM bit, nor that VACUUM is obsolete. Keep the core demonstration on pinned PG18; make PG19 a brief version-boundary note unless there is time for a separate controlled run. Sources: [PG19 release notes](https://www.postgresql.org/docs/19/release-19.html), [extended-statistics dump integration](https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64), and [on-access VM implementation at inspected commit 0da632e084842c36ec31d87adfc401b54ed7d7b2](https://github.com/postgres/postgres/blob/0da632e084842c36ec31d87adfc401b54ed7d7b2/src/backend/access/heap/pruneheap.c). The version qualification refers to the source inspected on October 20, 2026 UTC.
+The inspected PG19 release-candidate source adds extended-statistics transport and conditional VM marking during eligible reads. A query may change VM coverage while it is being measured. This is not a promise that one SELECT fills every VM bit, nor that VACUUM is obsolete. Keep the core demonstration on PG18. The new PG19rc1 runs show that ANALYZE after eligible reads can refresh the visibility estimate and change the natural plan; reads alone need not do so. [Measured results](forge-results.md#4-first-select-reads-can-cause-writes). Sources: [PG19 release notes](https://www.postgresql.org/docs/19/release-19.html), [extended-statistics dump integration](https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64), and [on-access VM implementation at inspected commit 0da632e084842c36ec31d87adfc401b54ed7d7b2](https://github.com/postgres/postgres/blob/0da632e084842c36ec31d87adfc401b54ed7d7b2/src/backend/access/heap/pruneheap.c). The version qualification refers to the source inspected on October 20, 2026 UTC.
 
 ## What restore guides tell readers
 
@@ -144,4 +159,4 @@ Questions to challenge each other with:
 
 6. [Hans-Jürgen Schönig, CYBERTEC: COPY (FREEZE)](https://www.cybertec-postgresql.com/en/loading-data-in-the-most-efficient-way/) — practical bulk-loading example; read with the WAL-setting qualification above.
 
-The [full research report](research.md) contains the longer history and primary sources. The [experiment plan](experiments.md) identifies what can realistically be completed in a few hours.
+The [full research report](research.md) contains the longer history and primary sources. The [Forge results](forge-results.md) contain completed measurements; the [original experiment plan](experiments.md) remains for comparison.

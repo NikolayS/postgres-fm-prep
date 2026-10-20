@@ -1,0 +1,36 @@
+0_source_pg17_q1_forced_ios_pass1.json	Index Only Scan(accounts_id_idx)	9539	10000	1	34	0	34	[0]
+0_source_pg17_q1_forced_ios_pass2.json	Index Only Scan(accounts_id_idx)	9539	10000	1	34	0	34	[0]
+0_source_pg17_q1_forced_ios_pass3.json	Index Only Scan(accounts_id_idx)	9539	10000	1	34	0	34	[0]
+0_source_pg17_q1_natural_pass1.json	Index Only Scan(accounts_id_idx)	9539	10000	1	34	0	34	[0]
+0_source_pg17_q1_natural_pass2.json	Index Only Scan(accounts_id_idx)	9539	10000	1	34	0	34	[0]
+0_source_pg17_q1_natural_pass3.json	Index Only Scan(accounts_id_idx)	9539	10000	1	34	0	34	[0]
+0_source_pg17_q2_natural_pass1.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98910	98960	1	2010	0	2010	-
+0_source_pg17_q2_natural_pass2.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98910	98960	1	2010	0	2010	-
+0_source_pg17_q2_natural_pass3.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98910	98960	1	2010	0	2010	-
+1_pg18_post_upgrade_q1_forced_ios_pass1.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+1_pg18_post_upgrade_q1_forced_ios_pass2.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+1_pg18_post_upgrade_q1_forced_ios_pass3.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+1_pg18_post_upgrade_q1_natural_pass1.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	4	30	34	[0]
+1_pg18_post_upgrade_q1_natural_pass2.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+1_pg18_post_upgrade_q1_natural_pass3.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+1_pg18_post_upgrade_q2_natural_pass1.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98910	98960.0	1	0	2010	2010	-
+1_pg18_post_upgrade_q2_natural_pass2.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98910	98960.0	1	2010	0	2010	-
+1_pg18_post_upgrade_q2_natural_pass3.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98910	98960.0	1	2010	0	2010	-
+2_pg18_after_missing_stats_only_q1_forced_ios_pass1.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+2_pg18_after_missing_stats_only_q1_forced_ios_pass2.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+2_pg18_after_missing_stats_only_q1_forced_ios_pass3.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+2_pg18_after_missing_stats_only_q1_natural_pass1.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+2_pg18_after_missing_stats_only_q1_natural_pass2.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+2_pg18_after_missing_stats_only_q1_natural_pass3.json	Index Only Scan(accounts_id_idx)	9539	10000.0	1	34	0	34	[0]
+2_pg18_after_missing_stats_only_q2_natural_pass1.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98910	98960.0	1	2010	0	2010	-
+2_pg18_after_missing_stats_only_q2_natural_pass2.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98910	98960.0	1	2010	0	2010	-
+2_pg18_after_missing_stats_only_q2_natural_pass3.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98910	98960.0	1	2010	0	2010	-
+3_pg18_after_analyze_only_q1_forced_ios_pass1.json	Index Only Scan(accounts_id_idx)	9970	10000.0	1	34	0	34	[0]
+3_pg18_after_analyze_only_q1_forced_ios_pass2.json	Index Only Scan(accounts_id_idx)	9970	10000.0	1	34	0	34	[0]
+3_pg18_after_analyze_only_q1_forced_ios_pass3.json	Index Only Scan(accounts_id_idx)	9970	10000.0	1	34	0	34	[0]
+3_pg18_after_analyze_only_q1_natural_pass1.json	Index Only Scan(accounts_id_idx)	9970	10000.0	1	34	0	34	[0]
+3_pg18_after_analyze_only_q1_natural_pass2.json	Index Only Scan(accounts_id_idx)	9970	10000.0	1	34	0	34	[0]
+3_pg18_after_analyze_only_q1_natural_pass3.json	Index Only Scan(accounts_id_idx)	9970	10000.0	1	34	0	34	[0]
+3_pg18_after_analyze_only_q2_natural_pass1.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98967	98960.0	1	2010	0	2010	-
+3_pg18_after_analyze_only_q2_natural_pass2.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98967	98960.0	1	2010	0	2010	-
+3_pg18_after_analyze_only_q2_natural_pass3.json	Hash Join > Seq Scan(customers) > Hash > Seq Scan(orders)	98967	98960.0	1	2010	0	2010	-

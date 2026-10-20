@@ -1,0 +1,55 @@
+## server_version_num 180006
+## pg_class
+        relname         | relkind | relpages | reltuples | relallvisible | relallfrozen 
+------------------------+---------+----------+-----------+---------------+--------------
+ accounts               | r       |     3449 |    200000 |          3449 |            0
+ accounts_id_idx        | i       |      551 |    200000 |             0 |            0
+ customers              | r       |     1274 |    200000 |          1274 |            0
+ customers_pkey         | i       |      551 |    200000 |             0 |            0
+ orders                 | r       |      736 |    100000 |           736 |            0
+ orders_customer_id_idx | i       |      276 |    100000 |             0 |            0
+ orders_pkey            | i       |      276 |    100000 |             0 |            0
+(7 rows)
+
+## pg_visibility_map_summary
+     t     | all_visible | all_frozen 
+-----------+-------------+------------
+ accounts  |        3449 |          0
+ customers |        1274 |          0
+ orders    |         736 |          0
+(3 rows)
+
+## pg_statistic rows per relation (tables and indexes)
+        relname         | pg_statistic_rows 
+------------------------+-------------------
+ accounts               |                 2
+ accounts_id_idx        |                 0
+ customers              |                 2
+ customers_pkey         |                 0
+ orders                 |                 3
+ orders_customer_id_idx |                 0
+ orders_pkey            |                 0
+(7 rows)
+
+## pg_stats rows per table
+ tablename | pg_stats_rows 
+-----------+---------------
+ accounts  |             2
+ customers |             2
+ orders    |             3
+(3 rows)
+
+## orders.status MCV
+  most_common_vals   | most_common_freqs | null_frac | n_distinct 
+---------------------+-------------------+-----------+------------
+ {completed,pending} | {0.9891,0.0109}   |         0 |          2
+(1 row)
+
+## pg_stat_user_tables
+  relname  | n_live_tup | n_dead_tup | n_mod_since_analyze | n_ins_since_vacuum | last_vacuum | last_autovacuum | last_analyze | last_autoanalyze | vacuum_count | autovacuum_count | analyze_count | autoanalyze_count 
+-----------+------------+------------+---------------------+--------------------+-------------+-----------------+--------------+------------------+--------------+------------------+---------------+-------------------
+ accounts  |          0 |          0 |                   0 |                  0 |             |                 |              |                  |            0 |                0 |             0 |                 0
+ customers |          0 |          0 |                   0 |                  0 |             |                 |              |                  |            0 |                0 |             0 |                 0
+ orders    |          0 |          0 |                   0 |                  0 |             |                 |              |                  |            0 |                0 |             0 |                 0
+(3 rows)
+

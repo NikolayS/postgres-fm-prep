@@ -1,0 +1,79 @@
+150:2026-10-20 04:06:35.179 UTC [26685] db= LOG:  automatic vacuum of table "big_stages.pg_catalog.pg_statistic": index 
+164:2026-10-20 04:06:40.188 UTC [26713] db= LOG:  automatic vacuum of table "big_vdb.pg_catalog.pg_statistic": index sca
+178:2026-10-20 04:06:50.187 UTC [26826] db= LOG:  automatic vacuum of table "big_vacuum_analyze.pg_catalog.pg_statistic"
+191:2026-10-20 04:07:00.186 UTC [26925] db= LOG:  automatic vacuum of table "big_analyze.pg_catalog.pg_statistic": index
+205:2026-10-20 04:07:20.190 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_type"
+224:2026-10-20 04:07:20.199 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_attribute"
+230:2026-10-20 04:07:20.204 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_class"
+236:2026-10-20 04:07:20.205 UTC [27060] db= LOG:  automatic analyze of table "template1.information_schema.sql_features"
+242:2026-10-20 04:07:20.210 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_constraint"
+248:2026-10-20 04:07:20.210 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_rewrite"
+267:2026-10-20 04:07:20.214 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_description"
+286:2026-10-20 04:07:20.215 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_depend"
+292:2026-10-20 04:07:20.216 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_ts_config_map"
+298:2026-10-20 04:07:20.216 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_init_privs"
+304:2026-10-20 04:07:20.217 UTC [27060] db= LOG:  automatic analyze of table "template1.pg_catalog.pg_collation"
+310:2026-10-20 04:07:25.192 UTC [27129] db= LOG:  automatic vacuum of table "big_src.pg_catalog.pg_statistic": index sca
+425:2026-10-20 04:15:27.167 UTC [37230] db= LOG:  automatic vacuum of table "big_stock.public.customers": index scans: 0
+437:2026-10-20 04:15:27.492 UTC [37230] db= LOG:  automatic analyze of table "big_stock.public.customers"
+443:2026-10-20 04:15:27.694 UTC [37230] db= LOG:  automatic vacuum of table "big_stock.public.orders": index scans: 0
+455:2026-10-20 04:15:27.846 UTC [37230] db= LOG:  automatic analyze of table "big_stock.public.orders"
+461:2026-10-20 04:15:38.302 UTC [37246] db= LOG:  automatic vacuum of table "big_stages3.public.customers": index scans:
+473:2026-10-20 04:15:41.206 UTC [37246] db= LOG:  automatic vacuum of table "big_stages3.public.orders": index scans: 0
+489:2026-10-20 04:17:45.988 UTC [37299] db= LOG:  automatic vacuum of table "big_stages.public.accounts": index scans: 0
+501:2026-10-20 04:17:45.990 UTC [37278] db= LOG:  automatic vacuum of table "big_stages2.public.accounts": index scans: 
+513:2026-10-20 04:17:50.551 UTC [37246] db= LOG:  automatic vacuum of table "big_stages3.public.accounts": index scans: 
+526:2026-10-20 04:17:50.579 UTC [37246] db= LOG:  automatic vacuum of table "big_stages3.pg_catalog.pg_statistic": index
+540:2026-10-20 04:17:51.108 UTC [37299] db= LOG:  automatic vacuum of table "big_stages.public.orders": index scans: 0
+553:2026-10-20 04:17:55.554 UTC [37278] db= LOG:  automatic vacuum of table "big_stages2.public.customers": index scans:
+566:2026-10-20 04:18:00.675 UTC [37299] db= LOG:  automatic vacuum of table "big_stages.public.customers": index scans: 
+579:2026-10-20 04:18:00.686 UTC [37278] db= LOG:  automatic vacuum of table "big_stages2.public.orders": index scans: 0
+592:2026-10-20 04:18:00.713 UTC [37278] db= LOG:  automatic vacuum of table "big_stages2.pg_catalog.pg_statistic": index
+606:2026-10-20 04:18:00.714 UTC [37299] db= LOG:  automatic vacuum of table "big_stages.pg_catalog.pg_statistic": index 
+621:2026-10-20 04:18:04.750 UTC [38060] db= LOG:  automatic vacuum of table "big_vdb.pg_catalog.pg_statistic": index sca
+635:2026-10-20 04:18:11.243 UTC [38080] db= LOG:  automatic analyze of table "big_vacuum_freeze.public.accounts"
+641:2026-10-20 04:18:12.049 UTC [38080] db= LOG:  automatic analyze of table "big_vacuum_freeze.public.customers"
+647:2026-10-20 04:18:12.349 UTC [38080] db= LOG:  automatic analyze of table "big_vacuum_freeze.public.orders"
+653:2026-10-20 04:18:12.844 UTC [38102] db= LOG:  automatic vacuum of table "big_vacuum_analyze.pg_catalog.pg_statistic"
+666:2026-10-20 04:18:17.834 UTC [38171] db= LOG:  automatic analyze of table "big_vacuum.public.customers"
+672:2026-10-20 04:18:18.310 UTC [38171] db= LOG:  automatic analyze of table "big_vacuum.public.orders"
+678:2026-10-20 04:18:20.454 UTC [38171] db= LOG:  automatic analyze of table "big_vacuum.public.accounts"
+686:2026-10-20 04:19:53.406 UTC [37928] db= LOG:  automatic vacuum of table "big_j1.public.accounts": index scans: 0
+699:2026-10-20 04:19:55.790 UTC [37928] db= LOG:  automatic analyze of table "big_j1.public.accounts"
+705:2026-10-20 04:20:03.466 UTC [38040] db= LOG:  automatic vacuum of table "big_j4.public.accounts": index scans: 0
+717:2026-10-20 04:20:05.873 UTC [38040] db= LOG:  automatic analyze of table "big_j4.public.accounts"
+723:2026-10-20 04:20:06.045 UTC [37928] db= LOG:  automatic vacuum of table "big_j1.public.customers": index scans: 0
+736:2026-10-20 04:20:07.060 UTC [37928] db= LOG:  automatic analyze of table "big_j1.public.customers"
+743:2026-10-20 04:20:12.566 UTC [37928] db= LOG:  automatic vacuum of table "big_j1.public.orders": index scans: 0
+756:2026-10-20 04:20:13.101 UTC [37928] db= LOG:  automatic analyze of table "big_j1.public.orders"
+762:2026-10-20 04:20:16.142 UTC [38040] db= LOG:  automatic vacuum of table "big_j4.public.customers": index scans: 0
+775:2026-10-20 04:20:17.161 UTC [38040] db= LOG:  automatic analyze of table "big_j4.public.customers"
+781:2026-10-20 04:20:22.688 UTC [38040] db= LOG:  automatic vacuum of table "big_j4.public.orders": index scans: 0
+794:2026-10-20 04:20:23.225 UTC [38040] db= LOG:  automatic analyze of table "big_j4.public.orders"
+800:2026-10-20 04:20:29.763 UTC [38194] db= LOG:  automatic vacuum of table "big_analyze.public.accounts": index scans: 
+813:2026-10-20 04:20:40.104 UTC [38194] db= LOG:  automatic vacuum of table "big_analyze.public.customers": index scans:
+826:2026-10-20 04:20:45.655 UTC [38194] db= LOG:  automatic vacuum of table "big_analyze.public.orders": index scans: 0
+839:2026-10-20 04:20:45.681 UTC [38194] db= LOG:  automatic vacuum of table "big_analyze.pg_catalog.pg_statistic": index
+853:2026-10-20 04:21:23.448 UTC [39514] db= LOG:  automatic vacuum of table "big_stats.public.customers": index scans: 0
+866:2026-10-20 04:21:24.480 UTC [39514] db= LOG:  automatic analyze of table "big_stats.public.customers"
+872:2026-10-20 04:21:30.021 UTC [39514] db= LOG:  automatic vacuum of table "big_stats.public.orders": index scans: 0
+884:2026-10-20 04:21:30.565 UTC [39514] db= LOG:  automatic analyze of table "big_stats.public.orders"
+892:2026-10-20 04:21:56.944 UTC [39104] db= LOG:  automatic vacuum of table "big_stats.public.accounts": index scans: 0
+905:2026-10-20 04:21:58.774 UTC [39104] db= LOG:  automatic analyze of table "big_stats.public.accounts"
+911:2026-10-20 04:21:59.478 UTC [39158] db= LOG:  automatic vacuum of table "big_stock.public.accounts": index scans: 0
+924:2026-10-20 04:22:00.712 UTC [39158] db= LOG:  automatic analyze of table "big_stock.public.accounts"
+
+2026-10-20 04:17:45.988 UTC [37299] db= LOG:  automatic vacuum of table "big_stages.public.accounts": index scans: 0
+	system usage: CPU: user: 1.39 s, system: 0.66 s, elapsed: 123.17 s
+2026-10-20 04:17:45.990 UTC [37278] db= LOG:  automatic vacuum of table "big_stages2.public.accounts": index scans: 0
+	system usage: CPU: user: 1.64 s, system: 2.49 s, elapsed: 127.17 s
+2026-10-20 04:17:50.551 UTC [37246] db= LOG:  automatic vacuum of table "big_stages3.public.accounts": index scans: 0
+	system usage: CPU: user: 1.67 s, system: 3.25 s, elapsed: 129.34 s
+2026-10-20 04:19:53.406 UTC [37928] db= LOG:  automatic vacuum of table "big_j1.public.accounts": index scans: 0
+	system usage: CPU: user: 1.60 s, system: 2.45 s, elapsed: 122.81 s
+2026-10-20 04:20:03.466 UTC [38040] db= LOG:  automatic vacuum of table "big_j4.public.accounts": index scans: 0
+	system usage: CPU: user: 1.63 s, system: 2.13 s, elapsed: 122.74 s
+2026-10-20 04:20:29.763 UTC [38194] db= LOG:  automatic vacuum of table "big_analyze.public.accounts": index scans: 0
+	system usage: CPU: user: 1.69 s, system: 2.39 s, elapsed: 128.94 s
+2026-10-20 04:21:56.944 UTC [39104] db= LOG:  automatic vacuum of table "big_stats.public.accounts": index scans: 0
+	system usage: CPU: user: 1.59 s, system: 3.40 s, elapsed: 103.83 s

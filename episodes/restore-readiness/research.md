@@ -2,7 +2,11 @@
 
 Postgres.FM preparation for Nikolay Samokhvalov and Kirk Wolak. Research as of 2026-10-20 UTC.
 
-**Scope:** historical research, current source inspection, audit of existing Forge evidence, and proposed experiments. No new database experiment was run. Proposed experiments are not measured results. This document does not report a newly reproduced PostgreSQL defect.
+**Scope:** historical research, source inspection, documentation audit, and synthesis of supplied Forge experiments. The [new results report](forge-results.md) contains measured outcomes, four charts and public evidence. Preparing these materials did not execute new database experiments. No newly confirmed PostgreSQL defect is claimed.
+
+## New experimental evidence
+
+The [Forge synthesis](forge-results.md) now covers PG17/18 maintenance arms, PG18 statistics import, normal autovacuum, first-read WAL, a larger fixture, two pg_upgrade runs, extended/expression statistics and COPY FREEZE. Key qualifications: normal autovacuum helped; collected extended statistics remain a PG18 gap; imported visibility counts can disagree with physical VM; first-query writes depend on checkpoint/checksum state; larger-fixture timing is single-run and background arrival was confounded by other databases.
 
 ## Recommendation
 
@@ -85,7 +89,7 @@ An Index Only Scan can still have many heap fetches: the executor checks the rea
 
 ANALYZE collects distributions and refreshes relation estimates from the existing map; it does not build PG18 VM bits. VACUUM updates physical visibility and relation estimates, but does not replace distribution sampling. These actions are distinct without being perfectly orthogonal. [ANALYZE source](https://github.com/postgres/postgres/blob/REL_18_0/src/backend/commands/analyze.c), [maintenance documentation](https://www.postgresql.org/docs/18/routine-vacuuming.html)
 
-**Source-derived hypothesis for a lab:** importing high source `relallvisible` into a new heap can produce optimistic index-only-scan costing without physical VM coverage. But normal post-data index creation can overwrite those estimates. PG18 deliberately suppresses that heap-estimate refresh when autovacuum is disabled globally or per table. Consequently, “disable autovacuum for a clean experiment” changes more than background timing. Compare default ordering, stats-last ordering, and enabled/disabled controls. This is not yet a reproduced performance finding. [Index source](https://github.com/postgres/postgres/blob/REL_18_0/src/backend/catalog/index.c), [associated change](https://github.com/postgres/postgres/commit/d611f8b1587b8f30caa7c0da99ae5d28e914d54f)
+**Source-derived concern, now observed in the supplied Forge diagnostic:** importing high source `relallvisible` into a new heap can produce optimistic index-only-scan costing without physical VM coverage. But normal post-data index creation can overwrite those estimates. PG18 deliberately suppresses that heap-estimate refresh when autovacuum is disabled globally or per table. Consequently, “disable autovacuum for a clean experiment” changes more than background timing. Compare default ordering, stats-last ordering, and enabled/disabled controls. The [new Forge results](forge-results.md#3-pg18-imported-statistics-useful-with-two-distinct-gaps) observed the mismatch and extra heap fetches with per-table autovacuum disabled. A single-field control and independent execution of a minimized reproducer remain before calling it a confirmed defect. [Index source](https://github.com/postgres/postgres/blob/REL_18_0/src/backend/catalog/index.c), [associated change](https://github.com/postgres/postgres/commit/d611f8b1587b8f30caa7c0da99ae5d28e914d54f)
 
 See the [COPY FREEZE study section](study-pack.md#copy-freeze-old-feature-newer-visibility-map-behavior) for the 9.3/14 distinction, exact eligibility requirements, MVCC caveat and restore integration constraints.
 

@@ -1,0 +1,33 @@
+== pg_class
+     relname     | relkind | relpages | reltuples | relallvisible 
+-----------------+---------+----------+-----------+---------------
+ ev_day_idx      | i       |      272 |    300000 |             0
+ ev_lcountry_idx | i       |      262 |    300000 |             0
+ events          | r       |     2568 |    300000 |             0
+ events_pkey     | i       |      825 |    300000 |             0
+
+== pg_stats
+ tablename | attname | n_distinct | null_frac | mcv_n | hist | correlation 
+-----------+---------+------------+-----------+-------+------+-------------
+
+== pg_statistic_ext_data
+ stxname | stxkind | stxdinherit | nd | dep | mcv 
+---------+---------+-------------+----+-----+-----
+ ev_dep  | {f}     |             | f  | f   | f
+ ev_mcv  | {m}     |             | f  | f   | f
+ ev_nd   | {d}     |             | f  | f   | f
+
+== pg_stats_ext
+ statistics_name | n_distinct | dependencies | mcv_n 
+-----------------+------------+--------------+-------
+
+== activity
+ relname | n_live_tup | analyze_count | autoanalyze_count | vacuum_count | autovacuum_count 
+---------+------------+---------------+-------------------+--------------+------------------
+ events  |     300000 |             0 |                 0 |            0 |                0
+
+== content
+ count  |               md5                
+--------+----------------------------------
+ 300000 | 059c7eccfb38eea223389c39b68902f9
+

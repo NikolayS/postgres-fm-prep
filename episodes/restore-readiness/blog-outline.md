@@ -1,10 +1,10 @@
 # Blog outline: your restore finished—now make it ready
 
-Target: a practical article accompanying the Postgres.FM recording. This is an outline, not a finished article or a claim that the planned experiments have run.
+Target: a practical article accompanying the Postgres.FM recording. This is an outline, not a finished article. The [Forge results](forge-results.md) now supply measured evidence and four charts.
 
 ## Opening
 
-Start with a real, measured example from the new restore matrix: the same correct result before and after maintenance, with the plan and work performed made visible. If the experiment is unfinished, use the explicitly labelled earlier synthetic VM observation instead. Do not invent a production incident.
+Start with a real, measured example from the new restore matrix: the same correct result before and after maintenance, with the plan and work performed made visible. Use the PG18 five-arm table and the matching join/VM charts. Do not invent a production incident.
 
 ## 1. Two different missing things
 
@@ -53,7 +53,7 @@ Explain [PG13's insert-triggered autovacuum](autovacuum-readiness.md), separate 
 
 ## 6. What remains open
 
-PG19 release-candidate behavior and load-time COPY FREEZE fit in a short closing section. Do not let them delay the PG18 core experiment or become untested fixes presented as recommendations.
+PG19rc1 read-time VM, eligible COPY FREEZE loads, and pg_upgrade now have measured comparisons. Keep them as version/path distinctions. Open work includes the single-field relallvisible control, clean-cluster large autovacuum timing and the unexplained parallel statistics-import result.
 
 ## Evidence required before publication
 
@@ -64,3 +64,11 @@ PG19 release-candidate behavior and load-time COPY FREEZE fit in a short closing
 - Explicit separation of earlier synthetic observations, new measurements, source-derived explanations and untested proposals.
 
 The deadline is a reason to reduce scope. If a comparison remains incomplete, omit its numerical claim and state the remaining question.
+
+## New measured sections to weave into the article
+
+- Use [chart 4](assets/forge/fig4_stock_autovacuum_arrival.png) to give automatic maintenance credit; explain observed completion versus a guaranteed traffic-switch barrier.
+- Use [chart 3](assets/forge/fig3_first_read_cost.png) for first-query writes, preserving checkpoint/checksum conditions and query order.
+- Add the [larger-fixture cost table](forge-results.md#5-larger-fixture-budget-for-readiness): readiness consumes time and WAL, and similar buffer totals may describe very different work.
+- Add the extended-statistics example: PG18 expression stats arrived; CREATE STATISTICS data required ANALYZE.
+- Close with the workload acceptance criteria and the practical choices, not a universal speedup claim.
