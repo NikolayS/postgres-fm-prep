@@ -14,6 +14,22 @@ A query can leave the logical rows unchanged while changing physical bookkeeping
 
 Primary sources: [WAL settings: full_page_writes, wal_log_hints and wal_compression](https://www.postgresql.org/docs/18/runtime-config-wal.html), [PG18 tuple visibility/hint-bit implementation](https://github.com/postgres/postgres/blob/REL_18_6/src/backend/access/heap/heapam_visibility.c), [PG19rc1 buffer hint-update handling](https://github.com/postgres/postgres/blob/REL_19_RC1/src/backend/storage/buffer/bufmgr.c), [PG19rc1 on-access visibility handling](https://github.com/postgres/postgres/blob/REL_19_RC1/src/backend/access/heap/pruneheap.c).
 
+## Index creation may already be the first reader
+
+A normal B-tree build scans the heap and checks tuple visibility. In the non-concurrent build path, `heapam_index_build_range_scan()` calls `HeapTupleSatisfiesVacuum()`, whose checks can set transaction-status hints in heap tuple headers. This is source-based explanation, not a new index-build experiment. [PG18.6 index-build scan](https://github.com/postgres/postgres/blob/REL_18_6/src/backend/access/heap/heapam_handler.c), [visibility checks and SetHintBits](https://github.com/postgres/postgres/blob/REL_18_6/src/backend/access/heap/heapam_visibility.c).
+
+| Sequence | What the build can do |
+| --- | --- |
+| Load commits, then build a B-tree | Establish committed hints while scanning the restored heap, when WAL-safety conditions permit |
+| Load and build share the still-open inserting transaction | Cannot mark that transaction committed before it commits |
+| No index build after loading | No preparation from this index-build scan; other reads or maintenance may still do work |
+
+Do not promise that every index build establishes every hint. Transaction state, WAL-safety conditions and the scan path matter. **Hint preparation is not VM preparation:** on PG18 the build can establish hints while the physical VM remains empty. It is not a substitute for distribution statistics either.
+
+Our roughly 27-MiB first-read WAL result is for an **unindexed heap**. Index creation had already visited the indexed table in the campaign; its PG18 range query did not repeat that hint-bit work. Do not extrapolate the unindexed result to every table in a normal restore. [Indexed versus unindexed observations](forge-results.md#4-first-select-reads-can-cause-writes).
+
+**Podcast line:** “The first application SELECT may not be the first reader. Index creation during restore can already have paid some of the hint-bit cost. Hints make visibility checks cheaper; VM bits can let index-only scans skip the heap checks.”
+
 ## Forge follow-up: why this bookkeeping needs crash protection
 
 Reviewed October 20, 2026. Forge added an explanatory subsection in [commit 8f8598a7b0c11ddfcf8276cf7b3f6133b8dca61b](https://gitlab.com/postgres-ai/forge/-/commit/8f8598a7b0c11ddfcf8276cf7b3f6133b8dca61b), [case README at that revision](https://gitlab.com/postgres-ai/forge/-/blob/8f8598a7b0c11ddfcf8276cf7b3f6133b8dca61b/cases/restore-readiness-01/README.md#why-a-read-writes). These source links require Forge access; the measurements and explanations below are public. This update adds source-based interpretation, not new experiment runs. [Review provenance](evidence/forge/wal-followup-provenance.json).

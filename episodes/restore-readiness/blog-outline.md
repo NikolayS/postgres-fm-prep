@@ -93,3 +93,7 @@ Explain that PG19 read-time VM preparation originates outside recovery; physical
 ## Add depth without overloading the narrative
 
 From the [engineer-notes synthesis](engineer-notes-synthesis.md), prioritize a short partitioned-parent warning in operations and a readiness-manifest idea in future work. Use logical-copy benchmark fidelity as an optional closing question. Do not import the PDF's absolute claims about IOS, worker timing, synchronized freezing, or universal physical-copy recommendations.
+
+## Hint-bit explanation: keep the index-build qualification adjacent
+
+Use the [30-second host explanation](hosts-tldr.md#hint-bits-the-30-second-explanation). In the blog, keep “unindexed heap” beside the 27-MiB WAL number and explain that index creation after load commit may already set hints. Distinguish hint bits from VM bits and note the same-transaction exception in the technical companion. Avoid a claim that every first SELECT dirties or rewrites every restored table. [Source and sequence comparison](first-read-writes.md#index-creation-may-already-be-the-first-reader).

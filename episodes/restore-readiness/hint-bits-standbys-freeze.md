@@ -14,6 +14,10 @@ Updated October 20, 2026. Standby behavior here is verified from PG19rc1 source,
 
 All-visible and all-frozen are different. An Index Only Scan needs the all-visible bit; it does not require the all-frozen bit. [Index-only scan mechanism](https://www.postgresql.org/docs/19/indexes-index-only-scans.html), [freezing and wraparound prevention](https://www.postgresql.org/docs/19/routine-vacuuming.html#VACUUM-FOR-WRAPAROUND).
 
+## Index builds can prepare hints before application reads
+
+A normal B-tree build visits the heap and checks visibility, so it can set committed hints after the loading transaction commits. This does not guarantee every hint is set, and a build inside the still-open loading transaction cannot mark that transaction committed. On PG18, hint preparation can happen while the VM remains empty. Our large first-read WAL example used an **unindexed heap**. [Exact index-build path and qualifications](first-read-writes.md#index-creation-may-already-be-the-first-reader).
+
 ## Standby reads: hints are not the visibility map
 
 PG19's read-time VM path is disabled in recovery; standby VM updates arrive through WAL replay. **This does not mean a standby reader cannot modify tuple hint bits.** Hints cache transaction status and can be established locally when safe. Do not assume identical hint bits on primary and standby.

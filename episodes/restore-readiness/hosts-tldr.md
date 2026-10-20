@@ -18,7 +18,7 @@
 3. **Autovacuum deserves credit—but time is not the only issue.** Normal autovacuum repaired the small test restores in observed intervals of roughly 5–68 seconds. That is not an SLA, and partitioned-parent statistics are an exception that waiting does not repair. Do we accept asynchronous preparation or require it before traffic? [Timing and limits](forge-results.md).
    - Ask: “Is the first user part of our restore procedure without knowing it?”
 
-4. **A read can do writes.** One first count on a 27.19-MiB PG18 heap generated 26.94 MiB of WAL under the tested checksum/checkpoint settings. Hint-bit changes and full-page images explain the scale; PG19 adds conditional read-time VM work. VACUUM can schedule work earlier, but it is not free. [Controls and explanation](first-read-writes.md).
+4. **A read can do writes.** One first count on an unindexed 27.19-MiB PG18 heap generated 26.94 MiB of WAL under the tested checksum/checkpoint settings. Hint-bit changes and full-page images explain the scale; PG19 adds conditional read-time VM work. VACUUM can schedule work earlier, but it is not free. [Controls and explanation](first-read-writes.md).
    - Ask: “Does read-only mean no logical changes, or no physical work?”
 
 5. **PG19 makes the conclusion more interesting.** Changing only imported relallvisible selected IOS versus bitmap. First-read buffer work was nearly equal (648 vs 644); second-read work favored IOS (7 vs 325) after VM coverage improved. The initially inaccurate estimate was not universally harmful. [Independent reproduction](evidence/pg19-relallvisible/README.md).
@@ -57,6 +57,12 @@
 - PG19 second query: **7 vs 325 accesses**, showing why we challenged our first conclusion.
 
 These are buffer/WAL measurements, **not latency speedups**. Put the other numbers in the companion evidence.
+
+## Hint bits: the 30-second explanation
+
+“A SELECT can write: Postgres can cache transaction outcomes in row headers. Those hint bits can dirty heap pages and, depending on checksums and checkpoint timing, generate WAL. But index creation may already have done some of this work during restore. Our dramatic WAL example used an unindexed table. Hints make visibility checks cheaper; VM bits let index-only scans skip heap checks. VACUUM can move physical preparation into the maintenance window.”
+
+**Avoid:** “Every first SELECT after restore rewrites the table.” [Index-build path, transaction caveat and evidence](first-read-writes.md#index-creation-may-already-be-the-first-reader).
 
 ## Short sidebar: hints and FREEZE
 

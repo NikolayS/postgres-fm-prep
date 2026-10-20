@@ -104,6 +104,7 @@ In Forge's PG19 runs, ANALYZE after eligible reads refreshed the visibility esti
 
 Forge's [new explanation and source review](first-read-writes.md#forge-follow-up-why-this-bookkeeping-needs-crash-protection) adds these useful distinctions:
 
+- An index build can be the first reader: after the load commits, its heap visibility checks can set committed hints. If load and build share the still-open transaction, they cannot mark that inserting transaction committed yet. Our large first-read WAL example used an **unindexed heap**; do not generalize it to every restored table. Hints are distinct from VM bits. [Source and sequence comparison](first-read-writes.md#index-creation-may-already-be-the-first-reader).
 - COMMIT records transaction status; it does not visit every loaded tuple to set committed hint bits. `pg_xact` is not WAL, and committed does not mean visible to every snapshot.
 - Losing a hint is harmless; a torn checksummed page is not. This explains why a tiny bookkeeping change can need a full-page image.
 - A VM bit lets the executor skip heap checks. PG19's on-access implementation logs this state through `XLOG_HEAP2_PRUNE_ON_ACCESS`; the experiment did not decode individual record types.
