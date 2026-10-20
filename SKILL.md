@@ -368,3 +368,16 @@ Review checklist before the final composite:
   full-screen in and out; relative gains pop 0 dB, tick -3 dB, whoosh -6 dB.
 - Chapters for the description: final = intro + edited time + freezes before
   the chapter; re-check against the packager's final time map.
+- Overlays (`compose.ts --overlays manifest.json`): entries `{file, outStart
+  (edited s), dur, placement band|full, freezeSec, sfx: [{file, at}]}`; files
+  are full-frame 1920x1080 ProRes 4444 with alpha, placed at 0,0 from their
+  final start. `freezeSec` > 0: the picture holds one frame (`loop` filter,
+  frames snapped to 1/25 s) and the talk pauses; the gap is room tone (the
+  quietest 0.4 s within +-10 s, played forward then reversed as a seamless
+  loop, 40 ms crossfades), never digital silence; no music. SFX: loudest
+  400 ms set to -20 LUFS plus `--sfx-rel` (pop 0, tick -3, whoosh -6 dB).
+  Writes `<out>.time-map.json`: final = card + edited + sum of earlier
+  freezes. `--from/--until/--tail` render short windows for checks.
+- Final layout used on 2026-10-20: `layout.example.json` with big faces
+  (924x594 at y 110), robot 240x135 at 1656,790; overlay band x 24-1600,
+  y 912-1052. Full render with 22 overlays: about 45 min (fast preset).
