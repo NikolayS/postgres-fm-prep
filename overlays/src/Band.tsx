@@ -57,10 +57,20 @@ export const Band: React.FC<BandProps> = (p) => {
       </Wipe>
     );
   } else if (p.kind === 'quote') {
+    // Quote: white strip with a left accent bar; optional attribution strip under it (p.sub).
     body = (
-      <Wipe frame={frame} fps={fps} delay={0}>
-        <div style={{...strip, background: '#fff', color: '#111', textTransform: 'uppercase', letterSpacing: 0.5}}>{p.text}</div>
-      </Wipe>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 8}}>
+        <Wipe frame={frame} fps={fps} delay={0}>
+          <div style={{...strip, background: '#fff', color: '#111', fontSize: 44, fontWeight: 700, borderLeft: `12px solid ${accent}`, paddingLeft: 22}}>
+            {'“'}{p.text}{'”'}
+          </div>
+        </Wipe>
+        {p.sub ? (
+          <Wipe frame={frame} fps={fps} delay={0.4}>
+            <div style={{...strip, fontSize: 28, fontWeight: 500, background: 'rgba(17,17,17,0.85)', padding: '6px 22px'}}>{p.sub}</div>
+          </Wipe>
+        ) : null}
+      </div>
     );
   } else if (p.kind === 'lower') {
     body = (

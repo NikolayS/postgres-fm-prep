@@ -103,7 +103,7 @@ export const ITEMS: Item[] = [
   {id: '20-relallvisible', comp: 'number', outStart: 1939.7, duration: 5, placement: 'full', freezeSec: 2, sfx: [tick(0), pop(1.7)],
     props: {title: 'Imported relallvisible, empty VM (autovacuum off during restore)', before: 10032, after: 3301, sep: 'vs', beforeLabel: 'Index Only Scan chosen: 10,000 heap fetches', afterLabel: 'Bitmap Heap Scan it would otherwise choose', footnote: 'PG 18.6, --statistics archive, DBLab Forge bounded diagnostic. Buffer accesses, not latency.'}},
   {id: '21-quote-statistics', comp: 'band', outStart: 2166.1, duration: 4, placement: 'band', freezeSec: 0, sfx: [tick(0)],
-    props: {kind: 'quote', text: "Don't use --statistics, except for pg_upgrade"}},
+    props: {kind: 'quote', text: "Don't use --statistics, except for pg_upgrade", sub: 'Nik, on pg_dump --statistics'}},
   {id: '23-pgrestore-truncate', comp: 'shot', outStart: 2240.7, duration: 5.5, placement: 'full', freezeSec: 0, sfx: shotSfx(5.5),
     props: shot('archiver-truncate', 'github.com/postgres/postgres, REL_18_6, pg_backup_archiver.c#L997-L1013', {x: 80, y: 216, width: 830, height: 142}, {zoom: 1.7, column: {x: 20, y: 0, width: 900, height: 0}, notePrefix: NOTE, note: 'TRUNCATE + COPY in one transaction only with -j, for tables created in this run; no FREEZE'}),
     source: 'https://github.com/postgres/postgres/blob/REL_18_6/src/bin/pg_dump/pg_backup_archiver.c#L997-L1013'},
@@ -118,5 +118,8 @@ export const ITEMS: Item[] = [
     props: {kind: 'strip', text: 'Hello, AIs. Data checksums: always on.'}},
   {id: '28-laurenz-lower', comp: 'band', outStart: 2844.1, duration: 4, placement: 'band', freezeSec: 0, sfx: [tick(0)],
     props: {kind: 'lower', name: 'Laurenz Albe', sub: 'CYBERTEC'}},
+  // Host quotes and takeaways are band quote strips: talk continues, no freeze, no dimming (Nik, 2026-10-20).
+  {id: '29-revisit-docs', comp: 'band', outStart: 2910.0, duration: 6, placement: 'band', freezeSec: 0, sfx: [tick(0)],
+    props: {kind: 'quote', text: 'Platforms should revisit their docs.', sub: 'Nik and Kirk, closing takeaway'}},
 ];
 
