@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Podcast overlay manifest (read by compose.ts)",
+  "type": "object",
+  "required": ["overlays"],
+  "properties": {
+    "video": {"type": "string", "description": "edited talk file the outStart times refer to"},
+    "fps": {"type": "integer"}, "width": {"type": "integer"}, "height": {"type": "integer"},
+    "timeBase": {"type": "string"},
+    "band": {"type": "object", "properties": {"x": {"type": "number"}, "y": {"type": "number"}, "w": {"type": "number"}, "h": {"type": "number"}}},
+    "overlays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "outStart", "dur", "file", "placement", "freezeSec", "sfx"],
+        "properties": {
+          "id": {"type": "string"},
+          "outStart": {"type": "number", "description": "seconds in edited talk time, before intro and freeze shifts"},
+          "dur": {"type": "number"}, "duration": {"type": "number", "description": "same as dur (older readers)"},
+          "file": {"type": "string", "description": "ProRes 4444 .mov, full frame, alpha, relative to the manifest"},
+          "placement": {"enum": ["band", "full"]},
+          "freezeSec": {"type": "number", "description": "0, or hold the talk at outStart for this long (compose.ts inserts it; the overlay keeps playing)"},
+          "sfx": {"type": "array", "items": {"type": "object", "required": ["file", "at"], "properties": {"file": {"type": "string"}, "at": {"type": "number", "description": "seconds from overlay start"}, "gain": {"type": "number"}}}},
+          "source": {"type": ["string", "null"], "description": "URL of the real artifact shown"}
+        }
+      }
+    }
+  }
+}

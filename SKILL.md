@@ -296,3 +296,75 @@ the hook, no neutral faces). Steps per episode, about 10 minutes:
 Fonts (Anton, Archivo Black, Bebas Neue, Inter; OFL) are in `cover/fonts/`.
 `bun install` in `cover/` brings playwright-core, the background remover
 and pngjs; rendering uses the local Google Chrome binary.
+
+## Overlays (on-screen cards, 1920x1080 alpha layers)
+
+Tooling in `overlays/` (Remotion 4, TypeScript, Bun). Output: one ProRes 4444
+alpha `.mov` per overlay plus `manifest.json` (schema in
+`overlays/manifest.schema.json`), which `compose.ts` reads. Nothing is
+composited here; `compose.ts` places every file at 0,0, inserts the freezes and
+mixes the SFX.
+
+Style rules (from the vDud / "вДудь" study, 2026-10-20):
+- Drop, do not explain: a card appears on the word that needs it, stays 3-6 s,
+  leaves. No advice text, no "as you can see".
+- Real artifacts only: docs pages, commit or source pages, mailing-list
+  messages, our own published charts. Captured at the source, zoomed,
+  highlighted. Never redraw a source as our own card.
+- One motion per card: wipe-from-left 0.3 s for strips, scale-pop 0.3-0.4 s for
+  numbers and chips, eased push-in 1.0 s for screenshots; fade-out 0.2-0.3 s.
+- Staged lines: multi-line cards build line by line (0.4-0.6 s apart).
+- One fact per strip, under 60 characters. Frequency: one insert per 30-90 s of
+  talk; full-screen cards at least 60 s apart; SFX at least 2 s apart.
+- Reading time: `min_on_screen = max(1.5 s, words / 3)`.
+
+Placement:
+- `band`: strips, lower-thirds, link chips, quotes, gags. Default band
+  x 24-1600, y 912-1052 (constant `BAND` in `src/Band.tsx`); confirm the free
+  band with the layout owner first. Text 40 px (strips), 44 px (names), mono
+  28-32 px (chips); never below 28 px.
+- `full`: screenshots (`ShotCard`), number cards (`NumberPop`), notes and
+  charts (`FullCard`). They dim the whole frame to about 22% so they never
+  fight a face.
+
+Freezes: only on number cards where the number is the point; 2-2.5 s;
+`freezeSec` in the manifest, never baked into the overlay. The talk holds and
+goes silent at `outStart`; the overlay plays its full duration over the frozen
+frame and then over the moving talk.
+
+Editor's-note policy: one line, neutral, prefix "Editor's note:" in the accent
+colour; only for on-air slips that change a fact (numbers, versions, what a
+command does); never for slips the host corrects on air; cite the source in the
+item's `source` field. Numbers from experiments are buffers and WAL, never
+latency claims, and name the tool only (no internal paths or code).
+
+Plan format (`overlay-plan.md`, before any render): one row per moment with
+source time, output time, duration, type, exact on-screen text, verified URL
+(HTTP 200 on the day), pause (freeze) and SFX; plus a locked wording list for
+the Editor's notes and an open-items list.
+
+Workflow per episode (about 1 hour for 20 overlays):
+1. `cd overlays && bun install && scripts/sfx-synth.sh`.
+2. Captures: `VW=960 VH=540 COL='#docContent' BROWSER_BIN=<chrome-headless-shell> bun scripts/capture.ts <url> '<selector>' public/<name>.png [scrollOffset]`.
+   Each capture writes `<name>.rect.json` (target rect, content column,
+   viewport); highlights and framing come from these rects, never estimated.
+   Use `VW=960` for paragraphs and option names alike (text lands at 29 px
+   before the push-in).
+3. Copy `scripts/items.example.ts` to `scripts/items.ts`, edit the list.
+4. `bun scripts/render-all.ts [id ...]` renders in parallel (3 at a time) and
+   writes `../overlays/manifest.json` next to the `.mov` files.
+5. QA sheet: composite a mid frame of every overlay over the layout still
+   (`ffmpeg -i still.png -ss 3.2 -i x.mov -filter_complex overlay`) and check.
+
+Review checklist before the final composite:
+- Screenshot framing: no line cut at the left or right (content column fitted),
+  target block under the URL chip, top and bottom edges faded; the push-in ends
+  on the highlight.
+- Labels: secondary labels 30 px or more, context line 28 px or more.
+- Band cards fit the band (2 lines max); nothing over a face or the robot tile.
+- Every URL on screen verified; every source in the manifest; no third-party
+  art without a licence (gag cards are our own text).
+- SFX: pop on the moment the number lands (1.7 s), tick on strips, whoosh for
+  full-screen in and out; relative gains pop 0 dB, tick -3 dB, whoosh -6 dB.
+- Chapters for the description: final = intro + edited time + freezes before
+  the chapter; re-check against the packager's final time map.

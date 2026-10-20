@@ -1,0 +1,6 @@
+node_modules/
+out/
+public/*.png
+public/*.rect.json
+sfx/
+bun.lock

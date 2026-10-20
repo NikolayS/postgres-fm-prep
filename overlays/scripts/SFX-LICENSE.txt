@@ -1,0 +1,1 @@
+All files in this directory were synthesized with ffmpeg (anoisesrc/sine filters) on 2026-10-20 for the Postgres.FM overlays. No third-party samples. Free to use without attribution (owned by PostgresAI).
