@@ -9,6 +9,7 @@ The question: what performance-relevant state is missing after a logical Postgre
 ## Start here
 
 - [Kirk's study pack](study-pack.md) — a short reading guide, core distinctions and co-host questions.
+- [Restore documentation audit](restore-docs-audit.md) — 12-page sample, direct-versus-linked guidance, counts and source metadata.
 - [Research report](research.md) — historical discussions, PG18 defaults, visibility maps, version boundaries and operator considerations.
 - [Additional DBLab Forge experiments](experiments.md) — a bounded plan for a few hours, with priorities, decisive measurements and stop rules.
 - [Existing experimental observations](existing-observations.md) — what earlier synthetic examples show and what they do not.

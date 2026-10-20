@@ -100,6 +100,12 @@ A small expression-index example is useful if time permits: ANALYZE before an ex
 
 The inspected PG19 release-candidate source adds extended-statistics transport and conditional VM marking during eligible reads. A query may change VM coverage while it is being measured. This is not a promise that one SELECT fills every VM bit, nor that VACUUM is obsolete. Keep the core demonstration on pinned PG18; make PG19 a brief version-boundary note unless there is time for a separate controlled run. Sources: [PG19 release notes](https://www.postgresql.org/docs/19/release-19.html), [extended-statistics dump integration](https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64), and [on-access VM implementation at inspected commit 0da632e084842c36ec31d87adfc401b54ed7d7b2](https://github.com/postgres/postgres/blob/0da632e084842c36ec31d87adfc401b54ed7d7b2/src/backend/access/heap/pruneheap.c). The version qualification refers to the source inspected on October 20, 2026 UTC.
 
+## What restore guides tell readers
+
+Our [October 20 documentation audit](restore-docs-audit.md) inspected twelve selected logical restore/import pages. **Eight of twelve omit direct advice to gather optimizer statistics; none directly explains visibility-map readiness.** PostgreSQL's two pages, DigitalOcean and TigerData do recommend analysis. Azure provides that advice in a linked companion; pgAdmin links to upstream guidance. This is a convenience sample of exact pages, not a population estimate or a verdict on entire providers. Use the audit's row-level sources and qualifications when presenting the numbers.
+
+Suggested question for the episode: when a guide ends at a successful restore, what should its query-readiness checklist add?
+
 ## Proposed 28-minute conversation
 
 | Time | Discussion |

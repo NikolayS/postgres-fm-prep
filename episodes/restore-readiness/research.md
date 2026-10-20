@@ -121,6 +121,10 @@ Run snapshot and COPY FREEZE tests in disposable databases as separate arms. For
 
 For a later controlled operational study, use **time to workload readiness** as the metric: the first sustained measurement interval in which the fixed representative workload meets declared latency, throughput, error-rate and concurrency targets. This requires an appropriately isolated multi-user workload experiment; it is not an acceptance gate or a measured claim for the present single-session plan/buffer study. Choose the interval and targets before that execution. Restore exit time, first-query time, warmed throughput and full maintenance completion are separate observations. No single percentage of global VM coverage defines readiness for every workload.
 
+## Documentation coverage audit
+
+The [12-page restore/import documentation audit](restore-docs-audit.md) supplies a separate evidence set: 4/12 pages directly recommend ANALYZE/statistics gathering, and 0/12 directly explain post-restore VM readiness. It includes positive counterexamples, linked-guidance sensitivity checks, exact URLs, timestamps and source hashes. These are descriptive counts for a convenience sample, not a representative estimate of all documentation or a measurement of provider automation.
+
 ## Practical operator checklist to teach
 
 - Identify logical restore versus physical recovery/pg_upgrade, exact tool versions, and archive scope. Verify restore errors and required objects before investigating performance.

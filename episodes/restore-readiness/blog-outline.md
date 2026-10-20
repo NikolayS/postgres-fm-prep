@@ -30,6 +30,10 @@ Use short, paraphrased historical excerpts with links: 2002/2003 ANALYZE debate,
 
 Keep historical reasoning distinct from present engineering constraints. VACUUM cannot run inside a transaction block; this matters to a separate maintenance phase after a single-transaction restore. It does not make such a phase impossible.
 
+### Documentation gap: a bounded audit
+
+Use the [12-page audit](restore-docs-audit.md): eight pages omit direct statistics-gathering advice and none directly explains VM readiness. Name the positive examples and Azure/pgAdmin linked-guidance qualifications. Show the denominator and audit date; do not claim a traffic-weighted or representative industry percentage. This measures guidance coverage, independently of the performance experiments.
+
 ## 5. What to do after restoring
 
 Give a short decision sequence:
