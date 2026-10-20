@@ -69,7 +69,7 @@ for (const [name, c] of Object.entries(classes)) {
   const ok = rows.filter(r => base(r) && !neutral(r) && c.ok(r));
   ok.sort((a, b) => c.intensity(b) - c.intensity(a));
   const picked: R[] = [];
-  for (const r of ok) { if (picked.every(p => Math.abs(p.t - r.t) >= 8)) picked.push(r); if (picked.length >= 8) break; }
+  for (const r of ok) { if (picked.every(p => Math.abs(p.t - r.t) >= 8)) picked.push(r); if (picked.length >= Number(process.env.N ?? 8)) break; }
   picks[name] = picked.map(r => ({ t: r.t, file: r.file, faceX: r.faceX, faceY: r.faceY, faceH: r.faceH, intensity: +c.intensity(r).toFixed(2), glare: r.glare, laugh: r.laugh }));
   console.error(`${name}: pass=${ok.length} picked=${picked.length}`);
   const tiles = picked.map((r, i) => `<figure><img src="file://${r.file}"><figcaption>${name.toUpperCase()} #${i + 1}  t=${fmt(r.t)} (${r.t}s)  intensity ${c.intensity(r).toFixed(2)}${r.laugh ? "  [laugh]" : ""}</figcaption></figure>`).join("\n");
