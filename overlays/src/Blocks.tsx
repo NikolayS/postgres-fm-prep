@@ -103,10 +103,10 @@ export const HackBlock: React.FC<HackProps> = (p) => {
 // Columns = maintenance after restore, rows = queries; each row has its own scale,
 // so the ~100x drop shows as a tall bar next to a sliver.
 type Cell = {v: number; ms: string};
-export type CompareProps = {cols: string[]; rows: {label: string; cells: Cell[]; drop: {col: 1 | 2; at: number; text: string}}[]; rowAt: number[]; colStep: number; foot: string; durationSec: number};
+export type CompareProps = {cols: string[]; rows: {label: string; needs?: string; cells: Cell[]; drop: {col: 1 | 2; at: number; text: string}}[]; rowAt: number[]; colStep: number; foot: string; durationSec: number};
 export const CompareBlock: React.FC<CompareProps> = (p) => {
   const {s, grow} = useT();
-  const COLW = 200, BARW = 120, H = 150;
+  const COLW = 200, BARW = 120, H = p.rows.length > 1 ? 120 : 300;
   return (
     <Panel>
       <div style={{display: 'flex', justifyContent: 'space-between', opacity: s(0.2)}}>
@@ -119,7 +119,8 @@ export const CompareBlock: React.FC<CompareProps> = (p) => {
         const at0 = p.rowAt[ri];
         return (
           <div key={ri} style={{marginTop: ri === 0 ? 22 : 30, opacity: s(at0)}}>
-            <div style={{fontSize: 32, fontWeight: 700, color: ACCENT}}>{r.label}</div>
+            <div style={{fontSize: 32, fontWeight: 700, color: '#fff', lineHeight: 1.15}}>{r.label}</div>
+            {r.needs ? <div style={{fontSize: 28, fontWeight: 600, color: ACCENT, lineHeight: 1.2, marginTop: 2}}>{r.needs}</div> : null}
             <div style={{position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', height: H + 66, marginTop: 4}}>
               {r.cells.map((c, ci) => {
                 const at = at0 + 0.3 + ci * p.colStep;
@@ -213,6 +214,66 @@ export const TrapBlock: React.FC<TrapProps> = (p) => {
       </div>
       <div style={{flex: 1}} />
       <div style={{fontSize: 26, fontWeight: 500, color: DIM, opacity: s(p.rowsAt + 2)}}>{p.foot}</div>
+    </Panel>
+  );
+};
+
+// ---------- Before/after pair (first read vs second read, etc.) ----------
+// Optional meter (e.g. visibility map 0 -> N of M pages), then a two-column table;
+// the first row is the big metric, later rows are small (time).
+export type DuelProps = {
+  kicker: string;
+  title: string;
+  meter?: {label: string; value: number; of: number; at: number};
+  cols: [string, string];
+  rows: {label: string; a: string; b: string}[];
+  rowsAt: number[];
+  foot: string;
+  durationSec: number;
+};
+export const DuelBlock: React.FC<DuelProps> = (p) => {
+  const {s, grow} = useT();
+  const m = p.meter;
+  const g = m ? grow(m.at, 1.2) : 0;
+  return (
+    <Panel>
+      <div style={{fontSize: 30, fontWeight: 700, color: ACCENT, opacity: s(0.2)}}>{p.kicker}</div>
+      <div style={{fontSize: 52, fontWeight: 800, letterSpacing: -1, lineHeight: 1.1, marginTop: 6, opacity: s(0.3)}}>{p.title}</div>
+      {m ? (
+        <div style={{marginTop: 34, opacity: s(m.at)}}>
+          <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'baseline'}}>
+            <div style={{fontSize: 32, fontWeight: 600}}>{m.label}</div>
+            <div style={{fontSize: 64, fontWeight: 800, color: ACCENT, fontVariantNumeric: 'tabular-nums', lineHeight: 1}}>{fmt(m.value * g)}</div>
+          </div>
+          <div style={{height: 20, background: 'rgba(255,255,255,0.12)', borderRadius: 6, marginTop: 10}}>
+            <div style={{width: `${(m.value / m.of) * 100 * g}%`, height: '100%', background: ACCENT, borderRadius: 6}} />
+          </div>
+          <div style={{fontSize: 26, color: DIM, marginTop: 8, textAlign: 'right'}}>of {fmt(m.of)} pages</div>
+        </div>
+      ) : null}
+      <div style={{flex: 1}} />
+      <div style={{opacity: s(p.rowsAt[0])}}>
+        <div style={{display: 'flex'}}>
+          <div style={{flex: 1}} />
+          {p.cols.map((c, i) => (
+            <div key={i} style={{width: 215, textAlign: 'center', fontSize: 30, fontWeight: 700, color: i === 0 ? WARN : ACCENT}}>{c}</div>
+          ))}
+        </div>
+        {p.rows.map((r, i) => {
+          const k = s(p.rowsAt[i] ?? p.rowsAt[0], {damping: 11, stiffness: 240, mass: 0.5});
+          const big = i === 0;
+          return (
+            <div key={i} style={{display: 'flex', alignItems: 'center', marginTop: big ? 16 : 10, opacity: k}}>
+              <div style={{flex: 1, fontSize: 28, fontWeight: 600, color: DIM, whiteSpace: 'nowrap', overflow: 'hidden'}}>{r.label}</div>
+              {[r.a, r.b].map((v, j) => (
+                <div key={j} style={{width: 215, textAlign: 'center', fontSize: big ? 48 : 38, fontWeight: 800, color: j === 0 ? WARN : ACCENT, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap', transform: `scale(${0.7 + 0.3 * k})`}}>{v}</div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+      <div style={{flex: 1}} />
+      <div style={{fontSize: 26, fontWeight: 500, color: DIM, opacity: s(p.rowsAt[0] + 2)}}>{p.foot}</div>
     </Panel>
   );
 };

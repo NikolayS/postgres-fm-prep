@@ -21,6 +21,9 @@ export const toEdited = (segs: Seg[], t: number) => {
   return segs[segs.length - 1].outEnd;
 };
 
+// Chart numbers live in data/compare.json (swap the file to change the chart).
+const {_doc, source: _src, ...COMPARE} = JSON.parse(readFileSync(resolve(ROOT, 'data/compare.json'), 'utf8'));
+
 type Sfx = {file: string; at: number; gain: number};
 const air = (at: number, gain = 1.0): Sfx => ({file: 'sfx/air.wav', at, gain});
 let nThud = 0;
@@ -51,12 +54,7 @@ export const BLOCKS: Block[] = [
   // Numbers: Forge restore-readiness-01 README lines 32-35 (join), 49-52 (covering), 70-73 (ms, context only).
   {id: '08-two-queries', comp: 'compare', srcStart: 488.6, srcEnd: 510.6, words: 'Nik: "or even worse, you expected index only scan" (src 488.62) to Kirk: "So let\'s define" (src 510.66)', replaces: ['08-three-bars'],
     sfx: [air(0), air(0.6), thud(2.0), air(2.6), thud(4.6)],
-    props: {cols: ['restore only', '+ ANALYZE', '+ VACUUM ANALYZE'], rowAt: [0.6, 2.6], colStep: 0.35,
-      rows: [
-        {label: 'Skewed join', cells: [{v: 396608, ms: '145 ms'}, {v: 2096, ms: '67 ms'}, {v: 2096, ms: '67 ms'}], drop: {col: 1, at: 1.4, text: '÷190'}},
-        {label: 'Covering-index query', cells: [{v: 3301, ms: '6.6 ms'}, {v: 3301, ms: '6.6 ms'}, {v: 34, ms: '1.1 ms'}], drop: {col: 2, at: 2.0, text: '÷97'}},
-      ],
-      foot: 'Buffers (big), time (small). PG 18.6, DBLab Forge.'},
+    props: {...COMPARE, rowAt: COMPARE.rows.length > 1 ? [0.6, 2.6] : [0.6], colStep: 0.35},
     source: 'DBLab Forge restore-readiness-01 README.md:32-35,49-52,70-73'},
   // Nik: "relallv, uh, visible" (src 2067.41) ... "visibility maps are not yet built" (2097.27) ... "index only scan" (2102.17)
   // ... "heap fetches" (2106.09) ... "skewed result for a planner, right?" (2119.45).
@@ -69,6 +67,25 @@ export const BLOCKS: Block[] = [
       rows: [{label: 'heap fetches', a: '10,000', b: '0'}, {label: 'time', a: '6–11 ms', b: '1.1 ms'}],
       foot: 'PG 18.6, --statistics archive, autovacuum off during restore. DBLab Forge.'},
     source: 'DBLab Forge restore-readiness-01 README.md:10,15,88,100,51-52,72; runs/pg18/diag_av_off; runs/tav_pg18'},
+  // Nik: "But, if you don't have indexes ... first read is terribly slow ... Subsequent sequential scans will be fast." (src 2670.5-2690.7)
+  // Numbers: README lines 16, 157 (28,251,777 bytes WAL, 3,449 FPI); times from raw runs/frc2_pg18_checksums/targets/r{1,2,3}_none_ckpt/
+  // seq_events_first.json (49.1, 48.6, 42.9 ms) and seq_events_second.json (22.7, 23.2, 22.6 ms): medians 48.6 and 22.7.
+  {id: '25-first-read-wal', comp: 'duel', srcStart: 2670.5, srcEnd: 2690.7, words: 'Nik: "if you don\'t have indexes ... first read is terribly slow" (src 2670.51) to "will be fast." (src 2689.39)', replaces: ['25-first-read-wal'],
+    sfx: [air(0), thud(7.3), thud(16.2, 0.6)],
+    props: {kicker: 'PG 18.6, table without indexes', title: 'SELECT count(*) right after restore', cols: ['1st read', '2nd read'],
+      rows: [{label: 'WAL', a: '26.9 MiB', b: '0'}, {label: 'time', a: '49 ms', b: '23 ms'}], rowsAt: [7.3, 16.2],
+      foot: 'After a checkpoint, data checksums on. 200k rows. DBLab Forge.'},
+    source: 'DBLab Forge restore-readiness-01 README.md:16,157; runs/frc2_pg18_checksums/targets/r*_none_ckpt/seq_events_{first,second}.json'},
+  // Nik: "And in Postgres 19 ... also visibility maps." Kirk: "But that's a lot of writing to do a query." Nik: "...one bit for one page." (src 2691.0-2716.4)
+  // Numbers: README lines 11, 16, 166 (VM 3,267 of 3,480 after the first range query; 26,827,000 bytes WAL); times from raw
+  // runs/frc2_pg19_checksums/targets/r{1,2,3}_none_ckpt/q1_first.json (33.2, 30.1, 32.9 ms) and q1_second.json (7.3, 7.5, 7.6 ms).
+  {id: '26-pg19-first-read-vm', comp: 'duel', srcStart: 2691.0, srcEnd: 2716.4, words: 'Nik: "And in Postgres 19" (src 2690.81) to Nik: "one bit for one page." (src 2714.97)', replaces: ['26-pg19-first-read-vm'],
+    sfx: [air(0), thud(13.5), thud(18.1), thud(19.3, 0.6)],
+    props: {kicker: 'PG 19 (rc1), no VACUUM', title: 'A SELECT fills the visibility map',
+      meter: {label: 'all-visible after 1st read', value: 3267, of: 3480, at: 13.5}, cols: ['1st read', '2nd read'],
+      rows: [{label: 'WAL', a: '25.6 MiB', b: '0'}, {label: 'time', a: '33 ms', b: '7.5 ms'}], rowsAt: [18.1, 19.3],
+      foot: 'Index range query, after a checkpoint, data checksums on. DBLab Forge.'},
+    source: 'DBLab Forge restore-readiness-01 README.md:11,16,166; runs/frc2_pg19_checksums/targets/r*_none_ckpt/q1_{first,second}.json'},
 ];
 
 if (import.meta.main) {
@@ -83,7 +100,10 @@ if (import.meta.main) {
     const dur = r2(toEdited(segs, b.srcEnd) - outStart);
     // Reveal times and SFX are word-relative in source seconds; map them through the cuts too.
     const rel = (t: number) => r2(toEdited(segs, b.srcStart + t) - toEdited(segs, b.srcStart));
-    for (const k of ['vmAt', 'scanAt', 'rowsAt', 'shipAt']) if (typeof b.props[k] === 'number') b.props[k] = rel(b.props[k] as number);
+    for (const k of ['vmAt', 'scanAt', 'shipAt']) if (typeof b.props[k] === 'number') b.props[k] = rel(b.props[k] as number);
+    if (Array.isArray(b.props.rowsAt)) b.props.rowsAt = (b.props.rowsAt as number[]).map(rel);
+    else if (typeof b.props.rowsAt === 'number') b.props.rowsAt = rel(b.props.rowsAt as number);
+    if (b.props.meter) b.props.meter = {...(b.props.meter as object), at: rel((b.props.meter as {at: number}).at)};
     b.sfx = b.sfx.map((x) => ({...x, at: rel(x.at)}));
     return {id: b.id, srcStart: b.srcStart, srcEnd: b.srcEnd, words: b.words, replaces: b.replaces, outStart, duration: dur, dur, file: `${b.id}.mov`, placement: 'center', freezeSec: 0, sfx: b.sfx, source: b.source};
   });
