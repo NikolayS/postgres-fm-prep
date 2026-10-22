@@ -1,0 +1,11 @@
+{"dir":"/Library/Audio/Apple Loops/Apple/09 Disco Funk","tailSec":2.5,"events":[
+ {"file":"Electric Funk Synth Stabs.caf","at":0,"beats":16},
+ {"file":"Electric Funk Beat.caf","at":0,"beats":24},
+ {"file":"Glitter Nights Synth Bass 01.caf","at":0,"beats":24,"gain":-1},
+ {"file":"Glitter Nights Hi-Hat Topper.caf","at":8,"beats":16,"gain":-3},
+ {"file":"Glitter Nights Synth Pad.caf","at":8,"beats":16,"gain":-6,"fadeIn":4},
+ {"file":"Electric Funk Synth Lead 03.caf","at":16,"beats":8,"gain":-2},
+ {"file":"Electric Funk Synth Stabs.caf","at":24,"beats":2,"fadeOut":1.5},
+ {"file":"Electric Funk Beat.caf","at":24,"beats":1,"fadeOut":0.6},
+ {"file":"Glitter Nights Synth Bass 01.caf","at":24,"beats":2,"fadeOut":1.5,"gain":-1}
+]}
