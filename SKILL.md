@@ -312,7 +312,9 @@ the captions, notes and transcript again.
    `<base>-podcast.time-map.json`.
 5. **Website transcript**: `subtitles.ts transcript-txt
    <podcast>.transcript.md --out <podcast>.transcript.txt`. postgres.fm is
-   the Transistor-hosted site; it shows `transcript_text` as paragraphs.
+   the Transistor-hosted site: it shows each blank-line block of
+   `transcript_text` as one paragraph and makes "[hh:mm:ss]" a jump link.
+   Setting `transcript_text` adds a txt transcript and keeps the SRT one.
 6. **Show notes** (`shownotes.ts`): write `notes.json` (see
    `shownotes.example.json`): one row per link, with the podcast time of the
    first mention (`at`). Check each link on the live page before you add it.

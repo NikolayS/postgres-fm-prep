@@ -310,10 +310,10 @@ describe("speech walls, labels, voices (review fixes)", () => {
 });
 
 describe("website transcript (plain text)", () => {
-  test("one block per turn, 'Name [hh:mm:ss]: text', no markdown, no hard breaks", () => {
+  test("a turn starts 'Name [hh:mm:ss]: '; each paragraph is one block (the site shows a block as a paragraph)", () => {
     const md = ["# Title", "", "**Nik** [00:00:13]", "", "One *(Kirk: Yeah.)* two.", "", "Three.", "",
       "**Kirk** [00:00:20]", "", "- Four [music] five—", ""].join("\n");
-    expect(toTranscriptTxt(md)).toBe("Nik [00:00:13]: One (Kirk: Yeah.) two. Three.\n\nKirk [00:00:20]: Four five—\n");
+    expect(toTranscriptTxt(md)).toBe("Nik [00:00:13]: One (Kirk: Yeah.) two.\n\nThree.\n\nKirk [00:00:20]: Four five—\n");
   });
 
   test("a stray markdown marker fails loudly", () => {

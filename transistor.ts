@@ -1,7 +1,9 @@
 #!/usr/bin/env bun
 // Transistor.fm release: upload the podcast audio, create a draft episode with the description
 // (show notes HTML) and transcript_text, and publish only with --publish. postgres.fm is the
-// Transistor-hosted site; it shows transcript_text as paragraphs (subtitles.ts transcript-txt).
+// Transistor-hosted site: it shows each blank-line block of transcript_text as one paragraph and
+// makes "[hh:mm:ss]" a jump link (subtitles.ts transcript-txt). A PATCH of transcript_text adds
+// a txt transcript and keeps an SRT transcript that is there, so the episode has both.
 // Usage:
 //   bun transistor.ts --show 32147 --title "..." --number 193 --season 1 --audio podcast.mp3
 //        --description-file notes.transistor.html --transcript-file transcript.txt [--publish] [--dry-run]

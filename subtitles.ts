@@ -478,20 +478,22 @@ export function toArticle(raw: Tok[], o: { title?: string; paraWords?: number } 
   return out.join("\n");
 }
 
-// Website transcript (postgres.fm via Transistor transcript_text) from the article: one block per
-// turn, "Nik [00:00:13]: text", paragraphs of a turn joined, asides as "(Kirk: Yeah.)". No markdown
-// markers, no [music] or other tags, no dialogue dashes.
+// Website transcript (postgres.fm via Transistor transcript_text) from the article. The site shows
+// each blank-line block as one paragraph and makes "[hh:mm:ss]" a jump link. A turn starts with
+// "Nik [00:00:13]: "; each article paragraph is one block, with no line break inside it; asides
+// are "(Kirk: Yeah.)". No markdown markers, no [music] or other tags, no dialogue dashes.
 export function toTranscriptTxt(md: string): string {
   const blocks: string[] = [];
+  let head: string | null = null;
   for (const raw of md.split("\n")) {
     const l = raw.trim();
     if (!l || l.startsWith("# ")) continue;
     const h = l.match(/^\*\*([^*]+)\*\* \[(\d\d:\d\d:\d\d)\]$/);
-    if (h) { blocks.push(`${h[1]} [${h[2]}]:`); continue; }
+    if (h) { head = `${h[1]} [${h[2]}]: `; continue; }
     const text = l.replace(/\*\(([^)]*)\)\*/g, "($1)").replace(/^- /, "").replace(/\s*\[[a-z ]+\]\s*/g, " ").replace(/\s+/g, " ").trim();
     if (/[*_`#]{1,2}\S/.test(text.replace(/\b\w*_\w*\b/g, ""))) throw new Error(`markdown marker left: ${text.slice(0, 80)}`);
-    if (!blocks.length) throw new Error(`text before the first turn heading: ${text.slice(0, 80)}`);
-    if (text) blocks[blocks.length - 1] += " " + text;
+    if (!blocks.length && head === null) throw new Error(`text before the first turn heading: ${text.slice(0, 80)}`);
+    if (text) { blocks.push((head ?? "") + text); head = null; }
   }
   return blocks.join("\n\n") + "\n";
 }
@@ -611,7 +613,7 @@ if (import.meta.main) {
     if (!pos[0] || !v.out) usage();
     const txt = toTranscriptTxt(await Bun.file(pos[0]).text());
     await Bun.write(v.out, txt);
-    console.log(`${v.out}: ${txt.split("\n\n").length} turns`);
+    console.log(`${v.out}: ${txt.split("\n\n").length} paragraphs`);
   } else if (cmd === "check") {
     if (!pos[0]) usage();
     const probs = checkCues(parseSrt(await Bun.file(pos[0]).text()), MAX_CPS, v.map ? speechWalls(await Bun.file(v.map).json()) : []);
