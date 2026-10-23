@@ -449,8 +449,10 @@ Review checklist before the final composite:
 
 ## Long-hold center blocks (no freezes)
 - Rule (Nik, 2026-10-22): blocks never freeze or pause the talk. They play over it in the "center" placement (hosts at the edges) and stay while the topic is discussed: 12-25 s for data blocks, longer when the topic runs longer. Use big numbers and few words.
-- `overlays/src/Blocks.tsx`: `bio` (guest bio), `hack2` (sessions -> shipped releases), `compare` (queries x maintenance arms, a per-row scale, a ÷N badge, small ms under each bar), `trap` (planner vs visibility map, then a staged heap-fetch/time table).
+- `overlays/src/Blocks.tsx`: `bio` (guest bio), `hack2` (sessions -> shipped releases), `compare` (before -> after time per query + fix tag),  (queries x maintenance arms, a per-row scale, a ÷N badge, small ms under each bar), `trap` (planner vs visibility map, then a staged heap-fetch/time table).
 - Anchor every block to SOURCE word times (`srcStart`/`srcEnd` and reveal times relative to them), never to edited seconds. `scripts/blocks.example.ts <cuts.json> [--render]` maps them through `segmentTimes` and renders one at a time. `scripts/manifest-from-anchors.ts <cuts.json> <out>` rebuilds the full compose manifest for a new edit and sets every freezeSec to 0.
+- Less is more (Nik, 2026-10-22, on a 2-query x 3-arm grid with buffers, badges and footer: "very hard to understand -- too much, overloaded"). Start with the  comp: one big before -> after line per query, the fixing command as a yellow tag, one small caption, about 12 words in all, readable at phone size. Use  only when the arms themselves are the point.
+- Units: GiB/MiB, never GB/MB (heap 4,098,361 x 8 KiB = 31.3 GiB). State what each number is (warm or cold cache, buffers or time) in the caption and in the YouTube description.
 - Timings from a test harness are context only. Show ms small, next to the deterministic metric (buffers, heap fetches). Never present a ratio of ms as a speedup.
 
 ## Brand opening, intro music, covers (brand/)

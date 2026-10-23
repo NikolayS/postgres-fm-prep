@@ -1,0 +1,9 @@
+{
+  "_doc": "Numbers for the 08-two-queries center block (simple version, Nik 2026-10-22: times only, two lines). Swap this file to change the block. Times = execution time, median of measured passes x 3 restores, warm cache. 'tag' = the command that fixes the query.",
+  "source": "DBLab Forge restore-readiness-01, PG 18.6, DEFAULT archive (pg_dump without --statistics). README.md lines 70-73 (times): join 145 ms restore only, 67 ms after ANALYZE; index-only read 6.6 ms until VACUUM, 1.1 ms after VACUUM ANALYZE.",
+  "rows": [
+    {"label": "Join query", "from": "145", "to": "67", "unit": "ms", "tag": "ANALYZE"},
+    {"label": "Index-only read", "from": "6.6", "to": "1.1", "unit": "ms", "tag": "VACUUM"}
+  ],
+  "caption": "PG 18.6, small test, warm cache"
+}

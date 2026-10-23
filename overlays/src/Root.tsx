@@ -6,7 +6,7 @@ import {FullCard} from './FullCard';
 import {IntroCard} from './IntroCard';
 import {HackingInsert} from './HackingInsert';
 import {CenterChart} from './CenterChart';
-import {BioBlock, HackBlock, CompareBlock, TrapBlock, DuelBlock, ScaleBlock} from './Blocks';
+import {BioBlock, HackBlock, CompareBlock, SimpleBlock, TrapBlock, DuelBlock, ScaleBlock} from './Blocks';
 
 const FPS = 25;
 const W = 1920;
@@ -111,6 +111,7 @@ export const Root = () => (
     <Composition id="bio" component={BioBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />
     <Composition id="hack2" component={HackBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />
     <Composition id="compare" component={CompareBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />
+    <Composition id="simple" component={SimpleBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />
     <Composition id="trap" component={TrapBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />
     <Composition id="duel" component={DuelBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />
     <Composition id="scale" component={ScaleBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />

@@ -21,9 +21,9 @@ export const toEdited = (segs: Seg[], t: number) => {
   return segs[segs.length - 1].outEnd;
 };
 
-// Chart numbers live in data/compare.json (swap the file to change the chart).
+// Block 08 numbers live in data/two-queries.json (swap the file to change the block).
 const {_doc: _d1, source: _s1, ...ONEQ} = JSON.parse(readFileSync(resolve(ROOT, 'data/one-query.json'), 'utf8'));
-const {_doc, source: _src, ...COMPARE} = JSON.parse(readFileSync(resolve(ROOT, 'data/compare.json'), 'utf8'));
+const {_doc, source: _src, ...TWOQ} = JSON.parse(readFileSync(resolve(ROOT, 'data/two-queries.json'), 'utf8'));
 
 type Sfx = {file: string; at: number; gain: number};
 const air = (at: number, gain = 1.0): Sfx => ({file: 'sfx/air.wav', at, gain});
@@ -39,10 +39,11 @@ export const BLOCKS: Block[] = [
   // (see REPOSITION in manifest-v3.ts).
   // Nik: "...or even worse, you expected index only scan ... you don't have statistics." until Kirk: "So let's define".
   // Numbers: Forge restore-readiness-01 README lines 32-35 (join), 49-52 (covering), 70-73 (ms, context only).
-  {id: '08-two-queries', comp: 'compare', srcStart: 488.6, srcEnd: 510.6, words: 'Nik: "or even worse, you expected index only scan" (src 488.62) to Kirk: "So let\'s define" (src 510.66)', replaces: ['08-three-bars'],
+  {id: '08-two-queries', comp: 'simple', srcStart: 488.6, srcEnd: 510.6, words: 'Nik: "or even worse, you expected index only scan" (src 488.62) to Kirk: "So let\'s define" (src 510.66)', replaces: ['08-three-bars'],
     sfx: [air(0), air(0.6), thud(2.0), air(2.6), thud(4.6)],
-    props: {...COMPARE, rowAt: COMPARE.rows.length > 1 ? [0.6, 2.6] : [0.6], colStep: 0.35},
-    source: 'DBLab Forge restore-readiness-01 README.md:32-35,49-52,70-73'},
+    // Same reveal times as the old grid, so the SFX stay: rows at 0.6 / 2.6 (air), fix tags at 2.0 / 4.6 (thud).
+    props: {...TWOQ, rowAt: [0.6, 2.6], fixAt: [1.4, 2.0]},
+    source: 'DBLab Forge restore-readiness-01 README.md:70-73'},
   // Right after block 08 ends: Kirk opens a new thought, "So let's define a few things, okay?" (src 510.66), and the
   // hosts stay at the edges while the card hands over. Ends after "The optimizer can just look at that." (src 543.70).
   // Numbers: data/one-query.json (Forge analysis/one_query_pg18.csv, cold medians; README.md 22, 377-405).

@@ -154,6 +154,39 @@ export const CompareBlock: React.FC<CompareProps> = (p) => {
   );
 };
 
+// ---------- Two queries, simple (times only) ----------
+// Nik, 2026-10-22: the 3-column grid was overloaded. Two big lines, the fixing
+// command as a yellow tag, one small caption. Readable at phone size.
+export type SimpleProps = {rows: {label: string; from: string; to: string; unit: string; tag: string}[]; caption: string; rowAt: number[]; fixAt: number[]; durationSec: number};
+export const SimpleBlock: React.FC<SimpleProps> = (p) => {
+  const {s} = useT();
+  const num = (v: string, color: string) => (
+    <span style={{color}}>{v}<span style={{fontSize: 46, fontWeight: 700, marginLeft: 10, color: DIM}}>{p.rows[0].unit}</span></span>
+  );
+  return (
+    <Panel>
+      <div style={{flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 70}}>
+        {p.rows.map((r, i) => {
+          const at = p.rowAt[i];
+          const k = s(at + p.fixAt[i], {damping: 10, stiffness: 260, mass: 0.5});
+          return (
+            <div key={i} style={{opacity: s(at)}}>
+              <div style={{fontSize: 52, fontWeight: 800, lineHeight: 1.1}}>{r.label}</div>
+              <div style={{display: 'flex', alignItems: 'baseline', gap: 22, marginTop: 14, fontSize: 104, fontWeight: 800, lineHeight: 1, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap'}}>
+                {num(r.from, '#fff')}
+                <span style={{fontSize: 80, color: DIM, opacity: k}}>→</span>
+                <span style={{opacity: k}}>{num(r.to, ACCENT)}</span>
+              </div>
+              <div style={{display: 'inline-block', marginTop: 22, fontFamily: 'JetBrains Mono, Menlo, monospace', fontSize: 46, fontWeight: 700, color: '#111', background: ACCENT, borderRadius: 10, padding: '4px 20px', opacity: k, transform: `scale(${0.6 + 0.4 * k}) rotate(-3deg)`, transformOrigin: 'left center'}}>{r.tag}</div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{fontSize: 30, fontWeight: 500, color: DIM, opacity: s(p.rowAt[p.rowAt.length - 1] + 2)}}>{p.caption}</div>
+    </Panel>
+  );
+};
+
 // ---------- Imported relallvisible trap ----------
 export type TrapProps = {
   planner: {label: string; value: number}; // what pg_class says
