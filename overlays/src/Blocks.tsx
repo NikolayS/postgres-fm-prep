@@ -219,7 +219,7 @@ export const TrapBlock: React.FC<TrapProps> = (p) => {
   const full = Math.max(p.planner.value, 1);
   return (
     <Panel>
-      <div style={{fontSize: 30, fontWeight: 600, color: DIM, opacity: s(0.2)}}>all-visible pages after restore</div>
+      <div style={{fontSize: 30, fontWeight: 600, color: DIM, opacity: s(0.2)}}>all-visible pages after pg_restore</div>
       <div style={{display: 'flex', flexDirection: 'column', gap: 26, marginTop: 18}}>
         {meter(p.planner.label, p.planner.value, full, 0.4, ACCENT)}
         {meter(p.vm.label, p.vm.value, full, p.vmAt, WARN)}

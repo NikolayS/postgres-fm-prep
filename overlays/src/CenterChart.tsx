@@ -18,6 +18,7 @@ export type CenterChartProps = {
   footnote?: string;
   chip?: string; // source line at the bottom
   stagger?: number; // seconds between items
+  donutR?: number; // donut radius (default 92); smaller so a footnote fits under 3 donuts
   durationSec: number;
 };
 
@@ -41,7 +42,7 @@ export const CenterChart: React.FC<CenterChartProps> = (p) => {
 
   let body: React.ReactNode = null;
   if (p.kind === 'donuts') {
-    const R = 92, SW = 26, C = 2 * Math.PI * R;
+    const R = p.donutR ?? 92, SW = 26, C = 2 * Math.PI * R;
     body = (
       <div style={{display: 'flex', flexDirection: 'column', gap: 26, alignItems: 'stretch', marginTop: 24}}>
         {(p.donuts ?? []).map((d, i) => {

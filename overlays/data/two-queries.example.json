@@ -5,5 +5,5 @@
     {"label": "Join query", "from": "145", "to": "67", "unit": "ms", "tag": "ANALYZE"},
     {"label": "Index-only read", "from": "6.6", "to": "1.1", "unit": "ms", "tag": "VACUUM"}
   ],
-  "caption": "PG 18.6, small test, warm cache"
+  "caption": "Postgres 18.6, small test, warm cache"
 }
