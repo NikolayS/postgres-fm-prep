@@ -79,6 +79,7 @@ bun $S/render.ts work/edl.json out-edited.mp4 --plan-only          # writes out-
 bun $S/render.ts work/edl.json out-preview.mp4 --until 480 --preset fast --work work/render  # preview
 bun $S/joins.ts out-edited.cuts.json --top 15 --max-bad 0 --fail-above 6   # join audit (regression check)
 bun $S/joins.ts out-preview.cuts.json --audio out-preview.mp4 --top 10       # same, on the rendered audio
+bun $S/podcast-audio.ts out-edited.mp4 out-edited.cuts.json out-podcast --intro i.wav --outro o.wav --trim-end S --title "..."  # audio-only master (wav, mp3, time map)
 bun $S/wordcheck.ts out-edited.cuts.json   # whisper at every join: dropped / doubled / unplanned words (leads, ~2 min)
 bun $S/render.ts work/edl.json part.mp4 --src-from 2580 --src-to 3030 --preset fast  # one source stretch
 bun $S/ab.ts old.joins.json old-edited.mp4 old.cuts.json work/edl.json ab.mp4 --top 10  # old/new A/B
