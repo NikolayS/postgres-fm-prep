@@ -248,6 +248,7 @@ bun $S/subtitles.ts build src.words.json --cuts out-edited.cuts.json \
 bun $S/subtitles.ts build src.words.json --audio-map podcast.time-map.json \
   --speakers ... --fixes fixes.json --out podcast --article --title "..." --voices
 bun $S/subtitles.ts check final.srt --map final.time-map.json  # caption rules report
+bun $S/subtitles.ts transcript-txt podcast.transcript.md --out podcast.transcript.txt  # website transcript
 bun $S/subtitles.ts qa final final.mp4 --source src.m4a --n 10  # spot check by ear and by audio match
 bun test tests/subtitles.test.ts                          # golden files, round trip
 ```
@@ -288,6 +289,64 @@ bun test tests/subtitles.test.ts                          # golden files, round 
   cross-correlation. 2026-10-22: offsets were 0-32 ms on both timelines.
   Whisper word times in short clips are off by up to 1 s; do not use them
   as the timing check. In cross-talk whisper often hears only one speaker.
+
+## Release flow (edit to published)
+
+Do the steps in this order. Each step reads the files of the step before it.
+The time maps join the steps: if a later render changes the timeline, build
+the captions, notes and transcript again.
+
+1. **Edit**: the workflow above gives `<base>-edited.mp4` and
+   `<base>-edited.cuts.json`. Get the host's go on the preview first.
+2. **Final video**: `compose.ts` (title card, layout, end card, music) gives
+   `<base>-final.mp4` and `<base>-final.time-map.json`. Wait until the render
+   is complete (`ffprobe` reads the duration; a file in progress has no moov
+   atom).
+3. **Captions and QA** (`subtitles.ts`, see above):
+   - `build` with `--cuts` and `--compose` (YouTube) and with `--audio-map
+     --article --voices` (podcast, after step 4).
+   - `check <srt> --map <time-map>`: no line, duration or wall problems; list
+     the cues over 20 cps that remain.
+   - `qa` on the final media: 10 random cues, all within 0.3 s.
+4. **Podcast MP3**: `podcast-audio.ts` gives `<base>-podcast.mp3`, `.wav` and
+   `<base>-podcast.time-map.json`.
+5. **Website transcript**: `subtitles.ts transcript-txt
+   <podcast>.transcript.md --out <podcast>.transcript.txt`. postgres.fm is
+   the Transistor-hosted site; it shows `transcript_text` as paragraphs.
+6. **Show notes** (`shownotes.ts`): write `notes.json` (see
+   `shownotes.example.json`): one row per link, with the podcast time of the
+   first mention (`at`). Check each link on the live page before you add it.
+   ```bash
+   bun $S/shownotes.ts notes.json --audio-map <base>-podcast.time-map.json \
+     --cuts <base>-edited.cuts.json --compose <base>-final.time-map.json --out notes
+   ```
+   It writes `notes.md`, `notes.transistor.html` and `notes.youtube.txt`,
+   and exits 1 on a rule problem: more than 20 links; a plain docs link that
+   is not `"special"`; a past episode that is not `"referred"` (said on air);
+   a "TBD" or other placeholder when `status` is `"publish"`; a YouTube
+   description over 5,000 characters. Set `"status": "publish"` only when
+   all links are final.
+7. **Transistor draft** (`transistor.ts`; key in `TRANSISTOR_API_KEY`, never
+   printed). Run with `--dry-run` first, then without it:
+   ```bash
+   bun $S/transistor.ts --show 32147 --title "..." --number N --season 1 \
+     --audio <base>-podcast.mp3 --description-file notes.transistor.html \
+     --transcript-file <podcast>.transcript.txt [--dry-run]
+   ```
+   This makes a draft. Check the draft in the Transistor dashboard.
+   `--episode <id>` updates the description or transcript of an existing
+   episode. Do not run two writers on one episode at the same time.
+8. **Publish**: the same command with `--publish` (or `--episode <id>
+   --publish`), only after the host approves the draft.
+9. **YouTube upload checklist** (YouTube Studio, by the host):
+   - The browser upload tool takes files up to 10 MB only, so the host drags
+     `<base>-final.mp4` into YouTube Studio.
+   - Title: the episode title. Description: `notes.youtube.txt` (times are
+     video times).
+   - Thumbnail: the 1280x720 cover.
+   - Subtitles: upload `<base>-final.en.srt` as English (not auto-sync).
+   - Playlist, category, and visibility as the host says; publish after a
+     last look at the processed video and captions.
 
 ## Layout, music and cards (packaging)
 
