@@ -306,7 +306,15 @@ export function musicCues(ranges: [number, number][]): Cue[] {
   });
 }
 
-export type Problem = { cue: number; rule: "line-length" | "line-count" | "duration" | "overlap" | "cps"; detail: string };
+// "[music]" cues over the music-only ranges, cut back so they never cover a talk cue.
+export function withMusic(talk: Cue[], ranges: [number, number][]): Cue[] {
+  const first = talk[0]?.start ?? Infinity, last = talk[talk.length - 1]?.end ?? -Infinity;
+  const before = ranges.filter(([a]) => a < first).map(([a, b]) => [a, Math.min(b, first)] as [number, number]);
+  const after = ranges.filter(([, b]) => b > last).map(([a, b]) => [Math.max(a, last), b] as [number, number]);
+  return [...musicCues(before.filter(([a, b]) => b > a)), ...talk, ...musicCues(after.filter(([a, b]) => b > a))];
+}
+
+export type Problem ={ cue: number; rule: "line-length" | "line-count" | "duration" | "overlap" | "cps"; detail: string };
 export function checkCues(cues: Cue[], maxCps = MAX_CPS): Problem[] {
   const p: Problem[] = [];
   cues.forEach((c, i) => {
@@ -485,7 +493,7 @@ if (import.meta.main) {
       ? v.music.split(",").map((r) => r.split("-").map(Number) as [number, number])
       : musicRanges(map);
     const talk = buildCues(cleanCaption(toks));
-    const cues = [...musicCues(music.filter(([, b]) => b <= talk[0].start)), ...talk, ...musicCues(music.filter(([a]) => a >= talk[talk.length - 1].end))];
+    const cues = withMusic(talk, music);
     await Bun.write(`${v.out}.srt`, toSrt(cues));
     await Bun.write(`${v.out}.vtt`, toVtt(cues));
     await Bun.write(`${v.out}.cues.json`, JSON.stringify(cues));

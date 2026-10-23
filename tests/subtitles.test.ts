@@ -2,7 +2,7 @@
 // Golden files: UPDATE_GOLDEN=1 bun test tests/subtitles.test.ts rewrites them (review the diff).
 import { describe, expect, test } from "bun:test";
 import {
-  applyFixes, buildCues, checkCues, cleanCaption, composePieces, mapWords, musicCues, musicRanges, parseSrt,
+  applyFixes, buildCues, checkCues, cleanCaption, composePieces, mapWords, musicCues, musicRanges, parseSrt, withMusic,
   piecesFromAudioMap, piecesFromCuts, relabel, retime, toArticle, toSrt, toVtt, wrapLines, type Tok,
 } from "../subtitles";
 
@@ -174,6 +174,15 @@ describe("cues", () => {
     expect(r[4].start).toBe(19.8); // a gap before: the smallest move that gives 1 s
     for (const [i, c] of r.entries()) expect(Math.abs(c.start - c.toks![0].start)).toBeLessThanOrEqual(0.3 + 1e-9);
     expect(checkCues(r.slice(0, 4))).toEqual([]);
+  });
+
+  test("music cues fill the time before the first cue and after the last cue, never over talk", () => {
+    const talk = [{ start: 13.36, end: 20, lines: ["a"] }, { start: 3030, end: 3036.56, lines: ["b"] }];
+    const all = withMusic(talk, [[0, 13], [3035.92, 3065.64]]);
+    expect(all.length).toBe(2 + 2 + 5);
+    expect(all[all.length - 5].start).toBe(3036.56);
+    expect(all[all.length - 1].end).toBe(3065.64);
+    expect(checkCues(all)).toEqual([]);
   });
 
   test("music cues cover the card in pieces of at most 7 s", () => {
