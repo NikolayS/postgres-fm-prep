@@ -460,3 +460,4 @@ Old postgres.fm look: pink gradient (#ef7de3 -> #f39aea -> #faddf7) with grain, 
 - Compose: brand/compose-card-video.patch adds `--card-video card.mp4` (animated title card) and `--fade-in-pow 3` (picture 1-(1-t/10)^3, sound afade ipar: readable early, still a 10 s fade).
 - Covers: brand/cover/*.html, render with the cover render.ts (1280x720, square 1000x1000 at 3x). Put a host image's hard cut edge at the frame edge.
 - Reposition means move only (Nik, 2026-10-22): when Nik asks to move an overlay, change only its start time or position. Never redesign its content, style, animation or SFX. Reuse the exact rendered .mov and give it a new source-word anchor.
+- Theme: layout config "theme": "shades" (brand/layout-shades-theme.patch, brand/compose-shades-endcard.patch) draws the show background, labels, highlight and end card in the shades style.
