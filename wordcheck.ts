@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 // Word check at every join: does a cut drop or double a real word?
-// Usage: bun wordcheck.ts <out.cuts.json> [--from s --to s] [--json out.json] [--work dir]
+// Usage: bun wordcheck.ts <out.cuts.json> [--audio out.mp4] [--from s --to s] [--json out.json] [--work dir]
 // For each join, local whisper transcribes the source around it ([A-W, B+W]) and the rebuilt
 // output around it ([J-W, J+W]). The kept source words (before A, after B) are aligned with the
 // output words: a kept source word missing from the output is "dropped", an output word the
@@ -13,7 +13,7 @@ import { type Edl, assembleAudio, decodePcm, fmt, loadTranscript, norm, whisperW
 
 const { values, positionals } = parseArgs({
   args: Bun.argv.slice(2), allowPositionals: true,
-  options: { from: { type: "string" }, to: { type: "string" }, json: { type: "string" }, work: { type: "string" } },
+  options: { audio: { type: "string" }, from: { type: "string" }, to: { type: "string" }, json: { type: "string" }, work: { type: "string" } },
 });
 const planPath = positionals[0];
 if (!planPath) { console.error("usage: bun wordcheck.ts <out.cuts.json> [--from s --to s]"); process.exit(2); }
@@ -26,7 +26,8 @@ const words = (await loadTranscript(edl.words)).words;
 const work = values.work ?? planPath.replace(/\.cuts\.json$/, "") + ".wordcheck";
 await $`mkdir -p ${work}`.quiet();
 const src = await decodePcm(plan.media, 1, R);
-const out = assembleAudio(src.slice(), 1, R, { audio: plan.audio, segments: plan.segments, cuts: [], muteOnly: [], gains: plan.gains ?? [] });
+// --audio: the rendered file (else the sound is rebuilt from the plan).
+const out = values.audio ? await decodePcm(values.audio, 1, R) : assembleAudio(src.slice(), 1, R, { audio: plan.audio, segments: plan.segments, cuts: [], muteOnly: [], gains: plan.gains ?? [] });
 const FILLER = new Set(["uh", "um", "er", "eh", "hmm", "mm", "mmm", "ah", "oh", "mhm", "mmhmm", "hm"]);
 const split = (text: string) => text.split(/[\s-]+/).map((t) => norm(t).replace(/'/g, "")).filter((t) => t && !FILLER.has(t));
 // Edit distance, for whisper's near misses ("bits"/"beats").
