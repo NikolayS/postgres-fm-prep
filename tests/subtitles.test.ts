@@ -120,10 +120,10 @@ describe("fixes and clean-up", () => {
     expect(out.map((x) => x.speaker)).toEqual(["Agent", "Agent", "speaker_1"]);
   });
 
-  test("the comma before a removed filler goes, except after an interjection", () => {
+  test("the comma before a removed filler goes only after a word that cannot end a clause", () => {
     const t = (text: string, start: number): Tok => ({ text, start, end: start + 0.2, speaker: "Nik" });
-    const out = cleanCaption([t("cause,", 0), t("uh,", 1), t("hint", 2), t("bits.", 3), t("Okay,", 4), t("um,", 5), t("so", 6)]);
-    expect(out.map((x) => x.text).join(" ")).toBe("cause hint bits. Okay, so");
+    const out = cleanCaption([t("cause,", 0), t("uh,", 1), t("hint", 2), t("bits.", 3), t("Okay,", 4), t("um,", 5), t("so", 6), t("admit,", 7), t("uh,", 8), t("dumps", 9)]);
+    expect(out.map((x) => x.text).join(" ")).toBe("cause hint bits. Okay, so admit, dumps");
   });
 
   test("fillers are removed and the next word takes the capital", () => {

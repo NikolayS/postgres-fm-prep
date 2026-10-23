@@ -138,9 +138,9 @@ const isStutter = (toks: Tok[], i: number) => {
   const next = toks[i + 1];
   return !!next && next.speaker === t.speaker && key(next.text).startsWith(m[1].toLowerCase().slice(0, 3));
 };
-// Scribe sets a comma before a filler ("and, uh, I"); it goes with the filler, except after an
-// interjection or a sentence adverb, where the comma is real ("Okay, uh, so").
-const KEEP_COMMA = new Set("so okay ok well yeah yes no right like actually now oh again anyway basically first second finally".split(" "));
+// Scribe sets a comma before a filler ("and, uh, I"). After a word that cannot end a clause the
+// comma goes with the filler; elsewhere it can be real ("I must admit, uh, dumps"), so it stays.
+const COMMA_BEFORE_FILLER = new Set("and but or because cause that the a an to of with which is for in on at from by as about into my our your their its this these those some".split(" "));
 const endsSentence = (t?: Tok) => !!t && /[.?!]["”)]?$/.test(t.text);
 const cap = (s: string) => s.replace(/^([^\p{L}]*)(\p{Ll})/u, (_, p, c) => p + c.toUpperCase());
 
@@ -157,7 +157,7 @@ function dropTokens(toks: Tok[], drop: (t: Tok, i: number) => boolean): Tok[] {
       const mark = t.text.match(/[.?!]$/)?.[0];
       const last = out[out.length - 1];
       if (mark && prev && last === prev && !TRAIL.test(prev.text)) out[out.length - 1] = { ...prev, text: prev.text + mark };
-      else if (isFiller(t) && /,$/.test(t.text) && prev && last === prev && /,$/.test(prev.text) && !KEEP_COMMA.has(key(prev.text)))
+      else if (isFiller(t) && /,$/.test(t.text) && prev && last === prev && /,$/.test(prev.text) && COMMA_BEFORE_FILLER.has(key(prev.text)))
         out[out.length - 1] = { ...prev, text: prev.text.slice(0, -1) };
       return;
     }
