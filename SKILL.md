@@ -234,6 +234,48 @@ words JSON next to the output too, so a veto re-render works later. The
    the silence left at the join (< 0.12 s = butt-join). Worst 10 printed. A
    step over 30 dB usually means a word tail was clipped: listen to it.
 
+## Captions and website transcript (subtitles.ts)
+
+`subtitles.ts` makes the captions and the article transcript from the source
+words JSON and the time maps. Words that the edit cut out do not appear.
+
+```bash
+# YouTube final: source -> edited (cuts.json) -> final (compose time map)
+bun $S/subtitles.ts build src.words.json --cuts out-edited.cuts.json \
+  --compose final.time-map.json --speakers speaker_0=Nik,speaker_1=Kirk \
+  --relabel 2614-2615.7=Agent --fixes fixes.json --out final
+# Podcast audio: source -> audio (podcast-audio.ts segments); --article adds the .transcript.md
+bun $S/subtitles.ts build src.words.json --audio-map podcast.time-map.json \
+  --speakers ... --fixes fixes.json --out podcast --article --title "..."
+bun $S/subtitles.ts check final.srt                       # caption rules report
+bun $S/subtitles.ts qa final final.mp4 --source src.m4a --n 10  # spot check by ear and by audio match
+bun test tests/subtitles.test.ts                          # golden files, round trip
+```
+
+- Output: `<out>.srt`, `<out>.vtt`, `<out>.cues.json` (cues with their words, for qa).
+- Rules: lines of 42 characters or fewer, 2 lines or fewer, cues of 1-7 s,
+  20 characters per second or fewer. A dynamic program picks the cue breaks:
+  sentence and clause ends first, never inside a word. Then each cue start
+  can move up to 0.3 s from its first word to bring the reading speed down.
+  Cross-talk is faster than 20 cps in about 5% of the cues; `check` lists them.
+- Speakers: the name starts each turn ("Kirk: "). A cue with two speakers has
+  one line each, and each line starts with "- ".
+- Clean-up: captions drop fillers ("uh", "um") and cut-off stutters ("r-");
+  the article also drops repeats of short words ("I, I") and laughter tags.
+- Fixes: a JSON list of `[from, to]` pairs for ASR errors (names, code names).
+  An empty `to` removes a word. Read the full SRT once and listen to doubtful
+  words (`whisper-cli` on a short clip) before you add a fix.
+- `--relabel a-b=Name` (source seconds) gives a range to another speaker,
+  for example the meeting bot that diarization put on a host.
+- "[music]" cues cover the opening card or intro and the end card or outro.
+- Article (postgres.fm): `**Name** [hh:mm:ss]`, then paragraphs until the
+  speaker changes. A short backchannel stays inline as `*(Kirk: Right.)*`.
+- qa: for each random cue, whisper hears the output around the cue, and the
+  source audio of the first and last word is found in the output by
+  cross-correlation. 2026-10-22: offsets were 0-32 ms on both timelines.
+  Whisper word times in short clips are off by up to 1 s; do not use them
+  as the timing check. In cross-talk whisper often hears only one speaker.
+
 ## Layout, music and cards (packaging)
 
 Scripts for the picture and the intro/outro, on top of the edited mp4. They
