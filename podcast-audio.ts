@@ -1,13 +1,13 @@
 #!/usr/bin/env bun
 // Audio-only podcast master: intro music + the edited talk + outro bed, no SFX, no freezes.
 // Usage: bun podcast-audio.ts <edited.mp4> <edited.cuts.json> <out-base> --intro a.wav --outro b.wav
-//        [--title "..."] [--cover 3000.png] [--music-gain dB] [--trim-end S] [--card 13] [--tail 29.72] [--duck -15] [--bed-lead 11]
+//        [--title "..."] [--cover 3000.png] [--music-lufs -18] [--trim-end S] [--card 13] [--tail 29.72] [--duck -15] [--bed-lead 11]
 // Writes <out-base>.wav (stereo 44.1 kHz 16-bit), <out-base>.mp3 (CBR 192k, ID3 title) and
 // <out-base>.time-map.json (audio time -> source time, one row per kept piece).
 // The music mix is the one of the video final (compose.ts): the intro plays at full level for
 // --card s (the title card in the video), ducks by --duck dB at the first words and fades to its
 // end; the outro bed enters ducked --bed-lead s before the show ends, rises after the sign-off
-// and ends --tail s after the show (end card + logo in the video). Music cues at -18 LUFS, a
+// and ends --tail s after the show (end card + logo in the video). Music cues at --music-lufs (-18) LUFS, a
 // 10 s fade-in and fade-out, pre-limit, then two-pass loudnorm to -16 LUFS / -1.5 dBTP.
 import { $ } from "bun";
 import { parseArgs } from "util";
@@ -17,15 +17,15 @@ const { values, positionals } = parseArgs({
   options: {
     intro: { type: "string" }, outro: { type: "string" }, title: { type: "string" }, "trim-end": { type: "string" },
     card: { type: "string", default: "13" }, tail: { type: "string", default: "29.72" }, duck: { type: "string", default: "-15" },
-    "bed-lead": { type: "string", default: "11" }, "rise-before": { type: "string", default: "1.0" }, "music-gain": { type: "string", default: "0" },
+    "bed-lead": { type: "string", default: "11" }, "rise-before": { type: "string", default: "1.0" }, "music-lufs": { type: "string", default: "-18" },
     cover: { type: "string" }, artist: { type: "string", default: "PostgresFM" },
   },
 });
 const [edited, cutsPath, outBase] = positionals;
 if (!outBase || !values.intro || !values.outro) { console.error("usage: bun podcast-audio.ts <edited.mp4> <cuts.json> <out-base> --intro a.wav --outro b.wav [--title ...]"); process.exit(2); }
 const C = Number(values.card), TAIL = Number(values.tail), DUCK = Number(values.duck), BED_LEAD = Number(values["bed-lead"]);
-// --music-gain dB: one gain for both beds, as compose.ts --music-gain (Nik 2026-10-23: -2.5).
-const MUSIC_LUFS = -18 + Number(values["music-gain"]), FADE = 10, SR = 44100;
+// --music-lufs: the level both beds are set to, as compose.ts --music-lufs (Nik 2026-10-23: -20.5).
+const MUSIC_LUFS = Number(values["music-lufs"]), FADE = 10, SR = 44100;
 const plan = await Bun.file(cutsPath).json();
 const dur = async (f: string) => Number((await $`ffprobe -v error -show_entries format=duration -of csv=p=0 ${f}`.text()).trim());
 const lufs = async (f: string) => Number((await $`ffmpeg -hide_banner -nostats -i ${f} -af ebur128 -f null -`.nothrow().quiet()).stderr.toString().match(/I:\s+(-?[\d.]+) LUFS\s*\n\s*Threshold/)![1]);
