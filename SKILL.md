@@ -441,3 +441,4 @@ Old postgres.fm look: pink gradient (#ef7de3 -> #f39aea -> #faddf7) with grain, 
 - Cards: Remotion comps CardShades / CardNeon / CardDial in brand/cards/src (13.4 s, beat clock {t0, b} must match the cue offset). Public assets: elephant.png, wordmark-*.png, fonts/Lato-*.woff2, <cue>-levels.json.
 - Compose: brand/compose-card-video.patch adds `--card-video card.mp4` (animated title card) and `--fade-in-pow 3` (picture 1-(1-t/10)^3, sound afade ipar: readable early, still a 10 s fade).
 - Covers: brand/cover/*.html, render with the cover render.ts (1280x720, square 1000x1000 at 3x). Put a host image's hard cut edge at the frame edge.
+- Reposition means move only (Nik, 2026-10-22): when Nik asks to move an overlay, change only its start time or position. Never redesign its content, style, animation or SFX. Reuse the exact rendered .mov and give it a new source-word anchor.
