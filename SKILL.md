@@ -498,6 +498,10 @@ Review checklist before the final composite:
 - Units: GiB/MiB, never GB/MB (heap 4,098,361 x 8 KiB = 31.3 GiB). State what each number is (warm or cold cache, buffers or time) in the caption and in the YouTube description.
 - Timings from a test harness are context only. Show ms small, next to the deterministic metric (buffers, heap fetches). Never present a ratio of ms as a speedup.
 
+## Long renders: use the watchdog
+- ffmpeg 8.0.1 can deadlock inside its scheduler on a big compose graph (main thread in sch_wait, all threads in pthread_cond_wait, 0% CPU). The output stops growing and has no moov atom. The same command passes on other runs. Lost 6 h overnight on 2026-10-23.
+- Wrap every long render: `bun $S/watchdog.ts 180 -- bun tools/compose.ts ...`. If the whole process tree uses no CPU for 180 s, it kills the tree and exits 124. Retry once on 124.
+
 ## Brand opening, intro music, covers (brand/)
 Old postgres.fm look: pink gradient (#ef7de3 -> #f39aea -> #faddf7) with grain, the script wordmark (postgres.fm_logo_black.png from the Transistor CDN, tinted white), the sunglasses elephant (cut from the 3000x3000 show artwork; tusk holes filled), Lato 900.
 - Music: ElevenLabs credits can run out (Starter). Fallback with a clean licence: arrange GarageBand Apple Loops (/Library/Audio/Apple Loops/Apple; royalty-free in own soundtracks). `bun brand/music/cafinfo.ts *.caf` (key, beats, priming), `profile.ts` (energy per half-beat: where the hits are), `arrange.ts arr.json out.wav` (sample-exact, priming removed), `levels.ts cue.wav levels.json` (per-frame bands for beat-reactive graphics). Same-prefix loops are one kit (same key/tempo).
