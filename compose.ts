@@ -19,6 +19,7 @@ import { mkdirSync } from "fs";
 import { dirname, join, resolve } from "path";
 import { filtergraph, prepareUi, renderHtml, type LayoutConfig } from "./layout";
 import type { Detection } from "./detect-tiles";
+import { sfxOff, talkChain } from "./freeze-audio";
 
 const FONT = `-apple-system,"SF Pro Display","Helvetica Neue",sans-serif`;
 const MONO = `"JetBrains Mono",ui-monospace,monospace`;
@@ -100,20 +101,6 @@ async function momentaryMax(f: string): Promise<number> {
   return Math.max(...ms);
 }
 
-// Quietest RT s of the talk within +-10 s of t (window seconds), as a room-tone source.
-const RT = 0.4; // room-tone source length (s)
-async function roomTone(input: string, from: number, t: number, showLen: number): Promise<number> {
-  const a = Math.max(0, t - 10), b = Math.min(showLen, t + 10), rate = 16000;
-  const pcm = new Float32Array(await $`ffmpeg -v error -ss ${(from + a).toFixed(3)} -t ${(b - a).toFixed(3)} -i ${input} -vn -ac 1 -ar ${rate} -f f32le -`.arrayBuffer());
-  const win = Math.round(rate * RT), hop = rate / 50;
-  let best = a, bestE = Infinity;
-  for (let i = 0; i + win <= pcm.length; i += hop) {
-    let e = 0;
-    for (let j = i; j < i + win; j++) e += pcm[j] * pcm[j];
-    if (e > 1e-9 && e < bestE) (bestE = e), (best = a + i / rate); // skip digital zero
-  }
-  return best;
-}
 
 if (import.meta.main) {
   const args = Bun.argv.slice(2);
@@ -256,35 +243,8 @@ if (import.meta.main) {
   }
 
   const db = (expr: string) => `volume='pow(10,(${expr})/20)':eval=frame`;
-  // Talk audio: cut at each freeze and fill the freeze with room tone: the quietest
-  // RT s nearby, played forward then reversed (a seamless loop), joined with 40 ms crossfades.
-  const XF = 0.04;
-  if (freezes.length) {
-    const n = freezes.length + 1;
-    ga.push(`[0:a]asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,asplit=${n + freezes.length}${Array.from({ length: n + freezes.length }, (_, i) => `[ta${i}]`).join("")}`);
-    let cur = "";
-    for (let i = 0; i < n; i++) {
-      const a = i === 0 ? 0 : freezes[i - 1].at, b = i < freezes.length ? freezes[i].at : showLen;
-      // Each crossfade eats XF s, so talk pieces keep XF on the joined sides.
-      const a2 = i === 0 ? a : a - XF / 2, b2 = i < freezes.length ? b + XF / 2 : b;
-      ga.push(`[ta${i}]atrim=start=${Math.max(0, a2).toFixed(4)}:end=${b2.toFixed(4)},asetpts=PTS-STARTPTS[tp${i}]`);
-      if (i === 0) cur = "tp0";
-      else {
-        ga.push(`[${cur}][tp${i}]acrossfade=d=${XF}:c1=qsin:c2=qsin[tj${i}]`);
-        cur = `tj${i}`;
-      }
-      if (i < freezes.length) {
-        const q = await roomTone(input, from, freezes[i].at, showLen);
-        const len = freezes[i].sec + XF; // plus half a crossfade per side
-        ga.push(`[ta${n + i}]atrim=start=${q.toFixed(3)}:end=${(q + RT).toFixed(3)},asetpts=PTS-STARTPTS,asplit[rf${i}][rr${i}]`);
-        ga.push(`[rr${i}]areverse[rv${i}]`);
-        ga.push(`[rf${i}][rv${i}]concat=n=2:v=0:a=1,aloop=loop=-1:size=${Math.round(2 * RT * 48000)},atrim=end=${len.toFixed(4)},asetpts=PTS-STARTPTS[rt${i}]`);
-        ga.push(`[${cur}][rt${i}]acrossfade=d=${XF}:c1=qsin:c2=qsin[tr${i}]`);
-        cur = `tr${i}`;
-      }
-    }
-    ga.push(`[${cur}]anull[talk]`);
-  } else ga.push(`[0:a]asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo[talk]`);
+  // Talk audio: cut at each freeze; the freeze is clean silence with fades in quiet frames (freeze-audio.ts).
+  ga.push(...(await talkChain(input, from, freezes, showLen)));
   ga.push(`[talk]asetpts=PTS-STARTPTS,adelay=${Math.round(C * 1000)}:all=1,apad=whole_dur=${total.toFixed(3)}[voice]`);
   const mix = ["[voice]"];
   if (intro && C > 0) {
@@ -314,6 +274,8 @@ if (import.meta.main) {
   let si = 0;
   for (const o of overlays)
     for (const s of o.sfx) {
+      // Noise-burst SFX (air, wind) sound like breathing into the mic: off unless --sfx-off says otherwise.
+      if (sfxOff(s.file.split("/").pop()!.replace(/\.[^.]+$/, ""), (flag("--sfx-off") ?? "air,wind").split(","))) continue;
       const k = add(["-i", s.file]);
       const mm = await momentaryMax(s.file);
       const name = s.file.split("/").pop()!.replace(/\.[^.]+$/, "");

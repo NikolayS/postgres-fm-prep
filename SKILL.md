@@ -489,14 +489,18 @@ should be low frequency, like wind or a low smash"). Family from
 hit 80->55 Hz, lowpass 800 Hz; a number or fact lands; variants rotate so
 repeats differ), `wind1-2` (pink-noise swell, lowpass 1.5 / 1.0 kHz;
 full-screen in and out). No bright clicks or ticks; keep every hit under the
-voice. Helpers `tick/pop/clack/whoosh` in items.ts keep the old role names
+voice. `air` and `wind` are off by default in compose.ts (`--sfx-off`,
+default "air,wind"; "" turns them on): they are noise bursts with a breath
+spectrum, and a viewer heard them as "breathing into the mic" (2026-10-23). Helpers `tick/pop/clack/whoosh` in items.ts keep the old role names
 and map to these files. The regular host gets no intro card; only the guest. `DUMP_PROPS=<dir> bun scripts/render-all.ts <id>`
 writes the props JSON for `bunx remotion still` QA frames.
 
 Freezes: on number cards where the number is the point (2-2.5 s) and on intro
 and playlist cards (whole card); `freezeSec` in the manifest, never baked into
 the overlay. The talk holds and
-goes silent at `outStart`; the overlay plays its full duration over the frozen
+goes silent at `outStart`: clean silence, never looped mic sound, with the
+edge fades in quiet 10 ms frames (`freeze-audio.ts`; regression test in
+`tests/freeze-audio.test.ts`); the overlay plays its full duration over the frozen
 frame and then over the moving talk.
 
 Do not overexplain (Nik, 2026-10-20): a quote strip is the quote only, no
