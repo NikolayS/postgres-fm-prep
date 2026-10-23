@@ -51,11 +51,18 @@ veto any cut and re-render with one command.
    to build the final EDL.
 5. **Preview first**: `--until 480` renders the first 8 min of output; get the
    host's go before the full render.
-6. **Render**: plan the joins, lay room tone over removed words, splice audio
-   sample-exact with 60-120 ms equal-power crossfades, drop the same video frames, normalize loudness
+6. **Plan and audit the joins** (`render.ts --plan-only`, then `joins.ts`):
+   every cut must sit in a real pause found in the audio. Read the "Kept for
+   a clean sound" section of `cuts.md`: for a judgment row it shows the clean
+   cut points (`||`) inside and around the phrase. Respan the row to such a
+   point (shorter `phrase`) or mark it `"soft": true` when its edge is a
+   sentence or clause boundary with a short dip. Fewer cuts beat bad cuts.
+   Re-detect, re-plan, re-audit until no join scores above 3.
+7. **Render**: splice audio sample-exact at the planned points with equal-power
+   crossfades on room tone, drop the nearest video frames, normalize loudness
    (two-pass loudnorm, -16 LUFS; true peak -2.0 before AAC, about -1.5 dBTP after), encode H.264 CRF 19 + AAC 192k.
-7. **Verify** and report the numbers, including join harshness (worst 10).
-8. **Report**: output path, durations, cuts per category, filler kept/cut per
+8. **Verify** and report the numbers, including the join audit (worst 10).
+9. **Report**: output path, durations, cuts per category, filler kept/cut per
    speaker, beats and laughs protected, verify numbers, the top judgment cuts
    to check (with source mm:ss), how to veto.
 
@@ -70,7 +77,10 @@ bun $S/prosody.ts work/src.words.json work/prosody.json --show 01:00.34,03:05.72
 bun $S/detect.ts work/src.words.json work/edl.json --judgment work/judgment.json --prosody work/prosody.json --review work/review.txt
 bun $S/render.ts work/edl.json out-edited.mp4 --plan-only          # writes out-edited.cuts.md/.cuts.json
 bun $S/render.ts work/edl.json out-preview.mp4 --until 480 --preset fast --work work/render  # preview
-bun $S/verify.ts out-preview.cuts.json out-preview.mp4 --harsh-only  # join harshness, worst 10
+bun $S/joins.ts out-edited.cuts.json --top 15 --max-bad 0 --fail-above 6   # join audit (regression check)
+bun $S/joins.ts out-preview.cuts.json --audio out-preview.mp4 --top 10       # same, on the rendered audio
+bun $S/render.ts work/edl.json part.mp4 --src-from 2580 --src-to 3030 --preset fast  # one source stretch
+bun $S/ab.ts old.joins.json old-edited.mp4 old.cuts.json work/edl.json ab.mp4 --top 10  # old/new A/B
 bun $S/render.ts work/edl.json out-edited.mp4 --work work/render   # temp PCM, ~1.5 GB
 bun $S/verify.ts out-edited.cuts.json out-edited.mp4 --joins 20 --work work/verify   # local whisper
 ```
@@ -81,8 +91,8 @@ Layout, music and overlays are built on top of the edited mp4. `<out>.cuts.json`
 has `segmentTimes`: every kept segment in output order as
 `{srcStart, srcEnd, outStart, outEnd}` (seconds; output time t maps to
 `srcStart + (t - outStart)` inside its segment). `segments` holds the same as
-source frame numbers at 25 fps. Room-tone mutes (`muteOnly`) do not change
-timing.
+source frame numbers at 25 fps. `audio` holds the sample-exact audio pieces
+(they differ from the frame segments by under 20 ms).
 
 Put the words JSON, judgment.json and EDL next to the output (not only in a
 temp dir): the EDL stores the words path, and a veto re-render needs it.
@@ -100,6 +110,9 @@ bun $S/render.ts work/edl.json out-edited.mp4 --keep bot,r0123,r0456
 A range is a `phrase` (the exact words, as in `review.txt`; punctuation and
 case are ignored) said `near` a time, or explicit `from`/`to` source times.
 Add `speaker` ("speaker_0") when another voice talks over the phrase.
+Add `"soft": true` to a removal row whose edge is a sentence or clause
+boundary with only a short dip (a 20 ms dip 20 dB under speech will do there;
+other rows need a real pause, 30 dB under speech).
 
 ```json
 {
@@ -153,47 +166,46 @@ Host feedback (2026-10-20): hard jumps are heard by ear; gentle beats short.
   ends a sentence ("Right. Right.") or is emphatic (yeah, yes, no, right,
   okay, always, very, hello, hyphen ...).
 - Words with zero duration in the transcript (crosstalk) are never auto-cut.
-- Pauses: only silences over 1.0 s are touched (`--max-gap`); scaled 1.2 s ->
-  0.6 s, 3 s+ -> 0.8 s; +0.15 s at a speaker change (`--turn-extra`). Every
-  join keeps at least 0.2 s (`--join-min`; 0.35 s at a turn change) or the
-  original gap if shorter: never butt-join two words. A removed word leaves
-  about 0.4 x its length (min 0.12 s) as room tone; when that leaves less than
-  one frame to cut, the word is muted in place (room tone, no frames dropped).
+- Join planning (`plan.ts`; host feedback 2026-10-22: "cut weirdly, hard to
+  listen, not natural"). Word timestamps are often 0.2-0.5 s off, so cuts
+  never trust them alone:
+  - Valleys: 10 ms levels; a valley is 30 ms+ under max(speech - 30 dB,
+    min(floor + 6, speech - 24)) (speech = p90, floor = p10 of +-3 s).
+    Blips under 40 ms and 20 dB under speech merge into the valley.
+  - Each word boundary maps to a valley by a DP alignment, or is "glued"
+    (the words run together). A cut edge must be a valley: no valley, no cut.
+  - A removal row is cut whole or not at all (no partial cuts: they change
+    the meaning). Auto rows also need no crosstalk and no untranscribed sound.
+    Rows not cut are listed under "Kept for a clean sound" with the reason.
+  - Placement: fade zones clear of loud frames, room tone matched on both
+    sides (Zoom gating jumps 30 dB), kept silence within +-35% of the target.
+  - Pauses: unchanged up to 0.9 s, then a smooth monotonic curve (1.2 s ->
+    1.02 s, 2 s -> 1.34 s, cap 1.8 s); +0.1 s at a speaker change; a pause
+    keeps its natural length when the gain is under 0.15 s. A breath right
+    before the next phrase is kept.
+  - Audio pieces are sample-exact; video follows to the nearest frame.
+    No mute-in-place: it chopped words (222 of 227 patches on 2026-10-20).
 - Laughs (Scribe tags) and `beats`: never cut, and the silence before and after
   is not shortened (beats cap 2.5 s).
-- Cut points: the quietest video-frame boundary (40 ms grid) near the target,
-  never inside a breath (0.12-0.8 s above floor + 8 dB, below speech), never
-  closer than 50 ms after or 40 ms before a kept word. Untranscribed sounds in
-  a pause are kept (they are often laughs or breaths).
-- Quiet snap: word timestamps are not trusted alone. Each cut boundary moves
-  (up to 240 ms either way) until 100 ms plus the crossfade on its side is
-  within 6 dB of the local room-tone floor (10th percentile of +-3 s) or under
-  -55 dBFS. No such point: a filler/repeat is muted in place (room tone, no
-  frames dropped) and a pause stays as it is; judgment rows are cut anyway
-  and marked "no quiet point" in the md.
 - Laughs in the audio (`prosody.ts`, into the EDL via `detect.ts --prosody`):
   sound not covered by words, 0.3-3 s, 3+ energy pulses at 2.5-9 per second,
   zero-crossing rate > 0.08. Protected like tagged laughs. Recall is partial
   (5 of 13 Scribe tags on 2026-10-20; most tags overlap words), so tags stay
   the main source.
-- Audio: removed words are replaced by the quietest nearby room tone before the
-  splice, so a crossfade never leaks a filler and the floor stays continuous.
-  Crossfades are equal-power, 60 ms + 30 ms per cut second, max 120 ms, and
-  never reach a kept word.
-- Safety: a planned cut is dropped when it overlaps a kept word, sits in
-  crosstalk (two or more zero-length words nearby), or holds loud sound that
-  no removed word explains (over 0.12 s for a pause, 0.3 s for an auto row;
-  judgment rows skip this check). The md lists them under "Planned but not
-  cut, for safety" with the reason.
-- Audio and video use the same frame-aligned cut points, so A/V offset is zero
-  by construction; verify.ts measures it.
+- Join audit (`joins.ts`), per join: edge level in the fade zones (penalty
+  over -30 dB re speech), room-tone level and spectrum step (both sides
+  quiet, over the natural step), breath clipped or removed, butt-join,
+  squeezed pause, pitch jump over the natural jump, crosstalk, mid-clause
+  struggle. Writes `<base>.joins.json`. `--max-bad N --fail-above S` exits
+  non-zero, so it serves as the regression check. 2026-10-20 episode: old
+  edit 200 joins, 112 above 6; new plan 122 joins, 0 above 6.
 - 0.3 s of room tone stays before the first word, 1.0 s after the last word,
   with a 30 ms fade-in and a 0.5 s fade-out.
 
 ## Outputs
 
 Next to the output video: `<out>.cuts.md` (human list: totals, judgment rows,
-candidates, notes, every cut), `<out>.cuts.json` (cut intervals, mutes, kept
+candidates, notes, every cut), `<out>.cuts.json` (cut intervals, audio pieces, kept
 segments and the output-to-source time map) and `<out>.verify.json`. Keep the EDL, judgment.json and the
 words JSON next to the output too, so a veto re-render works later. The
 `--work` dirs are temporary and safe to delete.
