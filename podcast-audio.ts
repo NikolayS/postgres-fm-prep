@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 // Audio-only podcast master: intro music + the edited talk + outro bed, no SFX, no freezes.
 // Usage: bun podcast-audio.ts <edited.mp4> <edited.cuts.json> <out-base> --intro a.wav --outro b.wav
-//        [--title "..."] [--trim-end S] [--card 13] [--tail 29.72] [--duck -15] [--bed-lead 11]
+//        [--title "..."] [--cover 3000.png] [--music-gain dB] [--trim-end S] [--card 13] [--tail 29.72] [--duck -15] [--bed-lead 11]
 // Writes <out-base>.wav (stereo 44.1 kHz 16-bit), <out-base>.mp3 (CBR 192k, ID3 title) and
 // <out-base>.time-map.json (audio time -> source time, one row per kept piece).
 // The music mix is the one of the video final (compose.ts): the intro plays at full level for
@@ -17,13 +17,15 @@ const { values, positionals } = parseArgs({
   options: {
     intro: { type: "string" }, outro: { type: "string" }, title: { type: "string" }, "trim-end": { type: "string" },
     card: { type: "string", default: "13" }, tail: { type: "string", default: "29.72" }, duck: { type: "string", default: "-15" },
-    "bed-lead": { type: "string", default: "11" }, "rise-before": { type: "string", default: "1.0" },
+    "bed-lead": { type: "string", default: "11" }, "rise-before": { type: "string", default: "1.0" }, "music-gain": { type: "string", default: "0" },
+    cover: { type: "string" }, artist: { type: "string", default: "PostgresFM" },
   },
 });
 const [edited, cutsPath, outBase] = positionals;
 if (!outBase || !values.intro || !values.outro) { console.error("usage: bun podcast-audio.ts <edited.mp4> <cuts.json> <out-base> --intro a.wav --outro b.wav [--title ...]"); process.exit(2); }
 const C = Number(values.card), TAIL = Number(values.tail), DUCK = Number(values.duck), BED_LEAD = Number(values["bed-lead"]);
-const MUSIC_LUFS = -18, FADE = 10, SR = 44100;
+// --music-gain dB: one gain for both beds, as compose.ts --music-gain (Nik 2026-10-23: -2.5).
+const MUSIC_LUFS = -18 + Number(values["music-gain"]), FADE = 10, SR = 44100;
 const plan = await Bun.file(cutsPath).json();
 const dur = async (f: string) => Number((await $`ffprobe -v error -show_entries format=duration -of csv=p=0 ${f}`.text()).trim());
 const lufs = async (f: string) => Number((await $`ffmpeg -hide_banner -nostats -i ${f} -af ebur128 -f null -`.nothrow().quiet()).stderr.toString().match(/I:\s+(-?[\d.]+) LUFS\s*\n\s*Threshold/)![1]);
@@ -48,8 +50,10 @@ const m = JSON.parse(p1.stderr.toString().match(/\{[^{}]*"input_i"[^{}]*\}/)![0]
 const ln = `loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true`;
 const wav = `${outBase}.wav`, mp3 = `${outBase}.mp3`;
 await $`ffmpeg -y -v error ${inputs} -filter_complex ${g.join(";") + `;[mix]${ln},aresample=192000,alimiter=limit=0.75:level=false:attack=1:release=50,aresample=${SR}[out]`} -map [out] -c:a pcm_s16le ${wav}`;
-const meta = values.title ? ["-metadata", `title=${values.title}`, "-metadata", "artist=PostgresFM", "-metadata", "album=PostgresFM"] : [];
-await $`ffmpeg -y -v error -i ${wav} -c:a libmp3lame -b:a 192k ${meta} -id3v2_version 3 ${mp3}`;
+const meta = values.title ? ["-metadata", `title=${values.title}`, "-metadata", `artist=${values.artist}`, "-metadata", `album=${values.artist}`] : [];
+// --cover: square artwork as the ID3 front cover (APIC).
+const art = values.cover ? ["-i", values.cover, "-map", "0:a", "-map", "1:v", "-c:v", "copy", "-disposition:v", "attached_pic", "-metadata:s:v", "title=Album cover", "-metadata:s:v", "comment=Cover (front)"] : [];
+await $`ffmpeg -y -v error -i ${wav} ${art} -c:a libmp3lame -b:a 192k ${meta} -id3v2_version 3 ${mp3}`;
 
 // Time map: the kept source pieces, sample-exact, shifted by the intro.
 const rows: { audioStart: number; audioEnd: number; srcStart: number; srcEnd: number }[] = [];
