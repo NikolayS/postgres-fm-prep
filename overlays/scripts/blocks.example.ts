@@ -22,6 +22,7 @@ export const toEdited = (segs: Seg[], t: number) => {
 };
 
 // Chart numbers live in data/compare.json (swap the file to change the chart).
+const {_doc: _d1, source: _s1, ...ONEQ} = JSON.parse(readFileSync(resolve(ROOT, 'data/one-query.json'), 'utf8'));
 const {_doc, source: _src, ...COMPARE} = JSON.parse(readFileSync(resolve(ROOT, 'data/compare.json'), 'utf8'));
 
 type Sfx = {file: string; at: number; gain: number};
@@ -34,28 +35,21 @@ const thud = (at: number, gain = 0.8): Sfx => ({file: ['sfx/thud1.wav', 'sfx/thu
 type Block = {id: string; comp: string; srcStart: number; srcEnd: number; words: string; replaces: string[]; sfx: Sfx[]; props: Record<string, unknown>; source: string};
 
 export const BLOCKS: Block[] = [
-  // Kirk: "Hey, Nik." ends 20.32; Nik talks about Michael and the topic; hacking mention starts 38.56.
-  {id: '01-kirk-bio', comp: 'bio', srcStart: 20.4, srcEnd: 33.4, words: 'after Kirk: "Hey, Nik." (src 19.98-20.32)', replaces: ['01-kirk-intro'],
-    sfx: [air(0), thud(1.4, 0.6), thud(2.0, 0.6), thud(2.6, 0.6), thud(3.2, 0.6)],
-    props: {name: 'Kirk Wolak', role: 'Software Architect, KiraSoft', factAt: 1.4, factStep: 0.6,
-      facts: ['Co-host, Hacking Postgres', 'GSoC mentor', 'psql patch in PostgreSQL 17', 'Credited in PG 16 and 17 release notes']},
-    source: 'https://postgres.fm/people/kirk-wolak'},
-  // Kirk: "Yep." 45.96-46.16, right after Nik's "...hacking sessions ... three years, right, on YouTube."
-  {id: '02-hacking-sessions', comp: 'hack2', srcStart: 46.2, srcEnd: 60.2, words: 'after Kirk: "Yep." (src 45.96-46.16)', replaces: ['02-hacking-sessions'],
-    sfx: [air(0), air(1.6), thud(2.2), air(3.0), thud(3.6)],
-    props: {title: 'Hacking Postgres', sub: 'Andrey Borodin, Kirk, Nik. Live on YouTube since Jan 2023, 50+ sessions', shipAt: 1.6, shipStep: 1.4,
-      shipped: [
-        {cover: 'thumbs/WLoMpg8A4WU.jpg', what: 'transaction_timeout', note: 'built live, Jan 2023', release: 'PostgreSQL 17'},
-        {cover: 'thumbs/YPq_hiOE-N8.jpg', what: 'uuidv7()', note: 'idea born live, Feb 2023', release: 'PostgreSQL 18'},
-      ],
-      chip: 'youtube.com/@PostgresTV'},
-    source: 'https://www.youtube.com/playlist?list=PLH8y1BNPAKjKDdJA7sDmFWUkbbYux3TRz'},
+  // 01-kirk-intro and 02-hacking-sessions are NOT here: Nik wants the exact v2 overlays, only moved
+  // (see REPOSITION in manifest-v3.ts).
   // Nik: "...or even worse, you expected index only scan ... you don't have statistics." until Kirk: "So let's define".
   // Numbers: Forge restore-readiness-01 README lines 32-35 (join), 49-52 (covering), 70-73 (ms, context only).
   {id: '08-two-queries', comp: 'compare', srcStart: 488.6, srcEnd: 510.6, words: 'Nik: "or even worse, you expected index only scan" (src 488.62) to Kirk: "So let\'s define" (src 510.66)', replaces: ['08-three-bars'],
     sfx: [air(0), air(0.6), thud(2.0), air(2.6), thud(4.6)],
     props: {...COMPARE, rowAt: COMPARE.rows.length > 1 ? [0.6, 2.6] : [0.6], colStep: 0.35},
     source: 'DBLab Forge restore-readiness-01 README.md:32-35,49-52,70-73'},
+  // Right after block 08 ends: Kirk opens a new thought, "So let's define a few things, okay?" (src 510.66), and the
+  // hosts stay at the edges while the card hands over. Ends after "The optimizer can just look at that." (src 543.70).
+  // Numbers: data/one-query.json (Forge analysis/one_query_pg18.csv, cold medians; README.md 22, 377-405).
+  {id: '08b-one-query-at-scale', comp: 'scale', srcStart: 510.66, srcEnd: 543.8, words: 'Kirk: "So let\'s define a few things" (src 510.66) to "The optimizer can just look at that." (src 543.70)', replaces: [],
+    sfx: [], // no audio change (team-lead, 2026-10-22)
+    props: {...ONEQ, barAt: 1.2, barStep: 2.2, finalAt: 8.4},
+    source: 'DBLab Forge restore-readiness-01 analysis/one_query_pg18.csv; README.md:22,377-405'},
   // Nik: "relallv, uh, visible" (src 2067.41) ... "visibility maps are not yet built" (2097.27) ... "index only scan" (2102.17)
   // ... "heap fetches" (2106.09) ... "skewed result for a planner, right?" (2119.45).
   // Numbers: README lines 10, 15, 88, 100 (10,000 heap fetches); ms: runs/pg18/diag_av_off q1_*_stats (6.1, 7.4),
@@ -84,7 +78,7 @@ export const BLOCKS: Block[] = [
     props: {kicker: 'PG 19 (rc1), no VACUUM', title: 'A SELECT fills the visibility map',
       meter: {label: 'all-visible after 1st read', value: 3267, of: 3480, at: 13.5}, cols: ['1st read', '2nd read'],
       rows: [{label: 'WAL', a: '25.6 MiB', b: '0'}, {label: 'time', a: '33 ms', b: '7.5 ms'}], rowsAt: [18.1, 19.3],
-      foot: 'Index range query, after a checkpoint, data checksums on. DBLab Forge.'},
+      foot: 'Full-page images after checkpoint. Index range query, checksums on. DBLab Forge.'},
     source: 'DBLab Forge restore-readiness-01 README.md:11,16,166; runs/frc2_pg19_checksums/targets/r*_none_ckpt/q1_{first,second}.json'},
 ];
 
@@ -97,7 +91,15 @@ if (import.meta.main) {
   const r2 = (x: number) => Math.round(x * 100) / 100;
   const entries = BLOCKS.map((b) => {
     const outStart = r2(toEdited(segs, b.srcStart));
-    const dur = r2(toEdited(segs, b.srcEnd) - outStart);
+    let dur = r2(toEdited(segs, b.srcEnd) - outStart);
+    const mov = join(OUT, `${b.id}.mov`);
+    const rendering = render && (only.size === 0 || only.has(b.id));
+    if (!rendering && existsSync(mov)) {
+      // Frozen block: keep the rendered .mov as is; its length wins over the mapped one.
+      const movDur = r2(Number(Bun.spawnSync(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', mov]).stdout.toString().trim()));
+      if (Math.abs(movDur - dur) > 0.3) console.warn(`${b.id}: mapped ${dur} s, rendered ${movDur} s; keeping the rendered file`);
+      dur = movDur;
+    }
     // Reveal times and SFX are word-relative in source seconds; map them through the cuts too.
     const rel = (t: number) => r2(toEdited(segs, b.srcStart + t) - toEdited(segs, b.srcStart));
     for (const k of ['vmAt', 'scanAt', 'shipAt']) if (typeof b.props[k] === 'number') b.props[k] = rel(b.props[k] as number);

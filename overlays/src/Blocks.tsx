@@ -277,3 +277,54 @@ export const DuelBlock: React.FC<DuelProps> = (p) => {
     </Panel>
   );
 };
+
+// ---------- One query at scale: horizontal time bars, linear scale ----------
+export type ScaleProps = {
+  title: string;
+  query: string;
+  bars: {label: string; ms: number; text: string; badge?: string}[];
+  barAt: number; // first bar, s
+  barStep: number; // s between bars
+  finalAt: number;
+  final: string;
+  caption: string;
+  durationSec: number;
+};
+export const ScaleBlock: React.FC<ScaleProps> = (p) => {
+  const {s, grow} = useT();
+  const max = Math.max(...p.bars.map((b) => b.ms));
+  const W = 630;
+  const fin = s(p.finalAt, {damping: 10, stiffness: 260, mass: 0.5});
+  return (
+    <Panel>
+      <div style={{fontSize: 40, fontWeight: 800, letterSpacing: -0.8, lineHeight: 1.12, opacity: s(0.2)}}>{p.title}</div>
+      <pre style={{margin: '18px 0 0', fontFamily: 'JetBrains Mono, Menlo, monospace', fontSize: 24, lineHeight: 1.3, color: 'rgba(255,255,255,0.72)', background: '#1b1b1f', borderRadius: 8, padding: '10px 14px', whiteSpace: 'pre-wrap', opacity: s(0.5)}}>{p.query}</pre>
+      <div style={{display: 'flex', flexDirection: 'column', gap: 22, marginTop: 30}}>
+        {p.bars.map((b, i) => {
+          const at = p.barAt + i * p.barStep;
+          const g = grow(at, 1.0);
+          const w = Math.max(8, (b.ms / max) * W) * g;
+          const last = i === p.bars.length - 1;
+          const inside = w > W * 0.6;
+          const k = s(at + 0.9, {damping: 10, stiffness: 260, mass: 0.5});
+          return (
+            <div key={i} style={{opacity: s(at)}}>
+              <div style={{fontSize: 30, fontWeight: 700, color: last ? ACCENT : '#fff'}}>{b.label}</div>
+              <div style={{position: 'relative', height: 58, marginTop: 6}}>
+                <div style={{position: 'absolute', left: 0, top: 0, width: w, height: 58, background: last ? ACCENT : i === 0 ? 'rgba(255,255,255,0.9)' : 'rgba(255,255,255,0.7)', borderRadius: 6}} />
+                <div style={{position: 'absolute', top: 2, ...(inside ? {right: W - w + 14, color: '#111'} : {left: w + 14, color: last ? ACCENT : '#fff'}), fontSize: 46, fontWeight: 800, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap', opacity: g}}>
+                  {b.text}
+                  {b.badge ? <span style={{marginLeft: 16, fontSize: 36, fontWeight: 900, color: '#111', background: ACCENT, borderRadius: 8, padding: '0 12px', display: 'inline-block', opacity: k, transform: `scale(${0.6 + 0.4 * k}) rotate(-4deg)`}}>{b.badge}</span> : null}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{flex: 1}} />
+      <div style={{alignSelf: 'center', fontSize: 56, fontWeight: 900, color: '#111', background: ACCENT, borderRadius: 12, padding: '6px 26px', opacity: fin, transform: `scale(${0.6 + 0.4 * fin}) rotate(-2deg)`}}>{p.final}</div>
+      <div style={{flex: 1}} />
+      <div style={{fontSize: 26, fontWeight: 500, color: DIM, opacity: s(p.finalAt + 0.6)}}>{p.caption}</div>
+    </Panel>
+  );
+};

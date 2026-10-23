@@ -18,13 +18,17 @@ if (resolve(blocks.cuts) !== resolve(cutsPath)) { console.error(`blocks-v3.manif
 const v2 = JSON.parse(readFileSync(resolve(ROOT, '../out/manifest-v2-src-anchors.json'), 'utf8')).overlays;
 const replaced = new Set(blocks.overlays.flatMap((b: {replaces: string[]}) => b.replaces));
 const r2 = (x: number) => Math.round(x * 100) / 100;
+// Nik, 2026-10-22: the v2 guest intro and hacking insert were perfect; move them only. Same .mov, props,
+// SFX and freeze as v2; new source anchors: right after Kirk's "Hey, Nik." (ends 20.32) and "Yep." (ends 46.16).
+const REPOSITION: Record<string, number> = {'01-kirk-intro': 20.32, '02-hacking-sessions': 46.16};
 
 const abs = (dir: string, o: {file: string; sfx: {file: string}[]}) => ({...o, file: resolve(dir, o.file), sfx: o.sfx.map((s) => ({...s, file: resolve(dir, s.file)}))});
 const kept = v2.filter((o: {id: string}) => !replaced.has(o.id)).map((o: any) => {
-  const outStart = r2(toEdited(segs, o.srcStart));
+  const srcStart = REPOSITION[o.id] ?? o.srcStart;
+  const outStart = r2(toEdited(segs, srcStart));
   const {nearWords, ...rest} = o;
-  // Keep the v2 rendered duration: the .mov length is fixed until re-rendered.
-  return abs(V2, {...rest, outStart, freezeSec: 0});
+  // Keep the v2 rendered duration: the .mov length is fixed until re-rendered. Freezes only on the repositioned v2 cards.
+  return abs(V2, {...rest, srcStart, outStart, freezeSec: o.id in REPOSITION ? o.freezeSec : 0});
 });
 const added = blocks.overlays.map((o: any) => abs(V3, o));
 const all = [...kept, ...added].sort((a, b) => a.outStart - b.outStart);
