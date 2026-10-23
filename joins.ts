@@ -133,7 +133,7 @@ export async function auditJoins(plan: any, opts: { audio?: string; synth?: bool
   };
   const thr = (t: number) => { const [f, s] = local(t); return valleyThreshold(f, s); };
   const lvAt = (t: number) => { const i = Math.floor(t * 100); return muted(t) ? lvF[i] : lv[i]; };
-  const peak = (a: number, b: number) => { let m = -120; for (let i = Math.floor(a * 100); i <= Math.floor(b * 100 - 1e-6); i++) m = Math.max(m, lvAt(i / 100 + 0.005) ?? -120); return m; };
+  const peak = (a: number, b: number) => { let m = -120; for (let i = Math.floor(a * 100 + 1e-6); i <= Math.floor(b * 100 - 1e-6); i++) m = Math.max(m, lvAt(i / 100 + 0.005) ?? -120); return m; };
   // Quiet run (valley) containing t: its length, in a level array; 0 if t is in sound.
   const quietRun = (x: Float32Array, t: number, th: number, src = true) => {
     const at = (i: number) => (src && muted(i / 100) ? lvF[i] : x[i]);

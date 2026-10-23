@@ -6,8 +6,9 @@
 // nearest frame. A removal that cannot be cut clean is kept and listed. Check: bun joins.ts <out.cuts.json>.
 import { $ } from "bun";
 import { parseArgs } from "util";
-import { type Edl, FPS, FRAME_S, RATE, assembleAudio, energy, fmt, isLaugh, loadTranscript } from "./lib";
+import { type Edl, FPS, FRAME_S, RATE, assembleAudio, decodePcm, energy, fmt, isLaugh, loadTranscript } from "./lib";
 import { type PlannedCut, piecesFrom, planCuts, videoSegments } from "./plan";
+import { auditJoins } from "./joins";
 
 const { values, positionals } = parseArgs({
   args: Bun.argv.slice(2),
@@ -51,7 +52,31 @@ const AUTO = ["filler", "repeat", "falsestart"];
 const beats = edl.beats ?? [];
 const laughs = words.filter(isLaugh);
 const audioLaughs = edl.laughs ?? [];
-const planned = planCuts({ words, removals: active, lv: db, duration, beats, laughs: audioLaughs, params: { maxGap: MAX_GAP, turnExtra: TURN_EXTRA } });
+// Plan, then score every join on the rebuilt sound (joins.ts) and revert the cuts that are heard
+// as a jump: a room-tone step over the natural one (host, 2026-10-22: 09:24, 19.5 dB) or a
+// score over REVERT_SCORE. Fewer cuts beat bad cuts. Repeat until no join needs a revert.
+const PRIORITY = ["head", "tail", "bot", "bot-polish", "struggle", "repeat", "falsestart", "filler"];
+const primary = (c: PlannedCut) => PRIORITY.find((p) => c.cats.includes(p)) ?? "pause";
+const REVERT_LEVEL = 10, REVERT_SCORE = 4; // dB over the natural step; join score (joins.ts)
+const keepPauses: number[] = [];
+const reverted = new Map<string, string>();
+const srcPcm = await decodePcm(media, 1, 16000);
+let planned = planCuts({ words, removals: active, lv: db, duration, beats, laughs: audioLaughs, params: { maxGap: MAX_GAP, turnExtra: TURN_EXTRA } });
+for (let round = 0; round < 4; round++) {
+  const pcs = piecesFrom(planned.cuts, duration);
+  const draft = { media, edl: edlPath, muteOnly: [], segments: videoSegments(pcs, FPS, frames), audio: pcs, cuts: planned.cuts.map((c) => ({ ...c, cat: primary(c) })) };
+  const all = (await auditJoins(draft, { src: srcPcm })).rows; if (process.env.DBG) await Bun.write(process.env.DBG + round, JSON.stringify(draft));
+  const bad = all.filter((r: any) => r.levelX > REVERT_LEVEL || r.score > REVERT_SCORE);
+  if (!bad.length) break;
+  for (const r of bad) {
+    const why = `reverted: heard as a jump (join score ${r.score}; ${r.flags.join("; ")})`;
+    if (r.ids.length) for (const id of r.ids) reverted.set(id, why);
+    else keepPauses.push((r.srcA + r.srcB) / 2);
+    console.error(`revert ${fmt(r.srcA)} ${r.cat} "${r.text}": ${r.flags.join("; ")}`);
+  }
+  planned = planCuts({ words, removals: active.filter((r) => !reverted.has(r.id)), lv: db, duration, beats, laughs: audioLaughs, params: { maxGap: MAX_GAP, turnExtra: TURN_EXTRA, keepPauses } });
+}
+for (const [id, why] of reverted) planned.kept.set(id, why);
 type Cut = PlannedCut;
 const cuts: Cut[] = planned.cuts;
 const skipped = planned.kept; // removal id -> why it was not cut (restraint)
@@ -86,8 +111,6 @@ const gains = (edl.gains ?? []).map((g) => {
 });
 
 // ---- 4. Reports ---------------------------------------------------------------------
-const PRIORITY = ["head", "tail", "bot", "bot-polish", "struggle", "repeat", "falsestart", "filler"];
-const primary = (c: Cut) => PRIORITY.find((p) => c.cats.includes(p)) ?? "pause";
 const byId = new Map(edl.removals.map((r) => [r.id, r]));
 const totals: Record<string, { n: number; s: number }> = {};
 for (const c of cuts) {

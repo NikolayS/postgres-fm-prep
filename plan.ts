@@ -23,6 +23,7 @@ export type PlanParams = {
   turnExtra: number; // extra silence kept at a speaker change (s)
   beatCap: number; // protected pauses (beats, laughs) keep up to this (s)
   headKeep: number; tailKeep: number;
+  keepPauses?: number[]; // source times of pause joins not to compress (reverted after the audit)
 };
 export const DEFAULT_PARAMS: PlanParams = { maxGap: 0.9, turnExtra: 0.1, beatCap: 2.5, headKeep: 0.3, tailKeep: 1.0 };
 
@@ -172,7 +173,7 @@ export function planCuts(o: {
   // some pauses to near silence: joining hiss to a gated hole is a step), and the kept silence
   // should stay near T. Returns null when no clean pair exists.
   const softLevel = (i: number) => { const [f, s] = local(i / 100); return valleyThreshold(f, s, SOFT_VALLEY_DB); };
-  const clear = (t: number, h: number, soft: boolean) => { for (let i = Math.floor((t - h) * 100); i <= Math.floor((t + h) * 100 - 1e-6); i++) if (lv[i] > (soft ? softLevel(i) : valleyLevel(i))) return false; return true; };
+  const clear = (t: number, h: number, soft: boolean) => { for (let i = Math.floor((t - h) * 100 + 1e-6); i <= Math.floor((t + h) * 100 - 1e-6); i++) if (lv[i] > (soft ? softLevel(i) : valleyLevel(i))) return false; return true; };
   const room = (a: number, b: number) => { let e = 0, n = 0; for (let i = Math.floor(a * 100); i < Math.floor(b * 100); i++) (e += 10 ** (Math.max(-80, lv[i]) / 10)), n++; return n ? 10 * Math.log10(e / n) : -80; };
   type Span = { s: number; e: number; soft?: boolean };
   const valley = (v: number): Span => ({ s: vs(v), e: ve(v) });
@@ -186,10 +187,13 @@ export function planCuts(o: {
     if (Math.min(gl, gr) < 2 * h - 1e-9) return null;
     T = Math.max(2 * h, Math.min(T, g - 2 * h));
     let best: { A: number; B: number; T: number; c: number } | null = null;
-    for (let A = L.s + h; A <= L.e - h + 1e-9; A += 0.01) {
+    // Grid points rounded to 10 us, as the plan JSON stores them (so the audit sees the same frames).
+    for (let A0 = L.s + h; A0 <= L.e - h + 1e-9; A0 += 0.01) {
+      const A = Math.round(A0 * 1e5) / 1e5;
       if (!clear(A, h, !!L.soft)) continue;
       const ra = room(A - h - 0.04, A - h);
-      for (let B = Rv.s + h; B <= Rv.e - h + 1e-9; B += 0.01) {
+      for (let B0 = Rv.s + h; B0 <= Rv.e - h + 1e-9; B0 += 0.01) {
+        const B = Math.round(B0 * 1e5) / 1e5;
         if (same && B - A < 0.02) continue;
         const kept = A - L.s + (Rv.e - B);
         const dev = Math.abs(kept - T) / T;
@@ -283,6 +287,13 @@ export function planCuts(o: {
     const T = prot ? Math.min(g, P.beatCap) : pauseTarget(g, P.maxGap) + (turn && g > 0.3 ? P.turnExtra : 0);
     const p = place(Ls, Rs, T);
     if (!p) return "no clean cut point in the pauses (clicks or noise)";
+    // Cross-check with the word times (off by up to ~0.5 s, so only gross mismatches count): a kept
+    // word mostly inside the cut, or removed words mostly outside it, mean the alignment slipped.
+    const ov = (w: Word) => Math.max(0, Math.min(w.end, p.B) - Math.max(w.start, p.A));
+    const lost = ws.filter((w) => !removedBy.has(w) && w.end - w.start >= 0.05 && ov(w) > 0.5 * (w.end - w.start));
+    if (lost.length) return `the cut would take kept words (${lost.map((w) => w.text).join(" ")})`;
+    const far = span.filter((w) => w.end + 0.3 < p.A || w.start - 0.3 > p.B);
+    if (far.length) return `the removed words are not where the cut would be (${far.map((w) => w.text).join(" ")})`;
     const why = [prot ? "beat/laugh pause kept" : "", Ls.soft || Rs.soft ? `soft edge (${[Ls.soft ? "start" : "", Rs.soft ? "end" : ""].filter(Boolean).join(", ")})` : ""].filter(Boolean).join("; ");
     return { start: p.A, end: p.B, xfade: p.xf, ids, cats, text: span.map((w) => w.text).join(" "), gapBefore: g, gapAfter: p.T, why };
   }
@@ -324,8 +335,11 @@ export function planCuts(o: {
     if (g <= P.maxGap) continue;
     const T = Math.min(g, pauseTarget(g, P.maxGap) + (turn ? P.turnExtra : 0));
     if (g - T < 0.15) continue; // too little to gain for a join
+    if (P.keepPauses?.some((t) => t >= vs(v) - 0.01 && t <= ve(v) + 0.01)) continue;
     const p = place(valley(v), valley(v), T);
     if (!p) continue;
+    if (ws.some((w) => w.end - w.start >= 0.05 && Math.min(w.end, p.B) - Math.max(w.start, p.A) > 0.5 * (w.end - w.start))) continue; // a word sits in this "pause"
+    if (cuts.some((c) => c.start < p.B && c.end > p.A)) continue; // the same valley, reached from another word pair (crosstalk)
     cuts.push({ start: p.A, end: p.B, xfade: p.xf, ids: [], cats: [], text: "", gapBefore: g, gapAfter: T, why: "" });
   }
   // For judgment rows that stay: the words around them with every clean cut point marked "||",

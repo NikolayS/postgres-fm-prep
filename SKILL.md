@@ -79,6 +79,7 @@ bun $S/render.ts work/edl.json out-edited.mp4 --plan-only          # writes out-
 bun $S/render.ts work/edl.json out-preview.mp4 --until 480 --preset fast --work work/render  # preview
 bun $S/joins.ts out-edited.cuts.json --top 15 --max-bad 0 --fail-above 6   # join audit (regression check)
 bun $S/joins.ts out-preview.cuts.json --audio out-preview.mp4 --top 10       # same, on the rendered audio
+bun $S/wordcheck.ts out-edited.cuts.json   # whisper at every join: dropped / doubled / unplanned words (leads, ~2 min)
 bun $S/render.ts work/edl.json part.mp4 --src-from 2580 --src-to 3030 --preset fast  # one source stretch
 bun $S/ab.ts old.joins.json old-edited.mp4 old.cuts.json work/edl.json ab.mp4 --top 10  # old/new A/B
 bun $S/render.ts work/edl.json out-edited.mp4 --work work/render   # temp PCM, ~1.5 GB
@@ -185,6 +186,11 @@ Host feedback (2026-10-20): hard jumps are heard by ear; gentle beats short.
     before the next phrase is kept.
   - Audio pieces are sample-exact; video follows to the nearest frame.
     No mute-in-place: it chopped words (222 of 227 patches on 2026-10-20).
+  - Word-time cross-check: no cut takes most of a kept word, and every
+    removed word lies within 0.3 s of its cut (else the alignment slipped).
+  - Revert loop (render.ts): after planning, every join is scored on the
+    rebuilt sound (joins.ts); a join with a room-tone step over 10 dB above
+    the natural one, or a score over 4, is reverted and the plan is redone.
 - Laughs (Scribe tags) and `beats`: never cut, and the silence before and after
   is not shortened (beats cap 2.5 s).
 - Laughs in the audio (`prosody.ts`, into the EDL via `detect.ts --prosody`):
