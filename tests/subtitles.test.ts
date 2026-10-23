@@ -3,11 +3,12 @@
 import { describe, expect, test } from "bun:test";
 import {
   applyFixes, buildCues, checkCues, cleanCaption, composePieces, mapWords, musicCues, musicRanges, parseSrt, withMusic,
-  piecesFromAudioMap, piecesFromCuts, relabel, retime, toArticle, toSrt, toVtt, wrapLines, type Tok,
+  piecesFromAudioMap, piecesFromCuts, relabel, densify, retime, speechWalls, toArticle, toSrt, toVtt, wrapLines, type Tok,
 } from "../subtitles";
 
 const D = `${import.meta.dir}/subtitles`;
 const json = (f: string) => Bun.file(`${D}/${f}`).json();
+const key = (s: string) => s.toLowerCase().replace(/[^a-z0-9_']/g, "");
 const SPEAKERS = { speaker_0: "Nik", speaker_1: "Kirk" };
 
 async function fixture(timeline: "final" | "audio") {
@@ -158,6 +159,11 @@ describe("cues", () => {
     expect(kinds).toEqual(["duration", "duration", "line-count", "line-length", "overlap"]);
   });
 
+  test("checkCues with walls flags speech over a freeze, never a [music] cue", () => {
+    const cues = [{ start: 20, end: 26.9, lines: ["Hey, Nik."] }, { start: 26.8, end: 33.8, lines: ["[music]"] }];
+    expect(checkCues(cues, 20, [[26.8, 33.8]]).filter((p) => p.rule === "wall").map((p) => p.cue)).toEqual([1]);
+  });
+
   test("retime moves a boundary at most 0.3 s to bring reading speed to 20 cps", () => {
     const tk = (text: string, start: number, end: number): Tok => ({ text, start, end, speaker: "Nik" });
     const cues = [
@@ -205,6 +211,102 @@ describe("article", () => {
       "**Nik** [00:00:05]", "", "Six.", "",
     ].join("\n"));
   });
+
+  test("only a pure backchannel stays inline; other interjections are turns with a timestamp", () => {
+    const md = toArticle([
+      t("One", "Nik", 0), t("two.", "Nik", 0.4), t("Yeah.", "Kirk", 1), t("Exactly.", "Kirk", 1.3), t("Three", "Nik", 2), t("four.", "Nik", 2.4),
+      t("Well-", "Kirk", 3), t("Five.", "Nik", 4), t("Right.", "Kirk", 5), t("Right.", "Kirk", 5.3), t("Six.", "Nik", 6),
+    ]);
+    expect(md).toBe([
+      "**Nik** [00:00:00]", "", "One two.", "",
+      "**Kirk** [00:00:01]", "", "Yeah. Exactly.", "",
+      "**Nik** [00:00:02]", "", "Three four.", "",
+      "**Kirk** [00:00:03]", "", "Well—", "",
+      "**Nik** [00:00:04]", "", "Five. *(Kirk: Right. Right.)* Six.", "",
+    ].join("\n"));
+  });
+
+  test("code names keep their case at a paragraph start; a repeated word without a comma goes", () => {
+    const md = toArticle([t("pg_dump-", "Kirk", 0), t("should", "Kirk", 0.4), t("in", "Kirk", 1), t("an", "Kirk", 1.2), t("agentic", "Kirk", 1.4), t("agentic", "Kirk", 1.8), t("context.", "Kirk", 2.2)]);
+    expect(md).toBe(["**Kirk** [00:00:00]", "", "pg_dump— should in an agentic context.", ""].join("\n"));
+  });
+});
+
+describe("speech walls, labels, voices (review fixes)", () => {
+  const t = (text: string, speaker: string, start: number, end: number): Tok => ({ text, start, end, speaker });
+  test("no speech cue runs into a freeze or the outro; near a wall the hold is 0.3 s", () => {
+    const toks = [t("Hello.", "Nik", 10, 10.5), t("Hey,", "Kirk", 26.46, 26.56), t("Nik.", "Kirk", 26.6, 26.77),
+      t("So", "Nik", 33.9, 34.1), t("Michael", "Nik", 34.15, 34.5), t("left.", "Nik", 34.55, 34.9), t("Bye.", "Kirk", 40, 40.15)];
+    const walls: [number, number][] = [[26.8, 33.8], [40.5, 60]];
+    const cues = buildCues(toks, { walls });
+    for (const c of cues) for (const [a, b] of walls) expect(c.end <= a + 1e-9 || c.start >= b - 1e-9).toBe(true);
+    const hey = cues.find((c) => c.lines.join(" ").includes("Hey"))!;
+    expect(hey.end).toBe(26.8);
+    expect(hey.lines).toEqual(["Hey, Nik."]); // "Kirk: Hey, Nik." would read at more than 20 cps
+    expect(cues[0].lines).toEqual(["Nik: Hello."]); // the name stays when it fits
+    expect(cues[cues.length - 1].end).toBe(40.45); // "Bye." ends 40.15: hold 0.3 s, not 0.5 s
+  });
+
+  test("speechWalls: freezes and the outro of the compose map; the outro of the podcast map", () => {
+    expect(speechWalls({ card: 13, showEnd: 3035.92, total: 3065.64, freezes: [{ edited: 13.8, sec: 7, finalStart: 26.8 }] }))
+      .toEqual([[26.8, 33.8], [3035.92, 3065.64]]);
+    expect(speechWalls({ segments: [], talk: { start: 13, end: 3021.92 }, outro: { end: 3051.64 } })).toEqual([[3021.92, 3051.64]]);
+  });
+
+  test("retime never shows a cue over the next speaker's first word", () => {
+    const cues = [
+      { start: 0, end: 1.2, lines: ["x".repeat(30)], toks: [t("a", "Nik", 0, 1.1)] }, // 25 cps
+      { start: 1.2, end: 4, lines: ["Kirk: yes"], toks: [t("yes", "Kirk", 1.2, 1.5)] },
+    ];
+    expect(retime(cues)[1].start).toBe(1.2);
+  });
+
+  test("captions keep a cut-off real word ('do-'); they drop a cut-off part of a word", () => {
+    const w = (text: string, start: number): Tok => ({ text, start, end: start + 0.1, speaker: "Kirk" });
+    expect(cleanCaption([w("you", 0), w("do-", 1), w("your", 2)]).map((x) => x.text)).toEqual(["you", "do-", "your"]);
+    expect(cleanCaption([w("r-", 0), w("raise", 1), w("wa-", 2), w("this", 3)]).map((x) => x.text)).toEqual(["raise", "this"]);
+  });
+
+  test("a cue over 20 cps loses its name label, then repeated words; never other words", () => {
+    const k = (text: string, speaker: string, start: number): Tok => ({ text, start, end: start + 0.1, speaker });
+    const toks = [k("No,", "Nik", 0), k("this", "Nik", 0.1), k("is", "Nik", 0.2), k("great.", "Nik", 0.3), k("I,", "Kirk", 0.5), k("I", "Kirk", 0.6), k("agree,", "Kirk", 0.7), k("yeah,", "Kirk", 0.8), k("yeah.", "Kirk", 0.9)];
+    const c = densify({ start: 0, end: 1.9, lines: ["- No, this is great.", "- I, I agree, yeah, yeah."], toks });
+    expect(c.lines).toEqual(["- No, this is great.", "- I agree, yeah."]);
+    const one = densify({ start: 0, end: 1, lines: ["Nik: No, this is great."], toks: toks.slice(0, 4) });
+    expect(one.lines).toEqual(["No, this is great."]);
+  });
+
+  test("CPS rule on the episode-like rapid exchange: no cue over 25 cps, words kept", () => {
+    const k = (text: string, speaker: string, start: number): Tok => ({ text, start, end: start + 0.18, speaker });
+    const words = "And it depends on your goal.".split(" ").map((w, i) => k(w, "Nik", 10 + i * 0.2))
+      .concat("Yeah, yeah. It depends on your goal.".split(" ").map((w, i) => k(w, "Kirk", 11.3 + i * 0.2)))
+      .concat("If, if all you are doing is validating your backup,".split(" ").map((w, i) => k(w, "Kirk", 13 + i * 0.25)));
+    const cues = buildCues(words);
+    for (const c of cues) expect(c.lines.join(" ").length / (c.end - c.start)).toBeLessThanOrEqual(25);
+    const said = cues.flatMap((c) => c.toks!.map((t) => key(t.text)));
+    for (const w of ["depends", "goal", "validating", "backup"]) expect(said).toContain(w);
+  });
+
+  test("a dropped cut-off word before an interruption leaves the dash: 'you find out- (Yeah.)' -> 'you find-'", () => {
+    const w = (text: string, speaker: string, start: number): Tok => ({ text, start, end: start + 0.1, speaker });
+    expect(cleanCaption([w("you", "Kirk", 0), w("find", "Kirk", 1), w("out-", "Kirk", 2), w("Yeah.", "Nik", 3)]).map((x) => x.text)).toEqual(["you", "find-", "Yeah."]);
+  });
+
+  test("VTT voice spans name the speaker of each line; the SRT stays plain", () => {
+    const k = (text: string, speaker: string): Tok => ({ text, start: 0, end: 0, speaker });
+    const cues = [
+      { start: 0, end: 2, lines: ["Nik: Hello, hello. This is", "Postgres.FM."], toks: [k("Hello,", "Nik")] },
+      { start: 2, end: 3, lines: ["- on YouTube.", "- Yep."], toks: [k("on", "Nik"), k("YouTube.", "Nik"), k("Yep.", "Kirk")] },
+      { start: 5, end: 6, lines: ["[music]"] },
+    ];
+    expect(toVtt(cues, { voices: true })).toBe([
+      "WEBVTT", "",
+      "00:00:00.000 --> 00:00:02.000", "<v Nik>Hello, hello. This is", "Postgres.FM.</v>", "",
+      "00:00:02.000 --> 00:00:03.000", "<v Nik>on YouTube.</v>", "<v Kirk>Yep.</v>", "",
+      "00:00:05.000 --> 00:00:06.000", "[music]", "",
+    ].join("\n"));
+    expect(toSrt(cues)).toContain("- on YouTube.\n- Yep.");
+  });
 });
 
 describe("round trip", () => {
@@ -224,10 +326,11 @@ describe("round trip", () => {
 describe("golden files", () => {
   test("final SRT, VTT and podcast article match the golden files", async () => {
     const fin = await fixture("final");
-    const cues = [...musicCues([[0, 5]]), ...buildCues(cleanCaption(fin.toks))];
+    const cues = [...musicCues([[0, 5]]), ...buildCues(cleanCaption(fin.toks), { walls: speechWalls(await json("fixture.time-map.json")) })];
     await golden("final.srt", toSrt(cues));
     await golden("final.vtt", toVtt(cues));
     const pod = await fixture("audio");
     await golden("podcast.transcript.md", toArticle(pod.toks, { title: "Fixture episode" }));
+    await golden("podcast.vtt", toVtt(buildCues(cleanCaption(pod.toks)), { voices: true }));
   });
 });

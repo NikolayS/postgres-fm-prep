@@ -246,8 +246,8 @@ bun $S/subtitles.ts build src.words.json --cuts out-edited.cuts.json \
   --relabel 2614-2615.7=Agent --fixes fixes.json --out final
 # Podcast audio: source -> audio (podcast-audio.ts segments); --article adds the .transcript.md
 bun $S/subtitles.ts build src.words.json --audio-map podcast.time-map.json \
-  --speakers ... --fixes fixes.json --out podcast --article --title "..."
-bun $S/subtitles.ts check final.srt                       # caption rules report
+  --speakers ... --fixes fixes.json --out podcast --article --title "..." --voices
+bun $S/subtitles.ts check final.srt --map final.time-map.json  # caption rules report
 bun $S/subtitles.ts qa final final.mp4 --source src.m4a --n 10  # spot check by ear and by audio match
 bun test tests/subtitles.test.ts                          # golden files, round trip
 ```
@@ -257,10 +257,23 @@ bun test tests/subtitles.test.ts                          # golden files, round 
   20 characters per second or fewer. A dynamic program picks the cue breaks:
   sentence and clause ends first, never inside a word. Then each cue start
   can move up to 0.3 s from its first word to bring the reading speed down.
-  Cross-talk is faster than 20 cps in about 5% of the cues; `check` lists them.
+  A cue still over 20 cps loses its name label, then repeated words ("I, I");
+  over 25 cps also the other speaker's pure backchannel line ("- Yeah").
+  Rapid cross-talk stays over 20 cps in about 7% of the cues; `check` lists them.
+- Walls: no speech cue runs into a video freeze or the outro after the talk
+  (from the time map); there the hold after the last word is 0.3 s, not 0.5 s.
+  A cue boundary never moves later than the next speaker's first word.
+  `check --map` reports a "wall" problem for speech over a freeze or outro.
 - Speakers: the name starts each turn ("Kirk: "). A cue with two speakers has
-  one line each, and each line starts with "- ".
-- Clean-up: captions drop fillers ("uh", "um") and cut-off stutters ("r-");
+  one line each, and each line starts with "- ". `--voices` writes WebVTT
+  voice spans (`<v Kirk>...</v>`) in place of these labels (podcast players);
+  the SRT stays plain.
+- Article: a turn per speaker change, with name and [hh:mm:ss]. Only a pure
+  backchannel (one word, maybe repeated: "Right.", "Yeah, yeah.") stays inline
+  as *(Name: Right.)*. Code names (fixes with a lowercase target) keep their case.
+- Clean-up: captions drop fillers ("uh", "um") and cut-off stutters ("r-"),
+  but keep a cut-off short verb ("you do-"); a dropped cut before the other
+  speaker leaves the dash on the word before ("you find-");
   the article also drops repeats of short words ("I, I") and laughter tags.
 - Fixes: a JSON list of `[from, to]` pairs for ASR errors (names, code names).
   An empty `to` removes a word. Read the full SRT once and listen to doubtful

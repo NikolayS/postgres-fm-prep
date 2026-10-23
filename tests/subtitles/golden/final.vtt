@@ -10,7 +10,7 @@ Nik: Hello, hello. This is Postgres.FM.
 Today we talk about
 pg_restore and vacuumdb.
 
-00:00:10.300 --> 00:00:14.200
+00:00:10.300 --> 00:00:13.700
 - Right.
 - Laurenz Albe fixed it for Postgres 19,
 
