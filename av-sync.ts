@@ -1,5 +1,6 @@
 // A/V sync check: final vs edited at mapped times (audio envelope and video motion xcorr).
-//   bun av-sync.ts edited.mp4 final.mp4 final.time-map.json 20 300 1500   (PAD=5 widens the search)
+//   bun av-sync.ts edited.mp4 final.mp4 final.time-map.json 20 300 1500   (PAD=5 widens the search;
+//   EDITED_CROP / FINAL_CROP w:h:x:y pick the same speaker tile in both files)
 import { $ } from "bun";
 const [edited, final, mapPath] = Bun.argv.slice(2);
 const map = await Bun.file(mapPath).json();
@@ -31,7 +32,7 @@ for (const t of Bun.argv.slice(5).map(Number)) {
   const T = toFinal(t), pad = Number(process.env.PAD ?? 1), d = 12;
   const ea = await env(edited, t, d), fa = await env(final, T - pad, d + 2 * pad);
   const aLag = bestLag(ea, fa, 1000) - pad * 1000; // ms; 0 = audio exactly where the map says
-  const ev = await motion(edited, t, d, "686:386:956:152"), fv = await motion(final, T - pad, d + 2 * pad, "924:594:24:110");
+  const ev = await motion(edited, t, d, process.env.EDITED_CROP ?? "686:386:956:152"), fv = await motion(final, T - pad, d + 2 * pad, process.env.FINAL_CROP ?? "924:594:972:110");
   const vLag = (bestLag(ev, fv, 25) - pad * 25) * 40; // ms
   console.log(`edited ${t}s -> final ${T.toFixed(2)}s: audio ${aLag} ms, video ${vLag} ms, A/V offset ${aLag - vLag} ms`);
 }
