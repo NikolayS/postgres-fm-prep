@@ -7,6 +7,7 @@
 //        [--relabel 2614-2615.7=Agent,...]   (source seconds: words there get this speaker)
 //        [--article] [--title "..."] [--voices]   (--voices: WebVTT <v Name> spans)
 //   bun subtitles.ts check <file.srt> [--map time-map.json]   (--map: also no speech over freezes/outro)
+//   bun subtitles.ts transcript-txt <base.transcript.md> --out <file.txt>   (website transcript)
 //   bun subtitles.ts qa <base> <media> [--source src.mp4] [--n 10] [--seed 1] [--tol 0.3]
 // build writes <base>.srt, <base>.vtt, <base>.cues.json (cues with their words, for qa) and,
 // with --article, <base>.transcript.md. YouTube final: source words map through the edit's kept
@@ -477,6 +478,24 @@ export function toArticle(raw: Tok[], o: { title?: string; paraWords?: number } 
   return out.join("\n");
 }
 
+// Website transcript (postgres.fm via Transistor transcript_text) from the article: one block per
+// turn, "Nik [00:00:13]: text", paragraphs of a turn joined, asides as "(Kirk: Yeah.)". No markdown
+// markers, no [music] or other tags, no dialogue dashes.
+export function toTranscriptTxt(md: string): string {
+  const blocks: string[] = [];
+  for (const raw of md.split("\n")) {
+    const l = raw.trim();
+    if (!l || l.startsWith("# ")) continue;
+    const h = l.match(/^\*\*([^*]+)\*\* \[(\d\d:\d\d:\d\d)\]$/);
+    if (h) { blocks.push(`${h[1]} [${h[2]}]:`); continue; }
+    const text = l.replace(/\*\(([^)]*)\)\*/g, "($1)").replace(/^- /, "").replace(/\s*\[[a-z ]+\]\s*/g, " ").replace(/\s+/g, " ").trim();
+    if (/[*_`#]{1,2}\S/.test(text.replace(/\b\w*_\w*\b/g, ""))) throw new Error(`markdown marker left: ${text.slice(0, 80)}`);
+    if (!blocks.length) throw new Error(`text before the first turn heading: ${text.slice(0, 80)}`);
+    if (text) blocks[blocks.length - 1] += " " + text;
+  }
+  return blocks.join("\n\n") + "\n";
+}
+
 // ---- QA: random cues, checked by ear (whisper) and against the source audio ----------------------
 const lev = (a: string, b: string) => { const d = Array.from({ length: b.length + 1 }, (_, j) => j); for (let i = 1; i <= a.length; i++) { let p = d[0]; d[0] = i; for (let j = 1; j <= b.length; j++) { const t = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, p + (a[i - 1] === b[j - 1] ? 0 : 1)); p = t; } } return d[b.length]; };
 const qnorm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
@@ -588,6 +607,11 @@ if (import.meta.main) {
     const by = Object.groupBy(probs, (p) => p.rule);
     console.log(`${cues.length} cues, ${toks.length} words; rule problems: ${probs.length ? Object.entries(by).map(([k, x]) => `${k} ${x!.length}`).join(", ") : "none"}`);
     for (const p of probs.slice(0, 15)) console.log(`  cue ${p.cue} ${p.rule} ${p.detail}`);
+  } else if (cmd === "transcript-txt") {
+    if (!pos[0] || !v.out) usage();
+    const txt = toTranscriptTxt(await Bun.file(pos[0]).text());
+    await Bun.write(v.out, txt);
+    console.log(`${v.out}: ${txt.split("\n\n").length} turns`);
   } else if (cmd === "check") {
     if (!pos[0]) usage();
     const probs = checkCues(parseSrt(await Bun.file(pos[0]).text()), MAX_CPS, v.map ? speechWalls(await Bun.file(v.map).json()) : []);

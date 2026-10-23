@@ -3,7 +3,7 @@
 import { describe, expect, test } from "bun:test";
 import {
   applyFixes, buildCues, checkCues, cleanCaption, composePieces, mapWords, musicCues, musicRanges, parseSrt, withMusic,
-  piecesFromAudioMap, piecesFromCuts, relabel, densify, retime, speechWalls, toArticle, toSrt, toVtt, wrapLines, type Tok,
+  piecesFromAudioMap, piecesFromCuts, relabel, densify, toTranscriptTxt, retime, speechWalls, toArticle, toSrt, toVtt, wrapLines, type Tok,
 } from "../subtitles";
 
 const D = `${import.meta.dir}/subtitles`;
@@ -309,6 +309,18 @@ describe("speech walls, labels, voices (review fixes)", () => {
   });
 });
 
+describe("website transcript (plain text)", () => {
+  test("one block per turn, 'Name [hh:mm:ss]: text', no markdown, no hard breaks", () => {
+    const md = ["# Title", "", "**Nik** [00:00:13]", "", "One *(Kirk: Yeah.)* two.", "", "Three.", "",
+      "**Kirk** [00:00:20]", "", "- Four [music] five—", ""].join("\n");
+    expect(toTranscriptTxt(md)).toBe("Nik [00:00:13]: One (Kirk: Yeah.) two. Three.\n\nKirk [00:00:20]: Four five—\n");
+  });
+
+  test("a stray markdown marker fails loudly", () => {
+    expect(() => toTranscriptTxt("**Nik** [00:00:01]\n\nSome **bold** text.\n")).toThrow(/markdown/);
+  });
+});
+
 describe("round trip", () => {
   test("SRT -> parse -> SRT is lossless, and every kept word is in the captions in order", async () => {
     const { toks } = await fixture("final");
@@ -331,6 +343,7 @@ describe("golden files", () => {
     await golden("final.vtt", toVtt(cues));
     const pod = await fixture("audio");
     await golden("podcast.transcript.md", toArticle(pod.toks, { title: "Fixture episode" }));
+    await golden("podcast.transcript.txt", toTranscriptTxt(toArticle(pod.toks, { title: "Fixture episode" })));
     await golden("podcast.vtt", toVtt(buildCues(cleanCaption(pod.toks)), { voices: true }));
   });
 });

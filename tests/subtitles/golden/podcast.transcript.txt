@@ -1,0 +1,5 @@
+Nik [00:00:03]: Hello, hello. This is Postgres.FM. Today we talk about pg_restore and vacuumdb. (Kirk: Right.) Laurenz Albe fixed it for Postgres 19, I think.
+
+Kirk [00:00:13]: Yeah, and the minute you use -j in pg_restore, you introduce a problem where the materialized view gets created before its tables.
+
+Nik [00:00:20]: Okay.
