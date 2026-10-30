@@ -2,6 +2,7 @@
 //
 //   bun compose.ts <layout.json> <edited.mp4> <out.mp4> --intro intro.mp3 --outro outro.mp3
 //                  [--until S | --tail S] [--preset fast] [--card 4] [--end 10] [--duck -15]
+//                  [--duck-ramp 2] [--intro-fade 6]
 //
 // Picture: fade from black -> title card (C s, layers fade/slide in) -> 0.8 s crossfade ->
 // the show with the layout.ts filtergraph -> end card (E s) -> logo video (config "logo") ->
@@ -255,7 +256,14 @@ if (import.meta.main) {
     const ii = add(["-i", intro]);
     const introLen = await duration(intro);
     const duckAt = C + 0.1; // the edit keeps 0.3 s of room tone before the first word
-    ga.push(`[${ii}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gi.toFixed(2)}dB,${db(`if(lt(t,${duckAt}),0,${DUCK}*min(1,(t-${duckAt})/0.5))`)},afade=t=out:st=${Math.min(introLen - 1, C + 2)}:d=${Math.max(1, introLen - C - 3).toFixed(2)}[mi]`);
+    // A hard duck and a short fade near the end of the cue can sound abrupt: --duck-ramp S eases
+    // the duck in over S s (default 0.5, the old hard duck); --intro-fade S fades the bed out over
+    // S s from card + 1 s with a quarter-sine curve (default: the old 1-3 s fade near the cue end).
+    const DUCK_RAMP = Number(flag("--duck-ramp") ?? 0.5);
+    const IF = flag("--intro-fade");
+    const fadeSt = IF ? C + 1 : Math.min(introLen - 1, C + 2);
+    const fadeD = IF ? Math.min(Number(IF), introLen - C - 1) : Math.max(1, introLen - C - 3);
+    ga.push(`[${ii}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gi.toFixed(2)}dB,${db(`if(lt(t,${duckAt}),0,${DUCK}*min(1,(t-${duckAt})/${DUCK_RAMP}))`)},afade=t=out:st=${fadeSt}:d=${fadeD.toFixed(2)}${IF ? ":curve=qsin" : ""}[mi]`);
     mix.push("[mi]");
   }
   if (withOutro) {
