@@ -227,10 +227,13 @@ if (import.meta.main) {
   }
   // Overlays: full-frame alpha video at 0,0 from their final start time.
   for (const [i, o] of overlays.entries()) {
-    const k = add(["-i", o.file]);
+    // -itsoffset puts the overlay at its start time in the demuxer, so ffmpeg reads it only then.
+    // With setpts in the graph instead, all ProRes inputs decoded from t=0 and queued frames for
+    // the whole show; ffmpeg 8.0.1 slowed to a crawl and deadlocked (sch_wait) twice (2026-10-29).
     const T = fin(o.t);
+    const k = add(["-itsoffset", T.toFixed(3), "-i", o.file]);
     const dur = await duration(o.file);
-    g.push(`[${k}:v]setpts=PTS-STARTPTS+${T.toFixed(3)}/TB,format=yuva420p[ov${i}]`);
+    g.push(`[${k}:v]setpts=PTS,format=yuva420p[ov${i}]`);
     g.push(`[${vout}][ov${i}]overlay=0:0:eof_action=pass:enable='between(t,${T.toFixed(3)},${(T + dur).toFixed(3)})'[vo${i}]`);
     vout = `vo${i}`;
   }
