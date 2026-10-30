@@ -11,7 +11,7 @@ Source: supplied local snapshot of case `restore-readiness-01` from https://gitl
 - [Extended-statistics estimate summary](runs/extstats_track/plan_summary.txt), [PG18 state and raw plans](runs/extstats_track/pg18), [PG19rc1 state and raw plans](runs/extstats_track/pg19).
 - [Upgrade run 1](runs/upgrade_track/run1), [run 2](runs/upgrade_track/run2): source/destination state, plan summaries and content-hash comparisons.
 - [Larger-fixture steps](runs/big_pg18/steps.csv), [raw plans and maintenance timing logs](runs/big_pg18/steps).
-- Chart source: [core figures](../../assets/forge/figures.py) and [additional figures](../../assets/forge/figures_tracks.py). With Python and matplotlib installed, pass the `episodes/restore-readiness/assets/forge` directory as their sole argument to regenerate PNG and SVG files. Figure 4 consumes corrected `stock-times.csv`.
+- Chart source: [core figures](../../assets/forge/figures.py) and [additional figures](../../assets/forge/figures_tracks.py). With Python and matplotlib installed, pass the `episodes/20261020-restore-readiness/assets/forge` directory as their sole argument to regenerate PNG and SVG files. Figure 4 consumes corrected `stock-times.csv`.
 
 The manifest records original case-relative file paths and hashes, plus published hashes. Figure scripts have explicit presentation corrections; original measurements are retained unchanged. Numerical summaries can be inspected publicly, but this is a selected evidence package, not all source data, SQL or a complete reproduction bundle. Timings in the CSVs are not production performance forecasts.
 

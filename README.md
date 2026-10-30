@@ -6,11 +6,11 @@ Research, study packs, experiment plans and recording notes for individual Postg
 
 | Episode | Status | Materials |
 | --- | --- | --- |
-| Your restore finished. Is your database ready? | Preparation; additional experiments proposed | [Episode overview](episodes/restore-readiness/README.md) · [Study pack](episodes/restore-readiness/study-pack.md) |
+| Your restore finished. Is your database ready? | Preparation; additional experiments proposed | [Episode overview](episodes/20261020-restore-readiness/README.md) · [Study pack](episodes/20261020-restore-readiness/study-pack.md) |
 
 ## Repository structure
 
-Each episode lives in `episodes/<topic-slug>/`. Use a short, stable topic name; put recording dates and episode numbers in the episode overview once confirmed.
+Each episode lives in `episodes/<YYYYMMDD>-<topic-slug>/`, prefixed with the recording date so the list sorts by time. Keep the topic part short and stable; put the episode number in the overview once confirmed.
 
 The episode's `README.md` is its entry point. Keep its research, study pack, experiment plans, observations and article material together so relative links remain local to that episode. Add an `assets/` directory when there are figures to include.
 
@@ -18,7 +18,7 @@ The episode's `README.md` is its entry point. Keep its research, study pack, exp
 
 ## Add an episode
 
-1. Create `episodes/<topic-slug>/` and copy the episode template into its `README.md`.
+1. Create `episodes/<YYYYMMDD>-<topic-slug>/` (recording date) and copy the episode template into its `README.md`.
 2. Fill in the question, participants, status, deadlines and planned discussion.
 3. Add the relevant documents and link them from that overview.
 4. Add an entry to the episode table above.
