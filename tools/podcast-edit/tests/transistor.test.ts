@@ -3,7 +3,7 @@
 import { describe, expect, test } from "bun:test";
 import { release, type Deps } from "../transistor";
 
-const KEY = "tk_secret_123456";
+const KEY = "tk_secret_123456"; // gitleaks:allow (dummy key for the mocked API)
 type Call = { method: string; url: string; headers: Record<string, string>; body?: any };
 
 function mock(over: Partial<Record<string, (c: Call) => Response>> = {}) {
