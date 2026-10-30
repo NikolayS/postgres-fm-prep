@@ -7,6 +7,7 @@ Research, study packs, experiment plans and recording notes for individual Postg
 | Episode | Status | Materials |
 | --- | --- | --- |
 | Your restore finished. Is your database ready? | Preparation; additional experiments proposed | [Episode overview](episodes/20261020-restore-readiness/README.md) · [Study pack](episodes/20261020-restore-readiness/study-pack.md) |
+| UUIDv4 vs UUIDv7 | Edited; release pending | [Episode overview](episodes/20261027-uuidv4-vs-uuidv7/README.md) · [Show notes](episodes/20261027-uuidv4-vs-uuidv7/show-notes.md) · [Illustrations](episodes/20261027-uuidv4-vs-uuidv7/illustrations.md) |
 
 ## Repository structure
 
