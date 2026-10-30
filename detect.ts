@@ -198,6 +198,7 @@ if (values.judgment) {
       text: span.map((w) => w.text).join(" "),
       reason: r.reason,
       ...((r as any).soft ? { soft: true } : {}),
+      ...((r as any).cutLaugh ? { cutLaugh: true } : {}),
     });
   }
   edl.beats = (j.beats ?? []).map((b) => ({ start: parseTime(b.from!), end: parseTime(b.to!), side: b.side ?? "after", text: textOf(b), reason: b.reason }));

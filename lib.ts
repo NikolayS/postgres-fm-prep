@@ -18,6 +18,9 @@ export type Removal = {
   // point at a shallower dip (SOFT_VALLEY_DB under speech). Set it after reading the plan's
   // "clean cut points" hint, only at a sentence or clause boundary, and check the join by ear.
   soft?: boolean;
+  // Judgment rows only, on the host's request: a laugh inside the span may go with it (else
+  // "laugh in the cut" keeps the whole row).
+  cutLaugh?: boolean;
 };
 // A pause the render keeps as it is (cap 2.5 s): after a joke or punchline, before a key point.
 export type Beat = { start: number; end: number; side: "after" | "before"; text: string; reason: string };

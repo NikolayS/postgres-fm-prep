@@ -282,7 +282,7 @@ export function planCuts(o: {
     for (const run of runs) if (run.s >= Ls.e && run.e <= Rs.s && !isBreath(run)) sound += run.e - run.s;
     const said = span.reduce((s, w) => s + w.end - w.start, 0);
     if (!judged && sound > said + 0.6) return `untranscribed sound in the cut (${(sound - said).toFixed(2)} s)`;
-    if (laughIn(Ls.s, Rs.e)) return "laugh in the cut";
+    if (laughIn(Ls.s, Rs.e) && !inside.some((w) => removedBy.get(w)!.cutLaugh)) return "laugh in the cut";
     const g = Ls.e - Ls.s + (Rs.e - Rs.s);
     const T = prot ? Math.min(g, P.beatCap) : pauseTarget(g, P.maxGap) + (turn && g > 0.3 ? P.turnExtra : 0);
     const p = place(Ls, Rs, T);
