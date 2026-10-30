@@ -17,6 +17,10 @@ The episode's `README.md` is its entry point. Keep its research, study pack, exp
 
 [The episode template](templates/episode/README.md) provides a starting point. Document names are conventions, not requirements: create only the materials an episode needs.
 
+## Tooling
+
+[`tools/podcast-edit/`](tools/podcast-edit/SKILL.md) is the post-production toolkit for recorded episodes, packaged as a Claude Code skill: cut fillers and false starts with a vetoable cut list, lay out and compose the final video (cards, music, overlays and their sounds), build captions, the podcast MP3, show notes and the Transistor draft. `SKILL.md` is the entry point; it runs on Bun and ffmpeg. To use it as a skill, symlink the directory to `~/.claude/skills/podcast-edit`. API keys (`ELEVENLABS_API_KEY`, `TRANSISTOR_API_KEY`) come from the environment only and never belong in this repository.
+
 ## Add an episode
 
 1. Create `episodes/<YYYYMMDD>-<topic-slug>/` (recording date) and copy the episode template into its `README.md`.
