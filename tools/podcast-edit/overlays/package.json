@@ -1,0 +1,6 @@
+{
+  "name": "podcast-overlays", "private": true, "type": "module",
+  "scripts": {},
+  "dependencies": {"@remotion/cli": "4.0.533", "remotion": "4.0.533", "react": "19.2.0", "react-dom": "19.2.0"},
+  "devDependencies": {"@types/bun": "1.3.5", "@types/react": "19.2.0", "@types/react-dom": "19.2.0", "playwright": "1.63.0", "typescript": "5.9.3"}
+}

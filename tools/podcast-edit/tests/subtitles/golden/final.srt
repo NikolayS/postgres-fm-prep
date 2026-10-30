@@ -1,0 +1,36 @@
+1
+00:00:00,000 --> 00:00:05,000
+[music]
+
+2
+00:00:05,200 --> 00:00:07,600
+Nik: Hello, hello. This is Postgres.FM.
+
+3
+00:00:07,600 --> 00:00:10,300
+Today we talk about
+pg_restore and vacuumdb.
+
+4
+00:00:10,300 --> 00:00:13,700
+- Right.
+- Laurenz Albe fixed it for Postgres 19,
+
+5
+00:00:15,800 --> 00:00:17,550
+- I, I think.
+- [laughs] Yeah,
+
+6
+00:00:17,550 --> 00:00:21,350
+and the minute you use -j in pg_restore,
+you introduce a problem where
+
+7
+00:00:21,350 --> 00:00:24,400
+the materialized view gets
+created before its tables.
+
+8
+00:00:24,400 --> 00:00:25,400
+Nik: Okay.

@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Concept B v3</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* two text levels inside one receipt card: the number (L1) and the verdict (L2) */
+  body { background: var(--paper); color: var(--ink); }
+  .receipt { position: absolute; left: 40px; top: 40px; width: 780px; background: #fff; border-radius: 12px; padding: 20px 28px 16px; box-shadow: 0 18px 50px rgba(0,0,0,0.18); transform: rotate(-1.5deg); border: 2px solid #ddd; }
+  .receipt .big { font-family: var(--display); font-size: 180px; line-height: 0.9; display: flex; align-items: baseline; gap: 22px; white-space: nowrap; }
+  .receipt .big .old { color: var(--red); text-decoration: line-through; text-decoration-thickness: 14px; }
+  .receipt .big .arrow { font-family: var(--mono); font-size: 84px; color: #999; }
+  .receipt .big .new { color: #0a9a4a; }
+  .receipt .big .unit { font-size: 84px; color: #222; letter-spacing: 0.02em; text-transform: uppercase; }
+  .receipt .l2 { font-family: var(--display); font-size: 76px; line-height: 0.95; color: #222; margin-top: 6px; letter-spacing: 0.01em; text-transform: uppercase; white-space: nowrap; }
+  .receipt .l2 .em { color: var(--red); }
+  .mark { color: var(--ink); left: auto; right: 48px; top: 44px; bottom: auto; font-size: 66px; gap: 18px; }
+  .mark .dot { width: 28px; height: 28px; box-shadow: 0 0 0 8px rgba(255,59,59,0.25); }
+  .host.nik img { -webkit-mask-image: linear-gradient(to right, #000 90%, transparent 100%); mask-image: linear-gradient(to right, #000 90%, transparent 100%); }
+  .host.kirk { right: 470px; width: 560px; bottom: -30px; }
+  .host.kirk img { width: 560px; }
+  .robot { right: 48px; top: 136px; width: 120px; transform: rotate(5deg); z-index: 1; }
+  .robot img { width: 100%; }
+</style></head>
+<body><div class="canvas v3">
+  <div class="receipt">
+    <div class="big"><span class="old">3301</span><span class="arrow">&rarr;</span><span class="new">34</span><span class="unit">buffers</span></div>
+    <div class="l2">Restore done. <span class="em">Not ready.</span></div>
+  </div>
+  <div class="mark"><span class="dot"></span>Postgres.FM</div>
+  <div class="tile robot"><img src="img/samograph.png"></div>
+  <div class="host kirk fade"><img src="img/KIRK.png"></div>
+  <div class="host nik"><img src="img/NIK.png"></div>
+</div></body></html>

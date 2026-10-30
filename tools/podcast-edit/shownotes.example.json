@@ -1,0 +1,82 @@
+{
+  "title": "Dump/restore done. Now what?",
+  "number": 193,
+  "status": "draft",
+  "summary": "Nik is joined by Kirk Wolak, Software Architect at KiraSoft, to discuss what a database still needs after pg_restore finishes and before it takes production traffic — what pg_dump and pg_restore leave behind, why autovacuum may not catch up in time, and how Postgres itself could do better.",
+  "links": [
+    {
+      "group": "Hacking sessions",
+      "title": "Hacking Postgres sessions with Andrey, Kirk and Nik (YouTube playlist, PostgresTV)",
+      "url": "https://www.youtube.com/playlist?list=PLH8y1BNPAKjKDdJA7sDmFWUkbbYux3TRz",
+      "at": "00:00:27"
+    },
+    {
+      "group": "Hacking sessions",
+      "title": "Hacking Postgres website",
+      "url": "https://hacking.postgres.tv",
+      "at": "00:00:27"
+    },
+    {
+      "group": "Hacking sessions",
+      "title": "Hacking Postgres Telegram group",
+      "url": "https://t.me/postgres_hacking",
+      "at": "00:00:27"
+    },
+    {
+      "group": "Episodes",
+      "title": "Our previous episode with Kirk: GSoC B-Tree Merge",
+      "url": "https://postgres.fm/episodes/gsoc-btree-merge",
+      "at": "00:00:27",
+      "referred": true
+    },
+    {
+      "group": "Episodes",
+      "title": "Is pg_dump a backup tool?",
+      "url": "https://postgres.fm/episodes/is-pg_dump-a-backup-tool",
+      "at": "00:03:23",
+      "referred": true
+    },
+    {
+      "group": "pgsql-hackers",
+      "title": "pg_restore --include-analyze proposal (Jian He, 2025)",
+      "url": "https://www.postgresql.org/message-id/flat/CACJufxGx_YLLxmnZVMuUApiVYqjKrydvEQqD3qxhwM6e0_8jrQ%40mail.gmail.com",
+      "at": "00:15:39"
+    },
+    {
+      "group": "pgsql-hackers",
+      "title": "ANALYZE after restore (Christopher Kings-Lynne, 2002)",
+      "url": "https://www.postgresql.org/message-id/GNELIHDDFBOCMGBFGEFOOEOPCBAA.chriskl%40familyhealth.com.au",
+      "at": "00:30:13"
+    },
+    {
+      "group": "pgsql-hackers",
+      "title": "Statistics Import and Export (PG18 statistics transfer)",
+      "url": "https://www.postgresql.org/message-id/flat/CADkLM%3DfzX7QX6r78fShWDjNN3Vcr4PVAnvXxQ4DiGy6V%3D0bCUA%40mail.gmail.com",
+      "at": "00:31:55"
+    },
+    {
+      "group": "Commits",
+      "title": "Transfer statistics during pg_upgrade (adds statistics to pg_dump, PG18)",
+      "url": "https://github.com/postgres/postgres/commit/1fd1bd871012732e3c6c482667d2f2c56f1a9395",
+      "at": "00:04:39"
+    },
+    {
+      "group": "Commits",
+      "title": "vacuumdb --analyze-only processes partitioned tables (Laurenz Albe, PG19)",
+      "url": "https://github.com/postgres/postgres/commit/6429e5b771dbb98aa56441677b79cdb58f6e1675",
+      "at": "00:30:13"
+    },
+    {
+      "group": "Commits",
+      "title": "Set pd_prune_xid on insert (Melanie Plageman, PG19)",
+      "url": "https://github.com/postgres/postgres/commit/378a216187aea1b488ce60ed07dd1ac5c14a9984",
+      "at": "00:42:38"
+    },
+    {
+      "group": "Blog post",
+      "title": "PostgresAI blog post about this episode",
+      "url": "BLOG-LINK-TBD"
+    }
+  ],
+  "byline": "Nik and guest Kirk Wolak."
+}

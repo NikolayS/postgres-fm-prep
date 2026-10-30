@@ -1,0 +1,31 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Concept A v3</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* two text levels only; nothing under 66 px font size (about 48 px cap height) */
+  body { background: radial-gradient(1200px 700px at 20% 30%, #161b26 0%, var(--ink) 60%); }
+  .status { position: absolute; left: 48px; top: 40px; }
+  .l2 { display: flex; align-items: center; gap: 22px; font-family: var(--display); font-size: 92px; line-height: 0.9; text-transform: uppercase; color: var(--paper); letter-spacing: 0.01em; }
+  .l2 .ok { color: var(--ok); display: flex; align-items: center; }
+  .l2 .ok .check { width: 0.62em; height: 0.62em; margin-left: 16px; border-width: 0 0.18em 0.18em 0; }
+  .l1 { margin-top: 8px; font-family: var(--display); font-size: 236px; line-height: 0.85; color: var(--amber); text-transform: uppercase; letter-spacing: -0.01em; text-shadow: 0 10px 0 rgba(0,0,0,0.5); }
+  .l1 .q { color: var(--paper); }
+  .mark { left: auto; right: 48px; top: 44px; bottom: auto; font-size: 66px; gap: 18px; }
+  .mark .dot { width: 28px; height: 28px; box-shadow: 0 0 0 8px rgba(255,59,59,0.25); }
+  .robot { right: 48px; top: 136px; width: 120px; z-index: 1; transform: rotate(4deg); }
+  .robot img { width: 100%; }
+  .v3 .host.kirk { right: 450px; width: 560px; bottom: -30px; }
+  .v3 .host.nik { bottom: -30px; }   /* shoulder curve below the canvas: no gap between the hosts */
+  .host.kirk img { width: 560px; }
+</style></head>
+<body><div class="canvas v3">
+  <div class="status">
+    <div class="l2">Restore: <span class="ok">done <span class="check"></span></span></div>
+    <div class="l1">Ready<span class="q">?</span></div>
+  </div>
+  <div class="mark"><span class="dot"></span>Postgres.FM</div>
+  <div class="tile robot"><img src="img/samograph.png"></div>
+  <div class="host kirk fade"><img src="img/KIRK.png"></div>
+  <div class="host nik"><img src="img/NIK.png"></div>
+  <div class="grain"></div>
+</div></body></html>

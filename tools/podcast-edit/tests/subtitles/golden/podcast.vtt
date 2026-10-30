@@ -1,0 +1,24 @@
+WEBVTT
+
+00:00:03.200 --> 00:00:07.300
+<v Nik>Hello, hello. This is Postgres.FM.
+Today we talk about pg_restore</v>
+
+00:00:07.300 --> 00:00:09.100
+<v Nik>and vacuumdb.</v>
+<v Kirk>Right.</v>
+
+00:00:09.200 --> 00:00:12.500
+<v Nik>Laurenz Albe fixed it
+for Postgres 19, I, I think.</v>
+
+00:00:12.500 --> 00:00:16.650
+<v Kirk>[laughs] Yeah, and the minute
+you use -j in pg_restore, you introduce</v>
+
+00:00:16.650 --> 00:00:20.400
+<v Kirk>a problem where the materialized
+view gets created before its tables.</v>
+
+00:00:20.400 --> 00:00:21.400
+<v Nik>Okay.</v>

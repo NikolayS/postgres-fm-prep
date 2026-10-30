@@ -1,0 +1,47 @@
+--- ../podcast-packager/tools/compose.ts	2026-10-20 15:48:01
++++ tools/compose.ts	2026-10-22 16:41:54
+@@ -120,6 +120,10 @@
+   const args = Bun.argv.slice(2);
+   const flag = (n: string) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined; };
+   const [configPath, input, output] = args;
++  const cardVideo = flag("--card-video");
++  // --fade-in-pow P: picture brightness 1-(1-t/FADE_IN)^P (fast start, card readable early);
++  // the sound uses afade curve ipar (1-(1-x)^2). Default: linear for both.
++  const FADE_POW = Number(flag("--fade-in-pow") ?? 1);
+   const intro = flag("--intro"), outro = flag("--outro"), manifestPath = flag("--overlays");
+   if (!output) { console.error("usage: bun compose.ts <layout.json> <edited.mp4> <out.mp4> [--intro a.mp3] [--outro b.mp3] [--overlays manifest.json] [--from S] [--until S | --tail S] [--preset fast]"); process.exit(2); }
+   // logo: a video played after the end card (path relative to the config); credit: a light
+@@ -229,7 +233,12 @@
+     g.push(`[${cur}]format=yuv420p,setsar=1,fps=${fps},settb=1/${fps}[${name}]`);
+   };
+   let vout = "show";
+-  if (C > 0) {
++  if (C > 0 && cardVideo) {
++    // An animated title card (e.g. Remotion): the first C + X1 s, last frame held if short.
++    g.push(`[${add(["-i", cardVideo])}:v]format=yuv420p,setsar=1,fps=${fps},tpad=stop_mode=clone:stop_duration=2,trim=duration=${C + X1},setpts=PTS-STARTPTS,settb=1/${fps}[tcard]`);
++    g.push(`[tcard][show]xfade=transition=fade:duration=${X1}:offset=${C}[v1]`);
++    vout = "v1";
++  } else if (C > 0) {
+     buildCard("tcard", tc, C + X1);
+     g.push(`[tcard][show]xfade=transition=fade:duration=${X1}:offset=${C}[v1]`);
+     vout = "v1";
+@@ -260,7 +269,9 @@
+   }
+ 
+   // Fade from black at the start (full episode only) and to black at the end.
+-  const vf = [...(C > 0 ? [`fade=t=in:st=0:d=${FADE_IN}`] : []), ...(withOutro ? [`fade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}`] : [])];
++  const fadeIn = FADE_POW === 1 ? `fade=t=in:st=0:d=${FADE_IN}`
++    : ((k: string) => `format=yuv420p,geq=lum='16+(lum(X,Y)-16)*${k}':cb='128+(cb(X,Y)-128)*${k}':cr='128+(cr(X,Y)-128)*${k}':enable='lt(t,${FADE_IN})'`)(`(1-pow(1-min(T,${FADE_IN})/${FADE_IN},${FADE_POW}))`);
++  const vf = [...(C > 0 ? [fadeIn] : []), ...(withOutro ? [`fade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}`] : [])];
+   if (vf.length) {
+     g.push(`[${vout}]${vf.join(",")}[vfade]`);
+     vout = "vfade";
+@@ -348,7 +359,7 @@
+     const m = ga[i].match(/\[(\w+)\]$/);
+     if (m && mix.includes(`[${m[1]}]`)) ga[i] = ga[i].replace(/\[(\w+)\]$/, ",asetpts=N/SR/TB[$1]");
+   }
+-  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB${C > 0 ? `,afade=t=in:d=${FADE_IN}` : ""}${withOutro ? `,afade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}` : ""},aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`);
++  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB${C > 0 ? `,afade=t=in:d=${FADE_IN}${FADE_POW === 1 ? "" : ":curve=ipar"}` : ""}${withOutro ? `,afade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}` : ""},aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`);
+   // The pre-limit keeps true peaks low enough for loudnorm's linear mode: its dynamic mode
+   // (used when peaks are too high) lost the first seconds of the mix in a full-length run.
+ 

@@ -1,0 +1,12 @@
+{"dir":"/Library/Audio/Apple Loops/Apple/09 Disco Funk","tailSec":2.5,"events":[
+ {"file":"Boogie Right Brass 01.caf","at":0,"beats":8},
+ {"file":"Boogie Right Beat 01.caf","at":0,"beats":24},
+ {"file":"Boogie Right Slap Bass 02.caf","at":0,"beats":24,"gain":-2},
+ {"file":"Boogie Right Funk Guitar 02.caf","at":8,"beats":16,"gain":-4},
+ {"file":"Boogie Right Synth Lead 01.caf","at":8,"beats":8,"gain":-4},
+ {"file":"Boogie Right Hi-Hat Topper.caf","at":8,"beats":16,"gain":-3},
+ {"file":"Boogie Right Brass 01.caf","at":16,"beats":8},
+ {"file":"Boogie Right Brass 01.caf","at":24,"beats":1.5,"fadeOut":1.2},
+ {"file":"Boogie Right Beat 02.caf","at":24,"beats":1,"fadeOut":0.6},
+ {"file":"Boogie Right Slap Bass 02.caf","at":24,"beats":1.5,"fadeOut":1.2,"gain":-2}
+]}

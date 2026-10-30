@@ -1,0 +1,17 @@
+{"dir":"/Library/Audio/Apple Loops/Apple/09 Disco Funk","tailSec":3,"events":[
+ {"file":"Boogie Right Beat 01.caf","at":0,"beats":48},
+ {"file":"Boogie Right Beat 02.caf","at":48,"beats":8},
+ {"file":"Boogie Right Beat 01.caf","at":56,"beats":28},
+ {"file":"Boogie Right Beat 02.caf","at":84,"beats":8},
+ {"file":"Boogie Right Slap Bass 02.caf","at":0,"beats":92,"gain":-3},
+ {"file":"Boogie Right Funk Guitar 02.caf","at":0,"beats":92,"gain":-6},
+ {"file":"Boogie Right Hi-Hat Topper.caf","at":40,"beats":52,"gain":-4},
+ {"file":"Boogie Right Synth FX.caf","at":32,"beats":8,"gain":-4},
+ {"file":"Boogie Right Synth Lead 01.caf","at":40,"beats":16,"gain":-4},
+ {"file":"Boogie Right Brass 01.caf","at":56,"beats":8},
+ {"file":"Boogie Right Gliding Lead.caf","at":64,"beats":16,"gain":-4},
+ {"file":"Boogie Right Brass 01.caf","at":80,"beats":8},
+ {"file":"Boogie Right Brass 01.caf","at":92,"beats":1.5,"fadeOut":1.2},
+ {"file":"Boogie Right Beat 02.caf","at":92,"beats":1,"fadeOut":0.6},
+ {"file":"Boogie Right Slap Bass 02.caf","at":92,"beats":1.5,"fadeOut":1.2,"gain":-3}
+]}

@@ -1,0 +1,27 @@
+{
+  "_doc": "Numbers for the 08b-one-query-at-scale center block. Swap this file to change the block. Times are cold-cache medians (9 runs over 3 restores). Bars use a linear scale. 'badge' sits next to the value of that row.",
+  "source": "DBLab Forge restore-readiness-01, PG 18.6, analysis/one_query_pg18.csv rows def-none, def-analyze, def-vacuum_analyze, column cold_ms_med (32608, 6100, 23); README.md lines 22, 377-405 (fixture: events 250,000,016 rows, 31 GB heap in the README = 4,098,361 x 8 KiB pages = 31.3 GiB, host RAM 16 GiB, autovacuum off). Ratios: 32608/6100 = 5.3, 6100/23 = 265, 32608/23 = 1,418.",
+  "title": "One query, 31 GiB table, cold cache (Postgres 18.6)",
+  "query": "select count(*), sum(e.amount)\nfrom customers c\njoin events e on e.customer_id = c.id\nwhere c.country = 'LI'",
+  "bars": [
+    {
+      "label": "pg_restore only",
+      "ms": 32608,
+      "text": "32.6 s"
+    },
+    {
+      "label": "+ ANALYZE",
+      "ms": 6100,
+      "text": "6.1 s",
+      "badge": "~5x faster"
+    },
+    {
+      "label": "+ VACUUM ANALYZE",
+      "ms": 23,
+      "text": "23 ms",
+      "badge": "~260x faster"
+    }
+  ],
+  "final": "~1,400x faster",
+  "caption": "250M rows, data larger than RAM, autovacuum off. DBLab Forge."
+}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Concept A v3 square</title>
+<link rel="stylesheet" href="base.css">
+<style>
+  /* 1000x1000 CSS px rendered at 3x = 3000x3000; two text levels, show mark, hosts */
+  body { width: 1000px; height: 1000px; background: radial-gradient(900px 700px at 25% 25%, #161b26 0%, var(--ink) 65%); }
+  .mark { left: 56px; top: 52px; bottom: auto; font-size: 60px; gap: 16px; }
+  .mark .dot { width: 26px; height: 26px; box-shadow: 0 0 0 8px rgba(255,59,59,0.25); }
+  .status { position: absolute; left: 56px; top: 150px; }
+  .l2 { display: flex; align-items: center; gap: 20px; font-family: var(--display); font-size: 104px; line-height: 0.9; text-transform: uppercase; color: var(--paper); }
+  .l2 .ok { color: var(--ok); display: flex; align-items: center; }
+  .l2 .ok .check { width: 0.62em; height: 0.62em; margin-left: 16px; border-width: 0 0.18em 0.18em 0; }
+  .l1 { margin-top: 10px; font-family: var(--display); font-size: 300px; line-height: 0.85; color: var(--amber); text-transform: uppercase; letter-spacing: -0.01em; text-shadow: 0 12px 0 rgba(0,0,0,0.5); }
+  .l1 .q { color: var(--paper); }
+  .v3 .host.nik { right: -30px; bottom: -30px; width: 680px; }
+  .host.nik img { width: 680px; }
+  .host.kirk { right: 470px; bottom: -40px; width: 600px; }
+  .host.kirk img { width: 600px; }
+  .robot { right: 56px; top: 56px; width: 150px; transform: rotate(4deg); z-index: 1; }
+  .robot img { width: 100%; }
+</style></head>
+<body><div class="canvas v3">
+  <div class="mark"><span class="dot"></span>Postgres.FM</div>
+  <div class="status">
+    <div class="l2">Restore: <span class="ok">done <span class="check"></span></span></div>
+    <div class="l1">Ready<span class="q">?</span></div>
+  </div>
+  <div class="tile robot"><img src="img/samograph.png"></div>
+  <div class="host kirk fade"><img src="img/KIRK.png"></div>
+  <div class="host nik"><img src="img/NIK.png"></div>
+  <div class="grain"></div>
+</div></body></html>

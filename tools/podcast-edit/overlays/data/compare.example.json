@@ -1,0 +1,14 @@
+{
+  "_doc": "Numbers for the 08-two-queries center chart. Swap this file to change the chart (1 or 2 rows, 3 columns). Big number = buffer accesses at the root node; small = execution time, median of measured passes x 3 restores, warm cache. 'drop.col' = column where the badge sits (1 = between col 0 and 1, 2 = between col 1 and 2); 'drop.at' = seconds after the row appears.",
+  "source": "DBLab Forge restore-readiness-01, PG 18.6, DEFAULT archive (pg_dump without --statistics). README.md lines 32-35 (join), 49-52 (index-only read), 70-73 (times). Recomputed from runs/pg18/targets/r*_def-*/q*_natural_p3-5.json on 2026-10-22.",
+  "cols": ["restore only", "+ ANALYZE", "+ VACUUM ANALYZE"],
+  "rows": [
+    {"label": "Query 1: join on uneven data", "needs": "needs statistics (ANALYZE)",
+     "cells": [{"v": 396608, "ms": "145 ms"}, {"v": 2096, "ms": "67 ms"}, {"v": 2096, "ms": "67 ms"}],
+     "drop": {"col": 1, "at": 1.4, "text": "÷190"}},
+    {"label": "Query 2: index-only read", "needs": "needs visibility map (VACUUM)",
+     "cells": [{"v": 3301, "ms": "6.6 ms"}, {"v": 3301, "ms": "6.6 ms"}, {"v": 34, "ms": "1.1 ms"}],
+     "drop": {"col": 2, "at": 2.0, "text": "÷97"}}
+  ],
+  "foot": "pg_dump without --statistics. Buffers (big), time (small). PG 18.6, DBLab Forge."
+}
