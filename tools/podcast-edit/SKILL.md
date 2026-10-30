@@ -386,7 +386,9 @@ bun $S/compose.ts layout.json out-edited.mp4 final.mp4 --intro a-intro.mp3 --out
   -> show -> 0.6 s crossfade -> end card 10 s (`cardTitle` with "\n" breaks,
   `links`). Music cues are set to -18 LUFS. The intro plays at full level on
   the card, ducks `--duck` -15 dB 0.1 s into the show (the edit keeps 0.3 s
-  of room tone before the first word) and is gone by card + 6 s. The outro bed
+  of room tone before the first word) and is gone by card + 6 s. If the duck
+  or the fade sounds abrupt, `--duck-ramp 2` eases the duck in over 2 s and
+  `--intro-fade 6` fades the bed out over 6 s from card + 1 s. The outro bed
   enters ducked 10 s before the show ends, rises over 1.2 s after the
   sign-off, and its natural ending lines up with the end of the end card.
   Two-pass loudnorm (audio-only first pass) to -16 LUFS, -1.5 dBTP.
