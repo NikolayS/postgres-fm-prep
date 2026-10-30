@@ -10,3 +10,7 @@ work/
 *.f32
 *.json.tmp/
 node_modules/
+
+# Overlay sound library (sfx/README.md) and its generator output
+!sfx/*.wav
+sfx/generated/
