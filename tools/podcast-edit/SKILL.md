@@ -384,7 +384,8 @@ bun $S/compose.ts layout.json out-edited.mp4 final.mp4 --intro a-intro.mp3 --out
   frame on a tile, fade 0.3 s. Speed about 1.4x realtime on Apple Silicon.
 - `compose.ts`: title card 4 s (layers fade and slide in) -> 0.5 s crossfade
   -> show -> 0.6 s crossfade -> end card 10 s (`cardTitle` with "\n" breaks,
-  `links`). Music cues are set to -18 LUFS. The intro plays at full level on
+  `links`). `--end 0` drops the end card: the show crossfades straight
+  into the logo video. Music cues are set to -18 LUFS. The intro plays at full level on
   the card, ducks `--duck` -15 dB 0.1 s into the show (the edit keeps 0.3 s
   of room tone before the first word) and is gone by card + 6 s. If the duck
   or the fade sounds abrupt, `--duck-ramp 2` eases the duck in over 2 s and
