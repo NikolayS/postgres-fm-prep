@@ -202,7 +202,12 @@ export async function auditJoins(plan: any, opts: { audio?: string; synth?: bool
     }
     // Crosstalk: zero-length words (ASR sign of overlap) or another speaker's word at a cut point.
     const sp0 = wa?.speaker ?? wb?.speaker;
-    const crosstalk = words.filter((x) => (x.end - x.start < 0.02 && x.start > A - 0.3 && x.start < B + 0.3) || (sp0 && x.speaker !== sp0 && ((x.start < A + h && x.end > A - h) || (x.start < B + h && x.end > B - h)))).length;
+    // A judgment row (the host's or agent's decision, e.g. a 60 s aside) removes the overlap inside
+    // the cut on purpose: there only the edges count (Nik 2026-10-29, a closing-plugs cut was
+    // reverted for "crosstalk (14 words)" that were all inside the removed span).
+    const judged = !["filler", "repeat", "falsestart", "pause"].includes(c.cat);
+    const nearEdge = (t: number) => (t > A - 0.3 && t < A + 0.3) || (t > B - 0.3 && t < B + 0.3);
+    const crosstalk = words.filter((x) => (x.end - x.start < 0.02 && (judged ? nearEdge(x.start) : x.start > A - 0.3 && x.start < B + 0.3)) || (sp0 && x.speaker !== sp0 && ((x.start < A + h && x.end > A - h) || (x.start < B + h && x.end > B - h)))).length;
     const midClause = !!wa && !/[.?!]$/.test(wa.text) && !!wb && wb.speaker === wa.speaker;
     const flags: string[] = [];
     let score = 0;
