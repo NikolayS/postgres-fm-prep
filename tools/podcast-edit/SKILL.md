@@ -46,6 +46,11 @@ veto any cut and re-render with one command.
      sees them). When unsure, keep.
    - `notes`: swears, factual slips, names to spell. Never cut a factual
      correction, a technical point, or a joke that lands.
+   - On-air cut cues: propose these as cuts in the FIRST preview, not after
+     the host asks: "let's cut it" (and what it refers to), meta jokes about
+     the edit, plugs, talk about an absent host, talk about the show format,
+     chatter after the sign-off. List each in the report so the host can
+     veto it.
 4. **Prosody** (`prosody.ts`): filler pitch/length/level scores and laughs
    found in the audio. Then **detect again** with the judgment and prosody
    to build the final EDL.
@@ -317,7 +322,11 @@ the captions, notes and transcript again.
    Setting `transcript_text` adds a txt transcript and keeps the SRT one.
 6. **Show notes** (`shownotes.ts`): write `notes.json` (see
    `shownotes.example.json`): one row per link, with the podcast time of the
-   first mention (`at`). Check each link on the live page before you add it.
+   first mention (`at`). Open every link (logged out) before you add it;
+   flag any private link (a private brief, a draft, an internal tracker, a
+   login wall) to the host instead of publishing it. If the episode is built
+   on a Forge experiment, publish the Forge results first (forge-results and
+   a Zenodo DOI) so the notes link public data.
    ```bash
    bun $S/shownotes.ts notes.json --audio-map <base>-podcast.time-map.json \
      --cuts <base>-edited.cuts.json --compose <base>-final.time-map.json --out notes
@@ -495,7 +504,25 @@ full-screen in and out). No bright clicks or ticks; keep every hit under the
 voice. `air` and `wind` are off by default in compose.ts (`--sfx-off`,
 default "air,wind"; "" turns them on): they are noise bursts with a breath
 spectrum, and a viewer heard them as "breathing into the mic" (2026-10-23). Helpers `tick/pop/clack/whoosh` in items.ts keep the old role names
-and map to these files. The regular host gets no intro card; only the guest. `DUMP_PROPS=<dir> bun scripts/render-all.ts <id>`
+and map to these files.
+
+Overlay sounds (2026-10-30, supersedes the above for band and center
+cards): the library in `sfx/` (roles and sources in `sfx/README.md`).
+Band cards: the typing render plus one typing sound per typed line,
+trimmed to the line. Center cards: G10 IN at 0.05 s, G9 OUT (-3 dB) 0.1 s
+before the exit starts, the punch only on a sudden, short reveal. Nothing
+bright above ~4.5 kHz, nothing sub-only (phones play nothing under
+~150 Hz), SFX ceiling about -15 LUFS momentary. Apply it with:
+```bash
+bun $S/sfx-manifest.ts overlays/manifest.json --out overlays/manifest-sfx.json \
+  --accent 02=24.8 --accent 07=16.6     # card id (or prefix) = reveal times, s from card start
+bun $S/compose.ts ... --overlays overlays/manifest-sfx.json --sfx-rel center-out=-3
+```
+It switches band cards to `<card>-typing.mov` when that and the typing
+bursts (`<card>-typing-bursts.json` or `<NN>-typing-bursts.json`) exist,
+measures each center card's exit from its alpha, copies the sounds into
+`overlays/sfx/` under role names, and keeps only `thud*` of the old sounds
+(`--keep`). Re-running it on its output gives the same result. The regular host gets no intro card; only the guest. `DUMP_PROPS=<dir> bun scripts/render-all.ts <id>`
 writes the props JSON for `bunx remotion still` QA frames.
 
 Freezes: on number cards where the number is the point (2-2.5 s) and on intro
@@ -580,6 +607,8 @@ Review checklist before the final composite:
 - Timings from a test harness are context only. Show ms small, next to the deterministic metric (buffers, heap fetches). Never present a ratio of ms as a speedup.
 
 ## Long renders: use the watchdog
+- Check free disk space before a render (`df -h` on the output and `--work` dirs): a disk that fills mid-render loses the whole run.
+- Report a render ETA only from measured output growth (two `ls -l` or `ffprobe` readings some minutes apart, against the expected final size or duration), never a guess.
 - ffmpeg 8.0.1 can deadlock inside its scheduler on a big compose graph (main thread in sch_wait, all threads in pthread_cond_wait, 0% CPU). The output stops growing and has no moov atom. The same command passes on other runs. Lost 6 h overnight on 2026-10-23.
 - Wrap every long render: `bun $S/watchdog.ts 180 -- bun tools/compose.ts ...`. If the whole process tree uses no CPU for 180 s, it kills the tree and exits 124. Retry once on 124.
 
