@@ -41,7 +41,8 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 
 ## 4. YouTube subtitles
 
-- [ ] English subtitles built from the edited transcript, with names, Postgres terms and SQL spelled correctly (run `wordcheck.ts`, then a human pass).
+- [ ] English subtitles built from the edited transcript.
+- [ ] **Dictionary pass:** apply the glossary in `prompt.txt` from https://gitlab.com/postgres-ai/content/postgres-fm to the subtitles and transcripts. Then read them through for names, product names (DBLab Forge, PL/pgSQL…), Postgres terms and SQL identifiers. Add new mis-hearings to the glossary in an MR to that repo.
 - [ ] Uploaded **with timing** (SRT built from the final video's time map) and published.
 - [ ] **Remove YouTube's auto-generated English track** once it appears. It can take a while after upload, so check again after publishing.
 - [ ] Check whether auto-dubbing is on, and turn it off unless we want it.

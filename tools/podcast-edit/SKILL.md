@@ -258,6 +258,17 @@ bun $S/subtitles.ts qa final final.mp4 --source src.m4a --n 10  # spot check by 
 bun test tests/subtitles.test.ts                          # golden files, round trip
 ```
 
+**Always apply the show's dictionary before publishing captions or
+transcripts.** It is the "Glossary:" section of `prompt.txt` in
+https://gitlab.com/postgres-ai/content/postgres-fm, with one correct
+spelling per line and optional hints such as `int8 (instead of integer
+eight)`. Build `fixes.json` from it plus the episode's own names and terms,
+then read the result through for product names, people, SQL identifiers and
+Postgres terms. Add every new mis-hearing to the glossary in an MR to that
+repo, so the next episode gets it right. Episode 194 shipped without this
+pass ("AI Lab Forge" for DBLab Forge, "PLPGSQL" for PL/pgSQL) and needed a
+second upload.
+
 - Output: `<out>.srt`, `<out>.vtt`, `<out>.cues.json` (cues with their words, for qa).
 - Rules: lines of 42 characters or fewer, 2 lines or fewer, cues of 1-7 s,
   20 characters per second or fewer. A dynamic program picks the cue breaks:
