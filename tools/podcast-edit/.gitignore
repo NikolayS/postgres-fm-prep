@@ -1,0 +1,12 @@
+# Work dirs and media: never commit
+*.work/
+*.verify/
+work/
+*.mp4
+*.m4a
+*.wav
+*.mp3
+*.s16
+*.f32
+*.json.tmp/
+node_modules/

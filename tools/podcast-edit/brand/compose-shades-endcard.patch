@@ -1,0 +1,55 @@
+--- /private/tmp/claude-501/-Users-nik/df73b264-f06f-4bd2-a8c6-70f373a5e814/scratchpad/podcast-brand-v3/tools/compose.ts.bak	2026-10-22 19:39:58
++++ /private/tmp/claude-501/-Users-nik/df73b264-f06f-4bd2-a8c6-70f373a5e814/scratchpad/podcast-brand-v3/tools/compose.ts	2026-10-22 19:42:08
+@@ -17,7 +17,7 @@
+ import { $ } from "bun";
+ import { mkdirSync } from "fs";
+ import { dirname, join, resolve } from "path";
+-import { filtergraph, prepareUi, renderHtml, type LayoutConfig } from "./layout";
++import { BRAND, filtergraph, prepareUi, renderHtml, SHADES, type LayoutConfig } from "./layout";
+ import type { Detection } from "./detect-tiles";
+ 
+ const FONT = `-apple-system,"SF Pro Display","Helvetica Neue",sans-serif`;
+@@ -78,6 +78,34 @@
+   for (const [i, p] of parts.entries()) {
+     const png = join(work, `${name}-l${i}.png`);
+     await renderHtml(layerHtml(w, h, p.top, p.html, light), w, h, png);
++    layers.push({ png, st: p.st, d: 0.7, dy: 24 });
++  }
++  return { bg, layers };
++}
++
++// "shades" theme end card: the last frame of the shades title card (pink + rays + elephant,
++// script wordmark, Lato title with the plum band), static, its text layers sliding in.
++async function shadesCard(work: string, name: string, w: number, h: number, title: string, hosts: { name: string; company?: string }[]): Promise<{ bg: string; layers: Layer[] }> {
++  const [l1, l2 = ""] = title.split("\n");
++  const doc = (body: string, bg = "transparent") => `<!doctype html><html><head><meta charset="utf-8"><style>${SHADES.fonts}html,body{margin:0;width:${w}px;height:${h}px;overflow:hidden;background:${bg}}
++.a{position:absolute}.t{font-family:Lato;font-weight:900;font-size:150px;line-height:1;color:#fff;letter-spacing:-2px;text-shadow:0 7px 0 ${SHADES.plum}55,0 0 40px rgba(120,20,120,.25);width:1000px}
++.band{font-family:Lato;font-weight:900;font-size:124px;line-height:150px;height:150px;color:#fff;letter-spacing:-1px;white-space:nowrap;padding:0 38px 0 14px;position:absolute}.band:before{content:"";position:absolute;z-index:-1;left:-24px;top:0;width:790px;height:150px;background:${SHADES.plum};border-radius:18px;transform:skewX(-6deg);box-shadow:0 10px 0 rgba(61,15,69,.25)}.band i{font-style:normal;color:#ff9cf0}
++.who{font-family:Lato;font-weight:700;font-size:50px;line-height:1.12;color:${SHADES.plum}}.who span{font-weight:400;color:${SHADES.sub}}
++</style></head><body>${body}</body></html>`;
++  const k = 950 / 1536;
++  const bg = join(work, `${name}-bg.png`);
++  await renderHtml(doc(`<div class="a" style="left:-80px;top:-1220px;width:3200px;height:3200px;opacity:.2;background:repeating-conic-gradient(from 0deg at 50% 50%,rgba(255,255,255,.9) 0deg 7deg,rgba(255,255,255,0) 7deg 22deg);-webkit-mask-image:radial-gradient(circle at 50% 50%,black 0%,transparent 55%)"></div>
++<img class="a" src="file://${BRAND}/elephant.png" style="left:1170px;top:${h - 950 + 30}px;height:950px;width:${Math.round(1319 * k)}px">${SHADES.grain(w, h)}`, SHADES.bg), w, h, bg);
++  const parts = [
++    { st: 0.3, html: `<img class="a" src="file://${BRAND}/wordmark-white.png" style="left:110px;top:70px;width:700px;filter:drop-shadow(0 6px 0 rgba(61,15,69,.35))">` },
++    { st: 0.6, html: `<div class="a t" style="left:110px;top:330px">${l1.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</div>` },
++    { st: 0.9, html: `<div class="a band" style="left:110px;top:656px">${l2.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\?$/, "<i>?</i>")}</div>` },
++    { st: 1.2, html: `<div class="a who" style="left:116px;top:905px">${hosts.map((p) => `${p.name}${p.company ? `<span>&nbsp;&middot;&nbsp;${p.company}</span>` : ""}`).join("<br>")}</div>` },
++  ];
++  const layers: Layer[] = [];
++  for (const [i, p] of parts.entries()) {
++    const png = join(work, `${name}-l${i}.png`);
++    await renderHtml(doc(p.html), w, h, png);
+     layers.push({ png, st: p.st, d: 0.7, dy: 24 });
+   }
+   return { bg, layers };
+@@ -182,7 +210,7 @@
+       ? { top: 680, html: `<div class="who">${c.cardHosts.map((p) => `<b>${esc(p.name)}</b>${p.company ? ` &nbsp;&middot;&nbsp; ${esc(p.company)}` : ""}`).join("<br>")}</div>`, st: 1.1 }
+       : { top: 700, html: `<div class="hosts">${hosts}</div>`, st: 1.1 },
+   ]);
+-  const ec = await card(work, "end", w, h, [
++  const ec = c.theme === "shades" ? await shadesCard(work, "end", w, h, c.cardTitle ?? c.title ?? "", c.cardHosts ?? []) : await card(work, "end", w, h, [
+     { top: 300, html: mark, st: 0.3 },
+     { top: 400, html: title, st: 0.6 },
+     { top: 680, html: `<div class="hosts">${hosts}</div>`, st: 1.0 },

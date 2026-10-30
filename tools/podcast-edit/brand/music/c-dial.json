@@ -1,0 +1,10 @@
+{"dir":"/Library/Audio/Apple Loops/Apple/01 Hip Hop","tailSec":2.5,"events":[
+ {"file":"City Nights Brass 02.caf","at":0,"beats":8},
+ {"file":"City Nights Beat.caf","at":0,"beats":20},
+ {"file":"City Nights Bass.caf","at":0,"beats":20,"gain":-2},
+ {"file":"City Nights Electric Piano.caf","at":0,"beats":20,"gain":-7},
+ {"file":"City Nights Trumpet Lead.caf","at":8,"beats":12,"from":8,"gain":-1},
+ {"file":"City Nights Brass 02.caf","at":20,"beats":2.5,"from":1,"fadeOut":2},
+ {"file":"City Nights Beat.caf","at":20,"beats":1,"fadeOut":0.6},
+ {"file":"City Nights Bass.caf","at":20,"beats":2,"from":1,"fadeOut":1.5,"gain":-2}
+]}
