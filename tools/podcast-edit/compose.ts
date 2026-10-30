@@ -2,7 +2,7 @@
 //
 //   bun compose.ts <layout.json> <edited.mp4> <out.mp4> --intro intro.mp3 --outro outro.mp3
 //                  [--until S | --tail S] [--preset fast] [--card 4] [--end 10] [--duck -15]
-//                  [--duck-ramp 2] [--intro-fade 6]
+//                  [--duck-ramp 2] [--intro-fade 6] [--end 0 = no end card]
 //
 // Picture: fade from black -> title card (C s, layers fade/slide in) -> 0.8 s crossfade ->
 // the show with the layout.ts filtergraph -> end card (E s) -> logo video (config "logo") ->
@@ -176,9 +176,10 @@ if (import.meta.main) {
   const withOutro = !!outro && to >= full - 0.01;
   const showEndFinal = C + showLen + F; // final time where the show (with freezes) ends
   // After the show: end card, then the logo video, then the credit card, each joined by an
-  // X2 crossfade. Starts of each part in final time:
-  const endStart = showEndFinal - X2, logoStart = endStart + E - X2, creditStart = logoStart + (logo ? logoLen - X2 : 0);
-  const total = withOutro ? (cr ? creditStart + crLen : logo ? logoStart + logoLen : endStart + E) : showEndFinal;
+  // X2 crossfade. Starts of each part in final time. --end 0: no end card; the show
+  // crossfades straight into the logo video (or the credit card, or just ends).
+  const endStart = showEndFinal - X2, logoStart = E > 0 ? endStart + E - X2 : endStart, creditStart = logoStart + (logo ? logoLen - X2 : 0);
+  const total = withOutro ? (cr ? creditStart + crLen : logo ? logoStart + logoLen : E > 0 ? endStart + E : showEndFinal) : showEndFinal;
 
   // Inputs: 0 show, 1.. the layout.ts layers, then cards, music, overlays, SFX.
   const inputs: string[][] = [[...(from ? ["-ss", from.toFixed(3)] : []), ...(to < full ? ["-t", showLen.toFixed(3)] : []), "-i", input], ...uiPngs.map((p) => ["-loop", "1", "-framerate", String(fps), "-i", p])];
@@ -212,9 +213,11 @@ if (import.meta.main) {
     vout = "v1";
   }
   if (withOutro) {
-    buildCard("ecard", ec, E);
-    g.push(`[${vout}][ecard]xfade=transition=fade:duration=${X2}:offset=${endStart.toFixed(3)}[v2]`);
-    vout = "v2";
+    if (E > 0) {
+      buildCard("ecard", ec, E);
+      g.push(`[${vout}][ecard]xfade=transition=fade:duration=${X2}:offset=${endStart.toFixed(3)}[v2]`);
+      vout = "v2";
+    }
     if (logo) {
       g.push(`[${add(["-i", logo])}:v]format=yuv420p,setsar=1,fps=${fps},settb=1/${fps}[logo]`);
       g.push(`[${vout}][logo]xfade=transition=fade:duration=${X2}:offset=${logoStart.toFixed(3)}[v3]`);
@@ -319,7 +322,7 @@ if (import.meta.main) {
   // Time map for chapters and later layers: edited time -> final time.
   await Bun.write(output.replace(/\.mp4$/, "") + ".time-map.json", JSON.stringify({
     formula: "final = card + (edited - from) + sum(freeze.sec for freezes with at < edited - from)",
-    card: C, from, total: Number(total.toFixed(3)), showEnd: Number(showEndFinal.toFixed(3)), endCard: withOutro ? { start: Number(endStart.toFixed(3)), sec: E } : null,
+    card: C, from, total: Number(total.toFixed(3)), showEnd: Number(showEndFinal.toFixed(3)), endCard: withOutro && E > 0 ? { start: Number(endStart.toFixed(3)), sec: E } : null,
     logo: withOutro && logo ? { start: Number(logoStart.toFixed(3)), sec: logoLen } : null,
     credit: withOutro && cr ? { start: Number(creditStart.toFixed(3)), sec: crLen } : null,
     freezes: freezes.map((f) => ({ edited: Number((f.at + from).toFixed(3)), sec: f.sec, finalStart: Number(fin(f.at).toFixed(3)) })),
