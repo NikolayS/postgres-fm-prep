@@ -30,6 +30,7 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
   - hook with the key measured result, and its conditions, in the first two lines;
   - "Postgres.FM episode N";
   - one paragraph about the episode;
+  - "Main link:" with the HTML brief, when there is one (see section 7);
   - high-level chapters, starting at 00:00, about 10–16 of them, in video time;
   - key links with the video time of their first mention;
   - link to the full notes on postgres.fm;
@@ -73,7 +74,7 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 
 - [ ] Basic show notes: one paragraph about the episode, then links grouped by topic. Each link carries the podcast time of its first mention.
 - [ ] About 20 links at most. Docs links point at the exact section. Every link opens and says what we claim it says.
-- [ ] The main experiment or brief link sits near the top, not buried.
+- [ ] **Brief in Main link, everywhere.** When the episode has an HTML brief (console share link), it is the first item under a "Main link" heading in the Transistor notes (so on postgres.fm), and in a "Main link:" block right after the episode paragraph in the YouTube description, above the chapters. Don't repeat it in the key links list.
 - [ ] No company or job title for a guest unless they asked for one.
 
 ## 8. Research artefacts (when the episode is built on an experiment)
