@@ -157,7 +157,7 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
   </div>
   <div class="segs">
     <div class="seg"><div class="min">0–2<small>cold open</small></div><div>
-      <p><b>"You pull <code>postgres:18-pgvector-postgis</code> and it works. That image didn't exist a second ago."</b> Álvaro explains in one sentence what DOCIR does. Then the hook: Kubernetes just shipped something that may make it unnecessary. Let's argue.</p>
+      <p><b>"You pull an image whose name lists Postgres 18, pgvector and PostGIS, and it works. That image didn't exist a second ago."</b> Álvaro explains in one sentence what DOCIR does. Then the hook: Kubernetes just shipped something that may make it unnecessary. Let's argue.</p>
       <p class="use">On screen: <a class="chip" href="#f-docir">F4 registry composes on pull</a></p></div></div>
     <div class="seg"><div class="min">2–8<small>why fat images hurt</small></div><div>
       <ul><li>Size, CVE-scanner noise, and a rebuild plus retag for every extension change.</li>
@@ -181,7 +181,7 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
       <p class="use">On screen: <a class="chip" href="#f-pod">F5 pod with image volumes</a> <a class="chip" href="#f-roll">F7 rolling update</a> <a class="chip" href="#f-libs">F8 PostGIS libs</a></p></div></div>
     <div class="seg"><div class="min">34–46<small>DOCIR</small></div><div>
       <ul><li>Architecture: <code>name:reference</code> maps to layers plus a config; manifests are generated per request; layer metadata lives in Postgres; blobs are in S3; multi-arch; tokens.</li>
-      <li>Tag grammar and canonical order: is <code>18-postgis-pgvector</code> the same digest as <code>18-pgvector-postgis</code>?</li>
+      <li>Reference grammar: in DOCIR, image names look like real URL paths rather than one long tag. How is the path parsed? Is <code>…/pgvector/postgis</code> the same digest as <code>…/postgis/pgvector</code>?</li>
       <li>Signing, SBOMs and pinning by digest for images that exist only on demand.</li>
       <li><b>The debate:</b> with ImageVolume, what is left for DOCIR? The case for DOCIR to put to Álvaro: ImageVolume is Kubernetes-specific, Postgres-specific and Postgres 18+ only, and it cannot produce a combined SBOM, which makes it a narrow solution and DOCIR a general one. Let him make the case, then push back with the counter-questions under "The debate" below.</li>
       <li>Prior art: the OnGres post <a href="https://ongres.com/blog/why-postgres-extensions-should-be-distributed-and-packaged-as-oci-images/">"Why Postgres extensions should be distributed and packaged as OCI images"</a>. Its argument: packaging extensions is really building a Postgres distribution, so build them with the same OS, libc and compiler as the server.</li></ul>
@@ -226,7 +226,7 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
     <div class="head"><span class="eyebrow">F4</span><h3>A registry that composes on pull</h3></div>
     <div class="stage"><svg viewBox="0 0 960 540" role="img" aria-label="A client requests a manifest; the registry splits the reference, looks up layers in a Postgres metadata table, writes a manifest and the client fetches existing blobs from S3."></svg></div>
     <div class="ctl"></div>
-    <div class="cap"><div><b>Shows</b>DOCIR receives a manifest request, splits the reference, looks up matching layers in its Postgres metadata store, generates the manifest, and lets the client fetch blobs that already exist.</div><div><b>Aha</b>The image is a view over stored layers. Only the small manifest is new; every blob is shared and cacheable.</div><div><b>Check</b>The reference syntax and digests are illustrative. Confirm the real tag grammar, canonical ordering and multi-arch index handling with Álvaro.</div></div>
+    <div class="cap"><div><b>Shows</b>DOCIR receives a manifest request, splits the reference, looks up matching layers in its Postgres metadata store, generates the manifest, and lets the client fetch blobs that already exist.</div><div><b>Aha</b>The image is a view over stored layers. Only the small manifest is new; every blob is shared and cacheable.</div><div><b>Check</b>DOCIR references look like real URL paths. The exact path below and the digests are illustrative. Confirm the real grammar, canonical ordering and multi-arch index handling with Álvaro.</div></div>
   </figure>
 
   <figure class="anim" id="f-pod" data-scene="pod" data-dur="12">
@@ -270,7 +270,7 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
     </ol></div>
     <div class="qcard"><h3>DOCIR</h3><ol>
       <li>Walk us through one pull: reference → layers → manifest. Where does the business logic live, and who writes it?</li>
-      <li>Is the order of extensions in the tag canonicalised? Is the same combination always the same digest?</li>
+      <li>References look like URL paths. Is the order of extensions in the path canonicalised? Is the same combination always the same digest?</li>
       <li>How do signing (cosign), SBOMs and pinning by digest work for images that are generated?</li>
       <li>Status: open source? License? The slides targeted v1.0 in Q2 2026. Where is it now?</li>
     </ol></div>
@@ -331,7 +331,7 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
     <label><input type="checkbox" id="v3"><span>Whether ImageVolume is GA in 1.36 according to the official release notes, not only the KEP.</span></label>
     <label><input type="checkbox" id="v4"><span>The status of bug #19506 and the fix for any 18.x minor. Which 18.x carries the back-patched <code>pg_upgrade</code> fix (1e67508730)?</span></label>
     <label><input type="checkbox" id="v5"><span>What the "9 × 10⁵⁸" on Álvaro's slide counts: C(200,100) or something else.</span></label>
-    <label><input type="checkbox" id="v6"><span>DOCIR facts: open source or not, licence, URL, v1.0 status, tag grammar.</span></label>
+    <label><input type="checkbox" id="v6"><span>DOCIR facts: open source or not, licence, URL, v1.0 status, the exact URL-like reference grammar.</span></label>
     <label><input type="checkbox" id="v11"><span>Read the OnGres OCI-packaging post and note its date for the timeline. It may predate the CNPG and EDB posts, which matters for "who proposed OCI for extensions first".</span></label>
     <label><input type="checkbox" id="v7"><span>The StackGres extension count today. The OnGres post says about 200, and the year runtime loading first shipped.</span></label>
     <label><input type="checkbox" id="v8"><span>If sizes are quoted: <code>docker manifest inspect</code> for <code>postgres:18</code>, and the CNPG <code>18-minimal-trixie</code> and <code>standard</code> images.</span></label>
@@ -483,15 +483,15 @@ scenes.docir={build(svg){
   // db cylinder
   const db=el("g",{transform:"translate(690,110)"},svg);el("path",{d:"M0 14 a115 14 0 0 1 230 0 v130 a115 14 0 0 1 -230 0z",class:"f-pgs s-pg","stroke-width":1.5},db);el("path",{d:"M0 14 a115 14 0 0 0 230 0",fill:"none",class:"s-pg","stroke-width":1.5},db);
   txt(db,115,44,"layer metadata (Postgres)","f-pg lbl","middle");
-  const rows=[["base","18.x / amd64"],["pgvector","0.8 / pg18 / amd64"],["postgis","3.x / pg18 / amd64"],["pg_cron","1.6 / pg18 / amd64"]];
+  const rows=[["base","18.x amd64"],["pgvector","0.8 pg18 amd64"],["postgis","3.x pg18 amd64"],["pg_cron","1.6 pg18 amd64"]];
   S.rows=rows.map((r,i)=>{const g=el("g",null,db);const bg=box(g,12,60+i*20,206,18,"f-surface",2);txt(g,18,73+i*20,r[0],"f-ink mono").setAttribute("font-size","11");txt(g,92,73+i*20,r[1],"f-muted mono").setAttribute("font-size","10");return {bg,hit:i<3};});
   const s3=el("g",{transform:"translate(690,350)"},svg);box(s3,0,0,230,130,"f-boxs s-box",6).setAttribute("stroke-width","1.5");txt(s3,115,24,"blobs (S3)","f-box lbl","middle");
   S.blobs=[];for(let i=0;i<8;i++){const r=box(s3,18+(i%4)*52,40+Math.floor(i/4)*42,40,32,i<3?"f-box":"f-line",3);S.blobs.push(r);}
-  S.req=txt(svg,40,170,"","f-ink mono");S.req2=txt(svg,40,190,"","f-ink mono");S.REQ="GET /v2/postgres/manifests/";S.REQ2="    18-pgvector-postgis";
+  S.req=txt(svg,40,170,"","f-ink mono");S.req2=txt(svg,40,190,"","f-ink mono");S.REQ="GET /v2/pg/18/pgvector/postgis/";S.REQ2="    manifests/latest   (illustrative)";
   S.a1=line(svg,232,250,326,250,"ink",true);
-  S.chips=["18","pgvector","postgis","linux/amd64"].map((c,i)=>{const g=el("g",null,svg);const w=c.length*8+16;const x=350+[0,40,124,200][i];box(g,x,156,w,22,"f-pg",11);txt(g,x+w/2,171,c,"f-surface mono","middle").setAttribute("font-size","11.5");return g;});
+  let cx=338;S.chips=["pg/18","pgvector","postgis","amd64"].map((c,i)=>{const g=el("g",null,svg);const w=c.length*8+16;const x=cx;cx+=w+6;box(g,x,156,w,22,"f-pg",11);txt(g,x+w/2,171,c,"f-surface mono","middle").setAttribute("font-size","11.5");return g;});
   S.a2=line(svg,620,200,688,170,"pg",true);
-  S.man=[];const M=['{ "mediaType": "…image.manifest.v1+json",','  "config": { "digest": "sha256:c0f9…" },','  "layers": [','    { "digest": "sha256:4a1f…" },  // base','    { "digest": "sha256:9c0e…" },  // pgvector','    { "digest": "sha256:e71b…" } ] }'];
+  S.man=[];const M=['{ "mediaType": "…image.manifest.v1+json",','  "config": { "digest": "sha256:c0f9…" },','  "layers": [','    { "digest": "sha256:4a1f…" },  // base','    { "digest": "sha256:9c0e…" },  // pgvector','    { "digest": "sha256:e71b…" } ] } // postgis'];
   M.forEach((m,i)=>{S.man.push({e:txt(svg,346,220+i*22,"","f-ink mono"),s:m});});S.man.forEach(m=>m.e.setAttribute("font-size","11.5"));
   S.newTag=el("g",null,svg);box(S.newTag,346,360,262,26,"f-box",3);txt(S.newTag,477,378,"generated now · cached by digest","f-surface mono","middle").setAttribute("font-size","11.5");
   S.a3=line(svg,328,290,234,290,"box",true);
