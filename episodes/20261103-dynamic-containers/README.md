@@ -15,6 +15,7 @@
 | Document | Purpose |
 | --- | --- |
 | [Prep brief](https://claude.ai/artifact/XyvBbKY2eWJ8L7EfbqDbTt) ([source](prep.html)) | Run of show, eight animated 16:9 illustrations to screen-capture, questions for Álvaro, timeline, pre-recording checklist, titles and thumbnails |
+| [Cheat sheet](https://claude.ai/artifact/81DdY6NeSHGyGMFWGvC8mf) ([source](cheat-sheet.html)) | One-page host notes: the four approaches, key facts, gotchas, DOCIR demo, debate, top questions, run of show |
 | [`research.md`](research.md) | Facts with their sources: Postgres commits, KEP-4639, CNPG source and docs, the CNPG extension image Dockerfiles. Unverified claims are flagged |
 
 ## Main sources
