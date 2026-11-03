@@ -183,7 +183,8 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
       <ul><li>Architecture: <code>name:reference</code> maps to layers plus a config; manifests are generated per request; layer metadata lives in Postgres; blobs are in S3; multi-arch; tokens.</li>
       <li>Tag grammar and canonical order: is <code>18-postgis-pgvector</code> the same digest as <code>18-pgvector-postgis</code>?</li>
       <li>Signing, SBOMs and pinning by digest for images that exist only on demand.</li>
-      <li><b>The debate:</b> with ImageVolume, what is left for DOCIR? Plain Docker, Compose, Podman, CI, laptops, clusters older than 1.35, one artifact instead of N mounts.</li></ul>
+      <li><b>The debate:</b> with ImageVolume, what is left for DOCIR? The case for DOCIR to put to Álvaro: ImageVolume is Kubernetes-specific, Postgres-specific and Postgres 18+ only, and it cannot produce a combined SBOM, which makes it a narrow solution and DOCIR a general one. Let him make the case, then push back with the counter-questions under "The debate" below.</li>
+      <li>Prior art: the OnGres post <a href="https://ongres.com/blog/why-postgres-extensions-should-be-distributed-and-packaged-as-oci-images/">"Why Postgres extensions should be distributed and packaged as OCI images"</a>. Its argument: packaging extensions is really building a Postgres distribution, so build them with the same OS, libc and compiler as the server.</li></ul>
       <p class="use">On screen: <a class="chip" href="#f-docir">F4 registry composes on pull</a> <a class="chip" href="#f-when">F3 again</a></p></div></div>
     <div class="seg"><div class="min">46–55<small>the hard parts</small></div><div>
       <ul><li>ABI: <code>PG_MODULE_MAGIC</code> checks the major version and a few build constants, not glibc. When does a bookworm <code>.so</code> on trixie blow up?</li>
@@ -191,7 +192,7 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
       <li>Ecosystem: should extension authors ship OCI artifacts? PGXN v2, Trunk, PGDG debs: one shared spec or five package managers?</li>
       <li>Nik's angle: thin clones (DBLab) booting with a different extension set from production, for example hypopg on the clone only.</li></ul></div></div>
     <div class="seg"><div class="min">55–60<small>close</small></div><div>
-      <p>One thing to try this week from each person. For example: run <code>SHOW extension_control_path;</code> on PG 18, add pgvector to a CNPG cluster by image, or pull an image from DOCIR. Then where to find Álvaro's talks.</p></div></div>
+      <p>One thing to try this week from each person. For example: run <code>SHOW extension_control_path;</code> on PG 18, add pgvector to a CNPG cluster by image, or pull an image from DOCIR. Then where to find Álvaro's talks: <a href="https://aht.es/">aht.es</a>.</p></div></div>
   </div>
 </div></section>
 
@@ -274,7 +275,10 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
       <li>Status: open source? License? The slides targeted v1.0 in Q2 2026. Where is it now?</li>
     </ol></div>
     <div class="qcard"><h3>The debate</h3><ol>
-      <li>Kubernetes 1.35 turned ImageVolume on, and CNPG uses it with two GUCs. What does DOCIR still give a Kubernetes user?<span class="why">Candidates: plain Docker, Compose, Podman and CI; clusters older than 1.35; one artifact instead of N mounts.</span></li>
+      <li>Kubernetes 1.35 turned ImageVolume on, and CNPG uses it with two GUCs. What does DOCIR still give a Kubernetes user?<span class="why">The expected case: ImageVolume is Kubernetes-specific, Postgres-specific and PG 18+ only, and has no combined SBOM. It is narrow; DOCIR is general. Ask what other reasons he sees.</span></li>
+      <li>Counter: each CNPG extension image can carry its own SBOM, and the cluster status lists every image by reference. Why does a single combined SBOM matter to an auditor?</li>
+      <li>Counter: for a Postgres operator, being Postgres-specific is the point. Who outside Postgres needs dynamic images? Name the second use case.</li>
+      <li>Either/or? Could DOCIR serve the extension images that ImageVolume mounts, or a composed image that CNPG uses as its operand?</li>
       <li>Why not a three-line Dockerfile with <code>apt-get install postgresql-18-postgis-3</code>?</li>
       <li>Is 2ⁿ a strawman? Most users want about 10 combinations. Why not pre-build the top 50?</li>
     </ol></div>
@@ -301,6 +305,7 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
   <div><p class="eyebrow">Checked against Git, KEP and tags unless dashed</p><h2>How the pieces converged</h2></div>
   <div class="tl">
     <div class="tbd"><time>2020–21</time><p>StackGres loads extensions at runtime from its own repository. 1.0 shipped in 2021 with 120+ extensions. <span class="flag">confirm first release</span></p></div>
+    <div class="tbd"><time>~2024</time><p>OnGres blog: <a href="https://ongres.com/blog/why-postgres-extensions-should-be-distributed-and-packaged-as-oci-images/">"Why Postgres extensions should be distributed and packaged as OCI images"</a>. It says OnGres had run a repository of about 200 extensions for StackGres for about three years. <span class="flag">confirm date</span></p></div>
     <div class="k8s"><time>2024-05-17</time><p>KEP-4639 "OCI images as VolumeSource" created (sallyom, saschagrunert).</p></div>
     <div class="k8s"><time>2024-08</time><p>Kubernetes 1.31: <code>ImageVolume</code> alpha.</p></div>
     <div><time>2025-03-19</time><p>Postgres commit <code>4f7f7b0375</code> adds <code>extension_control_path</code>. Author Peter Eisentraut, co-author Matheus Alcantara; reviewed by David Wheeler, Gabriele Bartolini, Marco Nenciarini and Niccolò Fei.</p></div>
@@ -327,7 +332,8 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
     <label><input type="checkbox" id="v4"><span>The status of bug #19506 and the fix for any 18.x minor. Which 18.x carries the back-patched <code>pg_upgrade</code> fix (1e67508730)?</span></label>
     <label><input type="checkbox" id="v5"><span>What the "9 × 10⁵⁸" on Álvaro's slide counts: C(200,100) or something else.</span></label>
     <label><input type="checkbox" id="v6"><span>DOCIR facts: open source or not, licence, URL, v1.0 status, tag grammar.</span></label>
-    <label><input type="checkbox" id="v7"><span>The StackGres extension count today, and the year runtime loading first shipped.</span></label>
+    <label><input type="checkbox" id="v11"><span>Read the OnGres OCI-packaging post and note its date for the timeline. It may predate the CNPG and EDB posts, which matters for "who proposed OCI for extensions first".</span></label>
+    <label><input type="checkbox" id="v7"><span>The StackGres extension count today. The OnGres post says about 200, and the year runtime loading first shipped.</span></label>
     <label><input type="checkbox" id="v8"><span>If sizes are quoted: <code>docker manifest inspect</code> for <code>postgres:18</code>, and the CNPG <code>18-minimal-trixie</code> and <code>standard</code> images.</span></label>
     <label><input type="checkbox" id="v9"><span>How Álvaro wants to be introduced (name, title). Ask him; don't copy from LinkedIn.</span></label>
     <label><input type="checkbox" id="v10"><span>The co-host and recording date for this episode. The repo folder uses 2026-11-03 as a placeholder.</span></label>
@@ -355,6 +361,8 @@ footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1p
   <ul class="src">
     <li><a href="https://www.gabrielebartolini.it/articles/2025/12/cnpg-recipe-23-managing-extensions-with-imagevolume-in-cloudnativepg/">CNPG Recipe 23 – Managing extensions with ImageVolume</a>, G. Bartolini, 2025-12-01 <span class="flag">read in full</span></li>
     <li><a href="https://www.youtube.com/watch?v=PNvAefbcGiA">Dynamic OCI Registry</a>, Á. Hernández (video) · <a href="https://speakerdeck.com/ongres/docir-dynamic-oci-registry">slides</a> <span class="flag">watch</span></li>
+    <li><a href="https://ongres.com/blog/why-postgres-extensions-should-be-distributed-and-packaged-as-oci-images/">Why Postgres extensions should be distributed and packaged as OCI images</a>, OnGres blog: prior art <span class="flag">read</span></li>
+    <li><a href="https://aht.es/">aht.es</a>: Álvaro's talks (past talks; may not list the newest)</li>
     <li><a href="https://speakerdeck.com/ongres/postgres-a-la-carte-dynamic-container-images-with-your-choice-of-extensions">Postgres à la carte: dynamic container images</a>, Á. Hernández, slides</li>
     <li><a href="https://github.com/postgres/postgres/commit/4f7f7b0375">postgres 4f7f7b0375</a> extension_control_path · <a href="https://github.com/postgres/postgres/commit/f777d77387">f777d77387</a> · <a href="https://github.com/postgres/postgres/commit/1e67508730">1e67508730</a> · <a href="https://github.com/postgres/postgres/commit/f3c9e341cd">f3c9e341cd</a> <span class="flag ok">read</span></li>
     <li><a href="https://www.postgresql.org/message-id/19506-9478f3012ecc2328@postgresql.org">BUG #19506</a>: LOAD '$libdir/…' ignores dynamic_library_path</li>

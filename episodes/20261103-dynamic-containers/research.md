@@ -79,6 +79,11 @@ There are three follow-up details to know:
 - PostGIS `Dockerfile`: it diffs `ldconfig -p` of the base image against `ldd postgis*.so` and copies into `/system/` only the libraries the base lacks (GEOS, PROJ, GDAL and so on). `metadata.hcl` sets `ld_library_path = ["system"]`, `GDAL_DATA` and `PROJ_DATA` via `${image_root}`, and `auto_update_os_libs = true`.
 - Versions in `metadata.hcl`: pgvector `0.8.7-1.pgdg13+1` (trixie, PG18); PostGIS `3.7.0+dfsg-1.pgdg13+1`.
 
+## Prior art and guest material
+
+- OnGres, ["Why Postgres extensions should be distributed and packaged as OCI images"](https://ongres.com/blog/why-postgres-extensions-should-be-distributed-and-packaged-as-oci-images/). This summary comes from a search excerpt because ongres.com was blocked from this session; the date is **unverified**. Its argument: packaging binary extensions is really building a Postgres distribution with extensions; extensions should be built with the same host OS, libc and compiler as the server; any new extension format would end up looking like an OCI image; and OCI registries already give distribution over HTTP. It says OnGres had run a repository of about 200 extensions for StackGres for about three years.
+- Álvaro's talks are listed at [aht.es](https://aht.es/). The page may not include the newest ones.
+
 ## Álvaro's alternatives: three ways to get extensions into a container
 
 From the "Postgres à la carte" and DOCIR slide pages via search, so **unverified in detail**. Watch the talk to confirm.
