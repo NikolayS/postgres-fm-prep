@@ -6,6 +6,7 @@ Research, study packs, experiment plans and recording notes for individual Postg
 
 | Episode | Status | Materials |
 | --- | --- | --- |
+| Dynamic containers for Postgres (guest: Álvaro Hernández) | Preparation | [Episode overview](episodes/20261103-dynamic-containers/README.md) · [Prep brief](https://claude.ai/artifact/XyvBbKY2eWJ8L7EfbqDbTt) · [Research](episodes/20261103-dynamic-containers/research.md) |
 | Your restore finished. Is your database ready? | Preparation; additional experiments proposed | [Episode overview](episodes/20261020-restore-readiness/README.md) · [Study pack](episodes/20261020-restore-readiness/study-pack.md) |
 | UUIDv4 vs UUIDv7 (#194) | Published 2026-10-30: [YouTube](https://www.youtube.com/watch?v=gf8e3JkQ_8M) · [postgres.fm](https://postgres.fm/episodes/uuidv4-vs-uuidv7) | [Episode overview](episodes/20261027-uuidv4-vs-uuidv7/README.md) · [Show notes](episodes/20261027-uuidv4-vs-uuidv7/show-notes.md) · [Illustrations](episodes/20261027-uuidv4-vs-uuidv7/illustrations.md) |
 

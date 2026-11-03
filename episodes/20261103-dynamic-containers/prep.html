@@ -1,0 +1,638 @@
+<title>Dynamic Containers for Postgres</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a container-yard prep sheet. One reading column, wide figure bays for the animations, a sticky manifest bar for navigation. */
+:root{
+  --bg:#eceff3; --surface:#ffffff; --surface2:#f5f7fa; --ink:#132030; --muted:#566476; --line:#c8d0da;
+  --pg:#2c6591; --pg-soft:#d6e4f0; --box:#c4572a; --box-soft:#f5dccf; --ok:#23784f; --ok-soft:#d4ecdf; --bad:#b3261e; --bad-soft:#f6d7d4; --warn:#9a6a12;
+  --f-display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --f-body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e151d; --surface:#151f2a; --surface2:#1b2733; --ink:#e4ebf2; --muted:#93a2b3; --line:#2b3b4c;
+  --pg:#74ade0; --pg-soft:#1e3449; --box:#f08a55; --box-soft:#3e2619; --ok:#57c78f; --ok-soft:#183427; --bad:#f07a70; --bad-soft:#3d1d1b; --warn:#e1b450; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e151d; --surface:#151f2a; --surface2:#1b2733; --ink:#e4ebf2; --muted:#93a2b3; --line:#2b3b4c;
+  --pg:#74ade0; --pg-soft:#1e3449; --box:#f08a55; --box-soft:#3e2619; --ok:#57c78f; --ok-soft:#183427; --bad:#f07a70; --bad-soft:#3d1d1b; --warn:#e1b450; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:1100px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+a{color:var(--pg)} a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--box);outline-offset:2px}
+code,.mono{font-family:var(--f-mono);font-size:.88em}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;line-height:1.05;margin:0}
+h2{font-size:clamp(2rem,4vw,2.8rem);font-weight:800;letter-spacing:.01em}
+h3{font-size:1.45rem;font-weight:800;letter-spacing:.01em}
+p{margin:0} .prose{max-width:68ch}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* nav */
+nav.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+nav.bar .wrap{display:flex;gap:4px 18px;align-items:center;flex-wrap:wrap;padding-block:10px}
+nav.bar .tag{font-family:var(--f-mono);font-size:.72rem;color:var(--box);letter-spacing:.06em;margin-right:auto}
+nav.bar a{font-size:.88rem;font-weight:600;text-decoration:none;color:var(--ink)} nav.bar a:hover{color:var(--pg)}
+
+/* hero */
+header.hero{padding-block:44px 28px}
+header.hero .wrap{display:grid;gap:22px}
+.hero h1{font-size:clamp(3rem,9vw,6.4rem);font-weight:800;letter-spacing:-.005em;text-transform:uppercase}
+.hero h1 span{color:var(--box)}
+.hero .thesis{font-size:1.22rem;max-width:60ch}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.facts div{background:var(--surface);padding:12px 14px;display:grid;gap:2px;min-width:0}
+.facts b{font-family:var(--f-display);font-size:1.6rem;font-weight:800;line-height:1}
+.facts small{color:var(--muted);font-size:.8rem}
+
+section{padding-block:40px;border-top:1px solid var(--line)}
+section > .wrap{display:grid;gap:22px}
+.lede{color:var(--muted);max-width:70ch}
+
+/* run of show */
+.runbar{display:flex;height:34px;border:1px solid var(--line);overflow:hidden}
+.runbar div{display:flex;align-items:center;justify-content:center;font-family:var(--f-mono);font-size:.72rem;color:var(--ink);border-right:1px solid var(--line);white-space:nowrap;overflow:hidden;min-width:0}
+.runbar div:nth-child(odd){background:var(--pg-soft)} .runbar div:nth-child(even){background:var(--box-soft)} .runbar div:last-child{border-right:0}
+.segs{display:grid;gap:14px}
+.seg{display:grid;grid-template-columns:92px 1fr;gap:16px;background:var(--surface);border:1px solid var(--line);padding:16px}
+.seg .min{font-family:var(--f-display);font-weight:800;font-size:1.5rem;line-height:1}
+.seg .min small{display:block;font-family:var(--f-mono);font-size:.7rem;font-weight:400;color:var(--muted);margin-top:4px}
+.seg > div{min-width:0;display:grid;gap:8px}
+.seg ul{margin:0;padding-left:1.1em} .seg li{margin:2px 0}
+.seg .use{font-size:.85rem;color:var(--muted)}
+.chip{display:inline-block;font-family:var(--f-mono);font-size:.72rem;padding:1px 7px;border:1px solid var(--line);background:var(--surface2);border-radius:3px;text-decoration:none;color:var(--ink);white-space:nowrap}
+a.chip:hover{border-color:var(--pg)}
+@media (max-width:560px){.seg{grid-template-columns:1fr;gap:8px}}
+
+/* figures */
+.figs{display:grid;gap:34px}
+figure.anim{margin:0;background:var(--surface);border:1px solid var(--line);display:grid}
+figure.anim .head{display:flex;gap:10px 16px;align-items:baseline;flex-wrap:wrap;padding:14px 16px 0}
+figure.anim .head .eyebrow{color:var(--box)}
+.stage{padding:8px 10px 0;overflow-x:auto}
+.stage svg{display:block;width:100%;min-width:620px;height:auto;aspect-ratio:16/9}
+.ctl{display:flex;gap:10px;align-items:center;padding:10px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.ctl button{font:600 .82rem var(--f-body);background:var(--ink);color:var(--surface);border:0;padding:7px 14px;cursor:pointer;border-radius:3px;min-width:76px}
+.ctl button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);min-width:0}
+.ctl input[type=range]{flex:1 1 200px;accent-color:var(--box);min-width:0}
+.ctl .t{font-family:var(--f-mono);font-size:.75rem;color:var(--muted);min-width:9ch;text-align:right;font-variant-numeric:tabular-nums}
+.cap{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px 22px;padding:14px 16px 16px;border-top:1px solid var(--line);background:var(--surface2);font-size:.9rem}
+.cap > div{min-width:0} .cap b{display:block;font-size:.7rem;font-family:var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;font-weight:600}
+figure.anim:fullscreen{background:var(--bg);align-content:center;padding:2vh 2vw}
+figure.anim:fullscreen .cap{display:none}
+
+/* svg classes */
+.f-ink{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-surface{fill:var(--surface)} .f-s2{fill:var(--surface2)}
+.f-pg{fill:var(--pg)} .f-pgs{fill:var(--pg-soft)} .f-box{fill:var(--box)} .f-boxs{fill:var(--box-soft)}
+.f-ok{fill:var(--ok)} .f-oks{fill:var(--ok-soft)} .f-bad{fill:var(--bad)} .f-bads{fill:var(--bad-soft)} .f-line{fill:var(--line)}
+.s-line{stroke:var(--line)} .s-ink{stroke:var(--ink)} .s-pg{stroke:var(--pg)} .s-box{stroke:var(--box)} .s-ok{stroke:var(--ok)} .s-bad{stroke:var(--bad)} .s-muted{stroke:var(--muted)}
+svg text{font-family:var(--f-body)} svg .mono{font-family:var(--f-mono);font-size:13px}
+svg .disp{font-family:var(--f-display);font-weight:800}
+svg .lbl{font-size:13px} svg .sm{font-size:11.5px}
+
+/* questions */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.qcard{background:var(--surface);border:1px solid var(--line);padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.qcard ol{margin:0;padding-left:1.25em;display:grid;gap:8px} .qcard li::marker{color:var(--box);font-weight:700}
+.qcard .why{display:block;color:var(--muted);font-size:.86rem}
+
+/* timeline */
+.tl{display:grid;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.tl div{display:grid;grid-template-columns:118px 1fr;gap:14px;padding:7px 0 7px 18px;position:relative}
+.tl div::before{content:"";position:absolute;left:-7px;top:14px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--pg)}
+.tl div.k8s::before{border-color:var(--box)} .tl div.tbd::before{border-style:dashed;border-color:var(--muted)}
+.tl time{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}
+.tl p{min-width:0}
+@media (max-width:520px){.tl div{grid-template-columns:1fr;gap:0}}
+
+/* checklist */
+.check{display:grid;gap:8px;max-width:80ch}
+.check label{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--line);padding:10px 12px;cursor:pointer}
+.check input{margin-top:4px;accent-color:var(--ok)}
+.check label:has(input:checked){opacity:.6}
+.check label:has(input:checked) span{text-decoration:line-through}
+
+/* titles */
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.thumb{aspect-ratio:16/9;max-width:100%;background:#0d141b;color:#f4f6f8;display:grid;align-content:end;padding:12px;font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:.95;text-transform:uppercase;position:relative;overflow:hidden;border:1px solid var(--line)}
+.thumb i{font-style:normal;color:#f08a55}
+.thumb::after{content:"";position:absolute;right:10px;top:10px;width:30%;aspect-ratio:1;border:2px solid #74ade0;opacity:.7}
+.titles{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.titles li span{font-family:var(--f-mono);font-size:.75rem;color:var(--muted)}
+
+.src{columns:2 320px;column-gap:28px;font-size:.92rem;margin:0;padding-left:1.1em}
+.src li{break-inside:avoid;margin-bottom:8px}
+.flag{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.06em;padding:0 5px;border-radius:2px;background:var(--box-soft);color:var(--ink);white-space:nowrap}
+.flag.ok{background:var(--ok-soft)}
+footer{padding-block:30px 50px;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line)}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<nav class="bar" aria-label="Sections"><div class="wrap">
+  <span class="tag">POSTGRES.FM · PREP</span>
+  <a href="#plan">Plan</a><a href="#figures">Illustrations</a><a href="#questions">Questions</a><a href="#timeline">Timeline</a><a href="#verify">Verify</a><a href="#titles">Titles</a><a href="#sources">Sources</a>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <p class="eyebrow">Postgres.FM · next episode · guest Álvaro Hernández Tortosa (OnGres, StackGres)</p>
+  <h1>Dynamic containers <span>for Postgres</span></h1>
+  <p class="thesis">Every Postgres deployment has to combine the server binaries with the extensions it needs. The approaches differ in when that happens: at build time, at pod start, at pull time or at mount time. The episode is a tour of those four answers, with the person who has built two of them.</p>
+  <div class="facts" role="list">
+    <div role="listitem"><b>PG 18</b><small><code>extension_control_path</code> GUC, commit 4f7f7b0375, 2025-03-19</small></div>
+    <div role="listitem"><b>K8s 1.35</b><small>ImageVolume on by default · alpha 1.31 · GA 1.36 per KEP-4639</small></div>
+    <div role="listitem"><b>CNPG 1.27</b><small><code>.spec.postgresql.extensions</code> · 2025-08-12 · catalogs in 1.29</small></div>
+    <div role="listitem"><b>2<sup>n</sup></b><small>possible images for n optional extensions: why the registry approach (DOCIR) composes on demand</small></div>
+  </div>
+</div></header>
+
+<section id="plan"><div class="wrap">
+  <div><p class="eyebrow">Run of show · about 60 min</p><h2>Episode plan</h2></div>
+  <p class="lede">The arc follows the four composition points in time order, ending on the argument everyone will want to hear: does Kubernetes ImageVolume make a dynamic registry unnecessary? Each segment names the figure to put on screen. Minute budgets are targets, not cut points.</p>
+  <div class="runbar" aria-hidden="true">
+    <div style="flex:2">open</div><div style="flex:6">fat images</div><div style="flex:8">inject</div><div style="flex:8">PG18 GUC</div><div style="flex:10">ImageVolume</div><div style="flex:12">DOCIR</div><div style="flex:9">hard parts</div><div style="flex:5">close</div>
+  </div>
+  <div class="segs">
+    <div class="seg"><div class="min">0–2<small>cold open</small></div><div>
+      <p><b>"<code>docker pull sgcr.dev/postgres/e/pgvector/pg_stat_statements/citext</code>. It works, and that image didn't exist a second ago."</b> Álvaro explains in one sentence what DOCIR does. Then the hook: Kubernetes just shipped something that may make it unnecessary. Let's argue.</p>
+      <p class="use">On screen: <a class="chip" href="#f-docir">F4 registry composes on pull</a></p></div></div>
+    <div class="seg"><div class="min">2–8<small>why fat images hurt</small></div><div>
+      <ul><li>Size, CVE-scanner noise, and a rebuild plus retag for every extension change.</li>
+      <li>The combinatorics: 2ⁿ images for n optional extensions. Ask what was counted in the slide's "9 × 10⁵⁸".</li>
+      <li>Ask Álvaro for real numbers: StackGres image sizes, the extension count today.</li></ul>
+      <p class="use">On screen: <a class="chip" href="#f-fat">F1 fat vs à la carte</a> <a class="chip" href="#f-comb">F2 2ⁿ counter</a></p></div></div>
+    <div class="seg"><div class="min">8–16<small>inject at runtime</small></div><div>
+      <ul><li>The StackGres story: a <code>cluster-controller</code> sidecar downloads, verifies and unpacks extensions from <code>extensions.stackgres.io</code>, and webhooks validate the cluster spec.</li>
+      <li>What broke in production? Air-gapped installs, the extensions cache, cold start with 20 extensions, a registry outage at 3 a.m.</li>
+      <li>Why move on from it to OCI?</li></ul>
+      <p class="use">On screen: <a class="chip" href="#f-when">F3 when do you compose?</a></p></div></div>
+    <div class="seg"><div class="min">16–24<small>PG 18 plumbing</small></div><div>
+      <ul><li><code>extension_control_path</code> finds <code>.control</code> and SQL files; <code>dynamic_library_path</code> (old) finds <code>.so</code>. That makes two searches.</li>
+      <li>The <code>$libdir</code> problem: stripping, bug #18920, then the open bug #19506 (PostGIS upgrades). CNPG's PostGIS image <code>sed</code>-patches its SQL scripts.</li>
+      <li>Nik: why did this take until Postgres 18? Who pushed it? (David Wheeler started the thread; Peter Eisentraut and Matheus Alcantara wrote it; the CNPG team reviewed.)</li></ul>
+      <p class="use">On screen: <a class="chip" href="#f-resolve">F6 CREATE EXTENSION walk</a></p></div></div>
+    <div class="seg"><div class="min">24–34<small>ImageVolume + CNPG</small></div><div>
+      <ul><li>Images mount read-only at <code>/extensions/&lt;name&gt;</code>; the operator appends the paths to both GUCs; a <code>Database</code> resource runs <code>CREATE EXTENSION</code>.</li>
+      <li>Not free: every add, remove or update means a rolling restart; <code>shared_preload_libraries</code> is still manual; the image must match PG major, distro and architecture.</li>
+      <li>PostGIS: copying only the system libraries the base image lacks into <code>/system</code>.</li></ul>
+      <p class="use">On screen: <a class="chip" href="#f-pod">F5 pod with image volumes</a> <a class="chip" href="#f-roll">F7 rolling update</a> <a class="chip" href="#f-libs">F8 PostGIS libs</a></p></div></div>
+    <div class="seg"><div class="min">34–46<small>DOCIR</small></div><div>
+      <ul><li>Architecture: <code>name:reference</code> maps to layers plus a config; manifests are generated per request; layer metadata lives in Postgres; blobs are in S3; multi-arch; tokens.</li>
+      <li>Reference grammar: names are URL paths, as in <code>sgcr.dev/postgres/e/pgvector/pg_stat_statements/citext</code>. Is <code>…/e/citext/pgvector</code> the same digest as <code>…/e/pgvector/citext</code>? Why <code>/e/</code>? Is <code>pg_stat_statements</code> (contrib) its own layer?</li>
+      <li>Live demo, experimental and not yet optimised: <code>docker pull sgcr.dev/postgres</code>, then <code>…/postgres/e/vector</code>, then <code>…/postgres/e/pgvector/pg_stat_statements/citext</code>. Each pull fetches only the extra layers. A REST API and a website build these URLs. Ask what SGCR stands for (StackGres Container Registry is our guess).</li>
+      <li>Signing, SBOMs and pinning by digest for images that exist only on demand.</li>
+      <li><b>The debate:</b> with ImageVolume, what is left for DOCIR? The case for DOCIR to put to Álvaro: ImageVolume is Kubernetes-specific, Postgres-specific and Postgres 18+ only, and it cannot produce a combined SBOM, which makes it a narrow solution and DOCIR a general one. Let him make the case, then push back with the counter-questions under "The debate" below.</li>
+      <li>Prior art: the OnGres post <a href="https://ongres.com/blog/why-postgres-extensions-should-be-distributed-and-packaged-as-oci-images/">"Why Postgres extensions should be distributed and packaged as OCI images"</a>. Its argument: packaging extensions is really building a Postgres distribution, so build them with the same OS, libc and compiler as the server. It is the research that led to DOCIR, not a description of what was built.</li></ul>
+      <p class="use">On screen: <a class="chip" href="#f-docir">F4 registry composes on pull</a> <a class="chip" href="#f-when">F3 again</a></p></div></div>
+    <div class="seg"><div class="min">46–55<small>the hard parts</small></div><div>
+      <ul><li>ABI: <code>PG_MODULE_MAGIC</code> checks the major version and a few build constants, not glibc. When does a bookworm <code>.so</code> on trixie blow up?</li>
+      <li><code>pg_upgrade</code> with extension images (fixed for <code>extension_control_path</code> in March 2026). Who guarantees that pgvector exists for both majors on upgrade day?</li>
+      <li>Ecosystem: should extension authors ship OCI artifacts? PGXN v2, Trunk, PGDG debs: one shared spec or five package managers?</li>
+      <li>Nik's angle: thin clones (DBLab) booting with a different extension set from production, for example hypopg on the clone only.</li></ul></div></div>
+    <div class="seg"><div class="min">55–60<small>close</small></div><div>
+      <p>One thing to try this week from each person. For example: run <code>SHOW extension_control_path;</code> on PG 18, add pgvector to a CNPG cluster by image, or pull an image from DOCIR. Then where to find Álvaro's talks: <a href="https://aht.es/">aht.es</a>.</p></div></div>
+  </div>
+</div></section>
+
+<section id="figures"><div class="wrap">
+  <div><p class="eyebrow">Eight animated cards · 16:9 · scrub, replay, full screen to record</p><h2>Illustrations</h2></div>
+  <p class="lede">Each card rests on its final frame. Press Play to run it from the start, or drag the scrubber to step through it. Full screen gives a clean 16:9 frame for screen capture into the video edit. Step timings in F3 are illustrative; the cards show the order of events, not measured durations.</p>
+  <div class="figs">
+
+  <figure class="anim" id="f-fat" data-scene="fat" data-dur="9">
+    <div class="head"><span class="eyebrow">F1</span><h3>Fat image vs. à la carte</h3></div>
+    <div class="stage"><svg viewBox="0 0 960 540" role="img" aria-label="Left: a single image with every extension baked in, many with vulnerability markers. Right: a minimal base with only pgvector and PostGIS added from a shelf of extension images."></svg></div>
+    <div class="ctl"></div>
+    <div class="cap"><div><b>Shows</b>Option 1 bakes every extension into one image. Option 3 (and ImageVolume) starts from a minimal base and adds only what the cluster asks for.</div><div><b>Aha</b>With a fat image you pay for every extension you don't use: bytes, scanner findings and rebuilds.</div><div><b>Source</b>Álvaro, "Postgres à la carte" (option 1 vs 3); CNPG docs, Benefits. Brick contents are illustrative, not a real image.</div></div>
+  </figure>
+
+  <figure class="anim" id="f-comb" data-scene="comb" data-dur="11">
+    <div class="head"><span class="eyebrow">F2</span><h3>The 2ⁿ counter</h3></div>
+    <div class="stage"><svg viewBox="0 0 960 540" role="img" aria-label="A grid fills as the number of extensions grows, then a counter shows 2 to the n reaching 1.6 times 10 to the 60 at n equals 200."></svg></div>
+    <div class="ctl"></div>
+    <div class="cap"><div><b>Shows</b>The number of distinct images if each of n extensions is optional: 2ⁿ. The grid holds 1,024 cells, so it is full at n = 10.</div><div><b>Aha</b>Pre-building every combination stops being possible somewhere in the 30s. 2³³ is more than one image per person on Earth.</div><div><b>Check</b>The slide's "≈9 × 10⁵⁸ at n = 200" equals C(200,100), images with exactly 100 extensions. All subsets give 2²⁰⁰ ≈ 1.6 × 10⁶⁰. Ask Álvaro which he meant.</div></div>
+  </figure>
+
+  <figure class="anim" id="f-when" data-scene="when" data-dur="12">
+    <div class="head"><span class="eyebrow">F3</span><h3>When do you compose?</h3></div>
+    <div class="stage"><svg viewBox="0 0 960 540" role="img" aria-label="Four lanes: fat image composed at build time, StackGres runtime injection at pod start, DOCIR at pull time, ImageVolume at mount time."></svg></div>
+    <div class="ctl"></div>
+    <div class="cap"><div><b>Shows</b>The same goal, Postgres with pgvector running, reached four ways. The badge on each lane says who composes the final filesystem and when.</div><div><b>Aha</b>Each approach chooses a point in time to compose, and that choice decides who builds the image, what can be cached and what needs a restart.</div><div><b>Note</b>Bar lengths are illustrative and show order only. StackGres details come from its docs; DOCIR details come from the slides and need confirming.</div></div>
+  </figure>
+
+  <figure class="anim" id="f-docir" data-scene="docir" data-dur="12">
+    <div class="head"><span class="eyebrow">F4</span><h3>A registry that composes on pull</h3></div>
+    <div class="stage"><svg viewBox="0 0 960 540" role="img" aria-label="A client requests a manifest; the registry splits the reference, looks up layers in a Postgres metadata table, writes a manifest and the client fetches existing blobs from S3."></svg></div>
+    <div class="ctl"></div>
+    <div class="cap"><div><b>Shows</b>DOCIR receives a manifest request, splits the reference, looks up matching layers in its Postgres metadata store, generates the manifest, and lets the client fetch blobs that already exist.</div><div><b>Aha</b>The image is a view over stored layers. Only the small manifest is new; every blob is shared and cacheable.</div><div><b>Check</b>The pull is a real reference on sgcr.dev, an experimental public DOCIR deployment. Names are URL paths: <code>postgres/e/&lt;ext&gt;/&lt;ext&gt;…</code>. The digests and the metadata rows are illustrative. Confirm canonical ordering and multi-arch index handling with Álvaro.</div></div>
+  </figure>
+
+  <figure class="anim" id="f-pod" data-scene="pod" data-dur="12">
+    <div class="head"><span class="eyebrow">F5</span><h3>Extensions as read-only image volumes</h3></div>
+    <div class="stage"><svg viewBox="0 0 960 540" role="img" aria-label="A pod on a node pulls a minimal Postgres image and two extension images mounted read-only at /extensions/pgvector and /extensions/postgis; the GUC panel gains the new paths."></svg></div>
+    <div class="ctl"></div>
+    <div class="cap"><div><b>Shows</b>CNPG 1.27+ on K8s 1.33+ (gate) or 1.35+ (default). The kubelet pulls each extension image and mounts it read-only. The instance manager prepends <code>$system</code> and <code>$libdir</code> and appends one path per extension.</div><div><b>Aha</b>Nothing is copied into the Postgres image. The operator only edits two GUCs and two environment variables.</div><div><b>Source</b><code>pkg/postgres/configuration.go</code> (<code>setExtensionControlPath</code>, <code>setDynamicLibraryPath</code>); CNPG docs, Mounting; postgis <code>metadata.hcl</code>.</div></div>
+  </figure>
+
+  <figure class="anim" id="f-resolve" data-scene="resolve" data-dur="12">
+    <div class="head"><span class="eyebrow">F6</span><h3>What CREATE EXTENSION actually searches</h3></div>
+    <div class="stage"><svg viewBox="0 0 960 540" role="img" aria-label="CREATE EXTENSION vector walks extension_control_path to find vector.control, strips $libdir from module_pathname, then walks dynamic_library_path to find vector.so."></svg></div>
+    <div class="ctl"></div>
+    <div class="cap"><div><b>Shows</b>Two independent searches. The first finds <code>vector.control</code> under each path entry's <code>extension/</code> directory. The second strips <code>$libdir/</code> from <code>module_pathname</code> and finds <code>vector.so</code>.</div><div><b>Aha</b>Finding the <code>.so</code> is the fragile step. A literal <code>LOAD '$libdir/…'</code> in an extension script bypasses the path search (bug #19506, still open).</div><div><b>Source</b>Postgres commits 4f7f7b0375, f777d77387; pgsql-bugs #19506 (June 2026); CNPG <code>postgis/Dockerfile</code> sed workaround.</div></div>
+  </figure>
+
+  <figure class="anim" id="f-roll" data-scene="roll" data-dur="12">
+    <div class="head"><span class="eyebrow">F7</span><h3>Adding one extension is a rolling restart</h3></div>
+    <div class="stage"><svg viewBox="0 0 960 540" role="img" aria-label="A Cluster spec gains a pgvector entry; replica 3, then replica 2, then the primary are recreated with the new volume; a Database resource then runs CREATE EXTENSION."></svg></div>
+    <div class="ctl"></div>
+    <div class="cap"><div><b>Shows</b>Pod volumes can't change in place. CNPG recreates the replicas first, then the primary, using <code>primaryUpdateMethod: restart</code> by default or <code>switchover</code> if set. After that the <code>Database</code> resource runs <code>CREATE EXTENSION</code>.</div><div><b>Aha</b>"No rebuild" does not mean "no restart". Changes to <code>ld_library_path</code>, <code>bin_path</code> or <code>env</code> need a manual <code>cnpg restart</code>.</div><div><b>Source</b>CNPG docs: imagevolume_extensions (How it works, Caveats), rolling_update.md.</div></div>
+  </figure>
+
+  <figure class="anim" id="f-libs" data-scene="libs" data-dur="10">
+    <div class="head"><span class="eyebrow">F8</span><h3>PostGIS brings its own libraries</h3></div>
+    <div class="stage"><svg viewBox="0 0 960 540" role="img" aria-label="Set difference: the PostGIS library dependencies minus those already in the base image are copied into /system, reached through LD_LIBRARY_PATH."></svg></div>
+    <div class="ctl"></div>
+    <div class="cap"><div><b>Shows</b>The CNPG PostGIS build compares <code>ldd postgis*.so</code> with the base image's <code>ldconfig -p</code> and copies only the missing libraries into <code>/system</code>. It sets <code>LD_LIBRARY_PATH</code>, <code>GDAL_DATA</code> and <code>PROJ_DATA</code> from <code>${image_root}</code>.</div><div><b>Aha</b>An extension image is a small filesystem layered onto a specific base. Two extensions that ship different GEOS builds would conflict.</div><div><b>Source</b><code>postgres-extensions-containers/postgis/Dockerfile</code> and <code>metadata.hcl</code> at cb5c269. The library names are illustrative.</div></div>
+  </figure>
+
+  </div>
+</div></section>
+
+<section id="questions"><div class="wrap">
+  <div><p class="eyebrow">For Álvaro · grouped by segment</p><h2>Questions</h2></div>
+  <div class="qgrid">
+    <div class="qcard"><h3>The story</h3><ol>
+      <li>When did StackGres start loading extensions at runtime, and what made you stop baking them in?<span class="why">The StackGres 1.0 (2021) announcement says 120+ extensions. What is the number today?</span></li>
+      <li>What failed in production with runtime injection: air-gapped installs, cold starts, the extensions cache?</li>
+      <li>"Postgres in the Container Era" (2024) → "à la carte" (2025) → DOCIR. What changed your mind between the talks?</li>
+    </ol></div>
+    <div class="qcard"><h3>DOCIR</h3><ol>
+      <li>Walk us through one pull: reference → layers → manifest. Where does the business logic live, and who writes it?</li>
+      <li>References are URL paths (<code>sgcr.dev/postgres/e/…</code>). Is the order of extensions canonicalised? Is the same combination always the same digest? Are <code>vector</code> and <code>pgvector</code> aliases?</li>
+      <li>What does SGCR stand for, and what makes sgcr.dev "experimental, not optimised" today?</li>
+      <li>How do signing (cosign), SBOMs and pinning by digest work for images that are generated?</li>
+      <li>Status: open source? License? The slides targeted v1.0 in Q2 2026. Where is it now?</li>
+    </ol></div>
+    <div class="qcard"><h3>The debate</h3><ol>
+      <li>Kubernetes 1.35 turned ImageVolume on, and CNPG uses it with two GUCs. What does DOCIR still give a Kubernetes user?<span class="why">The expected case: ImageVolume is Kubernetes-specific, Postgres-specific and PG 18+ only, and has no combined SBOM. It is narrow; DOCIR is general. Ask what other reasons he sees.</span></li>
+      <li>Counter: each CNPG extension image can carry its own SBOM, and the cluster status lists every image by reference. Why does a single combined SBOM matter to an auditor?</li>
+      <li>Counter: for a Postgres operator, being Postgres-specific is the point. Who outside Postgres needs dynamic images? Name the second use case.</li>
+      <li>Either/or? Could DOCIR serve the extension images that ImageVolume mounts, or a composed image that CNPG uses as its operand?</li>
+      <li>Why not a three-line Dockerfile with <code>apt-get install postgresql-18-postgis-3</code>?</li>
+      <li>Is 2ⁿ a strawman? Most users want about 10 combinations. Why not pre-build the top 50?</li>
+    </ol></div>
+    <div class="qcard"><h3>Hard parts</h3><ol>
+      <li>ABI: the image must match PG major, distro and architecture. Is that enough? glibc symbol versions, LLVM bitcode, compiler flags?</li>
+      <li>Shared native dependencies: PostGIS and pgRouting both want GEOS. What happens when versions differ?</li>
+      <li><code>shared_preload_libraries</code> still needs a restart. Is "no rebuild" the real win, rather than "no restart"?</li>
+      <li>Major upgrades: who guarantees that the same extension version exists for both majors?</li>
+    </ol></div>
+    <div class="qcard"><h3>Ecosystem</h3><ol>
+      <li>Should extension authors publish OCI artifacts (<code>FROM scratch</code> with <code>/lib</code> and <code>/share</code>) next to debs?</li>
+      <li>PGXN v2, Trunk, Pigsty, PGDG, CNPG images, StackGres repo: can one OCI media-type spec serve all of them?</li>
+      <li>Licensing: CNPG accepts only CNCF-allowlisted licences (PostGIS is grandfathered). How does a commercial registry handle GPL extensions?</li>
+    </ol></div>
+    <div class="qcard"><h3>Nik's angles</h3><ol>
+      <li>Thin clones (DBLab): could a clone boot with a different extension set from production, for example hypopg or plprofiler only on the clone?</li>
+      <li>And the opposite: how do we prove the clone runs exactly production's extension digests?</li>
+      <li>Branching for AI agents: a database branch with on-demand extensions, created at pull time?</li>
+    </ol></div>
+  </div>
+</div></section>
+
+<section id="timeline"><div class="wrap">
+  <div><p class="eyebrow">Checked against Git, KEP and tags unless dashed</p><h2>How the pieces converged</h2></div>
+  <div class="tl">
+    <div class="tbd"><time>2020–21</time><p>StackGres loads extensions at runtime from its own repository. 1.0 shipped in 2021 with 120+ extensions. <span class="flag">confirm first release</span></p></div>
+    <div class="tbd"><time>~2024</time><p>OnGres blog: <a href="https://ongres.com/blog/why-postgres-extensions-should-be-distributed-and-packaged-as-oci-images/">"Why Postgres extensions should be distributed and packaged as OCI images"</a>. It says OnGres had run a repository of about 200 extensions for StackGres for about three years. <span class="flag">confirm date</span></p></div>
+    <div class="k8s"><time>2024-05-17</time><p>KEP-4639 "OCI images as VolumeSource" created (sallyom, saschagrunert).</p></div>
+    <div class="k8s"><time>2024-08</time><p>Kubernetes 1.31: <code>ImageVolume</code> alpha.</p></div>
+    <div><time>2025-03-19</time><p>Postgres commit <code>4f7f7b0375</code> adds <code>extension_control_path</code>. Author Peter Eisentraut, co-author Matheus Alcantara; reviewed by David Wheeler, Gabriele Bartolini, Marco Nenciarini and Niccolò Fei.</p></div>
+    <div class="tbd"><time>2025-05</time><p>Álvaro, "Postgres à la carte". <span class="flag">confirm venue</span></p></div>
+    <div><time>2025-06-04</time><p><code>f777d77387</code>: keep <code>$libdir</code> on a user's <code>LOAD</code> (bug #18920).</p></div>
+    <div><time>2025-08-12</time><p>CloudNativePG 1.27.0: <code>.spec.postgresql.extensions</code> (#7991).</p></div>
+    <div class="tbd"><time>2025-09</time><p>PostgreSQL 18.0 released. Álvaro presents DOCIR at ContainerDays Hamburg. <span class="flag">confirm dates</span></p></div>
+    <div><time>2025-12-01</time><p>Gabriele Bartolini, CNPG Recipe 23: pgvector and PostGIS through ImageVolume.</p></div>
+    <div class="k8s"><time>2025-12</time><p>Kubernetes 1.35: <code>ImageVolume</code> enabled by default (per the CNPG docs).</p></div>
+    <div><time>2026-01-01</time><p><code>f3c9e341cd</code>: a <code>location</code> column in <code>pg_available_extensions</code> (PG 19).</p></div>
+    <div><time>2026-03-16</time><p><code>1e67508730</code>: <code>pg_upgrade</code> works with <code>extension_control_path</code>.</p></div>
+    <div><time>2026-04-01</time><p>CloudNativePG 1.29.0: extensions in image catalogs.</p></div>
+    <div class="k8s"><time>2026 · v1.36</time><p><code>ImageVolume</code> stable (KEP milestone <code>stable: v1.36</code>, status implemented).</p></div>
+    <div class="tbd"><time>2026-06</time><p>Bug #19506 filed by Bartolini: <code>LOAD '$libdir/…'</code> in extension scripts breaks PostGIS upgrades. Open on <code>master</code> as of 2026-11-03.</p></div>
+  </div>
+</div></section>
+
+<section id="verify"><div class="wrap">
+  <div><p class="eyebrow">Before the mics go on · ticks are saved in this browser only</p><h2>Verify before recording</h2></div>
+  <div class="check" id="checklist">
+    <label><input type="checkbox" id="v1"><span>Read Recipe 23 in full and watch the DOCIR talk. Neither could be opened from the research session.</span></label>
+    <label><input type="checkbox" id="v2"><span>The ImageVolume beta version: the KEP says <code>beta: v1.34</code>, the CNPG docs say a gate is needed on 1.33 and 1.34. Check the Kubernetes release notes.</span></label>
+    <label><input type="checkbox" id="v3"><span>Whether ImageVolume is GA in 1.36 according to the official release notes, not only the KEP.</span></label>
+    <label><input type="checkbox" id="v4"><span>The status of bug #19506 and the fix for any 18.x minor. Which 18.x carries the back-patched <code>pg_upgrade</code> fix (1e67508730)?</span></label>
+    <label><input type="checkbox" id="v5"><span>What the "9 × 10⁵⁸" on Álvaro's slide counts: C(200,100) or something else.</span></label>
+    <label><input type="checkbox" id="v6"><span>DOCIR facts: open source or not, licence, v1.0 status. Try the sgcr.dev pulls yourself and note the layer counts and sizes. The research session could not reach sgcr.dev.</span></label>
+    <label><input type="checkbox" id="v11"><span>Read the OnGres OCI-packaging post and note its date for the timeline. It may predate the CNPG and EDB posts, which matters for "who proposed OCI for extensions first".</span></label>
+    <label><input type="checkbox" id="v7"><span>The StackGres extension count today. The OnGres post says about 200, and the year runtime loading first shipped.</span></label>
+    <label><input type="checkbox" id="v8"><span>If sizes are quoted: <code>docker manifest inspect</code> for <code>postgres:18</code>, and the CNPG <code>18-minimal-trixie</code> and <code>standard</code> images.</span></label>
+    <label><input type="checkbox" id="v9"><span>How Álvaro wants to be introduced (name, title). Ask him; don't copy from LinkedIn.</span></label>
+    <label><input type="checkbox" id="v10"><span>The co-host and recording date for this episode. The repo folder uses 2026-11-03 as a placeholder.</span></label>
+  </div>
+</div></section>
+
+<section id="titles"><div class="wrap">
+  <div><p class="eyebrow">Thumbnail asks, title answers · under 50 characters</p><h2>Titles and thumbnails</h2></div>
+  <div class="two">
+    <div><h3>Title candidates</h3><ol class="titles">
+      <li>Postgres images that don't exist until you pull <span>47</span></li>
+      <li>Add extensions without rebuilding images <span>40</span></li>
+      <li>Build, pull or mount: Postgres extensions <span>41</span></li>
+    </ol></div>
+    <div class="thumbs" aria-label="Thumbnail headline mockups">
+      <div class="thumb">2<i>²⁰⁰</i> images?</div>
+      <div class="thumb">No more <i>fat</i> images</div>
+      <div class="thumb">Extensions <i>on demand</i></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="sources"><div class="wrap">
+  <div><p class="eyebrow">Primary first</p><h2>Sources</h2></div>
+  <ul class="src">
+    <li><a href="https://www.gabrielebartolini.it/articles/2025/12/cnpg-recipe-23-managing-extensions-with-imagevolume-in-cloudnativepg/">CNPG Recipe 23 – Managing extensions with ImageVolume</a>, G. Bartolini, 2025-12-01 <span class="flag">read in full</span></li>
+    <li><a href="https://www.youtube.com/watch?v=PNvAefbcGiA">Dynamic OCI Registry</a>, Á. Hernández (video) · <a href="https://speakerdeck.com/ongres/docir-dynamic-oci-registry">slides</a> <span class="flag">watch</span></li>
+    <li><a href="https://ongres.com/blog/why-postgres-extensions-should-be-distributed-and-packaged-as-oci-images/">Why Postgres extensions should be distributed and packaged as OCI images</a>, OnGres blog: the research behind DOCIR, not its design <span class="flag">read</span></li>
+    <li><a href="https://sgcr.dev/">sgcr.dev</a>: experimental public DOCIR registry (<code>docker pull sgcr.dev/postgres/e/…</code>) <span class="flag">try it</span></li>
+    <li><a href="https://aht.es/">aht.es</a>: Álvaro's talks (past talks; may not list the newest)</li>
+    <li><a href="https://speakerdeck.com/ongres/postgres-a-la-carte-dynamic-container-images-with-your-choice-of-extensions">Postgres à la carte: dynamic container images</a>, Á. Hernández, slides</li>
+    <li><a href="https://github.com/postgres/postgres/commit/4f7f7b0375">postgres 4f7f7b0375</a> extension_control_path · <a href="https://github.com/postgres/postgres/commit/f777d77387">f777d77387</a> · <a href="https://github.com/postgres/postgres/commit/1e67508730">1e67508730</a> · <a href="https://github.com/postgres/postgres/commit/f3c9e341cd">f3c9e341cd</a> <span class="flag ok">read</span></li>
+    <li><a href="https://www.postgresql.org/message-id/19506-9478f3012ecc2328@postgresql.org">BUG #19506</a>: LOAD '$libdir/…' ignores dynamic_library_path</li>
+    <li><a href="https://www.postgresql.org/message-id/flat/E7C7BFFB-8857-48D4-A71F-88B359FADCFD@justatheory.com">pgsql-hackers thread</a> that led to extension_control_path (D. Wheeler)</li>
+    <li><a href="https://github.com/kubernetes/enhancements/tree/master/keps/sig-node/4639-oci-volume-source">KEP-4639 OCI images as VolumeSource</a> <span class="flag ok">read kep.yaml</span></li>
+    <li><a href="https://github.com/cloudnative-pg/cloudnative-pg/blob/main/docs/src/imagevolume_extensions.md">CNPG docs: Image Volume Extensions</a> (source at 66c7c6e) <span class="flag ok">read</span></li>
+    <li><a href="https://github.com/cloudnative-pg/postgres-extensions-containers">cloudnative-pg/postgres-extensions-containers</a>: pgvector and PostGIS Dockerfiles <span class="flag ok">read</span></li>
+    <li><a href="https://www.gabrielebartolini.it/articles/2025/03/the-immutable-future-of-postgresql-extensions-in-kubernetes-with-cloudnativepg/">The Immutable Future of PostgreSQL Extensions in Kubernetes</a>, G. Bartolini, 2025-03</li>
+    <li><a href="https://www.gabrielebartolini.it/articles/2026/08/cnpg-recipe-26-extension-image-catalogs/">CNPG Recipe 26 – Extension image catalogs</a>, 2026-08</li>
+    <li><a href="https://stackgres.io/doc/latest/administration/extensions/">StackGres: Postgres extensions</a> · <a href="https://stackgres.io/doc/latest/administration/extensions/cache/">extensions cache</a></li>
+    <li><a href="https://www.containerdays.io/blog/containerdays-2025-my-experience/">ContainerDays 2025 attendee write-up</a> (DOCIR talk)</li>
+    <li><a href="https://kubernetespodcast.com/episode/225-pg-on-k8s/index.html">Kubernetes Podcast #225</a> with Álvaro</li>
+    <li><a href="https://justatheory.com/2025/05/mini-summit-cnpg/">Extension Mini-Summit 5 transcript</a>: CNPG and extensions</li>
+  </ul>
+</div></section>
+
+<footer><div class="wrap">Prep brief for Postgres.FM, made 2026-11-03. Verified facts link to Git commits, the KEP or the CNPG source; anything else is flagged. Figures are explanatory drawings, not measurements.</div></footer>
+
+<script>
+(function(){
+"use strict";
+const NS="http://www.w3.org/2000/svg";
+const clamp=(x,a,b)=>Math.min(b===undefined?1:b,Math.max(a===undefined?0:a,x));
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const ease=x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
+const lerp=(a,b,u)=>a+(b-a)*u;
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);if(attrs)for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;if(parent)parent.appendChild(e);return e;}
+function show(e,u){e.setAttribute("opacity",clamp(u).toFixed(3));}
+function typed(e,str,u){const n=Math.round(str.length*clamp(u));e.textContent=str.slice(0,n);}
+function box(p,x,y,w,h,cls,rx){return el("rect",{x,y,width:w,height:h,rx:rx==null?4:rx,class:cls},p);}
+function txt(p,x,y,s,cls,anchor){return el("text",{x,y,class:cls||"f-ink lbl","text-anchor":anchor||"start"},p,s);}
+function title(svg,s,sub){txt(svg,40,48,s,"f-ink disp").setAttribute("font-size","30");if(sub)txt(svg,40,72,sub,"f-muted lbl");}
+function arrowDefs(svg){const d=el("defs",null,svg);["ink","pg","box","ok","bad","muted"].forEach(c=>{const m=el("marker",{id:"ah-"+c+"-"+svg.dataset.k,viewBox:"0 0 10 10",refX:"9",refY:"5",markerWidth:"7",markerHeight:"7",orient:"auto-start-reverse"},d);el("path",{d:"M0 0L10 5L0 10z",class:"f-"+c},m);});}
+function line(p,x1,y1,x2,y2,c,arrow,dash){const l=el("line",{x1,y1,x2,y2,class:"s-"+c,"stroke-width":2},p);if(arrow)l.setAttribute("marker-end","url(#ah-"+c+"-"+(p.ownerSVGElement||p).dataset.k+")");if(dash)l.setAttribute("stroke-dasharray",dash);return l;}
+function growLine(l,x1,y1,x2,y2,u){u=clamp(u);l.setAttribute("x2",lerp(x1,x2,u));l.setAttribute("y2",lerp(y1,y2,u));show(l,u>0?1:0);}
+function lock(p,x,y){const g=el("g",{transform:"translate("+x+","+y+")"},p);el("rect",{x:0,y:5,width:10,height:8,rx:1.5,class:"f-pg"},g);el("path",{d:"M2 5V3a3 3 0 0 1 6 0v2",fill:"none",class:"s-pg","stroke-width":1.6},g);return g;}
+
+const scenes={};
+
+/* F1 fat vs lean */
+scenes.fat={build(svg){
+  title(svg,"One image for everyone, or only what you asked for","");
+  const S={};
+  txt(svg,240,108,"OPTION 1 · FAT IMAGE","f-box mono","middle");
+  txt(svg,700,108,"MINIMAL BASE + EXTENSION IMAGES","f-pg mono","middle");
+  el("line",{x1:480,y1:96,x2:480,y2:510,class:"s-line","stroke-width":1,"stroke-dasharray":"4 5"},svg);
+  const names=["postgis","pgvector","timescaledb","pg_cron","pgaudit","pg_partman","pg_repack","hypopg","pg_hint_plan","wal2json","pgrouting","orafce","pg_ivm"];
+  S.fat=[];const bx=90,bw=300,bh=20;
+  box(svg,bx,450,bw,40,"f-line",3);txt(svg,bx+bw/2,475,"debian + postgres 18 + build deps","f-ink lbl","middle");
+  names.forEach((n,i)=>{const g=el("g",null,svg);const y=450-(i+1)*(bh+3);box(g,bx,y,bw,bh,"f-boxs",3);txt(g,bx+12,y+14,n,"f-ink mono").setAttribute("font-size","12");
+    const cve=el("g",null,g);if([0,2,4,6,7,9,10,12].includes(i)){el("circle",{cx:bx+bw-14,cy:y+10,r:5,class:"f-bad"},cve);txt(cve,bx+bw-26,y+14,"CVE","f-bad sm","end");}
+    S.fat.push({g,y,cve});});
+  S.fatNote=txt(svg,240,516,"every change → rebuild, retag, redeploy","f-muted lbl","middle");
+  const sx=520,sy=150;S.shelf=[];const shelfN=["pgvector","postgis","timescaledb","pg_cron","pgaudit","hypopg","wal2json","pg_ivm"];
+  shelfN.forEach((n,i)=>{const col=i%4,row=Math.floor(i/4);const x=sx+col*95,y=sy+row*40;const g=el("g",null,svg);box(g,0,0,88,28,"f-pgs",3);txt(g,44,18,n,"f-ink mono","middle").setAttribute("font-size","11.5");g.setAttribute("transform","translate("+x+","+y+")");S.shelf.push({g,x,y,n});});
+  txt(svg,700,140,"registry: one small image per extension","f-muted sm","middle");
+  box(svg,560,450,280,40,"f-line",3);txt(svg,700,475,"postgresql:18-minimal","f-ink mono","middle");
+  S.targets={pgvector:{x:560,y:420},postgis:{x:560,y:390}};
+  S.lean={};["pgvector","postgis"].forEach(n=>{const g=el("g",null,svg);box(g,0,0,280,26,"f-pg",3);txt(g,14,17,n,"f-surface mono");lock(g,256,6);S.lean[n]=g;});
+  S.leanNote=txt(svg,700,350,"mounted read-only, nothing else inside","f-pg lbl","middle");
+  return S;},
+ render(t,S){
+  S.fat.forEach((b,i)=>{const u=ease(seg(t,.02+i*.03,.07+i*.03));b.g.setAttribute("transform","translate(0,"+((1-u)*-40)+")");show(b.g,u);show(b.cve,seg(t,.46+i*.006,.5+i*.006));});
+  show(S.fatNote,seg(t,.5,.58));
+  S.shelf.forEach(s=>{const chosen=s.n==="pgvector"||s.n==="postgis";show(s.g,chosen?1:lerp(1,.35,seg(t,.6,.7)));});
+  [["pgvector",.6,.76],["postgis",.74,.9]].forEach(([n,a,b])=>{const s=S.shelf.find(q=>q.n===n),T=S.targets[n],u=ease(seg(t,a,b));
+    const x=lerp(s.x,T.x,u),y=lerp(s.y,T.y,u);S.lean[n].setAttribute("transform","translate("+x+","+y+") scale("+lerp(88/280,1,u)+",1)");show(S.lean[n],seg(t,a,a+.02));});
+  show(S.leanNote,seg(t,.9,.97));
+ }};
+
+/* F2 2^n */
+scenes.comb={build(svg){
+  title(svg,"How many images would you have to build?","each of n extensions is either in or out → 2ⁿ distinct images");
+  const S={cells:[]};const gx=60,gy=110,c=11.5;
+  for(let i=0;i<1024;i++){const r=el("rect",{x:gx+(i%32)*c,y:gy+Math.floor(i/32)*c,width:c-2,height:c-2,rx:1.5,class:"f-line"},svg);S.cells.push(r);}
+  txt(svg,gx,gy+32*c+22,"1 cell = 1 image · grid holds 1,024 (n = 10)","f-muted sm");
+  S.n=txt(svg,470,170,"n = 0","f-ink disp");S.n.setAttribute("font-size","64");
+  S.v=txt(svg,470,250,"","f-box disp");S.v.setAttribute("font-size","54");
+  S.d=txt(svg,470,282,"","f-muted mono");
+  const marks=[[10,"1,024: already a large CI build matrix"],[20,"≈ 1.05 million images"],[33,"≈ 8.6 billion: more images than people on Earth"],[64,"≈ 1.8 × 10¹⁹: past a 64-bit counter"],[200,"≈ 1.6 × 10⁶⁰ at n = 200 (slide: ≈ 9 × 10⁵⁸ = C(200,100))"]];
+  S.marks=marks.map((m,i)=>{const g=el("g",null,svg);el("circle",{cx:478,cy:326+i*36,r:5,class:"f-box"},g);txt(g,494,331+i*36,"n = "+m[0]+"  ","f-ink mono");txt(g,560,331+i*36,m[1],"f-ink lbl");return {g,n:m[0]};});
+  return S;},
+ nOf(t){return t<.4?Math.round(10*ease(t/.4)):Math.round(10+190*Math.pow((t-.4)/.6,1.6));},
+ render(t,S){const n=this.nOf(t);const fill=Math.min(1024,Math.pow(2,n));
+  S.cells.forEach((c,i)=>c.setAttribute("class",i<fill?(n>10?"f-box":"f-pg"):"f-line"));
+  S.n.textContent="n = "+n;
+  const v=Math.pow(2,n);let s;if(n<20)s=v.toLocaleString("en-US");else{const e=Math.floor(Math.log10(v));const m=v/Math.pow(10,e);s=m.toFixed(2)+" × 10"+String(e).split("").map(d=>"⁰¹²³⁴⁵⁶⁷⁸⁹"[d]).join("");}
+  S.v.textContent="2ⁿ = "+s;S.d.textContent=n<20?"":String(BigInt(2)**BigInt(n)).length+" digits";
+  S.marks.forEach(m=>show(m.g,n>=m.n?1:.15));
+  return "n = "+n;}};
+
+/* F3 when do you compose */
+scenes.when={build(svg){
+  title(svg,"Same goal, four moments to compose","Postgres 18 + pgvector running · order of steps, not to scale");
+  const lanes=[
+   {name:"Fat image",who:"BUILD TIME · you",c:"box",steps:[[0,.33,"docker build: base + every extension"],[.33,.42,"push"],[.42,.72,"pull one big image"],[.72,.8,"start"]]},
+   {name:"Runtime injection",sub:"StackGres",who:"POD START · sidecar",c:"ok",steps:[[0,.17,"pull base"],[.17,.25,"start pod"],[.25,.55,"sidecar downloads ext"],[.55,.66,"verify + unpack"],[.66,.74,"ready"]]},
+   {name:"Dynamic registry",sub:"DOCIR",who:"PULL TIME · registry",c:"pg",steps:[[0,.06,"req"],[.06,.17,"compose manifest"],[.17,.42,"pull base + vector layers"],[.42,.5,"start"]]},
+   {name:"ImageVolume",sub:"CNPG 1.27+",who:"MOUNT TIME · kubelet",c:"pg",steps:[[0,.17,"pull minimal base"],[.17,.3,"pull ext image"],[.3,.37,"mount ro"],[.37,.45,"start"]]}];
+  const S={lanes:[],x0:250,x1:920};
+  lanes.forEach((L,i)=>{const y=120+i*100;const g=el("g",null,svg);
+    txt(g,40,y+20,L.name,"f-ink disp").setAttribute("font-size","22");if(L.sub)txt(g,40,y+40,L.sub,"f-muted lbl");
+    el("line",{x1:S.x0,y1:y+36,x2:S.x1,y2:y+36,class:"s-line","stroke-width":1},g);
+    const bars=L.steps.map(st=>{const x=S.x0+st[0]*(S.x1-S.x0),w=(st[1]-st[0])*(S.x1-S.x0);const r=box(g,x,y+8,0,26,(st[2]==="start"||st[2]==="ready")?"f-ink":"f-"+L.c+"s",2);const tx=txt(g,x+6,y+26,st[2],"f-ink sm");return {r,tx,st,x,w};});
+    const badge=el("g",null,g);const bw=L.who.length*7.6+20;box(badge,S.x1-bw,y+50,bw,22,"f-"+L.c,3);txt(badge,S.x1-bw/2,y+65,L.who,"f-surface mono","middle").setAttribute("font-size","11.5");
+    S.lanes.push({bars,badge,end:L.steps[L.steps.length-1][1]});});
+  S.ph=el("line",{x1:S.x0,y1:100,x2:S.x0,y2:520,class:"s-box","stroke-width":2,"stroke-dasharray":"3 3"},svg);
+  return S;},
+ render(t,S){const p=clamp(t/.85);const x=lerp(S.x0,S.x1,p);S.ph.setAttribute("x1",x);S.ph.setAttribute("x2",x);show(S.ph,t<.86?1:0);
+  S.lanes.forEach(L=>{L.bars.forEach(b=>{const u=clamp((p-b.st[0])/(b.st[1]-b.st[0]));b.r.setAttribute("width",Math.max(0,b.w*u-2));const fits=b.tx.textContent.length*6.4<b.w-6;show(b.tx,u>=1&&fits?1:u>=1?0:0);if(u>=1&&!fits){b.tx.setAttribute("y",b.r.getAttribute("y")*1-4);b.tx.setAttribute("class","f-muted sm");show(b.tx,1);}});show(L.badge,seg(p,L.end,L.end+.05));});}};
+
+/* F4 DOCIR */
+scenes.docir={build(svg){
+  title(svg,"The manifest didn't exist until you asked","DOCIR: a registry that composes images from stored layers");
+  const S={};
+  box(svg,40,210,190,110,"f-s2 s-line",6).setAttribute("stroke-width","1.5");txt(svg,135,240,"client","f-ink disp","middle").setAttribute("font-size","22");txt(svg,135,264,"docker / podman /","f-muted sm","middle");txt(svg,135,280,"kubelet","f-muted sm","middle");
+  box(svg,330,110,290,400,"f-s2 s-line",6).setAttribute("stroke-width","1.5");txt(svg,475,138,"DOCIR registry","f-ink disp","middle").setAttribute("font-size","22");
+  // db cylinder
+  const db=el("g",{transform:"translate(690,110)"},svg);el("path",{d:"M0 14 a115 14 0 0 1 230 0 v150 a115 14 0 0 1 -230 0z",class:"f-pgs s-pg","stroke-width":1.5},db);el("path",{d:"M0 14 a115 14 0 0 0 230 0",fill:"none",class:"s-pg","stroke-width":1.5},db);
+  txt(db,115,44,"layer metadata (Postgres)","f-pg lbl","middle");
+  const rows=[["base","amd64"],["pgvector","amd64"],["pg_stat_statements","amd64"],["citext","amd64"],["postgis","amd64"]];
+  S.rows=rows.map((r,i)=>{const g=el("g",null,db);const bg=box(g,12,58+i*20,206,18,"f-surface",2);txt(g,18,71+i*20,r[0],"f-ink mono").setAttribute("font-size","11");txt(g,212,71+i*20,r[1],"f-muted mono","end").setAttribute("font-size","10");return {bg,hit:i<4};});
+  const s3=el("g",{transform:"translate(690,350)"},svg);box(s3,0,0,230,130,"f-boxs s-box",6).setAttribute("stroke-width","1.5");txt(s3,115,24,"blobs (S3)","f-box lbl","middle");
+  S.blobs=[];for(let i=0;i<8;i++){const r=box(s3,18+(i%4)*52,40+Math.floor(i/4)*42,40,32,i<4?"f-box":"f-line",3);S.blobs.push(r);}
+  S.req=txt(svg,40,170,"","f-ink mono");S.req2=txt(svg,40,190,"","f-ink mono");S.REQ="docker pull sgcr.dev/postgres/e/";S.REQ2="  pgvector/pg_stat_statements/citext";S.req.setAttribute("font-size","12");S.req2.setAttribute("font-size","12");
+  S.a1=line(svg,232,250,326,250,"ink",true);
+  let cx=342,cy=152;S.chips=["postgres","pgvector","pg_stat_statements","citext"].map((c,i)=>{const g=el("g",null,svg);const w=c.length*7+14;if(cx+w>616){cx=342;cy+=26;}const x=cx;cx+=w+5;box(g,x,cy,w,22,"f-pg",11);txt(g,x+w/2,cy+15,c,"f-surface mono","middle").setAttribute("font-size","11");return g;});
+  S.a2=line(svg,620,200,688,170,"pg",true);
+  S.man=[];const M=['{ "mediaType": "…manifest.v1+json",','  "config": {"digest":"sha256:c0f9…"},','  "layers": [','  {"digest":"sha256:4a1f…"}, // base','  {"digest":"sha256:9c0e…"}, // pgvector','  {"digest":"sha256:2b7d…"}, // pg_stat_st…','  {"digest":"sha256:e71b…"}  // citext','] }'];
+  M.forEach((m,i)=>{S.man.push({e:txt(svg,342,222+i*18,"","f-ink mono"),s:m});});S.man.forEach(m=>m.e.setAttribute("font-size","11"));
+  S.newTag=el("g",null,svg);box(S.newTag,346,372,262,26,"f-box",3);txt(S.newTag,477,390,"generated now · cached by digest","f-surface mono","middle").setAttribute("font-size","11.5");
+  S.a3=line(svg,328,290,234,290,"box",true);
+  S.fly=[0,1,2,3].map(i=>box(svg,0,0,20,16,"f-box",2));
+  S.cap=txt(svg,475,436,"only the small manifest is new","f-ink lbl","middle");S.cap2=txt(svg,475,456,"every blob already exists and is shared","f-muted lbl","middle");S.cap3=txt(svg,475,482,"next combination → pull only the missing layers","f-pg lbl","middle");
+  return S;},
+ render(t,S){typed(S.req,S.REQ,seg(t,0,.06));typed(S.req2,S.REQ2,seg(t,.06,.1));growLine(S.a1,232,250,326,250,seg(t,.08,.15));
+  S.chips.forEach((c,i)=>show(c,seg(t,.16+i*.03,.2+i*.03)));growLine(S.a2,620,200,688,170,seg(t,.3,.36));
+  S.rows.forEach((r,i)=>r.bg.setAttribute("class",r.hit&&t>.37+i*.025?"f-oks":"f-surface"));
+  S.man.forEach((m,i)=>typed(m.e,m.s,seg(t,.46+i*.028,.49+i*.028)));show(S.newTag,seg(t,.68,.71));
+  growLine(S.a3,328,290,234,290,seg(t,.72,.78));
+  S.fly.forEach((f,i)=>{const u=ease(seg(t,.78+i*.04,.88+i*.04));const x0=708+i*52,y0=390,x1=200,y1=300+i*4;f.setAttribute("x",lerp(x0,x1,u));f.setAttribute("y",lerp(y0,y1,u));show(f,u>0&&u<1?1:0);});
+  S.blobs.slice(0,4).forEach((b,i)=>b.setAttribute("opacity",t>.78+i*.04&&t<.88+i*.04?.4:1));
+  show(S.cap,seg(t,.9,.94));show(S.cap2,seg(t,.92,.96));show(S.cap3,seg(t,.95,.99));}};
+
+/* F5 pod */
+scenes.pod={build(svg){
+  title(svg,"Extensions mounted as read-only image volumes","CloudNativePG · Kubernetes ImageVolume · PostgreSQL 18");
+  const S={};
+  const imgs=[["…/postgresql:18-minimal-trixie",40,"f-line"],["…/pgvector:<tag>",310,"f-pg"],["…/postgis-extension:<tag>",480,"f-pg"]];
+  txt(svg,40,100,"REGISTRY","f-muted mono");
+  S.imgs=imgs.map(i=>{const g=el("g",null,svg);const w=i[0].length*7.2+20;box(g,i[1],108,w,26,i[2],3);txt(g,i[1]+10,126,i[0],i[2]==="f-pg"?"f-surface mono":"f-ink mono").setAttribute("font-size","11.5");return g;});
+  box(svg,30,160,900,360,"f-s2 s-line",8).setAttribute("stroke-dasharray","6 4");
+  txt(svg,46,184,"NODE · kubelet + containerd ≥ 2.1 or CRI-O ≥ 1.31","f-muted mono").setAttribute("font-size","11.5");
+  box(svg,52,198,520,306,"f-surface s-line",6);txt(svg,66,220,"pod cluster-example-1","f-ink mono");
+  S.pg=el("g",null,svg);box(S.pg,70,236,220,250,"f-pgs",4);txt(S.pg,180,260,"postgres container","f-pg lbl","middle");
+  ["/usr/lib/postgresql/18","/usr/share/postgresql/18","/var/lib/postgresql/data"].forEach((p,i)=>txt(S.pg,84,292+i*22,p,"f-ink mono").setAttribute("font-size","11.5"));
+  txt(S.pg,84,380,"/extensions/","f-ink mono").setAttribute("font-size","11.5");
+  S.vols=[["pgvector",410],["postgis",460]].map(([n,y],i)=>{const g=el("g",null,svg);box(g,330,y-26,220,40,"f-pg",4);txt(g,342,y-2,"/extensions/"+n,"f-surface mono").setAttribute("font-size","12");lock(g,528,y-20);const l=el("path",{d:"M330 "+(y-6)+" C 300 "+(y-6)+" 300 "+(398+i*20)+" 200 "+(398+i*20),fill:"none",class:"s-pg","stroke-width":1.6,"stroke-dasharray":"4 3"},g);txt(g,200,402+i*20,n,"f-ink mono").setAttribute("font-size","11");return g;});
+  S.ro=txt(svg,440,505,"read-only · immutable · pulled like any image","f-pg sm","middle");
+  box(svg,588,198,328,306,"f-surface s-line",6);txt(svg,602,220,"set by the instance manager","f-muted mono").setAttribute("font-size","11.5");
+  const G=[["extension_control_path =","f-ink"],["  '$system","f-muted"],["  :/extensions/pgvector/share","f-pg"],["  :/extensions/postgis/share'","f-pg"],["dynamic_library_path =","f-ink"],["  '$libdir","f-muted"],["  :/extensions/pgvector/lib","f-pg"],["  :/extensions/postgis/lib'","f-pg"],["LD_LIBRARY_PATH += …/postgis/system","f-box"],["GDAL_DATA = ${image_root}/share/gdal","f-box"],["PROJ_DATA = ${image_root}/share/proj","f-box"]];
+  S.g=G.map((g,i)=>{const e=txt(svg,602,248+i*22,g[0],g[1]+" mono");e.setAttribute("font-size","11.5");return e;});
+  return S;},
+ render(t,S){show(S.imgs[0],seg(t,0,.05));show(S.pg,seg(t,.04,.14));
+  show(S.imgs[1],seg(t,.15,.2));show(S.imgs[2],seg(t,.2,.25));
+  S.vols.forEach((v,i)=>{const u=ease(seg(t,.26+i*.12,.38+i*.12));v.setAttribute("transform","translate(0,"+((1-u)*-120)+")");show(v,u);});
+  show(S.ro,seg(t,.5,.56));
+  const ord=[0,1,4,5,2,6,3,7,8,9,10];ord.forEach((k,i)=>show(S.g[k],seg(t,.58+i*.035,.6+i*.035)));}};
+
+/* F6 resolve */
+scenes.resolve={build(svg){
+  title(svg,"CREATE EXTENSION does two searches","control file via extension_control_path, then the .so via dynamic_library_path");
+  const S={};
+  box(svg,40,100,360,410,"f-ink",6);
+  S.l=[["app=# CREATE EXTENSION vector;","t"],["","t"],["CREATE EXTENSION","r"],["","t"],["app=# SHOW extension_control_path;","t"],[" $system:/extensions/pgvector/share","r"],[" :/extensions/postgis/share","r"]].map((l,i)=>{const e=txt(svg,56,132+i*22,"",(l[1]==="r"?"f-pgs":"f-surface")+" mono");e.setAttribute("font-size","12.5");return {e,s:l[0]};});
+  const P=[[130,"1 · find vector.control","extension_control_path"],[318,"3 · find vector.so","dynamic_library_path"]];
+  P.forEach(p=>{txt(svg,430,p[0],p[1],"f-ink disp").setAttribute("font-size","22");txt(svg,920,p[0],p[2],"f-muted mono","end").setAttribute("font-size","11.5");});
+  const mk=(y,items)=>items.map((it,i)=>{const g=el("g",null,svg);const bg=box(g,430,y+i*34,490,28,"f-s2",3);txt(g,442,y+19+i*34,it[0],"f-ink mono").setAttribute("font-size","12");const r=txt(g,908,y+19+i*34,"","f-muted mono","end");r.setAttribute("font-size","12");return {bg,r,res:it[1],ok:it[2]};});
+  S.c=mk(144,[["$system → $sharedir/extension/","no vector.control",false],["/extensions/pgvector/share/extension/","vector.control ✓",true],["/extensions/postgis/share/extension/","(not searched)",null]]);
+  S.mod=el("g",null,svg);box(S.mod,430,256,490,28,"f-boxs",3);txt(S.mod,442,275,"2 · module_pathname '$libdir/vector' → strip → 'vector'","f-ink mono").setAttribute("font-size","12");
+  S.d=mk(330,[["$libdir → /usr/lib/postgresql/18/lib/","no vector.so",false],["/extensions/pgvector/lib/","vector.so ✓",true]]);
+  S.bug=el("g",null,svg);box(S.bug,430,412,490,96,"f-bads s-bad",4);
+  txt(S.bug,444,436,"Catch: LOAD '$libdir/postgis-3' inside an extension script","f-bad lbl").setAttribute("font-weight","700");
+  txt(S.bug,444,458,"is not stripped, so the path search never runs → \"could not","f-ink sm");
+  txt(S.bug,444,476,"access file\". Bug #19506, open. CNPG's PostGIS image","f-ink sm");
+  txt(S.bug,444,494,"sed-strips '$libdir/ from its SQL scripts as a workaround.","f-ink sm");
+  return S;},
+ render(t,S){[0,2].forEach((k,i)=>typed(S.l[k].e,S.l[k].s,k===0?seg(t,0,.08):seg(t,.7,.72)));
+  [4,5,6].forEach((k,i)=>typed(S.l[k].e,S.l[k].s,seg(t,.74+i*.04,.78+i*.04)));
+  const walk=(arr,a,step)=>arr.forEach((it,i)=>{const on=t>=a+i*step;const done=t>=a+(i+1)*step-.01;
+    it.bg.setAttribute("class",it.ok===true&&done?"f-oks":it.ok===false&&done?"f-bads":on&&it.ok!==null?"f-pgs":"f-s2");
+    it.r.textContent=done||(it.ok===null&&t>=a+step*2)?it.res:"";it.r.setAttribute("class",(it.ok?"f-ok":"f-muted")+" mono");});
+  walk(S.c,.1,.08);show(S.mod,seg(t,.34,.4));walk(S.d,.42,.1);show(S.bug,seg(t,.88,.95));}};
+
+/* F7 rolling update */
+scenes.roll={build(svg){
+  title(svg,"Adding pgvector: three pods, three restarts","CloudNativePG rolling update · replicas first, primary last");
+  const S={};
+  box(svg,40,96,420,110,"f-ink",6);
+  ["spec:","  postgresql:","    extensions:"].forEach((s,i)=>txt(svg,56,120+i*20,s,"f-surface mono").setAttribute("font-size","12.5"));
+  S.add=el("g",null,svg);box(S.add,50,166,400,32,"f-ok",3);txt(S.add,56,180,"+     - name: pgvector","f-surface mono").setAttribute("font-size","12.5");txt(S.add,56,195,"+       image: {reference: ghcr.io/…/pgvector:<tag>}","f-surface mono").setAttribute("font-size","11");
+  S.note=txt(svg,490,130,"pod volumes are immutable →","f-muted lbl");S.note2=txt(svg,490,152,"the pod is recreated","f-muted lbl");
+  const P=[["cluster-example-1","primary"],["cluster-example-2","replica"],["cluster-example-3","replica"]];
+  S.p=P.map((p,i)=>{const x=40+i*300,y=250;const g=el("g",null,svg);const bg=box(g,x,y,270,170,"f-surface s-line",6);bg.setAttribute("stroke-width","1.5");
+    txt(g,x+14,y+26,p[0],"f-ink mono");const role=txt(g,x+14,y+48,p[1],(p[1]==="primary"?"f-box":"f-pg")+" lbl");role.setAttribute("font-weight","700");
+    const st=txt(g,x+14,y+80,"running","f-ok mono");const vol=el("g",null,g);box(vol,x+14,y+100,242,26,"f-pg",3);txt(vol,x+24,y+117,"/extensions/pgvector","f-surface mono").setAttribute("font-size","11.5");lock(vol,x+236,y+107);
+    const r=txt(g,x+14,y+152,"","f-muted sm");return {g,bg,st,vol,r};});
+  S.db=el("g",null,svg);box(S.db,40,450,860,50,"f-pgs",4);txt(S.db,56,481,"Database resource  →  CREATE EXTENSION IF NOT EXISTS vector   (on the primary, replicated)","f-ink mono").setAttribute("font-size","12.5");
+  S.order=[[2,.14,.32],[1,.36,.54],[0,.58,.78]];
+  return S;},
+ render(t,S){show(S.add,seg(t,0,.08));show(S.note,seg(t,.08,.12));show(S.note2,seg(t,.1,.14));
+  S.order.forEach(([i,a,b])=>{const p=S.p[i];const u=seg(t,a,b);
+    let st="running",cls="f-ok mono",op=1;
+    if(u>0&&u<.35){st="terminating…";cls="f-bad mono";op=lerp(1,.45,u/.35);}else if(u>=.35&&u<.7){st=i===0?"restarting (primaryUpdateMethod: restart)":"recreated · attaching volume";cls="f-box mono";op=.6;}else if(u>=.7&&u<1){st="starting postgres…";cls="f-box mono";op=.85;}
+    p.st.textContent=st;p.st.setAttribute("class",cls);p.st.setAttribute("font-size",st.length>26?"10.5":"13");p.g.setAttribute("opacity",op);show(p.vol,u>=.5?1:0);
+    p.r.textContent=u>=1?"restarted once":"";});
+  show(S.db,seg(t,.84,.92));}};
+
+/* F8 libs */
+scenes.libs={build(svg){
+  title(svg,"PostGIS ships the libraries the base lacks","build step: ldd postgis*.so  minus  ldconfig -p of the base  →  /system");
+  const S={};
+  const base=["libc.so.6","libstdc++.so.6","libz.so.1","libssl.so.3","libxml2.so.2","libicu*.so","liblz4.so.1","libzstd.so.1"];
+  const deps=["libgeos_c.so","libproj.so","libgdal.so","libjson-c.so","libprotobuf-c.so","libsfcgal.so","libxml2.so.2","libc.so.6","libstdc++.so.6","libz.so.1"];
+  txt(svg,40,110,"BASE IMAGE · ldconfig -p","f-muted mono");txt(svg,340,110,"POSTGIS DEPS · ldd","f-muted mono");txt(svg,660,110,"EXTENSION IMAGE /system","f-muted mono");
+  base.forEach((b,i)=>{box(svg,40,122+i*30,240,26,"f-line",3);txt(svg,52,140+i*30,b,"f-ink mono").setAttribute("font-size","12");});
+  box(svg,650,122,270,6*30+10,"f-s2 s-box",4).setAttribute("stroke-dasharray","5 4");
+  S.d=deps.map((d,i)=>{const g=el("g",null,svg);const bg=box(g,0,0,240,26,"f-boxs",3);txt(g,12,18,d,"f-ink mono").setAttribute("font-size","12");const strike=el("line",{x1:8,y1:13,x2:232,y2:13,class:"s-bad","stroke-width":2},g);
+    const inBase=base.includes(d);return {g,bg,strike,inBase,i};});
+  let k=0;S.d.forEach(d=>{if(!d.inBase){d.slot=k++;}});
+  S.env=el("g",null,svg);box(S.env,40,430,880,82,"f-pgs",4);
+  ["LD_LIBRARY_PATH += /extensions/postgis/system      (ld_library_path: [system])","GDAL_DATA = ${image_root}/share/gdal       PROJ_DATA = ${image_root}/share/proj","changing these needs a manual cnpg restart · names above are illustrative; the real list comes from ldd"].forEach((s,i)=>txt(S.env,56,454+i*22,s,(i===2?"f-muted":"f-ink")+" mono").setAttribute("font-size",i===2?"11":"12.5"));
+  return S;},
+ render(t,S){S.d.forEach(d=>{const y0=122+d.i*30;show(d.g,seg(t,d.i*.02,d.i*.02+.05));
+    show(d.strike,d.inBase?seg(t,.3+d.i*.01,.36+d.i*.01):0);
+    let x=340,y=y0,op=1;
+    if(d.inBase){op=lerp(1,.25,seg(t,.42,.5));}
+    else{const u=ease(seg(t,.52+d.slot*.05,.64+d.slot*.05));x=lerp(340,665,u);y=lerp(y0,127+d.slot*30,u);d.bg.setAttribute("class",u>=1?"f-box":"f-boxs");}
+    d.g.setAttribute("transform","translate("+x+","+y+")");if(d.inBase)d.g.setAttribute("opacity",Math.min(op,seg(t,d.i*.02,d.i*.02+.05)));});
+  show(S.env,seg(t,.9,.97));}};
+
+/* engine */
+const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+document.querySelectorAll("figure.anim").forEach((fig,idx)=>{
+  const sc=scenes[fig.dataset.scene];const svg=fig.querySelector("svg");svg.dataset.k=String(idx);arrowDefs(svg);
+  const bg=el("rect",{x:0,y:0,width:960,height:540,class:"f-surface"});svg.insertBefore(bg,svg.firstChild);
+  const S=sc.build(svg);const dur=(+fig.dataset.dur||10)*1000;
+  const ctl=fig.querySelector(".ctl");
+  const play=document.createElement("button");play.type="button";play.textContent="Play";
+  const rng=document.createElement("input");rng.type="range";rng.min="0";rng.max="1000";rng.value="1000";rng.id="scrub-"+fig.id;rng.setAttribute("aria-label","Scrub "+fig.querySelector("h3").textContent);
+  const tm=document.createElement("span");tm.className="t";
+  const fs=document.createElement("button");fs.type="button";fs.className="ghost";fs.textContent="Full screen";
+  ctl.append(play,rng,tm,fs);
+  let t=1,raf=0,last=0;
+  function draw(){const lab=sc.render.call(sc,t,S);rng.value=String(Math.round(t*1000));tm.textContent=lab||((t*dur/1000).toFixed(1)+" / "+(dur/1000)+" s");}
+  function stop(){cancelAnimationFrame(raf);raf=0;play.textContent=t>=1?"Replay":"Play";}
+  function tick(now){if(!last)last=now;t=Math.min(1,t+(now-last)/dur);last=now;draw();if(t<1)raf=requestAnimationFrame(tick);else stop();}
+  play.addEventListener("click",()=>{if(raf){stop();return;}if(t>=1)t=0;last=0;play.textContent="Pause";if(reduce){t=1;draw();stop();return;}raf=requestAnimationFrame(tick);});
+  rng.addEventListener("input",()=>{if(raf)stop();t=rng.value/1000;draw();play.textContent=t>=1?"Replay":"Play";});
+  fs.addEventListener("click",()=>{try{if(document.fullscreenElement){document.exitFullscreen();}else{const p=fig.requestFullscreen&&fig.requestFullscreen();if(p&&p.catch)p.catch(()=>{});}}catch(e){}});
+  draw();play.textContent="Replay";
+});
+
+/* checklist persistence (per viewer) */
+document.querySelectorAll("#checklist input").forEach(cb=>{
+  try{cb.checked=localStorage.getItem("dc-"+cb.id)==="1";}catch(e){}
+  cb.addEventListener("change",()=>{try{localStorage.setItem("dc-"+cb.id,cb.checked?"1":"0");}catch(e){}});
+});
+})();
+</script>
