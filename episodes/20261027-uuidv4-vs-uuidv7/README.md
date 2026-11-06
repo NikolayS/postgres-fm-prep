@@ -34,3 +34,14 @@ All measured on Postgres 18 on Hetzner Cloud servers on 2026-10-26, one run per 
 - Once the random-key indexes outgrow memory, UUIDv4 runs at 0.61 to 0.76 of UUIDv7's insert rate on the same server (run 4, `analysis/r4_replication_pastcap.csv`).
 
 [Illustrations](illustrations.md) lists the source file for every number shown in the video.
+
+## Video and social clips
+
+- [How the video was made](video/README.md): tool patches, title card source, overlay source and manifests, covers, the splice script, and the files that stay out of git.
+- [Social clips](social/README.md): the UUIDv4 vs UUIDv7 animation for the blog post and a clip of Kirk on the B-tree, with the scripts that made them.
+
+## Local media (not in git)
+
+- Source recording: `/Users/nik/Documents/Zoom/2026-10-27 10.03.53 .fm recording/video2013034834.mp4` and `audio2013034834.m4a`.
+- Review folder: `/Users/nik/Documents/Zoom/2026-10-27 10.03.53 .fm recording/review/`: final video `29-final-v9.mp4`, podcast audio `30-podcast.mp3` and `30-podcast.wav`, drafts and previews `01` to `28`.
+- `.../review/scratchpad/overlays/*.mov` (rendered cards) and `.../review/scratchpad/v3/card/` (title card renders, intro and outro music, `outro/logo.mp4`). Full list in [video/README.md](video/README.md#local-media-not-in-git).

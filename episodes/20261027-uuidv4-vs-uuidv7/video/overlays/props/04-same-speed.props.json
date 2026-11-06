@@ -1,0 +1,1 @@
+{"kind":"strip","text":"UUIDv7 inserts as fast as int8","sub":"23,458 vs 23,131 inserts/s, same box","durationSec":26.2}

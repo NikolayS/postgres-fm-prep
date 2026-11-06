@@ -1,0 +1,1 @@
+import {shadesCard} from "./tools/compose";import {mkdirSync} from "fs";const work=import.meta.dir+"/card";mkdirSync(work,{recursive:true});console.log(await shadesCard(work,"title",1920,1080,"UUIDv4\nvs UUIDv7",[{name:"Nik Samokhvalov"},{name:"Kirk Wolak"}]));

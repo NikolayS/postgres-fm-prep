@@ -1,0 +1,13 @@
+{
+  "overlay": "06-just-switch-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "cps": 30,
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.317,
+      "chars": 26,
+      "line": "main"
+    }
+  ]
+}

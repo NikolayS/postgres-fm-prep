@@ -1,0 +1,25 @@
+{
+  "overlay": "08-keep-uuid-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "cps": 30,
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.117,
+      "chars": 20,
+      "line": "main"
+    },
+    {
+      "start": 1.467,
+      "end": 2.267,
+      "chars": 24,
+      "line": "main"
+    },
+    {
+      "start": 2.917,
+      "end": 3.783,
+      "chars": 26,
+      "line": "sub"
+    }
+  ]
+}

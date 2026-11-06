@@ -1,0 +1,67 @@
+{
+  "overlay": "01-uuid-versions-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "cps": 30,
+  "bursts": [
+    {
+      "start": 0.48,
+      "end": 0.747,
+      "chars": 8,
+      "line": "UUIDv4"
+    },
+    {
+      "start": 0.947,
+      "end": 1.113,
+      "chars": 5,
+      "line": "UUIDv4"
+    },
+    {
+      "start": 1.313,
+      "end": 1.48,
+      "chars": 5,
+      "line": "UUIDv4"
+    },
+    {
+      "start": 1.68,
+      "end": 1.847,
+      "chars": 5,
+      "line": "UUIDv4"
+    },
+    {
+      "start": 2.047,
+      "end": 2.48,
+      "chars": 13,
+      "line": "UUIDv4"
+    },
+    {
+      "start": 13,
+      "end": 13.267,
+      "chars": 8,
+      "line": "UUIDv7"
+    },
+    {
+      "start": 13.467,
+      "end": 13.633,
+      "chars": 5,
+      "line": "UUIDv7"
+    },
+    {
+      "start": 13.833,
+      "end": 14,
+      "chars": 5,
+      "line": "UUIDv7"
+    },
+    {
+      "start": 14.2,
+      "end": 14.367,
+      "chars": 5,
+      "line": "UUIDv7"
+    },
+    {
+      "start": 14.567,
+      "end": 15,
+      "chars": 13,
+      "line": "UUIDv7"
+    }
+  ]
+}

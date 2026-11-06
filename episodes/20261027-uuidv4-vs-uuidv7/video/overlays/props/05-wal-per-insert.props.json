@@ -1,0 +1,1 @@
+{"title":"WAL per insert","unit":"bytes, 80M to 100M rows","rows":[{"key":"v4","label":"UUIDv4","value":1324,"at":0.3},{"key":"v7","label":"UUIDv7","value":744,"at":4.3},{"key":"int8","label":"int8","value":745,"at":7.5}],"caption":"UUIDv4 dirties more pages, so more full pages go to WAL after each checkpoint.","captionAt":9.7,"durationSec":57.66}

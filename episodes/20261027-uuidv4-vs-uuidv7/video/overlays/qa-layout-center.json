@@ -1,0 +1,76 @@
+{
+ "canvas": {
+  "w": 1920,
+  "h": 1080,
+  "fps": 25
+ },
+ "tiles": "/Users/nik/Documents/Zoom/2026-10-27 10.03.53 .fm recording/review/scratchpad/overlays/qa-tiles.json",
+ "show": "PostgresFM",
+ "title": "UUIDv4 vs UUIDv7",
+ "cardTitle": "UUIDv4\nvs UUIDv7",
+ "links": [],
+ "crop": {
+  "top": 0.012,
+  "bottom": 0.072,
+  "left": 0.008,
+  "right": 0.008
+ },
+ "place": {
+  "kirk": {
+   "x": 24,
+   "y": 110,
+   "w": 924,
+   "h": 594,
+   "label": "Kirk Wolak",
+   "focusY": -0.6,
+   "center": {
+    "x": 24,
+    "y": 360,
+    "w": 560
+   }
+  },
+  "nik": {
+   "x": 972,
+   "y": 110,
+   "w": 924,
+   "h": 594,
+   "label": "Nik Samokhvalov",
+   "focusX": -0.15,
+   "focusY": -0.6,
+   "center": {
+    "x": 1336,
+    "y": 360,
+    "w": 560
+   }
+  },
+  "robot": {
+   "x": 1656,
+   "y": 790,
+   "w": 240,
+   "h": 135,
+   "label": "samograph (AI)",
+   "small": true,
+   "radius": 10
+  }
+ },
+ "highlight": [],
+ "sharpen": 0.25,
+ "transition": 0.6,
+ "cardHosts": [
+  {
+   "name": "Nik Samokhvalov"
+  },
+  {
+   "name": "Kirk Wolak"
+  }
+ ],
+ "theme": "shades",
+ "cuts": "/Users/nik/Documents/Zoom/2026-10-27 10.03.53 .fm recording/review/scratchpad/v3/full-v5-edited.cuts.json",
+ "logo": "/Users/nik/Documents/Zoom/2026-10-27 10.03.53 .fm recording/review/scratchpad/v3/card/outro/logo.mp4",
+ "center": [
+  {
+   "from": 940,
+   "to": 960
+  }
+ ]
+}

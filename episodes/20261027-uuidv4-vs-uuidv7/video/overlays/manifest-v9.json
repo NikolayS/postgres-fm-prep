@@ -1,0 +1,231 @@
+{
+  "video": "full-v5-edited.mp4",
+  "cuts": "/Users/nik/Documents/Zoom/2026-10-27 10.03.53 .fm recording/review/scratchpad/v3/full-v5-edited.cuts.json",
+  "fps": 25,
+  "width": 1920,
+  "height": 1080,
+  "timeBase": "edited seconds for the cuts file, no freezes",
+  "band": {
+    "x": 24,
+    "y": 912,
+    "w": 1576,
+    "h": 140
+  },
+  "overlays": [
+    {
+      "id": "01-uuid-versions",
+      "srcStart": 757.3,
+      "srcEnd": 789,
+      "words": "Nik: \"UUID version 4\" (757.43) ... \"digit 4\" (766.43) ... \"Version 7\" (770.91) ... \"digit 7\" (773.93) ... \"integer 8.\" (778.65)",
+      "outStart": 605.42,
+      "dur": 30.42,
+      "duration": 30.42,
+      "file": "01-uuid-versions-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/thud1.wav",
+          "at": 9.2,
+          "gain": 0.5
+        },
+        {
+          "file": "sfx/thud2.wav",
+          "at": 15.74,
+          "gain": 0.5
+        },
+        {
+          "file": "sfx/typeu2-2000ms.wav",
+          "at": 0.48,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typeu2-2000ms.wav",
+          "at": 13,
+          "gain": 1
+        }
+      ],
+      "source": "example values; UUIDv7 layout per RFC 9562 (48-bit Unix ms first)"
+    },
+    {
+      "id": "02-memory-then-graph",
+      "srcStart": 1063.9,
+      "srcEnd": 1146.5,
+      "words": "Kirk: \"just consumes all the memory, it kicks the table out of memory\" (1063.93-1067.47); Nik: \"check out the graph\" (1088.11) ... \"doesn't drop for UUID version 7 or integer 8.\" (1146.03)",
+      "outStart": 907.86,
+      "dur": 82,
+      "duration": 82,
+      "file": "02-memory-then-graph.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/sandg9.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/punchl.wav",
+          "at": 24.8,
+          "gain": 1
+        },
+        {
+          "file": "sfx/sandg10.wav",
+          "at": 81.55,
+          "gain": 1
+        }
+      ],
+      "source": "https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc (Infographic D: r1_summary.csv; Infographic G: r6_series.csv, small tier, mean lines)"
+    },
+    {
+      "id": "03-btree",
+      "srcStart": 1227.3,
+      "srcEnd": 1297,
+      "words": "Kirk: \"here's the difference\" (1226.91) ... \"doesn't fit in memory anymore\" (1240.71) ... \"UUID version 7\" (1275.95) ... \"when you add a page\" (1287.77) ... \"auto-increment IDs\" (1293.65) ... \"same concept.\" (1296.59)",
+      "outStart": 1069.62,
+      "dur": 69.7,
+      "duration": 69.7,
+      "file": "03-btree.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/sandg9.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/sandg10.wav",
+          "at": 69.27,
+          "gain": 1
+        }
+      ],
+      "source": "https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc (section 3: random leaf vs rightmost leaf)"
+    },
+    {
+      "id": "04-same-speed",
+      "srcStart": 1360.2,
+      "srcEnd": 1386.4,
+      "words": "Nik: \"basically the rates of inserts are same, like for integer 8 and UUID version 7\" (1360.33-1366.33)",
+      "outStart": 1200.92,
+      "dur": 26.2,
+      "duration": 26.2,
+      "file": "04-same-speed-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typeu2-1000ms.wav",
+          "at": 0.45,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typeu2-1200ms.wav",
+          "at": 2.1,
+          "gain": 1
+        }
+      ],
+      "source": "https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc (section 9: run 2, UUIDv7 23,458 vs int8 23,131 inserts/s on int8's box)"
+    },
+    {
+      "id": "05-wal-per-insert",
+      "srcStart": 1448.3,
+      "srcEnd": 1506.4,
+      "words": "Nik: \"which means that WAL is becoming bigger\" (1448.39) ... \"UUID version 7\" (1452.59) ... \"integer 8\" (1455.75) ... \"It's hard to say because\" (1506.38)",
+      "outStart": 1287.62,
+      "dur": 57.66,
+      "duration": 57.66,
+      "file": "05-wal-per-insert.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/sandg9.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/sandg10.wav",
+          "at": 57.23,
+          "gain": 1
+        }
+      ],
+      "source": "https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc (Infographic B: r1_windows_20m.csv, run 1, 80M-100M rows)"
+    },
+    {
+      "id": "06-just-switch",
+      "srcStart": 2074.8,
+      "srcEnd": 2097,
+      "words": "Kirk: \"just switch to UUID v7s.\" (2074.87-2076.11)",
+      "outStart": 1908,
+      "dur": 22.2,
+      "duration": 22.2,
+      "file": "06-just-switch-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typeu2-867ms.wav",
+          "at": 0.45,
+          "gain": 1
+        }
+      ],
+      "source": null
+    },
+    {
+      "id": "07-index-size",
+      "srcStart": 2628.2,
+      "srcEnd": 2661.2,
+      "words": "Nik: \"it's 18 bytes ... index size is bigger\" (2628.27-2631.77) ... \"comparison with integer eight\" (2639.15-2640.91) ... \"not comparison with UUID version four.\" (2642.79-2644.61)",
+      "outStart": 2454.12,
+      "dur": 32.48,
+      "duration": 32.48,
+      "file": "07-index-size.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/sandg9.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/punchl.wav",
+          "at": 16.6,
+          "gain": 1
+        },
+        {
+          "file": "sfx/sandg10.wav",
+          "at": 32.03,
+          "gain": 1
+        }
+      ],
+      "source": "https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc (Infographic C chart: r1_summary.csv, run 1 at 100M rows; key sizes section 6)"
+    },
+    {
+      "id": "08-keep-uuid",
+      "srcStart": 2891,
+      "srcEnd": 2916.7,
+      "words": "Nik: \"you don't need to change data type ... stays UUID ... just need to change default function\" (2890.57-2898.65)",
+      "outStart": 2713.64,
+      "dur": 25.1,
+      "duration": 25.1,
+      "file": "08-keep-uuid-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typeu2-1817ms.wav",
+          "at": 0.45,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typeu2-866ms.wav",
+          "at": 2.917,
+          "gain": 1
+        }
+      ],
+      "source": "https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc (\"uuidv7() is in Postgres 18\")"
+    }
+  ]
+}

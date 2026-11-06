@@ -1,0 +1,288 @@
+--- a/compose.ts
++++ b/compose.ts
+@@ -2,7 +2,6 @@
+ //
+ //   bun compose.ts <layout.json> <edited.mp4> <out.mp4> --intro intro.mp3 --outro outro.mp3
+ //                  [--until S | --tail S] [--preset fast] [--card 4] [--end 10] [--duck -15]
+-//                  [--duck-ramp 2] [--intro-fade 6] [--end 0 = no end card]
+ //
+ // Picture: fade from black -> title card (C s, layers fade/slide in) -> 0.8 s crossfade ->
+ // the show with the layout.ts filtergraph -> end card (E s) -> logo video (config "logo") ->
+@@ -16,11 +15,11 @@
+ // --overlays manifest.json: full-frame alpha overlays at their final time; an overlay with
+ // freezeSec holds the picture and pauses the talk for that long while its SFX play.
+ import { $ } from "bun";
+-import { mkdirSync } from "fs";
++import { mkdirSync, copyFileSync } from "fs";
+ import { dirname, join, resolve } from "path";
+-import { filtergraph, prepareUi, renderHtml, type LayoutConfig } from "./layout";
++import { BRAND, filtergraph, prepareUi, renderHtml, SHADES, type LayoutConfig } from "./layout";
+ import type { Detection } from "./detect-tiles";
+-import { sfxOff, talkChain } from "./freeze-audio";
++import { sfxOff, talkChain } from "/Users/nik/.claude/skills/podcast-edit/freeze-audio";
+ 
+ const FONT = `-apple-system,"SF Pro Display","Helvetica Neue",sans-serif`;
+ const MONO = `"JetBrains Mono",ui-monospace,monospace`;
+@@ -66,6 +65,7 @@
+ .bar{width:72px;height:4px;border-radius:2px;background:#4F8AD1;margin-bottom:28px}
+ .title{font-size:80px;font-weight:700;line-height:1.08;letter-spacing:-0.5px;text-wrap:balance;max-width:1300px}
+ .hosts{font-size:32px;color:#B7C3D6}.hosts b{color:#E8EDF5;font-weight:600}
++.who{font-size:44px;line-height:1.5;color:#93A4BD}.who b{color:#E8EDF5;font-weight:600}
+ .links{font-family:${MONO};font-size:34px;color:#93A4BD}.links span{color:#E8EDF5}
+ </style></head><body><div class="b">${inner}</div></body></html>`;
+ }
+@@ -84,8 +84,36 @@
+   return { bg, layers };
+ }
+ 
++// "shades" theme end card: the last frame of the shades title card (pink + rays + elephant,
++// script wordmark, Lato title with the plum band), static, its text layers sliding in.
++export async function shadesCard(work: string, name: string, w: number, h: number, title: string, hosts: { name: string; company?: string }[]): Promise<{ bg: string; layers: Layer[] }> {
++  const [l1, l2 = ""] = title.split("\n");
++  const doc = (body: string, bg = "transparent") => `<!doctype html><html><head><meta charset="utf-8"><style>${SHADES.fonts}html,body{margin:0;width:${w}px;height:${h}px;overflow:hidden;background:${bg}}
++.a{position:absolute}.t{font-family:Lato;font-weight:900;font-size:150px;line-height:1;color:#fff;letter-spacing:-2px;text-shadow:0 7px 0 ${SHADES.plum}55,0 0 40px rgba(120,20,120,.25);width:1000px}
++.band{font-family:Lato;font-weight:900;font-size:124px;line-height:150px;height:150px;color:#fff;letter-spacing:-1px;white-space:nowrap;padding:0 46px 0 14px;position:absolute}.band:before{content:"";position:absolute;z-index:-1;left:-24px;top:0;right:0;height:150px;background:${SHADES.plum};border-radius:18px;transform:skewX(-6deg);box-shadow:0 10px 0 rgba(61,15,69,.25)}.band i{font-style:normal;color:#ff9cf0}
++.who{font-family:Lato;font-weight:700;font-size:50px;line-height:1.12;color:${SHADES.plum}}.who span{font-weight:400;color:${SHADES.sub}}
++</style></head><body>${body}</body></html>`;
++  const k = 950 / 1536;
++  const bg = join(work, `${name}-bg.png`);
++  copyFileSync(join(BRAND, "brand-card-bg.png"), bg);
++  const parts = [
++    { st: 0.3, html: `<img class="a" src="file://${BRAND}/wordmark-white.png" style="left:61px;top:70px;width:700px;filter:drop-shadow(0 6px 0 rgba(61,15,69,.35))">` },
++    { st: 0.6, html: `<div class="a t" style="left:110px;top:330px">${l1.replace(/&/g, "&amp;").replace(/</g, "&lt;")}</div>` },
++    { st: 0.9, html: `<div class="a band" style="left:110px;top:656px">${l2.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/\?$/, "<i>?</i>")}</div>` },
++    { st: 1.2, html: `<div class="a who" style="left:116px;top:905px">${hosts.map((p) => `${p.name}${p.company ? `<span>&nbsp;&middot;&nbsp;${p.company}</span>` : ""}`).join("<br>")}</div>` },
++  ];
++  const layers: Layer[] = [];
++  for (const [i, p] of parts.entries()) {
++    const png = join(work, `${name}-l${i}.png`);
++    if (i === 0) copyFileSync(join(BRAND, "brand-card-wordmark.png"), png);
++    else await renderHtml(doc(p.html), w, h, png);
++    layers.push({ png, st: p.st, d: 0.7, dy: 24 });
++  }
++  return { bg, layers };
++}
++
+ // Overlay manifest (from the overlay agent): times are edited.mp4 seconds.
+-type Sfx = { file: string; at: number; gain?: number }; // gain is ignored: see --sfx-rel
++type Sfx = { file: string; at: number; gain?: number }; // gain: linear, relative to --sfx-lufs
+ type Overlay = { file: string; outStart: number; dur: number; placement?: "band" | "full" | "center"; freezeSec?: number; sfx?: Sfx[] };
+ type Freeze = { at: number; sec: number };
+ 
+@@ -107,19 +135,33 @@
+   const args = Bun.argv.slice(2);
+   const flag = (n: string) => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : undefined; };
+   const [configPath, input, output] = args;
++  const cardVideo = flag("--card-video");
++  // --fade-in-pow P: picture brightness 1-(1-t/FADE_IN)^P (fast start, card readable early);
++  // the sound uses afade curve ipar (1-(1-x)^2). Default: linear for both.
++  const FADE_POW = Number(flag("--fade-in-pow") ?? 1);
+   const intro = flag("--intro"), outro = flag("--outro"), manifestPath = flag("--overlays");
+   if (!output) { console.error("usage: bun compose.ts <layout.json> <edited.mp4> <out.mp4> [--intro a.mp3] [--outro b.mp3] [--overlays manifest.json] [--from S] [--until S | --tail S] [--preset fast]"); process.exit(2); }
+-  const full = await duration(input);
++  // logo: a video played after the end card (path relative to the config); credit: a light
++  // card after it ({kicker, big, lead, sec}).
++  // cardHosts: who is on the title card, with companies (the show labels are names only).
++  // riseBefore: the last word ends this long before the show end (the outro bed rises there).
++  type Cfg = LayoutConfig & { trimEnd?: number; riseBefore?: number; cardHosts?: { name: string; company?: string }[]; links?: string[]; cardTitle?: string; logo?: string; bedShift?: number; credit?: { kicker?: string; big: string; lead?: string; sec?: number } };
++  // trimEnd (config or --trim-end S): the show ends at S (e.g. cut a last word); unlike
++  // --until it keeps the outro.
++  const c: Cfg = await Bun.file(configPath).json();
++  const trim = flag("--trim-end") ?? c.trimEnd;
++  const full = trim !== undefined ? Number(trim) : await duration(input);
+   const to = flag("--until") ? Number(flag("--until")) : full;
+   const from = flag("--tail") ? full - Number(flag("--tail")) : Number(flag("--from") ?? 0);
+-  const C = from > 0 ? 0 : Number(flag("--card") ?? 5), E = Number(flag("--end") ?? 8), DUCK = Number(flag("--duck") ?? -15);
+-  const X1 = 0.8, X2 = 0.8, MUSIC_LUFS = -18, SFX_M = Number(flag("--sfx-lufs") ?? -20);
+-  const FADE_IN = 1.0, FADE_OUT = 2.0; // from black / to black, picture and sound
+-  const BED_LEAD = Number(flag("--bed-lead") ?? 30); // longest outro-bed lead under the closing talk
++  const C = from > 0 ? 0 : Number(flag("--card") ?? 13), E = Number(flag("--end") ?? 8), DUCK = Number(flag("--duck") ?? -15);
++  // --music-lufs: the level the intro and outro beds are set to (default -18; Nik 2026-10-23: -20.5,
++  // music a bit lower, to match voice). --music-gain dB is the same as -18 + dB.
++  const X1 = 0.8, X2 = 0.8, MUSIC_LUFS = Number(flag("--music-lufs") ?? -18 + Number(flag("--music-gain") ?? 0)), SFX_M = Number(flag("--sfx-lufs") ?? -22), SFX_LO = Number(flag("--sfx-floor") ?? -26);
++  // From black / to black, picture and sound. The title card is long enough to be fully
++  // visible for 3 s after the fade-in; the last card holds while it fades out.
++  const FADE_IN = Number(flag("--fade-in") ?? 10), FADE_OUT = Number(flag("--fade-out") ?? 10);
++  const BED_LEAD = Number(flag("--bed-lead") ?? 11); // outro-bed lead under the closing talk: the sign-off only
+ 
+-  // logo: a video played after the end card (path relative to the config); credit: a light
+-  // card after it ({kicker, big, lead, sec}).
+-  const c: LayoutConfig & { links?: string[]; cardTitle?: string; logo?: string; credit?: { kicker?: string; big: string; lead?: string; sec?: number } } = await Bun.file(configPath).json();
+   const base = dirname(resolve(configPath));
+   const tiles: Detection = typeof c.tiles === "string" ? await Bun.file(resolve(base, c.tiles)).json() : c.tiles;
+   const segments = c.cuts ? (await Bun.file(resolve(base, c.cuts)).json()).segments : null;
+@@ -140,7 +182,7 @@
+   const fin = (t: number) => toFinal(t, C, freezes); // window time -> final time
+ 
+   // "center" overlays: the hosts move aside for that window (window time, before freezes).
+-  c.center = [...(c.center ?? []), ...overlays.filter((o) => o.placement === "center").map((o) => ({ from: o.outStart, to: o.outStart + o.dur }))];
++  c.center = [...(c.center ?? []), ...overlays.filter((o) => o.placement === "center").map((o) => ({ from: o.outStart - 0.3, to: o.outStart + o.dur + 0.3 }))]; // aside before the chart draws
+   // UI layers for the show (same as layout.ts).
+   const uiPngs = await prepareUi(c, work);
+ 
+@@ -150,16 +192,18 @@
+   // cardTitle: the title with explicit line breaks ("\n") for the cards.
+   const title = `<div class="bar"></div><div class="title">${esc(c.cardTitle ?? c.title ?? "").replace(/\n/g, "<br>")}</div>`;
+   const links = (c.links ?? ["postgres.fm", "postgres.ai"]).map((l) => `<span>${esc(l)}</span>`).join(" &nbsp;&middot;&nbsp; ");
+-  const tc = await card(work, "title", w, h, [
++  const tc = c.theme === "shades" ? await shadesCard(work, "title", w, h, c.cardTitle ?? c.title ?? "", c.cardHosts ?? []) : await card(work, "title", w, h, [
+     { top: 330, html: mark, st: 0.2 },
+     { top: 430, html: title, st: 0.6 },
+-    { top: 700, html: `<div class="hosts">${hosts}</div>`, st: 1.1 },
++    c.cardHosts
++      ? { top: 680, html: `<div class="who">${c.cardHosts.map((p) => `<b>${esc(p.name)}</b>${p.company ? ` &nbsp;&middot;&nbsp; ${esc(p.company)}` : ""}`).join("<br>")}</div>`, st: 1.1 }
++      : { top: 700, html: `<div class="hosts">${hosts}</div>`, st: 1.1 },
+   ]);
+-  const ec = await card(work, "end", w, h, [
++  const ec = c.theme === "shades" ? await shadesCard(work, "end", w, h, c.cardTitle ?? c.title ?? "", c.cardHosts ?? []) : await card(work, "end", w, h, [
+     { top: 300, html: mark, st: 0.3 },
+     { top: 400, html: title, st: 0.6 },
+     { top: 680, html: `<div class="hosts">${hosts}</div>`, st: 1.0 },
+-    { top: 770, html: `<div class="links">${links}</div>`, st: 1.4 },
++    ...(c.links?.length === 0 ? [] : [{ top: 770, html: `<div class="links">${links}</div>`, st: 1.4 }]), // links: [] = none
+   ]);
+   const logo = c.logo ? resolve(base, c.logo) : null;
+   const logoLen = logo ? await duration(logo) : 0;
+@@ -170,19 +214,19 @@
+     ...(cr.lead ? [{ top: 470, html: `<div class="lead">${esc(cr.lead)}</div>`, st: 0.7 }] : []),
+     { top: 800, html: `<div class="links">${(c.links ?? ["postgres.fm", "postgres.ai"]).map((l) => `<span>${esc(l)}</span>`).join(" &nbsp;&middot;&nbsp; ")}</div>`, st: 1.1 },
+   ], true) : null;
+-  const crLen = cr?.sec ?? 7;
++  const crLen = (cr?.sec ?? 7) + FADE_OUT;
+ 
+   const showLen = to - from;
+   const withOutro = !!outro && to >= full - 0.01;
+   const showEndFinal = C + showLen + F; // final time where the show (with freezes) ends
+   // After the show: end card, then the logo video, then the credit card, each joined by an
+-  // X2 crossfade. Starts of each part in final time. --end 0: no end card; the show
+-  // crossfades straight into the logo video (or the credit card, or just ends).
++  // X2 crossfade. Starts of each part in final time:
++  // --end 0 (Nik 2026-10-28): no end card; the show crossfades straight into the logo video.
+   const endStart = showEndFinal - X2, logoStart = E > 0 ? endStart + E - X2 : endStart, creditStart = logoStart + (logo ? logoLen - X2 : 0);
+-  const total = withOutro ? (cr ? creditStart + crLen : logo ? logoStart + logoLen : E > 0 ? endStart + E : showEndFinal) : showEndFinal;
++  const total = withOutro ? (cr ? creditStart + crLen : logo ? logoStart + logoLen : endStart + E) : showEndFinal;
+ 
+   // Inputs: 0 show, 1.. the layout.ts layers, then cards, music, overlays, SFX.
+-  const inputs: string[][] = [[...(from ? ["-ss", from.toFixed(3)] : []), ...(to < full ? ["-t", showLen.toFixed(3)] : []), "-i", input], ...uiPngs.map((p) => ["-loop", "1", "-framerate", String(fps), "-i", p])];
++  const inputs: string[][] = [[...(from ? ["-ss", from.toFixed(3)] : []), "-t", showLen.toFixed(3), "-i", input], ...uiPngs.map((p) => ["-loop", "1", "-framerate", String(fps), "-i", p])];
+   const add = (a: string[]) => inputs.push(a) - 1;
+   const still = (png: string, len: number) => add(["-loop", "1", "-framerate", String(fps), "-t", String(len), "-i", png]);
+ 
+@@ -207,7 +251,12 @@
+     g.push(`[${cur}]format=yuv420p,setsar=1,fps=${fps},settb=1/${fps}[${name}]`);
+   };
+   let vout = "show";
+-  if (C > 0) {
++  if (C > 0 && cardVideo) {
++    // An animated title card (e.g. Remotion): the first C + X1 s, last frame held if short.
++    g.push(`[${add(["-i", cardVideo])}:v]format=yuv420p,setsar=1,fps=${fps},tpad=stop_mode=clone:stop_duration=2,trim=duration=${C + X1},setpts=PTS-STARTPTS,settb=1/${fps}[tcard]`);
++    g.push(`[tcard][show]xfade=transition=fade:duration=${X1}:offset=${C}[v1]`);
++    vout = "v1";
++  } else if (C > 0) {
+     buildCard("tcard", tc, C + X1);
+     g.push(`[tcard][show]xfade=transition=fade:duration=${X1}:offset=${C}[v1]`);
+     vout = "v1";
+@@ -233,7 +282,7 @@
+   for (const [i, o] of overlays.entries()) {
+     // -itsoffset puts the overlay at its start time in the demuxer, so ffmpeg reads it only then.
+     // With setpts in the graph instead, all ProRes inputs decoded from t=0 and queued frames for
+-    // the whole show; ffmpeg 8.0.1 slowed to a crawl and deadlocked (sch_wait) twice (2026-10-29).
++    // the whole show; ffmpeg 8.0.1 slowed to a crawl and deadlocked twice (Nik's UUID episode, 2026-10-29).
+     const T = fin(o.t);
+     const k = add(["-itsoffset", T.toFixed(3), "-i", o.file]);
+     const dur = await duration(o.file);
+@@ -243,7 +292,9 @@
+   }
+ 
+   // Fade from black at the start (full episode only) and to black at the end.
+-  const vf = [...(C > 0 ? [`fade=t=in:st=0:d=${FADE_IN}`] : []), ...(withOutro ? [`fade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}`] : [])];
++  const fadeIn = FADE_POW === 1 ? `fade=t=in:st=0:d=${FADE_IN}`
++    : ((k: string) => `format=yuv420p,geq=lum='16+(lum(X,Y)-16)*${k}':cb='128+(cb(X,Y)-128)*${k}':cr='128+(cr(X,Y)-128)*${k}':enable='lt(t,${FADE_IN})'`)(`(1-pow(1-min(T,${FADE_IN})/${FADE_IN},${FADE_POW}))`);
++  const vf = [...(C > 0 ? [fadeIn] : []), ...(withOutro ? [`fade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}`] : [])];
+   if (vf.length) {
+     g.push(`[${vout}]${vf.join(",")}[vfade]`);
+     vout = "vfade";
+@@ -259,32 +310,41 @@
+     const ii = add(["-i", intro]);
+     const introLen = await duration(intro);
+     const duckAt = C + 0.1; // the edit keeps 0.3 s of room tone before the first word
+-    // A hard duck and a short fade near the end of the cue can sound abrupt: --duck-ramp S eases
+-    // the duck in over S s (default 0.5, the old hard duck); --intro-fade S fades the bed out over
+-    // S s from card + 1 s with a quarter-sine curve (default: the old 1-3 s fade near the cue end).
++    // Nik 2026-10-28 ("fadeout in intro is still too acute"): --duck-ramp S eases the duck in over S s
++    // (default 0.5, the old hard duck); --intro-fade S fades the bed out over S s from card + 1 s
++    // (default: the old 1-3 s fade near the end of the cue).
+     const DUCK_RAMP = Number(flag("--duck-ramp") ?? 0.5);
+     const IF = flag("--intro-fade");
+-    const fadeSt = IF ? C + 1 : Math.min(introLen - 1, C + 2);
+-    const fadeD = IF ? Math.min(Number(IF), introLen - C - 1) : Math.max(1, introLen - C - 3);
+-    ga.push(`[${ii}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gi.toFixed(2)}dB,${db(`if(lt(t,${duckAt}),0,${DUCK}*min(1,(t-${duckAt})/${DUCK_RAMP}))`)},afade=t=out:st=${fadeSt}:d=${fadeD.toFixed(2)}${IF ? ":curve=qsin" : ""}[mi]`);
++    const INTRO_FADE_ST = IF ? C + 1 : Math.min(introLen - 1, C + 2);
++    const INTRO_FADE_D = IF ? Math.min(Number(IF), introLen - C - 1) : Math.max(1, introLen - C - 3);
++    ga.push(`[${ii}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gi.toFixed(2)}dB,${db(`if(lt(t,${duckAt}),0,${DUCK}*min(1,(t-${duckAt})/${DUCK_RAMP}))`)},afade=t=out:st=${INTRO_FADE_ST}:d=${INTRO_FADE_D.toFixed(2)}:curve=qsin[mi]`);
+     mix.push("[mi]");
+   }
+   if (withOutro) {
+     const go = MUSIC_LUFS - (await lufs(outro!));
+     const oi = add(["-i", outro!]);
+     const outroLen = await duration(outro!);
+-    const signOff = showEndFinal - 1.0; // sign-off ends about 1 s before the show (room tone tail)
+-    // Line the bed's natural ending up with the end of the end card; skip its head if long.
+-    const start = Math.max(total - outroLen, showEndFinal - BED_LEAD);
+-    const skip = Math.max(0, start - (total - outroLen));
++    const signOff = showEndFinal - (c.riseBefore ?? 1.0); // the last word ends this long before the show end
++    // Line the bed's natural ending up with the episode end; skip its head if long.
++    // bedShift (s, config or --bed-shift) moves the bed earlier, e.g. to put a beat on the
++    // logo's dot landing (tools/onsets.ts finds the beats).
++    const base = total - outroLen - Number(flag("--bed-shift") ?? c.bedShift ?? 0);
++    const start = Math.max(base, showEndFinal - BED_LEAD);
++    const skip = start - base;
+     const rel = (t: number) => (t - start).toFixed(3);
+-    ga.push(`[${oi}:a]atrim=start=${skip.toFixed(3)},asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,volume=${go.toFixed(2)}dB,${db(`if(lt(t,${rel(signOff)}),${DUCK},${DUCK}*max(0,1-(t-${rel(signOff)})/1.2))`)},afade=t=in:d=1.5,adelay=${Math.round(start * 1000)}:all=1[mo]`);
++    ga.push(`[${oi}:a]atrim=start=${skip.toFixed(3)},asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,volume=${go.toFixed(2)}dB,${db(`if(lt(t,${rel(signOff)}),${DUCK},${DUCK}*max(0,1-(t-${rel(signOff)})/1.2))`)},afade=t=in:d=3,adelay=${Math.round(start * 1000)}:all=1[mo]`);
+     mix.push("[mo]");
+   }
+-  // SFX: each sound's loudest 400 ms is set to SFX_M LUFS plus a per-sound offset by file
+-  // name (--sfx-rel, default pop 0, tick -3, whoosh -6 dB), so SFX sit under the voice.
+-  // Placed at final time.
+-  const sfxRel = Object.fromEntries((flag("--sfx-rel") ?? "pop=0,tick=-3,whoosh=-6").split(",").map((kv) => kv.split("=")).map(([k, v]) => [k, Number(v)]));
++  // SFX: each sound's loudest 400 ms (momentary loudness, not peak: low sounds read quieter)
++  // is set to SFX_M LUFS plus a per-family offset (--sfx-rel prefix=dB; a name must match a
++  // prefix) plus the manifest gain as dB, held within SFX_LO..SFX_M so SFX sit under the
++  // voice. Placed at final time.
++  const sfxRel = Object.fromEntries((flag("--sfx-rel") ?? "thud=0,wind=-3,air=-6").split(",").map((kv) => kv.split("=")).map(([k, v]) => [k, Number(v)]));
++  const relFor = (name: string) => {
++    const k = Object.keys(sfxRel).find((p) => name.startsWith(p));
++    if (k === undefined) throw new Error(`SFX ${name}: no --sfx-rel family matches`);
++    return sfxRel[k];
++  };
+   let si = 0;
+   for (const o of overlays)
+     for (const s of o.sfx) {
+@@ -293,7 +353,7 @@
+       const k = add(["-i", s.file]);
+       const mm = await momentaryMax(s.file);
+       const name = s.file.split("/").pop()!.replace(/\.[^.]+$/, "");
+-      const want = SFX_M + (sfxRel[name] ?? 0);
++      const want = Math.max(SFX_LO, Math.min(SFX_M, SFX_M + relFor(name) + (s.gain ? 20 * Math.log10(s.gain) : 0)));
+       const gain = want - mm;
+       ga.push(`[${k}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gain.toFixed(2)}dB,adelay=${Math.round((fin(o.t) + s.at) * 1000)}:all=1[sfx${si}]`);
+       mix.push(`[sfx${si++}]`);
+@@ -304,7 +364,7 @@
+     const m = ga[i].match(/\[(\w+)\]$/);
+     if (m && mix.includes(`[${m[1]}]`)) ga[i] = ga[i].replace(/\[(\w+)\]$/, ",asetpts=N/SR/TB[$1]");
+   }
+-  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB${C > 0 ? `,afade=t=in:d=${FADE_IN / 2}` : ""}${withOutro ? `,afade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}` : ""},aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`);
++  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB${C > 0 ? `,afade=t=in:d=${FADE_IN}${FADE_POW === 1 ? "" : ":curve=ipar"}` : ""}${withOutro ? `,afade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}` : ""},aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`);
+   // The pre-limit keeps true peaks low enough for loudnorm's linear mode: its dynamic mode
+   // (used when peaks are too high) lost the first seconds of the mix in a full-length run.
+ 
+@@ -322,7 +382,7 @@
+   // Time map for chapters and later layers: edited time -> final time.
+   await Bun.write(output.replace(/\.mp4$/, "") + ".time-map.json", JSON.stringify({
+     formula: "final = card + (edited - from) + sum(freeze.sec for freezes with at < edited - from)",
+-    card: C, from, total: Number(total.toFixed(3)), showEnd: Number(showEndFinal.toFixed(3)), endCard: withOutro && E > 0 ? { start: Number(endStart.toFixed(3)), sec: E } : null,
++    card: C, from, total: Number(total.toFixed(3)), showEnd: Number(showEndFinal.toFixed(3)), endCard: withOutro ? { start: Number(endStart.toFixed(3)), sec: E } : null,
+     logo: withOutro && logo ? { start: Number(logoStart.toFixed(3)), sec: logoLen } : null,
+     credit: withOutro && cr ? { start: Number(creditStart.toFixed(3)), sec: crLen } : null,
+     freezes: freezes.map((f) => ({ edited: Number((f.at + from).toFixed(3)), sec: f.sec, finalStart: Number(fin(f.at).toFixed(3)) })),
