@@ -1,0 +1,18 @@
+{
+  "overlay": "05-preload-trap-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 2.117,
+      "chars": 50,
+      "line": "main"
+    },
+    {
+      "start": 2.767,
+      "end": 5,
+      "chars": 67,
+      "line": "sub"
+    }
+  ]
+}

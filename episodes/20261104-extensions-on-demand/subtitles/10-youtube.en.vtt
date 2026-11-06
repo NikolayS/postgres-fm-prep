@@ -1,0 +1,4273 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.500
+[music]
+
+00:00:06.500 --> 00:00:13.000
+[music]
+
+00:00:15.000 --> 00:00:19.500
+Nik: Hello, hello, this is Postgres.FM.
+I'm Nik, as usual.
+
+00:00:19.500 --> 00:00:23.740
+And as usual, already three times
+in a row, Kirk is here. Hi, Kirk.
+
+00:00:24.420 --> 00:00:25.420
+Kirk: Hey, Nik.
+
+00:00:25.980 --> 00:00:30.500
+Nik: And we have Álvaro visited us
+today again. Hi, Álvaro. Thank you.
+
+00:00:30.500 --> 00:00:33.180
+- Hello.
+- Thank you for coming back.
+
+00:00:33.840 --> 00:00:35.860
+- Thank you for having me again.
+- Yeah.
+
+00:00:35.860 --> 00:00:37.154
+Álvaro: Real pleasure.
+
+00:00:37.240 --> 00:00:41.820
+Nik: So, so you have an interesting topic,
+one more interesting topic, and
+
+00:00:43.220 --> 00:00:44.840
+I know it's not like...
+
+00:00:44.840 --> 00:00:49.020
+it's not something super new in terms
+of topic for you because you...
+
+00:00:49.020 --> 00:00:52.440
+As I know, you work on this already
+like six years, Overall-
+
+00:00:52.440 --> 00:00:54.734
+- Mm-hmm
+- the whole topic, containers.
+
+00:00:55.260 --> 00:00:58.640
+And this means, like,
+it's maturing probably, right?
+
+00:00:58.640 --> 00:01:03.040
+So you have a new understanding how it can
+be done even better, better and better,
+
+00:01:03.040 --> 00:01:08.520
+so I'm very looking forward
+to learn and see all the details
+
+00:01:09.040 --> 00:01:11.880
+what you're building.
+And how is it called first?
+
+00:01:11.880 --> 00:01:14.920
+- Like, let's start with that.
+- Okay.
+
+00:01:14.920 --> 00:01:16.820
+- Yeah.
+- So the, the project,
+
+00:01:16.820 --> 00:01:22.800
+it's called StackGres Containers, and it's
+based on a technology that powers it,
+
+00:01:22.800 --> 00:01:28.380
+that it's called DOCIR,
+which means a dynamic OCI registry,
+
+00:01:28.940 --> 00:01:34.120
+- and I guess we can take it from there.
+- Right. Right. Right. That's great.
+
+00:01:34.240 --> 00:01:39.040
+So maybe we should first
+touch this topic again,
+
+00:01:39.140 --> 00:01:43.140
+Postgres and containers pros
+and cons, If it makes sense.
+
+00:01:43.140 --> 00:01:45.081
+- Right.
+- I know Kirk wanted it.
+
+00:01:47.120 --> 00:01:53.240
+Kirk: So, so Álvaro, you're talking
+about containers here, and in particular,
+
+00:01:53.240 --> 00:01:57.880
+mm-kay, you're talking about Kubernetes.
+Talk to me.
+
+00:01:57.880 --> 00:02:03.040
+I'm, I'm a little green in this field.
+Bring me up to speed. What are these?
+
+00:02:03.040 --> 00:02:08.280
+How are they working? Why are they useful?
+And why Kubernetes versus something else?
+
+00:02:09.340 --> 00:02:13.180
+Álvaro: So I guess you mean in the context
+of running databases, right?
+
+00:02:13.180 --> 00:02:15.560
+- Yes.
+- Or Postgres in particular.
+
+00:02:15.560 --> 00:02:21.400
+- And, and Postgres in particular, yes.
+- Our favorite one, or only one. So yeah.
+
+00:02:21.400 --> 00:02:24.480
+Look, there, there's,
+there's always, you know, containers.
+
+00:02:24.480 --> 00:02:28.540
+It, it all goes back to the story
+of containers, why, why containers appear.
+
+00:02:28.540 --> 00:02:32.120
+There is this, this well-known story
+
+00:02:32.360 --> 00:02:36.240
+that, you know, I've got the, the
+software, our application up and running.
+
+00:02:36.240 --> 00:02:40.140
+Here it is, and you demo it on your
+laptop, and then someone says, "Okay, give
+
+00:02:40.140 --> 00:02:44.200
+me your laptops. We're gonna take it to
+the data center to put it in production."
+
+00:02:44.200 --> 00:02:45.200
+- Right.
+- And
+
+00:02:45.420 --> 00:02:48.530
+the reason why is that [laughs] you,
+you don't want...
+
+00:02:48.530 --> 00:02:52.320
+or we all probably all have experience
+that there may be differences,
+
+00:02:52.320 --> 00:02:55.920
+right? Between what you have on your
+laptop and development environment,
+
+00:02:55.920 --> 00:02:58.820
+and everything works,
+and then what you put in production.
+
+00:02:58.820 --> 00:03:02.380
+And those differences account
+for application errors, scaling errors,
+
+00:03:02.380 --> 00:03:07.440
+security problems, you name it.
+So containers, which are actually not,
+
+00:03:07.440 --> 00:03:12.379
+not a clear-cut definition of what they
+are, but they're essentially a construct
+
+00:03:12.460 --> 00:03:18.540
+to provide, somehow or to a certain
+good degree a reproducible environment.
+
+00:03:18.540 --> 00:03:22.090
+An environment that you run on your
+laptop, that you run in production,
+
+00:03:22.090 --> 00:03:25.270
+and you're pretty much warranted
+you're running the same thing.
+
+00:03:25.270 --> 00:03:27.420
+Or at least there's
+some level of isolation
+
+00:03:27.420 --> 00:03:32.400
+that provides this reality
+that the environment is, is the same.
+
+00:03:33.040 --> 00:03:36.100
+It's technically a way
+to package things, right?
+
+00:03:36.100 --> 00:03:40.940
+So you package in a way that you can just
+take from one place, put into another one,
+
+00:03:40.940 --> 00:03:44.220
+and again,
+you get a reproducible environment.
+
+00:03:44.800 --> 00:03:46.120
+- Okay.
+- Yeah.
+
+00:03:46.120 --> 00:03:48.420
+Kirk: So back in... You know, I'm old.
+
+00:03:48.420 --> 00:03:52.280
+Back in the day, I would just use
+a virtual machine for this, and I think
+
+00:03:52.280 --> 00:03:56.660
+that's how this kinda started. What's
+the core difference between those two?
+
+00:03:56.660 --> 00:03:57.880
+'Cause I think that's,
+
+00:03:57.880 --> 00:04:00.920
+- that's an important distinction, right?
+- Yeah.
+
+00:04:00.920 --> 00:04:03.320
+- Right.
+- So, so a virtual machine is something
+
+00:04:03.320 --> 00:04:06.970
+that also is not... I mean, you can
+actually create an image of a virtual
+
+00:04:06.970 --> 00:04:09.841
+machine and take it from one
+place to another one.
+
+00:04:10.300 --> 00:04:15.620
+But they are technically less portable
+and, and let's say fat here in the way
+
+00:04:15.620 --> 00:04:18.149
+that they package
+a whole operating system.
+
+00:04:18.280 --> 00:04:22.540
+And that still brings differences
+from places to places. The containers
+
+00:04:22.540 --> 00:04:26.481
+are a light-weightier approach,
+are isolation at the process level.
+
+00:04:26.540 --> 00:04:31.360
+And, and so basically a container, if,
+if we're gonna get a little bit technical,
+
+00:04:31.360 --> 00:04:34.240
+it's an abstraction.
+It's a combination of three things.
+
+00:04:34.240 --> 00:04:36.700
+But basically what is the kernel,
+Linux kernel,
+
+00:04:36.700 --> 00:04:41.440
+supporting you on creating an illusion
+that you have your own PID namespace,
+
+00:04:41.440 --> 00:04:44.028
+so you, you see only
+your process hierarchy.
+
+00:04:44.100 --> 00:04:47.200
+You see your own file system
+and your own networking stack.
+
+00:04:47.200 --> 00:04:51.360
+And then can limit resources like
+CPU and, and RAM and whatnot, right?
+
+00:04:51.360 --> 00:04:54.125
+Kirk: Perfect.
+So instead of a virtual machine-
+
+00:04:54.616 --> 00:04:57.851
+So it can share the operating
+system with everyone else
+
+00:04:57.876 --> 00:04:59.500
+- Exactly. Exactly.
+- Right
+
+00:04:59.500 --> 00:05:03.450
+And, and that's why also from a security
+perspective, it's, it's a weaker
+
+00:05:03.450 --> 00:05:07.396
+level of isolation. You're still running
+on the same host on the same kernel,
+
+00:05:07.396 --> 00:05:11.816
+right? And if someone touches the kernel,
+it touches the kernel for everybody.
+
+00:05:11.816 --> 00:05:17.276
+But given that, that caveats, it
+provides this a good level of isolation,
+
+00:05:17.276 --> 00:05:19.616
+especially application isolation,
+
+00:05:20.300 --> 00:05:23.540
+by, you know, in a much lighter-weight
+approach. Not lighter-weight
+
+00:05:23.540 --> 00:05:27.040
+from performance, but from a packaging
+from a packaging perspective. You
+
+00:05:27.040 --> 00:05:30.730
+don't need to package the whole operating
+system, but just your application.
+
+00:05:30.730 --> 00:05:32.848
+And actually, this can be taken very far.
+
+00:05:32.916 --> 00:05:38.016
+A lot of people that use containers today
+actually pack, pack containers like a VM.
+
+00:05:38.176 --> 00:05:41.356
+They still pack like almost
+a whole operating system,
+
+00:05:41.416 --> 00:05:43.296
+whereas technically a container could
+
+00:05:43.296 --> 00:05:45.736
+- be as simple as a single binary.
+- Hmm.
+
+00:05:45.736 --> 00:05:49.276
+Álvaro: Single binary is probably
+not a good idea because normally
+
+00:05:49.276 --> 00:05:53.636
+applications require some,
+some support files, CA certificates,
+
+00:05:53.736 --> 00:05:57.450
+maybe a libc, maybe some other files,
+and sometimes you need a little bit
+
+00:05:57.450 --> 00:06:00.350
+more, but definitely you should
+not pack a whole operating
+
+00:06:00.350 --> 00:06:04.250
+system. But even leaving that aside,
+right, so why they're good for databases?
+
+00:06:04.250 --> 00:06:07.316
+And, and I've,
+I've been talking in, at many places about
+
+00:06:07.316 --> 00:06:10.816
+why containerized databases
+should be the future, if not
+
+00:06:10.816 --> 00:06:15.110
+the present. And there are many reasons
+for that. The, the first one is obvious,
+
+00:06:15.110 --> 00:06:18.610
+it's what we have just just said,
+you want a reproducible environment.
+
+00:06:18.610 --> 00:06:22.510
+But there are other reasons that go
+beyond that. For example, we are all aware
+
+00:06:22.510 --> 00:06:26.296
+that in Postgres there may be
+certain issues if you, for example,
+
+00:06:26.376 --> 00:06:31.036
+try to move your database across libcs,
+across systems where are different libcs.
+
+00:06:31.036 --> 00:06:36.316
+Basically, if you take your OS, you do an
+OS upgrade, and then you move to another
+
+00:06:36.316 --> 00:06:40.676
+OS version where there's a libc change,
+then maybe your, your index has now
+
+00:06:40.676 --> 00:06:43.776
+got corrupted, and you need
+to re-index your database, right?
+
+00:06:43.776 --> 00:06:46.616
+Why this happens,
+because you change the OS underneath,
+
+00:06:46.616 --> 00:06:49.557
+and this get exposed to the database,
+to Postgres.
+
+00:06:49.776 --> 00:06:56.156
+Now, if you run on a container, you are
+fixing the libc at the container level,
+
+00:06:56.376 --> 00:07:01.435
+and it can be independent of the host OS.
+So you solve a kind of problems
+
+00:07:01.435 --> 00:07:04.670
+by creating this isolation
+where you run your database.
+
+00:07:04.976 --> 00:07:11.860
+Kirk: So you're specifying, in fact, this
+environment requires this libc inside-
+
+00:07:11.860 --> 00:07:13.616
+- Yeah
+- the container. So don't go
+
+00:07:13.616 --> 00:07:17.636
+using the one the operating system wants
+to give me. We don't trust that one.
+
+00:07:17.636 --> 00:07:21.756
+As long as you use this one,
+I think we're clean. Boom. Good?
+
+00:07:21.756 --> 00:07:25.196
+Álvaro: Exactly. And this actually
+also isolates you from...
+
+00:07:25.196 --> 00:07:27.156
+because it isolates you from the OS,
+
+00:07:27.156 --> 00:07:31.356
+it doesn't matter whether you're running
+on Red Hat or Debian or, or whatever,
+
+00:07:31.356 --> 00:07:35.415
+they... just the container runs
+and, and you get the same experience.
+
+00:07:35.536 --> 00:07:38.396
+Even when the, the or, or the
+
+00:07:40.056 --> 00:07:45.256
+the, the simulation of containerization
+that other OSs have, like
+
+00:07:45.296 --> 00:07:50.676
+macOS or Windows, which they run
+a Linux VM to run containers, right?
+
+00:07:50.676 --> 00:07:54.936
+Which is a bit of a, something hidden from
+you. They don't run containers natively,
+
+00:07:54.936 --> 00:07:58.880
+these Linux containers natively,
+except for things like FreeBSD or so on.
+
+00:07:58.880 --> 00:08:02.736
+But going back to my [laughs] to the
+topic, right, they create this solution,
+
+00:08:02.736 --> 00:08:07.456
+but it still allows you to run the same
+workload on these other OSs, right?
+
+00:08:07.456 --> 00:08:11.376
+And you still get the same experience.
+So it also abstracts you from the OS,
+
+00:08:11.376 --> 00:08:14.258
+provides also another
+advantage in these regards.
+
+00:08:14.296 --> 00:08:17.716
+Kirk: Mm-hmm. Nice.
+So, so you got this container.
+
+00:08:17.716 --> 00:08:22.096
+It uses the resources of the machine
+you put it on. The, it can leverage
+
+00:08:22.096 --> 00:08:26.316
+the network and the things you turn on
+and tell it to kind of connect to, right?
+
+00:08:26.316 --> 00:08:30.496
+So this is, this is how you're looking
+at this. And then is there any advantage
+
+00:08:30.496 --> 00:08:35.116
+to having a, a secondary container
+in in case this one crashes?
+
+00:08:35.300 --> 00:08:38.380
+Yeah. Well, for obvious reasons,
+yes, there is, right?
+
+00:08:38.380 --> 00:08:39.720
+- Okay.
+- And this actually
+
+00:08:39.720 --> 00:08:43.640
+then moves the topic... Well, just before
+moving the topic, I would say there's
+
+00:08:43.640 --> 00:08:47.740
+another significant advantage of running
+on containers specifically for databases,
+
+00:08:47.740 --> 00:08:53.116
+is the security boundary. If you control
+exactly the amount of software that gets
+
+00:08:53.116 --> 00:08:56.116
+packaged with your database
+in the container image-
+
+00:08:56.176 --> 00:08:58.336
+- Mm-hmm
+- you can also do static analysis,
+
+00:08:58.336 --> 00:09:01.056
+static security analysis,
+and actually every
+
+00:09:01.056 --> 00:09:04.096
+containerized tool goes through
+those layers of analysis.
+
+00:09:04.096 --> 00:09:08.376
+There's tools specifically that understand
+containers format and analyze for scrutiny
+
+00:09:08.376 --> 00:09:10.160
+for security vulnerabilities.
+
+00:09:10.160 --> 00:09:12.950
+You are defining the boundary
+on, the software boundary-
+
+00:09:12.950 --> 00:09:14.596
+- Mm
+- for your running database,
+
+00:09:14.596 --> 00:09:16.340
+right? So you can analyze security,
+
+00:09:16.340 --> 00:09:19.960
+I would say, in a much more comfortable,
+standardized, and in static way,
+
+00:09:19.960 --> 00:09:21.410
+right? Before even deploying,
+
+00:09:21.410 --> 00:09:24.580
+you know the security of what
+you're gonna deploy, right?
+
+00:09:24.580 --> 00:09:28.536
+But moving from one instance to another
+instance is where actually I would also
+
+00:09:28.536 --> 00:09:32.636
+set the boundary between running a single
+container on something like Docker,
+
+00:09:32.636 --> 00:09:38.016
+Podman, or equivalent tools
+towards a Postgres cluster, right?
+
+00:09:38.336 --> 00:09:43.836
+Should we run Postgres clusters on Docker
+containers? I would probably say no,
+
+00:09:44.876 --> 00:09:49.416
+and that's where actually Kubernetes
+enters this scene, from my perspective,
+
+00:09:49.416 --> 00:09:53.256
+- in my opinion.
+- And the operate, yeah.
+
+00:09:54.040 --> 00:09:58.096
+Álvaro: So yeah, so we're moving from one
+instance to multiple instances, and now
+
+00:09:58.096 --> 00:10:01.876
+we need to coordinate a distributed
+system. We need to assign workloads
+
+00:10:01.876 --> 00:10:05.796
+to different hardware resources. We need
+to make sure that if something fails,
+
+00:10:05.796 --> 00:10:10.396
+something else gets turned on, like if,
+if a node dies with its container inside,
+
+00:10:10.396 --> 00:10:15.616
+that this container maybe appear somewhere
+else and reconnect and rewire the IPs
+
+00:10:15.616 --> 00:10:19.204
+and so on so that the cluster
+will continue operating, right?
+
+00:10:19.256 --> 00:10:21.356
+And this is actually what Kubernetes does.
+
+00:10:21.356 --> 00:10:25.796
+I know that a lot of people have some
+reluctance towards Kubernetes, right?
+
+00:10:25.870 --> 00:10:27.060
+And consider it a complex
+
+00:10:27.060 --> 00:10:29.376
+- system. And on this last part-
+- Not anymore
+
+00:10:29.376 --> 00:10:31.636
+- there's nothing not run.
+- Not anymore. It,
+
+00:10:31.636 --> 00:10:32.636
+Álvaro: Okay. No?
+
+00:10:33.616 --> 00:10:39.856
+Nik: Yeah. So I just don't care anymore
+because, you know, like, if... I,
+
+00:10:39.856 --> 00:10:42.016
+I care about different topic now.
+
+00:10:42.676 --> 00:10:48.316
+How to have highly, like 100%
+trustworthy agent for operations.
+
+00:10:48.316 --> 00:10:49.320
+Álvaro: [laughs]
+
+00:10:49.320 --> 00:10:50.436
+This is what I care.
+
+00:10:50.436 --> 00:10:52.930
+- Right. Because-
+- I don't care about complexity of
+
+00:10:52.930 --> 00:10:57.256
+kubectl commands and memorizing stuff
+and so on because I don't do it anymore,
+
+00:10:57.256 --> 00:11:00.080
+- right?
+- Yeah, you don't need to do it anymore
+
+00:11:00.176 --> 00:11:02.336
+No, I mean, anyway, Kubernetes
+
+00:11:02.536 --> 00:11:07.676
+surface is very, very wide. So I mean,
+if you want to learn the whole Kubernetes,
+
+00:11:07.676 --> 00:11:11.236
+it is complex,
+but also by learning a small subset of it,
+
+00:11:11.236 --> 00:11:14.942
+you can get comfortable with it
+and, and, you know, operate it.
+
+00:11:15.196 --> 00:11:18.136
+So the... You can pick
+which subset of it you need.
+
+00:11:18.136 --> 00:11:21.607
+But the reason why I think it's
+important, and what I would
+
+00:11:21.636 --> 00:11:28.376
+define Kubernetes, is basically an
+abstraction layer behind an API of compute
+
+00:11:28.436 --> 00:11:33.350
+networking and storage,
+so that if you want to, instead of, say,
+
+00:11:33.350 --> 00:11:35.780
+deploy this container with Postgres,
+you're gonna
+
+00:11:35.780 --> 00:11:39.240
+say deploy this Postgres container,
+another container for the replica,
+
+00:11:39.240 --> 00:11:41.960
+another third container for the replica,
+and then etcd,
+
+00:11:41.960 --> 00:11:44.540
+and then another tool for backups,
+and then Grafana,
+
+00:11:44.540 --> 00:11:48.240
+and then everything. Kubernetes allows
+you to orchestrate all this and say,
+
+00:11:48.240 --> 00:11:51.650
+"Okay, I need these compute resources,
+these storage resources, this,
+
+00:11:51.650 --> 00:11:53.400
+- Hmm
+- you know, memory resources.
+
+00:11:53.400 --> 00:11:56.450
+This networking all needs to be wired up.
+If something fails,
+
+00:11:56.450 --> 00:12:00.200
+I'll restart on another node and then
+rewire the IPs and so on. And this...
+
+00:12:00.200 --> 00:12:04.316
+That, that kind of magic is complex
+problems that get abstracted away,
+
+00:12:04.316 --> 00:12:07.816
+and they run anywhere, whether cloud,
+on-prem, it doesn't matter.
+
+00:12:07.816 --> 00:12:12.776
+You stay on a virtualized layer, that
+is API driven, and that, that's where I
+
+00:12:12.776 --> 00:12:16.736
+see the huge advantage. You can create
+like a virtual infrastructure, abstracts
+
+00:12:16.736 --> 00:12:21.596
+the infrastructure, you run anywhere you
+want, and it always has the same shape.
+
+00:12:22.356 --> 00:12:27.156
+Kirk: Interesting. So those people who got
+hosed when VMware got bought by Broadcom
+
+00:12:27.156 --> 00:12:30.996
+and saw the rates go up tenfold,
+had they been running more Kubernetes,
+
+00:12:30.996 --> 00:12:34.436
+this could have been pushed down
+to a new environment much faster.
+
+00:12:34.436 --> 00:12:35.440
+- Yep.
+- So.
+
+00:12:35.440 --> 00:12:36.096
+- Yep.
+- Yeah.
+
+00:12:36.096 --> 00:12:37.978
+- Absolutely.
+- Good. All right.
+
+00:12:38.176 --> 00:12:40.256
+Now start getting closer into
+
+00:12:40.556 --> 00:12:45.016
+so, so Kubernetes can handle all of this.
+What do you need your tool for?
+
+00:12:45.016 --> 00:12:48.056
+- [laughs]
+- What have you been working on?
+
+00:12:48.836 --> 00:12:53.136
+Álvaro: So there's famous,
+Kelsey Hightower, right?
+
+00:12:53.136 --> 00:12:57.116
+And he's, he's very famous
+for, for many things,
+
+00:12:57.116 --> 00:13:01.156
+and one of the things he said is,
+"Should I run Postgres on Kubernetes?"
+
+00:13:01.156 --> 00:13:07.076
+And, and he said that you know, you need
+to, to actually twist Postgres' arms
+
+00:13:07.076 --> 00:13:09.595
+a little bit to run
+on Kubernetes or twist,
+
+00:13:09.595 --> 00:13:14.256
+Kubernetes' arms actually to run Postgres,
+and I, I, I essentially stand by that.
+
+00:13:14.256 --> 00:13:18.936
+So if you try to run Postgres
+on Kubernetes naive, like, you know...
+
+00:13:18.936 --> 00:13:23.736
+I mean, it's not so hard. The distance
+from a Kubernet- as from a Docker,
+
+00:13:24.136 --> 00:13:29.696
+Dockerfile to a StatefulSet on Kubernetes
+and a service is, is tiny, right?
+
+00:13:30.076 --> 00:13:32.636
+But then you're gonna
+face a lot of problems,
+
+00:13:32.636 --> 00:13:36.976
+because it is not...
+It's gonna fight you a little bit.
+
+00:13:36.976 --> 00:13:40.856
+Kubernetes has no notion of what
+is a primary and replica, for example.
+
+00:13:40.856 --> 00:13:44.536
+It treats all containers equal.
+And, and by default,
+
+00:13:44.536 --> 00:13:48.356
+by default, that doesn't mean
+that only works for stateful workloads,
+
+00:13:48.356 --> 00:13:51.415
+but by default consider
+workloads somehow stateless,
+
+00:13:51.440 --> 00:13:55.096
+and may apply things that you don't
+want for a database to happen, right?
+
+00:13:55.096 --> 00:14:00.396
+And so you really need to, to set it up in
+a way that you wanna make sure everything
+
+00:14:00.396 --> 00:14:04.516
+works the way it should, right? And that's
+basically what an operator does.
+
+00:14:04.516 --> 00:14:08.820
+Without it, you're gonna fight a bit of
+an uphill battle that others have fought
+
+00:14:08.820 --> 00:14:11.776
+for you already, and there's
+no need to reinvent the wheel.
+
+00:14:11.776 --> 00:14:15.736
+So Kubernetes operators package all the
+knowledge required for running Postgres
+
+00:14:15.736 --> 00:14:20.216
+on Kubernetes. And on top of that, they
+typically pack all the tools that you need
+
+00:14:20.216 --> 00:14:24.396
+for what doesn't come included
+in Postgres Core: connection pooling,
+
+00:14:24.396 --> 00:14:27.876
+high availability, backups,
+monitoring, you name it, right?
+
+00:14:27.876 --> 00:14:29.716
+And automates most of the operations
+
+00:14:29.716 --> 00:14:32.296
+that you need for day zero
+and day two operations.
+
+00:14:32.296 --> 00:14:37.516
+So that it's a really convenience way,
+to package all this knowledge, tools,
+
+00:14:37.516 --> 00:14:42.190
+automation, and deliver to you in a single
+installable package that works anyway,
+
+00:14:42.190 --> 00:14:45.390
+anyway on any infrastructure you want,
+and that's the advantage.
+
+00:14:45.390 --> 00:14:47.190
+So that's why I would say if someone
+
+00:14:47.190 --> 00:14:52.036
+wants to run Postgres on Kubernetes, which
+I would say should be your default option,
+
+00:14:52.036 --> 00:14:57.056
+then I would say that StackGres is among,
+the best options to actually do that.
+
+00:14:57.176 --> 00:15:00.836
+And basically because it
+packages everything you need,
+
+00:15:00.996 --> 00:15:05.916
+it can be deployed a Postgres cluster in
+a few seconds by writing a tiny YAML file,
+
+00:15:05.916 --> 00:15:10.916
+very high level, no expertise required, or
+from the GUI from the command web console,
+
+00:15:10.936 --> 00:15:15.756
+or from the REST API. And anyway, you'll
+get a Postgres cluster in a few seconds,
+
+00:15:15.756 --> 00:15:18.056
+literally running
+on Kubernetes without having
+
+00:15:18.056 --> 00:15:21.076
+to be a Postgres expert,
+and that's the beauty of it.
+
+00:15:21.076 --> 00:15:25.782
+Kirk: Nice. So the... One of the things
+that's just dawned on me is that I think
+
+00:15:26.096 --> 00:15:30.656
+the key thing in a Kubernetes is these
+environments are not where you should be
+
+00:15:30.656 --> 00:15:35.976
+writing your data. In Postgres, we usually
+write our data in the database's, quote,
+
+00:15:35.976 --> 00:15:40.636
+environment, right? We have a Postgres
+user, and it kinda owns the data.
+
+00:15:40.636 --> 00:15:45.096
+It writes logs to the system
+logs inside that environment.
+
+00:15:45.096 --> 00:15:48.076
+In this case, part of what
+you have to do, I would guess,
+
+00:15:48.076 --> 00:15:53.190
+is you have to extract these things
+and point them to different places
+
+00:15:53.190 --> 00:15:56.796
+so that while the machine's running,
+if while the environment's running,
+
+00:15:56.796 --> 00:16:01.336
+if it goes down, you've got access to the
+logs. If you spin a new mach- new one up,
+
+00:16:01.336 --> 00:16:05.676
+it continues writing to the same logs,
+it continues working with the same files,
+
+00:16:05.676 --> 00:16:08.916
+right? So that's part
+of this overall configuration?
+
+00:16:09.176 --> 00:16:11.160
+- Yes, yes.
+- Perfect.
+
+00:16:11.160 --> 00:16:14.150
+In, in Kubernetes, so when,
+when you write operators
+
+00:16:14.150 --> 00:16:16.650
+for running something like
+Postgres on Kubernetes,
+
+00:16:16.650 --> 00:16:20.700
+you, you tend to offer options that align
+with the usual practices in Kubernetes.
+
+00:16:20.700 --> 00:16:25.076
+But Kubernetes provides many support
+systems or subsystems for this.
+
+00:16:25.076 --> 00:16:29.340
+For example, for logging, there's a
+subsystem which is basically very simple.
+
+00:16:29.340 --> 00:16:32.560
+If you throw anything to the standard
+error, it will get captured,
+
+00:16:32.560 --> 00:16:36.460
+and you can access it with Kubernetes
+tools, right? And that's the, that's
+
+00:16:36.460 --> 00:16:37.700
+the basic, that's the 101.
+
+00:16:37.700 --> 00:16:39.950
+- Nice.
+- But then you can improve on doing that.
+
+00:16:39.950 --> 00:16:43.290
+For example, actually in StackGres we
+support an option, which is this one,
+
+00:16:43.290 --> 00:16:46.410
+but we also support the option
+to capture the logs and send them
+
+00:16:46.410 --> 00:16:50.160
+to a, what we call a distributed log
+server, which happens to be a Postgres
+
+00:16:50.160 --> 00:16:53.743
+server collecting all the logs,
+and then you can query in SQL.
+
+00:16:54.116 --> 00:16:56.096
+Kirk: Nice. Now, okay, good.
+
+00:16:56.096 --> 00:17:00.876
+So now I kinda got a picture here,
+and you mentioned StackGres, right?
+
+00:17:01.248 --> 00:17:05.268
+So, and, and that's, that's kind
+of the product name, company name here?
+
+00:17:05.268 --> 00:17:08.168
+- It is both.
+- Like... Okay, perfect. Now All right.
+
+00:17:08.168 --> 00:17:09.928
+- Yeah. Yeah.
+- Yeah.
+
+00:17:09.928 --> 00:17:13.588
+Nik: As I, as I understand, the company
+was just recently renamed because
+
+00:17:13.588 --> 00:17:16.428
+of success of StackGres,
+right? Congratulations.
+
+00:17:17.048 --> 00:17:20.224
+Álvaro: Thank you. Yes.
+The company was called OnGres-
+
+00:17:20.308 --> 00:17:22.088
+- Okay
+- which meant on Postgres,
+
+00:17:22.088 --> 00:17:25.088
+and now it's transitioning
+to just to StackGres.
+
+00:17:25.090 --> 00:17:25.888
+- Right.
+- Nice.
+
+00:17:25.888 --> 00:17:27.048
+- And,
+- Congratulations.
+
+00:17:27.048 --> 00:17:30.728
+Nik: Yeah, and I know really big
+companies use it, which is great.
+
+00:17:30.728 --> 00:17:35.348
+And finally you changed
+license to Apache 2.0
+
+00:17:35.548 --> 00:17:39.728
+- from AGPL V, V3. So yeah.
+- Yes.
+
+00:17:39.728 --> 00:17:45.568
+Nik: We discussed it, when you visited
+us with Michael recently. That's great.
+
+00:17:45.748 --> 00:17:50.388
+So I, I wish we move from Kubernetes
+to just to containers,
+
+00:17:50.388 --> 00:17:54.708
+because this is a central topic now,
+right? Like, because, like what's-
+
+00:17:54.708 --> 00:17:56.748
+- Yes
+- what's new in that area?
+
+00:17:57.028 --> 00:17:59.888
+Because I know,
+I know for quite a long time
+
+00:17:59.988 --> 00:18:03.930
+for StackGres you already supported some,
+like dynamic load of
+
+00:18:03.930 --> 00:18:06.368
+- extensions to Postgres into containers.
+- Mm-hmm.
+
+00:18:06.368 --> 00:18:10.180
+Nik: And this is like technology
+you developed, your team developed.
+
+00:18:10.180 --> 00:18:12.888
+But there is something new,
+right? What, what is that?
+
+00:18:12.888 --> 00:18:15.828
+Álvaro: Yes. Yes, yes, that's correct.
+
+00:18:15.828 --> 00:18:19.988
+So, so yeah, this is kind of a little
+bit of let's go to the basics, right?
+
+00:18:19.988 --> 00:18:24.128
+Like, what, what is the fuel
+for these Kubernetes operators?
+
+00:18:25.170 --> 00:18:29.020
+What they consume, let's say,
+is the container images, right?
+
+00:18:29.020 --> 00:18:31.370
+Where we actually started
+the discussion today.
+
+00:18:31.370 --> 00:18:35.048
+This packaging of all the files
+that you need to run your database.
+
+00:18:35.048 --> 00:18:37.008
+And when you think about Postgres,
+
+00:18:37.008 --> 00:18:41.348
+one of the key features of Postgres
+is supporting extensions. So
+
+00:18:41.908 --> 00:18:46.440
+if you think about it, how do you provide
+these extensions to the Postgres clusters,
+
+00:18:46.440 --> 00:18:50.348
+right? And so there's, there's several
+ways to think about it. The, the option
+
+00:18:50.348 --> 00:18:54.368
+number one, the naive option is, okay,
+I wanna create a what, what I call a fat
+
+00:18:54.368 --> 00:18:58.528
+image. And the fat image is something
+where I just pack all the extensions.
+
+00:18:58.528 --> 00:19:03.168
+Let's say my universe of extensions
+is 200 or 500 or 1,000 extensions, right?
+
+00:19:04.448 --> 00:19:08.580
+And I package them all into a single
+container image. By the way,
+
+00:19:08.580 --> 00:19:12.210
+this applies the same to container
+images to VMs. Like, if you're running
+
+00:19:12.210 --> 00:19:16.080
+on a managed, on a managed Postgres,
+that runs on a VM behind the scenes, what
+
+00:19:16.080 --> 00:19:20.188
+did they package in the VM? Right? What,
+what's present in the VM? And so the goal-
+
+00:19:20.188 --> 00:19:24.828
+Nik: .control and .so files, all of them,
+they're all binaries and text files there,
+
+00:19:24.828 --> 00:19:26.528
+- right?
+- Exactly.
+
+00:19:26.528 --> 00:19:27.930
+- Yeah.
+- Now that we're-
+
+00:19:27.930 --> 00:19:31.188
+- What, other than that
+- more and more concerned, with security,
+
+00:19:31.188 --> 00:19:35.388
+right? If a package is hundreds
+of extensions, which Postgres extensions,
+
+00:19:35.388 --> 00:19:39.688
+where did they come from? Most
+of them are random, no pun intended,
+
+00:19:39.788 --> 00:19:41.768
+repositories on GitHub, right?
+
+00:19:41.768 --> 00:19:46.908
+And the security awareness and level
+of quality of those varies a lot.
+
+00:19:47.268 --> 00:19:49.327
+And so if you just pull everything,
+
+00:19:49.708 --> 00:19:54.414
+you're probably not getting a very safe
+environment from a security perspective.
+
+00:19:54.468 --> 00:19:57.528
+There may be plenty of CVEs
+within it because, you know,
+
+00:19:57.528 --> 00:20:00.822
+you're pulling a lot of objects,
+and not all are vetted.
+
+00:20:01.228 --> 00:20:04.550
+And but that was, that would be
+the, the case for the fatty image.
+
+00:20:04.550 --> 00:20:07.340
+It has also more problems.
+Probably it's very large.
+
+00:20:07.340 --> 00:20:11.240
+I think we measured this once, and it
+was, like several gigabytes. You don't,
+
+00:20:11.240 --> 00:20:14.950
+probably don't want to pull a Postgres
+image several gigabytes all the time.
+
+00:20:14.950 --> 00:20:18.900
+And on top of that, there's gonna be some
+conflicts with transitive dependencies,
+
+00:20:18.900 --> 00:20:22.700
+right? There, there's gonna be clashes.
+So it's definitely non-trivial problem
+
+00:20:22.700 --> 00:20:26.808
+to solve and comes with a lot of caveats,
+the main one security. But we still,
+
+00:20:26.808 --> 00:20:31.632
+we still wanted to provide to our users
+the ability to use hundreds of extensions.
+
+00:20:31.748 --> 00:20:34.748
+So you're right,
+we developed the first technology,
+
+00:20:35.168 --> 00:20:39.508
+a first way of building the Postgres
+containers and the extensions
+
+00:20:40.448 --> 00:20:43.270
+that took security first approach.
+We cannot compromise
+
+00:20:43.270 --> 00:20:46.628
+on security. So what we did is, look,
+our container images is gonna
+
+00:20:46.628 --> 00:20:50.908
+contain Postgres, like zero extensions.
+Sorry about that. Well, actually PL/pgSQL
+
+00:20:50.908 --> 00:20:51.908
+and a few others.
+
+00:20:51.908 --> 00:20:54.888
+- [laughs]
+- But essentially no extensions, right?
+
+00:20:55.128 --> 00:21:02.128
+And then we've developed a mechanism
+that allows to pull the extension code
+
+00:21:02.808 --> 00:21:07.508
+dynamically from the container when it's
+running already. We made this process very
+
+00:21:07.508 --> 00:21:11.488
+simple. It's basically you go to the YAML
+file that creates a Postgres cluster
+
+00:21:11.488 --> 00:21:14.608
+on the web console,
+and just select the extension, add a line,
+
+00:21:14.608 --> 00:21:19.108
+extensions is an array just in YAML, so
+it's a list. You add the extension name,
+
+00:21:19.108 --> 00:21:23.328
+Citus, citext, boom. And in one second
+it appears in all instances of the
+
+00:21:23.328 --> 00:21:27.380
+cluster. So it's, it's very transparent,
+very fast. The way it works is a little
+
+00:21:27.380 --> 00:21:29.280
+bit more complicated behind the scenes,
+
+00:21:29.280 --> 00:21:32.920
+but it goes to our extension repository,
+downloads the code of the extension
+
+00:21:32.920 --> 00:21:36.680
+that matches that particular version
+of Postgres, and then deploys it into the
+
+00:21:36.680 --> 00:21:40.620
+container running image, then set ups a
+hook so that if you restart the container,
+
+00:21:40.620 --> 00:21:44.720
+it will happen the same process again, and
+then applies to all replicas and so on.
+
+00:21:44.720 --> 00:21:46.780
+This was developed many years ago.
+
+00:21:46.780 --> 00:21:49.988
+I actually presented a talk about
+this on Kubernetes conference,
+
+00:21:49.988 --> 00:21:54.208
+the KubeCon, a few years ago.
+It's published, the videos and everything.
+
+00:21:54.208 --> 00:21:58.267
+And it works very well, to be honest.
+This mechanism works very well.
+
+00:21:58.410 --> 00:21:59.568
+- Hold on
+- but some...
+
+00:21:59.568 --> 00:22:03.480
+Kirk: Yeah. Real quick. How are you
+protected against some kind of injection
+
+00:22:03.480 --> 00:22:07.488
+attack, man in the middle? Is, do you
+have a communication with an encrypted key
+
+00:22:07.488 --> 00:22:10.900
+in public so that we can make sure
+it came from you? Is only just...
+
+00:22:10.900 --> 00:22:14.408
+- Yeah, it's already there? Perfect.
+- it's very good question. All...
+
+00:22:14.408 --> 00:22:17.510
+Well, first of all, they're,
+they only are served over HTTPS.
+
+00:22:17.510 --> 00:22:18.968
+- Good.
+- That's no question.
+
+00:22:18.968 --> 00:22:23.268
+And they are, they are digitally signed,
+so upon downloading the extension,
+
+00:22:23.268 --> 00:22:28.528
+the operator validates a digital signature
+so that they're all published by us,
+
+00:22:28.728 --> 00:22:32.770
+as, as the extension publishers. We
+actually support third-party publishers.
+
+00:22:32.770 --> 00:22:36.170
+We didn't use this mechanism,
+but it's built into the, the software,
+
+00:22:36.170 --> 00:22:40.170
+so that if an, a third-party provider
+would publish extensions to our repository
+
+00:22:40.170 --> 00:22:44.168
+signed with their digital keys, they
+would also be imported and verified, so.
+
+00:22:44.168 --> 00:22:48.928
+Kirk: Okay. Just the security. We,
+we've seen this happen. [laughs] Sorry.
+
+00:22:48.928 --> 00:22:52.869
+Álvaro: Yeah, yeah. That, that's
+absolutely mandatory for us, yeah.
+
+00:22:53.488 --> 00:22:57.404
+But there's still a problem, right?
+I mentioned before that one of the advan-
+
+00:22:57.404 --> 00:23:01.444
+Using container images is that you
+know beforehand the security boundary.
+
+00:23:01.444 --> 00:23:03.564
+You know beforehand the exact files,
+
+00:23:03.564 --> 00:23:07.624
+the exact set of files that are gonna
+be deployed. You can use static
+
+00:23:07.704 --> 00:23:11.424
+security analysis tools and tell you
+whether the image is good or not.
+
+00:23:11.424 --> 00:23:14.344
+Now we are slightly breaking
+this principle. You can still
+
+00:23:14.344 --> 00:23:18.744
+do the security analysis for the main
+image, the one that contains Kubernetes.
+
+00:23:18.744 --> 00:23:23.044
+But now if you select another
+extension, it comes separately
+
+00:23:23.044 --> 00:23:25.310
+and, and then you miss that, this part.
+
+00:23:25.310 --> 00:23:29.164
+That, that, that part of extension,
+that small amount of code was not part...
+
+00:23:29.164 --> 00:23:31.344
+We do actually the security
+analysis before
+
+00:23:31.344 --> 00:23:35.604
+publishing it to the extension repository.
+But from your perspective as an end user,
+
+00:23:35.604 --> 00:23:39.504
+it's not that easy, right,
+to validate that. Moreover, Kubernetes,
+
+00:23:39.504 --> 00:23:43.284
+because of this abstraction, this API
+that allows to develop common tools
+
+00:23:43.284 --> 00:23:47.624
+that operate across any environment,
+there is a lot of best practices and a lot
+
+00:23:47.624 --> 00:23:49.344
+of tools for complementary things.
+
+00:23:49.344 --> 00:23:53.004
+And for example, there is tools
+to detect if your file system has been
+
+00:23:53.004 --> 00:23:56.664
+modified and create an alert.
+Like, if someone tries to inject some
+
+00:23:56.664 --> 00:23:58.824
+malware somewhere,
+that malware potentially
+
+00:23:58.824 --> 00:24:03.064
+will create some files and that will get
+automatically flagged and raise an alert.
+
+00:24:03.064 --> 00:24:06.984
+So we're actually doing that. We're
+modifying the container image at runtime,
+
+00:24:06.984 --> 00:24:09.631
+and this gets flagged
+by these kind of tools.
+
+00:24:10.024 --> 00:24:14.040
+It is allowed, it's a reasonable
+exemption, but it's not ideal.
+
+00:24:14.040 --> 00:24:17.544
+So it's not bad, it thinks pretty good,
+and this actually has allowed,
+
+00:24:17.544 --> 00:24:21.444
+I would say, StackGres to grow. The,
+as the most... The operator has supports
+
+00:24:21.444 --> 00:24:25.524
+the most extensions and is one
+of the reasons why people come to use it.
+
+00:24:25.524 --> 00:24:29.384
+It's fully open source,
+but it has the most extensions available,
+
+00:24:29.384 --> 00:24:34.624
+and we see as of today around five or I
+think six already million extension
+
+00:24:34.624 --> 00:24:39.330
+downloads per month. So people are really
+using... And this is only when you create
+
+00:24:39.330 --> 00:24:41.630
+- a new cluster, right? So it's, it's-
+- Right
+
+00:24:41.630 --> 00:24:44.100
+steady state there is zero
+downloads because they're already
+
+00:24:44.100 --> 00:24:46.020
+- downloaded many times
+- And how many extensions,
+
+00:24:46.020 --> 00:24:48.844
+different extensions? Hundreds, right?
+
+00:24:49.944 --> 00:24:55.044
+- It's 220 something I think as of today.
+- Good. Good. Okay. Okay.
+
+00:24:55.044 --> 00:24:59.044
+Kirk: So you have, you have a little bit
+of a interface and an AI demo you could
+
+00:24:59.044 --> 00:25:03.500
+show us of this process where you get to
+choose these as part of the build of your
+
+00:25:03.500 --> 00:25:05.850
+- container when you create a container?
+- Yeah
+
+00:25:05.850 --> 00:25:09.700
+Kirk: and this is part of... This is
+the magic that you've actually made now.
+
+00:25:09.700 --> 00:25:15.924
+StackGres has made a tool that makes
+creating these Postgres containers that,
+
+00:25:15.924 --> 00:25:20.604
+you know, that need these, you know,
+whatever, whatever extensions you want,
+
+00:25:20.604 --> 00:25:23.384
+and helps you put them
+inside the containers.
+
+00:25:23.384 --> 00:25:26.924
+And inside, yeah,
+inside your container in the Kubernetes.
+
+00:25:26.924 --> 00:25:31.184
+And now, and, and currently you just let
+them pick and choose the ones they want,
+
+00:25:31.184 --> 00:25:34.944
+which likely should be the ones they're
+using. You know, just to be clear.
+
+00:25:34.944 --> 00:25:37.464
+- [laughs]
+- This is... You have an environment
+
+00:25:37.464 --> 00:25:40.660
+and you're trying to recreate
+it and recreate it consistently,
+
+00:25:40.660 --> 00:25:44.464
+right? So this way, that's what this
+environment is. And so it's technically
+
+00:25:44.464 --> 00:25:48.004
+like a template of the environment
+that you're building first when you
+
+00:25:48.004 --> 00:25:50.744
+configure it, and then you
+can roll it out, deploy it,
+
+00:25:50.744 --> 00:25:54.804
+give it to others to run. So if you have
+a developer that needs this environment
+
+00:25:54.804 --> 00:25:57.970
+and you kinda want it locked down
+so that he can only access it
+
+00:25:57.970 --> 00:26:02.170
+through the interface ports and stuff, you
+can let him run this, and he doesn't have
+
+00:26:02.170 --> 00:26:05.470
+to worry about how to configure
+all that, and doesn't have to muck
+
+00:26:05.470 --> 00:26:09.964
+with what's on the inside. You may not let
+him even see what's on the inside per se.
+
+00:26:09.964 --> 00:26:13.370
+He can get the Postgres,
+and if he's got the right, he can add,
+
+00:26:13.370 --> 00:26:17.424
+he can try to add an extension, but only
+if you've already pre-approved and built
+
+00:26:17.424 --> 00:26:22.664
+that extension in or someone who has that
+capacity to add it later. So I like this.
+
+00:26:22.664 --> 00:26:26.144
+This is sounding like something
+that I would deploy with my team-
+
+00:26:26.144 --> 00:26:27.344
+- Yeah
+- which works,
+
+00:26:27.344 --> 00:26:29.984
+you know, a, you know,
+in multiple countries.
+
+00:26:29.984 --> 00:26:34.544
+So, this would make my life a lot easier
+in many ways. I can see this already.
+
+00:26:34.544 --> 00:26:37.770
+- How easy is it to pick these extensions?
+- I have
+
+00:26:37.770 --> 00:26:40.430
+- a lot of questions here before we, like-
+- Okay, good.
+
+00:26:40.430 --> 00:26:41.844
+Before we jump into the demo?
+
+00:26:41.844 --> 00:26:43.184
+- Yeah.
+- Go ahead, Nik.
+
+00:26:43.184 --> 00:26:44.884
+Nik: First of all, the number.
+
+00:26:44.884 --> 00:26:51.284
+Like, like I, I remember you mentioned on,
+on some talks, in the past that if you,
+
+00:26:51.284 --> 00:26:56.504
+like, if we needed to create all possible
+variations of images, container images,
+
+00:26:56.504 --> 00:26:57.524
+it would be,
+
+00:26:59.104 --> 00:27:02.624
+two to a power of this 200 something,
+right? I just quickly checked.
+
+00:27:02.624 --> 00:27:09.204
+- Yeah.
+- It's 10, power 66, so 66 zeros roughly.
+
+00:27:09.444 --> 00:27:11.943
+- Yeah.
+- And the estimated
+
+00:27:11.943 --> 00:27:15.450
+- number of atoms in universe is 80-
+- Almost
+
+00:27:15.450 --> 00:27:17.504
+- zeros.
+- Right. Yeah. [laughs] Exactly.
+
+00:27:17.504 --> 00:27:20.040
+- Yeah. [laughs]
+- Not, not far from there. Yeah
+
+00:27:20.040 --> 00:27:22.710
+exactly. So here's the thing.
+So, so basically
+
+00:27:22.710 --> 00:27:25.900
+we started with this way of developing
+extensions where you, they
+
+00:27:25.900 --> 00:27:29.010
+they pull dynamically and it has,
+it's pretty good.
+
+00:27:29.010 --> 00:27:33.160
+And again, people are using it massively,
+millions of downloads per month, but still
+
+00:27:33.160 --> 00:27:37.080
+not perfect. We want to push it further.
+We want to bring this real promise
+
+00:27:37.080 --> 00:27:39.980
+of immutable image that contains
+everything that you need,
+
+00:27:39.980 --> 00:27:44.244
+right? But then again, we cannot pack all
+the extensions. So how do we do this? And,
+
+00:27:44.244 --> 00:27:48.830
+and so we developed a new technology that,
+that certainly has been developing over
+
+00:27:48.830 --> 00:27:52.010
+a lot of years. It's,
+it started as a small R&D project and,
+
+00:27:52.010 --> 00:27:55.920
+and became like the whole thing. And
+this is something that solves the problem
+
+00:27:55.920 --> 00:27:59.370
+both for Kubernetes and non-Kubernetes
+environment. So this also solves-
+
+00:27:59.370 --> 00:28:01.270
+- Hmm
+- the problem for Docker, right?
+
+00:28:01.270 --> 00:28:04.083
+Or, or Podman or any tool
+you use to run containers.
+
+00:28:04.544 --> 00:28:08.504
+And so the idea is, is what you were
+saying, Nikolay. So we, we thought about,
+
+00:28:08.504 --> 00:28:13.384
+hold on, what if we pre-generate,
+right, the, the container images?
+
+00:28:13.384 --> 00:28:17.604
+And, and, and so now we have
+the, we have the data and we
+
+00:28:17.604 --> 00:28:21.480
+see what extensions people use.
+And it's interesting because out of these
+
+00:28:21.480 --> 00:28:24.610
+225 extensions, almost all
+are pulled at some point. Of course,
+
+00:28:24.610 --> 00:28:28.530
+there is more popular than others, but
+it's not like, oh, there's 10 and every-
+
+00:28:28.530 --> 00:28:32.720
+and nobody else is, uses this one. No.
+They're all pulled, they're all used.
+
+00:28:32.720 --> 00:28:36.000
+And some users use one,
+two extensions, or they use 10,
+
+00:28:36.000 --> 00:28:39.520
+or they use 15, but among those
+that use 10, they're different subsets.
+
+00:28:39.520 --> 00:28:41.460
+Everybody uses a different combination.
+
+00:28:41.460 --> 00:28:43.360
+- Hmm.
+- So if we think about the math
+
+00:28:43.360 --> 00:28:46.724
+to compute, like all possible
+combinations of images is, yeah,
+
+00:28:46.724 --> 00:28:51.144
+is, is essentially ballpark the amount,
+number of atoms in the universe.
+
+00:28:51.144 --> 00:28:55.524
+And we decided we will not pay the Amazon
+bill for that number of images to be
+
+00:28:55.524 --> 00:28:56.724
+- generated.
+- Yeah.
+
+00:28:56.724 --> 00:28:59.224
+- Right.
+- Also, there is also like
+
+00:28:59.444 --> 00:29:02.800
+- variety of versions Right.
+- Yeah
+
+00:29:03.000 --> 00:29:06.960
+- yeah.
+- Yeah. A-a-and, and actually, yes, we,
+
+00:29:06.960 --> 00:29:10.340
+we, we have now a system
+that allows you to build this
+
+00:29:10.360 --> 00:29:14.780
+and, and explores, or explodes even more
+the cardinality because we, we give you
+
+00:29:14.780 --> 00:29:18.240
+even more options to decide what you want,
+right? So what's the end goal?
+
+00:29:18.240 --> 00:29:21.640
+The end goal is to have an image that
+contains what you want and nothing else.
+
+00:29:21.640 --> 00:29:25.190
+That simple, right?
+Postgres and this extension A, B, and M.
+
+00:29:25.190 --> 00:29:30.480
+That's all. And, and someone else will
+get a Postgres with extension B, J, Z,
+
+00:29:30.480 --> 00:29:35.470
+and whatever, right? So how can we do
+this? The naive approach could be, oh,
+
+00:29:35.470 --> 00:29:38.670
+let's just run a server that runs
+a Dockerfile and very quickly,
+
+00:29:38.670 --> 00:29:41.870
+very quickly generate the image
+dynamically or real time, right?
+
+00:29:41.870 --> 00:29:44.880
+Well, that takes many
+seconds to a minute, right?
+
+00:29:44.880 --> 00:29:49.340
+And and it's also not warrantied to
+provide a reproducible image so that you
+
+00:29:49.340 --> 00:29:52.140
+will get the same output
+all the time and so on.
+
+00:29:52.140 --> 00:29:56.100
+So we generate a system that the way it
+works is basically you specify what you
+
+00:29:56.100 --> 00:29:58.520
+want, and I can show how you specified it,
+
+00:29:58.520 --> 00:30:02.920
+but it's basically I want Postgres with
+the extension, with Citus, with you know,
+
+00:30:02.920 --> 00:30:08.900
+ltree, and with whatever, unaccent.
+And then you get a container image in real
+
+00:30:08.900 --> 00:30:13.606
+time that contains only Postgres and that
+very three extensions that you wanted.
+
+00:30:13.740 --> 00:30:17.640
+It's that simple.
+Sounds like magical, but it works,
+
+00:30:17.860 --> 00:30:20.900
+and gives you exactly what
+you were asking. Nothing more.
+
+00:30:20.900 --> 00:30:26.600
+No security problems, a single fixed
+image which you can scan statically
+
+00:30:26.820 --> 00:30:30.660
+is indistinguishable once you receive the
+image from another image and not generate.
+
+00:30:30.660 --> 00:30:33.370
+We call this dynamic image generation.
+Once you receive it,
+
+00:30:33.370 --> 00:30:36.700
+it's indistinguishable from a statically
+generated or classical generated
+
+00:30:36.700 --> 00:30:40.270
+image, and it just contains the extensions
+you want on the particular version
+
+00:30:40.270 --> 00:30:43.000
+that you want, and you can
+scan it with the usual tools,
+
+00:30:43.000 --> 00:30:45.900
+and you can run it with Kubernetes,
+without of Kubernetes,
+
+00:30:45.900 --> 00:30:49.660
+and you know exactly all the files
+that you will get in your environment.
+
+00:30:49.660 --> 00:30:51.720
+Kirk: All right, so here's the good news,
+
+00:30:51.720 --> 00:30:55.500
+is that that's awesome and it
+brings in these extensions.
+
+00:30:55.580 --> 00:31:00.740
+But I doubt it installs all those
+extensions into Postgres for you.
+
+00:31:00.760 --> 00:31:05.500
+I bet it only puts them out there so that
+when the database needs them or wants
+
+00:31:05.500 --> 00:31:07.660
+to see them, it can go ahead and add those
+
+00:31:07.660 --> 00:31:10.100
+- extensions.
+- That's correct,
+
+00:31:10.100 --> 00:31:13.740
+because it's not our decision what
+you're gonna do with those extensions.
+
+00:31:13.740 --> 00:31:16.980
+Maybe you want to have them,
+maybe you want to create extensions.
+
+00:31:16.980 --> 00:31:20.180
+Maybe you want to do this on one
+particular database or another.
+
+00:31:20.180 --> 00:31:22.980
+So we make no assumptions.
+From our perspective,
+
+00:31:22.980 --> 00:31:26.580
+we work in infrastructure, and
+infrastructure is providing you the bytes
+
+00:31:26.580 --> 00:31:30.380
+to run your database however you want,
+right? And that's exactly what we do.
+
+00:31:30.380 --> 00:31:33.640
+You want these extensions to be
+available, they are available.
+
+00:31:33.640 --> 00:31:37.640
+Kirk: Wow. Nik, make a note
+from one of our hacker sessions.
+
+00:31:37.640 --> 00:31:41.680
+Maybe we should go look at how he's
+pulling this off, and we can create a tool
+
+00:31:41.680 --> 00:31:46.080
+that helps people install the extensions
+they're interested in, you know,
+
+00:31:46.080 --> 00:31:50.660
+kind of on the operating system locally,
+leveraging his system of pre-authorizing
+
+00:31:50.660 --> 00:31:53.140
+them, so that they're there.
+Because I tell you,
+
+00:31:53.140 --> 00:31:56.900
+sometimes it's a pain in the arse
+to install some of these [laughs]
+
+00:31:56.900 --> 00:31:58.020
+- extensions.
+- Well,
+
+00:31:58.020 --> 00:32:00.360
+that's why I stopped
+doing that completely.
+
+00:32:00.360 --> 00:32:02.380
+- Yeah.
+- I I quit installing extension,
+
+00:32:02.380 --> 00:32:03.940
+- extensions on.
+- [laughs]
+
+00:32:03.940 --> 00:32:07.440
+Nik: Like, I, I'm curious,
+like you said, you said,
+
+00:32:08.740 --> 00:32:14.960
+it's exactly like this, but also I
+I suppose there's a problem that if,
+
+00:32:14.960 --> 00:32:21.280
+for example, I decide to compile and / or
+compile all from source code, everything,
+
+00:32:21.280 --> 00:32:26.360
+gain and build a similar image, it will,
+it will differ, differ from what you had,
+
+00:32:26.360 --> 00:32:30.340
+Because maybe some libraries will
+be different and operational system
+
+00:32:30.340 --> 00:32:33.840
+is slightly different,
+different build. So it won't-
+
+00:32:33.840 --> 00:32:35.781
+- Yeah
+- exactly the same, right?
+
+00:32:36.200 --> 00:32:38.847
+Álvaro: So we are obsessed
+with this problem,
+
+00:32:38.860 --> 00:32:43.800
+and we don't want to make any
+compromise here. Like Postgres, when,
+
+00:32:43.800 --> 00:32:49.400
+when you're loading extensions, extensions
+carry a certain level of risk, especially
+
+00:32:49.400 --> 00:32:53.420
+binary extensions which load dynamically
+into the Postgres server memory.
+
+00:32:53.420 --> 00:32:57.380
+They technically have access to the,
+to the inner guts of Postgres, right?
+
+00:32:57.380 --> 00:33:01.500
+And you need to be very sure about
+what you're doing. And I see...
+
+00:33:01.500 --> 00:33:05.850
+I've seen a lot of projects
+which mixed Postgres
+
+00:33:05.850 --> 00:33:09.450
+server built on a given environment
+with extensions built on a different
+
+00:33:09.450 --> 00:33:12.550
+environment. Typically,
+you install Postgres and then you pick
+
+00:33:12.550 --> 00:33:16.460
+an extension, you compile it somewhere
+else, and then you put all together.
+
+00:33:16.460 --> 00:33:18.759
+Most of the time that doesn't break,
+
+00:33:19.519 --> 00:33:22.343
+but most of the time it's
+not a strong warranty.
+
+00:33:22.460 --> 00:33:26.720
+And we wanted to provide 100% warranty
+that nothing will break or something will,
+
+00:33:26.720 --> 00:33:29.132
+will... everything will work as expected.
+
+00:33:29.180 --> 00:33:33.180
+So if you're pulling Postgres
+and extensions from different places,
+
+00:33:33.180 --> 00:33:38.060
+you're done, right? And, and, and most of
+the, the projects that I've seen actually
+
+00:33:38.060 --> 00:33:41.730
+kind of encourage this. Like, "Oh, we
+provide Postgres. If you want extensions,
+
+00:33:41.730 --> 00:33:43.570
+go and build them." And it's not only
+
+00:33:43.570 --> 00:33:47.570
+that you'll build them on a different
+environment, but it's even worse. Now you,
+
+00:33:47.570 --> 00:33:51.000
+end user, are an extension maintainer.
+
+00:33:51.250 --> 00:33:54.000
+Now you're responsible
+for monitoring for new versions.
+
+00:33:54.000 --> 00:33:57.690
+You're now responsible for monitoring
+for CVEs. You're now responsible
+
+00:33:57.690 --> 00:34:01.440
+for rebuilding them and distributing
+them and updating them on your servers
+
+00:34:01.440 --> 00:34:05.630
+instead of just consuming them when time
+comes. So, so that, that's a big problem,
+
+00:34:05.630 --> 00:34:09.380
+and we wanted to tackle it from the
+get-go. So when we designed the system,
+
+00:34:09.380 --> 00:34:15.060
+we also built like a separate
+project to actually build Postgres
+
+00:34:15.160 --> 00:34:20.440
+and its extension ecosystem as part
+of a single unity. They're all built
+
+00:34:20.620 --> 00:34:24.860
+in a reproducible way in the same
+environment with the same compiler,
+
+00:34:24.860 --> 00:34:27.600
+with the same libc,
+with the same everything.
+
+00:34:27.600 --> 00:34:30.360
+And then we distribute it
+with the system that allows
+
+00:34:30.360 --> 00:34:35.020
+to create, the container images in real
+time. And as Kirk said, if you want,
+
+00:34:35.020 --> 00:34:39.608
+I can make a small demo about this to see
+how it works in a more tangible way.
+
+00:34:39.640 --> 00:34:42.160
+But they're all built
+in the same environment,
+
+00:34:42.160 --> 00:34:46.580
+so much that we go as far
+as rebuilding every extension
+
+00:34:46.580 --> 00:34:50.380
+against every Postgres minor version,
+not even major, but minor version too.
+
+00:34:50.380 --> 00:34:52.520
+- Wow.
+- Because we've seen cases-
+
+00:34:52.520 --> 00:34:54.080
+- By the-
+- right, where the ABI
+
+00:34:54.080 --> 00:34:55.790
+has changed across a minor version-
+
+00:34:55.790 --> 00:34:57.520
+- Yeah
+- and created breakage.
+
+00:34:57.520 --> 00:35:00.540
+That cannot happen in our system
+because we build everything,
+
+00:35:00.540 --> 00:35:02.720
+- rebuild everything, all extensions-
+- Yeah
+
+00:35:02.720 --> 00:35:06.260
+- against any minor version.
+- So I have a bunch of questions again
+
+00:35:06.260 --> 00:35:11.720
+and, and, and, and just, just-
+Be with me for a second. First of all,
+
+00:35:11.720 --> 00:35:15.680
+just, as, as I said, I'm not a big fan
+of extensions over the last few years,
+
+00:35:15.680 --> 00:35:18.200
+- as, as you know very well.
+- Yeah.
+
+00:35:18.200 --> 00:35:21.540
+Nik: But, but like if you
+think about Postgres itself,
+
+00:35:21.680 --> 00:35:27.060
+what I always liked about Docker, it's
+so easy to run specific minor version.
+
+00:35:27.600 --> 00:35:33.420
+Because if you install it from, from apt
+package, yum package, it's always all...
+
+00:35:33.420 --> 00:35:38.220
+only the latest. And I cannot
+understand how everyone lives in it,
+
+00:35:38.220 --> 00:35:43.140
+because what if the latest has some
+bug and we need to run it today and we,
+
+00:35:43.140 --> 00:35:46.840
+we just, we got lost,
+We want the one, one step back.
+
+00:35:48.560 --> 00:35:54.400
+And extensions similar. Sometimes, I, I,
+I had cases when quite popular extensions
+
+00:35:54.820 --> 00:36:00.240
+introduced some bad bug,
+like segfaulting and so on and, and on-
+
+00:36:00.240 --> 00:36:02.800
+- Mm-hmm
+- fixed. Like, it was fixed in some hours,
+
+00:36:02.800 --> 00:36:08.140
+but still, like I, I want to full I
+want full, full control over versions.
+
+00:36:08.360 --> 00:36:09.360
+And also,
+
+00:36:11.340 --> 00:36:15.420
+it's not settled in my mind, should
+we always upgrade as soon as possible?
+
+00:36:15.420 --> 00:36:19.840
+This is what we all say
+as consultants or every...
+
+00:36:19.840 --> 00:36:23.440
+Like, as for example,
+if you're CTO or like you aim,
+
+00:36:23.440 --> 00:36:28.920
+if you have SOC 2 everything, you aim to
+have the latest always patched everything.
+
+00:36:29.220 --> 00:36:32.240
+But for example, very, like very
+
+00:36:32.840 --> 00:36:37.720
+well-known person, Mitchell Hashimoto,
+says that you shouldn't do it.
+
+00:36:39.820 --> 00:36:46.220
+As like entertaining piece,
+we, we have now, visual stuff.
+
+00:36:46.220 --> 00:36:51.760
+So those who listen to us on Spotify,
+Apple Podcasts, everywhere else,
+
+00:36:51.840 --> 00:36:57.780
+I encourage you to use YouTube, and watch,
+listen and sometimes watch a little bit
+
+00:36:57.780 --> 00:37:03.340
+because right now on the screen you
+can see that very, that very tweet
+
+00:37:03.640 --> 00:37:07.780
+from HashiCorp founder, right?
+Saying that you should pin the versions
+
+00:37:08.560 --> 00:37:13.440
+and not upgrade and verify
+all the upgrades before you,
+
+00:37:13.440 --> 00:37:17.080
+- you deploy them to production systems.
+- Actually, this-
+
+00:37:17.080 --> 00:37:20.780
+Nik: I have a I have a sense
+that what you're building is very good
+
+00:37:20.780 --> 00:37:25.700
+with this approach, but I'm not
+convinced this is what we all, all, all
+
+00:37:25.760 --> 00:37:28.800
+do because, for example,
+for Postgres version itself,
+
+00:37:28.800 --> 00:37:33.240
+I still think it's a good idea to be
+always on the minor, the latest minor,
+
+00:37:33.240 --> 00:37:38.360
+because I know how much effort in this
+particular piece of software is put
+
+00:37:38.680 --> 00:37:44.640
+into making it safe and secure and so on.
+So I would... Like, in my mind, like it's,
+
+00:37:44.640 --> 00:37:47.620
+like kind of split brain right now.
+I'm thinking Postgres-
+
+00:37:47.620 --> 00:37:50.700
+- [laughs]
+- I wish would be very always
+
+00:37:51.500 --> 00:37:57.580
+latest, up to date, but everything else
+may be frozen and, and verified very
+
+00:37:57.580 --> 00:37:59.130
+- well before-
+- Yes
+
+00:37:59.130 --> 00:38:01.180
+- before moving.
+- So our take here,
+
+00:38:01.180 --> 00:38:05.080
+we, we, we are not opinionated how you
+use it or, you know, how frequently you
+
+00:38:05.080 --> 00:38:09.230
+should upgrade your Postgres or not. I'm
+more on the sense, especially in Postgres,
+
+00:38:09.230 --> 00:38:15.340
+we know that minor versions are,
+for the most part, directly compatible,
+
+00:38:15.340 --> 00:38:18.860
+and there's no issue in update,
+upgrading them and so on. But I'm not
+
+00:38:18.860 --> 00:38:23.272
+gonna get into that debate. What I
+think is very important is the word pin.
+
+00:38:23.560 --> 00:38:27.160
+And so when...
+once you have a container image,
+
+00:38:27.260 --> 00:38:30.480
+that container image is identified
+more than its name or URL.
+
+00:38:30.480 --> 00:38:33.800
+It's technically identified
+by this digest, which is a, you know,
+
+00:38:33.800 --> 00:38:37.580
+a, a SHA-256 typically.
+And you can pin on that one.
+
+00:38:37.580 --> 00:38:41.520
+So instead of saying Postgres
+latest whatever, you say this SHA,
+
+00:38:41.520 --> 00:38:44.873
+and then you're warranted
+to use that particular version.
+
+00:38:44.960 --> 00:38:51.960
+Now, that holds true as long as you're not
+then adding extensions later on. There's
+
+00:38:51.980 --> 00:38:57.140
+now a recent, functionality in Postgres
+18 that allows you to, to add extensions
+
+00:38:57.140 --> 00:39:01.220
+in separate paths, right? And then you
+can, you can use techniques similar
+
+00:39:01.220 --> 00:39:05.880
+to what we're doing with StackGres to pull
+dynamically code there and mount it there
+
+00:39:05.880 --> 00:39:08.920
+and, and use that.
+But you're not pinning anymore.
+
+00:39:08.960 --> 00:39:13.280
+Now you have multiple versions
+that come from multiple places, versus
+
+00:39:13.380 --> 00:39:15.909
+with a container
+that the ones we generate,
+
+00:39:15.910 --> 00:39:18.950
+you can get a container with Postgres
+and these 17 extensions,
+
+00:39:18.950 --> 00:39:22.630
+whatever you need, and then you can pin
+it to a particular digest. Then it's
+
+00:39:22.630 --> 00:39:26.260
+up to you when to upgrade or not.
+I'll not get into that. It's your choice.
+
+00:39:26.260 --> 00:39:30.280
+But I'm very curious what you think.
+Okay, I understand, like you're right now,
+
+00:39:30.280 --> 00:39:34.230
+"Oh, this is technology, it's great,"
+but what... Like, let's talk about
+
+00:39:34.230 --> 00:39:38.300
+that. Like, should we upgrade or no, and
+how, and, and like what's the workflow?
+
+00:39:38.300 --> 00:39:40.120
+You cannot escape this topic.
+
+00:39:40.840 --> 00:39:44.640
+Well, no, no, no. I will not escape,
+but a short answer is that yes,
+
+00:39:44.640 --> 00:39:48.660
+by default, always upgrade minor versions
+fast because they're, they contain,
+
+00:39:48.660 --> 00:39:53.240
+they contain, security patches, patches,
+patches for security vulnerabilities,
+
+00:39:53.240 --> 00:39:56.181
+and those are an area where
+you cannot compromise.
+
+00:39:56.220 --> 00:39:57.460
+- But what-
+- And-
+
+00:39:57.460 --> 00:40:00.100
+- they introduce problems?
+- agree.
+
+00:40:00.100 --> 00:40:04.360
+I, I agree the, with the minor version
+updates. Keep those coming up to date.
+
+00:40:04.360 --> 00:40:07.100
+We don't do them immediately.
+We have a process.
+
+00:40:07.100 --> 00:40:12.680
+We install them on our, what we call
+outer servers first, things that serve SEO
+
+00:40:12.680 --> 00:40:16.260
+and our backup servers and other
+different environments first.
+
+00:40:16.260 --> 00:40:20.220
+And then if we don't see any problems
+with that after whatever time period,
+
+00:40:20.220 --> 00:40:24.691
+then they make their way into production.
+This gives us a chance to respond.
+
+00:40:24.940 --> 00:40:28.700
+Our SEO actually serves 10 times
+more pages than our main server.
+
+00:40:28.700 --> 00:40:31.640
+So it's a great test.
+On the other hand, though,
+
+00:40:31.640 --> 00:40:36.340
+when it comes time to upgrade to the major
+version, we're a little cautious, right?
+
+00:40:36.340 --> 00:40:38.960
+- Right.
+- And only because of previous problems.
+
+00:40:38.960 --> 00:40:41.520
+And it'll follow the exact
+same process for us.
+
+00:40:41.520 --> 00:40:45.420
+It'll actually happen as...
+And, and the problems will become evident.
+
+00:40:45.420 --> 00:40:49.520
+It'll actually happen as we migrate and do
+it in a staging environment and test
+
+00:40:49.520 --> 00:40:54.300
+the upgrade, full upgrade process, yada,
+yada, yada. And if everything's working,
+
+00:40:54.300 --> 00:40:59.220
+great. The problem becomes when something
+breaks and it's not quite the right,
+
+00:40:59.220 --> 00:41:01.700
+because that completely
+changes our entire plan,
+
+00:41:01.700 --> 00:41:04.400
+'cause now we have to roll
+production separately.
+
+00:41:04.400 --> 00:41:05.680
+- Speaking-
+- Seve-
+
+00:41:05.680 --> 00:41:08.900
+Nik: Speaking of major versions,
+I'm very curious Like it's,
+
+00:41:08.900 --> 00:41:10.700
+- it's different topic, and-
+- Yeah
+
+00:41:10.700 --> 00:41:13.840
+Nik: let's, let's touch
+that and then turn back to minor.
+
+00:41:13.840 --> 00:41:19.760
+Major versions, I know, like, for example,
+old Zalando operators, Zalando, Zalando,
+
+00:41:19.800 --> 00:41:23.760
+- containers, Spilo, They-
+- Mm-hmm
+
+00:41:23.780 --> 00:41:28.820
+Nik: have, they package all major
+versions, like five, Very fat containers,
+
+00:41:28.820 --> 00:41:30.800
+- container images-
+- Yeah
+
+00:41:30.800 --> 00:41:35.940
+Nik: to support upgrades. What's,
+your approach to support major upgrades?
+
+00:41:36.760 --> 00:41:40.220
+Álvaro: So it's actually very simple.
+So let me explain briefly,
+
+00:41:40.220 --> 00:41:43.220
+and, and we can get as deep
+as you want, of course,
+
+00:41:43.260 --> 00:41:45.600
+on how, how our technology works.
+
+00:41:45.800 --> 00:41:49.800
+So what we have created is, is a,
+is a different kind of registry.
+
+00:41:49.800 --> 00:41:53.388
+Registry is where the container
+images are being served from.
+
+00:41:53.480 --> 00:41:57.120
+And this, this registry,
+that's the, that's why we call it DOCIR,
+
+00:41:57.120 --> 00:42:01.740
+because it's the dynamic OCI registry.
+OCI is a standard of, container images.
+
+00:42:02.460 --> 00:42:05.860
+So what it does,
+it composes layers dynamically.
+
+00:42:05.860 --> 00:42:09.520
+So we've got a base layer, which
+contains the, the basic OS, let's say,
+
+00:42:09.520 --> 00:42:12.240
+type files and Postgres layer,
+and then each extension
+
+00:42:12.240 --> 00:42:16.230
+is a layer. Or actually any of these could
+be multiple layers, it doesn't matter.
+
+00:42:16.230 --> 00:42:20.250
+And what it does is, based on the spec
+that you provide, I want Postgres on these
+
+00:42:20.250 --> 00:42:24.480
+three extensions, it's able to compose all
+these layers and deliver the image to you.
+
+00:42:24.480 --> 00:42:28.080
+But it's not running a Docker build
+or anything behind the scenes.
+
+00:42:28.080 --> 00:42:32.580
+It does, does this in milliseconds.
+It just, it just does some magic
+
+00:42:32.580 --> 00:42:36.200
+with the manifests and the internals
+of the image, how they work.
+
+00:42:36.200 --> 00:42:41.660
+Now, when the time comes to have
+an image to actually, do a major version
+
+00:42:41.660 --> 00:42:46.520
+upgrade, we have a huge advantage, which
+is we can still apply the same technique
+
+00:42:46.520 --> 00:42:50.860
+and instead of composing one Postgres
+layer plus three extensions as layers,
+
+00:42:50.860 --> 00:42:53.820
+we compose two Postgres layers.
+So Postgres
+
+00:42:53.820 --> 00:42:57.880
+17 and Postgres 18 layer. And now suddenly
+on the container image that you get,
+
+00:42:57.880 --> 00:43:01.700
+you have both the binary for Postgres
+17 and the binary for Postgres 18,
+
+00:43:01.700 --> 00:43:03.490
+plus the extensions for Postgres 17,
+
+00:43:03.490 --> 00:43:07.510
+plus the extensions for Postgres 18. And
+we compose all these as different layers.
+
+00:43:07.510 --> 00:43:10.840
+So actually the system that we have
+developed is extremely flexible.
+
+00:43:10.840 --> 00:43:14.030
+We use it, we compose many
+of the layers actually under the hood.
+
+00:43:14.030 --> 00:43:16.170
+For example,
+we can add layer with Patroni,
+
+00:43:16.170 --> 00:43:19.720
+and you remove that layer and you
+don't have Patroni. And so, and,
+
+00:43:19.720 --> 00:43:23.640
+and we compose layers with WAL-G,
+and then or without WAL-G.
+
+00:43:23.720 --> 00:43:28.320
+And it really allows you to just by
+specifying the URL, the Docker pull, blah,
+
+00:43:28.320 --> 00:43:32.760
+blah, blah, and that whatever components
+you specify there, you'll get a different
+
+00:43:32.760 --> 00:43:35.800
+image. We support, for example,
+what we call t-shirt sizes.
+
+00:43:35.800 --> 00:43:39.980
+So we can generate images that we call
+full, that contains like all the usual
+
+00:43:39.980 --> 00:43:45.100
+tools that you'll find on a, on a bigger
+image, or minimal and medium size,
+
+00:43:45.100 --> 00:43:49.220
+so that you get more tools or less tools
+depending on the size you want to bear
+
+00:43:49.220 --> 00:43:53.700
+as part of your container image.
+And this is just a flag as part of URL.
+
+00:43:53.940 --> 00:43:57.352
+So it allows to compose
+essentially anything that we want.
+
+00:43:58.340 --> 00:44:00.420
+- Right.
+- Nice. But the upgrade
+
+00:44:00.420 --> 00:44:02.140
+- process operates outside-
+- Yeah
+
+00:44:02.140 --> 00:44:05.060
+Kirk: of the container,
+which is an environment.
+
+00:44:05.060 --> 00:44:11.360
+So if I were to run the 17, and go into
+18 and run the upgrade process so that it
+
+00:44:11.360 --> 00:44:15.980
+upgraded the files which are stored
+outside of the environment,
+
+00:44:15.980 --> 00:44:20.280
+now I do that, but if this container
+is ever taken down and restarted,
+
+00:44:20.280 --> 00:44:24.020
+how does it know that, no, no, no,
+no, I'm not running 17 anymore.
+
+00:44:24.020 --> 00:44:28.100
+I was running 17 last time
+I ran this static image.
+
+00:44:28.100 --> 00:44:31.360
+I'm running 18 now.
+I'm curious, how does that work?
+
+00:44:31.360 --> 00:44:34.180
+- It's, it's different container, right?
+- Yeah.
+
+00:44:34.180 --> 00:44:38.500
+So the, the, the answer to that is what
+actually where operators in Kubernetes
+
+00:44:38.500 --> 00:44:42.880
+provide tons of value, right?
+An operator will encode this operation.
+
+00:44:42.900 --> 00:44:47.500
+What it will do is first you're
+running on 17 and your descriptor,
+
+00:44:47.500 --> 00:44:51.420
+your, your, your YAML file, right?
+Will say that you're using an image
+
+00:44:51.420 --> 00:44:54.120
+with Postgres 17, right?
+On the URL path of that image
+
+00:44:54.120 --> 00:44:58.300
+will contain this Postgres 17 somewhere.
+Then you say, "I wanna do an upgrade."
+
+00:44:58.300 --> 00:45:01.800
+What you do, it will go and first of all,
+it will change the manifest
+
+00:45:01.800 --> 00:45:06.840
+so that now you'll have an image with both
+17 and 18. This will trigger a restart,
+
+00:45:06.940 --> 00:45:11.280
+because container image need to get
+restarted. And then it will have both.
+
+00:45:11.280 --> 00:45:15.045
+Now you run the pg_upgrade process.
+If it finishes successfully,
+
+00:45:15.340 --> 00:45:19.440
+after finishing successfully, the first
+thing it will do is rewrite the manifest
+
+00:45:19.440 --> 00:45:23.639
+again so that now your container image
+will not contain Postgres 17 as a layer.
+
+00:45:23.639 --> 00:45:27.880
+It will only contain Postgres 18. And then
+you restart and boom, you're Postgres 18.
+
+00:45:27.880 --> 00:45:34.880
+- Done. It's that simple, conceptually.
+- Okay. Yeah. I, I, I get
+
+00:45:34.900 --> 00:45:39.240
+that, and I understand exactly why it has
+to be [laughs] because of the environment
+
+00:45:39.240 --> 00:45:43.860
+being enclosed and static, right?
+It has to be changed through the manifest.
+
+00:45:43.860 --> 00:45:46.780
+So that makes perfect sense to me.
+That's cool. I learned,
+
+00:45:46.780 --> 00:45:50.500
+- I've learned quite a bit here.
+- Let's have a demo. Right?
+
+00:45:50.500 --> 00:45:52.180
+Kirk: Yeah. Exactly.
+
+00:45:53.160 --> 00:45:59.460
+- All right. So let me share screen here.
+- And while you do that, I'm,
+
+00:45:59.460 --> 00:46:04.700
+I wanna provide a little commentary. When
+I first saw this process and the demo,
+
+00:46:04.780 --> 00:46:08.240
+I was most blown away by being
+able to pick and choose
+
+00:46:08.300 --> 00:46:12.900
+all of the different, you know,
+extensions that I want to put into here,
+
+00:46:13.060 --> 00:46:16.460
+and how you talked about you
+could actually bring in different,
+
+00:46:16.460 --> 00:46:20.900
+versions of Postgres, et cetera,
+and how it only downloaded once.
+
+00:46:21.300 --> 00:46:26.980
+I wanna say that was just visual.
+That's eye candy. Okay?
+
+00:46:26.980 --> 00:46:32.040
+The real genius is actually what's running
+on the backend server, as you described,
+
+00:46:32.040 --> 00:46:36.620
+that kinda keeps track of all
+of this to make this simple part.
+
+00:46:36.620 --> 00:46:40.500
+I mean, the screen is just
+simple by comparison.
+
+00:46:40.500 --> 00:46:45.340
+It's counting on a lot of backend
+intelligence and a ton of work that has
+
+00:46:45.340 --> 00:46:49.500
+verified and looked at these things. And
+what's great is you can always increase
+
+00:46:49.500 --> 00:46:51.420
+that without changing how this works.
+
+00:46:51.420 --> 00:46:54.580
+So I really- I'm a, I'm
+a huge fan of architecture,
+
+00:46:54.580 --> 00:46:58.920
+so I love the architecture this way
+because you get a simple interface,
+
+00:46:58.920 --> 00:47:03.360
+but the, the gains on it
+are already immeasurable.
+
+00:47:03.360 --> 00:47:08.080
+It's not only simpler than most other
+ways, but you're proofing some things,
+
+00:47:08.080 --> 00:47:11.830
+and your proofing will only get
+better over time Which is awesome.
+
+00:47:11.830 --> 00:47:13.810
+- All right. Go ahead.
+- Yeah.
+
+00:47:13.810 --> 00:47:19.430
+Thank you for that. My, my obsession is
+to actually make Postgres simple to use.
+
+00:47:20.280 --> 00:47:23.930
+Most people who work with me hear me
+saying all the time, "It needs to be
+
+00:47:23.930 --> 00:47:28.871
+insultingly simple, insultingly easy, and
+if it isn't, we're doing something wrong."
+
+00:47:28.970 --> 00:47:31.730
+So let's try to see if we
+made easy, actually,
+
+00:47:31.730 --> 00:47:36.910
+to, to have a Postgres container image
+that you can run on Kubernetes, on Docker,
+
+00:47:36.910 --> 00:47:41.910
+Podman, anywhere you can run a container,
+without having to, you know,
+
+00:47:41.910 --> 00:47:45.290
+to make things very complicated
+or become an image maintainer.
+
+00:47:45.290 --> 00:47:48.570
+So we have created this page
+called StackGres Containers.
+
+00:47:48.570 --> 00:47:53.810
+Very simple interface, and you just enter
+the page and you say Docker pull whatever,
+
+00:47:53.810 --> 00:47:58.460
+right? And so let's actually copy
+and paste this, and let's run it here
+
+00:47:58.460 --> 00:48:02.510
+on my computer. It will take a while to
+load the image, depending on the internet
+
+00:48:02.510 --> 00:48:06.600
+connection. But okay, it's downloading a
+Postgres image. And actually you can see-
+
+00:48:06.600 --> 00:48:09.850
+Kirk: So we have a, a lot of people
+that are just listening. So I
+
+00:48:09.850 --> 00:48:14.290
+just wanna be clear, he took the URL that
+it was suggesting based off the initial
+
+00:48:14.290 --> 00:48:20.230
+parameters, and it just jumped into a
+terminal window doing Docker, docker pull,
+
+00:48:20.230 --> 00:48:24.030
+and then his sgcr.dev/postgres.
+
+00:48:24.030 --> 00:48:27.170
+And now it's downloading
+and processing that. And again,
+
+00:48:27.170 --> 00:48:30.830
+just for the people who are walking
+right now with a Walkman or whatever,
+
+00:48:30.830 --> 00:48:35.490
+I want them to know, so we're watching
+the terminal now, the Linux terminal now,
+
+00:48:35.490 --> 00:48:40.040
+Bash, whatever, and it's doing
+this. Go back and continue out.
+
+00:48:40.040 --> 00:48:42.890
+What is, what is Walkman, Kirk?
+[laughs] I'm joking.
+
+00:48:42.890 --> 00:48:46.890
+- Uh-oh.
+- [laughs] Yeah, yeah.
+
+00:48:46.890 --> 00:48:49.740
+- I, actually-
+- It's what old people had before earbuds.
+
+00:48:49.740 --> 00:48:50.790
+- Yeah.
+- And phones.
+
+00:48:50.790 --> 00:48:54.150
+Nik: And I,
+I again insist to moving to YouTube
+
+00:48:54.310 --> 00:48:58.150
+and keeping us in pocket until
+you hear the sound you just heard.
+
+00:48:58.310 --> 00:49:02.350
+That sound means you should look at the
+screen temporarily for a few seconds
+
+00:49:02.350 --> 00:49:04.590
+because something interesting is there,
+
+00:49:04.590 --> 00:49:08.450
+and then you can put us
+back to the pocket. Yeah.
+
+00:49:08.450 --> 00:49:12.550
+- Perfect
+- so and SGCR is StackGres Container
+
+00:49:12.550 --> 00:49:15.110
+- Registry.
+- That's correct. That's correct.
+
+00:49:15.110 --> 00:49:19.469
+- Mm-hmm.
+- Production URL is, is sgcr.io. But yeah.
+
+00:49:19.469 --> 00:49:25.630
+So, so basically we come to the page,
+we see docker pull sgcr.io/postgres,
+
+00:49:25.790 --> 00:49:28.970
+and actually here we can see
+on this webpage that it tells us
+
+00:49:28.970 --> 00:49:32.870
+that this contains two layers:
+a base layer and a Postgres layer.
+
+00:49:33.790 --> 00:49:37.750
+And that's exactly what we saw
+on the Docker pull. It pulled two layers,
+
+00:49:37.750 --> 00:49:42.170
+and we actually get the digest. This is
+how we can pin this particular image.
+
+00:49:42.170 --> 00:49:45.690
+And of course we can try to run this.
+
+00:49:46.750 --> 00:49:50.890
+For example,
+let's say something like this,
+
+00:49:52.050 --> 00:49:57.250
+and we can just try to run this and
+then let's actually list the extensions.
+
+00:49:57.250 --> 00:49:59.690
+I was too fast. Right. That's it. And-
+
+00:49:59.690 --> 00:50:04.770
+Kirk: Again, so he's doing a, a a Docker
+run, and that started the Docker up,
+
+00:50:04.770 --> 00:50:11.210
+and then he's doing a Docker, exec. And so
+he's command line executing a psql command
+
+00:50:11.210 --> 00:50:15.750
+to select asterisk
+from pg_available_extensions,
+
+00:50:15.870 --> 00:50:20.710
+and it showed up on the screen
+that PL/pgSQL is the only one.
+
+00:50:20.710 --> 00:50:22.830
+- So perfect?
+- Yep.
+
+00:50:22.830 --> 00:50:26.940
+The only one we consider that must be
+built into the container image, right?
+
+00:50:26.940 --> 00:50:29.390
+- Mm-hmm.
+- There is no other extension available
+
+00:50:29.390 --> 00:50:34.190
+here. So what we did, recap, we went to
+this webpage, StackGres Containers. We did
+
+00:50:34.190 --> 00:50:37.990
+the Docker pull Postgres, and we got
+an image which contains Postgres and no
+
+00:50:37.990 --> 00:50:42.650
+more extensions other than PL/pgSQL.
+Now we'll scroll down a little bit,
+
+00:50:42.650 --> 00:50:46.650
+and here we have a listing of all
+available extensions, right?
+
+00:50:46.650 --> 00:50:52.050
+And and, you know,
+we can pick any to add to the extension.
+
+00:50:52.050 --> 00:50:55.810
+So I don't know,
+I'm just gonna random pick any,
+
+00:50:56.030 --> 00:50:58.710
+- Is it... Might be-
+- Do pg_background
+
+00:50:58.710 --> 00:51:03.930
+Nik: PL/sh my favorite. It's my favorite.
+I think Peter Eisentraut created it.
+
+00:51:03.930 --> 00:51:08.130
+Yeah, PL/sh, my favorite
+PL language, the shell.
+
+00:51:09.090 --> 00:51:10.690
+- Inside it. Yeah.
+- Yeah.
+
+00:51:10.690 --> 00:51:14.337
+By the way, is it possible
+that some extensions will conflict?
+
+00:51:14.810 --> 00:51:18.540
+Yes, it is, it is technically possible,
+yes. So let me work through
+
+00:51:18.540 --> 00:51:22.070
+this first, and we'll talk about
+those cases later. Right. So I'm just-
+
+00:51:22.070 --> 00:51:23.250
+Kirk: Can you add mine?
+
+00:51:23.250 --> 00:51:27.930
+Can you add pg_background, the background
+one that runs things in the background?
+
+00:51:27.930 --> 00:51:29.283
+- There you go.
+- Sure.
+
+00:51:29.470 --> 00:51:31.260
+- Perfect.
+- All right. Actually,
+
+00:51:31.260 --> 00:51:34.410
+I just wanted to add one,
+but it's okay, because we'll see how,
+
+00:51:34.410 --> 00:51:40.590
+incremental this is, but that's fine. So,
+okay, I, I went on the web, web interface,
+
+00:51:40.590 --> 00:51:43.530
+and I browsed through the list
+of available extensions.
+
+00:51:43.530 --> 00:51:47.810
+There is 100 and something,
+right now, 150.
+
+00:51:47.810 --> 00:51:51.210
+We'll grow this very soon to the same
+as, as the current StackGres.
+
+00:51:51.210 --> 00:51:55.810
+We've 220 for something,
+but we're aiming for 400, 500 extensions.
+
+00:51:56.590 --> 00:52:00.450
+And we selected three particular
+extensions. Now, the image details part
+
+00:52:00.450 --> 00:52:05.150
+of the the, this webpage says that there's
+these three extensions. They will...
+
+00:52:05.150 --> 00:52:09.830
+They add like a tiny .5 megabyte
+additional size to the image,
+
+00:52:10.250 --> 00:52:15.570
+and the URL changed. So now I'm gonna copy
+and paste this new Docker pull command,
+
+00:52:16.130 --> 00:52:17.830
+and I'll just paste it here.
+
+00:52:19.330 --> 00:52:25.190
+And we'll... As you can see, we get three
+extra layers, one for each extension.
+
+00:52:25.190 --> 00:52:29.220
+We added three extensions, three extra
+layers. This was slow. Actually, we didn't
+
+00:52:29.220 --> 00:52:31.860
+do a time,
+but it's basically real time, right?
+
+00:52:31.860 --> 00:52:34.260
+- Yeah.
+- So it would be possible to do a Docker
+
+00:52:34.260 --> 00:52:36.810
+build from behind the scenes.
+This was essentially,
+
+00:52:36.810 --> 00:52:42.870
+let's actually, we can try to add now. Let
+me just add another one, HLL, for example.
+
+00:52:43.130 --> 00:52:48.790
+I'll just, copy and paste this and,
+and do a time. Paste this and do a time.
+
+00:52:48.790 --> 00:52:51.143
+So I'm just gonna now time this command,
+
+00:52:51.710 --> 00:52:57.150
+and it will pull this, and it's
+essentially 2.8 seconds to, to pull,
+
+00:52:57.150 --> 00:53:01.850
+decompress, and, and run the extension,
+right? So it's basically real time.
+
+00:53:02.130 --> 00:53:08.710
+So now I have a Postgres image with four
+extensions. Let's try to run this
+
+00:53:09.562 --> 00:53:14.722
+So now I'll run this, but I'll use the
+last argument with actually HLL, right?
+
+00:53:14.722 --> 00:53:17.428
+- So we can get all-
+- It put it in the front,
+
+00:53:17.930 --> 00:53:20.782
+- just so you know.
+- Oh, I added it again. Okay. My bad.
+
+00:53:20.782 --> 00:53:23.182
+It doesn't matter.
+We'll get the same result.
+
+00:53:23.182 --> 00:53:29.382
+And if I now check, the list available
+extensions, what I get is the list of five
+
+00:53:29.382 --> 00:53:30.562
+- extensions.
+- Yeah.
+
+00:53:30.562 --> 00:53:34.202
+Álvaro: The four that I added
+and the PL/pgSQL that was there.
+
+00:53:34.202 --> 00:53:37.182
+- But, Yeah
+- essentially that's the demo.
+
+00:53:37.922 --> 00:53:40.702
+Nik: Yeah, that's great. Questions.
+
+00:53:41.502 --> 00:53:47.942
+Since, like I understand, like it's,
+it's my, it's in my hands to decide,
+
+00:53:49.142 --> 00:53:53.722
+to control like when to upgrade and so on,
+can I specify particular minor version
+
+00:53:53.722 --> 00:53:56.300
+- of Postgres?
+- Oh, yeah. Absolutely.
+
+00:53:56.300 --> 00:53:58.102
+Nik: Can I specify- Particular minor
+
+00:53:58.102 --> 00:54:00.910
+- version of each extension?
+- Yes. Also.
+
+00:54:00.910 --> 00:54:01.910
+- Yeah.
+- Yeah.
+
+00:54:01.910 --> 00:54:03.762
+- That's good.
+- Let's look into that.
+
+00:54:03.762 --> 00:54:06.122
+- Yeah.
+- We can go back to the, to the web
+
+00:54:06.122 --> 00:54:08.682
+interface, the web console,
+and for example, here,
+
+00:54:08.682 --> 00:54:13.222
+I just didn't use the selector,
+but I can say, oh, sure, pick another
+
+00:54:13.542 --> 00:54:17.260
+minor version, right?
+So, on the URL, if you look at this URL,
+
+00:54:17.260 --> 00:54:20.560
+this technically not a URL,
+it's called a name reference in,
+
+00:54:20.560 --> 00:54:22.360
+- Right
+- the OCI specific registry,
+
+00:54:22.360 --> 00:54:26.160
+but I call it a URL because it looks
+like a URL. We make it look like a URL.
+
+00:54:26.160 --> 00:54:31.122
+And instead of saying /postgres,
+you say /postgres-- and the version,
+
+00:54:31.122 --> 00:54:35.142
+- and that will get you a major
+- Why not colon? Why not colon?
+
+00:54:35.402 --> 00:54:39.550
+- Because the OCI specific the OCI-
+- Mm-hmm
+
+00:54:39.550 --> 00:54:42.960
+specification limits the number
+of characters that can appear here.
+
+00:54:42.960 --> 00:54:44.840
+- And type.
+- So make it look like a URL,
+
+00:54:44.840 --> 00:54:46.900
+but we cannot use the whole characters.
+
+00:54:46.900 --> 00:54:50.450
+So this is a little bit of a compromise,
+but yeah, that's the way to do, to go.
+
+00:54:50.450 --> 00:54:53.290
+So you specify --version,
+and you get that particular version.
+
+00:54:53.290 --> 00:54:55.050
+And this applies for both Postgres and
+
+00:54:55.050 --> 00:54:56.060
+- extensions.
+- That's
+
+00:54:56.060 --> 00:54:57.920
+- good.
+- I don't know if we have different
+
+00:54:57.920 --> 00:55:00.690
+versions of the extensions built
+as part of this, but yeah, you see,
+
+00:55:00.690 --> 00:55:02.470
+- this is technically a dropdown.
+- Yeah.
+
+00:55:02.470 --> 00:55:03.681
+- So on the website-
+- Yeah
+
+00:55:03.681 --> 00:55:06.322
+once you select the extension,
+you'll have a dropdown-
+
+00:55:06.322 --> 00:55:08.530
+- Awesome
+- with all the available versions,
+
+00:55:08.530 --> 00:55:12.530
+and then you're able to, yes, exactly get-
+The exact Postgres version and the
+
+00:55:12.530 --> 00:55:15.090
+- exact version of every extension-
+- That's cool. That's cool
+
+00:55:15.090 --> 00:55:17.680
+- that you can add here.
+- For the sake of the time, let me ask
+
+00:55:17.680 --> 00:55:20.882
+a couple of more questions about security.
+So for example,
+
+00:55:20.942 --> 00:55:25.622
+- Yeah
+- I want, So this goes from your registry.
+
+00:55:26.202 --> 00:55:28.200
+I know you, some of your customers,
+
+00:55:28.200 --> 00:55:30.702
+are like air-gapped environments,
+so disconnected-
+
+00:55:30.702 --> 00:55:32.761
+- Mm-hmm
+- from internet basically.
+
+00:55:32.882 --> 00:55:37.702
+This is the same question. So, how will
+they work with this? And second question,
+
+00:55:37.702 --> 00:55:42.122
+what if I want to even better
+control and verify everything myself,
+
+00:55:42.122 --> 00:55:46.722
+is it possible to create like
+a, a mirror and first like,
+
+00:55:48.122 --> 00:55:54.142
+put some new versions of extensions or new
+new extensions if, if you keep adding
+
+00:55:54.142 --> 00:56:01.142
+them, first, put them to like, to like, a
+place where they are reviewed by my team-
+
+00:56:02.222 --> 00:56:04.482
+- Mm-hmm
+- people and agents, right? Security
+
+00:56:04.482 --> 00:56:10.062
+stuff, like, and then I, I already marked
+them as like basically signing, right?
+
+00:56:10.200 --> 00:56:11.200
+- Yep.
+- Yeah.
+
+00:56:11.200 --> 00:56:12.700
+- Vetting them.
+- So it's like
+
+00:56:12.700 --> 00:56:16.100
+two parts of the same question,
+how to to better control everything,
+
+00:56:16.100 --> 00:56:19.410
+- including versions.
+- This is the usual process in Kubernetes,
+
+00:56:19.410 --> 00:56:22.720
+and it's one of the beauty of the
+standardization that Kubernetes brought
+
+00:56:22.720 --> 00:56:26.350
+in, that you have the tooling to actually
+do this and automate all this, right?
+
+00:56:26.350 --> 00:56:29.590
+- And this is almost everybody, that-
+- It's not just Postgres problem.
+
+00:56:29.590 --> 00:56:31.442
+- This is what I'm hearing.
+- No.
+
+00:56:31.442 --> 00:56:33.950
+- Yeah.
+- Absolutely not. And everybody does this.
+
+00:56:33.950 --> 00:56:35.858
+Almost all of our customers actually,
+
+00:56:35.982 --> 00:56:39.702
+vet images before using them
+and so on. And actually,
+
+00:56:39.702 --> 00:56:44.702
+this hinges on the problem of whether
+we can pack everything as a single unit,
+
+00:56:44.702 --> 00:56:48.222
+which we're doing here
+with these images, versus
+
+00:56:48.482 --> 00:56:51.682
+pulling a Postgres image
+and then different artifacts,
+
+00:56:51.682 --> 00:56:55.542
+whether images or other things
+for the extensions. Because
+
+00:56:56.190 --> 00:57:00.042
+is a, is, is basically having one artifact
+to verify to go through this chain
+
+00:57:00.042 --> 00:57:04.162
+to put into your air-gapped environment,
+which means private mirrors, versus
+
+00:57:04.162 --> 00:57:06.642
+trying to track multiple
+disparate separate
+
+00:57:06.642 --> 00:57:10.702
+artifacts, right? So what we're achieving
+with this dynamic image list is you get
+
+00:57:10.702 --> 00:57:14.342
+a single image that contains everything
+that you want. Just one thing.
+
+00:57:14.342 --> 00:57:19.402
+It's that simple. And as I said before,
+this image is being dynamically generated
+
+00:57:19.402 --> 00:57:22.342
+by our special registry, right?
+The StackGres registry,
+
+00:57:22.342 --> 00:57:26.502
+container registry. But once it gets
+to you, it looks like exactly the same
+
+00:57:26.502 --> 00:57:30.962
+as absolutely indistinguishable from a
+statically generated image, which you can,
+
+00:57:30.962 --> 00:57:33.682
+refer to by digest. You can pin by digest.
+
+00:57:33.682 --> 00:57:38.222
+So once it reaches to you, you can use the
+standard tooling available in Kubernetes
+
+00:57:38.222 --> 00:57:42.242
+and not Kubernetes containers
+environments to validate the security,
+
+00:57:42.242 --> 00:57:45.882
+to put into your own private mirror,
+to extract, to process,
+
+00:57:45.882 --> 00:57:49.590
+to copy, to... It's just a sing-
+it's a container image. The same tooling-
+
+00:57:49.590 --> 00:57:51.000
+- Right. Right
+- exists today,
+
+00:57:51.000 --> 00:57:54.330
+- you can use it. It's that simple.
+- That's great. Yeah. Yeah. So it's like
+
+00:57:54.330 --> 00:57:56.562
+basically nothing new invented here.
+You can use-
+
+00:57:56.562 --> 00:57:58.982
+- Yep
+- standard workflows and... Yeah,
+
+00:57:58.982 --> 00:58:00.842
+that's great. Really like that.
+
+00:58:00.842 --> 00:58:04.862
+Kirk: So you've created
+the, like the master template
+
+00:58:05.162 --> 00:58:11.722
+to apply to Kubernetes and Postgres so
+that you can bring in everything you want.
+
+00:58:11.722 --> 00:58:16.442
+So this is really just
+a beautiful set of instrumentation
+
+00:58:16.482 --> 00:58:21.922
+to keep the complexity down
+and the flexibility up.
+
+00:58:22.182 --> 00:58:24.002
+That's how I would describe it.
+
+00:58:24.002 --> 00:58:28.582
+Álvaro: Yes. Yes. It, it,
+it goes beyond what the template is.
+
+00:58:28.622 --> 00:58:33.922
+So actually anytime we request one
+of these URLs, there are... So, okay,
+
+00:58:33.922 --> 00:58:38.350
+the process starts very early on. We build
+container images for everything. Postgres,
+
+00:58:38.350 --> 00:58:42.000
+every extension is built as a separate
+container image, right? Patroni is built
+
+00:58:42.000 --> 00:58:45.700
+as a separate container image. Everything
+is built like a separate entity.
+
+00:58:45.700 --> 00:58:50.462
+And those are pushed to our registry. Then
+our registry extracts metadata from all
+
+00:58:50.462 --> 00:58:53.991
+these images and puts it into a database.
+No surprises here.
+
+00:58:54.262 --> 00:58:55.890
+And then whenever you do a Docker
+
+00:58:55.890 --> 00:58:59.860
+pull of our container registry, that goes
+to a database, to the database Postgres,
+
+00:58:59.860 --> 00:59:03.930
+to an application server that talks to the
+Postgres database, makes a lot of queries
+
+00:59:03.930 --> 00:59:07.140
+because it says, "Oh, you're talking,
+you're asking Postgres on this particular
+
+00:59:07.140 --> 00:59:10.320
+extension. Postgres, you didn't specify
+a version. What is the latest version?
+
+00:59:10.320 --> 00:59:13.120
+For this, just this particular
+architecture. Okay, this one. Now,
+
+00:59:13.120 --> 00:59:16.440
+which extensions do we have compiled
+against this particular major version,
+
+00:59:16.440 --> 00:59:19.780
+this particular minor version, and what
+is the digest for this extension?"
+
+00:59:19.780 --> 00:59:21.990
+And then grabs all
+this data and then composes
+
+00:59:21.990 --> 00:59:25.820
+dynamically all these manifests. And
+that's the beauty of it, that you don't
+
+00:59:25.820 --> 00:59:29.670
+know, you don't need to know any of this.
+It just magically works as we saw on or
+
+00:59:29.670 --> 00:59:31.282
+- listened to in the demo.
+- Yep.
+
+00:59:31.282 --> 00:59:35.222
+Álvaro: Now, the good part is that
+this container registry is technically,
+
+00:59:35.222 --> 00:59:39.962
+and we developed it, without
+knowledge of Postgres. It is generic.
+
+00:59:39.962 --> 00:59:43.142
+It just, it just can combine
+layers for other things.
+
+00:59:43.142 --> 00:59:48.562
+And actually, we have had private users
+using it for composing other things.
+
+00:59:48.562 --> 00:59:51.702
+Like, there's,
+there's a great example I can name.
+
+00:59:51.982 --> 00:59:54.511
+There's a, there's
+a university in Germany,
+
+00:59:54.802 --> 00:59:56.862
+and a research institute actually,
+
+00:59:57.002 --> 01:00:01.590
+that their infrastructure team wanted
+to provide container images for running,
+
+01:00:02.702 --> 01:00:06.822
+these notebooks, right? That are written
+in Python. Sorry, just forgot the name.
+
+01:00:06.822 --> 01:00:07.922
+- Jupyter-
+- Jupyter
+
+01:00:07.922 --> 01:00:09.262
+- type stuff.
+- Thank you.
+
+01:00:09.262 --> 01:00:15.222
+So Jupyter Netbooks, Notebooks, to do data
+analysis. And for them, this is Python,
+
+01:00:15.222 --> 01:00:20.230
+right? And sometimes they need to add
+these different Python libraries. So they,
+
+01:00:20.230 --> 01:00:24.200
+they experience this exponential growth
+of the number of container images they had
+
+01:00:24.200 --> 01:00:27.890
+to generate because every team was asking
+for different set of dependencies.
+
+01:00:27.890 --> 01:00:29.140
+And so they started using
+
+01:00:29.140 --> 01:00:32.940
+our dynamic container registry to serve
+Python images for Jupyter notebooks.
+
+01:00:32.940 --> 01:00:35.290
+It is that generic. Now we're just running
+
+01:00:35.290 --> 01:00:38.480
+now this service for Postgres
+container images with the extensions
+
+01:00:38.480 --> 01:00:42.182
+because that's our main focus, but the
+technology is technically agnostic.
+
+01:00:42.182 --> 01:00:47.042
+Nik: Yeah. Maybe a few more
+small closing questions from me.
+
+01:00:47.042 --> 01:00:52.582
+First is what is the readiness and when...
+Like, is it publicly available already?
+
+01:00:53.102 --> 01:00:55.302
+Is it like production ready?
+
+01:00:55.562 --> 01:01:00.982
+Is it going to be free or, like,
+there is free version, paid version?
+
+01:01:01.082 --> 01:01:05.562
+And final final small question,
+is it agentic friendly?
+
+01:01:05.562 --> 01:01:11.882
+Can I point my agent to it or I, I need to
+click like you did, in old-fashioned UI?
+
+01:01:11.882 --> 01:01:14.082
+[laughs]
+
+01:01:14.082 --> 01:01:16.182
+- Okay, I'll respond in order.
+- Right.
+
+01:01:16.182 --> 01:01:21.062
+Álvaro: So as we speak, we are, we're
+finishing production readiness,
+
+01:01:21.162 --> 01:01:25.082
+and it's gonna launch as sgcr.io
+on the StackGres website. So you just,
+
+01:01:25.082 --> 01:01:29.702
+just go to the StackGres website. There's
+gonna be a section called Containers, and
+
+01:01:29.702 --> 01:01:34.522
+it's gonna be beta, public beta testing,
+right? So yep, expect it,
+
+01:01:34.662 --> 01:01:39.302
+probably as the time this episode airs or
+shortly thereafter, that's gonna be there.
+
+01:01:39.302 --> 01:01:43.562
+So go ahead and hit it hard, or not that
+hard. It will, well, beta, public beta.
+
+01:01:43.562 --> 01:01:47.822
+[laughs] so yeah, it's,
+it's gonna be there.
+
+01:01:47.840 --> 01:01:51.442
+We will be adding more images,
+more versions, more everything over time,
+
+01:01:51.442 --> 01:01:54.736
+but all the functionality,
+it's, it's already available.
+
+01:01:55.142 --> 01:01:57.002
+As for the agentic part,
+
+01:01:58.742 --> 01:02:02.802
+the website that I just showed
+is essentially a call to an API,
+
+01:02:03.462 --> 01:02:07.782
+which I guess already answers
+your question. But basically, the URL,
+
+01:02:07.782 --> 01:02:11.622
+you basically submit, through the API,
+the Postgres versions that you want
+
+01:02:11.622 --> 01:02:16.342
+or the default one, the extensions that
+you want at a particular given version.
+
+01:02:16.342 --> 01:02:20.202
+You can query versions of Postgres,
+you can query versions of the extensions,
+
+01:02:20.202 --> 01:02:24.582
+and then you ask for what the URL is,
+and then you can get the full URL as well
+
+01:02:24.582 --> 01:02:28.282
+as the digest, so that if you just
+want directly to pin by that version.
+
+01:02:28.282 --> 01:02:32.082
+And so yeah, basically point
+your agents to the API.
+
+01:02:32.090 --> 01:02:33.240
+- So if you need-
+- Yes
+
+01:02:33.240 --> 01:02:37.090
+Nik: if you need to test something
+in specific minor version of Postgres with
+
+01:02:37.090 --> 01:02:42.202
+specific several extensions and pin their
+versions as well, it's, it's just URL.
+
+01:02:42.702 --> 01:02:45.482
+- Yep.
+- That's that easy. That's great.
+
+01:02:45.522 --> 01:02:49.842
+- It's that easy. Yeah.
+- I think this is good for final-
+
+01:02:49.842 --> 01:02:53.622
+- This was good. I have one last question.
+- Okay.
+
+01:02:53.622 --> 01:02:58.442
+Kirk: What... Does this create
+an interesting opportunity
+
+01:02:58.602 --> 01:03:04.202
+for, like something that competes with
+like the PGXN or the extension network,
+
+01:03:04.202 --> 01:03:07.942
+you know, kind of thing,
+or helps them whereby we can help...
+
+01:03:07.942 --> 01:03:12.962
+I, I mean, you could provide a page that
+currently lists all the active and most
+
+01:03:12.962 --> 01:03:19.182
+recent versions of all the extensions
+that you guys trust, in one place, right?
+
+01:03:19.182 --> 01:03:25.802
+And now that creates an ability to talk
+back to the extension community as well.
+
+01:03:26.182 --> 01:03:29.382
+So, I mean, when I first started, the, I,
+
+01:03:29.382 --> 01:03:33.042
+I downloaded two
+of my extensions via PGXN, right?
+
+01:03:33.042 --> 01:03:35.302
+I think that was the name
+of the tool, right?
+
+01:03:35.302 --> 01:03:39.462
+So, and that, I didn't know what to trust,
+right? I was just getting green.
+
+01:03:39.462 --> 01:03:43.680
+What excites me about this is we
+have a extension problem in Postgres.
+
+01:03:43.680 --> 01:03:47.382
+We don't know which ones are trustworthy,
+are still being maintained well,
+
+01:03:47.382 --> 01:03:52.462
+are whatever. And you're kind
+of building that, from my perspective,
+
+01:03:52.462 --> 01:03:56.162
+as just a side to get done
+what you're doing. Talk to me.
+
+01:03:56.162 --> 01:04:00.282
+Álvaro: Yeah. We, we, we've been in
+contact with, with the Postgres extension
+
+01:04:00.282 --> 01:04:04.162
+community, if, if we can give it,
+consider it's an entity, right?
+
+01:04:04.162 --> 01:04:07.362
+But we definitely with key
+players in this space.
+
+01:04:08.102 --> 01:04:10.682
+Actually, I published
+a blog post some time ago
+
+01:04:10.682 --> 01:04:15.962
+basically stating that extensions
+should be, should be distributed as OCI
+
+01:04:15.962 --> 01:04:18.062
+- images, irrespective-
+- Mm-hmm
+
+01:04:18.062 --> 01:04:21.882
+Álvaro: of what we have done, right?
+It's just a distribution packaging
+
+01:04:21.882 --> 01:04:23.140
+format for extensions.
+
+01:04:23.140 --> 01:04:26.170
+PGXN deals with source code,
+so you still need to compile it,
+
+01:04:26.170 --> 01:04:28.410
+and which I already mentioned that I don't
+
+01:04:28.410 --> 01:04:32.280
+think the best idea is to compile things
+in your own environment, because maybe
+
+01:04:32.280 --> 01:04:36.002
+that's different from the environment
+where Postgres was packaged, right?
+
+01:04:36.002 --> 01:04:40.042
+But other than that-
+this this blog post resonated a lot.
+
+01:04:40.042 --> 01:04:44.422
+David Wheeler, one of the key
+leaders in this space, I would say,
+
+01:04:44.422 --> 01:04:48.762
+he took it to the heart and start
+testing this idea and, and went very far.
+
+01:04:48.762 --> 01:04:49.882
+And I think it, it,
+
+01:04:49.882 --> 01:04:54.117
+it piggybacked a lot with the community
+and, and gave a lot of insights.
+
+01:04:54.222 --> 01:04:57.602
+Now, what we have built is a way
+to very easily distribute,
+
+01:04:57.602 --> 01:05:01.302
+packaged as container images, right?
+Postgres and extensions.
+
+01:05:01.322 --> 01:05:05.962
+And I think this helps in so many ways.
+To give a few examples very quickly.
+
+01:05:05.962 --> 01:05:09.662
+One is there was some
+research done some time ago
+
+01:05:09.702 --> 01:05:12.942
+that tested incompatibility
+between extensions, actually,
+
+01:05:12.942 --> 01:05:18.042
+and it was taking extensions one pair at a
+time and testing them for incompatibility.
+
+01:05:18.042 --> 01:05:23.362
+This process with our registry now
+would becomes, becomes trivial because
+
+01:05:23.542 --> 01:05:24.542
+you can get,
+
+01:05:24.682 --> 01:05:26.970
+- Mm
+- those pairs of extensions with Postgres
+
+01:05:26.970 --> 01:05:29.620
+with just combining a text
+to form a URL, right? Which
+
+01:05:29.620 --> 01:05:33.690
+is trivial. You don't need to build those
+container images with these two particular
+
+01:05:33.690 --> 01:05:37.220
+extensions that you want to test for this
+particular time. It's just call a URL.
+
+01:05:37.220 --> 01:05:39.720
+Docker pull, you're done, right?
+You can run your test.
+
+01:05:39.720 --> 01:05:43.710
+So it can help accelerate these kind of
+tests. It can also accelerate, you know,
+
+01:05:43.710 --> 01:05:47.650
+running like projects like Testcontainers
+or equivalent, where again, you need,
+
+01:05:47.650 --> 01:05:51.450
+oh, I need Postgres, but I need these
+particular two extensions for my CI/CD
+
+01:05:51.450 --> 01:05:55.342
+environment, right? And you need to end
+up building your own container images.
+
+01:05:55.342 --> 01:05:56.342
+No longer.
+
+01:05:56.842 --> 01:06:03.162
+Users after this, I would say,
+can stop becoming image maintainers.
+
+01:06:03.222 --> 01:06:06.222
+- Right.
+- They can become just users or consumers
+
+01:06:06.222 --> 01:06:11.262
+of Postgres and any extensions they want,
+because it's just a URL away.
+
+01:06:11.922 --> 01:06:14.682
+- Great. That's-
+- No, that's great.
+
+01:06:14.882 --> 01:06:19.802
+Nik: Final question. Very final. Anything
+else you want to add that we didn't ask?
+
+01:06:21.050 --> 01:06:25.100
+I think I'm quite satisfied. You asked
+a lot of questions. I did my best,
+
+01:06:25.100 --> 01:06:27.050
+- That's good
+- to go through them. No,
+
+01:06:27.050 --> 01:06:30.342
+I would just encourage
+everybody to, to test it out.
+
+01:06:30.342 --> 01:06:33.082
+It's going out as a public beta,
+as I said.
+
+01:06:33.842 --> 01:06:37.442
+Might have a few rough edges
+at the beginning, or hopefully not.
+
+01:06:37.442 --> 01:06:40.542
+But test, provide feedback.
+We will add more extensions.
+
+01:06:40.542 --> 01:06:44.282
+If you believe your favorite
+extension is missing, you know,
+
+01:06:44.282 --> 01:06:49.622
+tweet us on social media, we'll respond,
+we'll add it as fast as possible. But also
+
+01:06:50.162 --> 01:06:54.691
+just keep an eye on what is behind
+the scenes because this is not everything.
+
+01:06:54.922 --> 01:06:59.422
+This is the, the public face, right, of,
+of serving Postgres and container images.
+
+01:06:59.422 --> 01:07:03.542
+But behind the scenes,
+we'll talk at some point, publicly later,
+
+01:07:03.542 --> 01:07:08.042
+later about another project that is
+powering all this, which is we have also
+
+01:07:08.042 --> 01:07:11.002
+go back to the whiteboard
+and design how we should build
+
+01:07:11.002 --> 01:07:14.382
+Postgres. Because it seems like,
+oh yeah, build Postgres. Well, no,
+
+01:07:14.382 --> 01:07:18.542
+this is not trivial process, and we want
+to make it following several conditions
+
+01:07:18.542 --> 01:07:23.542
+like make it, build Postgres
+in a reproducible way and hermetic way,
+
+01:07:23.542 --> 01:07:26.222
+which is the ultimate way to ensure
+
+01:07:26.322 --> 01:07:32.102
+security and supply chain risk avoidance
+in building and distributing Postgres.
+
+01:07:32.102 --> 01:07:36.842
+So the images you're gonna see there
+are built in this way already, and we aim
+
+01:07:36.842 --> 01:07:41.422
+to support hundreds of extensions
+and to provide new versions of extensions
+
+01:07:41.422 --> 01:07:46.002
+extremely fast, like essentially in less
+than 24 hours after they are published
+
+01:07:46.002 --> 01:07:48.602
+to automatically have
+them available for anyone
+
+01:07:48.602 --> 01:07:52.062
+running Postgres on containers,
+and maybe not even containers.
+
+01:07:52.062 --> 01:07:56.062
+So just keep an eye on the space
+because we're just getting started.
+
+01:07:56.142 --> 01:08:00.495
+Nik: That's great. Thank you for coming.
+Hopefully talk to you soon again,
+
+01:08:00.702 --> 01:08:03.030
+- sometime soon.
+- Awesome.
+
+01:08:03.030 --> 01:08:04.882
+- Thank you.
+- Thank you. Great show.
+
+01:08:04.882 --> 01:08:07.823
+- Thank you.
+- Appreciate it. Thank you very much.
+
+01:08:08.080 --> 01:08:13.560
+[music]
+
+01:08:13.560 --> 01:08:19.040
+[music]
+
+01:08:19.040 --> 01:08:24.520
+[music]
+
+01:08:24.520 --> 01:08:30.000
+[music]

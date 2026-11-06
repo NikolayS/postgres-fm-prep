@@ -8,6 +8,7 @@ Research, study packs, experiment plans and recording notes for individual Postg
 | --- | --- | --- |
 | Your restore finished. Is your database ready? | Preparation; additional experiments proposed | [Episode overview](episodes/20261020-restore-readiness/README.md) · [Study pack](episodes/20261020-restore-readiness/study-pack.md) |
 | UUIDv4 vs UUIDv7 (#194) | Published 2026-10-30: [YouTube](https://www.youtube.com/watch?v=gf8e3JkQ_8M) · [postgres.fm](https://postgres.fm/episodes/uuidv4-vs-uuidv7) | [Episode overview](episodes/20261027-uuidv4-vs-uuidv7/README.md) · [Show notes](episodes/20261027-uuidv4-vs-uuidv7/show-notes.md) · [Illustrations](episodes/20261027-uuidv4-vs-uuidv7/illustrations.md) |
+| Extensions on demand (#195) | In post-production | [Episode overview](episodes/20261104-extensions-on-demand/README.md) · [Illustrations](episodes/20261104-extensions-on-demand/illustrations.md) · [Video](episodes/20261104-extensions-on-demand/video/README.md) |
 
 ## Repository structure
 

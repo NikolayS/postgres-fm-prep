@@ -1,0 +1,4276 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.500
+[music]
+
+00:00:06.500 --> 00:00:13.000
+[music]
+
+00:00:15.010 --> 00:00:19.510
+<v Nik>Hello, hello, this is Postgres.FM.
+I'm Nik, as usual.</v>
+
+00:00:19.510 --> 00:00:23.750
+<v Nik>And as usual, already three times
+in a row, Kirk is here. Hi, Kirk.</v>
+
+00:00:24.430 --> 00:00:25.430
+<v Kirk>Hey, Nik.</v>
+
+00:00:25.990 --> 00:00:30.510
+<v Nik>And we have Álvaro visited us
+today again. Hi, Álvaro. Thank you.</v>
+
+00:00:30.510 --> 00:00:33.190
+<v Álvaro>Hello.</v>
+<v Nik>Thank you for coming back.</v>
+
+00:00:33.850 --> 00:00:35.870
+<v Álvaro>Thank you for having me again.</v>
+<v Nik>Yeah.</v>
+
+00:00:35.870 --> 00:00:37.164
+<v Álvaro>Real pleasure.</v>
+
+00:00:37.250 --> 00:00:41.830
+<v Nik>So, so you have an interesting topic,
+one more interesting topic, and</v>
+
+00:00:43.230 --> 00:00:44.850
+<v Nik>I know it's not like...</v>
+
+00:00:44.850 --> 00:00:49.030
+<v Nik>it's not something super new in terms
+of topic for you because you...</v>
+
+00:00:49.030 --> 00:00:52.420
+<v Nik>As I know, you work on this already
+like six years, Overall-</v>
+
+00:00:52.420 --> 00:00:54.714
+<v Álvaro>Mm-hmm</v>
+<v Nik>the whole topic, containers.</v>
+
+00:00:55.240 --> 00:00:58.620
+<v Nik>And this means, like,
+it's maturing probably, right?</v>
+
+00:00:58.620 --> 00:01:03.020
+<v Nik>So you have a new understanding how it can
+be done even better, better and better,</v>
+
+00:01:03.020 --> 00:01:08.500
+<v Nik>so I'm very looking forward
+to learn and see all the details</v>
+
+00:01:09.020 --> 00:01:11.860
+<v Nik>what you're building.
+And how is it called first?</v>
+
+00:01:11.860 --> 00:01:14.950
+<v Nik>Like, let's start with that.</v>
+<v Álvaro>Okay.</v>
+
+00:01:14.950 --> 00:01:16.850
+<v Nik>Yeah.</v>
+<v Álvaro>So the, the project,</v>
+
+00:01:16.850 --> 00:01:22.830
+<v Álvaro>it's called StackGres Containers, and it's
+based on a technology that powers it,</v>
+
+00:01:22.830 --> 00:01:28.410
+<v Álvaro>that it's called DOCIR,
+which means a dynamic OCI registry,</v>
+
+00:01:28.970 --> 00:01:34.150
+<v Álvaro>and I guess we can take it from there.</v>
+<v Nik>Right. Right. Right. That's great.</v>
+
+00:01:34.270 --> 00:01:39.070
+<v Nik>So maybe we should first
+touch this topic again,</v>
+
+00:01:39.170 --> 00:01:43.130
+<v Nik>Postgres and containers pros
+and cons, If it makes sense.</v>
+
+00:01:43.130 --> 00:01:45.071
+<v Álvaro>Right.</v>
+<v Nik>I know Kirk wanted it.</v>
+
+00:01:47.140 --> 00:01:53.260
+<v Kirk>So, so Álvaro, you're talking
+about containers here, and in particular,</v>
+
+00:01:53.260 --> 00:01:57.880
+<v Kirk>mm-kay, you're talking about Kubernetes.
+Talk to me.</v>
+
+00:01:57.880 --> 00:02:03.040
+<v Kirk>I'm, I'm a little green in this field.
+Bring me up to speed. What are these?</v>
+
+00:02:03.040 --> 00:02:08.280
+<v Kirk>How are they working? Why are they useful?
+And why Kubernetes versus something else?</v>
+
+00:02:09.350 --> 00:02:13.190
+<v Álvaro>So I guess you mean in the context
+of running databases, right?</v>
+
+00:02:13.190 --> 00:02:15.570
+<v Kirk>Yes.</v>
+<v Álvaro>Or Postgres in particular.</v>
+
+00:02:15.570 --> 00:02:21.410
+<v Kirk>And, and Postgres in particular, yes.</v>
+<v Álvaro>Our favorite one, or only one. So yeah.</v>
+
+00:02:21.410 --> 00:02:24.469
+<v Álvaro>Look, there, there's,
+there's always, you know, containers.</v>
+
+00:02:24.469 --> 00:02:28.529
+<v Álvaro>It, it all goes back to the story
+of containers, why, why containers appear.</v>
+
+00:02:28.529 --> 00:02:32.109
+<v Álvaro>There is this, this well-known story</v>
+
+00:02:32.349 --> 00:02:36.220
+<v Álvaro>that, you know, I've got the, the
+software, our application up and running.</v>
+
+00:02:36.220 --> 00:02:40.129
+<v Álvaro>Here it is, and you demo it on your
+laptop, and then someone says, "Okay, give</v>
+
+00:02:40.129 --> 00:02:44.189
+<v Álvaro>me your laptops. We're gonna take it to
+the data center to put it in production."</v>
+
+00:02:44.189 --> 00:02:45.189
+<v Kirk>Right.</v>
+<v Álvaro>And</v>
+
+00:02:45.409 --> 00:02:48.520
+<v Álvaro>the reason why is that [laughs] you,
+you don't want...</v>
+
+00:02:48.520 --> 00:02:52.310
+<v Álvaro>or we all probably all have experience
+that there may be differences,</v>
+
+00:02:52.310 --> 00:02:55.910
+<v Álvaro>right? Between what you have on your
+laptop and development environment,</v>
+
+00:02:55.910 --> 00:02:58.810
+<v Álvaro>and everything works,
+and then what you put in production.</v>
+
+00:02:58.810 --> 00:03:02.369
+<v Álvaro>And those differences account
+for application errors, scaling errors,</v>
+
+00:03:02.369 --> 00:03:07.429
+<v Álvaro>security problems, you name it.
+So containers, which are actually not,</v>
+
+00:03:07.429 --> 00:03:12.368
+<v Álvaro>not a clear-cut definition of what they
+are, but they're essentially a construct</v>
+
+00:03:12.449 --> 00:03:18.570
+<v Álvaro>to provide, somehow or to a certain
+good degree a reproducible environment.</v>
+
+00:03:18.570 --> 00:03:22.120
+<v Álvaro>An environment that you run on your
+laptop, that you run in production,</v>
+
+00:03:22.120 --> 00:03:25.300
+<v Álvaro>and you're pretty much warranted
+you're running the same thing.</v>
+
+00:03:25.300 --> 00:03:27.450
+<v Álvaro>Or at least there's
+some level of isolation</v>
+
+00:03:27.450 --> 00:03:32.430
+<v Álvaro>that provides this reality
+that the environment is, is the same.</v>
+
+00:03:33.070 --> 00:03:36.130
+<v Álvaro>It's technically a way
+to package things, right?</v>
+
+00:03:36.130 --> 00:03:40.970
+<v Álvaro>So you package in a way that you can just
+take from one place, put into another one,</v>
+
+00:03:40.970 --> 00:03:44.250
+<v Álvaro>and again,
+you get a reproducible environment.</v>
+
+00:03:44.830 --> 00:03:46.150
+<v Kirk>Okay.</v>
+<v Álvaro>Yeah.</v>
+
+00:03:46.150 --> 00:03:48.450
+<v Kirk>So back in... You know, I'm old.</v>
+
+00:03:48.450 --> 00:03:52.310
+<v Kirk>Back in the day, I would just use
+a virtual machine for this, and I think</v>
+
+00:03:52.310 --> 00:03:56.670
+<v Kirk>that's how this kinda started. What's
+the core difference between those two?</v>
+
+00:03:56.670 --> 00:03:57.890
+<v Kirk>'Cause I think that's,</v>
+
+00:03:57.890 --> 00:04:00.930
+<v Kirk>that's an important distinction, right?</v>
+<v Álvaro>Yeah.</v>
+
+00:04:00.930 --> 00:04:03.330
+<v Kirk>Right.</v>
+<v Álvaro>So, so a virtual machine is something</v>
+
+00:04:03.330 --> 00:04:06.980
+<v Álvaro>that also is not... I mean, you can
+actually create an image of a virtual</v>
+
+00:04:06.980 --> 00:04:09.851
+<v Álvaro>machine and take it from one
+place to another one.</v>
+
+00:04:10.310 --> 00:04:15.640
+<v Álvaro>But they are technically less portable
+and, and let's say fat here in the way</v>
+
+00:04:15.640 --> 00:04:18.169
+<v Álvaro>that they package
+a whole operating system.</v>
+
+00:04:18.260 --> 00:04:22.520
+<v Álvaro>And that still brings differences
+from places to places. The containers</v>
+
+00:04:22.520 --> 00:04:26.461
+<v Álvaro>are a light-weightier approach,
+are isolation at the process level.</v>
+
+00:04:26.520 --> 00:04:31.350
+<v Álvaro>And, and so basically a container, if,
+if we're gonna get a little bit technical,</v>
+
+00:04:31.350 --> 00:04:34.230
+<v Álvaro>it's an abstraction.
+It's a combination of three things.</v>
+
+00:04:34.230 --> 00:04:36.690
+<v Álvaro>But basically what is the kernel,
+Linux kernel,</v>
+
+00:04:36.690 --> 00:04:41.430
+<v Álvaro>supporting you on creating an illusion
+that you have your own PID namespace,</v>
+
+00:04:41.430 --> 00:04:44.018
+<v Álvaro>so you, you see only
+your process hierarchy.</v>
+
+00:04:44.090 --> 00:04:47.190
+<v Álvaro>You see your own file system
+and your own networking stack.</v>
+
+00:04:47.190 --> 00:04:51.350
+<v Álvaro>And then can limit resources like
+CPU and, and RAM and whatnot, right?</v>
+
+00:04:51.350 --> 00:04:54.115
+<v Kirk>Perfect.
+So instead of a virtual machine-</v>
+
+00:04:54.626 --> 00:04:57.861
+<v Kirk>So it can share the operating
+system with everyone else</v>
+
+00:04:57.886 --> 00:04:59.510
+<v Álvaro>Exactly. Exactly.</v>
+<v Kirk>Right</v>
+
+00:04:59.510 --> 00:05:03.460
+<v Álvaro>And, and that's why also from a security
+perspective, it's, it's a weaker</v>
+
+00:05:03.460 --> 00:05:07.406
+<v Álvaro>level of isolation. You're still running
+on the same host on the same kernel,</v>
+
+00:05:07.406 --> 00:05:11.826
+<v Álvaro>right? And if someone touches the kernel,
+it touches the kernel for everybody.</v>
+
+00:05:11.826 --> 00:05:17.286
+<v Álvaro>But given that, that caveats, it
+provides this a good level of isolation,</v>
+
+00:05:17.286 --> 00:05:19.626
+<v Álvaro>especially application isolation,</v>
+
+00:05:20.310 --> 00:05:23.550
+<v Álvaro>by, you know, in a much lighter-weight
+approach. Not lighter-weight</v>
+
+00:05:23.550 --> 00:05:27.050
+<v Álvaro>from performance, but from a packaging
+from a packaging perspective. You</v>
+
+00:05:27.050 --> 00:05:30.740
+<v Álvaro>don't need to package the whole operating
+system, but just your application.</v>
+
+00:05:30.740 --> 00:05:32.858
+<v Álvaro>And actually, this can be taken very far.</v>
+
+00:05:32.926 --> 00:05:38.026
+<v Álvaro>A lot of people that use containers today
+actually pack, pack containers like a VM.</v>
+
+00:05:38.186 --> 00:05:41.366
+<v Álvaro>They still pack like almost
+a whole operating system,</v>
+
+00:05:41.426 --> 00:05:43.306
+<v Álvaro>whereas technically a container could</v>
+
+00:05:43.306 --> 00:05:45.746
+<v Álvaro>be as simple as a single binary.</v>
+<v Kirk>Hmm.</v>
+
+00:05:45.746 --> 00:05:49.286
+<v Álvaro>Single binary is probably
+not a good idea because normally</v>
+
+00:05:49.286 --> 00:05:53.646
+<v Álvaro>applications require some,
+some support files, CA certificates,</v>
+
+00:05:53.746 --> 00:05:57.460
+<v Álvaro>maybe a libc, maybe some other files,
+and sometimes you need a little bit</v>
+
+00:05:57.460 --> 00:06:00.360
+<v Álvaro>more, but definitely you should
+not pack a whole operating</v>
+
+00:06:00.360 --> 00:06:04.260
+<v Álvaro>system. But even leaving that aside,
+right, so why they're good for databases?</v>
+
+00:06:04.260 --> 00:06:07.326
+<v Álvaro>And, and I've,
+I've been talking in, at many places about</v>
+
+00:06:07.326 --> 00:06:10.826
+<v Álvaro>why containerized databases
+should be the future, if not</v>
+
+00:06:10.826 --> 00:06:15.100
+<v Álvaro>the present. And there are many reasons
+for that. The, the first one is obvious,</v>
+
+00:06:15.100 --> 00:06:18.600
+<v Álvaro>it's what we have just just said,
+you want a reproducible environment.</v>
+
+00:06:18.600 --> 00:06:22.500
+<v Álvaro>But there are other reasons that go
+beyond that. For example, we are all aware</v>
+
+00:06:22.500 --> 00:06:26.286
+<v Álvaro>that in Postgres there may be
+certain issues if you, for example,</v>
+
+00:06:26.366 --> 00:06:31.026
+<v Álvaro>try to move your database across libcs,
+across systems where are different libcs.</v>
+
+00:06:31.026 --> 00:06:36.306
+<v Álvaro>Basically, if you take your OS, you do an
+OS upgrade, and then you move to another</v>
+
+00:06:36.306 --> 00:06:40.666
+<v Álvaro>OS version where there's a libc change,
+then maybe your, your index has now</v>
+
+00:06:40.666 --> 00:06:43.766
+<v Álvaro>got corrupted, and you need
+to re-index your database, right?</v>
+
+00:06:43.766 --> 00:06:46.606
+<v Álvaro>Why this happens,
+because you change the OS underneath,</v>
+
+00:06:46.606 --> 00:06:49.547
+<v Álvaro>and this get exposed to the database,
+to Postgres.</v>
+
+00:06:49.796 --> 00:06:56.176
+<v Álvaro>Now, if you run on a container, you are
+fixing the libc at the container level,</v>
+
+00:06:56.396 --> 00:07:01.455
+<v Álvaro>and it can be independent of the host OS.
+So you solve a kind of problems</v>
+
+00:07:01.455 --> 00:07:04.690
+<v Álvaro>by creating this isolation
+where you run your database.</v>
+
+00:07:04.996 --> 00:07:11.880
+<v Kirk>So you're specifying, in fact, this
+environment requires this libc inside-</v>
+
+00:07:11.880 --> 00:07:13.636
+<v Álvaro>Yeah</v>
+<v Kirk>the container. So don't go</v>
+
+00:07:13.636 --> 00:07:17.656
+<v Kirk>using the one the operating system wants
+to give me. We don't trust that one.</v>
+
+00:07:17.656 --> 00:07:21.776
+<v Kirk>As long as you use this one,
+I think we're clean. Boom. Good?</v>
+
+00:07:21.776 --> 00:07:25.207
+<v Álvaro>Exactly. And this actually
+also isolates you from...</v>
+
+00:07:25.207 --> 00:07:27.167
+<v Álvaro>because it isolates you from the OS,</v>
+
+00:07:27.167 --> 00:07:31.367
+<v Álvaro>it doesn't matter whether you're running
+on Red Hat or Debian or, or whatever,</v>
+
+00:07:31.367 --> 00:07:35.426
+<v Álvaro>they... just the container runs
+and, and you get the same experience.</v>
+
+00:07:35.547 --> 00:07:38.407
+<v Álvaro>Even when the, the or, or the</v>
+
+00:07:40.067 --> 00:07:45.267
+<v Álvaro>the, the simulation of containerization
+that other OSs have, like</v>
+
+00:07:45.307 --> 00:07:50.687
+<v Álvaro>macOS or Windows, which they run
+a Linux VM to run containers, right?</v>
+
+00:07:50.687 --> 00:07:54.947
+<v Álvaro>Which is a bit of a, something hidden from
+you. They don't run containers natively,</v>
+
+00:07:54.947 --> 00:07:58.890
+<v Álvaro>these Linux containers natively,
+except for things like FreeBSD or so on.</v>
+
+00:07:58.890 --> 00:08:02.747
+<v Álvaro>But going back to my [laughs] to the
+topic, right, they create this solution,</v>
+
+00:08:02.747 --> 00:08:07.467
+<v Álvaro>but it still allows you to run the same
+workload on these other OSs, right?</v>
+
+00:08:07.467 --> 00:08:11.387
+<v Álvaro>And you still get the same experience.
+So it also abstracts you from the OS,</v>
+
+00:08:11.387 --> 00:08:14.269
+<v Álvaro>provides also another
+advantage in these regards.</v>
+
+00:08:14.307 --> 00:08:17.727
+<v Kirk>Mm-hmm. Nice.
+So, so you got this container.</v>
+
+00:08:17.727 --> 00:08:22.086
+<v Kirk>It uses the resources of the machine
+you put it on. The, it can leverage</v>
+
+00:08:22.086 --> 00:08:26.306
+<v Kirk>the network and the things you turn on
+and tell it to kind of connect to, right?</v>
+
+00:08:26.306 --> 00:08:30.486
+<v Kirk>So this is, this is how you're looking
+at this. And then is there any advantage</v>
+
+00:08:30.486 --> 00:08:35.106
+<v Kirk>to having a, a secondary container
+in in case this one crashes?</v>
+
+00:08:35.290 --> 00:08:38.370
+<v Álvaro>Yeah. Well, for obvious reasons,
+yes, there is, right?</v>
+
+00:08:38.370 --> 00:08:39.710
+<v Kirk>Okay.</v>
+<v Álvaro>And this actually</v>
+
+00:08:39.710 --> 00:08:43.630
+<v Álvaro>then moves the topic... Well, just before
+moving the topic, I would say there's</v>
+
+00:08:43.630 --> 00:08:47.730
+<v Álvaro>another significant advantage of running
+on containers specifically for databases,</v>
+
+00:08:47.730 --> 00:08:53.106
+<v Álvaro>is the security boundary. If you control
+exactly the amount of software that gets</v>
+
+00:08:53.106 --> 00:08:56.106
+<v Álvaro>packaged with your database
+in the container image-</v>
+
+00:08:56.166 --> 00:08:58.326
+<v Kirk>Mm-hmm</v>
+<v Álvaro>you can also do static analysis,</v>
+
+00:08:58.326 --> 00:09:01.046
+<v Álvaro>static security analysis,
+and actually every</v>
+
+00:09:01.046 --> 00:09:04.086
+<v Álvaro>containerized tool goes through
+those layers of analysis.</v>
+
+00:09:04.086 --> 00:09:08.366
+<v Álvaro>There's tools specifically that understand
+containers format and analyze for scrutiny</v>
+
+00:09:08.366 --> 00:09:10.150
+<v Álvaro>for security vulnerabilities.</v>
+
+00:09:10.150 --> 00:09:12.940
+<v Álvaro>You are defining the boundary
+on, the software boundary-</v>
+
+00:09:12.940 --> 00:09:14.586
+<v Kirk>Mm</v>
+<v Álvaro>for your running database,</v>
+
+00:09:14.586 --> 00:09:16.330
+<v Álvaro>right? So you can analyze security,</v>
+
+00:09:16.330 --> 00:09:19.950
+<v Álvaro>I would say, in a much more comfortable,
+standardized, and in static way,</v>
+
+00:09:19.950 --> 00:09:21.400
+<v Álvaro>right? Before even deploying,</v>
+
+00:09:21.400 --> 00:09:24.570
+<v Álvaro>you know the security of what
+you're gonna deploy, right?</v>
+
+00:09:24.570 --> 00:09:28.526
+<v Álvaro>But moving from one instance to another
+instance is where actually I would also</v>
+
+00:09:28.526 --> 00:09:32.626
+<v Álvaro>set the boundary between running a single
+container on something like Docker,</v>
+
+00:09:32.626 --> 00:09:38.006
+<v Álvaro>Podman, or equivalent tools
+towards a Postgres cluster, right?</v>
+
+00:09:38.326 --> 00:09:43.826
+<v Álvaro>Should we run Postgres clusters on Docker
+containers? I would probably say no,</v>
+
+00:09:44.866 --> 00:09:49.406
+<v Álvaro>and that's where actually Kubernetes
+enters this scene, from my perspective,</v>
+
+00:09:49.406 --> 00:09:53.246
+<v Álvaro>in my opinion.</v>
+<v Nik>And the operate, yeah.</v>
+
+00:09:54.030 --> 00:09:58.086
+<v Álvaro>So yeah, so we're moving from one
+instance to multiple instances, and now</v>
+
+00:09:58.086 --> 00:10:01.866
+<v Álvaro>we need to coordinate a distributed
+system. We need to assign workloads</v>
+
+00:10:01.866 --> 00:10:05.786
+<v Álvaro>to different hardware resources. We need
+to make sure that if something fails,</v>
+
+00:10:05.786 --> 00:10:10.386
+<v Álvaro>something else gets turned on, like if,
+if a node dies with its container inside,</v>
+
+00:10:10.386 --> 00:10:15.606
+<v Álvaro>that this container maybe appear somewhere
+else and reconnect and rewire the IPs</v>
+
+00:10:15.606 --> 00:10:19.194
+<v Álvaro>and so on so that the cluster
+will continue operating, right?</v>
+
+00:10:19.246 --> 00:10:21.346
+<v Álvaro>And this is actually what Kubernetes does.</v>
+
+00:10:21.346 --> 00:10:25.786
+<v Álvaro>I know that a lot of people have some
+reluctance towards Kubernetes, right?</v>
+
+00:10:25.840 --> 00:10:27.030
+<v Álvaro>And consider it a complex</v>
+
+00:10:27.030 --> 00:10:29.347
+<v Álvaro>system. And on this last part-</v>
+<v Nik>Not anymore</v>
+
+00:10:29.347 --> 00:10:31.607
+<v Álvaro>there's nothing not run.</v>
+<v Nik>Not anymore. It,</v>
+
+00:10:31.607 --> 00:10:32.607
+<v Álvaro>Okay. No?</v>
+
+00:10:33.587 --> 00:10:39.826
+<v Nik>Yeah. So I just don't care anymore
+because, you know, like, if... I,</v>
+
+00:10:39.826 --> 00:10:41.986
+<v Nik>I care about different topic now.</v>
+
+00:10:42.656 --> 00:10:48.296
+<v Nik>How to have highly, like 100%
+trustworthy agent for operations.</v>
+
+00:10:48.296 --> 00:10:49.300
+<v Álvaro>[laughs]</v>
+
+00:10:49.300 --> 00:10:50.416
+<v Nik>This is what I care.</v>
+
+00:10:50.416 --> 00:10:52.910
+<v Kirk>Right. Because-</v>
+<v Nik>I don't care about complexity of</v>
+
+00:10:52.910 --> 00:10:57.236
+<v Nik>kubectl commands and memorizing stuff
+and so on because I don't do it anymore,</v>
+
+00:10:57.236 --> 00:11:00.060
+<v Nik>right?</v>
+<v Álvaro>Yeah, you don't need to do it anymore</v>
+
+00:11:00.156 --> 00:11:02.316
+<v Álvaro>No, I mean, anyway, Kubernetes</v>
+
+00:11:02.516 --> 00:11:07.656
+<v Álvaro>surface is very, very wide. So I mean,
+if you want to learn the whole Kubernetes,</v>
+
+00:11:07.656 --> 00:11:11.216
+<v Álvaro>it is complex,
+but also by learning a small subset of it,</v>
+
+00:11:11.216 --> 00:11:14.922
+<v Álvaro>you can get comfortable with it
+and, and, you know, operate it.</v>
+
+00:11:15.176 --> 00:11:18.116
+<v Álvaro>So the... You can pick
+which subset of it you need.</v>
+
+00:11:18.116 --> 00:11:21.587
+<v Álvaro>But the reason why I think it's
+important, and what I would</v>
+
+00:11:21.616 --> 00:11:28.356
+<v Álvaro>define Kubernetes, is basically an
+abstraction layer behind an API of compute</v>
+
+00:11:28.416 --> 00:11:33.330
+<v Álvaro>networking and storage,
+so that if you want to, instead of, say,</v>
+
+00:11:33.330 --> 00:11:35.760
+<v Álvaro>deploy this container with Postgres,
+you're gonna</v>
+
+00:11:35.760 --> 00:11:39.220
+<v Álvaro>say deploy this Postgres container,
+another container for the replica,</v>
+
+00:11:39.220 --> 00:11:41.940
+<v Álvaro>another third container for the replica,
+and then etcd,</v>
+
+00:11:41.940 --> 00:11:44.520
+<v Álvaro>and then another tool for backups,
+and then Grafana,</v>
+
+00:11:44.520 --> 00:11:48.220
+<v Álvaro>and then everything. Kubernetes allows
+you to orchestrate all this and say,</v>
+
+00:11:48.220 --> 00:11:51.630
+<v Álvaro>"Okay, I need these compute resources,
+these storage resources, this,</v>
+
+00:11:51.630 --> 00:11:53.380
+<v Kirk>Hmm</v>
+<v Álvaro>you know, memory resources.</v>
+
+00:11:53.380 --> 00:11:56.430
+<v Álvaro>This networking all needs to be wired up.
+If something fails,</v>
+
+00:11:56.430 --> 00:12:00.180
+<v Álvaro>I'll restart on another node and then
+rewire the IPs and so on. And this...</v>
+
+00:12:00.180 --> 00:12:04.296
+<v Álvaro>That, that kind of magic is complex
+problems that get abstracted away,</v>
+
+00:12:04.296 --> 00:12:07.796
+<v Álvaro>and they run anywhere, whether cloud,
+on-prem, it doesn't matter.</v>
+
+00:12:07.796 --> 00:12:12.756
+<v Álvaro>You stay on a virtualized layer, that
+is API driven, and that, that's where I</v>
+
+00:12:12.756 --> 00:12:16.716
+<v Álvaro>see the huge advantage. You can create
+like a virtual infrastructure, abstracts</v>
+
+00:12:16.716 --> 00:12:21.576
+<v Álvaro>the infrastructure, you run anywhere you
+want, and it always has the same shape.</v>
+
+00:12:22.366 --> 00:12:27.166
+<v Kirk>Interesting. So those people who got
+hosed when VMware got bought by Broadcom</v>
+
+00:12:27.166 --> 00:12:31.006
+<v Kirk>and saw the rates go up tenfold,
+had they been running more Kubernetes,</v>
+
+00:12:31.006 --> 00:12:34.446
+<v Kirk>this could have been pushed down
+to a new environment much faster.</v>
+
+00:12:34.446 --> 00:12:35.450
+<v Álvaro>Yep.</v>
+<v Kirk>So.</v>
+
+00:12:35.450 --> 00:12:36.106
+<v Álvaro>Yep.</v>
+<v Kirk>Yeah.</v>
+
+00:12:36.106 --> 00:12:37.988
+<v Álvaro>Absolutely.</v>
+<v Kirk>Good. All right.</v>
+
+00:12:38.186 --> 00:12:40.266
+<v Kirk>Now start getting closer into</v>
+
+00:12:40.566 --> 00:12:45.026
+<v Kirk>so, so Kubernetes can handle all of this.
+What do you need your tool for?</v>
+
+00:12:45.026 --> 00:12:48.066
+<v Álvaro>- [laughs]
+- What have you been working on?</v>
+
+00:12:48.846 --> 00:12:53.146
+<v Álvaro>So there's famous,
+Kelsey Hightower, right?</v>
+
+00:12:53.146 --> 00:12:57.126
+<v Álvaro>And he's, he's very famous
+for, for many things,</v>
+
+00:12:57.126 --> 00:13:01.166
+<v Álvaro>and one of the things he said is,
+"Should I run Postgres on Kubernetes?"</v>
+
+00:13:01.166 --> 00:13:07.086
+<v Álvaro>And, and he said that you know, you need
+to, to actually twist Postgres' arms</v>
+
+00:13:07.086 --> 00:13:09.605
+<v Álvaro>a little bit to run
+on Kubernetes or twist,</v>
+
+00:13:09.605 --> 00:13:14.266
+<v Álvaro>Kubernetes' arms actually to run Postgres,
+and I, I, I essentially stand by that.</v>
+
+00:13:14.266 --> 00:13:18.946
+<v Álvaro>So if you try to run Postgres
+on Kubernetes naive, like, you know...</v>
+
+00:13:18.946 --> 00:13:23.746
+<v Álvaro>I mean, it's not so hard. The distance
+from a Kubernet- as from a Docker,</v>
+
+00:13:24.146 --> 00:13:29.706
+<v Álvaro>Dockerfile to a StatefulSet on Kubernetes
+and a service is, is tiny, right?</v>
+
+00:13:30.086 --> 00:13:32.646
+<v Álvaro>But then you're gonna
+face a lot of problems,</v>
+
+00:13:32.646 --> 00:13:36.986
+<v Álvaro>because it is not...
+It's gonna fight you a little bit.</v>
+
+00:13:36.986 --> 00:13:40.866
+<v Álvaro>Kubernetes has no notion of what
+is a primary and replica, for example.</v>
+
+00:13:40.866 --> 00:13:44.546
+<v Álvaro>It treats all containers equal.
+And, and by default,</v>
+
+00:13:44.546 --> 00:13:48.366
+<v Álvaro>by default, that doesn't mean
+that only works for stateful workloads,</v>
+
+00:13:48.366 --> 00:13:51.425
+<v Álvaro>but by default consider
+workloads somehow stateless,</v>
+
+00:13:51.450 --> 00:13:55.106
+<v Álvaro>and may apply things that you don't
+want for a database to happen, right?</v>
+
+00:13:55.106 --> 00:14:00.406
+<v Álvaro>And so you really need to, to set it up in
+a way that you wanna make sure everything</v>
+
+00:14:00.406 --> 00:14:04.526
+<v Álvaro>works the way it should, right? And that's
+basically what an operator does.</v>
+
+00:14:04.526 --> 00:14:08.830
+<v Álvaro>Without it, you're gonna fight a bit of
+an uphill battle that others have fought</v>
+
+00:14:08.830 --> 00:14:11.786
+<v Álvaro>for you already, and there's
+no need to reinvent the wheel.</v>
+
+00:14:11.786 --> 00:14:15.746
+<v Álvaro>So Kubernetes operators package all the
+knowledge required for running Postgres</v>
+
+00:14:15.746 --> 00:14:20.226
+<v Álvaro>on Kubernetes. And on top of that, they
+typically pack all the tools that you need</v>
+
+00:14:20.226 --> 00:14:24.406
+<v Álvaro>for what doesn't come included
+in Postgres Core: connection pooling,</v>
+
+00:14:24.406 --> 00:14:27.886
+<v Álvaro>high availability, backups,
+monitoring, you name it, right?</v>
+
+00:14:27.886 --> 00:14:29.726
+<v Álvaro>And automates most of the operations</v>
+
+00:14:29.726 --> 00:14:32.306
+<v Álvaro>that you need for day zero
+and day two operations.</v>
+
+00:14:32.306 --> 00:14:37.526
+<v Álvaro>So that it's a really convenience way,
+to package all this knowledge, tools,</v>
+
+00:14:37.526 --> 00:14:42.200
+<v Álvaro>automation, and deliver to you in a single
+installable package that works anyway,</v>
+
+00:14:42.200 --> 00:14:45.400
+<v Álvaro>anyway on any infrastructure you want,
+and that's the advantage.</v>
+
+00:14:45.400 --> 00:14:47.200
+<v Álvaro>So that's why I would say if someone</v>
+
+00:14:47.200 --> 00:14:52.046
+<v Álvaro>wants to run Postgres on Kubernetes, which
+I would say should be your default option,</v>
+
+00:14:52.046 --> 00:14:57.066
+<v Álvaro>then I would say that StackGres is among,
+the best options to actually do that.</v>
+
+00:14:57.186 --> 00:15:00.846
+<v Álvaro>And basically because it
+packages everything you need,</v>
+
+00:15:01.006 --> 00:15:05.926
+<v Álvaro>it can be deployed a Postgres cluster in
+a few seconds by writing a tiny YAML file,</v>
+
+00:15:05.926 --> 00:15:10.926
+<v Álvaro>very high level, no expertise required, or
+from the GUI from the command web console,</v>
+
+00:15:10.946 --> 00:15:15.766
+<v Álvaro>or from the REST API. And anyway, you'll
+get a Postgres cluster in a few seconds,</v>
+
+00:15:15.766 --> 00:15:18.066
+<v Álvaro>literally running
+on Kubernetes without having</v>
+
+00:15:18.066 --> 00:15:21.086
+<v Álvaro>to be a Postgres expert,
+and that's the beauty of it.</v>
+
+00:15:21.086 --> 00:15:25.792
+<v Kirk>Nice. So the... One of the things
+that's just dawned on me is that I think</v>
+
+00:15:26.106 --> 00:15:30.676
+<v Kirk>the key thing in a Kubernetes is these
+environments are not where you should be</v>
+
+00:15:30.676 --> 00:15:35.996
+<v Kirk>writing your data. In Postgres, we usually
+write our data in the database's, quote,</v>
+
+00:15:35.996 --> 00:15:40.656
+<v Kirk>environment, right? We have a Postgres
+user, and it kinda owns the data.</v>
+
+00:15:40.656 --> 00:15:45.116
+<v Kirk>It writes logs to the system
+logs inside that environment.</v>
+
+00:15:45.116 --> 00:15:48.096
+<v Kirk>In this case, part of what
+you have to do, I would guess,</v>
+
+00:15:48.096 --> 00:15:53.210
+<v Kirk>is you have to extract these things
+and point them to different places</v>
+
+00:15:53.210 --> 00:15:56.816
+<v Kirk>so that while the machine's running,
+if while the environment's running,</v>
+
+00:15:56.816 --> 00:16:01.356
+<v Kirk>if it goes down, you've got access to the
+logs. If you spin a new mach- new one up,</v>
+
+00:16:01.356 --> 00:16:05.696
+<v Kirk>it continues writing to the same logs,
+it continues working with the same files,</v>
+
+00:16:05.696 --> 00:16:08.936
+<v Kirk>right? So that's part
+of this overall configuration?</v>
+
+00:16:09.196 --> 00:16:11.180
+<v Álvaro>Yes, yes.</v>
+<v Kirk>Perfect.</v>
+
+00:16:11.180 --> 00:16:14.170
+<v Álvaro>In, in Kubernetes, so when,
+when you write operators</v>
+
+00:16:14.170 --> 00:16:16.670
+<v Álvaro>for running something like
+Postgres on Kubernetes,</v>
+
+00:16:16.670 --> 00:16:20.720
+<v Álvaro>you, you tend to offer options that align
+with the usual practices in Kubernetes.</v>
+
+00:16:20.720 --> 00:16:25.096
+<v Álvaro>But Kubernetes provides many support
+systems or subsystems for this.</v>
+
+00:16:25.096 --> 00:16:29.360
+<v Álvaro>For example, for logging, there's a
+subsystem which is basically very simple.</v>
+
+00:16:29.360 --> 00:16:32.580
+<v Álvaro>If you throw anything to the standard
+error, it will get captured,</v>
+
+00:16:32.580 --> 00:16:36.480
+<v Álvaro>and you can access it with Kubernetes
+tools, right? And that's the, that's</v>
+
+00:16:36.480 --> 00:16:37.720
+<v Álvaro>the basic, that's the 101.</v>
+
+00:16:37.720 --> 00:16:39.970
+<v Kirk>Nice.</v>
+<v Álvaro>But then you can improve on doing that.</v>
+
+00:16:39.970 --> 00:16:43.310
+<v Álvaro>For example, actually in StackGres we
+support an option, which is this one,</v>
+
+00:16:43.310 --> 00:16:46.430
+<v Álvaro>but we also support the option
+to capture the logs and send them</v>
+
+00:16:46.430 --> 00:16:50.180
+<v Álvaro>to a, what we call a distributed log
+server, which happens to be a Postgres</v>
+
+00:16:50.180 --> 00:16:53.763
+<v Álvaro>server collecting all the logs,
+and then you can query in SQL.</v>
+
+00:16:54.136 --> 00:16:56.116
+<v Kirk>Nice. Now, okay, good.</v>
+
+00:16:56.116 --> 00:17:00.896
+<v Kirk>So now I kinda got a picture here,
+and you mentioned StackGres, right?</v>
+
+00:17:01.268 --> 00:17:05.288
+<v Kirk>So, and, and that's, that's kind
+of the product name, company name here?</v>
+
+00:17:05.288 --> 00:17:08.188
+<v Álvaro>It is both.</v>
+<v Kirk>Like... Okay, perfect. Now All right.</v>
+
+00:17:08.188 --> 00:17:09.948
+<v Nik>Yeah. Yeah.</v>
+<v Kirk>Yeah.</v>
+
+00:17:09.948 --> 00:17:13.608
+<v Nik>As I, as I understand, the company
+was just recently renamed because</v>
+
+00:17:13.608 --> 00:17:16.448
+<v Nik>of success of StackGres,
+right? Congratulations.</v>
+
+00:17:17.068 --> 00:17:20.244
+<v Álvaro>Thank you. Yes.
+The company was called OnGres-</v>
+
+00:17:20.328 --> 00:17:22.108
+<v Nik>Okay</v>
+<v Álvaro>which meant on Postgres,</v>
+
+00:17:22.108 --> 00:17:25.108
+<v Álvaro>and now it's transitioning
+to just to StackGres.</v>
+
+00:17:25.110 --> 00:17:25.908
+<v Nik>Right.</v>
+<v Kirk>Nice.</v>
+
+00:17:25.908 --> 00:17:27.068
+<v Nik>And,</v>
+<v Kirk>Congratulations.</v>
+
+00:17:27.068 --> 00:17:30.748
+<v Nik>Yeah, and I know really big
+companies use it, which is great.</v>
+
+00:17:30.748 --> 00:17:35.368
+<v Nik>And finally you changed
+license to Apache 2.0</v>
+
+00:17:35.568 --> 00:17:39.748
+<v Nik>from AGPL V, V3. So yeah.</v>
+<v Álvaro>Yes.</v>
+
+00:17:39.748 --> 00:17:45.588
+<v Nik>We discussed it, when you visited
+us with Michael recently. That's great.</v>
+
+00:17:45.768 --> 00:17:50.408
+<v Nik>So I, I wish we move from Kubernetes
+to just to containers,</v>
+
+00:17:50.408 --> 00:17:54.728
+<v Nik>because this is a central topic now,
+right? Like, because, like what's-</v>
+
+00:17:54.728 --> 00:17:56.768
+<v Álvaro>Yes</v>
+<v Nik>what's new in that area?</v>
+
+00:17:57.048 --> 00:17:59.908
+<v Nik>Because I know,
+I know for quite a long time</v>
+
+00:18:00.008 --> 00:18:03.950
+<v Nik>for StackGres you already supported some,
+like dynamic load of</v>
+
+00:18:03.950 --> 00:18:06.388
+<v Nik>extensions to Postgres into containers.</v>
+<v Álvaro>Mm-hmm.</v>
+
+00:18:06.388 --> 00:18:10.200
+<v Nik>And this is like technology
+you developed, your team developed.</v>
+
+00:18:10.200 --> 00:18:12.908
+<v Nik>But there is something new,
+right? What, what is that?</v>
+
+00:18:12.908 --> 00:18:15.848
+<v Álvaro>Yes. Yes, yes, that's correct.</v>
+
+00:18:15.848 --> 00:18:20.008
+<v Álvaro>So, so yeah, this is kind of a little
+bit of let's go to the basics, right?</v>
+
+00:18:20.008 --> 00:18:24.148
+<v Álvaro>Like, what, what is the fuel
+for these Kubernetes operators?</v>
+
+00:18:25.190 --> 00:18:29.040
+<v Álvaro>What they consume, let's say,
+is the container images, right?</v>
+
+00:18:29.040 --> 00:18:31.390
+<v Álvaro>Where we actually started
+the discussion today.</v>
+
+00:18:31.390 --> 00:18:35.068
+<v Álvaro>This packaging of all the files
+that you need to run your database.</v>
+
+00:18:35.068 --> 00:18:37.028
+<v Álvaro>And when you think about Postgres,</v>
+
+00:18:37.028 --> 00:18:41.368
+<v Álvaro>one of the key features of Postgres
+is supporting extensions. So</v>
+
+00:18:41.928 --> 00:18:46.420
+<v Álvaro>if you think about it, how do you provide
+these extensions to the Postgres clusters,</v>
+
+00:18:46.420 --> 00:18:50.328
+<v Álvaro>right? And so there's, there's several
+ways to think about it. The, the option</v>
+
+00:18:50.328 --> 00:18:54.348
+<v Álvaro>number one, the naive option is, okay,
+I wanna create a what, what I call a fat</v>
+
+00:18:54.348 --> 00:18:58.508
+<v Álvaro>image. And the fat image is something
+where I just pack all the extensions.</v>
+
+00:18:58.508 --> 00:19:03.148
+<v Álvaro>Let's say my universe of extensions
+is 200 or 500 or 1,000 extensions, right?</v>
+
+00:19:04.428 --> 00:19:08.560
+<v Álvaro>And I package them all into a single
+container image. By the way,</v>
+
+00:19:08.560 --> 00:19:12.190
+<v Álvaro>this applies the same to container
+images to VMs. Like, if you're running</v>
+
+00:19:12.190 --> 00:19:16.060
+<v Álvaro>on a managed, on a managed Postgres,
+that runs on a VM behind the scenes, what</v>
+
+00:19:16.060 --> 00:19:20.168
+<v Álvaro>did they package in the VM? Right? What,
+what's present in the VM? And so the goal-</v>
+
+00:19:20.168 --> 00:19:24.808
+<v Nik>.control and .so files, all of them,
+they're all binaries and text files there,</v>
+
+00:19:24.808 --> 00:19:26.508
+<v Nik>right?</v>
+<v Álvaro>Exactly.</v>
+
+00:19:26.508 --> 00:19:27.910
+<v Nik>Yeah.</v>
+<v Álvaro>Now that we're-</v>
+
+00:19:27.910 --> 00:19:31.168
+<v Nik>What, other than that</v>
+<v Álvaro>more and more concerned, with security,</v>
+
+00:19:31.168 --> 00:19:35.368
+<v Álvaro>right? If a package is hundreds
+of extensions, which Postgres extensions,</v>
+
+00:19:35.368 --> 00:19:39.668
+<v Álvaro>where did they come from? Most
+of them are random, no pun intended,</v>
+
+00:19:39.768 --> 00:19:41.748
+<v Álvaro>repositories on GitHub, right?</v>
+
+00:19:41.748 --> 00:19:46.888
+<v Álvaro>And the security awareness and level
+of quality of those varies a lot.</v>
+
+00:19:47.278 --> 00:19:49.337
+<v Álvaro>And so if you just pull everything,</v>
+
+00:19:49.718 --> 00:19:54.424
+<v Álvaro>you're probably not getting a very safe
+environment from a security perspective.</v>
+
+00:19:54.478 --> 00:19:57.538
+<v Álvaro>There may be plenty of CVEs
+within it because, you know,</v>
+
+00:19:57.538 --> 00:20:00.832
+<v Álvaro>you're pulling a lot of objects,
+and not all are vetted.</v>
+
+00:20:01.228 --> 00:20:04.550
+<v Álvaro>And but that was, that would be
+the, the case for the fatty image.</v>
+
+00:20:04.550 --> 00:20:07.340
+<v Álvaro>It has also more problems.
+Probably it's very large.</v>
+
+00:20:07.340 --> 00:20:11.240
+<v Álvaro>I think we measured this once, and it
+was, like several gigabytes. You don't,</v>
+
+00:20:11.240 --> 00:20:14.950
+<v Álvaro>probably don't want to pull a Postgres
+image several gigabytes all the time.</v>
+
+00:20:14.950 --> 00:20:18.900
+<v Álvaro>And on top of that, there's gonna be some
+conflicts with transitive dependencies,</v>
+
+00:20:18.900 --> 00:20:22.700
+<v Álvaro>right? There, there's gonna be clashes.
+So it's definitely non-trivial problem</v>
+
+00:20:22.700 --> 00:20:26.808
+<v Álvaro>to solve and comes with a lot of caveats,
+the main one security. But we still,</v>
+
+00:20:26.808 --> 00:20:31.632
+<v Álvaro>we still wanted to provide to our users
+the ability to use hundreds of extensions.</v>
+
+00:20:31.748 --> 00:20:34.748
+<v Álvaro>So you're right,
+we developed the first technology,</v>
+
+00:20:35.168 --> 00:20:39.508
+<v Álvaro>a first way of building the Postgres
+containers and the extensions</v>
+
+00:20:40.448 --> 00:20:43.270
+<v Álvaro>that took security first approach.
+We cannot compromise</v>
+
+00:20:43.270 --> 00:20:46.628
+<v Álvaro>on security. So what we did is, look,
+our container images is gonna</v>
+
+00:20:46.628 --> 00:20:50.908
+<v Álvaro>contain Postgres, like zero extensions.
+Sorry about that. Well, actually PL/pgSQL</v>
+
+00:20:50.908 --> 00:20:51.908
+<v Álvaro>and a few others.</v>
+
+00:20:51.908 --> 00:20:54.888
+<v Nik>- [laughs]
+- But essentially no extensions, right?</v>
+
+00:20:55.128 --> 00:21:02.128
+<v Álvaro>And then we've developed a mechanism
+that allows to pull the extension code</v>
+
+00:21:02.808 --> 00:21:07.508
+<v Álvaro>dynamically from the container when it's
+running already. We made this process very</v>
+
+00:21:07.508 --> 00:21:11.488
+<v Álvaro>simple. It's basically you go to the YAML
+file that creates a Postgres cluster</v>
+
+00:21:11.488 --> 00:21:14.608
+<v Álvaro>on the web console,
+and just select the extension, add a line,</v>
+
+00:21:14.608 --> 00:21:19.108
+<v Álvaro>extensions is an array just in YAML, so
+it's a list. You add the extension name,</v>
+
+00:21:19.108 --> 00:21:23.328
+<v Álvaro>Citus, citext, boom. And in one second
+it appears in all instances of the</v>
+
+00:21:23.328 --> 00:21:27.380
+<v Álvaro>cluster. So it's, it's very transparent,
+very fast. The way it works is a little</v>
+
+00:21:27.380 --> 00:21:29.280
+<v Álvaro>bit more complicated behind the scenes,</v>
+
+00:21:29.280 --> 00:21:32.920
+<v Álvaro>but it goes to our extension repository,
+downloads the code of the extension</v>
+
+00:21:32.920 --> 00:21:36.680
+<v Álvaro>that matches that particular version
+of Postgres, and then deploys it into the</v>
+
+00:21:36.680 --> 00:21:40.620
+<v Álvaro>container running image, then set ups a
+hook so that if you restart the container,</v>
+
+00:21:40.620 --> 00:21:44.720
+<v Álvaro>it will happen the same process again, and
+then applies to all replicas and so on.</v>
+
+00:21:44.720 --> 00:21:46.780
+<v Álvaro>This was developed many years ago.</v>
+
+00:21:46.780 --> 00:21:49.988
+<v Álvaro>I actually presented a talk about
+this on Kubernetes conference,</v>
+
+00:21:49.988 --> 00:21:54.208
+<v Álvaro>the KubeCon, a few years ago.
+It's published, the videos and everything.</v>
+
+00:21:54.208 --> 00:21:58.267
+<v Álvaro>And it works very well, to be honest.
+This mechanism works very well.</v>
+
+00:21:58.410 --> 00:21:59.568
+<v Kirk>Hold on</v>
+<v Álvaro>but some...</v>
+
+00:21:59.568 --> 00:22:03.490
+<v Kirk>Yeah. Real quick. How are you
+protected against some kind of injection</v>
+
+00:22:03.490 --> 00:22:07.499
+<v Kirk>attack, man in the middle? Is, do you
+have a communication with an encrypted key</v>
+
+00:22:07.499 --> 00:22:10.920
+<v Kirk>in public so that we can make sure
+it came from you? Is only just...</v>
+
+00:22:10.920 --> 00:22:14.428
+<v Kirk>Yeah, it's already there? Perfect.</v>
+<v Álvaro>it's very good question. All...</v>
+
+00:22:14.428 --> 00:22:17.530
+<v Álvaro>Well, first of all, they're,
+they only are served over HTTPS.</v>
+
+00:22:17.530 --> 00:22:18.988
+<v Nik>Good.</v>
+<v Álvaro>That's no question.</v>
+
+00:22:18.988 --> 00:22:23.288
+<v Álvaro>And they are, they are digitally signed,
+so upon downloading the extension,</v>
+
+00:22:23.288 --> 00:22:28.548
+<v Álvaro>the operator validates a digital signature
+so that they're all published by us,</v>
+
+00:22:28.718 --> 00:22:32.760
+<v Álvaro>as, as the extension publishers. We
+actually support third-party publishers.</v>
+
+00:22:32.760 --> 00:22:36.160
+<v Álvaro>We didn't use this mechanism,
+but it's built into the, the software,</v>
+
+00:22:36.160 --> 00:22:40.160
+<v Álvaro>so that if an, a third-party provider
+would publish extensions to our repository</v>
+
+00:22:40.160 --> 00:22:44.158
+<v Álvaro>signed with their digital keys, they
+would also be imported and verified, so.</v>
+
+00:22:44.158 --> 00:22:48.918
+<v Kirk>Okay. Just the security. We,
+we've seen this happen. [laughs] Sorry.</v>
+
+00:22:48.918 --> 00:22:52.859
+<v Álvaro>Yeah, yeah. That, that's
+absolutely mandatory for us, yeah.</v>
+
+00:22:53.478 --> 00:22:57.394
+<v Álvaro>But there's still a problem, right?
+I mentioned before that one of the advan-</v>
+
+00:22:57.394 --> 00:23:01.434
+<v Álvaro>Using container images is that you
+know beforehand the security boundary.</v>
+
+00:23:01.434 --> 00:23:03.554
+<v Álvaro>You know beforehand the exact files,</v>
+
+00:23:03.554 --> 00:23:07.614
+<v Álvaro>the exact set of files that are gonna
+be deployed. You can use static</v>
+
+00:23:07.694 --> 00:23:11.414
+<v Álvaro>security analysis tools and tell you
+whether the image is good or not.</v>
+
+00:23:11.414 --> 00:23:14.334
+<v Álvaro>Now we are slightly breaking
+this principle. You can still</v>
+
+00:23:14.334 --> 00:23:18.734
+<v Álvaro>do the security analysis for the main
+image, the one that contains Kubernetes.</v>
+
+00:23:18.734 --> 00:23:23.034
+<v Álvaro>But now if you select another
+extension, it comes separately</v>
+
+00:23:23.034 --> 00:23:25.300
+<v Álvaro>and, and then you miss that, this part.</v>
+
+00:23:25.300 --> 00:23:29.154
+<v Álvaro>That, that, that part of extension,
+that small amount of code was not part...</v>
+
+00:23:29.154 --> 00:23:31.334
+<v Álvaro>We do actually the security
+analysis before</v>
+
+00:23:31.334 --> 00:23:35.594
+<v Álvaro>publishing it to the extension repository.
+But from your perspective as an end user,</v>
+
+00:23:35.594 --> 00:23:39.514
+<v Álvaro>it's not that easy, right,
+to validate that. Moreover, Kubernetes,</v>
+
+00:23:39.514 --> 00:23:43.294
+<v Álvaro>because of this abstraction, this API
+that allows to develop common tools</v>
+
+00:23:43.294 --> 00:23:47.634
+<v Álvaro>that operate across any environment,
+there is a lot of best practices and a lot</v>
+
+00:23:47.634 --> 00:23:49.354
+<v Álvaro>of tools for complementary things.</v>
+
+00:23:49.354 --> 00:23:53.014
+<v Álvaro>And for example, there is tools
+to detect if your file system has been</v>
+
+00:23:53.014 --> 00:23:56.674
+<v Álvaro>modified and create an alert.
+Like, if someone tries to inject some</v>
+
+00:23:56.674 --> 00:23:58.834
+<v Álvaro>malware somewhere,
+that malware potentially</v>
+
+00:23:58.834 --> 00:24:03.074
+<v Álvaro>will create some files and that will get
+automatically flagged and raise an alert.</v>
+
+00:24:03.074 --> 00:24:06.994
+<v Álvaro>So we're actually doing that. We're
+modifying the container image at runtime,</v>
+
+00:24:06.994 --> 00:24:09.641
+<v Álvaro>and this gets flagged
+by these kind of tools.</v>
+
+00:24:10.034 --> 00:24:14.050
+<v Álvaro>It is allowed, it's a reasonable
+exemption, but it's not ideal.</v>
+
+00:24:14.050 --> 00:24:17.554
+<v Álvaro>So it's not bad, it thinks pretty good,
+and this actually has allowed,</v>
+
+00:24:17.554 --> 00:24:21.434
+<v Álvaro>I would say, StackGres to grow. The,
+as the most... The operator has supports</v>
+
+00:24:21.434 --> 00:24:25.514
+<v Álvaro>the most extensions and is one
+of the reasons why people come to use it.</v>
+
+00:24:25.514 --> 00:24:29.374
+<v Álvaro>It's fully open source,
+but it has the most extensions available,</v>
+
+00:24:29.374 --> 00:24:34.614
+<v Álvaro>and we see as of today around five or I
+think six already million extension</v>
+
+00:24:34.614 --> 00:24:39.320
+<v Álvaro>downloads per month. So people are really
+using... And this is only when you create</v>
+
+00:24:39.320 --> 00:24:41.620
+<v Álvaro>a new cluster, right? So it's, it's-</v>
+<v Nik>Right</v>
+
+00:24:41.620 --> 00:24:44.090
+<v Álvaro>steady state there is zero
+downloads because they're already</v>
+
+00:24:44.090 --> 00:24:46.010
+<v Álvaro>downloaded many times</v>
+<v Nik>And how many extensions,</v>
+
+00:24:46.010 --> 00:24:48.834
+<v Nik>different extensions? Hundreds, right?</v>
+
+00:24:49.934 --> 00:24:55.034
+<v Álvaro>It's 220 something I think as of today.</v>
+<v Nik>Good. Good. Okay. Okay.</v>
+
+00:24:55.034 --> 00:24:59.034
+<v Kirk>So you have, you have a little bit
+of a interface and an AI demo you could</v>
+
+00:24:59.034 --> 00:25:03.490
+<v Kirk>show us of this process where you get to
+choose these as part of the build of your</v>
+
+00:25:03.490 --> 00:25:05.840
+<v Kirk>container when you create a container?</v>
+<v Álvaro>Yeah</v>
+
+00:25:05.840 --> 00:25:09.690
+<v Kirk>and this is part of... This is
+the magic that you've actually made now.</v>
+
+00:25:09.690 --> 00:25:15.914
+<v Kirk>StackGres has made a tool that makes
+creating these Postgres containers that,</v>
+
+00:25:15.914 --> 00:25:20.594
+<v Kirk>you know, that need these, you know,
+whatever, whatever extensions you want,</v>
+
+00:25:20.594 --> 00:25:23.374
+<v Kirk>and helps you put them
+inside the containers.</v>
+
+00:25:23.374 --> 00:25:26.914
+<v Kirk>And inside, yeah,
+inside your container in the Kubernetes.</v>
+
+00:25:26.914 --> 00:25:31.184
+<v Kirk>And now, and, and currently you just let
+them pick and choose the ones they want,</v>
+
+00:25:31.184 --> 00:25:34.944
+<v Kirk>which likely should be the ones they're
+using. You know, just to be clear.</v>
+
+00:25:34.944 --> 00:25:37.464
+<v Álvaro>- [laughs]
+- This is... You have an environment</v>
+
+00:25:37.464 --> 00:25:40.660
+<v Kirk>and you're trying to recreate
+it and recreate it consistently,</v>
+
+00:25:40.660 --> 00:25:44.464
+<v Kirk>right? So this way, that's what this
+environment is. And so it's technically</v>
+
+00:25:44.464 --> 00:25:48.004
+<v Kirk>like a template of the environment
+that you're building first when you</v>
+
+00:25:48.004 --> 00:25:50.744
+<v Kirk>configure it, and then you
+can roll it out, deploy it,</v>
+
+00:25:50.744 --> 00:25:54.804
+<v Kirk>give it to others to run. So if you have
+a developer that needs this environment</v>
+
+00:25:54.804 --> 00:25:57.970
+<v Kirk>and you kinda want it locked down
+so that he can only access it</v>
+
+00:25:57.970 --> 00:26:02.170
+<v Kirk>through the interface ports and stuff, you
+can let him run this, and he doesn't have</v>
+
+00:26:02.170 --> 00:26:05.470
+<v Kirk>to worry about how to configure
+all that, and doesn't have to muck</v>
+
+00:26:05.470 --> 00:26:09.964
+<v Kirk>with what's on the inside. You may not let
+him even see what's on the inside per se.</v>
+
+00:26:09.964 --> 00:26:13.370
+<v Kirk>He can get the Postgres,
+and if he's got the right, he can add,</v>
+
+00:26:13.370 --> 00:26:17.424
+<v Kirk>he can try to add an extension, but only
+if you've already pre-approved and built</v>
+
+00:26:17.424 --> 00:26:22.664
+<v Kirk>that extension in or someone who has that
+capacity to add it later. So I like this.</v>
+
+00:26:22.664 --> 00:26:26.144
+<v Kirk>This is sounding like something
+that I would deploy with my team-</v>
+
+00:26:26.144 --> 00:26:27.344
+<v Nik>Yeah</v>
+<v Kirk>which works,</v>
+
+00:26:27.344 --> 00:26:29.984
+<v Kirk>you know, a, you know,
+in multiple countries.</v>
+
+00:26:29.984 --> 00:26:34.544
+<v Kirk>So, this would make my life a lot easier
+in many ways. I can see this already.</v>
+
+00:26:34.544 --> 00:26:37.770
+<v Kirk>How easy is it to pick these extensions?</v>
+<v Nik>I have</v>
+
+00:26:37.770 --> 00:26:40.430
+<v Nik>a lot of questions here before we, like-</v>
+<v Kirk>Okay, good.</v>
+
+00:26:40.430 --> 00:26:41.844
+<v Kirk>Before we jump into the demo?</v>
+
+00:26:41.844 --> 00:26:43.184
+<v Nik>Yeah.</v>
+<v Kirk>Go ahead, Nik.</v>
+
+00:26:43.184 --> 00:26:44.884
+<v Nik>First of all, the number.</v>
+
+00:26:44.884 --> 00:26:51.284
+<v Nik>Like, like I, I remember you mentioned on,
+on some talks, in the past that if you,</v>
+
+00:26:51.284 --> 00:26:56.504
+<v Nik>like, if we needed to create all possible
+variations of images, container images,</v>
+
+00:26:56.504 --> 00:26:57.524
+<v Nik>it would be,</v>
+
+00:26:59.094 --> 00:27:02.614
+<v Nik>two to a power of this 200 something,
+right? I just quickly checked.</v>
+
+00:27:02.614 --> 00:27:09.194
+<v Álvaro>Yeah.</v>
+<v Nik>It's 10, power 66, so 66 zeros roughly.</v>
+
+00:27:09.434 --> 00:27:11.933
+<v Álvaro>Yeah.</v>
+<v Nik>And the estimated</v>
+
+00:27:11.933 --> 00:27:15.440
+<v Nik>number of atoms in universe is 80-</v>
+<v Kirk>Almost</v>
+
+00:27:15.440 --> 00:27:17.494
+<v Nik>zeros.</v>
+<v Kirk>Right. Yeah. [laughs] Exactly.</v>
+
+00:27:17.494 --> 00:27:20.060
+<v Álvaro>Yeah. [laughs]</v>
+<v Nik>Not, not far from there. Yeah</v>
+
+00:27:20.060 --> 00:27:22.730
+<v Álvaro>exactly. So here's the thing.
+So, so basically</v>
+
+00:27:22.730 --> 00:27:25.920
+<v Álvaro>we started with this way of developing
+extensions where you, they</v>
+
+00:27:25.920 --> 00:27:29.030
+<v Álvaro>they pull dynamically and it has,
+it's pretty good.</v>
+
+00:27:29.030 --> 00:27:33.180
+<v Álvaro>And again, people are using it massively,
+millions of downloads per month, but still</v>
+
+00:27:33.180 --> 00:27:37.100
+<v Álvaro>not perfect. We want to push it further.
+We want to bring this real promise</v>
+
+00:27:37.100 --> 00:27:40.000
+<v Álvaro>of immutable image that contains
+everything that you need,</v>
+
+00:27:40.000 --> 00:27:44.264
+<v Álvaro>right? But then again, we cannot pack all
+the extensions. So how do we do this? And,</v>
+
+00:27:44.264 --> 00:27:48.850
+<v Álvaro>and so we developed a new technology that,
+that certainly has been developing over</v>
+
+00:27:48.850 --> 00:27:52.030
+<v Álvaro>a lot of years. It's,
+it started as a small R&D project and,</v>
+
+00:27:52.030 --> 00:27:55.940
+<v Álvaro>and became like the whole thing. And
+this is something that solves the problem</v>
+
+00:27:55.940 --> 00:27:59.390
+<v Álvaro>both for Kubernetes and non-Kubernetes
+environment. So this also solves-</v>
+
+00:27:59.390 --> 00:28:01.290
+<v Nik>Hmm</v>
+<v Álvaro>the problem for Docker, right?</v>
+
+00:28:01.290 --> 00:28:04.103
+<v Álvaro>Or, or Podman or any tool
+you use to run containers.</v>
+
+00:28:04.564 --> 00:28:08.524
+<v Álvaro>And so the idea is, is what you were
+saying, Nikolay. So we, we thought about,</v>
+
+00:28:08.524 --> 00:28:13.404
+<v Álvaro>hold on, what if we pre-generate,
+right, the, the container images?</v>
+
+00:28:13.404 --> 00:28:17.624
+<v Álvaro>And, and, and so now we have
+the, we have the data and we</v>
+
+00:28:17.624 --> 00:28:21.500
+<v Álvaro>see what extensions people use.
+And it's interesting because out of these</v>
+
+00:28:21.500 --> 00:28:24.630
+<v Álvaro>225 extensions, almost all
+are pulled at some point. Of course,</v>
+
+00:28:24.630 --> 00:28:28.550
+<v Álvaro>there is more popular than others, but
+it's not like, oh, there's 10 and every-</v>
+
+00:28:28.550 --> 00:28:32.740
+<v Álvaro>and nobody else is, uses this one. No.
+They're all pulled, they're all used.</v>
+
+00:28:32.740 --> 00:28:36.020
+<v Álvaro>And some users use one,
+two extensions, or they use 10,</v>
+
+00:28:36.020 --> 00:28:39.540
+<v Álvaro>or they use 15, but among those
+that use 10, they're different subsets.</v>
+
+00:28:39.540 --> 00:28:41.480
+<v Álvaro>Everybody uses a different combination.</v>
+
+00:28:41.480 --> 00:28:43.380
+<v Nik>Hmm.</v>
+<v Álvaro>So if we think about the math</v>
+
+00:28:43.380 --> 00:28:46.744
+<v Álvaro>to compute, like all possible
+combinations of images is, yeah,</v>
+
+00:28:46.744 --> 00:28:51.164
+<v Álvaro>is, is essentially ballpark the amount,
+number of atoms in the universe.</v>
+
+00:28:51.164 --> 00:28:55.544
+<v Álvaro>And we decided we will not pay the Amazon
+bill for that number of images to be</v>
+
+00:28:55.544 --> 00:28:56.744
+<v Álvaro>generated.</v>
+<v Nik>Yeah.</v>
+
+00:28:56.744 --> 00:28:59.244
+<v Kirk>Right.</v>
+<v Nik>Also, there is also like</v>
+
+00:28:59.464 --> 00:29:02.800
+<v Nik>variety of versions Right.</v>
+<v Álvaro>Yeah</v>
+
+00:29:03.000 --> 00:29:06.960
+<v Nik>yeah.</v>
+<v Álvaro>Yeah. A-a-and, and actually, yes, we,</v>
+
+00:29:06.960 --> 00:29:10.340
+<v Álvaro>we, we have now a system
+that allows you to build this</v>
+
+00:29:10.360 --> 00:29:14.780
+<v Álvaro>and, and explores, or explodes even more
+the cardinality because we, we give you</v>
+
+00:29:14.780 --> 00:29:18.230
+<v Álvaro>even more options to decide what you want,
+right? So what's the end goal?</v>
+
+00:29:18.230 --> 00:29:21.630
+<v Álvaro>The end goal is to have an image that
+contains what you want and nothing else.</v>
+
+00:29:21.630 --> 00:29:25.180
+<v Álvaro>That simple, right?
+Postgres and this extension A, B, and M.</v>
+
+00:29:25.180 --> 00:29:30.470
+<v Álvaro>That's all. And, and someone else will
+get a Postgres with extension B, J, Z,</v>
+
+00:29:30.470 --> 00:29:35.460
+<v Álvaro>and whatever, right? So how can we do
+this? The naive approach could be, oh,</v>
+
+00:29:35.460 --> 00:29:38.660
+<v Álvaro>let's just run a server that runs
+a Dockerfile and very quickly,</v>
+
+00:29:38.660 --> 00:29:41.860
+<v Álvaro>very quickly generate the image
+dynamically or real time, right?</v>
+
+00:29:41.860 --> 00:29:44.870
+<v Álvaro>Well, that takes many
+seconds to a minute, right?</v>
+
+00:29:44.870 --> 00:29:49.330
+<v Álvaro>And and it's also not warrantied to
+provide a reproducible image so that you</v>
+
+00:29:49.330 --> 00:29:52.130
+<v Álvaro>will get the same output
+all the time and so on.</v>
+
+00:29:52.130 --> 00:29:56.090
+<v Álvaro>So we generate a system that the way it
+works is basically you specify what you</v>
+
+00:29:56.090 --> 00:29:58.510
+<v Álvaro>want, and I can show how you specified it,</v>
+
+00:29:58.510 --> 00:30:02.900
+<v Álvaro>but it's basically I want Postgres with
+the extension, with Citus, with you know,</v>
+
+00:30:02.900 --> 00:30:08.910
+<v Álvaro>ltree, and with whatever, unaccent.
+And then you get a container image in real</v>
+
+00:30:08.910 --> 00:30:13.616
+<v Álvaro>time that contains only Postgres and that
+very three extensions that you wanted.</v>
+
+00:30:13.750 --> 00:30:17.650
+<v Álvaro>It's that simple.
+Sounds like magical, but it works,</v>
+
+00:30:17.870 --> 00:30:20.910
+<v Álvaro>and gives you exactly what
+you were asking. Nothing more.</v>
+
+00:30:20.910 --> 00:30:26.610
+<v Álvaro>No security problems, a single fixed
+image which you can scan statically</v>
+
+00:30:26.830 --> 00:30:30.670
+<v Álvaro>is indistinguishable once you receive the
+image from another image and not generate.</v>
+
+00:30:30.670 --> 00:30:33.380
+<v Álvaro>We call this dynamic image generation.
+Once you receive it,</v>
+
+00:30:33.380 --> 00:30:36.710
+<v Álvaro>it's indistinguishable from a statically
+generated or classical generated</v>
+
+00:30:36.710 --> 00:30:40.280
+<v Álvaro>image, and it just contains the extensions
+you want on the particular version</v>
+
+00:30:40.280 --> 00:30:43.010
+<v Álvaro>that you want, and you can
+scan it with the usual tools,</v>
+
+00:30:43.010 --> 00:30:45.910
+<v Álvaro>and you can run it with Kubernetes,
+without of Kubernetes,</v>
+
+00:30:45.910 --> 00:30:49.670
+<v Álvaro>and you know exactly all the files
+that you will get in your environment.</v>
+
+00:30:49.670 --> 00:30:51.730
+<v Kirk>All right, so here's the good news,</v>
+
+00:30:51.730 --> 00:30:55.510
+<v Kirk>is that that's awesome and it
+brings in these extensions.</v>
+
+00:30:55.590 --> 00:31:00.750
+<v Kirk>But I doubt it installs all those
+extensions into Postgres for you.</v>
+
+00:31:00.770 --> 00:31:05.510
+<v Kirk>I bet it only puts them out there so that
+when the database needs them or wants</v>
+
+00:31:05.510 --> 00:31:07.670
+<v Kirk>to see them, it can go ahead and add those</v>
+
+00:31:07.670 --> 00:31:10.110
+<v Kirk>extensions.</v>
+<v Álvaro>That's correct,</v>
+
+00:31:10.110 --> 00:31:13.750
+<v Álvaro>because it's not our decision what
+you're gonna do with those extensions.</v>
+
+00:31:13.750 --> 00:31:16.990
+<v Álvaro>Maybe you want to have them,
+maybe you want to create extensions.</v>
+
+00:31:16.990 --> 00:31:20.190
+<v Álvaro>Maybe you want to do this on one
+particular database or another.</v>
+
+00:31:20.190 --> 00:31:22.990
+<v Álvaro>So we make no assumptions.
+From our perspective,</v>
+
+00:31:22.990 --> 00:31:26.590
+<v Álvaro>we work in infrastructure, and
+infrastructure is providing you the bytes</v>
+
+00:31:26.590 --> 00:31:30.390
+<v Álvaro>to run your database however you want,
+right? And that's exactly what we do.</v>
+
+00:31:30.390 --> 00:31:33.650
+<v Álvaro>You want these extensions to be
+available, they are available.</v>
+
+00:31:33.650 --> 00:31:37.650
+<v Kirk>Wow. Nik, make a note
+from one of our hacker sessions.</v>
+
+00:31:37.650 --> 00:31:41.690
+<v Kirk>Maybe we should go look at how he's
+pulling this off, and we can create a tool</v>
+
+00:31:41.690 --> 00:31:46.090
+<v Kirk>that helps people install the extensions
+they're interested in, you know,</v>
+
+00:31:46.090 --> 00:31:50.650
+<v Kirk>kind of on the operating system locally,
+leveraging his system of pre-authorizing</v>
+
+00:31:50.650 --> 00:31:53.130
+<v Kirk>them, so that they're there.
+Because I tell you,</v>
+
+00:31:53.130 --> 00:31:56.890
+<v Kirk>sometimes it's a pain in the arse
+to install some of these [laughs]</v>
+
+00:31:56.890 --> 00:31:58.010
+<v Kirk>extensions.</v>
+<v Nik>Well,</v>
+
+00:31:58.010 --> 00:32:00.350
+<v Nik>that's why I stopped
+doing that completely.</v>
+
+00:32:00.350 --> 00:32:02.370
+<v Kirk>Yeah.</v>
+<v Nik>I I quit installing extension,</v>
+
+00:32:02.370 --> 00:32:03.930
+<v Nik>- extensions on.
+- [laughs]</v>
+
+00:32:03.930 --> 00:32:07.430
+<v Nik>Like, I, I'm curious,
+like you said, you said,</v>
+
+00:32:08.730 --> 00:32:14.950
+<v Nik>it's exactly like this, but also I
+I suppose there's a problem that if,</v>
+
+00:32:14.950 --> 00:32:21.270
+<v Nik>for example, I decide to compile and / or
+compile all from source code, everything,</v>
+
+00:32:21.270 --> 00:32:26.350
+<v Nik>gain and build a similar image, it will,
+it will differ, differ from what you had,</v>
+
+00:32:26.350 --> 00:32:30.320
+<v Nik>Because maybe some libraries will
+be different and operational system</v>
+
+00:32:30.320 --> 00:32:33.820
+<v Nik>is slightly different,
+different build. So it won't-</v>
+
+00:32:33.820 --> 00:32:35.761
+<v Álvaro>Yeah</v>
+<v Nik>exactly the same, right?</v>
+
+00:32:36.180 --> 00:32:38.827
+<v Álvaro>So we are obsessed
+with this problem,</v>
+
+00:32:38.840 --> 00:32:43.780
+<v Álvaro>and we don't want to make any
+compromise here. Like Postgres, when,</v>
+
+00:32:43.780 --> 00:32:49.380
+<v Álvaro>when you're loading extensions, extensions
+carry a certain level of risk, especially</v>
+
+00:32:49.380 --> 00:32:53.400
+<v Álvaro>binary extensions which load dynamically
+into the Postgres server memory.</v>
+
+00:32:53.400 --> 00:32:57.360
+<v Álvaro>They technically have access to the,
+to the inner guts of Postgres, right?</v>
+
+00:32:57.360 --> 00:33:01.480
+<v Álvaro>And you need to be very sure about
+what you're doing. And I see...</v>
+
+00:33:01.480 --> 00:33:05.830
+<v Álvaro>I've seen a lot of projects
+which mixed Postgres</v>
+
+00:33:05.830 --> 00:33:09.430
+<v Álvaro>server built on a given environment
+with extensions built on a different</v>
+
+00:33:09.430 --> 00:33:12.530
+<v Álvaro>environment. Typically,
+you install Postgres and then you pick</v>
+
+00:33:12.530 --> 00:33:16.440
+<v Álvaro>an extension, you compile it somewhere
+else, and then you put all together.</v>
+
+00:33:16.440 --> 00:33:18.739
+<v Álvaro>Most of the time that doesn't break,</v>
+
+00:33:19.499 --> 00:33:22.323
+<v Álvaro>but most of the time it's
+not a strong warranty.</v>
+
+00:33:22.470 --> 00:33:26.730
+<v Álvaro>And we wanted to provide 100% warranty
+that nothing will break or something will,</v>
+
+00:33:26.730 --> 00:33:29.142
+<v Álvaro>will... everything will work as expected.</v>
+
+00:33:29.190 --> 00:33:33.190
+<v Álvaro>So if you're pulling Postgres
+and extensions from different places,</v>
+
+00:33:33.190 --> 00:33:38.070
+<v Álvaro>you're done, right? And, and, and most of
+the, the projects that I've seen actually</v>
+
+00:33:38.070 --> 00:33:41.740
+<v Álvaro>kind of encourage this. Like, "Oh, we
+provide Postgres. If you want extensions,</v>
+
+00:33:41.740 --> 00:33:43.580
+<v Álvaro>go and build them." And it's not only</v>
+
+00:33:43.580 --> 00:33:47.580
+<v Álvaro>that you'll build them on a different
+environment, but it's even worse. Now you,</v>
+
+00:33:47.580 --> 00:33:51.010
+<v Álvaro>end user, are an extension maintainer.</v>
+
+00:33:51.260 --> 00:33:54.010
+<v Álvaro>Now you're responsible
+for monitoring for new versions.</v>
+
+00:33:54.010 --> 00:33:57.700
+<v Álvaro>You're now responsible for monitoring
+for CVEs. You're now responsible</v>
+
+00:33:57.700 --> 00:34:01.450
+<v Álvaro>for rebuilding them and distributing
+them and updating them on your servers</v>
+
+00:34:01.450 --> 00:34:05.620
+<v Álvaro>instead of just consuming them when time
+comes. So, so that, that's a big problem,</v>
+
+00:34:05.620 --> 00:34:09.370
+<v Álvaro>and we wanted to tackle it from the
+get-go. So when we designed the system,</v>
+
+00:34:09.370 --> 00:34:15.050
+<v Álvaro>we also built like a separate
+project to actually build Postgres</v>
+
+00:34:15.150 --> 00:34:20.430
+<v Álvaro>and its extension ecosystem as part
+of a single unity. They're all built</v>
+
+00:34:20.610 --> 00:34:24.850
+<v Álvaro>in a reproducible way in the same
+environment with the same compiler,</v>
+
+00:34:24.850 --> 00:34:27.590
+<v Álvaro>with the same libc,
+with the same everything.</v>
+
+00:34:27.590 --> 00:34:30.350
+<v Álvaro>And then we distribute it
+with the system that allows</v>
+
+00:34:30.350 --> 00:34:35.010
+<v Álvaro>to create, the container images in real
+time. And as Kirk said, if you want,</v>
+
+00:34:35.010 --> 00:34:39.598
+<v Álvaro>I can make a small demo about this to see
+how it works in a more tangible way.</v>
+
+00:34:39.630 --> 00:34:42.150
+<v Álvaro>But they're all built
+in the same environment,</v>
+
+00:34:42.150 --> 00:34:46.570
+<v Álvaro>so much that we go as far
+as rebuilding every extension</v>
+
+00:34:46.570 --> 00:34:50.370
+<v Álvaro>against every Postgres minor version,
+not even major, but minor version too.</v>
+
+00:34:50.370 --> 00:34:52.510
+<v Kirk>Wow.</v>
+<v Álvaro>Because we've seen cases-</v>
+
+00:34:52.510 --> 00:34:54.070
+<v Nik>By the-</v>
+<v Álvaro>right, where the ABI</v>
+
+00:34:54.070 --> 00:34:55.780
+<v Álvaro>has changed across a minor version-</v>
+
+00:34:55.780 --> 00:34:57.510
+<v Nik>Yeah</v>
+<v Álvaro>and created breakage.</v>
+
+00:34:57.510 --> 00:35:00.530
+<v Álvaro>That cannot happen in our system
+because we build everything,</v>
+
+00:35:00.530 --> 00:35:02.710
+<v Álvaro>rebuild everything, all extensions-</v>
+<v Nik>Yeah</v>
+
+00:35:02.710 --> 00:35:06.261
+<v Álvaro>against any minor version.</v>
+<v Nik>So I have a bunch of questions again</v>
+
+00:35:06.261 --> 00:35:11.721
+<v Nik>and, and, and, and just, just-
+Be with me for a second. First of all,</v>
+
+00:35:11.721 --> 00:35:15.681
+<v Nik>just, as, as I said, I'm not a big fan
+of extensions over the last few years,</v>
+
+00:35:15.681 --> 00:35:18.201
+<v Nik>as, as you know very well.</v>
+<v Álvaro>Yeah.</v>
+
+00:35:18.201 --> 00:35:21.541
+<v Nik>But, but like if you
+think about Postgres itself,</v>
+
+00:35:21.681 --> 00:35:27.061
+<v Nik>what I always liked about Docker, it's
+so easy to run specific minor version.</v>
+
+00:35:27.601 --> 00:35:33.421
+<v Nik>Because if you install it from, from apt
+package, yum package, it's always all...</v>
+
+00:35:33.421 --> 00:35:38.221
+<v Nik>only the latest. And I cannot
+understand how everyone lives in it,</v>
+
+00:35:38.221 --> 00:35:43.141
+<v Nik>because what if the latest has some
+bug and we need to run it today and we,</v>
+
+00:35:43.141 --> 00:35:46.850
+<v Nik>we just, we got lost,
+We want the one, one step back.</v>
+
+00:35:48.550 --> 00:35:54.390
+<v Nik>And extensions similar. Sometimes, I, I,
+I had cases when quite popular extensions</v>
+
+00:35:54.810 --> 00:36:00.230
+<v Nik>introduced some bad bug,
+like segfaulting and so on and, and on-</v>
+
+00:36:00.230 --> 00:36:02.790
+<v Álvaro>Mm-hmm</v>
+<v Nik>fixed. Like, it was fixed in some hours,</v>
+
+00:36:02.790 --> 00:36:08.130
+<v Nik>but still, like I, I want to full I
+want full, full control over versions.</v>
+
+00:36:08.350 --> 00:36:09.350
+<v Nik>And also,</v>
+
+00:36:11.340 --> 00:36:15.420
+<v Nik>it's not settled in my mind, should
+we always upgrade as soon as possible?</v>
+
+00:36:15.420 --> 00:36:19.840
+<v Nik>This is what we all say
+as consultants or every...</v>
+
+00:36:19.840 --> 00:36:23.440
+<v Nik>Like, as for example,
+if you're CTO or like you aim,</v>
+
+00:36:23.440 --> 00:36:28.920
+<v Nik>if you have SOC 2 everything, you aim to
+have the latest always patched everything.</v>
+
+00:36:29.220 --> 00:36:32.240
+<v Nik>But for example, very, like very</v>
+
+00:36:32.840 --> 00:36:37.720
+<v Nik>well-known person, Mitchell Hashimoto,
+says that you shouldn't do it.</v>
+
+00:36:39.820 --> 00:36:46.220
+<v Nik>As like entertaining piece,
+we, we have now, visual stuff.</v>
+
+00:36:46.220 --> 00:36:51.760
+<v Nik>So those who listen to us on Spotify,
+Apple Podcasts, everywhere else,</v>
+
+00:36:51.840 --> 00:36:57.780
+<v Nik>I encourage you to use YouTube, and watch,
+listen and sometimes watch a little bit</v>
+
+00:36:57.780 --> 00:37:03.340
+<v Nik>because right now on the screen you
+can see that very, that very tweet</v>
+
+00:37:03.650 --> 00:37:07.790
+<v Nik>from HashiCorp founder, right?
+Saying that you should pin the versions</v>
+
+00:37:08.570 --> 00:37:13.450
+<v Nik>and not upgrade and verify
+all the upgrades before you,</v>
+
+00:37:13.450 --> 00:37:17.090
+<v Nik>you deploy them to production systems.</v>
+<v Álvaro>Actually, this-</v>
+
+00:37:17.090 --> 00:37:20.790
+<v Nik>I have a I have a sense
+that what you're building is very good</v>
+
+00:37:20.790 --> 00:37:25.710
+<v Nik>with this approach, but I'm not
+convinced this is what we all, all, all</v>
+
+00:37:25.770 --> 00:37:28.810
+<v Nik>do because, for example,
+for Postgres version itself,</v>
+
+00:37:28.810 --> 00:37:33.250
+<v Nik>I still think it's a good idea to be
+always on the minor, the latest minor,</v>
+
+00:37:33.250 --> 00:37:38.370
+<v Nik>because I know how much effort in this
+particular piece of software is put</v>
+
+00:37:38.690 --> 00:37:44.650
+<v Nik>into making it safe and secure and so on.
+So I would... Like, in my mind, like it's,</v>
+
+00:37:44.650 --> 00:37:47.630
+<v Nik>like kind of split brain right now.
+I'm thinking Postgres-</v>
+
+00:37:47.630 --> 00:37:50.710
+<v Álvaro>- [laughs]
+- I wish would be very always</v>
+
+00:37:51.510 --> 00:37:57.590
+<v Nik>latest, up to date, but everything else
+may be frozen and, and verified very</v>
+
+00:37:57.590 --> 00:37:59.140
+<v Nik>well before-</v>
+<v Álvaro>Yes</v>
+
+00:37:59.140 --> 00:38:01.190
+<v Nik>before moving.</v>
+<v Álvaro>So our, our take here,</v>
+
+00:38:01.190 --> 00:38:05.090
+<v Álvaro>we, we, we are not opinionated how you
+use it or, you know, how frequently you</v>
+
+00:38:05.090 --> 00:38:09.240
+<v Álvaro>should upgrade your Postgres or not. I'm
+more on the sense, especially in Postgres,</v>
+
+00:38:09.240 --> 00:38:15.350
+<v Álvaro>we know that minor versions are,
+for the most part, directly compatible,</v>
+
+00:38:15.350 --> 00:38:18.870
+<v Álvaro>and there's no issue in update,
+upgrading them and so on. But I'm not</v>
+
+00:38:18.870 --> 00:38:23.282
+<v Álvaro>gonna get into that debate. What I
+think is very important is the word pin.</v>
+
+00:38:23.570 --> 00:38:27.170
+<v Álvaro>And so when...
+once you have a container image,</v>
+
+00:38:27.270 --> 00:38:30.490
+<v Álvaro>that container image is identified
+more than its name or URL.</v>
+
+00:38:30.490 --> 00:38:33.810
+<v Álvaro>It's technically identified
+by this digest, which is a, you know,</v>
+
+00:38:33.810 --> 00:38:37.610
+<v Álvaro>a, a SHA-256 typically.
+And you can pin on that one.</v>
+
+00:38:37.610 --> 00:38:41.550
+<v Álvaro>So instead of saying Postgres
+latest whatever, you say this SHA,</v>
+
+00:38:41.550 --> 00:38:44.903
+<v Álvaro>and then you're warranted
+to use that particular version.</v>
+
+00:38:44.990 --> 00:38:51.990
+<v Álvaro>Now, that holds true as long as you're not
+then adding extensions later on. There's</v>
+
+00:38:52.010 --> 00:38:57.170
+<v Álvaro>now a recent, functionality in Postgres
+18 that allows you to, to add extensions</v>
+
+00:38:57.170 --> 00:39:01.250
+<v Álvaro>in separate paths, right? And then you
+can, you can use techniques similar</v>
+
+00:39:01.250 --> 00:39:05.910
+<v Álvaro>to what we're doing with StackGres to pull
+dynamically code there and mount it there</v>
+
+00:39:05.910 --> 00:39:08.920
+<v Álvaro>and, and use that.
+But you're not pinning anymore.</v>
+
+00:39:08.960 --> 00:39:13.280
+<v Álvaro>Now you have multiple versions
+that come from multiple places, versus</v>
+
+00:39:13.380 --> 00:39:15.909
+<v Álvaro>with a container
+that the ones we generate,</v>
+
+00:39:15.910 --> 00:39:18.950
+<v Álvaro>you can get a container with Postgres
+and these 17 extensions,</v>
+
+00:39:18.950 --> 00:39:22.630
+<v Álvaro>whatever you need, and then you can pin
+it to a particular digest. Then it's</v>
+
+00:39:22.630 --> 00:39:26.260
+<v Álvaro>up to you when to upgrade or not.
+I'll not get into that. It's your choice.</v>
+
+00:39:26.260 --> 00:39:30.280
+<v Nik>But I'm very curious what you think.
+Okay, I understand, like you're right now,</v>
+
+00:39:30.280 --> 00:39:34.230
+<v Nik>"Oh, this is technology, it's great,"
+but what... Like, let's talk about</v>
+
+00:39:34.230 --> 00:39:38.320
+<v Nik>that. Like, should we upgrade or no, and
+how, and, and like what's the workflow?</v>
+
+00:39:38.320 --> 00:39:40.140
+<v Nik>You cannot escape this topic.</v>
+
+00:39:40.860 --> 00:39:44.660
+<v Álvaro>Well, no, no, no. I will not escape,
+but a short answer is that yes,</v>
+
+00:39:44.660 --> 00:39:48.680
+<v Álvaro>by default, always upgrade minor versions
+fast because they're, they contain,</v>
+
+00:39:48.680 --> 00:39:53.260
+<v Álvaro>they contain, security patches, patches,
+patches for security vulnerabilities,</v>
+
+00:39:53.260 --> 00:39:56.201
+<v Álvaro>and those are an area where
+you cannot compromise.</v>
+
+00:39:56.240 --> 00:39:57.480
+<v Nik>But what-</v>
+<v Kirk>And-</v>
+
+00:39:57.480 --> 00:40:00.120
+<v Nik>they introduce problems?</v>
+<v Kirk>agree.</v>
+
+00:40:00.120 --> 00:40:04.380
+<v Kirk>I, I agree the, with the minor version
+updates. Keep those coming up to date.</v>
+
+00:40:04.380 --> 00:40:07.120
+<v Kirk>We don't do them immediately.
+We have a process.</v>
+
+00:40:07.120 --> 00:40:12.700
+<v Kirk>We install them on our, what we call
+outer servers first, things that serve SEO</v>
+
+00:40:12.700 --> 00:40:16.280
+<v Kirk>and our backup servers and other
+different environments first.</v>
+
+00:40:16.280 --> 00:40:20.240
+<v Kirk>And then if we don't see any problems
+with that after whatever time period,</v>
+
+00:40:20.240 --> 00:40:24.711
+<v Kirk>then they make their way into production.
+This gives us a chance to respond.</v>
+
+00:40:24.950 --> 00:40:28.710
+<v Kirk>Our SEO actually serves 10 times
+more pages than our main server.</v>
+
+00:40:28.710 --> 00:40:31.640
+<v Kirk>So it's a great test.
+On the other hand, though,</v>
+
+00:40:31.640 --> 00:40:36.340
+<v Kirk>when it comes time to upgrade to the major
+version, we're a little cautious, right?</v>
+
+00:40:36.340 --> 00:40:38.940
+<v Nik>Right.</v>
+<v Kirk>And only because of previous problems.</v>
+
+00:40:38.940 --> 00:40:41.500
+<v Kirk>And it'll follow the exact
+same process for us.</v>
+
+00:40:41.500 --> 00:40:45.400
+<v Kirk>It'll actually happen as...
+And, and the problems will become evident.</v>
+
+00:40:45.400 --> 00:40:49.500
+<v Kirk>It'll actually happen as we migrate and do
+it in a staging environment and test</v>
+
+00:40:49.500 --> 00:40:54.280
+<v Kirk>the upgrade, full upgrade process, yada,
+yada, yada. And if everything's working,</v>
+
+00:40:54.280 --> 00:40:59.200
+<v Kirk>great. The problem becomes when something
+breaks and it's not quite the right,</v>
+
+00:40:59.200 --> 00:41:01.680
+<v Kirk>because that completely
+changes our entire plan,</v>
+
+00:41:01.680 --> 00:41:04.380
+<v Kirk>'cause now we have to roll
+production separately.</v>
+
+00:41:04.380 --> 00:41:05.660
+<v Nik>Speaking-</v>
+<v Kirk>Seve-</v>
+
+00:41:05.660 --> 00:41:08.880
+<v Nik>Speaking of major versions,
+I'm very curious Like it's,</v>
+
+00:41:08.880 --> 00:41:10.680
+<v Nik>it's different topic, and-</v>
+<v Álvaro>Yeah</v>
+
+00:41:10.680 --> 00:41:13.820
+<v Nik>let's, let's touch
+that and then turn back to minor.</v>
+
+00:41:13.820 --> 00:41:19.740
+<v Nik>Major versions, I know, like, for example,
+old Zalando operators, Zalando, Zalando,</v>
+
+00:41:19.780 --> 00:41:23.740
+<v Nik>containers, Spilo, They-</v>
+<v Álvaro>Mm-hmm</v>
+
+00:41:23.760 --> 00:41:26.936
+<v Nik>have, they package all
+major versions, like five,</v>
+
+00:41:27.510 --> 00:41:30.830
+<v Nik>Very fat containers, container images-</v>
+<v Álvaro>Yeah</v>
+
+00:41:30.830 --> 00:41:35.970
+<v Nik>to support upgrades. What's,
+your approach to support major upgrades?</v>
+
+00:41:36.790 --> 00:41:40.250
+<v Álvaro>So it's actually very simple.
+So let me explain briefly,</v>
+
+00:41:40.250 --> 00:41:43.250
+<v Álvaro>and, and we can get as deep
+as you want, of course,</v>
+
+00:41:43.290 --> 00:41:45.630
+<v Álvaro>on how, how our technology works.</v>
+
+00:41:45.830 --> 00:41:49.830
+<v Álvaro>So what we have created is, is a,
+is a different kind of registry.</v>
+
+00:41:49.830 --> 00:41:53.418
+<v Álvaro>Registry is where the container
+images are being served from.</v>
+
+00:41:53.510 --> 00:41:57.150
+<v Álvaro>And this, this registry,
+that's the, that's why we call it DOCIR,</v>
+
+00:41:57.150 --> 00:42:01.740
+<v Álvaro>because it's the dynamic OCI registry.
+OCI is a standard of, container images.</v>
+
+00:42:02.460 --> 00:42:05.860
+<v Álvaro>So what it does,
+it composes layers dynamically.</v>
+
+00:42:05.860 --> 00:42:09.520
+<v Álvaro>So we've got a base layer, which
+contains the, the basic OS, let's say,</v>
+
+00:42:09.520 --> 00:42:12.240
+<v Álvaro>type files and Postgres layer,
+and then each extension</v>
+
+00:42:12.240 --> 00:42:16.230
+<v Álvaro>is a layer. Or actually any of these could
+be multiple layers, it doesn't matter.</v>
+
+00:42:16.230 --> 00:42:20.250
+<v Álvaro>And what it does is, based on the spec
+that you provide, I want Postgres on these</v>
+
+00:42:20.250 --> 00:42:24.480
+<v Álvaro>three extensions, it's able to compose all
+these layers and deliver the image to you.</v>
+
+00:42:24.480 --> 00:42:28.080
+<v Álvaro>But it's not running a Docker build
+or anything behind the scenes.</v>
+
+00:42:28.080 --> 00:42:32.580
+<v Álvaro>It does, does this in milliseconds.
+It just, it just does some magic</v>
+
+00:42:32.580 --> 00:42:36.200
+<v Álvaro>with the manifests and the internals
+of the image, how they work.</v>
+
+00:42:36.200 --> 00:42:41.660
+<v Álvaro>Now, when the time comes to have
+an image to actually, do a major version</v>
+
+00:42:41.660 --> 00:42:46.520
+<v Álvaro>upgrade, we have a huge advantage, which
+is we can still apply the same technique</v>
+
+00:42:46.520 --> 00:42:50.860
+<v Álvaro>and instead of composing one Postgres
+layer plus three extensions as layers,</v>
+
+00:42:50.860 --> 00:42:53.820
+<v Álvaro>we compose two Postgres layers.
+So Postgres</v>
+
+00:42:53.820 --> 00:42:57.880
+<v Álvaro>17 and Postgres 18 layer. And now suddenly
+on the container image that you get,</v>
+
+00:42:57.880 --> 00:43:01.700
+<v Álvaro>you have both the binary for Postgres
+17 and the binary for Postgres 18,</v>
+
+00:43:01.700 --> 00:43:03.490
+<v Álvaro>plus the extensions for Postgres 17,</v>
+
+00:43:03.490 --> 00:43:07.510
+<v Álvaro>plus the extensions for Postgres 18. And
+we compose all these as different layers.</v>
+
+00:43:07.510 --> 00:43:10.840
+<v Álvaro>So actually the system that we have
+developed is extremely flexible.</v>
+
+00:43:10.840 --> 00:43:14.030
+<v Álvaro>We use it, we compose many
+of the layers actually under the hood.</v>
+
+00:43:14.030 --> 00:43:16.170
+<v Álvaro>For example,
+we can add layer with Patroni,</v>
+
+00:43:16.170 --> 00:43:19.720
+<v Álvaro>and you remove that layer and you
+don't have Patroni. And so, and,</v>
+
+00:43:19.720 --> 00:43:23.640
+<v Álvaro>and we compose layers with WAL-G,
+and then or without WAL-G.</v>
+
+00:43:23.720 --> 00:43:28.320
+<v Álvaro>And it really allows you to just by
+specifying the URL, the Docker pull, blah,</v>
+
+00:43:28.320 --> 00:43:32.760
+<v Álvaro>blah, blah, and that whatever components
+you specify there, you'll get a different</v>
+
+00:43:32.760 --> 00:43:35.800
+<v Álvaro>image. We support, for example,
+what we call t-shirt sizes.</v>
+
+00:43:35.800 --> 00:43:39.980
+<v Álvaro>So we can generate images that we call
+full, that contains like all the usual</v>
+
+00:43:39.980 --> 00:43:45.100
+<v Álvaro>tools that you'll find on a, on a bigger
+image, or minimal and medium size,</v>
+
+00:43:45.100 --> 00:43:49.220
+<v Álvaro>so that you get more tools or less tools
+depending on the size you want to bear</v>
+
+00:43:49.220 --> 00:43:53.700
+<v Álvaro>as part of your container image.
+And this is just a flag as part of URL.</v>
+
+00:43:53.940 --> 00:43:57.352
+<v Álvaro>So it allows to compose
+essentially anything that we want.</v>
+
+00:43:58.370 --> 00:44:00.450
+<v Nik>Right.</v>
+<v Kirk>Nice. But the upgrade</v>
+
+00:44:00.450 --> 00:44:02.170
+<v Kirk>process operates outside-</v>
+<v Nik>Yeah</v>
+
+00:44:02.170 --> 00:44:05.090
+<v Kirk>of the container,
+which is an environment.</v>
+
+00:44:05.090 --> 00:44:11.390
+<v Kirk>So if I were to run the 17, and go into
+18 and run the upgrade process so that it</v>
+
+00:44:11.390 --> 00:44:16.010
+<v Kirk>upgraded the files which are stored
+outside of the environment,</v>
+
+00:44:16.010 --> 00:44:20.310
+<v Kirk>now I do that, but if this container
+is ever taken down and restarted,</v>
+
+00:44:20.310 --> 00:44:24.050
+<v Kirk>how does it know that, no, no, no,
+no, I'm not running 17 anymore.</v>
+
+00:44:24.050 --> 00:44:28.130
+<v Kirk>I was running 17 last time
+I ran this static image.</v>
+
+00:44:28.130 --> 00:44:31.390
+<v Kirk>I'm running 18 now.
+I'm curious, how does that work?</v>
+
+00:44:31.390 --> 00:44:34.200
+<v Nik>It's, it's different container, right?</v>
+<v Álvaro>Yeah.</v>
+
+00:44:34.200 --> 00:44:38.520
+<v Álvaro>So the, the, the answer to that is what
+actually where operators in Kubernetes</v>
+
+00:44:38.520 --> 00:44:42.900
+<v Álvaro>provide tons of value, right?
+An operator will encode this operation.</v>
+
+00:44:42.920 --> 00:44:47.520
+<v Álvaro>What it will do is first you're
+running on 17 and your descriptor,</v>
+
+00:44:47.520 --> 00:44:51.440
+<v Álvaro>your, your, your YAML file, right?
+Will say that you're using an image</v>
+
+00:44:51.440 --> 00:44:54.140
+<v Álvaro>with Postgres 17, right?
+On the URL path of that image</v>
+
+00:44:54.140 --> 00:44:58.330
+<v Álvaro>will contain this Postgres 17 somewhere.
+Then you say, "I wanna do an upgrade."</v>
+
+00:44:58.330 --> 00:45:01.830
+<v Álvaro>What you do, it will go and first of all,
+it will change the manifest</v>
+
+00:45:01.830 --> 00:45:06.870
+<v Álvaro>so that now you'll have an image with both
+17 and 18. This will trigger a restart,</v>
+
+00:45:06.970 --> 00:45:11.310
+<v Álvaro>because container image need to get
+restarted. And then it will have both.</v>
+
+00:45:11.310 --> 00:45:15.075
+<v Álvaro>Now you run the pg_upgrade process.
+If it finishes successfully,</v>
+
+00:45:15.370 --> 00:45:19.470
+<v Álvaro>after finishing successfully, the first
+thing it will do is rewrite the manifest</v>
+
+00:45:19.470 --> 00:45:23.669
+<v Álvaro>again so that now your container image
+will not contain Postgres 17 as a layer.</v>
+
+00:45:23.669 --> 00:45:27.910
+<v Álvaro>It will only contain Postgres 18. And then
+you restart and boom, you're Postgres 18.</v>
+
+00:45:27.910 --> 00:45:34.880
+<v Álvaro>Done. It's that simple, conceptually.</v>
+<v Kirk>Okay. Yeah. I, I, I get</v>
+
+00:45:34.880 --> 00:45:39.220
+<v Kirk>that, and I understand exactly why it has
+to be [laughs] because of the environment</v>
+
+00:45:39.220 --> 00:45:43.840
+<v Kirk>being enclosed and static, right?
+It has to be changed through the manifest.</v>
+
+00:45:43.840 --> 00:45:46.760
+<v Kirk>So that makes perfect sense to me.
+That's cool. I learned,</v>
+
+00:45:46.760 --> 00:45:50.510
+<v Kirk>I've learned quite a bit here.</v>
+<v Nik>Let's have a demo. Right?</v>
+
+00:45:50.510 --> 00:45:52.190
+<v Kirk>Yeah. Exactly.</v>
+
+00:45:53.160 --> 00:45:59.480
+<v Álvaro>All right. So let me share screen here.</v>
+<v Kirk>And while you do that, I'm,</v>
+
+00:45:59.480 --> 00:46:04.720
+<v Kirk>I wanna provide a little commentary. When
+I first saw this process and the demo,</v>
+
+00:46:04.800 --> 00:46:08.260
+<v Kirk>I was most blown away by being
+able to pick and choose</v>
+
+00:46:08.320 --> 00:46:12.920
+<v Kirk>all of the different, you know,
+extensions that I want to put into here,</v>
+
+00:46:13.080 --> 00:46:16.460
+<v Kirk>and how you talked about you
+could actually bring in different,</v>
+
+00:46:16.460 --> 00:46:20.900
+<v Kirk>versions of Postgres, et cetera,
+and how it only downloaded once.</v>
+
+00:46:21.300 --> 00:46:26.970
+<v Kirk>I wanna say that was just visual.
+That's eye candy. Okay?</v>
+
+00:46:26.970 --> 00:46:32.030
+<v Kirk>The real genius is actually what's running
+on the backend server, as you described,</v>
+
+00:46:32.030 --> 00:46:36.610
+<v Kirk>that kinda keeps track of all
+of this to make this simple part.</v>
+
+00:46:36.610 --> 00:46:40.490
+<v Kirk>I mean, the screen is just
+simple by comparison.</v>
+
+00:46:40.490 --> 00:46:45.330
+<v Kirk>It's counting on a lot of backend
+intelligence and a ton of work that has</v>
+
+00:46:45.330 --> 00:46:49.490
+<v Kirk>verified and looked at these things. And
+what's great is you can always increase</v>
+
+00:46:49.490 --> 00:46:51.410
+<v Kirk>that without changing how this works.</v>
+
+00:46:51.410 --> 00:46:54.570
+<v Kirk>So I really- I'm a, I'm
+a huge fan of architecture,</v>
+
+00:46:54.570 --> 00:46:58.910
+<v Kirk>so I love the architecture this way
+because you get a simple interface,</v>
+
+00:46:58.910 --> 00:47:03.350
+<v Kirk>but the, the gains on it
+are already immeasurable.</v>
+
+00:47:03.350 --> 00:47:08.070
+<v Kirk>It's not only simpler than most other
+ways, but you're proofing some things,</v>
+
+00:47:08.070 --> 00:47:11.820
+<v Kirk>and your proofing will only get
+better over time Which is awesome.</v>
+
+00:47:11.820 --> 00:47:13.800
+<v Kirk>All right. Go ahead.</v>
+<v Álvaro>Yeah.</v>
+
+00:47:13.800 --> 00:47:19.410
+<v Álvaro>Thank you for that. My, my obsession is
+to actually make Postgres simple to use.</v>
+
+00:47:20.260 --> 00:47:23.910
+<v Álvaro>Most people who work with me hear me
+saying all the time, "It needs to be</v>
+
+00:47:23.910 --> 00:47:28.851
+<v Álvaro>insultingly simple, insultingly easy, and
+if it isn't, we're doing something wrong."</v>
+
+00:47:28.950 --> 00:47:31.710
+<v Álvaro>So let's try to see if we
+made easy, actually,</v>
+
+00:47:31.710 --> 00:47:36.890
+<v Álvaro>to, to have a Postgres container image
+that you can run on Kubernetes, on Docker,</v>
+
+00:47:36.890 --> 00:47:41.890
+<v Álvaro>Podman, anywhere you can run a container,
+without having to, you know,</v>
+
+00:47:41.920 --> 00:47:45.300
+<v Álvaro>to make things very complicated
+or become an image maintainer.</v>
+
+00:47:45.300 --> 00:47:48.580
+<v Álvaro>So we have created this page
+called StackGres Containers.</v>
+
+00:47:48.580 --> 00:47:53.820
+<v Álvaro>Very simple interface, and you just enter
+the page and you say Docker pull whatever,</v>
+
+00:47:53.820 --> 00:47:58.470
+<v Álvaro>right? And so let's actually copy
+and paste this, and let's run it here</v>
+
+00:47:58.470 --> 00:48:02.520
+<v Álvaro>on my computer. It will take a while to
+load the image, depending on the internet</v>
+
+00:48:02.520 --> 00:48:06.610
+<v Álvaro>connection. But okay, it's downloading a
+Postgres image. And actually you can see-</v>
+
+00:48:06.610 --> 00:48:09.860
+<v Kirk>So we have a, a lot of people
+that are just listening. So I</v>
+
+00:48:09.860 --> 00:48:14.300
+<v Kirk>just wanna be clear, he took the URL that
+it was suggesting based off the initial</v>
+
+00:48:14.300 --> 00:48:20.240
+<v Kirk>parameters, and it just jumped into a
+terminal window doing Docker, docker pull,</v>
+
+00:48:20.240 --> 00:48:24.040
+<v Kirk>and then his sgcr.dev/postgres.</v>
+
+00:48:24.040 --> 00:48:27.180
+<v Kirk>And now it's downloading
+and processing that. And again,</v>
+
+00:48:27.180 --> 00:48:30.840
+<v Kirk>just for the people who are walking
+right now with a Walkman or whatever,</v>
+
+00:48:30.840 --> 00:48:35.500
+<v Kirk>I want them to know, so we're watching
+the terminal now, the Linux terminal now,</v>
+
+00:48:35.500 --> 00:48:40.050
+<v Kirk>Bash, whatever, and it's doing
+this. Go back and continue out.</v>
+
+00:48:40.050 --> 00:48:42.900
+<v Nik>What is, what is Walkman, Kirk?
+[laughs] I'm joking.</v>
+
+00:48:42.900 --> 00:48:46.900
+<v Kirk>Uh-oh.</v>
+<v Nik>[laughs] Yeah, yeah.</v>
+
+00:48:46.900 --> 00:48:49.750
+<v Nik>I, actually-</v>
+<v Kirk>It's what old people had before earbuds.</v>
+
+00:48:49.750 --> 00:48:50.800
+<v Nik>Yeah.</v>
+<v Kirk>And phones.</v>
+
+00:48:50.800 --> 00:48:54.160
+<v Nik>And I,
+I again insist to moving to YouTube</v>
+
+00:48:54.320 --> 00:48:58.160
+<v Nik>and keeping us in pocket until
+you hear the sound you just heard.</v>
+
+00:48:58.320 --> 00:49:02.360
+<v Nik>That sound means you should look at the
+screen temporarily for a few seconds</v>
+
+00:49:02.360 --> 00:49:04.600
+<v Nik>because something interesting is there,</v>
+
+00:49:04.600 --> 00:49:08.460
+<v Nik>and then you can put us
+back to the pocket. Yeah.</v>
+
+00:49:08.460 --> 00:49:12.560
+<v Kirk>Perfect</v>
+<v Nik>so and SGCR is StackGres Container</v>
+
+00:49:12.560 --> 00:49:15.120
+<v Nik>Registry.</v>
+<v Álvaro>That's correct. That's correct.</v>
+
+00:49:15.120 --> 00:49:19.479
+<v Nik>Mm-hmm.</v>
+<v Álvaro>Production URL is, is sgcr.io. But yeah.</v>
+
+00:49:19.479 --> 00:49:25.640
+<v Álvaro>So, so basically we come to the page,
+we see docker pull sgcr.io/postgres,</v>
+
+00:49:25.800 --> 00:49:28.980
+<v Álvaro>and actually here we can see
+on this webpage that it tells us</v>
+
+00:49:28.980 --> 00:49:32.880
+<v Álvaro>that this contains two layers:
+a base layer and a Postgres layer.</v>
+
+00:49:33.800 --> 00:49:37.760
+<v Álvaro>And that's exactly what we saw
+on the Docker pull. It pulled two layers,</v>
+
+00:49:37.760 --> 00:49:42.180
+<v Álvaro>and we actually get the digest. This is
+how we can pin this particular image.</v>
+
+00:49:42.180 --> 00:49:45.700
+<v Álvaro>And of course we can try to run this.</v>
+
+00:49:46.760 --> 00:49:50.900
+<v Álvaro>For example,
+let's say something like this,</v>
+
+00:49:52.060 --> 00:49:57.260
+<v Álvaro>and we can just try to run this and
+then let's actually list the extensions.</v>
+
+00:49:57.260 --> 00:49:59.700
+<v Álvaro>I was too fast. Right. That's it. And-</v>
+
+00:49:59.700 --> 00:50:04.780
+<v Kirk>Again, so he's doing a, a a Docker
+run, and that started the Docker up,</v>
+
+00:50:04.780 --> 00:50:11.220
+<v Kirk>and then he's doing a Docker, exec. And so
+he's command line executing a psql command</v>
+
+00:50:11.220 --> 00:50:15.760
+<v Kirk>to select asterisk
+from pg_available_extensions,</v>
+
+00:50:15.880 --> 00:50:20.720
+<v Kirk>and it showed up on the screen
+that PL/pgSQL is the only one.</v>
+
+00:50:20.720 --> 00:50:22.840
+<v Kirk>So perfect?</v>
+<v Álvaro>Yep.</v>
+
+00:50:22.840 --> 00:50:26.950
+<v Álvaro>The only one we consider that must be
+built into the container image, right?</v>
+
+00:50:26.950 --> 00:50:29.400
+<v Kirk>Mm-hmm.</v>
+<v Álvaro>There is no other extension available</v>
+
+00:50:29.400 --> 00:50:34.200
+<v Álvaro>here. So what we did, recap, we went to
+this webpage, StackGres Containers. We did</v>
+
+00:50:34.200 --> 00:50:38.000
+<v Álvaro>the Docker pull Postgres, and we got
+an image which contains Postgres and no</v>
+
+00:50:38.000 --> 00:50:42.660
+<v Álvaro>more extensions other than PL/pgSQL.
+Now we'll scroll down a little bit,</v>
+
+00:50:42.660 --> 00:50:46.660
+<v Álvaro>and here we have a listing of all
+available extensions, right?</v>
+
+00:50:46.660 --> 00:50:52.060
+<v Álvaro>And and, you know,
+we can pick any to add to the extension.</v>
+
+00:50:52.060 --> 00:50:55.820
+<v Álvaro>So I don't know,
+I'm just gonna random pick any,</v>
+
+00:50:56.040 --> 00:50:58.720
+<v Nik>Is it... Might be-</v>
+<v Kirk>Do pg_background</v>
+
+00:50:58.720 --> 00:51:03.940
+<v Nik>PL/sh my favorite. It's my favorite.
+I think Peter Eisentraut created it.</v>
+
+00:51:03.940 --> 00:51:08.140
+<v Nik>Yeah, PL/sh, my favorite
+PL language, the shell.</v>
+
+00:51:09.100 --> 00:51:10.700
+<v Álvaro>Inside it. Yeah.</v>
+<v Nik>Yeah.</v>
+
+00:51:10.700 --> 00:51:14.347
+<v Nik>By the way, is it possible
+that some extensions will conflict?</v>
+
+00:51:14.810 --> 00:51:18.540
+<v Álvaro>Yes, it is, it is technically possible,
+yes. So let me work through</v>
+
+00:51:18.540 --> 00:51:22.070
+<v Álvaro>this first, and we'll talk about
+those cases later. Right. So I'm just-</v>
+
+00:51:22.070 --> 00:51:23.250
+<v Kirk>Can you add mine?</v>
+
+00:51:23.250 --> 00:51:27.930
+<v Kirk>Can you add pg_background, the background
+one that runs things in the background?</v>
+
+00:51:27.930 --> 00:51:29.283
+<v Kirk>There you go.</v>
+<v Álvaro>Sure.</v>
+
+00:51:29.470 --> 00:51:31.260
+<v Kirk>Perfect.</v>
+<v Álvaro>All right. Actually,</v>
+
+00:51:31.260 --> 00:51:34.410
+<v Álvaro>I just wanted to add one,
+but it's okay, because we'll see how,</v>
+
+00:51:34.410 --> 00:51:40.590
+<v Álvaro>incremental this is, but that's fine. So,
+okay, I, I went on the web, web interface,</v>
+
+00:51:40.590 --> 00:51:43.530
+<v Álvaro>and I browsed through the list
+of available extensions.</v>
+
+00:51:43.530 --> 00:51:47.810
+<v Álvaro>There is 100 and something,
+right now, 150.</v>
+
+00:51:47.810 --> 00:51:51.210
+<v Álvaro>We'll grow this very soon to the same
+as, as the current StackGres.</v>
+
+00:51:51.210 --> 00:51:55.810
+<v Álvaro>We've 220 for something,
+but we're aiming for 400, 500 extensions.</v>
+
+00:51:56.590 --> 00:52:00.450
+<v Álvaro>And we selected three particular
+extensions. Now, the image details part</v>
+
+00:52:00.450 --> 00:52:05.150
+<v Álvaro>of the the, this webpage says that there's
+these three extensions. They will...</v>
+
+00:52:05.150 --> 00:52:09.830
+<v Álvaro>They add like a tiny .5 megabyte
+additional size to the image,</v>
+
+00:52:10.250 --> 00:52:15.570
+<v Álvaro>and the URL changed. So now I'm gonna copy
+and paste this new Docker pull command,</v>
+
+00:52:16.130 --> 00:52:17.830
+<v Álvaro>and I'll just paste it here.</v>
+
+00:52:19.300 --> 00:52:25.160
+<v Álvaro>And we'll... As you can see, we get three
+extra layers, one for each extension.</v>
+
+00:52:25.160 --> 00:52:29.190
+<v Álvaro>We added three extensions, three extra
+layers. This was slow. Actually, we didn't</v>
+
+00:52:29.190 --> 00:52:31.830
+<v Álvaro>do a time,
+but it's basically real time, right?</v>
+
+00:52:31.830 --> 00:52:34.230
+<v Kirk>Yeah.</v>
+<v Álvaro>So it would be possible to do a Docker</v>
+
+00:52:34.230 --> 00:52:36.780
+<v Álvaro>build from behind the scenes.
+This was essentially,</v>
+
+00:52:36.780 --> 00:52:42.840
+<v Álvaro>let's actually, we can try to add now. Let
+me just add another one, HLL, for example.</v>
+
+00:52:43.100 --> 00:52:48.800
+<v Álvaro>I'll just, copy and paste this and,
+and do a time. Paste this and do a time.</v>
+
+00:52:48.800 --> 00:52:51.153
+<v Álvaro>So I'm just gonna now time this command,</v>
+
+00:52:51.720 --> 00:52:57.160
+<v Álvaro>and it will pull this, and it's
+essentially 2.8 seconds to, to pull,</v>
+
+00:52:57.160 --> 00:53:01.840
+<v Álvaro>decompress, and, and run the extension,
+right? So it's basically real time.</v>
+
+00:53:02.120 --> 00:53:08.700
+<v Álvaro>So now I have a Postgres image with four
+extensions. Let's try to run this</v>
+
+00:53:09.572 --> 00:53:14.732
+<v Álvaro>So now I'll run this, but I'll use the
+last argument with actually HLL, right?</v>
+
+00:53:14.732 --> 00:53:17.438
+<v Álvaro>So we can get all-</v>
+<v Kirk>It put it in the front,</v>
+
+00:53:17.940 --> 00:53:20.792
+<v Kirk>just so you know.</v>
+<v Álvaro>Oh, I added it again. Okay. My bad.</v>
+
+00:53:20.792 --> 00:53:23.192
+<v Álvaro>It doesn't matter.
+We'll get the same result.</v>
+
+00:53:23.192 --> 00:53:29.392
+<v Álvaro>And if I now check, the list available
+extensions, what I get is the list of five</v>
+
+00:53:29.392 --> 00:53:30.572
+<v Álvaro>extensions.</v>
+<v Nik>Yeah.</v>
+
+00:53:30.572 --> 00:53:34.212
+<v Álvaro>The four that I added
+and the PL/pgSQL that was there.</v>
+
+00:53:34.212 --> 00:53:37.192
+<v Nik>But, Yeah</v>
+<v Álvaro>essentially that's the demo.</v>
+
+00:53:37.932 --> 00:53:40.672
+<v Nik>Yeah, that's great. Questions.</v>
+
+00:53:41.472 --> 00:53:47.912
+<v Nik>Since, like I understand, like it's,
+it's my, it's in my hands to decide,</v>
+
+00:53:49.112 --> 00:53:53.692
+<v Nik>to control like when to upgrade and so on,
+can I specify particular minor version</v>
+
+00:53:53.692 --> 00:53:56.270
+<v Nik>of Postgres?</v>
+<v Álvaro>Oh, yeah. Absolutely.</v>
+
+00:53:56.270 --> 00:53:58.072
+<v Nik>Can I specify- Particular minor</v>
+
+00:53:58.072 --> 00:54:00.880
+<v Nik>version of each extension?</v>
+<v Álvaro>Yes. Also.</v>
+
+00:54:00.880 --> 00:54:01.880
+<v Nik>Yeah.</v>
+<v Álvaro>Yeah.</v>
+
+00:54:01.880 --> 00:54:03.732
+<v Nik>That's good.</v>
+<v Álvaro>Let's look into that.</v>
+
+00:54:03.732 --> 00:54:06.092
+<v Nik>Yeah.</v>
+<v Álvaro>We can go back to the, to the web</v>
+
+00:54:06.092 --> 00:54:08.652
+<v Álvaro>interface, the web console,
+and for example, here,</v>
+
+00:54:08.652 --> 00:54:13.192
+<v Álvaro>I just didn't use the selector,
+but I can say, oh, sure, pick another</v>
+
+00:54:13.512 --> 00:54:17.260
+<v Álvaro>minor version, right?
+So, on the URL, if you look at this URL,</v>
+
+00:54:17.260 --> 00:54:20.560
+<v Álvaro>this technically not a URL,
+it's called a name reference in,</v>
+
+00:54:20.560 --> 00:54:22.360
+<v Kirk>Right</v>
+<v Álvaro>the OCI specific registry,</v>
+
+00:54:22.360 --> 00:54:26.160
+<v Álvaro>but I call it a URL because it looks
+like a URL. We make it look like a URL.</v>
+
+00:54:26.160 --> 00:54:31.122
+<v Álvaro>And instead of saying /postgres,
+you say /postgres-- and the version,</v>
+
+00:54:31.122 --> 00:54:35.142
+<v Álvaro>and that will get you a major</v>
+<v Nik>Why not colon? Why not colon?</v>
+
+00:54:35.402 --> 00:54:39.550
+<v Álvaro>Because the OCI specific the OCI-</v>
+<v Nik>Mm-hmm</v>
+
+00:54:39.550 --> 00:54:42.960
+<v Álvaro>specification limits the number
+of characters that can appear here.</v>
+
+00:54:42.960 --> 00:54:44.840
+<v Kirk>And type.</v>
+<v Álvaro>So make it look like a URL,</v>
+
+00:54:44.840 --> 00:54:46.900
+<v Álvaro>but we cannot use the whole characters.</v>
+
+00:54:46.900 --> 00:54:50.450
+<v Álvaro>So this is a little bit of a compromise,
+but yeah, that's the way to do, to go.</v>
+
+00:54:50.450 --> 00:54:53.290
+<v Álvaro>So you specify --version,
+and you get that particular version.</v>
+
+00:54:53.290 --> 00:54:55.050
+<v Álvaro>And this applies for both Postgres and</v>
+
+00:54:55.050 --> 00:54:56.060
+<v Álvaro>extensions.</v>
+<v Nik>That's</v>
+
+00:54:56.060 --> 00:54:57.920
+<v Nik>good.</v>
+<v Álvaro>I don't know if we have different</v>
+
+00:54:57.920 --> 00:55:00.690
+<v Álvaro>versions of the extensions built
+as part of this, but yeah, you see,</v>
+
+00:55:00.690 --> 00:55:02.470
+<v Álvaro>this is technically a dropdown.</v>
+<v Nik>Yeah.</v>
+
+00:55:02.470 --> 00:55:03.681
+<v Álvaro>So on the website-</v>
+<v Nik>Yeah</v>
+
+00:55:03.681 --> 00:55:06.322
+<v Álvaro>once you select the extension,
+you'll have a dropdown-</v>
+
+00:55:06.322 --> 00:55:08.530
+<v Nik>Awesome</v>
+<v Álvaro>with all the available versions,</v>
+
+00:55:08.530 --> 00:55:12.530
+<v Álvaro>and then you're able to, yes, exactly get-
+The exact Postgres version and the</v>
+
+00:55:12.530 --> 00:55:15.090
+<v Álvaro>exact version of every extension-</v>
+<v Nik>That's cool. That's cool</v>
+
+00:55:15.090 --> 00:55:17.680
+<v Álvaro>that you can add here.</v>
+<v Nik>For the sake of the time, let me ask</v>
+
+00:55:17.680 --> 00:55:20.882
+<v Nik>a couple of more questions about security.
+So for example,</v>
+
+00:55:20.942 --> 00:55:25.622
+<v Álvaro>Yeah</v>
+<v Nik>I want, So this goes from your registry.</v>
+
+00:55:26.202 --> 00:55:28.200
+<v Nik>I know you, some of your customers,</v>
+
+00:55:28.200 --> 00:55:30.702
+<v Nik>are like air-gapped environments,
+so disconnected-</v>
+
+00:55:30.702 --> 00:55:32.761
+<v Álvaro>Mm-hmm</v>
+<v Nik>from internet basically.</v>
+
+00:55:32.902 --> 00:55:37.722
+<v Nik>This is the same question. So, how will
+they work with this? And second question,</v>
+
+00:55:37.722 --> 00:55:42.142
+<v Nik>what if I want to even better
+control and verify everything myself,</v>
+
+00:55:42.142 --> 00:55:46.742
+<v Nik>is it possible to create like
+a, a mirror and first like,</v>
+
+00:55:48.142 --> 00:55:54.162
+<v Nik>put some new versions of extensions or new
+new extensions if, if you keep adding</v>
+
+00:55:54.162 --> 00:56:01.162
+<v Nik>them, first, put them to like, to like, a
+place where they are reviewed by my team-</v>
+
+00:56:02.242 --> 00:56:04.502
+<v Álvaro>Mm-hmm</v>
+<v Nik>people and agents, right? Security</v>
+
+00:56:04.502 --> 00:56:10.082
+<v Nik>stuff, like, and then I, I already marked
+them as like basically signing, right?</v>
+
+00:56:10.220 --> 00:56:11.220
+<v Álvaro>Yep.</v>
+<v Nik>Yeah.</v>
+
+00:56:11.220 --> 00:56:12.720
+<v Álvaro>Vetting them.</v>
+<v Nik>So it's like</v>
+
+00:56:12.720 --> 00:56:16.120
+<v Nik>two parts of the same question,
+how to to better control everything,</v>
+
+00:56:16.120 --> 00:56:19.430
+<v Nik>including versions.</v>
+<v Álvaro>This is the usual process in Kubernetes,</v>
+
+00:56:19.430 --> 00:56:22.740
+<v Álvaro>and it's one of the beauty of the
+standardization that Kubernetes brought</v>
+
+00:56:22.740 --> 00:56:26.370
+<v Álvaro>in, that you have the tooling to actually
+do this and automate all this, right?</v>
+
+00:56:26.370 --> 00:56:29.610
+<v Álvaro>And this is almost everybody, that-</v>
+<v Nik>It's not just Postgres problem.</v>
+
+00:56:29.610 --> 00:56:31.462
+<v Nik>This is what I'm hearing.</v>
+<v Álvaro>No.</v>
+
+00:56:31.462 --> 00:56:33.970
+<v Nik>Yeah.</v>
+<v Álvaro>Absolutely not. And everybody does this.</v>
+
+00:56:33.970 --> 00:56:35.878
+<v Álvaro>Almost all of our customers actually,</v>
+
+00:56:36.002 --> 00:56:39.722
+<v Álvaro>vet images before using them
+and so on. And actually,</v>
+
+00:56:39.722 --> 00:56:44.722
+<v Álvaro>this hinges on the problem of whether
+we can pack everything as a single unit,</v>
+
+00:56:44.722 --> 00:56:48.242
+<v Álvaro>which we're doing here
+with these images, versus</v>
+
+00:56:48.502 --> 00:56:51.702
+<v Álvaro>pulling a Postgres image
+and then different artifacts,</v>
+
+00:56:51.702 --> 00:56:55.562
+<v Álvaro>whether images or other things
+for the extensions. Because</v>
+
+00:56:56.210 --> 00:57:00.062
+<v Álvaro>is a, is, is basically having one artifact
+to verify to go through this chain</v>
+
+00:57:00.062 --> 00:57:04.182
+<v Álvaro>to put into your air-gapped environment,
+which means private mirrors, versus</v>
+
+00:57:04.182 --> 00:57:06.662
+<v Álvaro>trying to track multiple
+disparate separate</v>
+
+00:57:06.662 --> 00:57:10.722
+<v Álvaro>artifacts, right? So what we're achieving
+with this dynamic image list is you get</v>
+
+00:57:10.722 --> 00:57:14.362
+<v Álvaro>a single image that contains everything
+that you want. Just one thing.</v>
+
+00:57:14.362 --> 00:57:19.422
+<v Álvaro>It's that simple. And as I said before,
+this image is being dynamically generated</v>
+
+00:57:19.422 --> 00:57:22.362
+<v Álvaro>by our special registry, right?
+The StackGres registry,</v>
+
+00:57:22.362 --> 00:57:26.522
+<v Álvaro>container registry. But once it gets
+to you, it looks like exactly the same</v>
+
+00:57:26.522 --> 00:57:30.982
+<v Álvaro>as absolutely indistinguishable from a
+statically generated image, which you can,</v>
+
+00:57:30.982 --> 00:57:33.702
+<v Álvaro>refer to by digest. You can pin by digest.</v>
+
+00:57:33.702 --> 00:57:38.242
+<v Álvaro>So once it reaches to you, you can use the
+standard tooling available in Kubernetes</v>
+
+00:57:38.242 --> 00:57:42.262
+<v Álvaro>and not Kubernetes containers
+environments to validate the security,</v>
+
+00:57:42.262 --> 00:57:45.902
+<v Álvaro>to put into your own private mirror,
+to extract, to process,</v>
+
+00:57:45.902 --> 00:57:49.610
+<v Álvaro>to copy, to... It's just a sing-
+it's a container image. The same tooling-</v>
+
+00:57:49.610 --> 00:57:51.020
+<v Nik>Right. Right</v>
+<v Álvaro>exists today,</v>
+
+00:57:51.020 --> 00:57:54.350
+<v Álvaro>you can use it. It's that simple.</v>
+<v Nik>That's great. Yeah. Yeah. So it's like</v>
+
+00:57:54.350 --> 00:57:56.582
+<v Nik>basically nothing new invented here.
+You can use-</v>
+
+00:57:56.582 --> 00:57:59.002
+<v Álvaro>Yep</v>
+<v Nik>standard workflows and... Yeah,</v>
+
+00:57:59.002 --> 00:58:00.862
+<v Nik>that's great. Really like that.</v>
+
+00:58:00.862 --> 00:58:04.882
+<v Kirk>So you've created
+the, like the master template</v>
+
+00:58:05.182 --> 00:58:11.742
+<v Kirk>to apply to Kubernetes and Postgres so
+that you can bring in everything you want.</v>
+
+00:58:11.742 --> 00:58:16.462
+<v Kirk>So this is really just
+a beautiful set of instrumentation</v>
+
+00:58:16.502 --> 00:58:21.942
+<v Kirk>to keep the complexity down
+and the flexibility up.</v>
+
+00:58:22.202 --> 00:58:24.022
+<v Kirk>That's how I would describe it.</v>
+
+00:58:24.022 --> 00:58:28.602
+<v Álvaro>Yes. Yes. It, it,
+it goes beyond what the template is.</v>
+
+00:58:28.642 --> 00:58:33.942
+<v Álvaro>So actually anytime we request one
+of these URLs, there are... So, okay,</v>
+
+00:58:33.942 --> 00:58:38.340
+<v Álvaro>the process starts very early on. We build
+container images for everything. Postgres,</v>
+
+00:58:38.340 --> 00:58:41.990
+<v Álvaro>every extension is built as a separate
+container image, right? Patroni is built</v>
+
+00:58:41.990 --> 00:58:45.690
+<v Álvaro>as a separate container image. Everything
+is built like a separate entity.</v>
+
+00:58:45.690 --> 00:58:50.452
+<v Álvaro>And those are pushed to our registry. Then
+our registry extracts metadata from all</v>
+
+00:58:50.452 --> 00:58:53.981
+<v Álvaro>these images and puts it into a database.
+No surprises here.</v>
+
+00:58:54.252 --> 00:58:55.880
+<v Álvaro>And then whenever you do a Docker</v>
+
+00:58:55.880 --> 00:58:59.850
+<v Álvaro>pull of our container registry, that goes
+to a database, to the database Postgres,</v>
+
+00:58:59.850 --> 00:59:03.920
+<v Álvaro>to an application server that talks to the
+Postgres database, makes a lot of queries</v>
+
+00:59:03.920 --> 00:59:07.130
+<v Álvaro>because it says, "Oh, you're talking,
+you're asking Postgres on this particular</v>
+
+00:59:07.130 --> 00:59:10.310
+<v Álvaro>extension. Postgres, you didn't specify
+a version. What is the latest version?</v>
+
+00:59:10.310 --> 00:59:13.110
+<v Álvaro>For this, just this particular
+architecture. Okay, this one. Now,</v>
+
+00:59:13.110 --> 00:59:16.440
+<v Álvaro>which extensions do we have compiled
+against this particular major version,</v>
+
+00:59:16.440 --> 00:59:19.790
+<v Álvaro>this particular minor version, and what
+is the digest for this extension?"</v>
+
+00:59:19.790 --> 00:59:22.530
+<v Álvaro>And then grabs all this data
+and then composes dynamically</v>
+
+00:59:22.530 --> 00:59:26.030
+<v Álvaro>all these manifests. And that's
+the beauty of it, that you don't know,</v>
+
+00:59:26.030 --> 00:59:29.640
+<v Álvaro>you don't need to know any of this.
+It just magically works as we saw on or</v>
+
+00:59:29.640 --> 00:59:31.263
+<v Álvaro>listened to in the demo.</v>
+<v Kirk>Yep.</v>
+
+00:59:31.263 --> 00:59:35.203
+<v Álvaro>Now, the good part is that
+this container registry is technically,</v>
+
+00:59:35.203 --> 00:59:39.972
+<v Álvaro>and we developed it, without
+knowledge of Postgres. It is generic.</v>
+
+00:59:39.972 --> 00:59:43.152
+<v Álvaro>It just, it just can combine
+layers for other things.</v>
+
+00:59:43.152 --> 00:59:48.572
+<v Álvaro>And actually, we have had private users
+using it for composing other things.</v>
+
+00:59:48.572 --> 00:59:51.712
+<v Álvaro>Like, there's,
+there's a great example I can name.</v>
+
+00:59:51.992 --> 00:59:54.521
+<v Álvaro>There's a, there's
+a university in Germany,</v>
+
+00:59:54.812 --> 00:59:56.872
+<v Álvaro>and a research institute actually,</v>
+
+00:59:57.012 --> 01:00:01.600
+<v Álvaro>that their infrastructure team wanted
+to provide container images for running,</v>
+
+01:00:02.712 --> 01:00:06.832
+<v Álvaro>these notebooks, right? That are written
+in Python. Sorry, just forgot the name.</v>
+
+01:00:06.832 --> 01:00:07.932
+<v Kirk>Jupyter-</v>
+<v Álvaro>Jupyter</v>
+
+01:00:07.932 --> 01:00:09.272
+<v Kirk>type stuff.</v>
+<v Álvaro>Thank you.</v>
+
+01:00:09.272 --> 01:00:15.233
+<v Álvaro>So Jupyter Netbooks, Notebooks, to do data
+analysis. And for them, this is Python,</v>
+
+01:00:15.233 --> 01:00:20.240
+<v Álvaro>right? And sometimes they need to add
+these different Python libraries. So they,</v>
+
+01:00:20.240 --> 01:00:24.210
+<v Álvaro>they experience this exponential growth
+of the number of container images they had</v>
+
+01:00:24.210 --> 01:00:27.900
+<v Álvaro>to generate because every team was asking
+for different set of dependencies.</v>
+
+01:00:27.900 --> 01:00:29.150
+<v Álvaro>And so they started using</v>
+
+01:00:29.150 --> 01:00:32.950
+<v Álvaro>our dynamic container registry to serve
+Python images for Jupyter notebooks.</v>
+
+01:00:32.950 --> 01:00:35.300
+<v Álvaro>It is that generic. Now we're just running</v>
+
+01:00:35.300 --> 01:00:38.490
+<v Álvaro>now this service for Postgres
+container images with the extensions</v>
+
+01:00:38.490 --> 01:00:42.193
+<v Álvaro>because that's our main focus, but the
+technology is technically agnostic.</v>
+
+01:00:42.193 --> 01:00:47.053
+<v Nik>Yeah. Maybe a few more
+small closing questions from me.</v>
+
+01:00:47.053 --> 01:00:52.593
+<v Nik>First is what is the readiness and when...
+Like, is it publicly available already?</v>
+
+01:00:53.113 --> 01:00:55.313
+<v Nik>Is it like production ready?</v>
+
+01:00:55.573 --> 01:01:00.993
+<v Nik>Is it going to be free or, like,
+there is free version, paid version?</v>
+
+01:01:01.093 --> 01:01:05.573
+<v Nik>And final final small question,
+is it agentic friendly?</v>
+
+01:01:05.573 --> 01:01:11.893
+<v Nik>Can I point my agent to it or I, I need to
+click like you did, in old-fashioned UI?</v>
+
+01:01:11.893 --> 01:01:14.093
+<v Nik>[laughs]</v>
+
+01:01:14.093 --> 01:01:16.193
+<v Álvaro>Okay, I'll respond in order.</v>
+<v Nik>Right.</v>
+
+01:01:16.193 --> 01:01:21.082
+<v Álvaro>So as we speak, we are, we're
+finishing production readiness,</v>
+
+01:01:21.182 --> 01:01:25.102
+<v Álvaro>and it's gonna launch as sgcr.io
+on the StackGres website. So you just,</v>
+
+01:01:25.102 --> 01:01:29.722
+<v Álvaro>just go to the StackGres website. There's
+gonna be a section called Containers, and</v>
+
+01:01:29.722 --> 01:01:34.542
+<v Álvaro>it's gonna be beta, public beta testing,
+right? So yep, expect it,</v>
+
+01:01:34.682 --> 01:01:39.322
+<v Álvaro>probably as the time this episode airs or
+shortly thereafter, that's gonna be there.</v>
+
+01:01:39.322 --> 01:01:43.582
+<v Álvaro>So go ahead and hit it hard, or not that
+hard. It will, well, beta, public beta.</v>
+
+01:01:43.582 --> 01:01:47.842
+<v Álvaro>[laughs] so yeah, it's,
+it's gonna be there.</v>
+
+01:01:47.860 --> 01:01:51.462
+<v Álvaro>We will be adding more images,
+more versions, more everything over time,</v>
+
+01:01:51.462 --> 01:01:54.756
+<v Álvaro>but all the functionality,
+it's, it's already available.</v>
+
+01:01:55.162 --> 01:01:57.022
+<v Álvaro>As for the agentic part,</v>
+
+01:01:58.762 --> 01:02:02.822
+<v Álvaro>the website that I just showed
+is essentially a call to an API,</v>
+
+01:02:03.482 --> 01:02:07.802
+<v Álvaro>which I guess already answers
+your question. But basically, the URL,</v>
+
+01:02:07.802 --> 01:02:11.642
+<v Álvaro>you basically submit, through the API,
+the Postgres versions that you want</v>
+
+01:02:11.642 --> 01:02:16.362
+<v Álvaro>or the default one, the extensions that
+you want at a particular given version.</v>
+
+01:02:16.362 --> 01:02:20.222
+<v Álvaro>You can query versions of Postgres,
+you can query versions of the extensions,</v>
+
+01:02:20.222 --> 01:02:24.602
+<v Álvaro>and then you ask for what the URL is,
+and then you can get the full URL as well</v>
+
+01:02:24.602 --> 01:02:28.302
+<v Álvaro>as the digest, so that if you just
+want directly to pin by that version.</v>
+
+01:02:28.302 --> 01:02:32.102
+<v Álvaro>And so yeah, basically point
+your agents to the API.</v>
+
+01:02:32.110 --> 01:02:33.260
+<v Nik>So if you need-</v>
+<v Álvaro>Yes</v>
+
+01:02:33.260 --> 01:02:37.110
+<v Nik>if you need to test something in specific
+minor version of Postgres with</v>
+
+01:02:37.110 --> 01:02:42.222
+<v Nik>specific several extensions and pin their
+versions as well, it's, it's just URL.</v>
+
+01:02:42.722 --> 01:02:45.502
+<v Álvaro>Yep.</v>
+<v Nik>That's that easy. That's great.</v>
+
+01:02:45.542 --> 01:02:49.862
+<v Álvaro>It's that easy. Yeah.</v>
+<v Nik>I think this is good for final-</v>
+
+01:02:49.862 --> 01:02:53.642
+<v Kirk>This was good. I have one last question.</v>
+<v Nik>Okay.</v>
+
+01:02:53.642 --> 01:02:58.462
+<v Kirk>What... Does this create
+an interesting opportunity</v>
+
+01:02:58.622 --> 01:03:04.202
+<v Kirk>for, like something that competes with
+like the PGXN or the extension network,</v>
+
+01:03:04.202 --> 01:03:07.942
+<v Kirk>you know, kind of thing,
+or helps them whereby we can help...</v>
+
+01:03:07.942 --> 01:03:12.962
+<v Kirk>I, I mean, you could provide a page that
+currently lists all the active and most</v>
+
+01:03:12.962 --> 01:03:19.182
+<v Kirk>recent versions of all the extensions
+that you guys trust, in one place, right?</v>
+
+01:03:19.182 --> 01:03:25.802
+<v Kirk>And now that creates an ability to talk
+back to the extension community as well.</v>
+
+01:03:26.182 --> 01:03:29.383
+<v Kirk>So, I mean, when I first started, the, I,</v>
+
+01:03:29.383 --> 01:03:33.043
+<v Kirk>I downloaded two
+of my extensions via PGXN, right?</v>
+
+01:03:33.043 --> 01:03:35.303
+<v Kirk>I think that was the name
+of the tool, right?</v>
+
+01:03:35.303 --> 01:03:39.452
+<v Kirk>So, and that, I didn't know what to trust,
+right? I was just getting green.</v>
+
+01:03:39.452 --> 01:03:43.670
+<v Kirk>What excites me about this is we
+have a extension problem in Postgres.</v>
+
+01:03:43.670 --> 01:03:47.372
+<v Kirk>We don't know which ones are trustworthy,
+are still being maintained well,</v>
+
+01:03:47.372 --> 01:03:52.482
+<v Kirk>are whatever. And you're kind
+of building that, from my perspective,</v>
+
+01:03:52.482 --> 01:03:56.182
+<v Kirk>as just a side to get done
+what you're doing. Talk to me.</v>
+
+01:03:56.182 --> 01:04:00.302
+<v Álvaro>Yeah. We, we, we've been in
+contact with, with the Postgres extension</v>
+
+01:04:00.302 --> 01:04:04.182
+<v Álvaro>community, if, if we can give it,
+consider it's an entity, right?</v>
+
+01:04:04.182 --> 01:04:07.382
+<v Álvaro>But we definitely with key
+players in this space.</v>
+
+01:04:08.122 --> 01:04:10.702
+<v Álvaro>Actually, I published
+a blog post some time ago</v>
+
+01:04:10.702 --> 01:04:15.982
+<v Álvaro>basically stating that extensions
+should be, should be distributed as OCI</v>
+
+01:04:15.982 --> 01:04:18.082
+<v Álvaro>images, irrespective-</v>
+<v Kirk>Mm-hmm</v>
+
+01:04:18.082 --> 01:04:21.902
+<v Álvaro>of what we have done, right?
+It's just a distribution packaging</v>
+
+01:04:21.902 --> 01:04:23.160
+<v Álvaro>format for extensions.</v>
+
+01:04:23.160 --> 01:04:26.190
+<v Álvaro>PGXN deals with source code,
+so you still need to compile it,</v>
+
+01:04:26.190 --> 01:04:28.430
+<v Álvaro>and which I already mentioned that I don't</v>
+
+01:04:28.430 --> 01:04:32.300
+<v Álvaro>think the best idea is to compile things
+in your own environment, because maybe</v>
+
+01:04:32.300 --> 01:04:36.022
+<v Álvaro>that's different from the environment
+where Postgres was packaged, right?</v>
+
+01:04:36.022 --> 01:04:40.062
+<v Álvaro>But other than that-
+this this blog post resonated a lot.</v>
+
+01:04:40.062 --> 01:04:44.442
+<v Álvaro>David Wheeler, one of the key
+leaders in this space, I would say,</v>
+
+01:04:44.442 --> 01:04:48.782
+<v Álvaro>he took it to the heart and start
+testing this idea and, and went very far.</v>
+
+01:04:48.782 --> 01:04:49.902
+<v Álvaro>And I think it, it,</v>
+
+01:04:49.902 --> 01:04:54.137
+<v Álvaro>it piggybacked a lot with the community
+and, and gave a lot of insights.</v>
+
+01:04:54.242 --> 01:04:57.613
+<v Álvaro>Now, what we have built is a way
+to very easily distribute,</v>
+
+01:04:57.613 --> 01:05:01.313
+<v Álvaro>packaged as container images, right?
+Postgres and extensions.</v>
+
+01:05:01.333 --> 01:05:05.973
+<v Álvaro>And I think this helps in so many ways.
+To give a few examples very quickly.</v>
+
+01:05:05.973 --> 01:05:09.673
+<v Álvaro>One is there was some
+research done some time ago</v>
+
+01:05:09.713 --> 01:05:12.953
+<v Álvaro>that tested incompatibility
+between extensions, actually,</v>
+
+01:05:12.953 --> 01:05:18.053
+<v Álvaro>and it was taking extensions one pair at a
+time and testing them for incompatibility.</v>
+
+01:05:18.053 --> 01:05:23.373
+<v Álvaro>This process with our registry now
+would becomes, becomes trivial because</v>
+
+01:05:23.553 --> 01:05:24.553
+<v Álvaro>you can get,</v>
+
+01:05:24.693 --> 01:05:26.980
+<v Nik>Mm</v>
+<v Álvaro>those pairs of extensions with Postgres</v>
+
+01:05:26.980 --> 01:05:29.630
+<v Álvaro>with just combining a text
+to form a URL, right? Which</v>
+
+01:05:29.630 --> 01:05:33.700
+<v Álvaro>is trivial. You don't need to build those
+container images with these two particular</v>
+
+01:05:33.700 --> 01:05:37.230
+<v Álvaro>extensions that you want to test for this
+particular time. It's just call a URL.</v>
+
+01:05:37.230 --> 01:05:39.730
+<v Álvaro>Docker pull, you're done, right?
+You can run your test.</v>
+
+01:05:39.730 --> 01:05:43.720
+<v Álvaro>So it can help accelerate these kind of
+tests. It can also accelerate, you know,</v>
+
+01:05:43.720 --> 01:05:47.660
+<v Álvaro>running like projects like Testcontainers
+or equivalent, where again, you need,</v>
+
+01:05:47.660 --> 01:05:51.460
+<v Álvaro>oh, I need Postgres, but I need these
+particular two extensions for my CI/CD</v>
+
+01:05:51.460 --> 01:05:55.353
+<v Álvaro>environment, right? And you need to end
+up building your own container images.</v>
+
+01:05:55.353 --> 01:05:56.353
+<v Álvaro>No longer.</v>
+
+01:05:56.853 --> 01:06:03.173
+<v Álvaro>Users after this, I would say,
+can stop becoming image maintainers.</v>
+
+01:06:03.233 --> 01:06:06.233
+<v Nik>Right.</v>
+<v Álvaro>They can become just users or consumers</v>
+
+01:06:06.233 --> 01:06:11.273
+<v Álvaro>of Postgres and any extensions they want,
+because it's just a URL away.</v>
+
+01:06:11.933 --> 01:06:14.693
+<v Nik>Great. That's-</v>
+<v Kirk>No, that's great.</v>
+
+01:06:14.893 --> 01:06:19.813
+<v Nik>Final question. Very final. Anything
+else you want to add that we didn't ask?</v>
+
+01:06:21.040 --> 01:06:25.090
+<v Álvaro>I think I'm quite satisfied. You
+asked a lot of questions. I did my best,</v>
+
+01:06:25.090 --> 01:06:27.040
+<v Nik>That's good</v>
+<v Álvaro>to go through them. No,</v>
+
+01:06:27.040 --> 01:06:30.342
+<v Álvaro>I would just encourage
+everybody to, to test it out.</v>
+
+01:06:30.342 --> 01:06:33.082
+<v Álvaro>It's going out as a public beta,
+as I said.</v>
+
+01:06:33.842 --> 01:06:37.442
+<v Álvaro>Might have a few rough edges
+at the beginning, or hopefully not.</v>
+
+01:06:37.442 --> 01:06:40.542
+<v Álvaro>But test, provide feedback.
+We will add more extensions.</v>
+
+01:06:40.542 --> 01:06:44.282
+<v Álvaro>If you believe your favorite
+extension is missing, you know,</v>
+
+01:06:44.282 --> 01:06:49.622
+<v Álvaro>tweet us on social media, we'll respond,
+we'll add it as fast as possible. But also</v>
+
+01:06:50.162 --> 01:06:54.691
+<v Álvaro>just keep an eye on what is behind
+the scenes because this is not everything.</v>
+
+01:06:54.922 --> 01:06:59.422
+<v Álvaro>This is the, the public face, right, of,
+of serving Postgres and container images.</v>
+
+01:06:59.422 --> 01:07:03.542
+<v Álvaro>But behind the scenes,
+we'll talk at some point, publicly later,</v>
+
+01:07:03.542 --> 01:07:08.042
+<v Álvaro>later about another project that is
+powering all this, which is we have also</v>
+
+01:07:08.042 --> 01:07:11.002
+<v Álvaro>go back to the whiteboard
+and design how we should build</v>
+
+01:07:11.002 --> 01:07:14.382
+<v Álvaro>Postgres. Because it seems like,
+oh yeah, build Postgres. Well, no,</v>
+
+01:07:14.382 --> 01:07:18.542
+<v Álvaro>this is not trivial process, and we want
+to make it following several conditions</v>
+
+01:07:18.542 --> 01:07:23.542
+<v Álvaro>like make it, build Postgres
+in a reproducible way and hermetic way,</v>
+
+01:07:23.542 --> 01:07:26.222
+<v Álvaro>which is the ultimate way to ensure</v>
+
+01:07:26.322 --> 01:07:32.102
+<v Álvaro>security and supply chain risk avoidance
+in building and distributing Postgres.</v>
+
+01:07:32.102 --> 01:07:36.842
+<v Álvaro>So the images you're gonna see there
+are built in this way already, and we aim</v>
+
+01:07:36.842 --> 01:07:41.422
+<v Álvaro>to support hundreds of extensions
+and to provide new versions of extensions</v>
+
+01:07:41.422 --> 01:07:46.002
+<v Álvaro>extremely fast, like essentially in less
+than 24 hours after they are published</v>
+
+01:07:46.002 --> 01:07:48.602
+<v Álvaro>to automatically have
+them available for anyone</v>
+
+01:07:48.602 --> 01:07:52.062
+<v Álvaro>running Postgres on containers,
+and maybe not even containers.</v>
+
+01:07:52.062 --> 01:07:56.062
+<v Álvaro>So just keep an eye on the space
+because we're just getting started.</v>
+
+01:07:56.142 --> 01:08:00.495
+<v Nik>That's great. Thank you for coming.
+Hopefully talk to you soon again,</v>
+
+01:08:00.702 --> 01:08:03.030
+<v Nik>sometime soon.</v>
+<v Kirk>Awesome.</v>
+
+01:08:03.030 --> 01:08:04.882
+<v Nik>Thank you.</v>
+<v Kirk>Thank you. Great show.</v>
+
+01:08:04.882 --> 01:08:07.823
+<v Nik>Thank you.</v>
+<v Álvaro>Appreciate it. Thank you very much.</v>
+
+01:08:08.080 --> 01:08:14.024
+[music]
+
+01:08:14.024 --> 01:08:19.968
+[music]
+
+01:08:19.968 --> 01:08:25.912
+[music]
+
+01:08:25.912 --> 01:08:31.856
+[music]
+
+01:08:31.856 --> 01:08:37.800
+[music]

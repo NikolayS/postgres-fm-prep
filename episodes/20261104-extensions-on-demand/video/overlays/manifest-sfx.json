@@ -1,0 +1,206 @@
+{
+  "video": "01-edited.mp4",
+  "cuts": "/Users/nik/Documents/Zoom/2026-11-04 14.09.51 .fm recording/review/01-edited.cuts.json",
+  "fps": 25,
+  "width": 1920,
+  "height": 1080,
+  "timeBase": "edited seconds for the cuts file, no freezes",
+  "layout": "21-layout-center-v2.json = layout-v2.json + place.<host>.center (needed for center placement)",
+  "band": {
+    "x": 24,
+    "y": 912,
+    "w": 1576,
+    "h": 140
+  },
+  "overlays": [
+    {
+      "id": "01-fat-image",
+      "srcStart": 1209.5,
+      "srcEnd": 1301,
+      "words": "Alvaro: \"what I call a fat image\" (1209.77) ... \"1,000 extensions\" (1217.35) ... \"single container image\" (1221.97) ... \"There may be plenty of CVEs\" (1270.49) ... \"the main one security\" (1300.99)",
+      "outStart": 1120.82,
+      "dur": 90.94,
+      "duration": 90.94,
+      "file": "01-fat-image.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 90.5,
+          "gain": 0.7
+        }
+      ],
+      "accents": [],
+      "stillAt": 50.5,
+      "source": "https://console.postgres.ai/shared/brief/c501d438-b872-4705-89a6-bdab30ea1680 (section 2, E1: compressed MiB and Trivy CVE totals; key numbers: 98 MiB extension layer)"
+    },
+    {
+      "id": "02-repo-down",
+      "srcStart": 1547.4,
+      "srcEnd": 1574.4,
+      "words": "Alvaro: \"it has the most extensions available\" (1547.60) ... \"only when you create a new cluster\" (1558.52) ... \"steady state there is zero downloads\" (1561.48-1562.80) ... \"220 something\" (1569.78)",
+      "outStart": 1454.84,
+      "dur": 27,
+      "duration": 27,
+      "file": "02-repo-down.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 26.54,
+          "gain": 0.7
+        }
+      ],
+      "accents": [],
+      "stillAt": 24.6,
+      "source": "https://console.postgres.ai/shared/brief/c501d438-b872-4705-89a6-bdab30ea1680 (section 0, follow-up round: StackGres with the repository unreachable, n = 3; cache rerun, warm 29.4 s to 19 of 19)"
+    },
+    {
+      "id": "03-combinations",
+      "srcStart": 1699.6,
+      "srcEnd": 1735,
+      "words": "Nik: \"two to a power of this 200 something\" (1699.90) ... \"10 power 66, so 66 zeros\" (1707.16) ... \"atoms in universe ... 80 zeros\" (1713.30-1716.30)",
+      "outStart": 1606.04,
+      "dur": 25.84,
+      "duration": 25.84,
+      "file": "03-combinations-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1433ms.wav",
+          "at": 0.45,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typing-1467ms.wav",
+          "at": 2.533,
+          "gain": 1
+        }
+      ],
+      "accents": [],
+      "stillAt": 12.16,
+      "source": "2^220 = 1.7 x 10^66 (arithmetic); 220 extensions said on air at 26:09; 10^80 atoms is the usual estimate quoted on air"
+    },
+    {
+      "id": "04-hashimoto",
+      "srcStart": 2289.4,
+      "srcEnd": 2340,
+      "words": "Nik: \"Mitchell Hashimoto, says that you shouldn't do it\" (2289.58-2292.90) ... \"on the screen you can see that very tweet\" (2314.32-2318.52) ... \"pin the versions\" (2322.78) ... \"verify all the upgrades\" (2327.78)",
+      "outStart": 2180.72,
+      "dur": 49.8,
+      "duration": 49.8,
+      "file": "04-hashimoto.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 49.34,
+          "gain": 0.7
+        }
+      ],
+      "accents": [],
+      "stillAt": 34.8,
+      "source": "https://x.com/mitchellh/status/2057171518027887035 (2026-05-20 18:48 UTC; text from the public syndication endpoint, first paragraph)"
+    },
+    {
+      "id": "05-preload-trap",
+      "srcStart": 2429.2,
+      "srcEnd": 2459.6,
+      "words": "Alvaro: \"functionality in Postgres 18 that allows you to add extensions in separate paths\" (2429.34-2435.24) ... \"pull dynamically code there and mount it there\" (2441.82) ... \"not pinning anymore\" (2444.78)",
+      "outStart": 2319.16,
+      "dur": 30.16,
+      "duration": 30.16,
+      "file": "05-preload-trap-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1667ms.wav",
+          "at": 0.45,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typing-2233ms.wav",
+          "at": 2.767,
+          "gain": 1
+        }
+      ],
+      "accents": [],
+      "stillAt": 15.56,
+      "source": "https://console.postgres.ai/shared/brief/c501d438-b872-4705-89a6-bdab30ea1680 (section 0: pgaudit image + shared_preload_libraries in one patch, switchover, 4 of 4 no recovery; two steps worked, n = 1)"
+    },
+    {
+      "id": "06-layers",
+      "srcStart": 2598.6,
+      "srcEnd": 2700,
+      "words": "Alvaro: \"let me explain briefly\" (2598.82) ... \"composes layers dynamically\" (2625.18) ... \"base layer\" (2627.96) ... \"each extension is a layer\" (2633.12) ... \"these three extensions\" (2641.16) ... \"in milliseconds\" (2650.14) ... \"major version upgrade\" (2662.32) ... \"Postgres 17 and Postgres 18 layer\" (2674.48) ... \"plus the extensions for Postgres 17\" (2683)",
+      "outStart": 2484.96,
+      "dur": 100.8,
+      "duration": 100.8,
+      "file": "06-layers.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 100.34,
+          "gain": 0.7
+        }
+      ],
+      "accents": [],
+      "stillAt": 55.8,
+      "source": "mechanism as described on air; https://console.postgres.ai/shared/brief/c501d438-b872-4705-89a6-bdab30ea1680 (section 3, E2: e/citext/pgvector and e/pgvector/citext share digest f9ca85e9; pgvector layer one blob, 0.85 MB, shared by every composition)"
+    },
+    {
+      "id": "07-restart-outage",
+      "srcStart": 2800.8,
+      "srcEnd": 2852.2,
+      "words": "Alvaro: \"I wanna do an upgrade\" (2801.02) ... \"This will trigger a restart\" (2809.28) ... \"you run the PG upgrade process\" (2815.46) ... \"rewrite the manifest again\" (2822.16) ... \"then you restart and boom\" (2830.22); Kirk: \"It has to be changed through the manifest\" (2846.14)",
+      "outStart": 2684.12,
+      "dur": 50.88,
+      "duration": 50.88,
+      "file": "07-restart-outage.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 50.42,
+          "gain": 0.7
+        }
+      ],
+      "accents": [],
+      "stillAt": 38.68,
+      "source": "https://console.postgres.ai/shared/brief/c501d438-b872-4705-89a6-bdab30ea1680 (section 0, case 02 table: longest rw outage, medians of 5 / 3)"
+    }
+  ]
+}

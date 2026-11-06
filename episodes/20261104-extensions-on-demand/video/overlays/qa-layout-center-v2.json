@@ -1,0 +1,104 @@
+{
+ "canvas": {
+  "w": 1920,
+  "h": 1080,
+  "fps": 25
+ },
+ "tiles": "/Users/nik/Documents/Zoom/2026-11-04 14.09.51 .fm recording/review/tiles-manual.json",
+ "show": "PostgresFM",
+ "title": "Extensions on demand",
+ "cardTitle": "Extensions\non demand",
+ "links": [],
+ "crop": {
+  "top": 0.012,
+  "bottom": 0.072,
+  "left": 0.008,
+  "right": 0.008
+ },
+ "place": {
+  "kirk": {
+   "x": 24,
+   "y": 240,
+   "w": 608,
+   "h": 456,
+   "label": "Kirk Wolak",
+   "focusY": -0.4,
+   "center": {
+    "x": 1640,
+    "y": 120,
+    "w": 256
+   }
+  },
+  "nik": {
+   "x": 656,
+   "y": 240,
+   "w": 608,
+   "h": 456,
+   "label": "Nik Samokhvalov",
+   "focusY": -0.4,
+   "track": "/private/tmp/claude-501/-Users-nik-github-postgres-fm-prep/42061d05-2dad-43b6-b521-0abd7ccdb213/scratchpad/ep195/nik-track.json",
+   "center": {
+    "x": 1640,
+    "y": 360,
+    "w": 256
+   }
+  },
+  "alvaro": {
+   "x": 1288,
+   "y": 240,
+   "w": 608,
+   "h": 456,
+   "label": "Álvaro Hernández",
+   "focusY": -0.4,
+   "center": {
+    "x": 1640,
+    "y": 600,
+    "w": 256
+   }
+  },
+  "robot": {
+   "x": 1656,
+   "y": 880,
+   "w": 240,
+   "h": 135,
+   "small": true,
+   "radius": 10
+  },
+  "screen": {
+   "x": 200,
+   "y": 120,
+   "w": 1520,
+   "h": 855,
+   "crop": {
+    "top": 0,
+    "bottom": 0,
+    "left": 0,
+    "right": 0
+   },
+   "radius": 12
+  }
+ },
+ "highlight": [],
+ "sharpen": 0.25,
+ "transition": 0.6,
+ "cardHosts": [
+  {
+   "name": "Kirk Wolak"
+  },
+  {
+   "name": "Nik Samokhvalov"
+  },
+  {
+   "name": "Álvaro Hernández"
+  }
+ ],
+ "theme": "shades",
+ "cuts": "/Users/nik/Documents/Zoom/2026-11-04 14.09.51 .fm recording/review/01-edited.cuts.json",
+ "logo": "/Users/nik/Documents/Zoom/2026-11-04 14.09.51 .fm recording/review/21-outro-v2.mp4",
+ "center": [
+  {
+   "from": 1100,
+   "to": 1300
+  }
+ ]
+}

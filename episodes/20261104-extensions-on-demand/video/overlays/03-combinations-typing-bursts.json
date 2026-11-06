@@ -1,0 +1,18 @@
+{
+  "overlay": "03-combinations-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.883,
+      "chars": 43,
+      "line": "main"
+    },
+    {
+      "start": 2.533,
+      "end": 4,
+      "chars": 44,
+      "line": "sub"
+    }
+  ]
+}
