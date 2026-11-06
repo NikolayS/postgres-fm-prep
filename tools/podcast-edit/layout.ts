@@ -10,12 +10,15 @@
 // no drawtext), so fonts and rounded corners look right. Tiles are masked boxes on top of
 // the background, so they can move: "center" windows slide the hosts to the edges.
 import { $ } from "bun";
-import { mkdirSync } from "fs";
+import { mkdirSync, readFileSync, writeFileSync } from "fs";
 import { dirname, join, resolve } from "path";
 import type { Detection, Rect } from "./detect-tiles";
 
 export type Place = { x: number; y: number; w: number; h: number; label?: string; sub?: string; radius?: number; focusX?: number; focusY?: number; small?: boolean;
+  crop?: LayoutConfig["crop"]; // this tile's own crop (e.g. a screen share: all 0), instead of the global one
+  track?: string; // face track JSON {w, h, path: [[t, x, y], ...]} (face-track/track.ts): the crop follows the face
   center?: { x: number; y: number; w: number } }; // where the tile goes in the "center" state (keeps aspect)
+export type Track = { w: number; h: number; path: [number, number, number][] };
 export type LayoutConfig = {
   canvas: { w: number; h: number; fps: number };
   tiles: string | Detection; // detect-tiles.ts output (path relative to the config, or inline)
@@ -140,7 +143,30 @@ async function load(configPath: string) {
   const base = dirname(resolve(configPath));
   const tiles: Detection = typeof c.tiles === "string" ? await Bun.file(resolve(base, c.tiles)).json() : c.tiles;
   const cuts = c.cuts ? await Bun.file(resolve(base, c.cuts)).json() : null;
+  resolvePlaces(c, base);
   return { c, tiles, segments: (cuts?.segments ?? null) as [number, number][] | null };
+}
+
+// Paths inside places (track) are relative to the config file, like tiles and cuts.
+export function resolvePlaces(c: LayoutConfig, base: string) {
+  for (const p of Object.values(c.place)) if (p.track) p.track = resolve(base, p.track);
+}
+
+// sendcmd file for a face track: at each path point, move the crop of every Zoom-layout
+// variant of the tile (crop@trk<i>) to tile origin + point. Times are window time (t - from).
+export function trackCommands(trk: Track, from: number, origins: { i: number; x: number; y: number }[]): string {
+  const lines: string[] = [];
+  for (const [t, x, y] of trk.path) {
+    if (t < from) continue;
+    lines.push(`${(t - from).toFixed(3)} ${origins.map((o) => `crop@trk${o.i} x ${o.x + x}, crop@trk${o.i} y ${o.y + y}`).join(", ")};`);
+  }
+  return lines.join("\n") + "\n";
+}
+// Path point in effect at time t (the last one at or before t).
+export function trackAt(trk: Track, t: number): [number, number] {
+  let k = 0;
+  for (let j = 0; j < trk.path.length && trk.path[j][0] <= t; j++) k = j;
+  return [trk.path[k][1], trk.path[k][2]];
 }
 
 // Render the still layers once: background, then per place a mask, a label and an edge-only
@@ -196,8 +222,19 @@ export function filtergraph(c: LayoutConfig, tiles: Detection, segments: [number
     const p = c.place[n], bx = boxSize(p);
     const vs = variants.map((v, i) => ({ ...v, i })).filter((v) => v.n === n);
     if (!vs.length) continue;
-    vs.forEach((v) => {
-      const k = cropFor(v.u.L.tiles[n], c.crop, p);
+    // track: the crop (track w x h, in tile pixels) follows the face path through sendcmd. One
+    // command file, written next to the track JSON, drives the crops of all variants.
+    const trk: Track | null = p.track ? JSON.parse(readFileSync(p.track, "utf8")) : null;
+    const cmdFile = p.track ? p.track.replace(/\.json$/, "") + ".cmd" : "";
+    if (trk) writeFileSync(cmdFile, trackCommands(trk, from, vs.map((v) => ({ i: v.i, x: v.u.L.tiles[n].x, y: v.u.L.tiles[n].y }))));
+    vs.forEach((v, j) => {
+      if (trk) {
+        const r = v.u.L.tiles[n], [x, y] = trackAt(trk, from);
+        const sc = j === 0 ? `sendcmd=f='${cmdFile}',` : "";
+        parts.push(`[s${v.i}]${sc}crop@trk${v.i}=${trk.w}:${trk.h}:${r.x + x}:${r.y + y},scale=${p.w}:${p.h}:flags=lanczos${sharp},setsar=1[v${v.i}]`);
+        return;
+      }
+      const k = cropFor(v.u.L.tiles[n], p.crop ?? c.crop, p);
       parts.push(`[s${v.i}]crop=${k.w}:${k.h}:${k.x}:${k.y},scale=${p.w}:${p.h}:flags=lanczos${sharp},setsar=1[v${v.i}]`);
     });
     // Merge the Zoom-layout variants: later ones on top while their layout is on.
@@ -219,7 +256,11 @@ export function filtergraph(c: LayoutConfig, tiles: Detection, segments: [number
       const lerp = (a: number, b: number) => `(${a}+(${b - a})*(${e}))`;
       parts.push(`[box_${n}]scale=w='trunc(${lerp(bx.w, bx.w * k)}/2)*2':h='trunc(${lerp(bx.h, bx.h * k)}/2)*2':eval=frame:flags=bicubic[bs_${n}]`);
       parts.push(`[${cur}][bs_${n}]overlay=x='${lerp(p.x, q.x)}':y='${lerp(p.y, q.y)}':eval=frame[o_${n}]`);
-    } else parts.push(`[a_${n}][${mi + 1}:v]overlay=0:0:format=yuv420[box_${n}];[${cur}][box_${n}]overlay=${p.x}:${p.y}[o_${n}]`);
+    } else {
+      // A tile that exists only in some Zoom layouts (a screen share) is shown only while one of them is on.
+      const onlySome = vs.length < used.length ? `:enable='${enable(vs.flatMap((v) => v.u.iv))}'` : "";
+      parts.push(`[a_${n}][${mi + 1}:v]overlay=0:0:format=yuv420[box_${n}];[${cur}][box_${n}]overlay=${p.x}:${p.y}${onlySome}[o_${n}]`);
+    }
     cur = `o_${n}`;
   }
   // Highlights: one glow layer per highlight row, fade in/out 0.3 s.

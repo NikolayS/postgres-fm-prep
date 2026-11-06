@@ -17,7 +17,7 @@ export type BandProps = {
   durationSec: number;
 };
 
-const Wipe: React.FC<{frame: number; fps: number; delay: number; children: React.ReactNode; style?: React.CSSProperties}> = ({frame, fps, delay, children, style}) => {
+export const Wipe: React.FC<{frame: number; fps: number; delay: number; children: React.ReactNode; style?: React.CSSProperties}> = ({frame, fps, delay, children, style}) => {
   const f = frame - delay * fps;
   const w = interpolate(f, [0, 0.3 * fps], [0, 100], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
   const x = interpolate(f, [0, 0.3 * fps], [-24, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.cubic)});
@@ -29,7 +29,7 @@ const Wipe: React.FC<{frame: number; fps: number; delay: number; children: React
 // Hand-drawn yellow marker stroke behind dark text (Nik, 2026-10-20: "yellow-highlighted, like by hand").
 // The stroke is an SVG rect roughened by a turbulence displacement, tilted a little (seeded by the
 // text), and revealed left-to-right like a marker swipe over `swipe` seconds.
-const Marker: React.FC<{frame: number; fps: number; delay: number; seed: number; swipe?: number; fontSize: number; children: React.ReactNode}> = ({frame, fps, delay, seed, swipe = 0.5, fontSize, children}) => {
+export const Marker: React.FC<{frame: number; fps: number; delay: number; seed: number; swipe?: number; fontSize: number; children: React.ReactNode}> = ({frame, fps, delay, seed, swipe = 0.5, fontSize, children}) => {
   const f = frame - delay * fps;
   const w = interpolate(f, [0, swipe * fps], [0, 104], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp', easing: Easing.out(Easing.quad)});
   const textIn = interpolate(f, [0.1 * fps, 0.4 * fps], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -52,7 +52,7 @@ const Marker: React.FC<{frame: number; fps: number; delay: number; seed: number;
     </div>
   );
 };
-const seedOf = (s: string) => Math.abs([...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7)) % 1000;
+export const seedOf = (s: string) => Math.abs([...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) | 0, 7)) % 1000;
 
 export const Band: React.FC<BandProps> = (p) => {
   const frame = useCurrentFrame();

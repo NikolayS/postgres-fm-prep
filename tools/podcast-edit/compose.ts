@@ -121,6 +121,7 @@ if (import.meta.main) {
   // card after it ({kicker, big, lead, sec}).
   const c: LayoutConfig & { links?: string[]; cardTitle?: string; logo?: string; credit?: { kicker?: string; big: string; lead?: string; sec?: number } } = await Bun.file(configPath).json();
   const base = dirname(resolve(configPath));
+  for (const p of Object.values(c.place)) if (p.track) p.track = resolve(base, p.track); // as layout.ts resolvePlaces
   const tiles: Detection = typeof c.tiles === "string" ? await Bun.file(resolve(base, c.tiles)).json() : c.tiles;
   const segments = c.cuts ? (await Bun.file(resolve(base, c.cuts)).json()).segments : null;
   const { w, h, fps } = c.canvas;

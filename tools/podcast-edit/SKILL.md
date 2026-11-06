@@ -402,6 +402,11 @@ bun $S/compose.ts layout.json out-edited.mp4 final.mp4 --intro a-intro.mp3 --out
   with `segments` from cuts.json). Because crops are relative to the tile, a
   Zoom resize does not move the faces. `highlight` (source times) adds a glow
   frame on a tile, fade 0.3 s. Speed about 1.4x realtime on Apple Silicon.
+  Per place: `crop` replaces the global crop for that tile (a screen share:
+  all 0). A tile that exists only in some Zoom layouts (a screen share) is shown
+  only while one of them is on. `track` (path relative to the layout file) makes
+  the crop follow a face: see [face-track/README.md](face-track/README.md)
+  (macOS Vision detection, smoothed path, ffmpeg `sendcmd` on a named crop).
 - `compose.ts`: title card 4 s (layers fade and slide in) -> 0.5 s crossfade
   -> show -> 0.6 s crossfade -> end card 10 s (`cardTitle` with "\n" breaks,
   `links`). `--end 0` drops the end card: the show crossfades straight
