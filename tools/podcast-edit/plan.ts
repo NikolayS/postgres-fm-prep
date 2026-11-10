@@ -224,14 +224,19 @@ export function planCuts(o: {
   // Head: everything before the first kept word; tail: everything after the last one.
   if (keptIdx.length) {
     const first = ws[keptIdx[0]], last = ws[keptIdx[keptIdx.length - 1]];
-    const vh = keptIdx[0] > 0 && bnd[keptIdx[0] - 1] >= 0 ? bnd[keptIdx[0] - 1] : firstValleyAfter(first.start - 0.3);
+    // The head ends in the valley right before the first kept word, never an earlier one: the
+    // DP can map that boundary to an earlier, longer valley and leave untranscribed sound
+    // (a click, an "mm") before the opening line (ep 196: a sound 1.3 s before "Hello").
+    const vNear = firstValleyAfter(first.start - 0.3);
+    const vh = vNear < V && vs(vNear) < first.start ? vNear : keptIdx[0] > 0 && bnd[keptIdx[0] - 1] >= 0 ? bnd[keptIdx[0] - 1] : vNear;
     // Clamp to the valley: word ends are often late, and the next word must not leak in.
-    const headEnd = Math.max(vs(vh), Math.min(first.start, ve(vh)) - Math.min(P.headKeep, vlen(vh)));
+    const headEnd = vh >= V ? Math.max(0, first.start - P.headKeep) : Math.max(vs(vh), Math.min(first.start, ve(vh)) - Math.min(P.headKeep, vlen(vh)));
     const headIds = [...new Set(words.filter((w) => removedBy.has(w) && w.end <= first.start + 0.01).map((w) => removedBy.get(w)!.id))];
     if (headEnd > 0.05) cuts.push({ start: 0, end: headEnd, xfade: 0, ids: headIds, cats: ["head"], text: "", gapBefore: 0, gapAfter: 0, why: "head" });
     const li = keptIdx[keptIdx.length - 1];
     const vt = li < ws.length - 1 && bnd[li] >= 0 ? bnd[li] : firstValleyAfter(last.end);
-    const tailStart = Math.min(ve(vt), Math.max(last.end, vs(vt)) + Math.min(P.tailKeep, vlen(vt)));
+    // No valley after the last kept word (sound runs to the end of the file): keep tailKeep of it.
+    const tailStart = vt >= V ? Math.min(duration, last.end + P.tailKeep) : Math.min(ve(vt), Math.max(last.end, vs(vt)) + Math.min(P.tailKeep, vlen(vt)));
     const tailIds = [...new Set(words.filter((w) => removedBy.has(w) && w.start >= last.end - 0.01).map((w) => removedBy.get(w)!.id))];
     if (tailStart < duration - 0.05) cuts.push({ start: tailStart, end: duration, xfade: 0, ids: tailIds, cats: ["tail"], text: "", gapBefore: 0, gapAfter: 0, why: "tail" });
   }

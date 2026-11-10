@@ -9,6 +9,7 @@ Research, study packs, experiment plans and recording notes for individual Postg
 | Dump/restore done. Now what? (#193) | Published 2026-10-23: [YouTube](https://www.youtube.com/watch?v=0R1BJBzLCoc) · [postgres.fm](https://postgres.fm/episodes/dump-restore-done-now-what) | [Episode overview](episodes/20261020-restore-readiness/README.md) · [Study pack](episodes/20261020-restore-readiness/study-pack.md) |
 | UUIDv4 vs UUIDv7 (#194) | Published 2026-10-30: [YouTube](https://www.youtube.com/watch?v=gf8e3JkQ_8M) · [postgres.fm](https://postgres.fm/episodes/uuidv4-vs-uuidv7) | [Episode overview](episodes/20261027-uuidv4-vs-uuidv7/README.md) · [Show notes](episodes/20261027-uuidv4-vs-uuidv7/show-notes.md) · [Illustrations](episodes/20261027-uuidv4-vs-uuidv7/illustrations.md) |
 | Extensions on demand (#195) | Published 2026-11-06: [YouTube](https://www.youtube.com/watch?v=7oeAAqU00zk) · [postgres.fm](https://postgres.fm/episodes/extensions-on-demand) | [Episode overview](episodes/20261104-extensions-on-demand/README.md) · [Show notes](episodes/20261104-extensions-on-demand/show-notes.md) · [Illustrations](episodes/20261104-extensions-on-demand/illustrations.md) · [Video](episodes/20261104-extensions-on-demand/video/README.md) · [Social](episodes/20261104-extensions-on-demand/social/README.md) |
+| Temporary tables (#196, working title) | Recorded 2026-11-10; edit in progress | [Episode overview](episodes/20261110-temporary-tables/README.md) |
 
 ## Repository structure
 

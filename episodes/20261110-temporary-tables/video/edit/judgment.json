@@ -1,0 +1,205 @@
+{
+ "removals": [
+  {
+   "cat": "head",
+   "from": 0,
+   "to": 13.9,
+   "reason": "pre-show: 'let's go / I'm recording / start with the introduction'"
+  },
+  {
+   "cat": "struggle",
+   "near": "00:49",
+   "phrase": "So again, like, uh, I remind that it's better to listen to us, uh, uh, on YouTube and have, uh, your phone in the pocket until there is this weird sound. When you know that there is something on the screen, it should be potentially interesting, some charts or something we will be showing.",
+   "reason": "on-air cut cue: show-format talk (phone in pocket until the sound); the tweet cue before it stays"
+  },
+  {
+   "cat": "struggle",
+   "near": "01:20",
+   "phrase": "which we just have...",
+   "reason": "abandoned start; 'today we have a topic. We were discussing with Kirk...'"
+  },
+  {
+   "cat": "struggle",
+   "near": "04:16",
+   "phrase": "they just,",
+   "reason": "abandoned start before 'temporary tables are bad in two areas'"
+  },
+  {
+   "cat": "struggle",
+   "near": "12:35",
+   "phrase": "they found that, like, let's, like,",
+   "reason": "false start before 'problems number zero'"
+  },
+  {
+   "cat": "struggle",
+   "near": "15:17",
+   "phrase": "Postgres MVCC and model overall if, uh... So,",
+   "reason": "abandoned start: 'hidden issue with ... transaction ID wraparound'"
+  },
+  {
+   "cat": "struggle",
+   "near": "15:24",
+   "phrase": "So if you keep some session and, uh, there is a problem, well, it's, uh... And",
+   "reason": "abandoned sentence before 'And I can imagine...'"
+  },
+  {
+   "cat": "struggle",
+   "near": "18:23",
+   "phrase": "Also, there was an idea to create, to implement...",
+   "reason": "restart: 'Also, there was work on implementing global temporary tables' (cut from the sentence start: 'in Postgres. There was work on implementing...')"
+  },
+  {
+   "cat": "struggle",
+   "near": "23:50",
+   "phrase": "10 or too,",
+   "reason": "word search before '10 too small'"
+  },
+  {
+   "cat": "struggle",
+   "near": "34:08",
+   "phrase": "if, uh, working, work, uh,",
+   "reason": "word search: 'if it's like just dealing with arrays'"
+  },
+  {
+   "cat": "tail",
+   "reason": "after the sign-off",
+   "from": 2353.5,
+   "to": 2365.68
+  }
+ ],
+ "keep": [
+  {
+   "near": "02:54",
+   "phrase": "more, and more, and",
+   "reason": "emphatic 'more, and more, and more'"
+  },
+  {
+   "near": "03:58",
+   "phrase": "Or walls. Cliffs",
+   "reason": "banter 'cliffs or walls?' \u2014 meaning, not a repeat"
+  },
+  {
+   "near": "26:46",
+   "phrase": "waiting and",
+   "reason": "emphatic 'waiting and waiting'"
+  }
+ ],
+ "fillers": [],
+ "beats": [
+  {
+   "near": "10:45",
+   "phrase": "Like, just because it was a joke.",
+   "reason": "joke (8X machine)",
+   "side": "after"
+  },
+  {
+   "near": "11:24",
+   "phrase": "They're like, \"The machine's good for five years.\"",
+   "reason": "joke",
+   "side": "after"
+  },
+  {
+   "near": "17:01",
+   "phrase": "Why do we need to signal others anything at all?",
+   "reason": "rhetorical question to Kirk",
+   "side": "after"
+  },
+  {
+   "near": "27:03",
+   "phrase": "adding an extra developer to a late project only makes it later.",
+   "reason": "Brooks's law punchline",
+   "side": "after"
+  },
+  {
+   "near": "31:03",
+   "phrase": "Do you know this trick?",
+   "reason": "question/tease before the trick",
+   "side": "after"
+  },
+  {
+   "near": "36:33",
+   "phrase": "foot gun.",
+   "reason": "punchline",
+   "side": "after"
+  },
+  {
+   "near": "29:48",
+   "phrase": "And we will change it.",
+   "reason": "self-joke + laugh",
+   "side": "after"
+  }
+ ],
+ "gains": [],
+ "candidates": [
+  {
+   "near": "00:23",
+   "phrase": "the fourth time I think we record without Michael,",
+   "note": "absent-host talk, KEPT: it is the on-air cue for Michael's post screenshot ('there should be a sound right now')"
+  },
+  {
+   "near": "15:01",
+   "phrase": "silicon friend here",
+   "note": "meta joke about the bot, kept: it introduces the wraparound point"
+  },
+  {
+   "near": "30:31",
+   "phrase": "watching us on YouTube",
+   "note": "format talk, kept: cues the select t1 from t1 overlay"
+  },
+  {
+   "near": "27:46",
+   "phrase": "Hold on.",
+   "note": "Kirk's number slip corrected on air by Nik (88,000 / <4,000 / 17,000) - kept, never cut a correction"
+  },
+  {
+   "near": "23:44",
+   "phrase": "too much, too many, right?",
+   "note": "pooler-size musing, kept"
+  },
+  {
+   "near": "03:22",
+   "phrase": "until this... Like,",
+   "note": "restart I wanted to cut; kept: no clean join (audit score > 3)"
+  },
+  {
+   "near": "05:55",
+   "phrase": "in my def...",
+   "note": "restart I wanted to cut; kept: no clean join (audit score > 3)"
+  },
+  {
+   "near": "32:53",
+   "phrase": "exactly temporary...",
+   "note": "restart I wanted to cut; kept: no clean join (audit score > 3)"
+  }
+ ],
+ "notes": [
+  {
+   "at": "32:40",
+   "note": "swear 'shit ton' (Kirk), not bleeped"
+  },
+  {
+   "at": "17:58",
+   "note": "'DBeav Forge' / 25:20 'DBeav Lab Forge' / 37:11 'Deep Lab Forge' / 19:05 'D- db- LabForge' -> DBLab Forge (captions)"
+  },
+  {
+   "at": "16:24",
+   "note": "'S and Val' / 20:13 'S in wal write' / 36:15 'ices in val ride' -> SInvalWrite / sinval (captions)"
+  },
+  {
+   "at": "08:36",
+   "note": "'PLPG SQL' / 10:00 'PLPG scale' -> PL/pgSQL; 08:09 'RTE' likely 'CTE' (check by ear)"
+  },
+  {
+   "at": "25:32",
+   "note": "'Brandon Gregg' -> Brendan Gregg; 24:31 'Andreas Freund' -> Andres Freund; 39:04 'Nick' -> Nik"
+  },
+  {
+   "at": "19:08",
+   "note": "Nik says PG19 'release candidate 2 right now'; the Forge study ran PG19 RC1 (within 2.4% of PG18) - check whether an editor's note is needed"
+  },
+  {
+   "at": "25:59",
+   "note": "Kirk: '4K ring buffer' - the queue is 4,096 message slots (~64 KB), not 4 KB; possible editor's note"
+  }
+ ]
+}
