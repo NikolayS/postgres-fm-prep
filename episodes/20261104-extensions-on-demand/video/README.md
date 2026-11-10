@@ -89,7 +89,7 @@ The rendered `.mov` files (ProRes 4444 with alpha, 5.6 GB in all) stay in `$R/20
 
 [`scripts/`](scripts/):
 
-- `find.py "phrase" ["phrase@1200" ...]`: finds a phrase in `src.words.json` and prints its source, edited and final time (final = edited + 13 s card). Paths to `$R` are at the top.
+- `find.py "phrase" ["phrase@1200" ...]`: finds a phrase in `src.words.json` and prints its source, edited and final time (final = edited + 13 s card). Paths to `$R` are at the top. Now generic: `tools/podcast-edit/find.ts` (also maps freezes and podcast time).
 - `sheet.py`: takes stills from the overlay previews (`$R/22-previews/`), writes them to `../assets/` and makes the contact sheet `$R/23-contact-sheet.png`.
 
 ## Final render

@@ -8,15 +8,20 @@
 - **Hosts:** Nik Samokhvalov and Kirk Wolak, with Álvaro Hernández.
 - **Recording date:** 2026-11-04.
 - **Episode number:** 195.
-- **Status:** In post-production.
+- **Status:** Published 2026-11-06 (YouTube Premiere 13:15 Pacific).
+- **YouTube:** https://www.youtube.com/watch?v=7oeAAqU00zk
+- **Podcast:** https://postgres.fm/episodes/extensions-on-demand
+- **Blog post:** in review (postgres-ai/docs, draft MR).
 - **Experiment brief:** [Dynamic containers for PostgreSQL: what we measured](https://console.postgres.ai/shared/brief/c501d438-b872-4705-89a6-bdab30ea1680) (DBLab Forge cases `dynamic-containers-01` and `dynamic-containers-02`, PostgresAI; draft).
 
 ## Materials
 
+- [Show notes](show-notes.md): the resources mentioned in the episode, the Transistor summary and the YouTube description.
 - [Illustrations](illustrations.md): the seven on-screen cards, what each shows and where every number comes from.
 - [`assets/`](assets/): one still per card.
 - [`video/`](video/README.md): how the video was made: tool patches, layout, face track, title card and outro source, overlay source and manifests, and the render command.
 - [`subtitles/`](subtitles/): YouTube and podcast captions, the podcast transcript, and the subtitle dictionary.
+- [`social/`](social/README.md): the X thread and LinkedIn post, the combinations animation and the guest clip.
 
 ## Local media (not in git)
 

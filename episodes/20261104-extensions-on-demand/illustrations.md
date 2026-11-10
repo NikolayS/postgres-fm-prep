@@ -1,6 +1,6 @@
 # Extensions on demand: on-screen illustrations
 
-The video version has seven cards. Two are bands at the bottom of the frame. Five are charts, diagrams or a quote in the center; for those the three faces move to a column on the right, above the robot tile. Each card appears while the hosts talk about the same point and stays at least 25 seconds. The colors are the same on every card: fat image orange, extension image yellow, official or base image light blue.
+The video version has seven cards. Two are bands at the bottom of the frame. Five are charts, diagrams or a screenshot in the center; for those the three faces move to a column on the right, above the robot tile. Each card appears while the hosts talk about the same point and stays at least 25 seconds. The colors are the same on every card: fat image orange, extension image yellow, official or base image light blue.
 
 Times are in the YouTube version, which starts with a 13-second title card. Each still is one frame from a preview render of the edited video, taken after the card has finished drawing.
 
@@ -42,13 +42,13 @@ Then, when Álvaro says there may be plenty of CVEs, "CVEs found by Trivy" (`All
 
 ## 4. Mitchell Hashimoto: never update unless it breaks
 
-**Time:** 00:36:34, about 50 s. Center, quote.
+**Time:** 00:36:34, about 50 s. Center, screenshot.
 
-**Shows:** a quote card: `Mitchell Hashimoto`, `@mitchellh · May 20, 2026`, and the first paragraph of the post: "Fork your dependencies, trim them to only your use case, never update unless it breaks for your users. I’ve been vocal about this for 10+ years. I’ve always said that updating is way riskier than latent bugs (which can be tracked and CVEs monitored)." Two phrases are highlighted when Nik paraphrases them: "never update unless it breaks for your users." and "updating is way riskier than latent bugs". Footer: `Post on X, first paragraph`.
+**Shows:** a screenshot of the post on X, light theme, from the author line down to the date (`6:48 PM · May 20, 2026`, shown in UTC). The visible text is the first paragraph, "Fork your dependencies, trim them to only your use case, never update unless it breaks for your users. I’ve been vocal about this for 10+ years. I’ve always said that updating is way riskier than latent bugs (which can be tracked and CVEs monitored).", then "If you are updating a Show more". Two phrases get a solid red underline (#E5322D), drawn left to right when Nik paraphrases them: "never update unless it breaks for your users." and "updating is way riskier than latent bugs". Below the screenshot, in light gray mono: `https://x.com/mitchellh/status/2057171518027887035`.
 
-**Numbers and source:** [the post on X](https://x.com/mitchellh/status/2057171518027887035), 2026-05-20 18:48 UTC; text and date checked through X's public embed data on 2026-11-05. The post continues past this paragraph; the card shows the first paragraph only. Nik says on air that the tweet is on screen and paraphrases it as "pin the versions and not upgrade and verify all the upgrades". The post says "never update" and "fork", not "pin"; it is the closest match we found, and Nik should confirm it is the one he meant.
+**Numbers and source:** [the post on X](https://x.com/mitchellh/status/2057171518027887035), 2026-05-20 18:48 UTC. The screenshot is the official embed (`platform.twitter.com/embed/Tweet.html?id=2057171518027887035&theme=light`) taken with headless Chrome on 2026-11-05, no login, at 2x, cropped below the date row; the underlines are placed from the embed's own text positions. Nik says on air that the tweet is on screen and paraphrases it as "pin the versions and not upgrade and verify all the upgrades". The post says "never update" and "fork", not "pin"; it is the closest match we found, and Nik should confirm it is the one he meant.
 
-![Quote card: Mitchell Hashimoto, May 20, 2026: Fork your dependencies, trim them to only your use case, never update unless it breaks for your users.](assets/04-hashimoto.png)
+![Screenshot of Mitchell Hashimoto's post on X, May 20, 2026: Fork your dependencies, trim them to only your use case, never update unless it breaks for your users; two phrases underlined in red; the post URL below it.](assets/04-hashimoto.png)
 
 ## 5. Mount the extension image first, preload it second
 
