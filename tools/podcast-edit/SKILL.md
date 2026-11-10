@@ -358,8 +358,12 @@ the captions, notes and transcript again.
    This makes a draft. Check the draft in the Transistor dashboard.
    `--episode <id>` updates the description or transcript of an existing
    episode. Do not run two writers on one episode at the same time.
-8. **Publish**: the same command with `--publish` (or `--episode <id>
-   --publish`), only after the host approves the draft.
+8. **Publish**: only after the host approves the draft:
+   `bun $S/transistor.ts --show 32147 --episode <id> --publish`. With no
+   other fields it sends only the publish call (before 2026-11-10 it sent an
+   empty PATCH first and failed with "episode is missing"). Then check the
+   postgres.fm page, the share page and the RSS feed (the feed is cached for
+   some minutes).
 9. **YouTube upload checklist** (YouTube Studio, by the host):
    - The browser upload tool takes files up to 10 MB only, so the host drags
      `<base>-final.mp4` into YouTube Studio.
@@ -367,8 +371,18 @@ the captions, notes and transcript again.
      video times).
    - Thumbnail: the 1280x720 cover.
    - Subtitles: upload `<base>-final.en.srt` as English (not auto-sync).
+     It is the YouTube track, in final-video time; the podcast SRT has other
+     times. Later, delete the auto-generated English track and turn off
+     auto-dubbing (both appear some time after upload).
+   - The title on the thumbnails and the square cover must be the final
+     title. Settle the title first, then make the covers; a late title change
+     means new covers (episode 195: the cover said one title, Transistor
+     another).
    - Playlist, category, and visibility as the host says; publish after a
      last look at the processed video and captions.
+
+10. **Promotion** (X, LinkedIn, blog post): see [PROMOTION.md](PROMOTION.md).
+    Speaker clips: `python3 $S/social/clip.py` (header of the file).
 
 ## Layout, music and cards (packaging)
 
@@ -617,6 +631,7 @@ Review checklist before the final composite:
 ## Long-hold center blocks (no freezes)
 - Rule (Nik, 2026-10-22): blocks never freeze or pause the talk. They play over it in the "center" placement (hosts at the edges) and stay while the topic is discussed: 12-25 s for data blocks, longer when the topic runs longer. Use big numbers and few words.
 - `overlays/src/Blocks.tsx`: `bio` (guest bio), `hack2` (sessions -> shipped releases), `simple` (before -> after time per query + fix tag), `compare` (queries x maintenance arms, a per-row scale, a ÷N badge, small ms under each bar), `trap` (planner vs visibility map, then a staged heap-fetch/time table).
+- `bun $S/find.ts src.words.json "phrase" "other phrase@1100" --cuts edited.cuts.json --time-map final.time-map.json --audio-map podcast.time-map.json` prints a phrase's source, edited, final-video and podcast time (or "cut"). Use it for overlay anchors, chapters, show-note times and social clip in/out points; never guess a time from the video.
 - Anchor every block to SOURCE word times (`srcStart`/`srcEnd` and reveal times relative to them), never to edited seconds. `scripts/blocks.example.ts <cuts.json> [--render]` maps them through `segmentTimes` and renders one at a time. `scripts/manifest-from-anchors.ts <cuts.json> <out>` rebuilds the full compose manifest for a new edit and sets every freezeSec to 0.
 - Less is more (Nik, 2026-10-22, on a 2-query x 3-arm grid with buffers, badges and footer: "very hard to understand -- too much, overloaded"). Start with the `simple` comp: one big before -> after line per query, the fixing command as a yellow tag, one small caption, about 12 words in all, readable at phone size. Use `compare` only when the arms themselves are the point.
 - Units: GiB/MiB, never GB/MB (heap 4,098,361 x 8 KiB = 31.3 GiB). State what each number is (warm or cold cache, buffers or time) in the caption and in the YouTube description.
@@ -626,7 +641,32 @@ Review checklist before the final composite:
 - Check free disk space before a render (`df -h` on the output and `--work` dirs): a disk that fills mid-render loses the whole run.
 - Report a render ETA only from measured output growth (two `ls -l` or `ffprobe` readings some minutes apart, against the expected final size or duration), never a guess.
 - ffmpeg 8.0.1 can deadlock inside its scheduler on a big compose graph (main thread in sch_wait, all threads in pthread_cond_wait, 0% CPU). The output stops growing and has no moov atom. The same command passes on other runs. Lost 6 h overnight on 2026-10-23.
-- Wrap every long render: `bun $S/watchdog.ts 180 -- bun tools/compose.ts ...`. If the whole process tree uses no CPU for 180 s, it kills the tree and exits 124. Retry once on 124.
+- Wrap every long render: `bun $S/watchdog.ts 180 -- bun tools/compose.ts ...`. If the whole process tree uses no CPU for 180 s, it sends SIGINT (ffmpeg then finalizes the mp4, so the frames encoded so far are usable), kills what is left after 60 s, and exits 124.
+- Known freeze (episode 195, 2026-11-05, twice): the full render stalls at the crossfade into the outro video (config `logo`). Holding the last show frame with `tpad` did not help. Do not re-render 90 min: keep the interrupted file and finish it with `splice.ts --outro` at `logo.start` from the time map, then `compose.ts ... --audio-only` on the result if the sound is incomplete (see "Fix a finished video"). On any other 124, retry once.
+
+## Fix a finished video (splice.ts)
+
+Late changes to the intro card, the outro, a blur or one overlay do not need a
+full render (about 90 min for a 70 min episode). `splice.ts` encodes only the
+changed window, widened to keyframes, with the compose.ts x264 settings, and
+stream-copies the rest; the sound is copied from the input (or `--audio`). It
+checks that the frame count is unchanged. Episode 195 needed six such fixes
+by hand; each took 1-10 min.
+
+```bash
+# new outro, or finish a render that froze at the outro (at = time-map logo.start)
+bun $S/splice.ts final.mp4 final-v2.mp4 --outro 21-outro-v6.mp4 --at 4087.28
+# new title card: render the start of the same timeline, then take its picture
+bun $S/compose.ts layout.json 01-edited.mp4 head.mp4 --until 22 <same flags as the final>
+bun $S/splice.ts final.mp4 final-v3.mp4 --to 20 --with head.mp4
+# blur something in a camera tile (t in the filter starts at the window start)
+bun $S/splice.ts final.mp4 final-v4.mp4 --from 12.9 --to 106.2 --vf "crop=150:104:1538:302,boxblur=18:3" --at 1538:302
+# one overlay changed: render the same window with compose.ts --from/--until and use --with --with-at <from>
+```
+
+After a splice: decode the whole file once (`ffmpeg -v error -i out.mp4 -f
+null -`), look at a frame on each side of every join, and run `av-sync.ts`.
+Re-encoding the window costs nothing visible at CRF 19.
 
 ## Brand opening, intro music, covers (brand/)
 Old postgres.fm look: pink gradient (#ef7de3 -> #f39aea -> #faddf7) with grain, the script wordmark (postgres.fm_logo_black.png from the Transistor CDN, tinted white), the sunglasses elephant (cut from the 3000x3000 show artwork; tusk holes filled), Lato 900.

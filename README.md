@@ -8,7 +8,7 @@ Research, study packs, experiment plans and recording notes for individual Postg
 | --- | --- | --- |
 | Your restore finished. Is your database ready? | Preparation; additional experiments proposed | [Episode overview](episodes/20261020-restore-readiness/README.md) · [Study pack](episodes/20261020-restore-readiness/study-pack.md) |
 | UUIDv4 vs UUIDv7 (#194) | Published 2026-10-30: [YouTube](https://www.youtube.com/watch?v=gf8e3JkQ_8M) · [postgres.fm](https://postgres.fm/episodes/uuidv4-vs-uuidv7) | [Episode overview](episodes/20261027-uuidv4-vs-uuidv7/README.md) · [Show notes](episodes/20261027-uuidv4-vs-uuidv7/show-notes.md) · [Illustrations](episodes/20261027-uuidv4-vs-uuidv7/illustrations.md) |
-| Extensions on demand (#195) | In post-production | [Episode overview](episodes/20261104-extensions-on-demand/README.md) · [Illustrations](episodes/20261104-extensions-on-demand/illustrations.md) · [Video](episodes/20261104-extensions-on-demand/video/README.md) |
+| Extensions on demand (#195) | Published 2026-11-06: [YouTube](https://www.youtube.com/watch?v=7oeAAqU00zk) · [postgres.fm](https://postgres.fm/episodes/extensions-on-demand) | [Episode overview](episodes/20261104-extensions-on-demand/README.md) · [Show notes](episodes/20261104-extensions-on-demand/show-notes.md) · [Illustrations](episodes/20261104-extensions-on-demand/illustrations.md) · [Video](episodes/20261104-extensions-on-demand/video/README.md) · [Social](episodes/20261104-extensions-on-demand/social/README.md) |
 
 ## Repository structure
 
@@ -20,7 +20,7 @@ The episode's `README.md` is its entry point. Keep its research, study pack, exp
 
 ## Tooling
 
-[`tools/podcast-edit/`](tools/podcast-edit/SKILL.md) is the post-production toolkit for recorded episodes, packaged as a Claude Code skill: cut fillers and false starts with a vetoable cut list, lay out and compose the final video (cards, music, overlays and their sounds), build captions, the podcast MP3, show notes and the Transistor draft. `SKILL.md` is the entry point; it runs on Bun and ffmpeg. To use it as a skill, symlink the directory to `~/.claude/skills/podcast-edit`. API keys (`ELEVENLABS_API_KEY`, `TRANSISTOR_API_KEY`) come from the environment only and never belong in this repository.
+[`tools/podcast-edit/`](tools/podcast-edit/SKILL.md) is the post-production toolkit for recorded episodes, packaged as a Claude Code skill: cut fillers and false starts with a vetoable cut list, lay out and compose the final video (cards, music, overlays and their sounds), build captions, the podcast MP3, show notes and the Transistor draft. `SKILL.md` is the entry point; [`PROMOTION.md`](tools/podcast-edit/PROMOTION.md) covers the X thread, LinkedIn, animations, speaker clips and the blog post; it runs on Bun and ffmpeg. To use it as a skill, symlink the directory to `~/.claude/skills/podcast-edit`. API keys (`ELEVENLABS_API_KEY`, `TRANSISTOR_API_KEY`) come from the environment only and never belong in this repository.
 
 ## Release an episode
 

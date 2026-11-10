@@ -8,7 +8,7 @@
 //   bun transistor.ts --show 32147 --title "..." --number 193 --season 1 --audio podcast.mp3
 //        --description-file notes.transistor.html --transcript-file transcript.txt [--publish] [--dry-run]
 //   bun transistor.ts --show 32147 --episode <id> [--description-file f] [--transcript-file f] [--dry-run]
-//        (update an existing episode: only the fields given)
+//        [--publish] (update an existing episode: only the fields given; --publish alone publishes it)
 // The API key comes from TRANSISTOR_API_KEY. It goes only to api.transistor.fm, never to the
 // presigned upload URL, and it is never printed. --dry-run sends nothing and prints the plan.
 import { basename } from "path";
@@ -46,7 +46,7 @@ export async function release(o: Opts, d: Deps): Promise<{ id?: string; status: 
 
   const content = { description: o.description, transcript_text: o.transcriptText };
   if (o.dryRun) {
-    if (o.episode) log(`PATCH ${API}/episodes/${o.episode}: ${size(fields(content))}`);
+    if (o.episode && [...fields(content)].length) log(`PATCH ${API}/episodes/${o.episode}: ${size(fields(content))}`);
     else {
       log(`GET ${API}/episodes/authorize_upload (filename=${basename(o.audio!)})`);
       log(`PUT <presigned upload URL>: ${o.audio}`);
@@ -59,8 +59,13 @@ export async function release(o: Opts, d: Deps): Promise<{ id?: string; status: 
 
   let id = o.episode, status = "draft";
   if (id) {
-    const r = await api("PATCH", `/episodes/${id}`, fields(content));
-    status = r.data?.attributes?.status ?? status;
+    // Transistor rejects a PATCH with no episode fields ("episode is missing", HTTP 422), so a
+    // publish-only run (--episode <id> --publish) skips it.
+    const f = fields(content);
+    if ([...f].length) {
+      const r = await api("PATCH", `/episodes/${id}`, f);
+      status = r.data?.attributes?.status ?? status;
+    } else if (!o.publish) throw new Error("nothing to do: give --description-file, --transcript-file or --publish");
   } else {
     const up = (await api("GET", `/episodes/authorize_upload?filename=${encodeURIComponent(basename(o.audio!))}`)).data.attributes;
     log(`PUT <presigned upload URL>: ${o.audio}`);

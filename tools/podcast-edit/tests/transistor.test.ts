@@ -76,6 +76,21 @@ describe("existing episode", () => {
   });
 });
 
+describe("publish an existing draft", () => {
+  test("--episode <id> --publish alone sends only the publish call (no empty PATCH)", async () => {
+    const m = mock({ "/v1/episodes/555/publish": () => new Response(JSON.stringify({ data: { id: "555", attributes: { status: "published" } } }), { status: 200 }) });
+    const r = await release({ show: "32147", episode: "555", publish: true }, m.deps);
+    expect(m.calls.map((c) => `${c.method} ${c.url}`)).toEqual(["PATCH https://api.transistor.fm/v1/episodes/555/publish"]);
+    expect(r).toEqual({ id: "555", status: "published" });
+  });
+
+  test("--episode <id> with no fields and no --publish is an error, not an empty PATCH", async () => {
+    const m = mock();
+    await expect(release({ show: "32147", episode: "555" }, m.deps)).rejects.toThrow("nothing to do");
+    expect(m.calls).toEqual([]);
+  });
+});
+
 describe("safety", () => {
   test("dry run sends nothing and logs the plan without the key", async () => {
     const m = mock();

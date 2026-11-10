@@ -4,7 +4,7 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 
 ## 1. Edit approved
 
-- [ ] Cut list reviewed: fillers, false starts, long pauses, pre-show and post-show chatter, on-air "let's cut that" moments, bot interruptions.
+- [ ] Cut list reviewed: fillers, false starts, long pauses, pre-show and post-show chatter, on-air "let's cut that" moments, bot interruptions, remarks about how someone looks.
 - [ ] **Host approved the edit** (watched the full draft, not only the cut list).
 - [ ] Speaker names and titles are as the guest wants them. Ask; don't copy them from LinkedIn.
 
@@ -15,11 +15,15 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 - [ ] Overlay sounds follow the convention in `tools/podcast-edit/sfx/`: band cards get a typing reveal; centre cards get the sand strokes in and out, plus a punch on key reveals. Nothing bright, nothing sub-only.
 - [ ] Loudness about -16 LUFS integrated; no clipping.
 - [ ] Full decode check: no dropped or duplicated frames, A/V in sync at start, middle and end.
-- [ ] If only overlays or sounds changed after a full render, splice the changed windows or remux the audio. Don't re-render the whole video.
+- [ ] If only overlays or sounds changed after a full render, splice the changed windows (`splice.ts`) or remux the audio (`compose.ts --audio-only`). Don't re-render the whole video.
+- [ ] Long renders run under `watchdog.ts`. If a render froze at the outro, finish it with `splice.ts --outro` (SKILL.md, "Fix a finished video").
+- [ ] Outro fits the episode: no experiment outro when there were no results; two companies on separate frames; no name said twice (voice and graphic).
+- [ ] Camera backgrounds: nothing private visible (blur it).
 
 ## 3. YouTube metadata
 
 - [ ] **Title** under about 50 visible characters. It must complement the thumbnail, not repeat it: the thumbnail asks the question, the title promises how we answered it (a concrete number or effort). No channel or episode suffix; the channel name already shows.
+- [ ] Title settled **before** the thumbnails and the square cover are made; the covers show the final title.
 - [ ] **Thumbnail(s)**, 1280×720:
   - dark background;
   - heavy condensed headline of 2–4 words;
@@ -44,7 +48,7 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 
 - [ ] English subtitles built from the edited transcript.
 - [ ] **Dictionary pass:** apply the glossary in `prompt.txt` from https://gitlab.com/postgres-ai/content/postgres-fm to the subtitles and transcripts. Then read them through for names, product names (DBLab Forge, PL/pgSQL…), Postgres terms and SQL identifiers. Add new mis-hearings to the glossary in an MR to that repo.
-- [ ] Uploaded **with timing** (SRT built from the final video's time map) and published.
+- [ ] Uploaded **with timing** (the YouTube SRT, built from the final video's time map; not the podcast SRT) and published.
 - [ ] **Remove YouTube's auto-generated English track** once it appears. It can take a while after upload, so check again after publishing.
 - [ ] Check whether auto-dubbing is on, and turn it off unless we want it.
 
@@ -59,7 +63,7 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
   - transcript;
   - `video_url` pointing at the YouTube video.
 - [ ] Show notes open with the "watch on YouTube" tip; since episode 193 the video carries charts and illustrations.
-- [ ] Publish (`PATCH /v1/episodes/<id>/publish`, `status=published`), then check:
+- [ ] Publish with `transistor.ts --show 32147 --episode <id> --publish`, then check:
   - the postgres.fm episode page;
   - the Transistor share page;
   - the RSS feed.
@@ -88,8 +92,25 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 - [ ] Independent review of everything that goes public, repeated until it passes. Trackers (issues, MR notes and diffs) are checked too, not only files.
 - [ ] Once the archive is public, add the brief, the results repo and the DOI to the show notes and the YouTube description.
 
-## 9. After release
+## 9. Social posts (same day)
 
-- [ ] Within a day: the auto subtitles are gone, the A/B test is running, and the RSS entry is correct.
-- [ ] Update the episode's `README.md` here: status, publication links, the experiment DOI.
+Rules and lessons: [`tools/podcast-edit/PROMOTION.md`](tools/podcast-edit/PROMOTION.md).
+
+- [ ] X thread drafted in `episodes/<episode>/social/x-thread.md`: numbers in the first line, no link in the first post, links in the last reply, handles checked, a number check with sources.
+- [ ] Only the guest's product and ours are named; other products are described generically.
+- [ ] Media: an animation (each screen readable, contact sheet checked) and a speaker clip (`social/clip.py`; no sip or hand at the start; ends on the show URL).
+- [ ] LinkedIn variant, links in the first comment.
+- [ ] The host posts.
+
+## 10. Blog post (postgres-ai/docs, a few days later)
+
+- [ ] Draft MR with the SOC2 work item linked. The parts match the last two posts: plain title, TL;DR tabs, video, numbers, the social animation, "how it works" in depth, advice, limits, links, thanks.
+- [ ] Terms defined for a generic engineer; about 70-80% STE; first person.
+- [ ] No reader questions (no comments section); no figure that needs explaining.
+- [ ] Lint, cspell, CI and the review app checked. The host merges.
+
+## 11. After release
+
+- [ ] Within a day: the auto subtitles are gone, auto-dubbing is off, the A/B test is running, and the RSS entry is correct.
+- [ ] Update the episode's `README.md` here and the episode table in the top `README.md`: status, publication links (YouTube, postgres.fm, blog post), the experiment DOI.
 - [ ] Note what went wrong in this release and fix the tool or this checklist.
