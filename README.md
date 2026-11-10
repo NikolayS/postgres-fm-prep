@@ -24,7 +24,7 @@ The episode's `README.md` is its entry point. Keep its research, study pack, exp
 
 ## Release an episode
 
-Follow [the release checklist](RELEASE_CHECKLIST.md): edit approval, the YouTube video and its metadata, subtitles, the podcast audio on Transistor, transcript, show notes and research artefacts.
+To start on a new recording, use [the episode prompt](EPISODE_PROMPT.md). Follow [the release checklist](RELEASE_CHECKLIST.md): edit approval, the YouTube video and its metadata, subtitles, the podcast audio on Transistor, transcript, show notes and research artefacts.
 
 ## Add an episode
 
