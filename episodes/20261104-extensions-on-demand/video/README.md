@@ -34,7 +34,8 @@ The theme needs the brand assets at `BRAND` in `layout.ts` (fonts, `wordmark-whi
 
 [`layout/`](layout/):
 
-- `21-layout-center-v2.json`: used for the final render. Three hosts in 4:3 tiles in a row. During center cards the faces move to a column on the right (256 px wide at x 1640, y 120/360/600), above the robot tile. The screen share tile is shown only while Zoom shows it.
+- `26-layout-wide.json`: used for the published video (`27-final-*`). Same as `21-layout-center-v2.json`, but each face tile shows the whole Zoom frame, so the faces are smaller (the host asked for this).
+- `21-layout-center-v2.json`: used for the first final (`25-final-v1`). Three hosts in 4:3 tiles in a row. During center cards the faces move to a column on the right (256 px wide at x 1640, y 120/360/600), above the robot tile. The screen share tile is shown only while Zoom shows it.
 - `layout-v2.json`: the same without the center positions (used for the face-track tests).
 - `tiles-manual.json`: tile rectangles per Zoom layout, written by hand. The Zoom tiles touch, so `detect-tiles.ts` cannot split them.
 
@@ -51,9 +52,9 @@ Nik moved a lot in his camera, so his crop follows his face. The generic tool is
 
 ## Title card and outro
 
-[`card/remotion/`](card/remotion/): the Remotion title card. `src/Crazy3.tsx` (composition `CardCrazy3`) is the one used: 14 s, beat-synced to the intro music (`public/a-shades-levels.json`), the elephant roasts the absent co-host, and the title and hosts are in `src/common.tsx` (`TITLE`, `HOSTS`). `Crazy.tsx` and `Crazy2.tsx` are earlier versions. The card source started from episode 194 (`../../20261027-uuidv4-vs-uuidv7/video/card/remotion/`).
+[`card/remotion/`](card/remotion/): the Remotion title card. The published video uses `src/Crazy4.tsx` (`card-crazy-v4.mp4`): the same as `Crazy3`, with a friendlier joke about the absent co-host. `src/Crazy3.tsx` (composition `CardCrazy3`) was the first final's card: 14 s, beat-synced to the intro music (`public/a-shades-levels.json`), the elephant roasts the absent co-host, and the title and hosts are in `src/common.tsx` (`TITLE`, `HOSTS`). `Crazy.tsx` and `Crazy2.tsx` are earlier versions. The card source started from episode 194 (`../../20261027-uuidv4-vs-uuidv7/video/card/remotion/`).
 
-[`card/outro/`](card/outro/): the outro after the show, `src/Outro.tsx` (composition `Outro`, 22.72 s). It starts with the Postgres.AI logo animation (`logo-v1.mp4`, not in git) and adds the StackGres lockup. In the layout config it is `"logo"`: `$R/21-outro-v2.mp4`.
+[`card/outro/`](card/outro/): the outro after the show. The published video uses `src/Outro3.tsx` (composition `Outro3`, rendered as `21-outro-v6.mp4`): frame 1 "In this episode:" with the StackGres logo, stackgres.io/containers and "StackGres Containers · extensions on demand"; a cut; frame 2 "Prepared by:" with the PostgresAI logo. Two companies are never on one frame. The kickers use JetBrains Mono. The first version was `src/Outro.tsx` (composition `Outro`, 22.72 s). It starts with the Postgres.AI logo animation (`logo-v1.mp4`, not in git) and adds the StackGres lockup. In the layout config it is `"logo"`: `$R/21-outro-v2.mp4`.
 
 ```bash
 cd "$R/card/remotion" && npm install && npx remotion render src/index.ts CardCrazy3 out/card-crazy-v3.mp4 --codec=h264 --crf=16 --pixel-format=yuv420p
@@ -94,6 +95,17 @@ The rendered `.mov` files (ProRes 4444 with alpha, 5.6 GB in all) stay in `$R/20
 
 ## Final render
 
+The published video is `$R/27-final-v6.mp4` (uploaded 2026-11-06). How it was made:
+
+1. `27-final-v2.mp4`: full compose with `26-layout-wide.json`, `card-crazy-v3.mp4`, the overlays and `21-outro-v3.mp4` (the `render.sh` command below, with the layout and card changed). The render froze at the crossfade into the outro, twice. It was stopped with SIGINT and the ending was rebuilt: the video up to the last keyframe, copied, then the tail encoded again with the crossfade into the outro.
+2. `-v3`, `-v4`: new outros (`21-outro-v4`, `-v5`: the two separate frames, then the kickers), spliced in the same way.
+3. `-v5`: the new title card `card-crazy-v4.mp4` (`compose.ts --until 22`, first 500 frames) and `21-outro-v6.mp4` (stackgres.io/containers), spliced.
+4. `-v6`: a blur on a family photo behind Álvaro, from 12.9 s to 106.2 s (`crop=150:104:1538:302,boxblur=18:3`), until he turned his camera.
+
+Every step is now one `splice.ts` command (`tools/podcast-edit/SKILL.md`, "Fix a finished video"). Steps 1-4 took minutes each instead of a 90 min render.
+
+The first full render, `25-final-v1.mp4`:
+
 [`render.sh`](render.sh), run from `$R`:
 
 ```bash
@@ -105,7 +117,7 @@ The intro and outro music are the episode 194 cues (`O`). Their arrangement file
 
 ## Subtitles and transcript
 
-[`../subtitles/`](../subtitles/), copied from `$R` on 2026-11-05:
+[`../subtitles/`](../subtitles/), copied from `$R` on 2026-11-10 (the versions uploaded to YouTube and Transistor):
 
 - `10-youtube.en.srt`, `10-youtube.en.vtt`: YouTube captions, final-video time.
 - `11-podcast.en.srt`, `11-podcast.en.vtt`, `11-podcast.transcript.md`: podcast time.

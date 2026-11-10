@@ -6,7 +6,7 @@ The video version has eight cards. Four are bands at the bottom of the frame; fo
 
 Times are in the YouTube version, which starts with a 13-second title card. Each still is one frame from the edited video, taken after the card has finished drawing.
 
-The numbers come from the DBLab Forge case `uuid-pk-v4-v7-01` (CC BY 4.0, PostgresAI): the [brief](https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc) and the [public case directory in forge-results](https://gitlab.com/postgres-ai/forge-results/-/tree/main/cases/uuid-pk-v4-v7-01), currently in review as [merge request !2](https://gitlab.com/postgres-ai/forge-results/-/merge_requests/2). File names below are relative to that case directory. All runs were on Postgres 18 on Hetzner Cloud servers on 2026-10-26, one run per cell. Memory tiers: "small" is `shared_buffers = 1GB` with a 3 GiB memory cap; "tiny" is `shared_buffers = 512MB` with a 1.5 GiB cap.
+The numbers come from the [DBLab Forge](https://postgres.ai/products/dblab-forge) case `uuid-pk-v4-v7-01` (CC BY 4.0, PostgresAI): the [brief](https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc) and the [public case directory in forge-results](https://gitlab.com/postgres-ai/forge-results/-/tree/main/cases/uuid-pk-v4-v7-01), currently in review as [merge request !2](https://gitlab.com/postgres-ai/forge-results/-/merge_requests/2). File names below are relative to that case directory. All runs were on Postgres 18 on Hetzner Cloud servers on 2026-10-26, one run per cell. Memory tiers: "small" is `shared_buffers = 1GB` with a 3 GiB memory cap; "tiny" is `shared_buffers = 512MB` with a 1.5 GiB cap.
 
 ## 1. UUID versions
 

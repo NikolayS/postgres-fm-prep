@@ -3983,12 +3983,12 @@ I'm just gonna random pick any,
 
 810
 00:50:58,720 --> 00:51:03,940
-Nik: PL/sh my favorite. It's my favorite.
+Nik: plsh my favorite. It's my favorite.
 I think Peter Eisentraut created it.
 
 811
 00:51:03,940 --> 00:51:08,140
-Yeah, PL/sh, my favorite
+Yeah, plsh, my favorite
 PL language, the shell.
 
 812

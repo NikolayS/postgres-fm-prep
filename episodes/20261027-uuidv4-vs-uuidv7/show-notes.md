@@ -6,7 +6,7 @@ Resources mentioned in the episode. Each time in brackets is the first mention i
 
 ## Main link
 
-- [00:00:34] UUIDv4 vs UUIDv7 vs int8 primary keys on Postgres 18 (DBLab Forge brief, PostgresAI): https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc
+- [00:00:34] UUIDv4 vs UUIDv7 vs int8 primary keys on Postgres 18 ([DBLab Forge](https://postgres.ai/products/dblab-forge) brief, PostgresAI): https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc
 
 ## Our previous episodes
 
@@ -25,7 +25,7 @@ Resources mentioned in the episode. Each time in brackets is the first mention i
 - [00:00:51] Hacking Postgres 101: ULID function (Postgres.TV, 2023): https://www.youtube.com/watch?v=YPq_hiOE-N8
 - [00:00:51] Hacking Postgres sessions with Andrey, Kirk and Nik (YouTube playlist): https://www.youtube.com/playlist?list=PLH8y1BNPAKjKDdJA7sDmFWUkbbYux3TRz
 - [00:00:51] Hacking Postgres website: https://hacking.postgres.tv
-- [00:13:36] DBLab Forge results for this experiment, case `uuid-pk-v4-v7-01` (public data, CC BY 4.0): https://gitlab.com/postgres-ai/forge-results/-/tree/main/cases/uuid-pk-v4-v7-01 (in review as https://gitlab.com/postgres-ai/forge-results/-/merge_requests/2 until it is merged)
+- [00:13:36] [DBLab Forge](https://postgres.ai/products/dblab-forge) results for this experiment, case `uuid-pk-v4-v7-01` (public data, CC BY 4.0): https://gitlab.com/postgres-ai/forge-results/-/tree/main/cases/uuid-pk-v4-v7-01 (in review as https://gitlab.com/postgres-ai/forge-results/-/merge_requests/2 until it is merged)
 - [00:38:42] How to use UUID (PostgresAI how-to): https://postgres.ai/docs/postgres-howtos/schema-design/data-types/how-to-use-uuid
 
 ## Postgres commits and docs

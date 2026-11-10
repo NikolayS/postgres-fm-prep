@@ -12,7 +12,7 @@
 
 ## Links
 
-- **Experiment brief:** [UUIDv4 vs UUIDv7 vs int8 primary keys on Postgres 18](https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc) (DBLab Forge case `uuid-pk-v4-v7-01`, PostgresAI).
+- **Experiment brief:** [UUIDv4 vs UUIDv7 vs int8 primary keys on Postgres 18](https://console.postgres.ai/shared/brief/9fffe2da-00c1-470b-a79d-a210ae2306bc) ([DBLab Forge](https://postgres.ai/products/dblab-forge) case `uuid-pk-v4-v7-01`, PostgresAI).
 - **Public results:** [forge-results, case `uuid-pk-v4-v7-01`](https://gitlab.com/postgres-ai/forge-results/-/tree/main/cases/uuid-pk-v4-v7-01). The case is in review in [merge request !2](https://gitlab.com/postgres-ai/forge-results/-/merge_requests/2) (draft). The case directory link works once that merge request is merged; until then, read the files in the merge request.
 - **Raw data on Zenodo:** pending publication. The DOI 10.5281/zenodo.23812083 is reserved but not live yet.
 - **YouTube:** to be added.

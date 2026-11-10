@@ -30,6 +30,8 @@ The question: what performance-relevant state is missing after a logical Postgre
 
 ## Current status
 
+Published 2026-10-23 as episode 193, "Dump/restore done. Now what?": [YouTube](https://www.youtube.com/watch?v=0R1BJBzLCoc) · [postgres.fm](https://postgres.fm/episodes/dump-restore-done-now-what). The notes below are from the preparation.
+
 Research was assembled on 2026-10-20 UTC. The next recording/article target is October 20, with study material needed that morning Pacific time.
 
 The [Forge experiments have supplied results](forge-results.md), including the core matrix and additional tracks. The original plan is retained as a historical proposal. Public charts and selected evidence accompany the synthesis; single-run costs and unisolated explanations are qualified. No universal query-latency speedup is claimed.

@@ -596,7 +596,7 @@ Do pg_background
 
 **Nik** [00:50:58]
 
-PL/sh my favorite. It's my favorite. I think Peter Eisentraut created it. Yeah, PL/sh, my favorite PL language, the shell.
+plsh my favorite. It's my favorite. I think Peter Eisentraut created it. Yeah, plsh, my favorite PL language, the shell.
 
 **Álvaro** [00:51:09]
 

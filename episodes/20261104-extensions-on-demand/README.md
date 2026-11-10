@@ -21,6 +21,7 @@
 - [`assets/`](assets/): one still per card.
 - [`video/`](video/README.md): how the video was made: tool patches, layout, face track, title card and outro source, overlay source and manifests, and the render command.
 - [`subtitles/`](subtitles/): YouTube and podcast captions, the podcast transcript, and the subtitle dictionary.
+- [`thumbs/`](thumbs/): the title options (`titles.md`) and the sources of the YouTube thumbnails and the square cover (`src/`: HTML, face cutouts, `mk.py`). The published pair: thumbnail A, "FAT IMAGE or LAYERS?".
 - [`social/`](social/README.md): the X thread and LinkedIn post, the combinations animation and the guest clip.
 
 ## Local media (not in git)
