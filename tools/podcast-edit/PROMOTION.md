@@ -65,7 +65,11 @@ The docs repository is under SOC2: the post goes in a draft MR with a linked wor
 
 ## Video details the host asked for (episodes 194-195)
 
-- Screenshot of a post (X): a real screenshot, the key words underlined in red (no highlight box), and the URL printed under it.
+- **Posts are shown as screenshots, never as re-typed quote cards.** This applies to X, LinkedIn, Hacker News, Reddit, mailing lists (pgsql-hackers), GitHub issues, blog posts and docs. Viewers recognize the platform's UI at once, and a screenshot shows the quote is real. Episode 195 first had a typed quote card for Mitchell Hashimoto's post; the host asked for the screenshot.
+  - Take it logged out, light theme, at 2x, from the author line to the date. For X, use the official embed (`https://platform.twitter.com/embed/Tweet.html?id=<id>&theme=light`) in headless Chrome. Crop off counters and ads, but keep the platform's look.
+  - Mark the key words with a red underline (#E5322D), drawn when the speaker says them. No highlight boxes.
+  - Print the full URL under the screenshot, in small grey mono.
+  - The same rule applies to the blog post and social posts: show the original post as a screenshot with a link.
 - Faces: when the host asks for smaller faces, zoom out (take a bigger crop of the tile), do not only scale down.
 - Two companies are never on one frame. Episode 195 outro: frame 1 "In this episode:" with the guest's company; a cut; frame 2 "Prepared by:" with PostgresAI. The kickers use a clean monospace (JetBrains Mono), not a generic AI-looking font.
 - Do not say a name in the voice-over that the graphic already shows.

@@ -19,6 +19,7 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 - [ ] Long renders run under `watchdog.ts`. If a render froze at the outro, finish it with `splice.ts --outro` (SKILL.md, "Fix a finished video").
 - [ ] Outro fits the episode: no experiment outro when there were no results; two companies on separate frames; no name said twice (voice and graphic).
 - [ ] Camera backgrounds: nothing private visible (blur it).
+- [ ] Every quoted post (X, LinkedIn, HN, mailing list, GitHub…) is a real screenshot of its UI with the URL printed, not a typed quote card.
 
 ## 3. YouTube metadata
 
