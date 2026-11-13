@@ -1,6 +1,6 @@
 # Episode 196 (The hidden costs of CREATE TEMP TABLE): X thread and LinkedIn post
 
-Draft, 2026-11-12; updated 2026-11-13 after the fact-check and the final upload. Nothing is posted; Nik posts. Rules kept: no link in the first post (links in the last reply); numbers in the first line; simple English; no emojis; only our product named (DBLab Forge).
+Draft, 2026-11-12; updated 2026-11-13 after the fact-check and the final upload. Nik posts from his accounts. Rules: no link in the first post (links in the last reply); numbers in the first line; simple English; few emojis (Nik's choice in post 1); only our product named (DBLab Forge).
 
 Handles: Kirk @yugedilbertfan, the show @postgresfm, Nik @samokhvalov. The postgres.fm URL is live (checked 2026-11-13).
 
@@ -52,18 +52,18 @@ At 5,000, the DDL sessions spend 91% of their active time waiting on LWLock:SInv
 First aid: cut idle sessions.
 ```
 
-### 4/ Reply — 280 chars (X weighting) — media: none (link card)
+### 4/ Reply — 279 chars (X weighting) — media: none (link card)
 
 ```
 The fix: no temp tables in hot code.
 
 - CTE: 88,531 tx/s
 - PL/pgSQL arrays, records
-- if you must, one reused temp table per session: 17,741 tx/s
+- if you must: reuse one, ON COMMIT DELETE ROWS: 17,741 tx/s
 
-Watch: https://www.youtube.com/watch?v=gAdhpYewLZ8
-Listen (Spotify, Apple, any app): https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
 Brief (DBLab Forge): https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d
+Listen (Spotify, Apple, any app): https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+Watch: https://www.youtube.com/watch?v=gAdhpYewLZ8
 ```
 
 ## v1 (2026-11-12, reference)
@@ -151,7 +151,7 @@ Video, podcast (Spotify, Apple Podcasts, any app) and the brief with every chart
 - 4,096 slots: sinvaladt.c MAXNUMMESSAGES, unchanged since Tom Lane's 2008 rewrite (fad153ec452, in 8.4); fact-check.
 - 88.1% LWLock, 84.7% SInvalWrite at 5,000 idle: brief § 5.
 - 91% is the share of the DDL sessions' active time (fact-check, YouTube description line 2).
-- ~114 messages per create + drop: the final ring card (4,096 / 114 = about 36 transactions to fill the queue, as the card shows).
+- ~114 messages per create + drop: derived from the Postgres source in brief § 10 (2-column table, ON COMMIT DROP); a uprobe counted about 134, which the "~" covers. 4,096 / 114 = about 36 transactions to fill the queue, as the final ring card shows.
 
 ## YouTube community poll (PostgresTV, after the video is public)
 

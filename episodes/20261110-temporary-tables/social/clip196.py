@@ -12,7 +12,7 @@ CLIPS = {
     # start/end: YouTube video time (s), cut in pauses measured on the audio.
     'kirk': dict(start=1544.88, end=1598.55, name='Kirk Wolak',
                  topic='why temp tables slow down\nevery session'),
-    'nik': dict(start=1275.06, end=1309.70, name='Nik Samokhvalov',
+    'nik': dict(start=1275.11, end=1309.70, name='Nik Samokhvalov',
                 topic='idle sessions push you\noff the cliff'),
 }
 C = CLIPS[WHO]; START, END = C['start'], C['end']; DUR = END - START
@@ -131,7 +131,7 @@ meas = subprocess.run(['ffmpeg', '-hide_banner', '-ss', str(START), '-t', str(DU
 mj = json.loads(meas[meas.rindex('{'):meas.rindex('}') + 1])
 af = (f"loudnorm=I=-16:TP=-1.5:LRA=11:measured_I={mj['input_i']}:measured_TP={mj['input_tp']}:measured_LRA={mj['input_lra']}:"
       f"measured_thresh={mj['input_thresh']}:offset={mj['target_offset']}:linear=true,aresample=48000,"
-      f"afade=t=in:st=0:d=0.05,afade=t=out:st={DUR - 0.45:.2f}:d=0.45")
+      f"afade=t=in:st=0:d=0.03,afade=t=out:st={DUR - 0.15:.2f}:d=0.15,apad=pad_dur=1.0")
 subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(START), '-t', str(DUR), '-i', SRC, '-vn', '-af', af, '-ac', '2', AUD], check=True)
 
 # ---------- video ----------
@@ -142,12 +142,14 @@ def mode_of(fr):
     if pinkish(a) and not pinkish(b) and not any(pinkish(fr.getpixel(q)) for q in ((488, 470), (1432, 470), (44, 232), (930, 232), (44, 710), (930, 710), (990, 232), (1876, 232), (990, 710), (1876, 710))): return 'side'
     return None
 
-def compose(fr, mode):
+TILE_IN = 0.9  # no speaker tile in the first 0.9 s (hand-at-ear house rule), then 0.3 s fade-in
+def compose(fr, mode, t=99.0):
     im = bg.copy()
     if mode == 'card':
         im.paste(fr.crop(CARD).resize((MW, CH_), Image.LANCZOS), (MX, MEDIA_Y), card_mask)
         sm = fr.crop(SMALL[WHO]).resize((SMW, SMH), Image.LANCZOS)
-        im.paste(sm, (WX1 - 44 - SMW, 96), small_mask)
+        k = max(0.0, min(1.0, (t - TILE_IN) / 0.3))
+        if k > 0: im.paste(sm, (WX1 - 44 - SMW, 96), small_mask if k >= 1 else small_mask.point(lambda v: int(v * k)))
     else:
         im.paste(fr.crop(BIG[WHO]).resize((MW, BH_), Image.LANCZOS), (MX, MEDIA_Y), big_mask)
     return im
@@ -166,7 +168,7 @@ while True:
     if m is None:  # source layout is mid-transition: hold the last clean picture
         im = frozen if frozen is not None else compose(fr, 'side')
     else:
-        im = compose(fr, m)
+        im = compose(fr, m, t)
         if last_mode is not None and m != last_mode:
             fade_from, fade_n = frozen, 8; switches.append(round(t, 2))
         if fade_n > 0 and fade_from is not None:
@@ -179,10 +181,13 @@ while True:
             for l in lines:
                 dr.text((W // 2, y), l, font=F_CAP, fill=(245, 245, 247), anchor='ma'); y += 64
             break
-    if t > DUR - 1.6:
-        k = min(1, (t - (DUR - 1.6)) / 0.4)
+    if t > DUR - 0.6:
+        k = min(1, (t - (DUR - 0.6)) / 0.4)
         dr.text((W // 2, WY1 - 50), 'postgres.fm', font=F_END, fill=tuple(int(c * k) for c in (61, 220, 132)), anchor='mm')
     enc.stdin.write(im.tobytes())
+for _ in range(int(FPS * 1.0)):  # hold the end card 1 s after the last word (audio is padded to match)
+    enc.stdin.write(im.tobytes())
+n += int(FPS * 1.0)
 enc.stdin.close(); enc.wait(); dec.wait()
 import os; os.remove(AUD)
 print(json.dumps({'out': OUT, 'start': START, 'end': END, 'dur': round(DUR, 2), 'frames': n, 'mode_switches_at': switches, 'cues': len(shown)}))
