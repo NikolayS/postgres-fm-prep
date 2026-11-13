@@ -45,18 +45,14 @@ Idle sessions are not free. DDL tx/s at a 500 tx/s target:
 At 5,000, the DDL sessions spend 91% of their active time waiting on LWLock:SInvalWrite (PG18, 16 vCPU, synthetic).
 ```
 
-### 4/ Reply — 267 chars — media: none (link previews)
+### 4/ Reply — 244 chars — media: none (link previews)
 
 ```
-The fix: no temp tables in hot code.
+The fix: no temp tables in hot code. Use CTEs, or PL/pgSQL arrays and records.
 
-- CTEs
-- PL/pgSQL arrays and records
-- SELECT t1 FROM t1, then unnest + (t1).* to get rows back
-
-Video: https://www.youtube.com/watch?v=gAdhpYewLZ8
-Podcast: https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
-Brief (DBLab Forge), every chart and config: https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d
+Watch: https://www.youtube.com/watch?v=gAdhpYewLZ8
+Listen in Spotify, Apple Podcasts or any app, or here: https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+Brief, every chart and config: https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d
 ```
 
 ## v1 (2026-11-12, reference)
@@ -114,7 +110,7 @@ The DBLab Forge brief, every chart and config: https://console.postgres.ai/share
 
 ## LinkedIn
 
-Links go in the first comment (the same links as reply 5). Media: `../assets/23-throughput.png`.
+Links go in the first comment (the same links as v2 reply 4: Watch, Listen in any app, Brief). Media: `../assets/23-throughput.png`.
 
 ```
 A temp table created and dropped in every transaction: 3,931 tx/s. The same query as a CTE: 88,531 tx/s (Postgres 17, 16 vCPU, 32 clients, synthetic workload).
