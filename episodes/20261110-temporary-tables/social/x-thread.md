@@ -8,7 +8,69 @@ Character counts are X counts (a link = 23; limit 280); `posts.py` prints them.
 
 ---
 
-### 1/ First post (no link) — 229 chars — media: ../assets/23-throughput.png (or a clip of the throughput card from the final video, about 27:01-29:16)
+## v2 (2026-11-13): short, punchy, one emoji in the headline, bullets, a closing question
+
+The v1 posts below stay as the reference. Post v2. Media for post 1: the animation (social/anim-196.mp4). No link in post 1; links in the last reply.
+
+### 1/ First post (no link) — 253 chars — media: anim-196.mp4
+
+```
+CREATE TEMP TABLE in every transaction: 3,931 tx/s 🐘
+Same query as a CTE: 88,531 tx/s.
+
+New Postgres.FM with Kirk Wolak @yugedilbertfan:
+- why temp tables hit a cliff
+- why idle sessions make it worse
+- what to use instead
+
+Have you been bitten by this?
+```
+
+### 2/ Reply — 184 chars — media: ../assets/21-ring-final.png
+
+```
+Why? Every CREATE and DROP of a temp table is catalog DDL.
+
+- one shared invalidation queue, 4,096 slots
+- every session must read every message
+- one create + drop: about 114 messages
+```
+
+### 3/ Reply — 226 chars — media: ../assets/17-cliff.png
+
+```
+Idle sessions are not free. DDL tx/s at a 500 tx/s target:
+
+- 0 idle: 502
+- 3,000 idle: 274
+- 5,000 idle: 127
+
+At 5,000, the DDL sessions spend 91% of their active time waiting on LWLock:SInvalWrite (PG18, 16 vCPU, synthetic).
+```
+
+### 4/ Reply — 161 chars — media: none
+
+```
+The fix: no temp tables in hot code.
+
+- CTEs
+- PL/pgSQL arrays and records
+- SELECT t1 FROM t1, then unnest + (t1).* to get rows back
+
+Measured with DBLab Forge.
+```
+
+### 5/ Reply — 118 chars — media: none (link previews)
+
+```
+Video: https://www.youtube.com/watch?v=gAdhpYewLZ8
+Podcast: https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+Brief, every chart and config: https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d
+```
+
+## v1 (2026-11-12, reference)
+
+#### 1/ First post (no link) — 229 chars — media: ../assets/23-throughput.png (or a clip of the throughput card from the final video, about 27:01-29:16)
 
 ```
 A temp table created and dropped in every transaction: 3,931 tx/s.
@@ -17,7 +79,7 @@ The same query as a CTE: 88,531 tx/s.
 New Postgres.FM with Kirk Wolak @yugedilbertfan: the hidden costs of CREATE TEMP TABLE, measured with DBLab Forge. Out now.
 ```
 
-### 2/ Reply — 225 chars — media: ../assets/21-ring-final.png (frame of the final ring card)
+#### 2/ Reply — 225 chars — media: ../assets/21-ring-final.png (frame of the final ring card)
 
 ```
 Why so slow? Every CREATE and DROP of a temp table is catalog DDL, and every session must hear about it.
@@ -25,7 +87,7 @@ Why so slow? Every CREATE and DROP of a temp table is catalog DDL, and every ses
 The messages go into one shared queue with 4,096 slots, fixed at compile time. One create + drop is about 114 messages.
 ```
 
-### 3/ Reply — 230 chars — media: ../assets/17-cliff.png
+#### 3/ Reply — 230 chars — media: ../assets/17-cliff.png
 
 ```
 Idle sessions are not free.
@@ -39,7 +101,7 @@ DDL at a 500 tx/s target:
 At 5,000, the DDL sessions spend 91% of their active time waiting on LWLock:SInvalWrite (PG18, 16 vCPU, synthetic).
 ```
 
-### 4/ Reply — 268 chars — media: ../assets/16-ash.png
+#### 4/ Reply — 268 chars — media: ../assets/16-ash.png
 
 ```
 Active session history: with 0 idle sessions, 95% CPU. With 5,000 idle: 88% LWLock (85% SInvalWrite), and more than half of the seconds have no samples at all.
@@ -47,7 +109,7 @@ Active session history: with 0 idle sessions, 95% CPU. With 5,000 idle: 88% LWLo
 The fix: no temp tables in hot code. Keep results in memory (PL/pgSQL arrays, records) or rewrite as a CTE.
 ```
 
-### 5/ Reply — 142 chars — media: none (link previews)
+#### 5/ Reply — 142 chars — media: none (link previews)
 
 ```
 Links:
