@@ -1,0 +1,70 @@
+Postgres temp tables in hot code: a temp table created and dropped in every transaction ran at 3,931 tx/s; the same query as a CTE at 88,531 tx/s (PG17, 16 vCPU, 32 clients, synthetic workload).
+And idle sessions are not free: with 5,000 of them, temp-table DDL falls from 502 to 127 tx/s, and the DDL sessions spend 91% of their active time waiting on LWLock:SInvalWrite (PG18, 16 vCPU).
+
+Postgres.FM episode 196: Nik and Kirk discuss the hidden costs of CREATE TEMP TABLE: dead tuples and catalog bloat, and the shared invalidation queue that every session has to read. They cover why thousands of idle sessions make it much worse, what it looks like in wait events, and what to use instead. Kirk's team moved from Oracle, where global temporary tables are cheap; in Postgres every CREATE and DROP is catalog DDL that all sessions have to hear about.
+
+Main link: the experiment brief, with every chart, number and config (DBLab Forge, PostgresAI):
+https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d
+
+Chapters:
+00:00 Cold open
+00:21 Postgres temp tables: the hidden costs
+00:35 Michael is away; DBLab Forge experiments continue
+01:33 Kirk's story: from Oracle global temporary tables
+04:41 Hard to diagnose; dead tuples vs bloat
+08:01 What to use instead: arrays, CTEs, PL/pgSQL records
+12:21 The layers: invisible data, dead tuples, catalog bloat
+15:36 LWLock:SInvalWrite: why temp-table DDL reaches every session
+18:21 The 4,096-message invalidation queue
+20:26 Idle sessions make it worse
+24:21 How it looks in active session history
+26:51 Temp table vs CTE: under 4,000 vs 88,000 tx/s
+30:13 select t1 from t1: rows, arrays and back
+32:22 When temp tables are fine; unlogged tables
+34:36 The brief: ideas for Postgres hackers
+37:21 PgBouncer, DISCARD ALL and the Don't Do This wiki
+
+Key links (video time of the first mention):
+* Michael's post about taking a few months off, X (1:05) https://x.com/michristofides/status/2117283823314674021
+* CREATE TABLE, temporary tables: autovacuum cannot vacuum them, docs (4:55) https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-TEMPORARY
+* LWLock wait events: SInvalWrite, SInvalRead, docs (16:01) https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-LWLOCK-TABLE
+* sinvaladt.c: MAXNUMMESSAGES = 4096 (18:32) https://github.com/postgres/postgres/blob/3d342deeb433060dbea02fdd276656a5563275d5/src/backend/storage/ipc/sinvaladt.c
+* Increase the number of fast-path lock slots, Tomas Vondra, Postgres 18 (19:10) https://github.com/postgres/postgres/commit/c4d5cb71d229095a39fda1121a75ee40e6069a2a
+* pg_ash, active session history for Postgres (24:33) https://github.com/NikolayS/pg_ash
+* Linux performance tools, Brendan Gregg (25:00) https://www.brendangregg.com/linuxperf.html
+* CREATE TABLE, ON COMMIT, docs (27:35) https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-PARMS-ON-COMMIT
+* Rewrite the sinval messaging mechanism, Tom Lane, 2008 (36:04) https://github.com/postgres/postgres/commit/fad153ec45299bd4d4f29dec8d9e04e2f1c08148
+* Don't create temporary tables in frequently executed code, PostgreSQL wiki (37:02) https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_create_temporary_tables_in_frequently_executed_code
+* PgBouncer server_reset_query, default DISCARD ALL (38:06) https://www.pgbouncer.org/config.html#server_reset_query
+
+Related episodes:
+* UUIDv4 vs UUIDv7: we inserted 2 billion UUIDs https://www.youtube.com/watch?v=gf8e3JkQ_8M
+* LWLocks https://www.youtube.com/watch?v=DdQjvYHbIRU
+* max connections vs migrations https://www.youtube.com/watch?v=KFRK8PiIvTg
+* Long-running transactions https://www.youtube.com/watch?v=uSUpbUJM5Kk
+
+Subscribe for a new Postgres episode every Friday: https://www.youtube.com/@PostgresTV?sub_confirmation=1
+
+All links: https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+
+[Check out the subtitles – we edit them! YouTube auto-translates them from English to other languages; try it and share it with people interested in Postgres!]
+
+~~~
+
+What did you like or not like? What should we discuss next time? Let us know in the comments, or by tweeting us on @postgresfm https://twitter.com/PostgresFM, @samokhvalov https://twitter.com/samokhvalov and @michristofides https://twitter.com/michristofides
+
+~~~
+
+Postgres FM is produced by:
+- Michael Christofides, founder of pgMustard https://pgmustard.com/
+- Nikolay Samokhvalov, founder of PostgresAI https://postgres.ai/
+
+With credit to:
+- Jessie Draws for the elephant artwork
+- Intro and outro music: our own arrangement of Apple Loops from GarageBand
+
+~~~
+
+This is the video version. Check out https://postgres.fm to subscribe to the audio-only version, to see the transcript, guest profiles, and more.
+
+#PostgreSQL #Postgres #Database

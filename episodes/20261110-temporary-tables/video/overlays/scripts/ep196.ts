@@ -47,7 +47,7 @@ const DOCS_CT = 'https://www.postgresql.org/docs/current/sql-createtable.html';
 const GH = 'https://github.com/postgres/postgres/blob/3d342deeb433060dbea02fdd276656a5563275d5/src/backend/storage/ipc/sinvaladt.c';
 const ROWS = (at: number[]) => [
   {tag: '0', text: 'Primary only', at: at[0]},
-  {tag: '1', text: 'Invisible to other sessions', at: at[1]},
+  {tag: '1', text: 'Data invisible to other sessions', at: at[1]},
   {tag: '2A', text: 'Dead tuples', at: at[2]},
   {tag: '2B', text: 'Catalog bloat', at: at[3]},
 ];
@@ -88,7 +88,7 @@ export const ITEMS: Item[] = [
     source: `the layers as listed on air (Nik); 2B measurement from ${BRIEF} § 5 ("churn at 128 clients grows pg_attribute by 737 to 839 MiB ... in about 70 s ... reuse_* arms grow it by less than 1.5 MiB")`.concat('; 2A "dead tuples" as Nik says on air ("it\'s not bloat, it\'s dead tuples")'), still: 808},
   {id: '09-kirk-60m', comp: 'band196', placement: 'band', srcStart: 875.9, srcEnd: 892.0,
     words: 'Kirk: "So what was 10 million a day" (876.18) "quickly became 60 million" (879.12-881.02) "updates to PG catalog a day" (881.56-883.82) ... "for no good reason" (890.58)',
-    props: {lines: [{style: 'dark', segs: [{text: '10M queries/day', at: 876.6}, {text: '  →  60M pg_catalog changes/day', at: 879.9}]}, {style: 'chip', segs: [{text: "Kirk's system: 2 temp tables + 1 index, created and dropped", at: 883.0}]}]},
+    props: {lines: [{style: 'dark', segs: [{text: '10M queries/day', at: 876.6}, {text: '  →  60M pg_catalog changes/day', at: 879.9}]}, {style: 'chip', segs: [{text: "Kirk's system: 2 temp tables + 1 index, created and dropped", at: 883.0}]}, {style: 'chip', segs: [{text: "Editor's note: 13+ catalog rows per temp table: far more than 60M", at: 885.5}]}]},
     source: 'on air (Kirk), his production system; not measured by us', still: 888},
   {id: '10-robot-tag', comp: 'band196', placement: 'band', srcStart: 907.9, srcEnd: 914.4,
     words: 'Nik: "told him not to speak unless directly addressed" (908.84-911.34)',
@@ -113,7 +113,7 @@ export const ITEMS: Item[] = [
     accents: [1134.9], source: `${GH}#L123 (master on 2026-11-10; line 102: "MAXNUMMESSAGES: max number of shared-inval messages we can buffer.", line 123: #define MAXNUMMESSAGES 4096; capture at 4x so the push-in stays sharp)`, still: 1140.5},
   {id: '15-lockmanager', comp: 'band196', placement: 'band', srcStart: 1173.2, srcEnd: 1209.5,
     words: 'Nik: "first you will start seeing lightweight lock lock manager" (1173.39) ... "max locks per transaction" (1199.91) ... "this lightweight lock goes away" (1207.85-1209.29)',
-    props: {lines: [{style: 'dark', segs: [{text: 'Over 16 relations per transaction: LWLock:LockManager', at: 1173.6}]}, {style: 'chip', segs: [{text: 'PG18: raise max_locks_per_transaction', at: 1200.0}]}]},
+    props: {lines: [{style: 'dark', segs: [{text: 'Many relations per transaction: LWLock:LockManager', at: 1173.6}]}, {style: 'chip', segs: [{text: 'Fast path: 16 slots up to PG17; PG18: 64 by default, scaled by max_locks_per_transaction', at: 1200.0}]}, {style: 'chip', segs: [{text: "Editor's note: temp-table DDL takes AccessExclusiveLock, never the fast path", at: 1203.0}]}]},
     source: 'commit c4d5cb71d229095a39fda1121a75ee40e6069a2a (Tomas Vondra, PG18): 16 fast-path locks since 9.2; arrays "sized on startup based on max_locks_per_transaction"; https://github.com/postgres/postgres/commit/c4d5cb71d229095a39fda1121a75ee40e6069a2a', still: 1205},
   {id: '16-cpu', comp: 'ashts196', placement: 'center', srcStart: 1217.5, srcEnd: 1240.0,
     words: 'Nik: "usually a CPU is low" (1221.19-1223.39) "and disk IO is low" (1224.37-1225.39) ... "this, uh, invalidation queue" (1237.73-1239.77)',

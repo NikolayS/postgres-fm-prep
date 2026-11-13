@@ -333,7 +333,11 @@ export const Cliff196: React.FC<CliffProps> = (p) => {
   );
 };
 
-// ---------- the ring: a fixed queue of 4,096 slots broadcasting to every session ----------
+// ---------- the ring: a fixed queue of 4,096 slots; every session must read every message, or be reset ----------
+// Checked against sinvaladt.c/sinval.c (2026-11-13): circular buffer of MAXNUMMESSAGES = 4096 (compile time).
+// Writers only flag sessions (hasMessages); from half full (2,048 msgs, SIG_THRESHOLD) the furthest-behind
+// session is woken with a catch-up signal, one at a time, each passing it on; at full, sessions that still
+// have not read are reset (rebuild all caches). Writers never wait for readers; they contend on SInvalWriteLock.
 export type RingProps = {
   drawAt: number; fillAt: number; msgNote: string; flashAt: number; quadAt: number; greyAt: number; redAt: number;
   durationSec: number;
@@ -343,56 +347,91 @@ export const Ring196: React.FC<RingProps> = (p) => {
   const {t, grow, s} = useT();
   const CX = 360, CY = 390, R = 250;
   const draw = grow(p.drawAt, 1.0);
-  // True scale: one temp-table create + drop = ~114 of 4,096 slots (2.8%, ~2.7 of 96 ticks). From fillAt one
-  // transaction lands every 0.35 s and fills its slice; 36 of them fill the ring.
-  const TX = 36, PER = 0.35;
-  const ntx = t >= p.fillAt ? Math.min(TX, Math.floor((t - p.fillAt) / PER) + 1) : 0;
-  const nfill = (ntx * TICKS) / TX;
-  const red = t >= p.redAt ? Math.max(0, 1 - (t - p.redAt) / 1.6) * (0.5 + 0.5 * Math.cos((t - p.redAt) * 14)) : 0;
+  // True scale: one create + drop = ~114 of 4,096 slots. One transaction every 0.35 s from fillAt.
+  const TX = 36, HALF = 18, PER = 0.35;
+  const halfAt = p.fillAt + (HALF - 1) * PER;
+  // after half full the writer slows so that transaction 36 (full) lands at redAt: the reset comes
+  // before any unread slot is reused (sinvaladt.c SIInsertDataEntries -> SICleanupQueue(true, n))
+  const PER2 = (p.redAt - halfAt) / (TX - HALF);
+  const txF = t < p.fillAt ? 0 : t < halfAt ? (t - p.fillAt) / PER + 1 : HALF + (t - halfAt) / PER2;
+  const ntx = Math.floor(txF);
+  // moving window: head = newest message, tail = oldest still needed; after full the window rotates
+  const headT = txF * TICKS / TX;                               // ticks written; the writer keeps the slow pace
+  const head = headT;
+  const tail = Math.max(0, head - TICKS);                       // at most 4,096 kept
   const quad = grow(p.quadAt, 1.2);
   const n1 = 1000, n4 = 4000;
-  const GX = 790, GY = 160, GW = 660, GH = 560;
+  const GX = 790, GY = 200, GW = 660, GH = 420;
   const count = Math.round(n1 + (n4 - n1) * quad);
-  const big = quad >= 0.02; // from the quadruple on: 80 x 50 grid, dots fill in up to 4,000
+  const big = quad >= 0.02;
   const cols = big ? 80 : 40, rows = big ? 50 : 25, nShow = big ? count : n1;
   const cw = GW / cols, ch = GH / rows;
   const r = Math.min(cw, ch) * 0.36;
   const grey = grow(p.greyAt, 0.8);
-  const flashWave = (i: number) => {
-    if (t < p.flashAt) return 0;
-    // repeating broadcasts: a wave every 1.6 s sweeping the grid
-    const col = i % cols, row = Math.floor(i / cols);
-    const d = (col / cols + row / rows) * 0.6;
-    const ph = ((t - p.flashAt - d) % 1.6 + 1.6) % 1.6;
-    return t - p.flashAt - d < 0 ? 0 : Math.max(0, 1 - ph / 0.35);
-  };
+  const flag = grow(p.fillAt, 0.6);                             // writers flag every session from the first write
+  const flagLegend = grow(p.flashAt, 0.6);
+  // catch-up chain: one session woken at a time, from half full on
+  const RATE = 22;                                              // sessions per second (schematic)
+  const chainAtRed = Math.floor((p.redAt - halfAt) * RATE);
+  const NS = chainAtRed + 1;                                    // after the reset the chain loops over the survivors only
+  const chainF = t >= halfAt ? ((t - halfAt) * RATE) % NS : -1;
+  const chain = Math.floor(chainF);
+  const red = grow(p.redAt, 0.8);
   const dots: React.ReactNode[] = [];
   for (let i = 0; i < nShow; i++) {
     const col = i % cols, row = Math.floor(i / cols);
-    const fl = flashWave(i);
-    const base = 0.45 + 0.55 * fl;
-    const c = grey > 0 ? `rgba(${Math.round(255 - 100 * grey)},${Math.round(255 - 100 * grey)},${Math.round(255 - 90 * grey)},${base * (1 - 0.35 * grey) + 0.1})` : `rgba(255,255,255,${base})`;
-    dots.push(<circle key={i} cx={GX + col * cw + cw / 2} cy={GY + row * ch + ch / 2} r={r * (1 + 0.5 * fl)} fill={c} />);
+    const woken = i === chain && chain >= 0;                     // one needSig at a time; reset sessions are never signalled
+    const since = t >= halfAt ? (((chainF - i) % NS) + NS) % NS / RATE : 9;                          // seconds since this session caught up
+    const caught = i <= chainAtRed && !woken && since < 1 && (t >= p.redAt || i < chain);                      // white trail, fades back to flagged (next write flags it again)
+    const isReset = i > chainAtRed && red > 0;
+    let c: string; let rr = r;
+    if (woken) { c = K.yellow; rr = r * 2.4; }
+    else if (isReset) c = `rgba(255,75,62,${0.35 + 0.6 * red})`;
+    else if (caught) c = `rgba(255,255,255,${0.85 * (1 - since)})`;
+    else {
+      const g = 255 - 100 * grey;
+      const base = 0.45 * (1 - 0.3 * grey) + 0.1;
+      c = flag > 0 ? `rgba(${Math.round(g + (255 - g) * 0.0)},${Math.round(g - 80 * flag)},${Math.round(g - 150 * flag)},${base})` : `rgba(${g},${g},${Math.round(255 - 90 * grey)},${base})`;
+    }
+    dots.push(<circle key={i} cx={GX + col * cw + cw / 2} cy={GY + row * ch + ch / 2} r={rr} fill={c} />);
   }
+  const line2 = ntx < HALF ? `× ${Math.max(ntx, 0)} transaction${ntx === 1 ? '' : 's'}`
+    : ntx < TX ? `× ${ntx} transactions: catch-up signals` : '× 36 = full: laggards reset';
+  const labA = grow(halfAt, 0.5), labR = red;
   return (
     <Panel>
-      <svg width={1470} height={800} style={{position: 'absolute', left: 50, top: 40}}>
+      <svg width={1470} height={870} style={{position: 'absolute', left: 50, top: 40}}>
         {Array.from({length: TICKS}).map((_, i) => {
           const a = (i / TICKS) * Math.PI * 2 - Math.PI / 2;
           const shown = i / TICKS <= draw;
-          const filled = i < nfill;
-          const col = red > 0.05 ? K.red : filled ? K.orange : 'rgba(255,255,255,0.4)';
-          const r0 = R - 34, r1 = R + (filled ? 6 : 0);
+          // a slot is in use if its logical position (i + k*TICKS) lies in [tail, head)
+          const k = Math.floor((head - i) / TICKS);
+          const pos = i + k * TICKS;
+          const filled = pos >= tail && pos < head && head > 0;
+          const isHead = head > 0 && Math.floor((head - 0.001) % TICKS) === i;
+          const col = isHead ? '#fff' : filled ? K.orange : 'rgba(255,255,255,0.4)';
+          const r0 = R - 34, r1 = R + (filled ? 6 : 0) + (isHead ? 16 : 0);
           return shown ? <line key={i} x1={CX + Math.cos(a) * r0} y1={CY + Math.sin(a) * r0} x2={CX + Math.cos(a) * r1} y2={CY + Math.sin(a) * r1} stroke={col} strokeWidth={9} strokeLinecap="round" /> : null;
         })}
-        <circle cx={CX} cy={CY} r={R + 26} fill="none" stroke={K.red} strokeWidth={10} opacity={red} />
-        <text x={CX} y={CY + 40} fill="#fff" fontSize={120} fontFamily="Inter" fontWeight={700} textAnchor="middle" opacity={draw}>4,096</text>
-        <text x={CX} y={CY + 92} fill={DIM} fontSize={32} fontFamily="Inter" fontWeight={600} textAnchor="middle" opacity={draw}>message slots, fixed</text>
+        <text x={CX} y={CY + 30} fill="#fff" fontSize={120} fontFamily="Inter" fontWeight={700} textAnchor="middle" opacity={draw}>4,096</text>
+        <text x={CX} y={CY + 80} fill={DIM} fontSize={32} fontFamily="Inter" fontWeight={600} textAnchor="middle" opacity={draw}>message slots</text>
+        <text x={CX} y={CY + 118} fill={DIM} fontSize={26} fontFamily="Inter" fontWeight={500} textAnchor="middle" opacity={draw}>fixed at compile time</text>
         <text x={CX} y={CY + R + 90} fill={K.orange} fontSize={40} fontFamily="Inter" fontWeight={700} textAnchor="middle" opacity={grow(p.fillAt, 0.5)}>{p.msgNote}</text>
-        <text x={CX} y={CY + R + 145} fill="#fff" fontSize={40} fontFamily="Inter" fontWeight={600} textAnchor="middle" opacity={grow(p.fillAt, 0.5)} style={{fontVariantNumeric: 'tabular-nums'}}>{ntx >= TX ? '× 36 transactions = full' : `× ${ntx} transaction${ntx === 1 ? '' : 's'}`}</text>
+        <text x={CX} y={CY + R + 145} fill="#fff" fontSize={38} fontFamily="Inter" fontWeight={600} textAnchor="middle" opacity={grow(p.fillAt, 0.5)} style={{fontVariantNumeric: 'tabular-nums'}}>{line2}</text>
         {dots}
-        <text x={GX} y={GY - 40} fill="#fff" fontSize={54} fontFamily="Inter" fontWeight={700} opacity={s(0.4)}>{fmt(quad < 0.02 ? n1 : count)} sessions</text>
-        <text x={GX + GW} y={GY - 40} fill={DIM} fontSize={40} fontFamily="Inter" fontWeight={600} textAnchor="end" opacity={grow(p.greyAt, 0.6)}>all idle</text>
+        <text x={GX} y={GY - 80} fill="#fff" fontSize={54} fontFamily="Inter" fontWeight={700} opacity={s(0.4)}>{fmt(quad < 0.02 ? n1 : count)} sessions</text>
+        <text x={GX + GW} y={GY - 80} fill={DIM} fontSize={40} fontFamily="Inter" fontWeight={600} textAnchor="end" opacity={grow(p.greyAt, 0.6)}>all idle</text>
+        <text x={GX} y={GY - 30} fill={DIM} fontSize={30} fontFamily="Inter" fontWeight={500} opacity={grow(p.quadAt + 1.5, 0.6)}>each must read every message, or be reset</text>
+        {[
+          {o: flagLegend, c: 'rgba(255,175,105,0.75)', txt: 'flagged: has unread messages', y: 0},
+          {o: labA, c: K.yellow, txt: 'catch-up signal: woken one at a time', y: 1},
+          {o: labR, c: K.red, txt: 'reset: must rebuild all caches', y: 2},
+        ].map((L) => <g key={L.y} opacity={L.o}>
+          <circle cx={GX + 12} cy={GY + GH + 38 + 44 * L.y} r={10} fill={L.c} />
+          <text x={GX + 34} y={GY + GH + 49 + 44 * L.y} fill="#fff" fontSize={30} fontFamily="Inter" fontWeight={600}>{L.txt}</text>
+        </g>)}
+        <text x={GX} y={GY + GH + 49 + 44 * 3} fill={K.orange} fontSize={30} fontFamily="Inter" fontWeight={700} opacity={grow(p.greyAt + 1.5, 0.6)}>writers queue on SInvalWriteLock:</text>
+        <text x={GX} y={GY + GH + 49 + 44 * 3 + 38} fill={K.orange} fontSize={30} fontFamily="Inter" fontWeight={700} opacity={grow(p.greyAt + 1.5, 0.6)}>each write flags all {fmt(count)} sessions</text>
       </svg>
       <div style={{position: 'absolute', left: 50, bottom: 30, fontSize: 38, fontWeight: 500, color: DIM}}>Schematic</div>
     </Panel>

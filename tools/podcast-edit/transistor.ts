@@ -59,21 +59,24 @@ export async function release(o: Opts, d: Deps): Promise<{ id?: string; status: 
     return { id: o.episode, status: "dry-run" };
   }
 
+  async function upload(file: string) {
+    const up = (await api("GET", `/episodes/authorize_upload?filename=${encodeURIComponent(basename(file))}`)).data.attributes;
+    log(`PUT <presigned upload URL>: ${file}`);
+    const put = await d.fetch(up.upload_url, { method: "PUT", headers: { "Content-Type": up.content_type }, body: await d.readFile(file) });
+    if (!put.ok) throw new Error(`audio upload: HTTP ${put.status}`);
+    return up.audio_url as string;
+  }
   let id = o.episode, status = "draft";
   if (id) {
     // Transistor rejects a PATCH with no episode fields ("episode is missing", HTTP 422), so a
-    // publish-only run (--episode <id> --publish) skips it.
-    const f = fields(content);
+    // publish-only run (--episode <id> --publish) skips it. --audio replaces the episode audio.
+    const f = fields({ ...content, audio_url: o.audio ? await upload(o.audio) : undefined });
     if ([...f].length) {
       const r = await api("PATCH", `/episodes/${id}`, f);
       status = r.data?.attributes?.status ?? status;
-    } else if (!o.publish) throw new Error("nothing to do: give --description-file, --transcript-file, --summary-file, --video-url or --publish");
+    } else if (!o.publish) throw new Error("nothing to do: give --audio, --description-file, --transcript-file, --summary-file, --video-url or --publish");
   } else {
-    const up = (await api("GET", `/episodes/authorize_upload?filename=${encodeURIComponent(basename(o.audio!))}`)).data.attributes;
-    log(`PUT <presigned upload URL>: ${o.audio}`);
-    const put = await d.fetch(up.upload_url, { method: "PUT", headers: { "Content-Type": up.content_type }, body: await d.readFile(o.audio!) });
-    if (!put.ok) throw new Error(`audio upload: HTTP ${put.status}`);
-    const r = await api("POST", "/episodes", fields({ show_id: o.show, title: o.title, number: o.number, season: o.season, audio_url: up.audio_url, ...content }));
+    const r = await api("POST", "/episodes", fields({ show_id: o.show, title: o.title, number: o.number, season: o.season, audio_url: await upload(o.audio!), ...content }));
     id = String(r.data.id);
     status = r.data.attributes?.status ?? status;
     log(`draft episode ${id}`);

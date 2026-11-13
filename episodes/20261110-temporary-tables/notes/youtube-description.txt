@@ -1,5 +1,5 @@
 Postgres temp tables in hot code: a temp table created and dropped in every transaction ran at 3,931 tx/s; the same query as a CTE at 88,531 tx/s (PG17, 16 vCPU, 32 clients, synthetic workload).
-And idle sessions are not free: with 5,000 of them, temp-table DDL falls from 502 to 127 tx/s, and LWLock:SInvalWrite takes 91% of the waits (PG18, 16 vCPU).
+And idle sessions are not free: with 5,000 of them, temp-table DDL falls from 502 to 127 tx/s, and the DDL sessions spend 91% of their active time waiting on LWLock:SInvalWrite (PG18, 16 vCPU).
 
 Postgres.FM episode 196: Nik and Kirk discuss the hidden costs of CREATE TEMP TABLE: dead tuples and catalog bloat, and the shared invalidation queue that every session has to read. They cover why thousands of idle sessions make it much worse, what it looks like in wait events, and what to use instead. Kirk's team moved from Oracle, where global temporary tables are cheap; in Postgres every CREATE and DROP is catalog DDL that all sessions have to hear about.
 

@@ -1,0 +1,2865 @@
+1
+00:00:00,080 --> 00:00:01,740
+Nik: Why create temporary tables at all?
+
+2
+00:00:01,848 --> 00:00:05,381
+Nik: You're basically already falling
+from the cliff
+
+3
+00:00:05,381 --> 00:00:07,148
+and just lie down there on the bottom.
+
+4
+00:00:07,324 --> 00:00:11,497
+Kirk: "Hey, just confirm that you know
+you have to update your cache here,
+
+5
+00:00:11,497 --> 00:00:13,584
+because somebody created a temp table."
+
+6
+00:00:13,704 --> 00:00:19,040
+Nik: Less than 4,000 for temporary tables
+which are created per transaction.
+
+7
+00:00:19,104 --> 00:00:20,540
+Nik: Just don't use temp tables.
+
+8
+00:00:20,840 --> 00:00:27,840
+[music]
+
+9
+00:00:27,840 --> 00:00:34,840
+[music]
+
+10
+00:00:35,160 --> 00:00:38,220
+Nik: Hello, hello,
+this is Postgres.FM. I'm Nik.
+
+11
+00:00:38,220 --> 00:00:42,220
+And as usual, already with me is Kirk.
+Hi, Kirk.
+
+12
+00:00:42,420 --> 00:00:44,420
+- Thank you for joining.
+- Hey, Nik.
+
+13
+00:00:44,420 --> 00:00:48,640
+Nik: It's the fourth time I
+think we record without Michael,
+
+14
+00:00:49,060 --> 00:00:52,580
+who is on vacations for a few months.
+
+15
+00:00:52,700 --> 00:00:56,240
+He, by the way,
+announced it in his social networks,
+
+16
+00:00:57,080 --> 00:01:03,260
+last week, and I'm just like, for regular
+folks who watch us, on YouTube,
+
+17
+00:01:04,900 --> 00:01:10,020
+there should be a sound right now, and you
+should see, you should see the, this tweet
+
+18
+00:01:10,100 --> 00:01:16,460
+from Michael.
+So, while Michael is off, let's continue
+
+19
+00:01:16,580 --> 00:01:23,040
+exploring Postgres behavior
+with DBLab Forge. And today,
+
+20
+00:01:23,620 --> 00:01:29,060
+we have a topic We were discussing
+with Kirk, behind the scene, I think,
+
+21
+00:01:29,060 --> 00:01:32,720
+- for a couple of years already, right?
+- Yeah. Three or more.
+
+22
+00:01:32,920 --> 00:01:37,560
+Nik: Three or more. [laughs] Yeah. We...
+So, Kirk, tell, tell us, your story.
+
+23
+00:01:37,560 --> 00:01:40,700
+You moved, your system from Oracle, right?
+
+24
+00:01:40,700 --> 00:01:45,260
+And this provoked you to use
+temporary tables. Am I right?
+
+25
+00:01:45,260 --> 00:01:49,880
+Kirk: Yes, absolutely.
+And after doing it, I met you.
+
+26
+00:01:49,880 --> 00:01:53,720
+[laughs] And you're like, "No,
+don't use temporary tables."
+
+27
+00:01:53,720 --> 00:01:58,940
+But we, we struggled because
+Oracle has global temporary tables,
+
+28
+00:01:59,080 --> 00:02:01,440
+and you get it in the global dictionary.
+
+29
+00:02:01,440 --> 00:02:05,680
+There's no pg_catalog changes
+for every session that needs them.
+
+30
+00:02:05,680 --> 00:02:10,000
+All of that kind of comes along free.
+They just have a flag that says, "Oh,
+
+31
+00:02:10,000 --> 00:02:13,880
+store this in his own files,"
+like not with everything else.
+
+32
+00:02:13,880 --> 00:02:18,740
+So it was so easy to use, and the code
+could count on it being there.
+
+33
+00:02:18,740 --> 00:02:21,540
+It was wonderful.
+And when we switched over to Postgres,
+
+34
+00:02:21,540 --> 00:02:24,840
+we find out, no, we're gonna have
+to create these temporary tables
+
+35
+00:02:24,840 --> 00:02:26,940
+all the time, and this adds overhead.
+
+36
+00:02:26,940 --> 00:02:32,760
+And this is our most heavily used search,
+is we store results in a temporary table,
+
+37
+00:02:32,760 --> 00:02:37,280
+and then we fill up extra data in them,
+and then we provide them back.
+
+38
+00:02:37,340 --> 00:02:42,400
+And it took us a while to get
+this really wired up efficiently,
+
+39
+00:02:42,440 --> 00:02:46,490
+and to realize that if it's set...
+If certain settings are too low,
+
+40
+00:02:46,490 --> 00:02:50,140
+you end up spilling over to disk while
+you're writing to your temp table.
+
+41
+00:02:50,140 --> 00:02:54,600
+During practice and running it by hand,
+I ran into an issue where it slowed down
+
+42
+00:02:54,600 --> 00:02:55,940
+more, and more, and more,
+
+43
+00:02:55,940 --> 00:02:59,620
+and I realized I was using delete
+and I should've been truncating.
+
+44
+00:02:59,620 --> 00:03:01,600
+- [laughs]
+- And you assumed that-
+
+45
+00:03:01,600 --> 00:03:03,500
+Kirk: At one point, I actually had to
+
+46
+00:03:03,500 --> 00:03:05,900
+- vacuum analyze my temp table-
+- Yeah
+
+47
+00:03:05,900 --> 00:03:08,782
+Kirk: to get the results
+I'm expecting for speed.
+
+48
+00:03:08,790 --> 00:03:10,680
+- Right
+- I'm sorry, what was your question?
+
+49
+00:03:10,680 --> 00:03:15,740
+Nik: Yeah. I say, I say maybe truncate
+is not, also a good thing in this context,
+
+50
+00:03:15,740 --> 00:03:19,540
+- as we will discuss a little bit later.
+- Why?
+
+51
+00:03:19,540 --> 00:03:26,540
+Nik: But I must admit, until this...
+Like, until recently, I was, talk-
+
+52
+00:03:26,720 --> 00:03:29,840
+I was saying things like
+never use sub-transactions,
+
+53
+00:03:29,840 --> 00:03:35,420
+never use temporary tables. Well,
+I speak from practice. And you can...
+
+54
+00:03:35,420 --> 00:03:41,500
+It means, like, you can use them if you
+have very low loads, right? If you, like,
+
+55
+00:03:41,500 --> 00:03:46,940
+have tiny workloads, like below,
+like few hundred transactions per second,
+
+56
+00:03:46,940 --> 00:03:52,460
+for example. It's like you won't notice
+big, big, problems. But when you grow,
+
+57
+00:03:53,120 --> 00:03:58,940
+these things quickly become performance
+cliffs, right? Or walls. Cliffs or walls?
+
+58
+00:03:58,940 --> 00:04:01,920
+- Cliffs, right? Because you're-
+- Yeah, cliffs. You fall off of them.
+
+59
+00:04:01,920 --> 00:04:02,700
+- Yeah.
+- Yeah.
+
+60
+00:04:02,700 --> 00:04:05,140
+- Yeah.
+- You unexpectedly trip and fall off
+
+61
+00:04:05,140 --> 00:04:06,660
+- of them, so...
+- Right.
+
+62
+00:04:06,660 --> 00:04:09,940
+- Right?
+- Yeah. And so it can cause even downtime.
+
+63
+00:04:10,260 --> 00:04:16,240
+So until recently,
+I always said this keeping in mind that
+
+64
+00:04:17,480 --> 00:04:23,000
+temporary tables are bad
+in two areas for me. First is
+
+65
+00:04:23,300 --> 00:04:28,520
+they're actually really hard to diagnose
+because you don't see them. Transaction-
+
+66
+00:04:28,520 --> 00:04:31,680
+- Mm
+- session which created it does see it.
+
+67
+00:04:31,700 --> 00:04:36,340
+But if, if you're a DBA, like,
+trying to... or you have an agent trying
+
+68
+00:04:36,340 --> 00:04:40,811
+to diagnose things, connecting to database
+in a different session obviously,
+
+69
+00:04:40,900 --> 00:04:44,460
+you're limited in terms of understanding
+what's happening. You, you...
+
+70
+00:04:44,460 --> 00:04:45,880
+Like, it's, it's hard.
+
+71
+00:04:45,980 --> 00:04:51,390
+And second thing is second thing is bloat.
+You are right. Like, it's just...
+
+72
+00:04:51,390 --> 00:04:55,090
+But not bloat of temporary tables.
+We need to distinguish things here.
+
+73
+00:04:55,090 --> 00:04:58,890
+If you use a lot of deletes, Autovacuum
+will ignore temporary tables, right?
+
+74
+00:04:58,890 --> 00:05:00,380
+It, it will just...
+
+75
+00:05:01,560 --> 00:05:06,920
+Autovacuum doesn't care about your poor
+temporary tables. If you use deletes,
+
+76
+00:05:06,920 --> 00:05:13,040
+your bloat, content, like,
+as, as we all know, MVCC in Postgres-
+
+77
+00:05:13,320 --> 00:05:16,960
+- Yep
+- deletes, delete is, is done very fast
+
+78
+00:05:17,420 --> 00:05:23,420
+because it's only marking tuple
+as deleted in this session,
+
+79
+00:05:24,200 --> 00:05:28,800
+which probably will be, like,
+not so if rollback happens, right?
+
+80
+00:05:29,280 --> 00:05:34,400
+But then, the real, clean,
+cleanup happens in, in the vacuum.
+
+81
+00:05:34,600 --> 00:05:38,240
+Like, Autovacuum runs cleanup.
+Everything is great.
+
+82
+00:05:38,240 --> 00:05:43,940
+But if you delete in your table,
+temporary table, Autovacuum doesn't care.
+
+83
+00:05:43,940 --> 00:05:46,760
+It means you just accumulate
+a lot of dead tuples.
+
+84
+00:05:46,760 --> 00:05:50,760
+It's not bloat, it's dead tuples actually.
+I, I, I tend to distinguish,
+
+85
+00:05:50,760 --> 00:05:53,540
+dead tuples from bloat
+because in my def...
+
+86
+00:05:53,540 --> 00:05:58,069
+There's no, official definition of bloat.
+You cannot find it in documentation
+
+87
+00:05:58,596 --> 00:06:03,276
+So different people mean different
+things when they say bloat.
+
+88
+00:06:03,276 --> 00:06:08,036
+But to me, bloat is what's left
+after cleaning up, dead tuples.
+
+89
+00:06:08,036 --> 00:06:10,536
+It's empty space which is unused.
+
+90
+00:06:11,056 --> 00:06:16,256
+It will be probably used, but in many
+cases it will be unlikely used because,
+
+91
+00:06:16,256 --> 00:06:20,616
+for example, 90% of our space is empty,
+
+92
+00:06:21,276 --> 00:06:25,516
+and nobody will come back
+and use it at all. Anyway...
+
+93
+00:06:25,516 --> 00:06:29,575
+And yeah, and if you have index
+on temporary table, it also degrades.
+
+94
+00:06:29,836 --> 00:06:33,316
+This touches our topic
+a couple of weeks ago, right?
+
+95
+00:06:33,316 --> 00:06:40,316
+int8 versus UUID version
+four and version seven, and how, like,
+
+96
+00:06:40,496 --> 00:06:44,516
+B-tree can degrade and so on over time.
+And in this case, nobody will use it
+
+97
+00:06:44,516 --> 00:06:48,956
+probably at all if it's UUID version
+seven, so you'll just delete something.
+
+98
+00:06:48,956 --> 00:06:49,956
+- What?
+- Yeah.
+
+99
+00:06:50,156 --> 00:06:52,816
+Kirk: So, so the challenge is, again,
+
+100
+00:06:52,816 --> 00:06:56,116
+your advice was rock solid
+because it comes from experience.
+
+101
+00:06:56,116 --> 00:07:01,880
+And it's hard to put everything that goes
+wrong when you use temporary tables into
+
+102
+00:07:01,880 --> 00:07:05,430
+words, and that's what we're gonna
+do in this episode a bit for people,
+
+103
+00:07:05,430 --> 00:07:09,180
+is we're gonna make sure you understand
+what you're giving up by, by taking
+
+104
+00:07:09,180 --> 00:07:10,856
+advantage of this feature.
+
+105
+00:07:10,856 --> 00:07:16,076
+And one of the things I wanna point out
+is we've tested this now in our system.
+
+106
+00:07:16,316 --> 00:07:21,136
+We've rewritten the stored procedures
+that do the temporary table work
+
+107
+00:07:21,156 --> 00:07:23,236
+and return the data set out of them.
+
+108
+00:07:23,236 --> 00:07:27,556
+We've rewritten them to do it all
+using in-memory record structures.
+
+109
+00:07:27,616 --> 00:07:31,056
+And it's not only faster
+to do it this way, okay?
+
+110
+00:07:31,056 --> 00:07:34,456
+But the thing is, it's now
+a read-only transaction.
+
+111
+00:07:34,456 --> 00:07:38,956
+There's no extra transaction being
+created because I'm searching.
+
+112
+00:07:39,136 --> 00:07:40,576
+So what happens is it's-
+
+113
+00:07:40,576 --> 00:07:43,490
+- In other words
+- now I can run it on another machine on a
+
+114
+00:07:43,490 --> 00:07:46,930
+- read-only server right now. If you use-
+- You're jumping to solution
+
+115
+00:07:46,930 --> 00:07:48,660
+- already,
+- Hey, well, well-
+
+116
+00:07:48,660 --> 00:07:50,996
+- since you're jumping-
+- I'm jumping to the problem, right?
+
+117
+00:07:50,996 --> 00:07:53,030
+- Right.
+- I hope I'm not jumping to the so yeah,
+
+118
+00:07:53,030 --> 00:07:54,956
+- but we found a solution-
+- Solution is just-
+
+119
+00:07:54,956 --> 00:07:57,690
+- and I only looked for it
+- don't use temporary tables.
+
+120
+00:07:57,690 --> 00:08:00,130
+- And we have-
+- Well, yeah, but I just wanted
+
+121
+00:08:00,130 --> 00:08:01,410
+to let people know that one
+
+122
+00:08:01,410 --> 00:08:04,716
+way to do it is store it in memory.
+Store it in record structure in memory-
+
+123
+00:08:04,716 --> 00:08:07,276
+- Yeah
+- if you have to. Just use an RTE,
+
+124
+00:08:07,536 --> 00:08:09,536
+or there's a handful of ways you
+
+125
+00:08:09,536 --> 00:08:10,676
+- can do this.
+- Yeah.
+
+126
+00:08:10,676 --> 00:08:13,441
+Kirk: It doesn't have
+to be overly complicated.
+
+127
+00:08:13,576 --> 00:08:16,870
+And I think I'll end up writing
+an article for the wiki,
+
+128
+00:08:17,376 --> 00:08:21,376
+so that in the "don't do this" section,
+I'm literally gonna recommend,
+
+129
+00:08:21,376 --> 00:08:23,920
+don't use temporary tables,
+especially as part-
+
+130
+00:08:23,920 --> 00:08:26,376
+- I, I will support this
+- of your regular stuff.
+
+131
+00:08:26,376 --> 00:08:32,856
+Nik: 100%. So, and, and you use, you said,
+these structures, is it in PL/pgSQL code,
+
+132
+00:08:32,856 --> 00:08:37,836
+- in, in functions, stored procedures?
+- Yeah. Pure PL/pg, you know, SQL. Yeah
+
+133
+00:08:37,836 --> 00:08:41,456
+- or just CTE with arrays also will work.
+- Well,
+
+134
+00:08:41,456 --> 00:08:47,716
+the reason the CTEs don't work for us
+is we have, for, for business reasons,
+
+135
+00:08:47,716 --> 00:08:51,076
+we actually apply a lot
+of business logic to the results.
+
+136
+00:08:51,076 --> 00:08:52,756
+So when we bring back results,
+
+137
+00:08:52,756 --> 00:08:55,756
+our results aren't like Google
+search for something, blah.
+
+138
+00:08:55,756 --> 00:09:00,396
+Our results are a lot closer to what
+an AI might do, where it then proofs some
+
+139
+00:09:00,396 --> 00:09:06,296
+of the results that come back, and then it
+prioritizes some, and then augments them
+
+140
+00:09:06,296 --> 00:09:10,076
+with information they might need,
+like currencies in their country,
+
+141
+00:09:10,076 --> 00:09:13,736
+and things that if you add to one
+giant query, just forget it.
+
+142
+00:09:13,736 --> 00:09:18,916
+You won't get the performance we get,
+okay? Our average search speeds with like,
+
+143
+00:09:18,956 --> 00:09:23,456
+two different like fields, et cetera,
+is, like, 30 milliseconds, okay?
+
+144
+00:09:23,456 --> 00:09:28,156
+Across the 200 million row table
+that's being updated in real time.
+
+145
+00:09:28,656 --> 00:09:31,556
+- Mm-hmm. Mm-hmm
+- it crushes this kind of performance.
+
+146
+00:09:31,556 --> 00:09:35,796
+We tried doing, letting the optimizer
+do these two points in the past.
+
+147
+00:09:35,796 --> 00:09:38,400
+Even Oracle failed.
+Like, it was just slow-
+
+148
+00:09:38,400 --> 00:09:40,750
+- I,
+- because it had so many decisions to make
+
+149
+00:09:40,750 --> 00:09:44,350
+Nik: you, you are figuring me.
+I would look at this. I, I cannot imagine
+
+150
+00:09:44,350 --> 00:09:48,836
+the thing I couldn't solve
+with advanced CTEs, with arrays,
+
+151
+00:09:48,836 --> 00:09:52,750
+and stuff like unnested and so on.
+But let's not... You're provoking me.
+
+152
+00:09:52,750 --> 00:09:54,190
+- Yeah.
+- Like, this is super
+
+153
+00:09:54,190 --> 00:09:55,630
+off-topic right now. Like, I,
+
+154
+00:09:55,630 --> 00:09:58,280
+- Yeah, yeah, yeah. It's all right
+- I love PL/pgSQL.
+
+155
+00:09:58,280 --> 00:10:02,356
+I, this is my favorite language the last,
+I think, 15 years, so [laughs]
+
+156
+00:10:02,356 --> 00:10:05,236
+- Nice.
+- Yeah. Other language, basically, right?
+
+157
+00:10:05,236 --> 00:10:08,876
+But CTEs I also love,
+and there are pros and cons, and, like,
+
+158
+00:10:08,876 --> 00:10:12,776
+let's not go there because it's,
+like, kind of two paths for solution.
+
+159
+00:10:12,776 --> 00:10:14,500
+- Yeah, yeah. Yeah.
+- But before-
+
+160
+00:10:14,500 --> 00:10:17,656
+Kirk: So again, we came
+from an environment. We had one set up.
+
+161
+00:10:17,656 --> 00:10:19,496
+We recreated it here.
+
+162
+00:10:19,536 --> 00:10:23,736
+And part of what we had to understand
+was the timing and what we had to give up.
+
+163
+00:10:23,736 --> 00:10:27,720
+- Mm-hmm.
+- So straight up, Postgres was 10 to 25%
+
+164
+00:10:27,720 --> 00:10:30,276
+- slower than Oracle, for the same query-
+- Not bad
+
+165
+00:10:30,276 --> 00:10:32,256
+- same data, roughly.
+- Not bad.
+
+166
+00:10:32,256 --> 00:10:34,356
+Kirk: Not bad. For free, it's awesome.
+
+167
+00:10:34,356 --> 00:10:39,160
+In fact, the price difference is so
+interesting that the client bought 8X
+
+168
+00:10:39,160 --> 00:10:41,360
+- the machine to run Postgres on.
+- [laughs]
+
+169
+00:10:41,360 --> 00:10:43,360
+- Like, just because it was a joke.
+- I,
+
+170
+00:10:43,360 --> 00:10:47,010
+this happens a lot once. I remember
+a huge company migrating from Oracle,
+
+171
+00:10:47,010 --> 00:10:52,036
+and they said, "Our fleet, like, with
+Postgres, on Postgres is much bigger."
+
+172
+00:10:52,036 --> 00:10:54,816
+And I was thinking,
+is it bad thing or good thing?
+
+173
+00:10:54,816 --> 00:10:58,876
+Is it a bad thing because you need
+more machines to run the same workload
+
+174
+00:10:58,876 --> 00:11:03,200
+to, to match, like, the power? Or it's
+a good thing because it's just because you
+
+175
+00:11:03,200 --> 00:11:06,956
+don't pay for license, you finally can
+get more power in terms of hardware,
+
+176
+00:11:06,956 --> 00:11:08,640
+- right?
+- That was exactly.
+
+177
+00:11:08,640 --> 00:11:10,190
+- Yeah.
+- That was... this client
+
+178
+00:11:10,190 --> 00:11:12,216
+- looked at the price of the machine-
+- Yeah
+
+179
+00:11:12,216 --> 00:11:16,130
+Kirk: and compared it to what they're,
+what they even pay for just development
+
+180
+00:11:16,130 --> 00:11:17,130
+- licenses.
+- Yeah.
+
+181
+00:11:17,130 --> 00:11:18,230
+- And they laughed.
+- Yeah.
+
+182
+00:11:18,230 --> 00:11:19,990
+- [laughs]
+- Yeah. So,
+
+183
+00:11:19,990 --> 00:11:21,810
+They're like, "The machine's good for five
+
+184
+00:11:21,810 --> 00:11:23,036
+- years."
+- We should return-
+
+185
+00:11:23,036 --> 00:11:25,600
+- So yeah
+- to the core problem, and we, we...
+
+186
+00:11:25,600 --> 00:11:28,456
+I think we have...
+There are, like, several layers there.
+
+187
+00:11:28,456 --> 00:11:33,856
+But before they go back to the problem,
+how many times did I need to tell you
+
+188
+00:11:33,856 --> 00:11:37,327
+that get rid of temporary tables
+before you started acting?
+
+189
+00:11:37,880 --> 00:11:40,970
+Yeah. So you had mentioned it,
+and it, it planted a seed.
+
+190
+00:11:40,970 --> 00:11:43,930
+I just didn't understand how
+easy it would be, to be honest.
+
+191
+00:11:43,930 --> 00:11:46,880
+- Mm-hmm.
+- And not only that, here's what changed.
+
+192
+00:11:46,880 --> 00:11:51,436
+Because we're now on Postgres and the
+client went from having a server to six
+
+193
+00:11:51,436 --> 00:11:55,496
+different servers that do different
+work and offload it differently,
+
+194
+00:11:55,496 --> 00:11:59,104
+and it scales better,
+the client's now asking- Oh,
+
+195
+00:11:59,104 --> 00:12:02,564
+does this mean we can put a server,
+up in the cloud and have it close
+
+196
+00:12:02,564 --> 00:12:03,690
+- to Asia where-
+- Yes
+
+197
+00:12:03,690 --> 00:12:05,344
+- half of our clients are?
+- Yes.
+
+198
+00:12:05,344 --> 00:12:09,150
+Kirk: Could we go here? And could
+we do it with a centralized server
+
+199
+00:12:09,150 --> 00:12:11,650
+- and maybe make these read-only replicas?
+- Yeah.
+
+200
+00:12:11,650 --> 00:12:14,580
+And it's like, well,
+the minute they did that, guess what?
+
+201
+00:12:14,580 --> 00:12:17,770
+The temp tables have to go out the window.
+We cannot use our... Right?
+
+202
+00:12:17,770 --> 00:12:20,320
+- Okay. Let's unwrap this.
+- So that finished it. [laughs]
+
+203
+00:12:20,320 --> 00:12:21,584
+- Yeah. Yeah.
+- I was done.
+
+204
+00:12:21,584 --> 00:12:24,784
+Nik: Let's,
+let's untangle this, like, big,
+
+205
+00:12:26,344 --> 00:12:29,544
+big thing, of problems
+with temporary tables. Okay.
+
+206
+00:12:29,544 --> 00:12:34,444
+Problems number zero,
+they can be used only on the primary.
+
+207
+00:12:35,304 --> 00:12:37,984
+- Yeah. Yeah.
+- Problem number
+
+208
+00:12:38,404 --> 00:12:43,344
+one for, like, troubleshooting,
+you don't see them from other sessions,
+
+209
+00:12:43,344 --> 00:12:47,579
+so if something is wrong, it's really
+hard to diagnose what's happening.
+
+210
+00:12:47,604 --> 00:12:53,044
+Problem number two, 2A and 2B, bloat.
+
+211
+00:12:53,044 --> 00:12:57,064
+2A is the bloat itself
+if you use delete, but okay-
+
+212
+00:12:57,064 --> 00:12:59,770
+- Mm-hmm
+- you can just truncate, right? Okay.
+
+213
+00:13:00,423 --> 00:13:05,004
+And you need to vacuum, your, on your own,
+so it's not, it's not again,
+
+214
+00:13:05,004 --> 00:13:09,004
+it's not bloat, dead, dead tuples,
+but after vacuum becomes bloat.
+
+215
+00:13:09,004 --> 00:13:13,964
+Anyway, the MVCC problems with the content
+of these temporary tables themselves.
+
+216
+00:13:14,044 --> 00:13:18,664
+But problem 2.2B is a catalog bloat.
+
+217
+00:13:18,864 --> 00:13:20,084
+- This is like-
+- Yeah
+
+218
+00:13:20,084 --> 00:13:24,804
+Nik: for me, like, it's like I saw
+it so many times. Yeah. It's like,
+
+219
+00:13:24,804 --> 00:13:31,044
+just like you, you come to people and they
+have 95, 99%, some catalog tables bloated.
+
+220
+00:13:31,144 --> 00:13:35,024
+And as we know, as you know,
+you cannot use pg_repack or something.
+
+221
+00:13:35,024 --> 00:13:39,204
+You need to vacuum full. Fortunately,
+it it's usually, like, just a few seconds.
+
+222
+00:13:39,204 --> 00:13:44,744
+Boom, and, and it's done.
+Like small surgery. But then other
+
+223
+00:13:45,104 --> 00:13:49,924
+queries are, are affected by catalog
+bloat because it takes more and more time
+
+224
+00:13:50,044 --> 00:13:53,380
+to deal with metadata,
+with catalog, right? Sound good?
+
+225
+00:13:53,380 --> 00:13:56,684
+Kirk: And two, two guys trying
+to create records at the same time.
+
+226
+00:13:56,684 --> 00:14:01,384
+Now you have contention. So, and we didn't
+see how bad it was until we kind of ran
+
+227
+00:14:01,384 --> 00:14:05,864
+a count and were watching
+for transaction ID wraparound.
+
+228
+00:14:05,964 --> 00:14:11,044
+Thankfully, it gets handled automatically,
+but what we thought was 10 million
+
+229
+00:14:11,304 --> 00:14:15,164
+queries a day running through,
+we didn't realize because we,
+
+230
+00:14:15,164 --> 00:14:19,184
+we had two temp tables and an index,
+temporary index,
+
+231
+00:14:19,184 --> 00:14:24,264
+that those are three records going
+in, and they're three records coming out
+
+232
+00:14:24,344 --> 00:14:26,004
+when that session's over, right?
+
+233
+00:14:26,004 --> 00:14:29,464
+When you free up your temp tables,
+then those three have to come out.
+
+234
+00:14:29,464 --> 00:14:34,804
+So what was 10 million a day
+quickly became 60 million
+
+235
+00:14:34,844 --> 00:14:38,124
+- updates to pg_catalog a day.
+- Mm-hmm.
+
+236
+00:14:38,124 --> 00:14:42,183
+Kirk: Okay? Pretty soon, we're just
+wasting time updating pg_catalog.
+
+237
+00:14:42,384 --> 00:14:45,064
+Like, you know, for, for no good reason.
+
+238
+00:14:45,064 --> 00:14:46,504
+- [laughs]
+- Right.
+
+239
+00:14:46,504 --> 00:14:51,224
+Kirk: So, and that, and that has
+a whole different raft of problems
+
+240
+00:14:51,224 --> 00:14:54,704
+if you cross certain barriers, so.
+
+241
+00:14:54,824 --> 00:15:01,504
+Nik: Yeah. And our silicon friend here
+who is silent because I told, I, I,
+
+242
+00:15:01,504 --> 00:15:04,864
+I told him not to speak
+unless directly addressed.
+
+243
+00:15:04,864 --> 00:15:09,144
+He says also that there is a, like,
+interesting hidden issue with
+
+244
+00:15:10,544 --> 00:15:12,784
+so transaction ID wraparound.
+
+245
+00:15:13,124 --> 00:15:16,948
+I can imagine in very heavily
+loaded environments it might happen
+
+246
+00:15:17,004 --> 00:15:21,964
+that a vacuum cannot,
+take care of, like, cannot freeze, right?
+
+247
+00:15:22,844 --> 00:15:28,044
+The, the content of the the tuples
+in temporary tables,
+
+248
+00:15:28,044 --> 00:15:29,924
+which is also additional risk.
+
+249
+00:15:30,044 --> 00:15:35,944
+I would still put it, to category, like,
+the, to item two, complex item two, right?
+
+250
+00:15:35,944 --> 00:15:38,744
+- Okay.
+- It's all about MVCC and bloat and so on
+
+251
+00:15:38,744 --> 00:15:41,584
+in that layer.
+And finally, layer number three,
+
+252
+00:15:41,584 --> 00:15:45,504
+which is central topic for this podcast,
+which is very, very interesting.
+
+253
+00:15:45,504 --> 00:15:49,404
+It doesn't it's not related
+to bloat, MVCC, nothing.
+
+254
+00:15:50,364 --> 00:15:56,404
+It's related to how Postgres works, when
+something, like, when any DDL happens,
+
+255
+00:15:56,404 --> 00:16:01,504
+including, temporary table creation,
+and actually truncate as well.
+
+256
+00:16:01,604 --> 00:16:07,884
+So it, it looks like a wait event,
+lightweight lock,
+
+257
+00:16:08,103 --> 00:16:15,084
+SInvalWrite, SInvalRead.
+So, a snapshot invalidation,
+
+258
+00:16:15,084 --> 00:16:18,824
+catalog snapshot invalidation,
+and it happens when one session,
+
+259
+00:16:19,564 --> 00:16:26,564
+executes some DDL or truncate as well, and
+it signals, that other sessions must also,
+
+260
+00:16:27,424 --> 00:16:31,424
+like,
+refresh their understanding of catalog.
+
+261
+00:16:31,464 --> 00:16:35,484
+And interesting that I was thinking,
+like, I, I couldn't understand why
+
+262
+00:16:35,484 --> 00:16:39,544
+logically it doesn't make sense to me.
+Why, why do we do it?
+
+263
+00:16:39,544 --> 00:16:43,844
+Because temporary tables,
+they are visible to only to our session.
+
+264
+00:16:44,024 --> 00:16:48,944
+Why do we need to signal others
+anything at all? What do you think?
+
+265
+00:16:48,944 --> 00:16:51,244
+- Right.
+- Why? [laughs] Why?
+
+266
+00:16:52,344 --> 00:16:55,684
+- Yeah.
+- And I... Honestly, it may just be
+
+267
+00:16:55,724 --> 00:17:00,504
+a, like a trigger on pg_catalog that says,
+"Hey, the catalog's changed.
+
+268
+00:17:00,504 --> 00:17:04,020
+Tell everyone that their catalog
+assumptions might be wrong,"
+
+269
+00:17:04,020 --> 00:17:07,624
+right? That the optimizer might have
+to look at maybe it added a column,
+
+270
+00:17:07,624 --> 00:17:12,684
+maybe it did this. So maybe it
+was an overly safe approach to, hey,
+
+271
+00:17:12,684 --> 00:17:17,264
+catalog change, just send this out, okay?
+So that it gets handled. Because you're
+
+272
+00:17:17,264 --> 00:17:23,444
+dead on. There's only one backend that can
+truly read your temp tables, right?
+
+273
+00:17:23,444 --> 00:17:26,184
+And needs to know about
+changes to your temp tables.
+
+274
+00:17:26,184 --> 00:17:28,584
+The problem is, it's a global catalog.
+
+275
+00:17:28,784 --> 00:17:34,464
+Nik: Right. Right. It is global catalog.
+Exactly. Data is, is local.
+
+276
+00:17:34,464 --> 00:17:38,084
+A catalog is, is global.
+This is just mechanism Postgres uses.
+
+277
+00:17:38,084 --> 00:17:44,704
+And and one of the ideas, DBLab Forge
+brought, as usually we have ideas for
+
+278
+00:17:44,764 --> 00:17:49,324
+current versions, for operations,
+for DBREs and their agents
+
+279
+00:17:49,748 --> 00:17:54,528
+And additionally, separately, we have
+ideas for future improvements in Postgres.
+
+280
+00:17:54,588 --> 00:17:58,768
+And one of the ideas to make it
+truly local, but it, it's like,
+
+281
+00:17:58,768 --> 00:18:00,668
+I guess it's just hard because
+
+282
+00:18:01,448 --> 00:18:05,148
+because how work with catalog
+is organized in Postgres.
+
+283
+00:18:05,348 --> 00:18:09,588
+There, there was work on implementing
+global temporary tables for guys who
+
+284
+00:18:09,588 --> 00:18:15,768
+are moving from Oracle should be good. But
+I think it's abandoned a few years ago,
+
+285
+00:18:15,948 --> 00:18:21,728
+so I'm not sure about the status of that.
+Anyway, moving back to this thing.
+
+286
+00:18:21,748 --> 00:18:28,408
+So every time, you create a, a temporary
+table or or destroy it or truncate it,
+
+287
+00:18:28,568 --> 00:18:31,948
+this signal goes to this queue,
+invalidation queue,
+
+288
+00:18:32,308 --> 00:18:38,808
+which is 4,096 hard-coded constant, right?
+
+289
+00:18:38,808 --> 00:18:43,288
+- Okay.
+- Yeah. And what happens, when you,
+
+290
+00:18:44,088 --> 00:18:49,348
+as DBLab Forge found, first you don't
+see that particular lightweight lock.
+
+291
+00:18:49,528 --> 00:18:52,728
+If you take, for example,
+Postgres 18 or Postgres 19,
+
+292
+00:18:52,728 --> 00:18:56,508
+which is release candidate 2
+right now, right? It will...
+
+293
+00:18:56,508 --> 00:19:01,108
+And you just start in many sessions,
+start, creating temporary tables,
+
+294
+00:19:01,588 --> 00:19:06,868
+and increase number of such sessions,
+increase contention. On 16-core machine,
+
+295
+00:19:08,688 --> 00:19:10,548
+you will start seeing problems. Like,
+
+296
+00:19:10,548 --> 00:19:13,708
+first you will start seeing
+lightweight lock LockManager,
+
+297
+00:19:13,708 --> 00:19:19,288
+which is understandable because if you
+have indexes and a lot of relations,
+
+298
+00:19:19,548 --> 00:19:25,108
+fast path is not, happening,
+is not, being used
+
+299
+00:19:25,148 --> 00:19:31,228
+if you exceed the total number
+of relations in transaction exceeding 16.
+
+300
+00:19:32,488 --> 00:19:37,248
+Which is quite easy to solve,
+super easy to solve in Postgres 18,
+
+301
+00:19:37,448 --> 00:19:42,928
+just increasing max_locks_per_transaction
+setting. Setting it, for example, 128,
+
+302
+00:19:42,928 --> 00:19:48,068
+256, and then, this,
+this lightweight lock goes away.
+
+303
+00:19:48,468 --> 00:19:53,288
+And then you see this lightweight
+lock SInvalWrite.
+
+304
+00:19:53,967 --> 00:20:00,448
+And the interesting thing
+is that if you see it, usually
+
+305
+00:20:00,648 --> 00:20:05,668
+a CPU is low and disk IO is low,
+can be close to zero.
+
+306
+00:20:05,868 --> 00:20:09,728
+So you don't see the server as loaded
+at all, but you are not getting-
+
+307
+00:20:09,728 --> 00:20:13,248
+- Mm
+- throughput as you should because
+
+308
+00:20:13,548 --> 00:20:18,548
+this is just this, like,
+bottleneck, this invalidation queue.
+
+309
+00:20:19,188 --> 00:20:26,088
+And the problem further
+increases if you have
+
+310
+00:20:26,368 --> 00:20:32,528
+additional, idle sessions, which is quite
+common on RDS and Aurora. They...
+
+311
+00:20:32,528 --> 00:20:37,708
+Like, we see clients all the time coming
+to us with, like, 2,500 max connections,
+
+312
+00:20:37,708 --> 00:20:39,548
+5,000 max connections.
+
+313
+00:20:39,888 --> 00:20:44,728
+And they start, like, when project
+is growing, they start using them.
+
+314
+00:20:45,028 --> 00:20:49,048
+Even if they use... There is no PgBouncer
+usually because you need to manage it,
+
+315
+00:20:49,048 --> 00:20:51,048
+- like, yeah.
+- Yeah.
+
+316
+00:20:51,048 --> 00:20:53,968
+Nik: Amazon doesn't provide
+it as a managed service.
+
+317
+00:20:53,968 --> 00:20:58,628
+They, they provide RDS proxy,
+but RDS proxy is very weird thing.
+
+318
+00:20:58,628 --> 00:21:03,808
+We see it's, like,
+provoking idle sessions really well.
+
+319
+00:21:03,828 --> 00:21:09,048
+We just see a lot of idle sessions, so it
+doesn't help to shave off, idle sessions.
+
+320
+00:21:09,048 --> 00:21:12,695
+So it's quite common you just have,
+like, 2,000 idle sessions.
+
+321
+00:21:13,508 --> 00:21:14,568
+- Wow.
+- Yeah.
+
+322
+00:21:14,568 --> 00:21:21,568
+And this directly negatively affects,
+this very problem, this lightweight lock
+
+323
+00:21:21,988 --> 00:21:26,028
+SInvalWrite contention,
+as you can see from the graphs.
+
+324
+00:21:26,948 --> 00:21:33,948
+So, this means that, like, you just have
+bottleneck. You, you experience a problem,
+
+325
+00:21:34,068 --> 00:21:38,988
+like performance issue. It's performance
+cliff. It can come, like, in waves.
+
+326
+00:21:39,848 --> 00:21:44,328
+If you have a lot of idle sessions,
+it can be, like, constant.
+
+327
+00:21:44,328 --> 00:21:48,868
+You're basically already falling
+from the cliff and just lie down there
+
+328
+00:21:49,008 --> 00:21:51,728
+on the bottom, right? And and it...
+
+329
+00:21:51,728 --> 00:21:58,028
+I, I can imagine in some cases it can
+be downtime, just like outage, right?
+
+330
+00:21:58,388 --> 00:22:01,988
+And if you just...
+Like, first urgent emergency help,
+
+331
+00:22:01,988 --> 00:22:08,988
+just shave off idle sessions. Find a way,
+like, bring PgBouncer or better plan,
+
+332
+00:22:09,488 --> 00:22:15,088
+application side, pool connection sizes,
+right? You can... Usually you can cut it.
+
+333
+00:22:15,128 --> 00:22:20,168
+How it happens, like right now we are,
+like, how many weeks, before Black Friday?
+
+334
+00:22:20,748 --> 00:22:23,208
+- What usually happens, I saw-
+- Three.
+
+335
+00:22:23,208 --> 00:22:30,208
+Nik: Yeah. Two or three, yeah. So Black
+Friday is when e-commerce companies start,
+
+336
+00:22:32,728 --> 00:22:36,608
+bringing more capacity to handle
+Black Friday well, because it's like,
+
+337
+00:22:36,608 --> 00:22:41,888
+it's like tsunami workload usually for
+successful businesses. And they just...
+
+338
+00:22:41,888 --> 00:22:46,608
+How it, like, usually works, guys who
+are responsible for application, they say,
+
+339
+00:22:46,608 --> 00:22:51,308
+"Oh, our application is quite heavy.
+Let's double or triple, quadruple
+
+340
+00:22:51,388 --> 00:22:56,108
+number of application nodes." But usually
+they just forget about database,
+
+341
+00:22:56,108 --> 00:22:58,588
+and they just don't talk to database.
+
+342
+00:22:58,588 --> 00:23:04,508
+And if there's no PgBouncer, which is,
+which protects from extra idle sessions,
+
+343
+00:23:05,348 --> 00:23:08,628
+they just, like, say,
+"Okay, we just double double
+
+344
+00:23:08,988 --> 00:23:11,788
+- number of application nodes."
+- Yeah.
+
+345
+00:23:11,788 --> 00:23:16,908
+Nik: But they don't, don't... Like, they
+have application size poolers, say like,
+
+346
+00:23:16,908 --> 00:23:22,188
+40. Like, they have like 100 nodes, 40.
+Oh, too much, too many, right?
+
+347
+00:23:22,188 --> 00:23:29,188
+Say, okay, 10. 10 too small.
+Okay. Say some of all sessions,
+
+348
+00:23:29,388 --> 00:23:35,308
+before the their change was 1,000,
+and we were okay with it.
+
+349
+00:23:35,308 --> 00:23:41,568
+Okay, it was RDS 5,000 max connections,
+but application side pooler protected us.
+
+350
+00:23:41,568 --> 00:23:43,408
+We didn't exceed 1,000.
+
+351
+00:23:43,408 --> 00:23:47,968
+But now they decided to double or,
+or triple the number of application nodes,
+
+352
+00:23:48,088 --> 00:23:52,148
+not changing the size
+of pooler on application side.
+
+353
+00:23:52,704 --> 00:23:56,164
+So we just suddenly have more
+connections potentially, right?
+
+354
+00:23:56,164 --> 00:23:59,664
+- Right.
+- Yeah. And the database, okay,
+
+355
+00:23:59,784 --> 00:24:05,704
+it handles quite well and after
+Postgres 13, 14 it thanks to work
+
+356
+00:24:05,804 --> 00:24:11,690
+from Andres Freund, it handles really
+well extra idle connections usually.
+
+357
+00:24:11,690 --> 00:24:15,544
+Like you can couple of thousand idle
+connections, you don't suffer from them.
+
+358
+00:24:15,544 --> 00:24:20,944
+Except this point, if you intensively
+use temporary tables, it will hurt you.
+
+359
+00:24:20,944 --> 00:24:27,284
+So this wait event can be seen
+in active session history dashboards,
+
+360
+00:24:27,284 --> 00:24:32,684
+like Performance Insights
+or our dashboards, PostgresAI dashboards.
+
+361
+00:24:32,844 --> 00:24:38,024
+Or if you, if you use pg_ash, you can see
+it as well. And you just see, oh, boom,
+
+362
+00:24:38,024 --> 00:24:44,124
+like a lot of sessions are waiting
+in that wait, wait event. CPU is not 100%.
+
+363
+00:24:44,384 --> 00:24:49,104
+Disk I/O is far from saturation, maybe
+even close to zero if we have very cached
+
+364
+00:24:49,424 --> 00:24:54,784
+state as we had in this synthetic case,
+by DBLab Forge.
+
+365
+00:24:55,024 --> 00:24:59,924
+And nothing is happening, right?
+And this actually very classic
+
+366
+00:25:00,024 --> 00:25:06,364
+situation of a problem, performance
+problem, which Brendan Gregg in his,
+
+367
+00:25:07,104 --> 00:25:11,504
+I, I highly recommend, there are a couple
+of videos, from some conference,
+
+368
+00:25:12,164 --> 00:25:17,104
+where he just walks through various
+Linux tools. And one of the cases,
+
+369
+00:25:17,104 --> 00:25:22,204
+like CPU is almost zero, disk I/O is zero,
+but performance is not there.
+
+370
+00:25:22,204 --> 00:25:26,800
+What's happening, right?
+This is happening. We're just waiting.
+
+371
+00:25:26,800 --> 00:25:30,804
+Some, some bottleneck, and we're just
+waiting for something, and, and that's it.
+
+372
+00:25:30,804 --> 00:25:35,004
+Kirk: And again, it's a, it's, it's
+a basically a 4K ring buffer that we're
+
+373
+00:25:35,004 --> 00:25:38,780
+dropping these messages into,
+and we've got to wait till everybody
+
+374
+00:25:38,780 --> 00:25:42,870
+basically takes off and says, yeah,
+I cleared my... You know, I listened.
+
+375
+00:25:42,870 --> 00:25:44,870
+- I know. Thank you very much."
+- Mm-hmm.
+
+376
+00:25:44,870 --> 00:25:47,650
+And the challenge
+is this is going out to everybody.
+
+377
+00:25:47,650 --> 00:25:49,064
+- It's a broadcast.
+- Mm-hmm.
+
+378
+00:25:49,064 --> 00:25:53,284
+Kirk: And you're, you're now
+broadcasting it, not to 1,000 sessions,
+
+379
+00:25:53,284 --> 00:25:56,484
+- but now to 4,000 sessions.
+- All idle ones. Yeah.
+
+380
+00:25:56,484 --> 00:26:00,743
+Kirk: And all idle ones. And you're
+broadcasting then to them, "Hey,
+
+381
+00:26:01,083 --> 00:26:04,404
+just confirm that you know you
+have to update your cache here,
+
+382
+00:26:04,404 --> 00:26:06,698
+because somebody created a temp table."
+
+383
+00:26:06,784 --> 00:26:10,444
+And the worst part is, is the more
+temp table creation you get,
+
+384
+00:26:10,444 --> 00:26:15,164
+the more of those messages you get.
+And the queue doesn't change in size.
+
+385
+00:26:15,184 --> 00:26:17,604
+So now all of a sudden
+there's contention there,
+
+386
+00:26:17,604 --> 00:26:22,244
+and now you get people waiting and
+waiting, and you have to wait to process.
+
+387
+00:26:22,244 --> 00:26:26,384
+And all of a sudden now everything
+you're doing is just running slower.
+
+388
+00:26:26,384 --> 00:26:30,804
+The queries didn't get any harder,
+okay? Nothing really...
+
+389
+00:26:30,804 --> 00:26:35,340
+It's not the work, it's the information,
+right? This is like adding a late,
+
+390
+00:26:35,340 --> 00:26:38,540
+adding an extra developer to a late
+project only makes it later.
+
+391
+00:26:38,540 --> 00:26:41,990
+This is adding a session to a system
+that's overwhelmed by the number
+
+392
+00:26:41,990 --> 00:26:47,024
+of sessions, only makes the system more
+overwhelmed by the number of sessions.
+
+393
+00:26:47,024 --> 00:26:48,590
+- Yeah.
+- So interesting.
+
+394
+00:26:48,590 --> 00:26:50,844
+- And then
+- You, you had just mentioned the,
+
+395
+00:26:50,844 --> 00:26:52,010
+- the graph.
+- Yeah.
+
+396
+00:26:52,010 --> 00:26:56,120
+I think it's a good time to mention,
+'cause, you know, simply you can rewrite
+
+397
+00:26:56,120 --> 00:26:59,500
+a lot of these queries like you
+did for this as a CTE, right?
+
+398
+00:26:59,500 --> 00:27:01,804
+- Mm-hmm.
+- And we have this graph that the AI
+
+399
+00:27:01,804 --> 00:27:06,184
+will bring up or the, you know,
+whoever will bring up and show it to you.
+
+400
+00:27:06,184 --> 00:27:09,724
+- That it's amazing the, the difference.
+- Yeah.
+
+401
+00:27:09,724 --> 00:27:11,444
+- It's like-
+- 20,000
+
+402
+00:27:11,444 --> 00:27:17,750
+Kirk: yeah, 20,000, you know,
+versus 80,000 transactions per second.
+
+403
+00:27:17,750 --> 00:27:18,890
+- Hold on.
+- Depending-
+
+404
+00:27:18,890 --> 00:27:22,484
+I'm looking at the graph,
+which is like 88,000 transactions for CTE.
+
+405
+00:27:22,484 --> 00:27:26,164
+- Yeah, yeah, yeah. Yeah, that one.
+- And less than 4,000
+
+406
+00:27:26,444 --> 00:27:29,464
+for temporary tables which
+are created per transaction.
+
+407
+00:27:29,464 --> 00:27:32,824
+So temporary table,
+create table statement for temporary,
+
+408
+00:27:32,824 --> 00:27:35,164
+- create temporary table statement.
+- Yeah.
+
+409
+00:27:35,164 --> 00:27:39,264
+Nik: There's modifiers
+ON COMMIT DELETE ROWS or ON COMMIT DROP.
+
+410
+00:27:39,744 --> 00:27:43,624
+- So for ON COMMIT DROP, it's the worst.
+- Yes.
+
+411
+00:27:43,624 --> 00:27:47,264
+Nik: Because you are, like you
+basically for every transaction you,
+
+412
+00:27:47,264 --> 00:27:49,784
+you broadcast more messages, right?
+
+413
+00:27:50,144 --> 00:27:53,900
+But for ON COMMIT DELETE ROWS,
+this is your case,
+
+414
+00:27:53,900 --> 00:27:55,420
+- like, which will lead-
+- Yeah
+
+415
+00:27:55,420 --> 00:27:59,440
+to different problem. It will lead to a
+lot of dead tuples. You need to vacuum.
+
+416
+00:27:59,440 --> 00:28:01,690
+- Okay.
+- You have now bloat and like indexes
+
+417
+00:28:01,690 --> 00:28:07,864
+are out of shape. So that is good here
+because slight, like good like four,
+
+418
+00:28:07,864 --> 00:28:12,464
+four or five times better in terms
+of maximum TPS you can achieve.
+
+419
+00:28:12,464 --> 00:28:16,964
+So you have 17,000 transactions
+in this synthetic experiment.
+
+420
+00:28:17,084 --> 00:28:22,784
+Because okay, you are deleting rows.
+If we forget about the tuples and bloat,
+
+421
+00:28:23,264 --> 00:28:29,324
+then we just avoid extra DDL and extra
+broadcast, through that queue, right?
+
+422
+00:28:29,324 --> 00:28:33,544
+So this is like slightly better,
+but I would, I wouldn't still
+
+423
+00:28:33,644 --> 00:28:36,444
+use temporary tables at all.
+
+424
+00:28:36,444 --> 00:28:43,024
+Kirk: Well, and, and the CTE version
+is like more than four times better
+
+425
+00:28:43,024 --> 00:28:48,144
+than that. You're getting 80 some
+thousand rows or transactions per second.
+
+426
+00:28:48,144 --> 00:28:53,424
+Like it's... When you see the graph,
+that should be what's telling you, oh,
+
+427
+00:28:53,484 --> 00:28:57,830
+I probably don't want a system that's
+heavily dependent on temporary tables.
+
+428
+00:28:57,830 --> 00:29:01,084
+Now look, they have their place.
+If it's a once-a-month batch job
+
+429
+00:29:01,084 --> 00:29:04,944
+or something like that, or it can't
+fit in the memory, it's insane,
+
+430
+00:29:04,944 --> 00:29:07,664
+and you have to do some stuff,
+that's perfect.
+
+431
+00:29:07,664 --> 00:29:12,524
+Like, do that. But don't use it
+as part of every search we do.
+
+432
+00:29:12,524 --> 00:29:15,484
+[laughs] As our system
+grows and we do more,
+
+433
+00:29:15,764 --> 00:29:18,564
+this is just gonna
+compound on temp tables.
+
+434
+00:29:18,684 --> 00:29:21,344
+Again, had I do-
+had to do it all over again,
+
+435
+00:29:21,600 --> 00:29:25,504
+we would've not implemented what we did,
+so... And we will change it. [laughs]
+
+436
+00:29:25,504 --> 00:29:29,144
+Nik: I, I know only one case
+where temp tables are needed,
+
+437
+00:29:29,144 --> 00:29:32,164
+is guys migrating
+from Oracle really want them.
+
+438
+00:29:32,164 --> 00:29:35,364
+Beyond that, I,
+I cannot imagine any case where, where,
+
+439
+00:29:35,364 --> 00:29:39,104
+where I would personally use
+temp tables at all. Zero.
+
+440
+00:29:39,724 --> 00:29:43,424
+Kirk: Zero. Even if, like for example,
+you're asked to do a bunch of
+
+441
+00:29:43,424 --> 00:29:47,524
+data analysis, and you have to take
+the data and massage it into a different
+
+442
+00:29:47,524 --> 00:29:52,304
+structure so that you can then load it
+into what effectively is what management
+
+443
+00:29:52,304 --> 00:29:53,630
+- wants. Because-
+- Mm-hmm
+
+444
+00:29:53,630 --> 00:29:55,490
+it's being significantly pivoted,
+
+445
+00:29:55,490 --> 00:29:57,664
+- et cetera, and they're gonna look at-
+- Well
+
+446
+00:29:57,664 --> 00:30:00,546
+Kirk: and spend time
+querying it over next month.
+
+447
+00:30:00,580 --> 00:30:06,900
+Nik: F-follow me, like, and, and again,
+YouTube guys, watching us on YouTube will,
+
+448
+00:30:06,900 --> 00:30:12,240
+will see it in the center of the screen
+right now. So imagine you have a table,
+
+449
+00:30:12,900 --> 00:30:17,560
+and you select from it. Select star
+from this table, right? Or select...
+
+450
+00:30:18,360 --> 00:30:23,460
+Let's name this table T1.
+You can say select star from the table,
+
+451
+00:30:23,460 --> 00:30:28,180
+and you will see the whole table with all,
+like, several rows, several
+
+452
+00:30:28,300 --> 00:30:34,540
+columns, right? But then you can say
+select T1 from T1. Do you know this trick?
+
+453
+00:30:36,280 --> 00:30:38,700
+Kirk: Select T1 from T1.
+
+454
+00:30:38,700 --> 00:30:41,290
+- Yeah.
+- Oh, where you select actually the record
+
+455
+00:30:41,290 --> 00:30:42,660
+- set itself-
+- Yes, exactly
+
+456
+00:30:42,660 --> 00:30:44,420
+- as a single item.
+- You will have-
+
+457
+00:30:44,420 --> 00:30:46,640
+- Okay
+- only one column, which is of record
+
+458
+00:30:46,640 --> 00:30:47,860
+- size-
+- Hmm
+
+459
+00:30:47,860 --> 00:30:51,320
+Nik: or record type,
+and you will have, n number of rows,
+
+460
+00:30:51,320 --> 00:30:55,780
+how many rows this table has.
+But then you can say select array,
+
+461
+00:30:56,600 --> 00:31:00,980
+parenthesis, and inside it select
+T1 from, from T1. What will-
+
+462
+00:31:00,980 --> 00:31:01,980
+- Oh, wow.
+- Yeah.
+
+463
+00:31:01,980 --> 00:31:03,880
+- So that'll create an array-
+- Yeah
+
+464
+00:31:03,880 --> 00:31:05,040
+- of rows-
+- Yeah
+
+465
+00:31:05,040 --> 00:31:07,960
+for all of the rows of the table
+that you're pulling.
+
+466
+00:31:07,960 --> 00:31:13,560
+Nik: You basically collapsed everything to
+a single scalar value, which contains all
+
+467
+00:31:13,560 --> 00:31:16,780
+- rows with all columns inside.
+- Right.
+
+468
+00:31:16,780 --> 00:31:20,192
+Nik: But the magic,
+the true magic is that you can undo it
+
+469
+00:31:20,360 --> 00:31:21,660
+- dynamically.
+- Right.
+
+470
+00:31:21,660 --> 00:31:25,560
+- You can unnest it and pull it back.
+- You can unnest, and then you can also,
+
+471
+00:31:25,560 --> 00:31:30,680
+use the construct, (t1).*.
+This will bring your-
+
+472
+00:31:30,680 --> 00:31:32,268
+- Yeah
+- your columns back.
+
+473
+00:31:32,300 --> 00:31:37,520
+So this is how you can play with it
+even without, direct use of arrays.
+
+474
+00:31:37,520 --> 00:31:41,920
+But why not? Like, you use arrays as well.
+In any CTE, you can use it.
+
+475
+00:31:42,400 --> 00:31:46,420
+And this is how you can have a, like,
+multi-stage analysis of whatever.
+
+476
+00:31:46,420 --> 00:31:51,700
+If you need PL/pgSQL or PLPython as well,
+you can do it in a function as well.
+
+477
+00:31:51,840 --> 00:31:54,720
+But why create temporary
+tables at all if you can
+
+478
+00:31:54,720 --> 00:31:57,070
+- do such things? Or just use-
+- Well, usually-
+
+479
+00:31:57,070 --> 00:32:00,320
+- a simple arrays. Yeah
+- in my... The examples that we typically
+
+480
+00:32:00,320 --> 00:32:05,280
+have that we're crunching through, we're
+joining, I wanna say a 200 million row
+
+481
+00:32:05,280 --> 00:32:08,100
+- table against a billion row table.
+- Mm-hmm.
+
+482
+00:32:08,100 --> 00:32:09,359
+- Okay? And we're-
+- Mm
+
+483
+00:32:09,359 --> 00:32:14,520
+Kirk: expanding out and then breaking
+down, and we get a shit ton of data back,
+
+484
+00:32:14,520 --> 00:32:20,000
+and then we have to collapse that and turn
+that around, but the result is still huge.
+
+485
+00:32:20,000 --> 00:32:21,880
+It will not fit the memory.
+
+486
+00:32:22,020 --> 00:32:26,120
+Nik: What, what exactly temporary...
+do temporary tables bring you value?
+
+487
+00:32:26,120 --> 00:32:30,600
+Which value? I would just use regular
+tables, and I would deal with the tuples
+
+488
+00:32:30,600 --> 00:32:33,680
+- and vacuuming.
+- Oh, yeah, yeah. So... And that's
+
+489
+00:32:33,680 --> 00:32:37,620
+something else to mention. Yeah. So we
+can actually, and we do this now more
+
+490
+00:32:37,620 --> 00:32:42,000
+than ever. Like I said, the only time I
+would do it if it was, like, a ad hoc.
+
+491
+00:32:42,000 --> 00:32:44,880
+But now on the stuff we do
+regularly like this, yeah,
+
+492
+00:32:44,880 --> 00:32:47,900
+we've switched to using unlogged tables.
+
+493
+00:32:47,900 --> 00:32:49,000
+- Okay?
+- Great.
+
+494
+00:32:49,080 --> 00:32:51,860
+Kirk: But there is something where,
+to be honest,
+
+495
+00:32:51,860 --> 00:32:56,600
+we drop the indexes on the unlogged
+tables, so that when we insert the data
+
+496
+00:32:56,600 --> 00:33:00,800
+across the few sets, and then we... One of
+the things we're doing is we are limiting
+
+497
+00:33:00,800 --> 00:33:03,940
+the column sets that get stored.
+We're doing a bunch of other things,
+
+498
+00:33:03,940 --> 00:33:06,200
+- but I don't wanna go too deep into this.
+- Yeah. And also-
+
+499
+00:33:06,200 --> 00:33:10,100
+- Let's have a separate session on this.
+- I feel also materialized views are,
+
+500
+00:33:10,100 --> 00:33:12,200
+is adjacent topic here, right? It's like-
+
+501
+00:33:12,200 --> 00:33:14,920
+- Right
+- so I guess there are two paths.
+
+502
+00:33:14,920 --> 00:33:19,200
+One is if you do need something like,
+a massive manipulation with data,
+
+503
+00:33:19,200 --> 00:33:22,340
+it should be on the primary,
+because you still need rights.
+
+504
+00:33:22,340 --> 00:33:24,200
+And, and then maybe like,
+
+505
+00:33:25,900 --> 00:33:28,940
+mm, regular tables, right?
+And, and, and understanding-
+
+506
+00:33:28,940 --> 00:33:32,340
+- Yeah
+- MVCC. But if you don't actually need,
+
+507
+00:33:33,440 --> 00:33:36,900
+joins, right?
+For example, if it's like just
+
+508
+00:33:37,460 --> 00:33:43,840
+dealing with arrays and so on is enough,
+and then, like, should be read-only on, on
+
+509
+00:33:43,920 --> 00:33:49,420
+possible, with potential to be
+moved to replicas and just arrays or
+
+510
+00:33:49,660 --> 00:33:53,620
+variables inside PL/pgSQL or something
+like this, right? So it's definitely-
+
+511
+00:33:53,620 --> 00:33:57,080
+- Yeah
+- it's definitely, doable.
+
+512
+00:33:57,140 --> 00:34:02,260
+So as usual, we also...
+Like, this, this probably like,
+
+513
+00:34:03,540 --> 00:34:08,120
+that we can say how to mitigate it.
+Just get rid of temporary tables.
+
+514
+00:34:08,560 --> 00:34:09,760
+- If you need-
+- Right
+
+515
+00:34:09,760 --> 00:34:13,680
+Nik: emergency help,
+get rid of idle connections, stop,
+
+516
+00:34:14,480 --> 00:34:18,660
+truncating temporary tables,
+but better just get rid of them in,
+
+517
+00:34:18,760 --> 00:34:22,380
+- Yeah
+- yeah, in, in one or, or a few possible
+
+518
+00:34:22,640 --> 00:34:27,020
+ways. But there are also ideas
+for Postgres, improvements
+
+519
+00:34:27,040 --> 00:34:30,500
+in this area. There is some work,
+and there are ideas again,
+
+520
+00:34:30,500 --> 00:34:36,120
+like if we revisit this topic, if some
+of our listeners, listen to us who,
+
+521
+00:34:36,460 --> 00:34:41,120
+do some hacking and Postgres development,
+check out, the brief.
+
+522
+00:34:41,380 --> 00:34:46,260
+As usual, at the very end,
+there are ideas for both, like,
+
+523
+00:34:46,260 --> 00:34:51,000
+DBREs and their agents and for Postgres
+itself for future development.
+
+524
+00:34:51,100 --> 00:34:54,760
+So I think these are quite
+good entry points
+
+525
+00:34:55,220 --> 00:34:59,910
+for, like, to consider some
+improvements further. What, what do you
+
+526
+00:34:59,910 --> 00:35:01,840
+- think? I personally didn't-
+- Yeah
+
+527
+00:35:01,840 --> 00:35:05,080
+spend a lot of time there,
+but I just see there is potential.
+
+528
+00:35:05,080 --> 00:35:11,300
+There are several ideas. But I wouldn't
+jump to them before extra research
+
+529
+00:35:11,660 --> 00:35:15,720
+of past discussions in, in hack-
+in the hackers' mailing list.
+
+530
+00:35:16,100 --> 00:35:18,747
+Kirk: And since we use AI,
+I wanna point out,
+
+531
+00:35:18,780 --> 00:35:22,074
+I didn't rewrite all of those
+stored procedures by hand.
+
+532
+00:35:22,200 --> 00:35:25,520
+I actually leveraged and you know,
+
+533
+00:35:25,520 --> 00:35:29,600
+mostly vibe coded it out, because
+the structures were straightforward once I
+
+534
+00:35:29,600 --> 00:35:33,800
+was able to tell the AI. So yeah,
+I would just focus on getting rid of them.
+
+535
+00:35:33,800 --> 00:35:38,460
+But if you are gonna keep them, there are
+some enhancements that can be suggested.
+
+536
+00:35:38,460 --> 00:35:41,860
+You know, the size of the ring
+buffer can't be changed easily.
+
+537
+00:35:41,860 --> 00:35:48,500
+But there's also a question of whether or
+not we can suppress the SInvalWrite lock,
+
+538
+00:35:49,360 --> 00:35:52,720
+from being emitted if it's
+dealing with a temporary
+
+539
+00:35:52,720 --> 00:35:54,080
+- table. Okay?
+- Mm-hmm.
+
+540
+00:35:54,080 --> 00:35:57,180
+Kirk: And that alone would help.
+But again, now you're fixing,
+
+541
+00:35:57,180 --> 00:36:02,080
+you're fixing the root cause of a problem
+you're creating by using a foot gun.
+
+542
+00:36:02,684 --> 00:36:04,144
+- Yeah.
+- Okay? [laughs]
+
+543
+00:36:04,144 --> 00:36:10,124
+Nik: As I understand, this code was, last,
+heavily touched by Tom Lane in 2008.
+
+544
+00:36:10,764 --> 00:36:14,104
+- Yeah.
+- This, So I, I would be very careful.
+
+545
+00:36:14,104 --> 00:36:18,064
+First study deeper, because of course,
+our brief has some ideas.
+
+546
+00:36:18,064 --> 00:36:24,444
+Like for example,
+this maximum messages, hard-coded 4K
+
+547
+00:36:24,684 --> 00:36:28,664
+could depend on max_connections, for
+example, or, or it could be a separate,
+
+548
+00:36:28,664 --> 00:36:30,204
+- setting.
+- Yeah.
+
+549
+00:36:30,204 --> 00:36:35,584
+Nik: But yeah, yeah, I, I would think
+deeper there, here, and then just, like,
+
+550
+00:36:35,584 --> 00:36:41,644
+it was quick, quick research
+with DBLab Forge. I, I was... I, as usual,
+
+551
+00:36:41,924 --> 00:36:48,384
+mostly focus on current situation, how
+to help our clients, because we definitely
+
+552
+00:36:48,544 --> 00:36:52,084
+see some struggles all the time,
+and reproduce them
+
+553
+00:36:52,104 --> 00:36:57,784
+using these tools in synthetic,
+and then, see how it can be mitigated.
+
+554
+00:36:58,084 --> 00:37:01,744
+And mitigation here remains
+just don't use temp tables.
+
+555
+00:37:02,364 --> 00:37:06,763
+Kirk: And I think, and, and I really think
+that updating the don't do this wiki,
+
+556
+00:37:06,763 --> 00:37:10,964
+is a step in the right direction.
+Because I followed that so much when I
+
+557
+00:37:10,964 --> 00:37:15,884
+was in the process of converting from
+Oracle to Postgres, that I just would love
+
+558
+00:37:15,884 --> 00:37:21,104
+to save other people the future time
+[laughs] in doing that. So yeah.
+
+559
+00:37:21,544 --> 00:37:28,204
+- Good. Anything else on this topic?
+- No, I think it's, I think it's fabulous.
+
+560
+00:37:28,204 --> 00:37:31,964
+I think it's a great topic. Also,
+I do wanna mention that having PgBouncer
+
+561
+00:37:31,964 --> 00:37:33,944
+doesn't help this problem at all,
+
+562
+00:37:33,964 --> 00:37:38,384
+because it can't keep the temp tables
+between sessions, and it shouldn't,
+
+563
+00:37:38,584 --> 00:37:43,224
+because of leaking and stuff.
+So, we use PgBouncer, okay?
+
+564
+00:37:43,224 --> 00:37:48,504
+But it actually makes some things actually
+a little bit worse. We tried some tricks,
+
+565
+00:37:48,550 --> 00:37:51,904
+you know, to make it, you know,
+so we could stick around and stuff.
+
+566
+00:37:51,904 --> 00:37:55,364
+In the end, it's easier to just
+rewrite to not use temp tables.
+
+567
+00:37:55,364 --> 00:37:58,484
+Nik: Right.
+But some aspect of it, PgBouncer helps.
+
+568
+00:37:58,484 --> 00:38:00,680
+It helps to get rid of idle connections,
+
+569
+00:38:00,680 --> 00:38:02,684
+- which makes the problem worse.
+- Yeah.
+
+570
+00:38:02,684 --> 00:38:04,164
+- Right?
+- Yes, absolutely.
+
+571
+00:38:04,164 --> 00:38:06,184
+- But the
+- From that standpoint, right.
+
+572
+00:38:06,184 --> 00:38:09,550
+But it doesn't help because
+in the end it's gonna issue a DISCARD-
+
+573
+00:38:09,550 --> 00:38:11,804
+- Mm-hmm
+- okay? In between sessions connect.
+
+574
+00:38:11,804 --> 00:38:15,784
+We use long-running sessions
+because we haven't migrated over.
+
+575
+00:38:16,124 --> 00:38:20,804
+So because of that, it uses a DISCARD ALL,
+which basically dumps and drops all
+
+576
+00:38:20,804 --> 00:38:24,884
+your temp tables even though
+it's the same session. So yeah.
+
+577
+00:38:25,904 --> 00:38:27,024
+- Great.
+- So, so,
+
+578
+00:38:27,024 --> 00:38:29,004
+- Yeah
+- it's, it's a lot to fix,
+
+579
+00:38:29,004 --> 00:38:32,604
+but it's worth fixing.
+Another good topic. Thank you, Nik.
+
+580
+00:38:32,844 --> 00:38:37,604
+Nik: Thank you. A pleasure to chat
+with you. See you next time. Bye-bye.
+
+581
+00:38:38,144 --> 00:38:39,144
+Kirk: Bye.
+
+582
+00:38:39,240 --> 00:38:44,720
+[music]
+
+583
+00:38:44,720 --> 00:38:50,200
+[music]
+
+584
+00:38:50,200 --> 00:38:55,680
+[music]
+
+585
+00:38:55,680 --> 00:39:01,160
+[music]
