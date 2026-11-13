@@ -1,6 +1,6 @@
 # Episode 196 speaker clips for X / LinkedIn / YouTube Shorts (1080x1350, 25 fps).
 # Style follows social/anim-196.mp4: a dark window on an indigo/purple wave wallpaper.
-# Usage: python3 clip196.py <final-video.mp4> <captions.vtt> <out.mp4> <kirk|nik>
+# Usage: python3 clip196.py <final-video.mp4> <captions.vtt> <out.mp4> <kirk|nik|trick>
 # Source layout (final video, 1920x1080): either an illustration card on the left with
 # small speaker tiles on the right ("card" mode), or two large speaker tiles ("side" mode).
 import sys, re, subprocess, json, math
@@ -14,8 +14,11 @@ CLIPS = {
                  topic='why temp tables slow down\nevery session'),
     'nik': dict(start=1275.11, end=1309.70, name='Nik Samokhvalov',
                 topic='idle sessions push you\noff the cliff'),
+    # the (t1).* trick: psql card 24, Nik's tile
+    'trick': dict(start=1810.36, end=1891.85, name='Nik Samokhvalov', tile='nik',
+                  topic='SELECT t1 FROM t1: a table in\none value, and back with (t1).*'),
 }
-C = CLIPS[WHO]; START, END = C['start'], C['end']; DUR = END - START
+C = CLIPS[WHO]; TILE = C.get('tile', WHO); START, END = C['start'], C['end']; DUR = END - START
 FPS = 25; SW, SH = 1920, 1080; W, H = 1080, 1350
 # Source geometry (measured on frames of the final video).
 CARD = (40, 100, 1610, 1030)
@@ -69,7 +72,7 @@ MX = (W - MW) // 2
 cw, ch = CARD[2] - CARD[0], CARD[3] - CARD[1]; CH_ = int(ch * MW / cw)
 card_mask = rmask((MW, CH_), 18)
 SMW = 320; SMH = int(SMW * 136 / 248); small_mask = rmask((SMW, SMH), 14)
-bw, bh = BIG[WHO][2] - BIG[WHO][0], BIG[WHO][3] - BIG[WHO][1]; BH_ = int(bh * MW / bw)
+bw, bh = BIG[TILE][2] - BIG[TILE][0], BIG[TILE][3] - BIG[TILE][1]; BH_ = int(bh * MW / bw)
 big_mask = rmask((MW, BH_), 18)
 CAP_Y = MEDIA_Y + max(CH_, BH_) + 46
 
@@ -147,11 +150,11 @@ def compose(fr, mode, t=99.0):
     im = bg.copy()
     if mode == 'card':
         im.paste(fr.crop(CARD).resize((MW, CH_), Image.LANCZOS), (MX, MEDIA_Y), card_mask)
-        sm = fr.crop(SMALL[WHO]).resize((SMW, SMH), Image.LANCZOS)
+        sm = fr.crop(SMALL[TILE]).resize((SMW, SMH), Image.LANCZOS)
         k = max(0.0, min(1.0, (t - TILE_IN) / 0.3))
         if k > 0: im.paste(sm, (WX1 - 44 - SMW, 96), small_mask if k >= 1 else small_mask.point(lambda v: int(v * k)))
     else:
-        im.paste(fr.crop(BIG[WHO]).resize((MW, BH_), Image.LANCZOS), (MX, MEDIA_Y), big_mask)
+        im.paste(fr.crop(BIG[TILE]).resize((MW, BH_), Image.LANCZOS), (MX, MEDIA_Y), big_mask)
     return im
 
 dec = subprocess.Popen(['ffmpeg', '-loglevel', 'error', '-ss', str(START), '-i', SRC, '-t', str(DUR), '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], stdout=subprocess.PIPE)
