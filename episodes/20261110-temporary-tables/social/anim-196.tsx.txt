@@ -101,10 +101,10 @@ const Race: React.FC<{w: number}> = ({w}) => {
           <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 62, letterSpacing: '-0.04em', color: K.red}}>~23×</span>
           <span style={{fontFamily: SANS, fontWeight: 600, fontSize: 40, color: K.red}}>slower</span>
         </div>)}
-      <div style={{height: 52}} />
+      <Fade at={3.6} y={10} style={{fontFamily: MONO, fontSize: 30, color: K.red, marginTop: 14, height: 38}}>cost: catalog rows + files, every transaction</Fade>
+      <div style={{height: 34}} />
       <Typed at={0.85} text="with t as (…) select …" color={K.green} size={42} />
       {bar(88531, K.green, true)}
-      <Fade at={4.1} style={{fontFamily: MONO, fontSize: 30, color: K.dim, marginTop: 40}}>cost: catalog rows + files, every transaction</Fade>
     </div>
   );
 };
@@ -171,7 +171,7 @@ const RingLegend: React.FC<{at: number}> = ({at}) => {
       </div>
       <div style={{display: 'flex', alignItems: 'center', gap: 20, marginTop: 22, opacity: e(d1 - 0.2)}}>
         <span style={{fontFamily: MONO, fontSize: 38, color: tx >= 36 ? K.red : K.orange, minWidth: 140}}>× {tx}</span>
-        <span>{tx >= 36 ? <>= full: <span style={{color: K.red}}>laggards reset</span></> : 'transactions'}</span>
+        <span>{tx >= 36 ? <>= full: <span style={{color: K.red}}>laggards reset</span></> : tx === 1 ? 'transaction' : 'transactions'}</span>
       </div>
     </div>
   );
@@ -396,8 +396,8 @@ const SLIDES: Record<SlideId, (c: Ctx) => React.ReactNode> = {
     </div>
     <Donut at={B} w={inner} h={500} />
     <div>
-      <Fade at={B + 2.8} style={{fontFamily: MONO, fontWeight: 500, fontSize: 58, color: K.red, letterSpacing: '-0.01em'}}>LWLock:SInvalWrite</Fade>
-      <Fade at={B + 3.1} style={{fontFamily: SANS, fontWeight: 500, fontSize: 32, color: K.dim, marginTop: 10}}>share of DDL sessions' active time</Fade>
+      <Fade at={B + 1.2} style={{fontFamily: MONO, fontWeight: 500, fontSize: 58, color: K.red, letterSpacing: '-0.01em'}}>LWLock:SInvalWrite</Fade>
+      <Fade at={B + 1.4} style={{fontFamily: SANS, fontWeight: 500, fontSize: 32, color: K.dim, marginTop: 10}}>share of DDL sessions' active time</Fade>
     </div>
     <Tiny at={B + 1.0}>PG18 · 16 vCPU · synthetic</Tiny>
   </>,
@@ -440,7 +440,7 @@ const SLIDES: Record<SlideId, (c: Ctx) => React.ReactNode> = {
 // Schedules: section start times (s); content of a section starts 0.9 s before, while it scrolls in.
 export const CUTS = {
   full: {ids: ['bars', 'queue', 'sessions', 'cliff', 'donut', 'fix', 'end'] as SlideId[], S: [0, 8.0, 18.2, 24.8, 31.6, 37.4, 42.4], dur: 49.0, joke: 1.5},
-  x: {ids: ['bars', 'cliff', 'donut', 'fix', 'end'] as SlideId[], S: [0, 7.2, 13.6, 19.0, 22.2], dur: 25.0, joke: 0.6},
+  x: {ids: ['bars', 'cliff', 'donut', 'fix', 'end'] as SlideId[], S: [0, 7.2, 13.6, 19.0, 23.4], dur: 28.2, joke: 1.2},
 };
 const LOOP = 0.8; // last LOOP seconds crossfade back to the opening frame
 
