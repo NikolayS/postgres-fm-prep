@@ -119,18 +119,28 @@ The DBLab Forge brief, every chart and config: https://console.postgres.ai/share
 
 ---
 
-## LinkedIn
+## LinkedIn (v3, post this)
 
-Links go in the first comment (the same links as v2 reply 4: Watch, Listen in any app, Brief). Media: `../assets/23-throughput.png`.
+Media: anim-196.mp4 (the full portrait animation, native upload; custom thumbnail = the final frame of slide 1). Links in the first comment: Watch / Listen / Brief, as in v3 reply 4.
 
 ```
-A temp table created and dropped in every transaction: 3,931 tx/s. The same query as a CTE: 88,531 tx/s (Postgres 17, 16 vCPU, 32 clients, synthetic workload).
+CREATE TEMP TABLE in every transaction: 3,931 tx/s.
+The same query as a CTE: 88,531 tx/s.
+About 23x, and that is with zero idle sessions.
 
-In the new Postgres.FM episode, Kirk Wolak and I talk about the hidden costs of CREATE TEMP TABLE. Kirk's team came from Oracle, where global temporary tables are cheap. In Postgres, every CREATE and DROP of a temp table is catalog DDL, and every other session must hear about it, through one shared invalidation queue of 4,096 slots.
+New Postgres FM episode with Kirk Wolak: the hidden costs of CREATE TEMP TABLE. What we measured with DBLab Forge:
 
-Idle sessions make it much worse. With a 500 tx/s target, DDL holds 502 tx/s up to 1,000 idle sessions, then falls to 274 at 3,000 and to 127 at 5,000, where the DDL sessions spend 91% of their active time waiting on LWLock:SInvalWrite (Postgres 18, 16 vCPU).
+- Without idle sessions, the cost is catalog and file work: 13 or more catalog rows inserted per temp table, the same rows deleted at drop, files created and unlinked.
+- With many idle sessions, a second cost appears: about 114 invalidation messages per create + drop go into one shared queue of 4,096 slots, and every session must read them, the idle ones too.
+- We asked for 500 temp-table transactions per second. With 0 or 1,000 idle sessions we got 502. With 3,000: 274. With 5,000: 127.
+- At 5,000 idle sessions, the DDL sessions spend 91% of their active time waiting on one lock: LWLock:SInvalWrite.
 
-We measured all of this with DBLab Forge, and the brief has every chart and config. Links in the first comment.
+The fix: no temp tables in hot code. Use a CTE, or keep the rows in PL/pgSQL arrays and records.
+
+Have you ever seen LWLock:SInvalWrite in your wait events?
+
+Video, podcast (Spotify, Apple Podcasts, any app) and the brief with every chart and config: first comment.
+(Throughput: Postgres 17, 32 clients. Idle sessions: Postgres 18. Both 16 vCPU, synthetic.)
 ```
 
 ## Number check
