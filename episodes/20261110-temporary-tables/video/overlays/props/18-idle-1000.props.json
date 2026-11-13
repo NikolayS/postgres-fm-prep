@@ -1,0 +1,1 @@
+{"lines":[{"style":"dark","segs":[{"text":"1,000 idle sessions: 502 tx/s","at":0.4},{"text":"   3,000: ","at":15.1},{"text":"274 tx/s","color":"#FF4B3E"}]},{"style":"chip","segs":[{"text":"500 tx/s target, synthetic workload"}]}],"durationSec":24}

@@ -1,0 +1,25 @@
+{
+  "url": "https://platform.twitter.com/embed/Tweet.html?id=2117283823314674021&theme=light",
+  "block": "css=article",
+  "clip": {
+    "x": 1,
+    "y": 1,
+    "width": 548,
+    "height": 205
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "taking a few months off",
+      "rects": [
+        {
+          "x": 16,
+          "y": 96,
+          "w": 204.828125,
+          "h": 23
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-10T22:45:46.993Z"
+}

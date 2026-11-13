@@ -1,0 +1,75 @@
+{
+ "banner": [
+  "psql (18.6 (Debian 18.6-1.pgdg13+2))",
+  "Type \"help\" for help."
+ ],
+ "blocks": [
+  {
+   "cmd": "create table t1 (id int, name text, status text);",
+   "out": [
+    "CREATE TABLE"
+   ],
+   "gap": false
+  },
+  {
+   "cmd": "insert into t1 values\n  (1,'Nik','on air'),\n  (2,'Kirk','on air'),\n  (3,'Michael','vacation');",
+   "out": [
+    "INSERT 0 3"
+   ],
+   "gap": false
+  },
+  {
+   "cmd": "select * from t1;",
+   "out": [
+    " id |  name   |  status  ",
+    "----+---------+----------",
+    "  1 | Nik     | on air",
+    "  2 | Kirk    | on air",
+    "  3 | Michael | vacation",
+    "(3 rows)"
+   ]
+  },
+  {
+   "cmd": "select t1 from t1;",
+   "out": [
+    "          t1          ",
+    "----------------------",
+    " (1,Nik,\"on air\")",
+    " (2,Kirk,\"on air\")",
+    " (3,Michael,vacation)",
+    "(3 rows)"
+   ]
+  },
+  {
+   "cmd": "select array(select t1 from t1);",
+   "out": [
+    "                                array                                ",
+    "---------------------------------------------------------------------",
+    " {\"(1,Nik,\\\"on air\\\")\",\"(2,Kirk,\\\"on air\\\")\",\"(3,Michael,vacation)\"}",
+    "(1 row)"
+   ]
+  },
+  {
+   "cmd": "select t1 from unnest(array(select t1 from t1)) t1;",
+   "out": [
+    "          t1          ",
+    "----------------------",
+    " (1,Nik,\"on air\")",
+    " (2,Kirk,\"on air\")",
+    " (3,Michael,vacation)",
+    "(3 rows)"
+   ]
+  },
+  {
+   "cmd": "select (t1).* from unnest(array(select t1 from t1)) t1;",
+   "out": [
+    " id |  name   |  status  ",
+    "----+---------+----------",
+    "  1 | Nik     | on air",
+    "  2 | Kirk    | on air",
+    "  3 | Michael | vacation",
+    "(3 rows)"
+   ]
+  }
+ ]
+}

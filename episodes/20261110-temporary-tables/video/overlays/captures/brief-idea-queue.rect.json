@@ -1,0 +1,58 @@
+{
+  "url": "https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d",
+  "block": "Size the queue with the installation",
+  "clip": {
+    "x": 78.390625,
+    "y": 687.265625,
+    "width": 717.609375,
+    "height": 273.375
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "A size derived from",
+      "rects": [
+        {
+          "x": 469.875,
+          "y": 102.140625,
+          "w": 151.5,
+          "h": 24
+        }
+      ]
+    },
+    {
+      "text": "max_connections",
+      "rects": [
+        {
+          "x": 66.765625,
+          "y": 133.1875,
+          "w": 131.59375,
+          "h": 19
+        }
+      ]
+    },
+    {
+      "text": "or a separate setting",
+      "rects": [
+        {
+          "x": 211.828125,
+          "y": 130.1875,
+          "w": 157.609375,
+          "h": 24
+        }
+      ]
+    },
+    {
+      "text": "Size the queue with the installation",
+      "rects": [
+        {
+          "x": 62.390625,
+          "y": 18,
+          "w": 278.1875,
+          "h": 24
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-10T23:48:39.374Z"
+}

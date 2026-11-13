@@ -1,0 +1,29 @@
+{
+  "url": "https://github.com/postgres/postgres/commit/fad153ec45299bd4d4f29dec8d9e04e2f1c08148",
+  "block": "Rewrite the sinval messaging mechanism",
+  "clip": {
+    "x": 0,
+    "y": 152,
+    "width": 800,
+    "height": 238
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "Rewrite the sinval messaging mechanism to reduce contention and avoid",
+      "rects": [
+        {
+          "x": 29,
+          "y": 109.8125,
+          "w": 581.59375,
+          "h": 16
+        }
+      ]
+    },
+    {
+      "text": "Jun 19, 2008",
+      "rects": []
+    }
+  ],
+  "capturedAt": "2026-11-10T23:47:39.366Z"
+}

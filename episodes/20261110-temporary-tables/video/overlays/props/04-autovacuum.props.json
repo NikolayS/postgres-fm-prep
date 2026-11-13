@@ -1,0 +1,1 @@
+{"lines":[{"style":"marker","segs":[{"text":"“Autovacuum doesn't care about your poor temporary tables.”"}]},{"style":"chip","segs":[{"text":"Docs, CREATE TABLE: autovacuum cannot vacuum or analyze temporary tables"}]}],"durationSec":7.5}

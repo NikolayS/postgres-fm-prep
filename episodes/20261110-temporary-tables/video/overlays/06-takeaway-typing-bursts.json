@@ -1,0 +1,12 @@
+{
+  "overlay": "06-takeaway-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.183,
+      "chars": 22,
+      "line": "l0s0"
+    }
+  ]
+}

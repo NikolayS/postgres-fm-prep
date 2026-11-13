@@ -1,0 +1,18 @@
+{
+  "overlay": "15-lockmanager-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.4,
+      "end": 2.167,
+      "chars": 53,
+      "line": "l0s0"
+    },
+    {
+      "start": 26.8,
+      "end": 28.033,
+      "chars": 37,
+      "line": "l1s0"
+    }
+  ]
+}

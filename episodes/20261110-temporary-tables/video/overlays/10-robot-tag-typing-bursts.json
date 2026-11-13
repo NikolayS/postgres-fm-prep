@@ -1,0 +1,12 @@
+{
+  "overlay": "10-robot-tag-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.783,
+      "chars": 40,
+      "line": "l0s0"
+    }
+  ]
+}

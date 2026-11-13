@@ -1,0 +1,25 @@
+{
+  "url": "https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d",
+  "block": "css=#s5 > p:has-text(\"On the primary the cliff is not disk\")",
+  "clip": {
+    "x": 374.390625,
+    "y": 779.640625,
+    "width": 701.609375,
+    "height": 196.234375
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "css=#s5 > ul > li:nth-child(2)",
+      "rects": [
+        {
+          "x": 36.796875,
+          "y": 124.140625,
+          "w": 648.8125,
+          "h": 56.09375
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-10T22:51:49.101Z"
+}

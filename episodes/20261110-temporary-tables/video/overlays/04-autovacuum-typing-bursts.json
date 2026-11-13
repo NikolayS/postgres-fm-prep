@@ -1,0 +1,18 @@
+{
+  "overlay": "04-autovacuum-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 2.417,
+      "chars": 59,
+      "line": "l0s0"
+    },
+    {
+      "start": 3.067,
+      "end": 5.467,
+      "chars": 72,
+      "line": "l1s0"
+    }
+  ]
+}

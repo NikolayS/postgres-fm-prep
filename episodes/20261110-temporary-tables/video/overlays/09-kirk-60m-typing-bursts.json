@@ -1,0 +1,24 @@
+{
+  "overlay": "09-kirk-60m-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.7,
+      "end": 1.2,
+      "chars": 15,
+      "line": "l0s0"
+    },
+    {
+      "start": 4,
+      "end": 5.033,
+      "chars": 31,
+      "line": "l0s1"
+    },
+    {
+      "start": 7.1,
+      "end": 9.067,
+      "chars": 59,
+      "line": "l1s0"
+    }
+  ]
+}

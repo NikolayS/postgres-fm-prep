@@ -1,0 +1,1 @@
+{"pts":[{"x":0,"y":502,"label":"502"},{"x":1000,"y":502,"label":"502"},{"x":3000,"y":274,"label":"274"},{"x":5000,"y":127,"label":"127"}],"drawAt":[0.6,8.76,10.26],"waitRow":{"values":["1.3%","54%","86%","91%"],"at":17.68,"label":"SInvalWrite"},"dot":{"at":31.08,"landAt":33.98},"caption":"PG18, 16 vCPU, 500 DDL tx/s target, synthetic workload","durationSec":43.68}

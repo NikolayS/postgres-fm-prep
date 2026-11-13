@@ -1,0 +1,43 @@
+psql (18.6 (Debian 18.6-1.pgdg13+2))
+Type "help" for help.
+
+[?2004hpostgres=# select * from t1;
+[?2004l id |  name   |  status  
+----+---------+----------
+  1 | Nik     | on air
+  2 | Kirk    | on air
+  3 | Michael | vacation
+(3 rows)
+
+[?2004hpostgres=# select t1 from t1;
+[?2004l          t1          
+----------------------
+ (1,Nik,"on air")
+ (2,Kirk,"on air")
+ (3,Michael,vacation)
+(3 rows)
+
+[?2004hpostgres=# select array(select t1 from t1);
+[?2004l                                array                                
+---------------------------------------------------------------------
+ {"(1,Nik,\"on air\")","(2,Kirk,\"on air\")","(3,Michael,vacation)"}
+(1 row)
+
+[?2004hpostgres=# select t1 from unnest(array(select t1 from t1)) t1;
+[?2004l          t1          
+----------------------
+ (1,Nik,"on air")
+ (2,Kirk,"on air")
+ (3,Michael,vacation)
+(3 rows)
+
+[?2004hpostgres=# select (t1).* from unnest(array(select t1 from t1)) t1;
+[?2004l id |  name   |  status  
+----+---------+----------
+  1 | Nik     | on air
+  2 | Kirk    | on air
+  3 | Michael | vacation
+(3 rows)
+
+[?2004hpostgres=# \q
+[?2004l

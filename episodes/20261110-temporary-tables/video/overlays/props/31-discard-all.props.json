@@ -1,0 +1,1 @@
+{"lines":[{"style":"dark","segs":[{"text":"Session pooling: DISCARD ALL drops temp tables"}]},{"style":"chip","segs":[{"text":"PgBouncer server_reset_query, default DISCARD ALL"}]}],"durationSec":17.6}

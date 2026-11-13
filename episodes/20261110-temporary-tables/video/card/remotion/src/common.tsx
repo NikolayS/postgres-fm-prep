@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {continueRender, delayRender, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 
 export const W = 1920, H = 1080, FPS = 25;
-// Ep 196 working title (not final): line 1 is the big white line, line 2 sits in the plum band.
-export const TITLE = ['Temporary', 'tables'];
-export const HOSTS: {name: string; company?: string; photo?: string}[] = [{name: 'Kirk Wolak', photo: 'photo-kirk.png'}, {name: 'Nik Samokhvalov', photo: 'photo-nik.png'}];
+// Ep 196 final title (2026-11-10): line 1 is the big white line, line 2 sits in the plum band.
+export const TITLE = ['The hidden costs of', 'CREATE TEMP TABLE'];
+export const HOSTS: {name: string; company?: string; photo?: string}[] = [{name: 'Nik Samokhvalov', photo: 'photo-nik.png'}, {name: 'Kirk Wolak', photo: 'photo-kirk.png'}];
 
 // Lato (OFL), the type family of the old postgres.fm covers, in heavy weights.
 let fontsLoaded = false;

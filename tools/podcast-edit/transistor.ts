@@ -6,7 +6,8 @@
 // a txt transcript and keeps an SRT transcript that is there, so the episode has both.
 // Usage:
 //   bun transistor.ts --show 32147 --title "..." --number 193 --season 1 --audio podcast.mp3
-//        --description-file notes.transistor.html --transcript-file transcript.txt [--publish] [--dry-run]
+//        --description-file notes.transistor.html --transcript-file transcript.txt
+//        [--summary-file summary.txt] [--video-url https://www.youtube.com/watch?v=...] [--publish] [--dry-run]
 //   bun transistor.ts --show 32147 --episode <id> [--description-file f] [--transcript-file f] [--dry-run]
 //        [--publish] (update an existing episode: only the fields given; --publish alone publishes it)
 // The API key comes from TRANSISTOR_API_KEY. It goes only to api.transistor.fm, never to the
@@ -17,7 +18,7 @@ import { parseArgs } from "util";
 export const API = "https://api.transistor.fm/v1";
 export type Opts = {
   show: string; episode?: string; title?: string; number?: number; season?: number; audio?: string;
-  description?: string; transcriptText?: string; publish?: boolean; dryRun?: boolean;
+  description?: string; transcriptText?: string; summary?: string; videoUrl?: string; publish?: boolean; dryRun?: boolean;
 };
 export type Deps = { fetch: typeof fetch; key?: string; readFile: (p: string) => Promise<Uint8Array>; log: (s: string) => void };
 
@@ -44,7 +45,8 @@ export async function release(o: Opts, d: Deps): Promise<{ id?: string; status: 
     return JSON.parse(text || "{}");
   }
 
-  const content = { description: o.description, transcript_text: o.transcriptText };
+  // summary: the short text players show; video_url: the YouTube video (Transistor episode field).
+  const content = { summary: o.summary, description: o.description, transcript_text: o.transcriptText, video_url: o.videoUrl };
   if (o.dryRun) {
     if (o.episode && [...fields(content)].length) log(`PATCH ${API}/episodes/${o.episode}: ${size(fields(content))}`);
     else {
@@ -65,7 +67,7 @@ export async function release(o: Opts, d: Deps): Promise<{ id?: string; status: 
     if ([...f].length) {
       const r = await api("PATCH", `/episodes/${id}`, f);
       status = r.data?.attributes?.status ?? status;
-    } else if (!o.publish) throw new Error("nothing to do: give --description-file, --transcript-file or --publish");
+    } else if (!o.publish) throw new Error("nothing to do: give --description-file, --transcript-file, --summary-file, --video-url or --publish");
   } else {
     const up = (await api("GET", `/episodes/authorize_upload?filename=${encodeURIComponent(basename(o.audio!))}`)).data.attributes;
     log(`PUT <presigned upload URL>: ${o.audio}`);
@@ -90,6 +92,7 @@ if (import.meta.main) {
     options: {
       show: { type: "string" }, episode: { type: "string" }, title: { type: "string" }, number: { type: "string" }, season: { type: "string" },
       audio: { type: "string" }, "description-file": { type: "string" }, "transcript-file": { type: "string" },
+      "summary-file": { type: "string" }, "video-url": { type: "string" },
       publish: { type: "boolean" }, "dry-run": { type: "boolean" },
     },
   });
@@ -98,7 +101,8 @@ if (import.meta.main) {
   try {
     const r = await release({
       show: v.show, episode: v.episode, title: v.title, number: v.number ? Number(v.number) : undefined, season: v.season ? Number(v.season) : undefined,
-      audio: v.audio, description: await text(v["description-file"]), transcriptText: await text(v["transcript-file"]), publish: v.publish, dryRun: v["dry-run"],
+      audio: v.audio, description: await text(v["description-file"]), transcriptText: await text(v["transcript-file"]),
+      summary: (await text(v["summary-file"]))?.trim(), videoUrl: v["video-url"], publish: v.publish, dryRun: v["dry-run"],
     }, { fetch, key: process.env.TRANSISTOR_API_KEY, readFile: async (p) => new Uint8Array(await Bun.file(p).arrayBuffer()), log: (s) => console.log(s) });
     console.log(`result: episode ${r.id ?? "-"} ${r.status}`);
   } catch (e) {

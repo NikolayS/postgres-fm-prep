@@ -1,0 +1,1 @@
+Nik and Kirk discuss the hidden costs of CREATE TEMP TABLE: dead tuples and catalog bloat, and the shared invalidation queue that every session has to read. They cover why thousands of idle sessions make it much worse, what it looks like in wait events, and what to use instead.

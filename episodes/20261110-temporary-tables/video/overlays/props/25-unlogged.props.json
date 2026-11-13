@@ -1,0 +1,1 @@
+{"lines":[{"style":"marker","segs":[{"text":"“We've switched to using unlogged tables.”"}]},{"style":"chip","segs":[{"text":"Docs, CREATE UNLOGGED TABLE: not written to WAL, not crash-safe"}]}],"durationSec":7}

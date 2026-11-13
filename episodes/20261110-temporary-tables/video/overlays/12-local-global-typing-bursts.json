@@ -1,0 +1,18 @@
+{
+  "overlay": "12-local-global-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 0.983,
+      "chars": 16,
+      "line": "l0s0"
+    },
+    {
+      "start": 1.333,
+      "end": 2.033,
+      "chars": 21,
+      "line": "l0s0"
+    }
+  ]
+}

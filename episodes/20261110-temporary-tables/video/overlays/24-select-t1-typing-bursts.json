@@ -1,0 +1,43 @@
+{
+  "overlay": "24-select-t1.mov",
+  "timeBase": "seconds from the overlay start",
+  "note": "center card: add one typing sound per line by hand (sfx-manifest adds typing only to band cards)",
+  "bursts": [
+    {
+      "start": 4.9,
+      "end": 5.467,
+      "chars": 17,
+      "line": "stmt0"
+    },
+    {
+      "start": 21.9,
+      "end": 22.5,
+      "chars": 18,
+      "line": "stmt1"
+    },
+    {
+      "start": 47.4,
+      "end": 48.467,
+      "chars": 32,
+      "line": "stmt2"
+    },
+    {
+      "start": 72.26,
+      "end": 73.96,
+      "chars": 51,
+      "line": "stmt3"
+    },
+    {
+      "start": 77.66,
+      "end": 78.06,
+      "chars": 12,
+      "line": "stmt4"
+    },
+    {
+      "start": 78.41,
+      "end": 79.843,
+      "chars": 43,
+      "line": "stmt4"
+    }
+  ]
+}

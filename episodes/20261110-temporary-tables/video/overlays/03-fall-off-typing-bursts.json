@@ -1,0 +1,12 @@
+{
+  "overlay": "03-fall-off-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.217,
+      "chars": 23,
+      "line": "l0s0"
+    }
+  ]
+}

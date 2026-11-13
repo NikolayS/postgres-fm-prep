@@ -1,0 +1,61 @@
+A temp table created and dropped in every transaction: 3,931 tx/s. The same query as a CTE: 88,531 tx/s (PG17, 16 vCPU, 32 clients, synthetic workload).
+And idle sessions are not free: with 5,000 of them, temp-table DDL falls from 502 to 127 tx/s, and LWLock:SInvalWrite takes 91% of the waits (PG18, 16 vCPU).
+
+Postgres.FM episode 196: Nik and Kirk discuss the hidden costs of CREATE TEMP TABLE: dead tuples and catalog bloat, and the shared invalidation queue that every session has to read. They cover why thousands of idle sessions make it much worse, what it looks like in wait events, and what to use instead. Kirk's team moved from Oracle, where global temporary tables are cheap; in Postgres every CREATE and DROP is catalog DDL that all sessions have to hear about.
+
+Main link: the experiment brief, with every chart, number and config (DBLab Forge, PostgresAI):
+https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d
+
+[Check out the subtitles – we edit them! YouTube auto-translates them from English to other languages; try it and share it with people interested in Postgres!]
+
+Chapters:
+00:00 Intro
+00:14 Michael is away; DBLab Forge experiments continue
+01:12 Kirk's story: from Oracle global temporary tables
+04:20 Hard to diagnose; dead tuples vs bloat
+07:40 Instead: arrays, CTEs, PL/pgSQL
+12:00 The layers: invisible data, dead tuples, catalog bloat
+15:15 Layer 3: catalog invalidation, LWLock:SInvalWrite
+18:00 The 4,096-message invalidation queue
+20:05 Idle sessions make it worse
+24:00 How it looks in active session history
+26:30 Rewrite as a CTE: 88,000 vs under 4,000 tx/s
+29:52 select t1 from t1: rows, arrays and back
+32:01 When temp tables still make sense
+34:15 The brief: ideas for Postgres hackers
+37:00 PgBouncer, DISCARD ALL and the Don't Do This wiki
+
+Key links (video time of the first mention):
+* Michael's post about taking a few months off, X (0:44) https://x.com/michristofides/status/2117283823314674021
+* CREATE TABLE, temporary tables: autovacuum cannot vacuum them, docs (4:34) https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-TEMPORARY
+* LWLock wait events: SInvalWrite, SInvalRead, docs (15:40) https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-LWLOCK-TABLE
+* sinvaladt.c: MAXNUMMESSAGES = 4096 (18:11) https://github.com/postgres/postgres/blob/3d342deeb433060dbea02fdd276656a5563275d5/src/backend/storage/ipc/sinvaladt.c
+* Increase the number of fast-path lock slots, Tomas Vondra, Postgres 18 (18:49) https://github.com/postgres/postgres/commit/c4d5cb71d229095a39fda1121a75ee40e6069a2a
+* pg_ash, active session history for Postgres (24:12) https://github.com/NikolayS/pg_ash
+* Linux performance tools, Brendan Gregg (24:39) https://www.brendangregg.com/linuxperf.html
+* CREATE TABLE, ON COMMIT, docs (27:14) https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-PARMS-ON-COMMIT
+* Rewrite the sinval messaging mechanism, Tom Lane, 2008 (35:43) https://github.com/postgres/postgres/commit/fad153ec45299bd4d4f29dec8d9e04e2f1c08148
+* Don't create temporary tables in frequently executed code, PostgreSQL wiki (36:41) https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_create_temporary_tables_in_frequently_executed_code
+* PgBouncer server_reset_query, default DISCARD ALL (37:45) https://www.pgbouncer.org/config.html#server_reset_query
+
+All links: https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+
+~~~
+
+What did you like or not like? What should we discuss next time? Let us know in the comments, or by tweeting us on @postgresfm https://twitter.com/PostgresFM, @samokhvalov https://twitter.com/samokhvalov and @michristofides https://twitter.com/michristofides
+
+~~~
+
+Postgres FM is produced by:
+- Michael Christofides, founder of pgMustard https://pgmustard.com/
+- Nikolay Samokhvalov, founder of PostgresAI https://postgres.ai/
+
+With credit to:
+- Jessie Draws for the elephant artwork
+- Intro and outro music: our own arrangement of Apple Loops from GarageBand
+
+~~~
+
+This is the video version. Check out https://postgres.fm to subscribe to the audio-only version, to see the transcript, guest profiles, and more.
+
+#PostgreSQL #Postgres #Database

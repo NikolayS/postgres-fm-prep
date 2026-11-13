@@ -1,0 +1,47 @@
+{
+  "url": "https://github.com/postgres/postgres/blob/3d342deeb433060dbea02fdd276656a5563275d5/src/backend/storage/ipc/sinvaladt.c",
+  "block": "css=#LC99",
+  "clip": {
+    "x": 418,
+    "y": 948,
+    "width": 740,
+    "height": 564
+  },
+  "scale": 4,
+  "highlights": [
+    {
+      "text": "css=#LC102",
+      "rects": [
+        {
+          "x": 2,
+          "y": 62,
+          "w": 963,
+          "h": 20
+        }
+      ]
+    },
+    {
+      "text": "css=#LC123",
+      "rects": [
+        {
+          "x": 2,
+          "y": 482,
+          "w": 963,
+          "h": 20
+        }
+      ]
+    },
+    {
+      "text": "4096",
+      "rects": [
+        {
+          "x": 178.1875,
+          "y": 485,
+          "w": 28.90625,
+          "h": 14
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-10T23:45:30.042Z"
+}

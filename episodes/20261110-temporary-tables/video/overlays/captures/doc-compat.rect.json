@@ -1,0 +1,48 @@
+{
+  "url": "https://www.postgresql.org/docs/current/sql-createtable.html",
+  "block": "css=div[id=\"id-1.9.3.85.9.3\"] > h3",
+  "clip": {
+    "x": 7.34375,
+    "y": 771.453125,
+    "width": 545.328125,
+    "height": 272.828125
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "temporary tables are defined just once and automatically exist",
+      "rects": [
+        {
+          "x": 401.953125,
+          "y": 83.953125,
+          "w": 115.296875,
+          "h": 19
+        },
+        {
+          "x": 16,
+          "y": 105.5625,
+          "w": 299.46875,
+          "h": 19
+        }
+      ]
+    },
+    {
+      "text": "instead requires each session to issue its own",
+      "rects": [
+        {
+          "x": 325.59375,
+          "y": 127.171875,
+          "w": 198.296875,
+          "h": 19
+        },
+        {
+          "x": 16,
+          "y": 148.78125,
+          "w": 103.578125,
+          "h": 19
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-10T23:57:43.325Z"
+}

@@ -1,0 +1,25 @@
+{
+  "url": "https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d",
+  "block": "css=#s13 > h2",
+  "clip": {
+    "x": 322,
+    "y": 808.8125,
+    "width": 752,
+    "height": 111.625
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "Ideas for Postgres",
+      "rects": [
+        {
+          "x": 60.140625,
+          "y": 14,
+          "w": 189.140625,
+          "h": 25
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-10T22:52:36.856Z"
+}

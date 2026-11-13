@@ -1,0 +1,42 @@
+psql (18.6 (Debian 18.6-1.pgdg13+2))
+Type "help" for help.
+
+postgres=# select * from t1;
+ id |  name   |  status  
+----+---------+----------
+  1 | Nik     | on air
+  2 | Kirk    | on air
+  3 | Michael | vacation
+(3 rows)
+
+postgres=# select t1 from t1;
+          t1          
+----------------------
+ (1,Nik,"on air")
+ (2,Kirk,"on air")
+ (3,Michael,vacation)
+(3 rows)
+
+postgres=# select array(select t1 from t1);
+                                array                                
+---------------------------------------------------------------------
+ {"(1,Nik,\"on air\")","(2,Kirk,\"on air\")","(3,Michael,vacation)"}
+(1 row)
+
+postgres=# select t1 from unnest(array(select t1 from t1)) t1;
+          t1          
+----------------------
+ (1,Nik,"on air")
+ (2,Kirk,"on air")
+ (3,Michael,vacation)
+(3 rows)
+
+postgres=# select (t1).* from unnest(array(select t1 from t1)) t1;
+ id |  name   |  status  
+----+---------+----------
+  1 | Nik     | on air
+  2 | Kirk    | on air
+  3 | Michael | vacation
+(3 rows)
+
+postgres=# \q

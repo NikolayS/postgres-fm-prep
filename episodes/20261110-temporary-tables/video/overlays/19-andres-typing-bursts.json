@@ -1,0 +1,30 @@
+{
+  "overlay": "19-andres-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.817,
+      "chars": 41,
+      "line": "l0s0"
+    },
+    {
+      "start": 2.467,
+      "end": 3.367,
+      "chars": 27,
+      "line": "l1s0"
+    },
+    {
+      "start": 3.717,
+      "end": 4.383,
+      "chars": 20,
+      "line": "l1s0"
+    },
+    {
+      "start": 4.733,
+      "end": 4.767,
+      "chars": 1,
+      "line": "l1s0"
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "url": "https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d",
+  "block": "Group C. Left: DDL tx/s achieved",
+  "clip": {
+    "x": 374.390625,
+    "y": 623.390625,
+    "width": 701.609375,
+    "height": 400.328125
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "css=#s4 figure img",
+      "rects": [
+        {
+          "x": 33,
+          "y": 33,
+          "w": 635.609375,
+          "h": 219.5625
+        }
+      ]
+    },
+    {
+      "text": "the DDL pool stops reaching its rate between 1,000 and 3,000 idle",
+      "rects": [
+        {
+          "x": 281.15625,
+          "y": 314.78125,
+          "w": 364.96875,
+          "h": 14
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-10T22:51:36.747Z"
+}

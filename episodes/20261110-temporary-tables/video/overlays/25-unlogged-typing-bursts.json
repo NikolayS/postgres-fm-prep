@@ -1,0 +1,18 @@
+{
+  "overlay": "25-unlogged-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.85,
+      "chars": 42,
+      "line": "l0s0"
+    },
+    {
+      "start": 2.5,
+      "end": 4.6,
+      "chars": 63,
+      "line": "l1s0"
+    }
+  ]
+}

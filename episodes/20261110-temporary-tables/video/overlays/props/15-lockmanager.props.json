@@ -1,0 +1,1 @@
+{"lines":[{"style":"dark","segs":[{"text":"Over 16 relations per transaction: LWLock:LockManager","at":0.4}]},{"style":"chip","segs":[{"text":"PG18: raise max_locks_per_transaction","at":26.8}]}],"durationSec":36.3}

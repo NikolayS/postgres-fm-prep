@@ -1,0 +1,12 @@
+{
+  "overlay": "22-information-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.85,
+      "chars": 42,
+      "line": "l0s0"
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+ "dir": "/Library/Audio/Apple Loops/Apple/09 Disco Funk",
+ "tailSec": 1,
+ "events": [
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 0,
+   "beats": 4
+  },
+  {
+   "file": "Boogie Right Beat 01.caf",
+   "at": 0,
+   "beats": 24
+  },
+  {
+   "file": "Boogie Right Slap Bass 02.caf",
+   "at": 0,
+   "beats": 24,
+   "gain": -2
+  },
+  {
+   "file": "Boogie Right Beat 01.caf",
+   "at": 26,
+   "beats": 14
+  },
+  {
+   "file": "Boogie Right Slap Bass 02.caf",
+   "at": 26,
+   "beats": 14,
+   "gain": -2
+  },
+  {
+   "file": "Boogie Right Beat 01.caf",
+   "at": 42,
+   "beats": 6
+  },
+  {
+   "file": "Boogie Right Slap Bass 02.caf",
+   "at": 42,
+   "beats": 6,
+   "gain": -2
+  },
+  {
+   "file": "Boogie Right Funk Guitar 02.caf",
+   "at": 4,
+   "beats": 20,
+   "gain": -4
+  },
+  {
+   "file": "Boogie Right Funk Guitar 02.caf",
+   "at": 26,
+   "beats": 14,
+   "gain": -4
+  },
+  {
+   "file": "Boogie Right Funk Guitar 02.caf",
+   "at": 42,
+   "beats": 6,
+   "gain": -4
+  },
+  {
+   "file": "Boogie Right Hi-Hat Topper.caf",
+   "at": 10,
+   "beats": 14,
+   "gain": -3
+  },
+  {
+   "file": "Boogie Right Hi-Hat Topper.caf",
+   "at": 28,
+   "beats": 12,
+   "gain": -3
+  },
+  {
+   "file": "Boogie Right Synth Lead 01.caf",
+   "at": 16,
+   "beats": 8,
+   "gain": -4
+  },
+  {
+   "file": "Boogie Right Synth Lead 01.caf",
+   "at": 32,
+   "beats": 6,
+   "gain": -5
+  },
+  {
+   "file": "Boogie Right Synth FX.caf",
+   "at": 24,
+   "beats": 2,
+   "gain": -6,
+   "fadeOut": 0.5
+  },
+  {
+   "file": "Boogie Right Synth FX.caf",
+   "at": 40,
+   "beats": 2,
+   "gain": -6,
+   "fadeOut": 0.5
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 4,
+   "beats": 2,
+   "fadeOut": 1
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 10,
+   "beats": 2,
+   "fadeOut": 1
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 14,
+   "beats": 2,
+   "fadeOut": 1
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 20,
+   "beats": 2,
+   "fadeOut": 1
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 26,
+   "beats": 2,
+   "fadeOut": 1
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 28,
+   "beats": 2,
+   "fadeOut": 1
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 32,
+   "beats": 2,
+   "fadeOut": 1
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 38,
+   "beats": 2,
+   "fadeOut": 1
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 42,
+   "beats": 2,
+   "fadeOut": 1
+  },
+  {
+   "file": "Boogie Right Brass 01.caf",
+   "at": 48,
+   "beats": 3,
+   "fadeOut": 3
+  },
+  {
+   "file": "Boogie Right Beat 01.caf",
+   "at": 48,
+   "beats": 16,
+   "fadeOut": 4,
+   "gain": -1
+  },
+  {
+   "file": "Boogie Right Slap Bass 02.caf",
+   "at": 48,
+   "beats": 16,
+   "fadeOut": 4,
+   "gain": -3
+  },
+  {
+   "file": "Boogie Right Funk Guitar 02.caf",
+   "at": 48,
+   "beats": 16,
+   "fadeOut": 4,
+   "gain": -6
+  }
+ ]
+}

@@ -1,0 +1,1 @@
+{"lines":[{"style":"dark","segs":[{"text":"10M queries/day","at":0.7},{"text":"  →  60M pg_catalog changes/day","at":4}]},{"style":"chip","segs":[{"text":"Kirk's system: 2 temp tables + 1 index, created and dropped","at":7.1}]}],"durationSec":16.1}

@@ -1,0 +1,57 @@
+{
+ "url": "https://github.com/postgres/postgres/blob/3d342deeb433060dbea02fdd276656a5563275d5/src/backend/storage/ipc/sinvaladt.c",
+ "derivedFrom": "gh-sinval-full.png (lines 102-103 and 123, lines 104-122 elided)",
+ "clip": {
+  "x": 0,
+  "y": 0,
+  "width": 548,
+  "height": 102
+ },
+ "scale": 4,
+ "highlights": [
+  {
+   "text": "4096",
+   "rects": [
+    {
+     "x": 178.1875,
+     "y": 81,
+     "w": 28.90625,
+     "h": 14
+    }
+   ]
+  },
+  {
+   "text": "define-line",
+   "rects": [
+    {
+     "x": 2,
+     "y": 78,
+     "w": 195.075,
+     "h": 20
+    }
+   ]
+  },
+  {
+   "text": "MAXNUMMESSAGES 4096",
+   "rects": [
+    {
+     "x": 59.8,
+     "y": 78,
+     "w": 137.275,
+     "h": 20
+    }
+   ]
+  },
+  {
+   "text": "comment",
+   "rects": [
+    {
+     "x": 0,
+     "y": 4,
+     "w": 548,
+     "h": 20
+    }
+   ]
+  }
+ ]
+}

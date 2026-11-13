@@ -1,0 +1,14 @@
+{
+  "url": "https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d",
+  "block": "css=header.cover",
+  "clip": {
+    "x": 0,
+    "y": 48,
+    "width": 1100,
+    "height": 320
+  },
+  "scale": 2,
+  "highlights": [],
+  "capturedAt": "2026-11-10T22:51:58.169Z",
+  "note": "crop of brief-cover.png, top 320 CSS px (header line, study line, title)"
+}

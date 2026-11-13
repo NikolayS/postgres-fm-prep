@@ -1,0 +1,269 @@
+Nik [00:00:14]: Hello, hello, this is Postgres.FM. I'm Nik. And as usual, already with me is Kirk. Hi, Kirk. Thank you for joining.
+
+Kirk [00:00:23]: Hey, Nik.
+
+Nik [00:00:23]: It's the fourth time I think we record without Michael, who is on vacations for a few months. He, by the way, announced it in his social networks, last week, and I'm just like, for regular folks who watch us, on YouTube, there should be a sound right now, and you should see, you should see the, this tweet from Michael. So, while Michael is off, let's continue exploring Postgres behavior with DBLab Forge.
+
+And today, we have a topic We were discussing with Kirk, behind the scene, I think, for a couple of years already, right?
+
+Kirk [00:01:10]: Yeah. Three or more.
+
+Nik [00:01:12]: Three or more. Yeah. We... So, Kirk, tell, tell us, your story. You moved, your system from Oracle, right? And this provoked you to use temporary tables. Am I right?
+
+Kirk [00:01:24]: Yes, absolutely. And after doing it, I met you. And you're like, "No, don't use temporary tables." But we struggled because Oracle has global temporary tables, and you get it in the global dictionary. There's no pg_catalog changes for every session that needs them. All of that kind of comes along free. They just have a flag that says, "Oh, store this in his own files," like not with everything else. So it was so easy to use, and the code could count on it being there. It was wonderful. And when we switched over to Postgres, we find out, no, we're gonna have to create these temporary tables all the time, and this adds overhead.
+
+And this is our most heavily used search, is we store results in a temporary table, and then we fill up extra data in them, and then we provide them back. And it took us a while to get this really wired up efficiently, and to realize that if it's set... If certain settings are too low, you end up spilling over to disk while you're writing to your temp table. During practice and running it by hand, I ran into an issue where it slowed down more, and more, and I realized I was using delete and I should've been truncating.
+
+Nik [00:02:40]: And you assumed that—
+
+Kirk [00:02:40]: At one point, I actually had to vacuum analyze my temp table— (Nik: Yeah.) to get the results I'm expecting for speed. (Nik: Right.) I'm sorry, what was your question?
+
+Nik [00:02:49]: Yeah. I say maybe truncate is not, also a good thing in this context, as we will discuss a little bit later.
+
+Kirk [00:02:58]: Why?
+
+Nik [00:02:58]: But I must admit, until this... Like, until recently, I was, talk— I was saying things like never use sub-transactions, never use temporary tables. Well, I speak from practice. And you can... It means, like, you can use them if you have very low loads, right? If you, like, have tiny workloads, like below, like few hundred transactions per second, for example. It's like you won't notice big, big, problems. But when you grow, these things quickly become performance cliffs, right? Or walls. Cliffs or walls? Cliffs, right? Because you're—
+
+Kirk [00:03:39]: Yeah, cliffs. You fall off of them. (Nik: Yeah.) Yeah. (Nik: Yeah.) You unexpectedly trip and fall off of them, so... (Nik: Right.) Right?
+
+Nik [00:03:45]: Yeah. And so it can cause even downtime. So until recently, I always said this keeping in mind that temporary tables are bad in two areas for me. First is they're actually really hard to diagnose because you don't see them. Transaction— (Kirk: Mm.) session which created it does see it. But if you're a DBA, like, trying to... or you have an agent trying to diagnose things, connecting to database in a different session obviously, you're limited in terms of understanding what's happening. You... Like, it's hard. And second thing is second thing is bloat. You are right. Like, it's just... But not bloat of temporary tables. We need to distinguish things here.
+
+If you use a lot of deletes, Autovacuum will ignore temporary tables, right? It will just... Autovacuum doesn't care about your poor temporary tables. If you use deletes, your bloat, content, like, as, as we all know, MVCC in Postgres— (Kirk: Yep.) deletes, delete is done very fast because it's only marking tuple as deleted in this session, which probably will be, like, not so if rollback happens, right? But then, the real, clean, cleanup happens in the vacuum.
+
+Like, Autovacuum runs cleanup. Everything is great. But if you delete in your table, temporary table, Autovacuum doesn't care. It means you just accumulate a lot of dead tuples. It's not bloat, it's dead tuples actually. I tend to distinguish, dead tuples from bloat because in my def... There's no, official definition of bloat. You cannot find it in documentation So different people mean different things when they say bloat. But to me, bloat is what's left after cleaning up, dead tuples. It's empty space which is unused.
+
+It will be probably used, but in many cases it will be unlikely used because, for example, 90% of our space is empty, and nobody will come back and use it at all. Anyway... And yeah, and if you have index on temporary table, it also degrades. This touches our topic a couple of weeks ago, right? int8 versus UUID version four and version seven, and how, like, B-tree can degrade and so on over time. And in this case, nobody will use it probably at all if it's UUID version seven, so you'll just delete something.
+
+Kirk [00:06:28]: What? (Nik: Yeah.) So the challenge is, again, your advice was rock solid because it comes from experience. And it's hard to put everything that goes wrong when you use temporary tables into words, and that's what we're gonna do in this episode a bit for people, is we're gonna make sure you understand what you're giving up by, by taking advantage of this feature. And one of the things I wanna point out is we've tested this now in our system.
+
+We've rewritten the stored procedures that do the temporary table work and return the data set out of them. We've rewritten them to do it all using in-memory record structures. And it's not only faster to do it this way, okay? But the thing is, it's now a read-only transaction. There's no extra transaction being created because I'm searching. So what happens is it's—
+
+Nik [00:07:19]: In other words
+
+Kirk [00:07:20]: Now I can run it on another machine on a read-only server right now. If you use—
+
+Nik [00:07:25]: You're jumping to solution already,
+
+Kirk [00:07:26]: Hey, well, well, well—
+
+Nik [00:07:28]: Since you're jumping—
+
+Kirk [00:07:28]: I'm jumping to the problem, right? (Nik: Right.) I hope I'm not jumping to the so yeah, but we found a solution—
+
+Nik [00:07:33]: Solution is just—
+
+Kirk [00:07:34]: And I only looked for it
+
+Nik [00:07:35]: Don't use temporary tables. And we have—
+
+Kirk [00:07:38]: Well, yeah, but I just wanted to let people know that one way to do it is store it in memory. Store it in record structure in memory— (Nik: Yeah.) if you have to. Just use an RTE, or there's a handful of ways you can do this. (Nik: Yeah.) It doesn't have to be overly complicated. And I think I'll end up writing an article for the wiki, so that in the "don't do this" section, I'm literally gonna recommend, don't use temporary tables, especially as part—
+
+Nik [00:08:03]: I will support this
+
+Kirk [00:08:03]: Of your regular stuff.
+
+Nik [00:08:05]: 100%. So, and you use, you said, these structures, is it in PL/pgSQL code, in functions, stored procedures?
+
+Kirk [00:08:13]: Yeah. Pure PL/pg, you know, SQL. Yeah
+
+Nik [00:08:17]: Or just CTE with arrays also will work.
+
+Kirk [00:08:20]: Well, the reason the CTEs don't work for us is we have, for business reasons, we actually apply a lot of business logic to the results. So when we bring back results, our results aren't like Google search for something, blah. Our results are a lot closer to what an AI might do, where it then proofs some of the results that come back, and then it prioritizes some, and then augments them with information they might need, like currencies in their country, and things that if you add to one giant query, just forget it. You won't get the performance we get, okay? Our average search speeds with like, two different like fields, et cetera, is, like, 30 milliseconds, okay?
+
+Across the 200 million row table that's being updated in real time. (Nik: Mm-hmm. Mm-hmm.) it crushes this kind of performance. We tried doing, letting the optimizer do these two points in the past. Even Oracle failed. Like, it was just slow—
+
+Nik [00:09:17]: I,
+
+Kirk [00:09:17]: Because it had so many decisions to make
+
+Nik [00:09:19]: You are figuring me. I would look at this. I cannot imagine the thing I couldn't solve with advanced CTEs, with arrays, and stuff like unnested and so on. But let's not... You're provoking me. (Kirk: Yeah.) Like, this is super off-topic right now. Like, I,
+
+Kirk [00:09:34]: Yeah, yeah, yeah. It's all right
+
+Nik [00:09:35]: I love PL/pgSQL. I, this is my favorite language the last, I think, 15 years, so (Kirk: Nice.) Yeah. Other language, basically, right? But CTEs I also love, and there are pros and cons, and, like, let's not go there because it's, like, kind of two paths for solution. (Kirk: Yeah, yeah. Yeah.) But before—
+
+Kirk [00:09:53]: So again, we came from an environment. We had one set up. We recreated it here. And part of what we had to understand was the timing and what we had to give up. (Nik: Mm-hmm.) So straight up, Postgres was 10 to 25% slower than Oracle, for the same query—
+
+Nik [00:10:09]: Not bad
+
+Kirk [00:10:09]: Same data, roughly.
+
+Nik [00:10:10]: Not bad.
+
+Kirk [00:10:11]: Not bad. For free, it's awesome. In fact, the price difference is so interesting that the client bought 8X the machine to run Postgres on. Like, just because it was a joke.
+
+Nik [00:10:22]: I, this happens a lot once. I remember a huge company migrating from Oracle, and they said, "Our fleet, like, with Postgres, on Postgres is much bigger." And I was thinking, is it bad thing or good thing? Is it a bad thing because you need more machines to run the same workload to match, like, the power? Or it's a good thing because it's just because you don't pay for license, you finally can get more power in terms of hardware, right?
+
+Kirk [00:10:47]: That was exactly. (Nik: Yeah.) That was... this client looked at the price of the machine— (Nik: Yeah.) and compared it to what they're, what they even pay for just development licenses. (Nik: Yeah.) And they laughed.
+
+Nik [00:10:57]: Yeah. Yeah, yeah, yeah, yeah, yeah. So,
+
+Kirk [00:10:59]: They're like, "The machine's good for five years."
+
+Nik [00:11:01]: We should return—
+
+Kirk [00:11:02]: So yeah
+
+Nik [00:11:02]: To the core problem, and we... I think we have... There are, like, several layers there. But before they go back to the problem, how many times did I need to tell you that get rid of temporary tables before you started acting?
+
+Kirk [00:11:17]: Yeah. So you had mentioned it, and it planted a seed. I just didn't understand how easy it would be, to be honest. (Nik: Mm-hmm, mm-hmm.) And not only that, here's what changed. Because we're now on Postgres and the client went from having a server to six different servers that do different work and offload it differently, and it scales better, the client's now asking— Oh, does this mean we can put a server, up in the cloud and have it close to Asia where— (Nik: Yes.) half of our clients are? (Nik: Yes.) Could we go here? And could we do it with a centralized server and maybe make these read-only replicas? (Nik: Yeah.) And it's like, well, the minute they did that, guess what?
+
+The temp tables have to go out the window. We cannot use our... Right?
+
+Nik [00:11:57]: Okay. Let's unwrap this.
+
+Kirk [00:11:57]: So that finished it. (Nik: Yeah. Yeah.) I was done.
+
+Nik [00:12:00]: Let's untangle this, like, big, big thing, of problems with temporary tables. Okay. Problems number zero, they can be used only on the primary. (Kirk: Yeah. Yeah.) Problem number one for, like, troubleshooting, you don't see them from other sessions, so if something is wrong, it's really hard to diagnose what's happening. Problem number two, 2A and 2B, bloat. 2A is the bloat itself if you use delete, but okay— (Kirk: Mm-hmm.) you can just truncate, right? Okay.
+
+And you need to vacuum, your, on your own, so it's not again, it's not bloat, dead, dead tuples, but after vacuum becomes bloat. Anyway, the MVCC problems with the content of these temporary tables themselves. But problem 2.2B is a catalog bloat. This is like— (Kirk: Yeah.) for me, like, it's like I saw it so many times. Yeah. It's like, just like you come to people and they have 95, 99%, some catalog tables bloated. And as we know, as you know, you cannot use pg_repack or something. You need to vacuum full. Fortunately, it it's usually, like, just a few seconds. Boom, and it's done. Like small surgery.
+
+But then other queries are, are affected by catalog bloat because it takes more and more time to deal with metadata, with catalog, right? Sound good?
+
+Kirk [00:13:32]: And two, two guys trying to create records at the same time. Now you have contention. So, and we didn't see how bad it was until we kind of ran a count and were watching for transaction ID wraparound. Thankfully, it gets handled automatically, but what we thought was 10 million queries a day running through, we didn't realize because we had two temp tables and an index, temporary index, that those are three records going in, and they're three records coming out when that session's over, right? When you free up your temp tables, then those three have to come out. So what was 10 million a day quickly became 60 million updates to pg_catalog a day. (Nik: Mm-hmm.)
+
+Okay? Pretty soon, we're just wasting time updating pg_catalog. Like, you know, for no good reason. (Nik: Right.) So, and that has a whole different raft of problems if you cross certain barriers, so.
+
+Nik [00:14:33]: Yeah. And our silicon friend here who is silent because I told, I told him not to speak unless directly addressed. He says also that there is a, like, interesting hidden issue with so transaction ID wraparound. I can imagine in very heavily loaded environments it might happen that a vacuum cannot, take care of, like, cannot freeze, right? The content of the tuples in temporary tables, which is also additional risk. I would still put it, to category, like, the, to item two, complex item two, right? (Kirk: Okay.) It's all about MVCC and bloat and so on in that layer. And finally, layer number three, which is central topic for this podcast, which is very, very interesting.
+
+It doesn't it's not related to bloat, MVCC, nothing. It's related to how Postgres works, when something, like, when any DDL happens, including, temporary table creation, and actually truncate as well. So it looks like a wait event, lightweight lock, SInvalWrite, SInvalRead. So, a snapshot invalidation, catalog snapshot invalidation, and it happens when one session, executes some DDL or truncate as well, and it signals, that other sessions must also, like, refresh their understanding of catalog. And interesting that I was thinking, like, I couldn't understand why logically it doesn't make sense to me. Why, why do we do it? Because temporary tables, they are visible to only to our session.
+
+Why do we need to signal others anything at all? What do you think? (Kirk: Right.) Why? Why? Yeah.
+
+Kirk [00:16:31]: And I... Honestly, it may just be a, like a trigger on pg_catalog that says, "Hey, the catalog's changed. Tell everyone that their catalog assumptions might be wrong," right? That the optimizer might have to look at maybe it added a column, maybe it did this. So maybe it was an overly safe approach to, hey, catalog change, just send this out, okay? So that it gets handled. Because you're dead on. There's only one backend that can truly read your temp tables, right? And needs to know about changes to your temp tables. The problem is, it's a global catalog.
+
+Nik [00:17:07]: Right. Right. It is global catalog. Exactly. Data is local. A catalog is global. This is just mechanism Postgres uses. And one of the ideas, DBLab Forge brought, as usually we have ideas for current versions, for operations, for DBREs and their agents And additionally, separately, we have ideas for future improvements in Postgres. And one of the ideas to make it truly local, but it, it's like, I guess it's just hard because how work with catalog is organized in Postgres.
+
+There was work on implementing global temporary tables for guys who are moving from Oracle should be good. But I think it's abandoned a few years ago, so I'm not sure about the status of that. Anyway, moving back to this thing. So every time, you create a temporary table or destroy it or truncate it, this signal goes to this queue, invalidation queue, which is 4,096 hard-coded constant, right? (Kirk: Okay.)
+
+Yeah. And what happens, when you, as DBLab Forge found, first you don't see that particular lightweight lock. If you take, for example, Postgres 18 or Postgres 19, which is release candidate 2 right now, right? It will... And you just start in many sessions, start, creating temporary tables, and increase number of such sessions, increase contention. On 16-core machine, you will start seeing problems. Like, first you will start seeing lightweight lock LockManager, which is understandable because if you have indexes and a lot of relations, fast path is not, happening, is not, being used if you exceed the total number of relations in transaction exceeding 16.
+
+Which is quite easy to solve, super easy to solve in Postgres 18, just increasing max_locks_per_transaction setting. Setting it, for example, 128, 256, and then, this lightweight lock goes away. And then you see this lightweight lock SInvalWrite. And the interesting thing is that if you see it, usually a CPU is low and disk IO is low, can be close to zero. So you don't see the server as loaded at all, but you are not getting— (Kirk: Mm.) throughput as you should because this is just this, like, bottleneck, this invalidation queue.
+
+And the problem further increases if you have additional, idle sessions, which is quite common on RDS and Aurora. They... Like, we see clients all the time coming to us with, like, 2,500 max connections, 5,000 max connections. And they start, like, when project is growing, they start using them. Even if they use... There is no PgBouncer usually because you need to manage it, like, yeah. (Kirk: Yeah.) Amazon doesn't provide it as a managed service.
+
+They provide RDS proxy, but RDS proxy is very weird thing. We see it's, like, provoking idle sessions really well. We just see a lot of idle sessions, so it doesn't help to shave off, idle sessions. So it's quite common you just have, like, 2,000 idle sessions. (Kirk: Wow.) Yeah. And this directly negatively affects, this very problem, this lightweight lock SInvalWrite contention, as you can see from the graphs. So, this means that, like, you just have bottleneck. You experience a problem, like performance issue. It's performance cliff. It can come, like, in waves.
+
+If you have a lot of idle sessions, it can be, like, constant. You're basically already falling from the cliff and just lie down there on the bottom, right? And it... I can imagine in some cases it can be downtime, just like outage, right? And if you just... Like, first urgent emergency help, just shave off idle sessions. Find a way, like, bring PgBouncer or better plan, application side, pool connection sizes, right? You can... Usually you can cut it. How it happens, like right now we are, like, how many weeks, before Black Friday?
+
+What usually happens, I saw—
+
+Kirk [00:22:02]: Three.
+
+Nik [00:22:02]: Yeah. Two or three, yeah. So Black Friday is when e-commerce companies start, bringing more capacity to handle Black Friday well, because it's like tsunami workload usually for successful businesses. And they just... How it, like, usually works, guys who are responsible for application, they say, "Oh, our application is quite heavy. Let's double or triple, quadruple number of application nodes." But usually they just forget about database, and they just don't talk to database. And if there's no PgBouncer, which is, which protects from extra idle sessions, they just, like, say, "Okay, we just double number of application nodes." (Kirk: Yeah.)
+
+But they don't, don't... Like, they have application size poolers, say like, 40. Like, they have like 100 nodes, 40. Oh, too much, too many, right? Say, okay, 10. 10 too small. Okay. Say some of all sessions, before the their change was 1,000, and we were okay with it. Okay, it was RDS 5,000 max connections, but application side pooler protected us. We didn't exceed 1,000. But now they decided to double or, or triple the number of application nodes, not changing the size of pooler on application side.
+
+So we just suddenly have more connections potentially, right? (Kirk: Right.) Yeah. And the database, okay, it handles quite well and after Postgres 13, 14 it thanks to work from Andres Freund, it handles really well extra idle connections usually. Like you can couple of thousand idle connections, you don't suffer from them. Except this point, if you intensively use temporary tables, it will hurt you. So this wait event can be seen in active session history dashboards, like Performance Insights or our dashboards, PostgresAI dashboards. Or if you use pg_ash, you can see it as well.
+
+And you just see, oh, boom, like a lot of sessions are waiting in that wait, wait event. CPU is not 100%. Disk I/O is far from saturation, maybe even close to zero if we have very cached state as we had in this synthetic case, by DBLab Forge. And nothing is happening, right? And this actually very classic situation of a problem, performance problem, which Brendan Gregg in his, I highly recommend, there are a couple of videos, from some conference, where he just walks through various Linux tools.
+
+And one of the cases, like CPU is almost zero, disk I/O is zero, but performance is not there. What's happening, right? This is happening. We're just waiting. Some, some bottleneck, and we're just waiting for something, and that's it.
+
+Kirk [00:25:09]: And again, it's a, it's a basically a 4K ring buffer that we're dropping these messages into, and we've got to wait till everybody basically takes off and says, "Yeah, yeah, I cleared my... You know, I listened. I know. Thank you very much." (Nik: Mm-hmm.) And the challenge is this is going out to everybody. It's a broadcast. (Nik: Mm-hmm.) And you're, you're now broadcasting it, not to 1,000 sessions, but now to 4,000 sessions.
+
+Nik [00:25:34]: All idle ones. Yeah.
+
+Kirk [00:25:35]: And all idle ones. And you're broadcasting then to them, "Hey, just confirm that you know you have to update your cache here, because somebody created a temp table." And the worst part is the more temp table creation you get, the more of those messages you get. And the queue doesn't change in size. So now all of a sudden there's contention there, and now you get people waiting and waiting, and you have to wait to process. And all of a sudden now everything you're doing is just running slower. The queries didn't get any harder, okay? Nothing really... It's not the work, it's the information, right? This is like adding a late, adding an extra developer to a late project only makes it later.
+
+This is adding a session to a system that's overwhelmed by the number of sessions, only makes the system more overwhelmed by the number of sessions. (Nik: Yeah.) So interesting.
+
+Nik [00:26:27]: And then
+
+Kirk [00:26:28]: You had just mentioned the graph. (Nik: Yeah.) I think it's a good time to mention, 'cause, you know, simply you can rewrite a lot of these queries like you did for this as a CTE, right? (Nik: Mm-hmm.) And we have this graph that the AI will bring up or the, you know, whoever will bring up and show it to you. That it's amazing the difference. (Nik: Yeah.) It's like—
+
+Nik [00:26:50]: 20,000
+
+Kirk [00:26:50]: Yeah, 20,000, you know, versus 80,000 transactions per second.
+
+Nik [00:26:57]: Hold on.
+
+Kirk [00:26:57]: Depending—
+
+Nik [00:26:58]: I'm looking at the graph, which is like 88,000 transactions for CTE.
+
+Kirk [00:27:01]: Yeah, yeah, yeah. Yeah, that one.
+
+Nik [00:27:03]: And less than 4,000 for temporary tables which are created per transaction. So temporary table, create table statement for temporary, create temporary table statement. (Kirk: Yeah.) There's modifiers ON COMMIT DELETE ROWS or ON COMMIT DROP. So for ON COMMIT DROP, it's the worst. (Kirk: Yes.) Because you are, like you basically for every transaction you broadcast more messages, right? But for ON COMMIT DELETE ROWS, this is your case, like, which will lead— (Kirk: Yeah.) to different problem. It will lead to a lot of dead tuples. You need to vacuum. (Kirk: Okay.) You have now bloat and like indexes are out of shape. So that is good here because slight, like good like four, four or five times better in terms of maximum TPS you can achieve. So you have 17,000 transactions in this synthetic experiment.
+
+Because okay, you are deleting rows. If we forget about the tuples and bloat, then we just avoid extra DDL and extra broadcast, through that queue, right? So this is like slightly better, but I would, I wouldn't still use temporary tables at all.
+
+Kirk [00:28:15]: Well, and the CTE version is like more than four times better than that. You're getting 80 some thousand rows or transactions per second. Like it's... When you see the graph, that should be what's telling you, oh, I probably don't want a system that's heavily dependent on temporary tables. Now look, they have their place. If it's a once-a-month batch job or something like that, or it can't fit in the memory, it's insane, and you have to do some stuff, that's perfect. Like, do that. But don't use it as part of every search we do.
+
+As our system grows and we do more, this is just gonna compound on temp tables. Again, had I do— had to do it all over again, we would've not implemented what we did, so... And we will change it.
+
+Nik [00:29:05]: I know only one case where temp tables are needed, is guys migrating from Oracle really want them. Beyond that, I cannot imagine any case where, where, where I would personally use temp tables at all. Zero.
+
+Kirk [00:29:18]: Zero. Even if, like for example, you're asked to do a bunch of data analysis, and you have to take the data and massage it into a different structure so that you can then load it into what effectively is what management wants. Because— (Nik: Mm-hmm.) it's being significantly pivoted, et cetera, and they're gonna look at—
+
+Nik [00:29:36]: Well
+
+Kirk [00:29:36]: And spend time querying it over next month.
+
+Nik [00:29:39]: F-follow me, like, and again, YouTube guys, watching us on YouTube will, will see it in the center of the screen right now. So imagine you have a table, and you select from it. Select star from this table, right? Or select... Let's name this table T1. You can say select star from the table, and you will see the whole table with all, like, several rows, several columns, right? But then you can say select T1 from T1. Do you know this trick?
+
+Kirk [00:30:15]: Select T1 from T1. (Nik: Yeah.) Oh, where you select actually the record set itself—
+
+Nik [00:30:21]: Yes, exactly
+
+Kirk [00:30:21]: As a single item.
+
+Nik [00:30:23]: You will have— (Kirk: Okay.) only one column, which is of record size—
+
+Kirk [00:30:26]: Hmm
+
+Nik [00:30:27]: Or record type, and you will have, n number of rows, how many rows this table has. But then you can say select array, parenthesis, and inside it select T1 from, from T1. What will—
+
+Kirk [00:30:40]: Oh, wow. (Nik: Yeah.) So that'll create an array— (Nik: Yeah.) of rows— (Nik: Yeah.) for all of the rows of the table that you're pulling.
+
+Nik [00:30:47]: You basically collapsed everything to a single scalar value, which contains all rows with all columns inside. (Kirk: Right.) But the magic, the true magic is that you can undo it dynamically.
+
+Kirk [00:31:00]: Right. You can unnest it and pull it back.
+
+Nik [00:31:02]: You can unnest, and then you can also, use the construct, (t1) dot star. This will bring your— (Kirk: Yeah.) your columns back. So this is how you can play with it even without, direct use of arrays. But why not? Like, you use arrays as well. In any CTE, you can use it. And this is how you can have a, like, multi-stage analysis of whatever. If you need PL/pgSQL or PLPython as well, you can do it in a function as well. But why create temporary tables at all if you can do such things? Or just use—
+
+Kirk [00:31:35]: Well, usually—
+
+Nik [00:31:36]: A simple arrays. Yeah
+
+Kirk [00:31:36]: In my... The examples that we typically have that we're crunching through, we're joining, I wanna say a 200 million row table against a billion row table. (Nik: Mm-hmm.) Okay? And we're— (Nik: Mm.) expanding out and then breaking down, and we get a shit ton of data back, and then we have to collapse that and turn that around, but the result is still huge. It will not fit the memory.
+
+Nik [00:32:01]: What exactly temporary... do temporary tables bring you value? Which value? I would just use regular tables, and I would deal with the tuples and vacuuming.
+
+Kirk [00:32:11]: Oh, yeah, yeah. So... And that's something else to mention. Yeah. So we can actually, and we do this now more than ever. Like I said, the only time I would do it if it was, like, a ad hoc. But now on the stuff we do regularly like this, yeah, we've switched to using unlogged tables. Okay? (Nik: Great.) But there is something where, to be honest, we drop the indexes on the unlogged tables, so that when we insert the data across the few sets, and then we... One of the things we're doing is we are limiting the column sets that get stored. We're doing a bunch of other things, but I don't wanna go too deep into this.
+
+Nik [00:32:45]: Yeah. And also—
+
+Kirk [00:32:45]: Let's have a separate session on this.
+
+Nik [00:32:47]: I feel also materialized views are, is adjacent topic here, right? It's like— (Kirk: Right.) so I guess there are two paths. One is if you do need something like, a massive manipulation with data, it should be on the primary, because you still need rights. And then maybe like, mm, regular tables, right? And understanding— (Kirk: Yeah.) MVCC. But if you don't actually need, joins, right? For example, if it's like just dealing with arrays and so on is enough, and then, like, should be read-only on possible, with potential to be moved to replicas and just arrays or variables inside PL/pgSQL or something like this, right? So it's definitely— (Kirk: Yeah.) it's definitely, doable. So as usual, we also...
+
+Like, this probably like, that we can say how to mitigate it. Just get rid of temporary tables. If you need— (Kirk: Right.) emergency help, get rid of idle connections, stop, truncating temporary tables, but better just get rid of them in, (Kirk: Yeah.) yeah, in one or, or a few possible ways. But there are also ideas for Postgres, improvements in this area. There is some work, and there are ideas again, like if we revisit this topic, if some of our listeners, listen to us who, do some hacking and Postgres development, check out, the brief.
+
+As usual, at the very end, there are ideas for both, like, DBREs and their agents and for Postgres itself for future development. So I think these are quite good entry points for, like, to consider some improvements further. What do you think? I personally didn't— (Kirk: Yeah.) spend a lot of time there, but I just see there is potential. There are several ideas. But I wouldn't jump to them before extra research of past discussions in hack— in the hackers' mailing list.
+
+Kirk [00:34:55]: And since we use AI, I wanna point out, I didn't rewrite all of those stored procedures by hand. I actually leveraged and you know, mostly vibe coded it out, because the structures were straightforward once I was able to tell the AI. So yeah, I would just focus on getting rid of them. But if you are gonna keep them, there are some enhancements that can be suggested. You know, the size of the ring buffer can't be changed easily. But there's also a question of whether or not we can suppress the SInvalWrite lock, from being emitted if it's dealing with a temporary table. Okay? (Nik: Mm-hmm.) And that alone would help.
+
+But again, now you're fixing, you're fixing the root cause of a problem you're creating by using a foot gun. (Nik: Yeah.) Okay?
+
+Nik [00:35:43]: As I understand, this code was, last, heavily touched by Tom Lane in 2008. (Kirk: Yeah.) This, So I would be very careful. First study deeper, because of course, our brief has some ideas. Like for example, this maximum messages, hard-coded 4K could depend on max_connections, for example, or, or it could be a separate, setting. (Kirk: Yeah.) But yeah, yeah, I would think deeper there, here, and then just, like, it was quick, quick research with DBLab Forge. I was... I, as usual, mostly focus on current situation, how to help our clients, because we definitely see some struggles all the time, and reproduce them using these tools in synthetic, and then, see how it can be mitigated.
+
+And mitigation here remains just don't use temp tables.
+
+Kirk [00:36:41]: And I think, and I really think that updating the don't do this wiki, is a step in the right direction. Because I followed that so much when I was in the process of converting from Oracle to Postgres, that I just would love to save other people the future time in doing that. So yeah.
+
+Nik [00:37:00]: Good. Anything else on this topic?
+
+Kirk [00:37:05]: No, I think it's, I think it's fabulous. I think it's a great topic. Also, I do wanna mention that having PgBouncer doesn't help this problem at all, because it can't keep the temp tables between sessions, and it shouldn't, because of leaking and stuff. So, we use PgBouncer, okay? But it actually makes some things actually a little bit worse. We tried some tricks, you know, to make it, you know, so we could stick around and stuff. In the end, it's easier to just rewrite to not use temp tables.
+
+Nik [00:37:34]: Right. But some aspect of it, PgBouncer helps. It helps to get rid of idle connections, which makes the problem worse. (Kirk: Yeah.) Right?
+
+Kirk [00:37:42]: Yes, absolutely.
+
+Nik [00:37:43]: But the
+
+Kirk [00:37:43]: From that standpoint, right. But it doesn't help because in the end it's gonna issue a DISCARD— (Nik: Mm-hmm.) okay? In between sessions connect. We use long-running sessions because we haven't migrated over. So because of that, it uses a DISCARD ALL, which basically dumps and drops all your temp tables even though it's the same session. So yeah. (Nik: Great.) So, (Nik: Yeah.) it's a lot to fix, but it's worth fixing. Another good topic. Thank you, Nik.
+
+Nik [00:38:12]: Thank you. A pleasure to chat with you. See you next time. Bye-bye.
+
+Kirk [00:38:17]: Bye.

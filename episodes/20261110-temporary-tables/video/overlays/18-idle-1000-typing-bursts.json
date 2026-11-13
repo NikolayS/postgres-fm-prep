@@ -1,0 +1,30 @@
+{
+  "overlay": "18-idle-1000-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.4,
+      "end": 1.367,
+      "chars": 29,
+      "line": "l0s0"
+    },
+    {
+      "start": 15.1,
+      "end": 15.433,
+      "chars": 10,
+      "line": "l0s1"
+    },
+    {
+      "start": 15.783,
+      "end": 16.05,
+      "chars": 8,
+      "line": "l0s2"
+    },
+    {
+      "start": 16.7,
+      "end": 17.867,
+      "chars": 35,
+      "line": "l1s0"
+    }
+  ]
+}

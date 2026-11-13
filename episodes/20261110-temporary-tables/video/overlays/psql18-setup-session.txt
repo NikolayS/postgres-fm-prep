@@ -1,0 +1,19 @@
+psql (18.6 (Debian 18.6-1.pgdg13+2))
+Type "help" for help.
+
+postgres=# create table t1 (id int, name text, status text);
+CREATE TABLE
+postgres=# insert into t1 values
+postgres-#   (1,'Nik','on air'),
+postgres-#   (2,'Kirk','on air'),
+postgres-#   (3,'Michael','vacation');
+INSERT 0 3
+postgres=# select * from t1;
+ id |  name   |  status  
+----+---------+----------
+  1 | Nik     | on air
+  2 | Kirk    | on air
+  3 | Michael | vacation
+(3 rows)
+
+postgres=# q\q

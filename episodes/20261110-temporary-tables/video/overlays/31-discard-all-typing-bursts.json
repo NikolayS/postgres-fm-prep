@@ -1,0 +1,18 @@
+{
+  "overlay": "31-discard-all-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.983,
+      "chars": 46,
+      "line": "l0s0"
+    },
+    {
+      "start": 2.633,
+      "end": 4.267,
+      "chars": 49,
+      "line": "l1s0"
+    }
+  ]
+}

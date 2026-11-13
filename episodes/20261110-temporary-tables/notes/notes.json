@@ -1,0 +1,29 @@
+{
+  "title": "The hidden costs of CREATE TEMP TABLE",
+  "number": 196,
+  "byline": "Nik and Kirk.",
+  "status": "draft",
+  "summary": "Nik and Kirk discuss the hidden costs of CREATE TEMP TABLE: dead tuples and catalog bloat, and the shared invalidation queue that every session has to read. They cover why thousands of idle sessions make it much worse, what it looks like in wait events, and what to use instead.",
+  "links": [
+    {"group": "Main link", "title": "Temp tables in the request path: where the cliff is, and what LWLock:SInvalWrite really tells you (DBLab Forge brief, PostgresAI)", "url": "https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d", "at": "00:34:15"},
+    {"group": "Michael", "title": "Michael's post about taking a few months off (X)", "url": "https://x.com/michristofides/status/2117283823314674021", "at": "00:00:44"},
+    {"group": "Episodes", "title": "UUIDv4 vs UUIDv7", "url": "https://postgres.fm/episodes/uuidv4-vs-uuidv7", "at": "00:06:12", "referred": true},
+    {"group": "Postgres docs", "title": "CREATE TABLE, Compatibility: temporary tables vs the SQL standard's global temporary tables (docs)", "url": "https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-COMPATIBILITY", "at": "00:01:32", "special": true},
+    {"group": "Postgres docs", "title": "CREATE TABLE, TEMPORARY: autovacuum cannot vacuum or analyze temporary tables (docs)", "url": "https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-TEMPORARY", "at": "00:04:34", "special": true},
+    {"group": "Postgres docs", "title": "LWLock wait events, including SInvalWrite and SInvalRead (docs)", "url": "https://www.postgresql.org/docs/current/monitoring-stats.html#WAIT-EVENT-LWLOCK-TABLE", "at": "00:15:40", "special": true},
+    {"group": "Postgres docs", "title": "max_locks_per_transaction (docs)", "url": "https://www.postgresql.org/docs/current/runtime-config-locks.html#GUC-MAX-LOCKS-PER-TRANSACTION", "at": "00:19:16", "special": true},
+    {"group": "Postgres docs", "title": "CREATE TABLE, ON COMMIT: PRESERVE ROWS, DELETE ROWS, DROP (docs)", "url": "https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-PARMS-ON-COMMIT", "at": "00:27:14", "special": true},
+    {"group": "Postgres docs", "title": "CREATE TABLE, UNLOGGED (docs)", "url": "https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-UNLOGGED", "at": "00:32:24", "special": true},
+    {"group": "Postgres docs", "title": "DISCARD (docs)", "url": "https://www.postgresql.org/docs/current/sql-discard.html", "at": "00:37:45", "special": true},
+    {"group": "Postgres source and history", "title": "sinvaladt.c: MAXNUMMESSAGES, the 4,096-message invalidation queue", "url": "https://github.com/postgres/postgres/blob/3d342deeb433060dbea02fdd276656a5563275d5/src/backend/storage/ipc/sinvaladt.c", "at": "00:18:11"},
+    {"group": "Postgres source and history", "title": "Increase the number of fast-path lock slots (Tomas Vondra, 2024, Postgres 18)", "url": "https://github.com/postgres/postgres/commit/c4d5cb71d229095a39fda1121a75ee40e6069a2a", "at": "00:18:49"},
+    {"group": "Postgres source and history", "title": "Postgres 14 release notes: better scalability with many connections (Andres Freund's work)", "url": "https://www.postgresql.org/docs/release/14.0/", "at": "00:23:38", "special": true},
+    {"group": "Postgres source and history", "title": "Rewrite the sinval messaging mechanism to reduce contention (Tom Lane, 2008)", "url": "https://github.com/postgres/postgres/commit/fad153ec45299bd4d4f29dec8d9e04e2f1c08148", "at": "00:35:43"},
+    {"group": "Tools", "title": "pg_repack", "url": "https://github.com/reorg/pg_repack", "at": "00:13:10"},
+    {"group": "Tools", "title": "PgBouncer, server_reset_query (default DISCARD ALL)", "url": "https://www.pgbouncer.org/config.html#server_reset_query", "at": "00:20:24"},
+    {"group": "Tools", "title": "Amazon RDS Performance Insights", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html", "at": "00:24:06", "special": true},
+    {"group": "Tools", "title": "pg_ash, active session history for Postgres", "url": "https://github.com/NikolayS/pg_ash", "at": "00:24:12"},
+    {"group": "Other", "title": "Linux performance tools (Brendan Gregg)", "url": "https://www.brendangregg.com/linuxperf.html", "at": "00:24:39"},
+    {"group": "Other", "title": "Don't Do This: Don't create temporary tables in frequently executed code (PostgreSQL wiki)", "url": "https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_create_temporary_tables_in_frequently_executed_code", "at": "00:36:41"}
+  ]
+}

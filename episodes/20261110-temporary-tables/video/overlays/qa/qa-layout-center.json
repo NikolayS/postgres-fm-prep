@@ -1,0 +1,122 @@
+{
+ "canvas": {
+  "w": 1920,
+  "h": 1080,
+  "fps": 25
+ },
+ "tiles": "/Users/nik/Documents/Zoom/2026-11-10 10.03.07 .fm recording/review/tiles-manual.json",
+ "show": "PostgresFM",
+ "title": "The hidden costs of CREATE TEMP TABLE",
+ "cardTitle": "The hidden costs of\nCREATE TEMP TABLE",
+ "links": [],
+ "crop": {
+  "top": 0.012,
+  "bottom": 0.072,
+  "left": 0.008,
+  "right": 0.008
+ },
+ "place": {
+  "kirk": {
+   "x": 968,
+   "y": 210,
+   "w": 928,
+   "h": 522,
+   "label": "Kirk Wolak",
+   "focusY": 0,
+   "center": {
+    "x": 1640,
+    "y": 360,
+    "w": 256
+   }
+  },
+  "nik": {
+   "x": 24,
+   "y": 210,
+   "w": 928,
+   "h": 522,
+   "label": "Nik Samokhvalov",
+   "focusY": 0,
+   "center": {
+    "x": 1640,
+    "y": 120,
+    "w": 256
+   }
+  },
+  "robot": {
+   "x": 1656,
+   "y": 880,
+   "w": 240,
+   "h": 135,
+   "small": true,
+   "radius": 10
+  }
+ },
+ "highlight": [],
+ "sharpen": 0.25,
+ "transition": 0.6,
+ "cardHosts": [
+  {
+   "name": "Nik Samokhvalov"
+  },
+  {
+   "name": "Kirk Wolak"
+  }
+ ],
+ "theme": "shades",
+ "cuts": "/Users/nik/Documents/Zoom/2026-11-10 10.03.07 .fm recording/review/01-edited.cuts.json",
+ "logo": "/Users/nik/Documents/Zoom/2026-11-10 10.03.07 .fm recording/review/21-outro-v2.mp4",
+ "center": [
+  {
+   "from": 30.56,
+   "to": 40.16
+  },
+  {
+   "from": 79.9,
+   "to": 112.1
+  },
+  {
+   "from": 714.34,
+   "to": 768.74
+  },
+  {
+   "from": 902.48,
+   "to": 956.38
+  },
+  {
+   "from": 1072.7,
+   "to": 1086.3
+  },
+  {
+   "from": 1160.64,
+   "to": 1183.74
+  },
+  {
+   "from": 1238.58,
+   "to": 1282.86
+  },
+  {
+   "from": 1496.76,
+   "to": 1553.06
+  },
+  {
+   "from": 1586.06,
+   "to": 1701.18
+  },
+  {
+   "from": 1772.0,
+   "to": 1869.06
+  },
+  {
+   "from": 2043.4,
+   "to": 2056.5
+  },
+  {
+   "from": 2129.0,
+   "to": 2154.5
+  },
+  {
+   "from": 2188.58,
+   "to": 2204.24
+  }
+ ]
+}

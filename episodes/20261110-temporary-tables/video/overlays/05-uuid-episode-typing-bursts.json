@@ -1,0 +1,30 @@
+{
+  "overlay": "05-uuid-episode-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 0.75,
+      "chars": 9,
+      "line": "l0s0"
+    },
+    {
+      "start": 1.1,
+      "end": 1.9,
+      "chars": 24,
+      "line": "l0s0"
+    },
+    {
+      "start": 2.55,
+      "end": 2.85,
+      "chars": 9,
+      "line": "l1s0"
+    },
+    {
+      "start": 3.2,
+      "end": 4.133,
+      "chars": 28,
+      "line": "l1s0"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "url": "https://github.com/postgres/postgres/blob/3d342deeb433060dbea02fdd276656a5563275d5/src/backend/storage/ipc/sinvaladt.c#L123",
+  "block": "css=[data-line-number=\"120\"]",
+  "clip": {
+    "x": 356.3125,
+    "y": 790,
+    "width": 660,
+    "height": 160
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "css=#LC123",
+      "rects": [
+        {
+          "x": 63.6875,
+          "y": 60,
+          "w": 677.453125,
+          "h": 20
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-10T22:58:49.618Z"
+}

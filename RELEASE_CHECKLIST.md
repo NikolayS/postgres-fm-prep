@@ -42,7 +42,7 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
   - the standard footer: feedback, "produced by", credits;
   - 2–3 hashtags at the end.
 - [ ] Made for kids: **No**.
-- [ ] Playlist: Postgres.FM podcast.
+- [ ] Playlists, 2–3: always **Postgres.FM podcast** and **PostgreSQL in English**, plus 1 topic playlist (e.g. "PostgreSQL performance. Benchmarks", "PostgreSQL index maintenance. Bloat. VACUUM", "Postgres in containers. Docker. Kubernetes", "Postgres and AI", "Hacking Postgres").
 - [ ] Publish as Public with **instant Premiere**.
 
 ## 4. YouTube subtitles

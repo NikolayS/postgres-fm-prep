@@ -1,0 +1,210 @@
+[
+ [
+  "Nick",
+  "Nik"
+ ],
+ [
+  "DB Lab",
+  "DBLab"
+ ],
+ [
+  "Postgres AI",
+  "PostgresAI"
+ ],
+ [
+  "Postgres.ai",
+  "PostgresAI"
+ ],
+ [
+  "PostgresFM",
+  "Postgres.FM"
+ ],
+ [
+  "UUID v4",
+  "UUIDv4"
+ ],
+ [
+  "UUID V4",
+  "UUIDv4"
+ ],
+ [
+  "UUID v7",
+  "UUIDv7"
+ ],
+ [
+  "UUID V7",
+  "UUIDv7"
+ ],
+ [
+  "UUID4",
+  "UUIDv4"
+ ],
+ [
+  "UUID7",
+  "UUIDv7"
+ ],
+ [
+  "int 8",
+  "int8"
+ ],
+ [
+  "Nick's",
+  "Nik's"
+ ],
+ [
+  "joined me",
+  "joined me."
+ ],
+ [
+  "UUID v4 patch",
+  "UUIDv7 patch"
+ ],
+ [
+  "Andrei",
+  "Andrey"
+ ],
+ [
+  "Tomasz Wondra",
+  "Tomas Vondra"
+ ],
+ [
+  "Brendan Greg",
+  "Brendan Gregg"
+ ],
+ [
+  "UUID v7s",
+  "UUIDv7s"
+ ],
+ [
+  "UUID V7s",
+  "UUIDv7s"
+ ],
+ [
+  "UUID v4s",
+  "UUIDv4s"
+ ],
+ [
+  "Integer, eight",
+  "int8"
+ ],
+ [
+  "Integer eight",
+  "int8"
+ ],
+ [
+  "bloated that, that tuples",
+  "bloat, dead, dead tuples"
+ ],
+ [
+  "PLPG SQL",
+  "PL/pgSQL"
+ ],
+ [
+  "PLPG scale",
+  "PL/pgSQL"
+ ],
+ [
+  "PLPGSQL",
+  "PL/pgSQL"
+ ],
+ [
+  "Pure PLPG",
+  "Pure PL/pg"
+ ],
+ [
+  "snapshot and validation",
+  "snapshot invalidation"
+ ],
+ [
+  "S and Val, write, S and Val read",
+  "SInvalWrite, SInvalRead"
+ ],
+ [
+  "S in wal write",
+  "SInvalWrite"
+ ],
+ [
+  "ices in val ride",
+  "SInvalWrite"
+ ],
+ [
+  "DBeav Lab Forge",
+  "DBLab Forge"
+ ],
+ [
+  "DBeav Forge",
+  "DBLab Forge"
+ ],
+ [
+  "LabForge",
+  "DBLab Forge"
+ ],
+ [
+  "Deep Lab Forge",
+  "DBLab Forge"
+ ],
+ [
+  "lightweight lock lock manager",
+  "lightweight lock LockManager"
+ ],
+ [
+  "max locks per transaction",
+  "max_locks_per_transaction"
+ ],
+ [
+  "depend on max connections",
+  "depend on max_connections"
+ ],
+ [
+  "application site pooler",
+  "application side pooler"
+ ],
+ [
+  "back end",
+  "backend"
+ ],
+ [
+  "PG catalog",
+  "pg_catalog"
+ ],
+ [
+  "pgbouncer",
+  "PgBouncer"
+ ],
+ [
+  "on commit delete rows",
+  "ON COMMIT DELETE ROWS"
+ ],
+ [
+  "on commit drop",
+  "ON COMMIT DROP"
+ ],
+ [
+  "T1 in parenthesis.star",
+  "(t1).*"
+ ],
+ [
+  "better planned",
+  "better plan"
+ ],
+ [
+  "a discard all",
+  "a DISCARD ALL"
+ ],
+ [
+  "issue a discard",
+  "issue a DISCARD"
+ ],
+ [
+  "Brandon Gregg",
+  "Brendan Gregg"
+ ],
+ [
+  "Andreas Freund",
+  "Andres Freund"
+ ],
+ [
+  "DBAs and their agents",
+  "DBREs and their agents"
+ ]
+]
