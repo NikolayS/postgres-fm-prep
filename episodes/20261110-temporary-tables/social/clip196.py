@@ -12,7 +12,7 @@ CLIPS = {
     # start/end: YouTube video time (s), cut in pauses measured on the audio.
     'kirk': dict(start=1544.88, end=1598.55, name='Kirk Wolak',
                  topic='why temp tables slow down\nevery session'),
-    'nik': dict(start=1268.92, end=1334.90, name='Nikolay Samokhvalov',
+    'nik': dict(start=1268.92, end=1309.70, name='Nik Samokhvalov',
                 topic='idle sessions push you\noff the cliff'),
 }
 C = CLIPS[WHO]; START, END = C['start'], C['end']; DUR = END - START
