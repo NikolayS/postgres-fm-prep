@@ -1,0 +1,357 @@
+import React from 'react';
+import {AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
+import {font} from '../font';
+
+// Postgres.FM #196 social animation, "app window on a wallpaper" style.
+// Silent. Two formats from one layout: portrait 1080x1350 and landscape 1920x1080.
+// Numbers: the fact-checked set (brief throughput and cliff figures, ring card).
+
+const MONO = 'JetBrains Mono, Menlo, monospace';
+const SANS = 'Inter, sans-serif';
+const K = {bg: '#0a0a0a', line: 'rgba(255,255,255,0.09)', dim: 'rgba(255,255,255,0.58)', faint: 'rgba(255,255,255,0.34)',
+  green: '#3DDC84', red: '#FF6B5B', yellow: '#FFD23F', blue: '#7CC4FF', orange: '#FF8A3D', white: '#F5F5F5'};
+const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
+const EASE = Easing.bezier(0.22, 1, 0.36, 1);
+const fmt = (n: number) => Math.round(n).toLocaleString('en-US');
+
+// Section start times (s). Scroll happens around each boundary.
+const S = [0, 9.4, 13.6, 18.6, 23.0, 26.2];
+export const DUR = 30;
+// Content of a section starts while it scrolls in.
+const B = S.map((v, i) => (i ? v - 0.9 : v));
+
+type Fmt = 'portrait' | 'landscape';
+const useT = () => {
+  const frame = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  font();
+  const t = frame / fps;
+  const e = (a: number, d = 0.7) => interpolate(t, [a, a + d], [0, 1], {...clamp, easing: EASE});
+  return {t, e};
+};
+
+const Fade: React.FC<{at: number; d?: number; y?: number; style?: React.CSSProperties; children: React.ReactNode}> = ({at, d = 0.7, y = 18, style, children}) => {
+  const {e} = useT();
+  const p = e(at, d);
+  return <div style={{opacity: p, transform: `translateY(${(1 - p) * y}px)`, ...style}}>{children}</div>;
+};
+
+const Eyebrow: React.FC<{at: number; color: string; text: string}> = ({at, color, text}) => (
+  <Fade at={at} style={{display: 'flex', alignItems: 'center', gap: 14, fontFamily: MONO, fontSize: 22, letterSpacing: '0.14em', color: K.dim}}>
+    <span style={{width: 11, height: 11, borderRadius: 6, background: color, boxShadow: `0 0 14px ${color}`}} />
+    {text}
+  </Fade>
+);
+
+const Head: React.FC<{at: number; size: number; children: React.ReactNode; style?: React.CSSProperties}> = ({at, size, children, style}) => (
+  <Fade at={at} y={26} style={{fontFamily: SANS, fontWeight: 600, fontSize: size, letterSpacing: '-0.035em', lineHeight: 1.04, color: K.white, marginTop: 22, ...style}}>
+    {children}
+  </Fade>
+);
+
+const Mono: React.FC<{at: number; size?: number; color?: string; children: React.ReactNode; style?: React.CSSProperties}> = ({at, size = 24, color = K.dim, children, style}) => (
+  <Fade at={at} style={{fontFamily: MONO, fontSize: size, color, lineHeight: 1.45, ...style}}>{children}</Fade>
+);
+
+// ---------- typing pane ----------
+type Line = {text: string; color?: string; out?: {to: number; color: string; suffix: string}};
+const Pane: React.FC<{at: number; lines: Line[]; size: number; foot: string}> = ({at, lines, size, foot}) => {
+  const {t, e} = useT();
+  const CPS = 46;
+  let cur = at + 0.5;
+  const starts = lines.map((l) => {
+    const s = cur;
+    cur += l.out ? 0.9 : l.text.length / CPS + 0.18;
+    return s;
+  });
+  const typingIdx = lines.findIndex((l, i) => !l.out && t >= starts[i] && t < starts[i] + l.text.length / CPS);
+  const lastStarted = starts.filter((s) => t >= s).length - 1;
+  const blink = Math.floor(t * 2.2) % 2 === 0;
+  return (
+    <Fade at={at} style={{border: `1px solid ${K.line}`, borderRadius: 14, background: '#0f0f10', overflow: 'hidden', marginTop: 34}}>
+      <div style={{display: 'flex', justifyContent: 'space-between', padding: '12px 22px', borderBottom: `1px solid ${K.line}`,
+        fontFamily: MONO, fontSize: 18, letterSpacing: '0.12em', color: K.faint}}>
+        <span>PSQL · PGBENCH</span><span>{foot}</span>
+      </div>
+      <div style={{padding: '18px 24px 22px', fontFamily: MONO, fontSize: size, lineHeight: 1.55}}>
+        {lines.map((l, i) => {
+          if (t < starts[i]) return <div key={i} style={{height: size * 1.55}} />;
+          if (l.out) {
+            const p = e(starts[i], 0.8);
+            return (
+              <div key={i} style={{color: l.out.color, fontWeight: 500, fontSize: size * 1.3, opacity: Math.min(1, p * 2), margin: '2px 0 8px'}}>
+                → {fmt(l.out.to * p)} {l.out.suffix}
+              </div>
+            );
+          }
+          const n = Math.floor((t - starts[i]) * CPS);
+          const shown = l.text.slice(0, n);
+          const cursor = (i === typingIdx || (typingIdx < 0 && i === lastStarted && !lines[i].out)) && blink;
+          return (
+            <div key={i} style={{color: l.color ?? K.white, whiteSpace: 'pre'}}>
+              {shown}
+              <span style={{display: 'inline-block', width: size * 0.6, height: size * 1.1, verticalAlign: 'text-bottom', background: cursor ? K.white : 'transparent'}} />
+            </div>
+          );
+        })}
+      </div>
+    </Fade>
+  );
+};
+
+// ---------- stat cells ----------
+type Cell = {big: string; color: string; cap: string};
+const Cells: React.FC<{at: number; cells: Cell[]; row: boolean; big: number; cap: number}> = ({at, cells, row, big, cap}) => {
+  const {e} = useT();
+  return (
+    <div style={{display: 'flex', flexDirection: row ? 'row' : 'column', border: `1px solid ${K.line}`, borderRadius: 14, marginTop: 40, overflow: 'hidden'}}>
+      {cells.map((c, i) => {
+        const p = e(at + i * 0.35, 0.8);
+        return (
+          <div key={i} style={{flex: 1, padding: row ? '34px 34px 30px' : '26px 34px 24px', opacity: p, transform: `translateY(${(1 - p) * 16}px)`,
+            borderLeft: row && i ? `1px dashed ${K.line}` : 'none', borderTop: !row && i ? `1px dashed ${K.line}` : 'none',
+            display: 'flex', flexDirection: row ? 'column' : 'row', alignItems: row ? 'flex-start' : 'center', gap: row ? 14 : 34}}>
+            <div style={{fontFamily: SANS, fontWeight: 600, fontSize: big, letterSpacing: '-0.04em', lineHeight: 1, color: c.color, minWidth: row ? 0 : big * 2.3}}>{c.big}</div>
+            <div style={{fontFamily: MONO, fontSize: cap, letterSpacing: '0.06em', lineHeight: 1.45, color: K.dim, textTransform: 'uppercase'}}>{c.cap}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
+// ---------- isometric invalidation queue ----------
+const IsoQueue: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
+  const {t, e} = useT();
+  const N = 64;
+  const cx = w * 0.28, cy = h * 0.6, rx = Math.min(w * 0.24, 250), ry = rx * 0.5, PH = rx * 0.17;
+  const fill = interpolate(t, [at + 1.0, at + 4.4], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
+  const head = Math.floor(fill * N);
+  const pillars = Array.from({length: N}, (_, i) => {
+    const a = (i / N) * Math.PI * 2 - Math.PI / 2;
+    return {i, x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry};
+  }).sort((p, q) => p.y - q.y);
+  // session grid (isometric tiles)
+  const G = 13, s = Math.min(w * 0.0185, 19);
+  const ox = w * 0.74, oy = cy - G * s * 0.5;
+  const tiles: React.ReactNode[] = [];
+  for (let r = 0; r < G; r++) for (let c = 0; c < G; c++) {
+    const x = ox + (c - r) * s, y = oy + (c + r) * s * 0.5;
+    const ph = ((t - at - 1.0) * 1.4 - (r + c) / (2 * G)) % 1;
+    const k = t > at + 1.0 && ph > 0 && ph < 0.3 ? 1 - ph / 0.3 : 0;
+    const col = k > 0 ? K.orange : 'rgba(124,196,255,0.30)';
+    tiles.push(<path key={`${r}-${c}`} d={`M${x},${y - s * 0.42} L${x + s * 0.84},${y} L${x},${y + s * 0.42} L${x - s * 0.84},${y} Z`}
+      fill={k > 0 ? col : 'none'} fillOpacity={0.25 + 0.6 * k} stroke={col} strokeWidth={1.4} opacity={0.6 + 0.4 * k} />);
+  }
+  const vis = e(at + 0.4, 0.9);
+  return (
+    <svg width={w} height={h} style={{display: 'block', opacity: vis}}>
+      <defs>
+        <filter id="glow" filterUnits="userSpaceOnUse" x={0} y={0} width={w} height={h}><feGaussianBlur stdDeviation="4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+      </defs>
+      <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="none" stroke="rgba(255,255,255,0.10)" strokeWidth={1.5} strokeDasharray="3 7" />
+      <ellipse cx={cx} cy={cy - PH} rx={rx} ry={ry} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={1.2} />
+      {pillars.map((p) => {
+        const lit = p.i < head, isHead = p.i === head;
+        const col = isHead ? K.white : lit ? K.orange : 'rgba(255,255,255,0.20)';
+        return <line key={p.i} x1={p.x} y1={p.y} x2={p.x} y2={p.y - PH} stroke={col} strokeWidth={lit || isHead ? 5 : 3.5} strokeLinecap="round"
+          filter={lit || isHead ? 'url(#glow)' : undefined} />;
+      })}
+      <g filter="url(#glow)">{tiles}</g>
+      {/* a message travelling from the queue to the sessions */}
+      {t > at + 1.0 && (() => {
+        const ph = ((t - at - 1.0) * 1.4) % 1;
+        const x0 = cx + rx * 0.9, y0 = cy - PH, x1 = ox - G * s * 0.4, y1 = oy + G * s * 0.25;
+        const qx = (x0 + x1) / 2, qy = Math.min(y0, y1) - h * 0.18;
+        const bx = (1 - ph) ** 2 * x0 + 2 * (1 - ph) * ph * qx + ph ** 2 * x1;
+        const by = (1 - ph) ** 2 * y0 + 2 * (1 - ph) * ph * qy + ph ** 2 * y1;
+        return (
+          <g>
+            <path d={`M${x0},${y0} Q${qx},${qy} ${x1},${y1}`} fill="none" stroke="rgba(255,138,61,0.35)" strokeWidth={1.5} strokeDasharray="4 6" />
+            <circle cx={bx} cy={by} r={6} fill={K.orange} filter="url(#glow)" />
+          </g>
+        );
+      })()}
+      <text x={cx} y={cy + 4} textAnchor="middle" fill={K.white} fontFamily={SANS} fontWeight={600} fontSize={rx * 0.34} letterSpacing="-2">4,096</text>
+      <text x={cx} y={cy + rx * 0.17} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={17} letterSpacing="2.5">SLOTS</text>
+      <text x={cx} y={cy - ry - PH - 26} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={18} letterSpacing="2.5">ONE SHARED QUEUE</text>
+      <text x={ox} y={oy - s * 1.6} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={18} letterSpacing="2.5">ALL SESSIONS</text>
+    </svg>
+  );
+};
+
+// ---------- cliff chart ----------
+const Cliff: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
+  const {e} = useT();
+  const pts = [[0, 502], [1000, 502], [3000, 274], [5000, 127]];
+  const L = 70, R = w - 70, T = 70, B = h - 70;
+  const X = (v: number) => L + ((R - L) * v) / 5000;
+  const Y = (v: number) => B - ((B - T) * v) / 560;
+  const draw = e(at + 0.6, 2.2);
+  const d = pts.map((p, i) => `${i ? 'L' : 'M'}${X(p[0])},${Y(p[1])}`).join(' ');
+  const len = 2000;
+  const cols = [K.green, K.green, K.yellow, K.red];
+  return (
+    <svg width={w} height={h} style={{display: 'block'}}>
+      <defs>
+        <linearGradient id="lg" x1="0" x2="1" y1="0" y2="0"><stop offset="0.2" stopColor={K.green} /><stop offset="0.6" stopColor={K.yellow} /><stop offset="1" stopColor={K.red} /></linearGradient>
+        <filter id="glow2" filterUnits="userSpaceOnUse" x={0} y={0} width={w} height={h}><feGaussianBlur stdDeviation="5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+      </defs>
+      {[0, 250, 500].map((v) => (
+        <g key={v} opacity={e(at + 0.3)}>
+          <line x1={L} x2={R} y1={Y(v)} y2={Y(v)} stroke="rgba(255,255,255,0.10)" strokeDasharray="2 8" strokeWidth={1.5} />
+          <text x={L - 14} y={Y(v) + 6} textAnchor="end" fill={K.faint} fontFamily={MONO} fontSize={17}>{v}</text>
+        </g>
+      ))}
+      <path d={d} fill="none" stroke="url(#lg)" strokeWidth={5} strokeLinejoin="round" strokeDasharray={len} strokeDashoffset={len * (1 - draw)} filter="url(#glow2)" />
+      {pts.map((p, i) => {
+        const appear = e(at + 0.6 + (2.2 * X(p[0]) - L) / (R - L) * 0.9 + 0.1, 0.6);
+        const anchor = i === 0 ? 'start' : i === 3 ? 'end' : 'middle';
+        return (
+          <g key={i} opacity={appear}>
+            <circle cx={X(p[0])} cy={Y(p[1])} r={9} fill={K.bg} stroke={cols[i]} strokeWidth={4} />
+            {i !== 1 && <text x={i === 0 ? (X(0) + X(1000)) / 2 : X(p[0]) + (i === 3 ? 6 : 0)} y={Y(p[1]) - 26} textAnchor={i === 0 ? 'middle' : anchor} fill={cols[i]} fontFamily={SANS} fontWeight={600} fontSize={52} letterSpacing="-1.5">{fmt(p[1] * appear)}</text>}
+            <text x={X(p[0])} y={B + 40} textAnchor={anchor} fill={K.dim} fontFamily={MONO} fontSize={21}>{fmt(p[0])}</text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+};
+
+// ---------- wallpaper ----------
+const Wallpaper: React.FC<{W: number; H: number}> = ({W, H}) => {
+  const {t} = useT();
+  const blob = (x: number, y: number, r: number, c: string, sp: number, ph: number) => (
+    <div style={{position: 'absolute', left: x + Math.sin(t * sp + ph) * 60 - r, top: y + Math.cos(t * sp * 0.8 + ph) * 40 - r,
+      width: 2 * r, height: 2 * r, borderRadius: '50%', background: c, filter: 'blur(90px)'}} />
+  );
+  const wave = (k: number, c: string, o: number) => {
+    const pts: string[] = [];
+    for (let x = -50; x <= W + 50; x += 30) {
+      const y = H * (0.42 + k * 0.17) + Math.sin(x / (W * 0.18) + t * 0.25 + k * 1.7) * H * 0.07 + Math.sin(x / (W * 0.07) + k) * H * 0.015;
+      pts.push(`${x},${y}`);
+    }
+    return <polygon points={`-50,${H + 50} ${pts.join(' ')} ${W + 50},${H + 50}`} fill={c} opacity={o} />;
+  };
+  return (
+    <AbsoluteFill style={{background: 'linear-gradient(150deg, #120B33 0%, #1B1150 45%, #0B1C4A 100%)', overflow: 'hidden'}}>
+      {blob(W * 0.15, H * 0.2, W * 0.35, '#5B2BB5', 0.3, 0)}
+      {blob(W * 0.85, H * 0.3, W * 0.32, '#1F56D6', 0.25, 2)}
+      {blob(W * 0.6, H * 0.95, W * 0.4, '#8A2E9E', 0.2, 4)}
+      <svg width={W} height={H} style={{position: 'absolute', inset: 0, filter: 'blur(14px)'}}>
+        {wave(0, '#3A2A9A', 0.35)}
+        {wave(1, '#5A2FA8', 0.32)}
+        {wave(2, '#1C3FA0', 0.38)}
+      </svg>
+    </AbsoluteFill>
+  );
+};
+
+// ---------- main ----------
+export const Win196: React.FC<{fmt: Fmt}> = ({fmt: F}) => {
+  const {t, e} = useT();
+  const {width: W, height: H} = useVideoConfig();
+  const P = F === 'portrait';
+  const win = P ? {x: 54, y: 70, w: W - 108, h: H - 140} : {x: 150, y: 76, w: W - 300, h: H - 152};
+  const BAR = 50;
+  const cw = win.w, ch = win.h - BAR;
+  const pad = P ? 60 : 84;
+  const inner = cw - 2 * pad;
+  // scroll: one section per window height
+  const scroll = S.slice(1).reduce((acc, b) => acc + e(b - 0.45, 1.0), 0) * ch;
+  const head = P ? 86 : 92;
+  const sec = (i: number, children: React.ReactNode, justify: 'flex-start' | 'center' = 'flex-start') => (
+    <div style={{position: 'absolute', left: 0, top: i * ch, width: cw, height: ch, padding: `${P ? 64 : 58}px ${pad}px`, boxSizing: 'border-box',
+      display: 'flex', flexDirection: 'column', justifyContent: P ? 'center' : justify}}>{children}</div>
+  );
+  const winIn = e(0, 0.9);
+  return (
+    <AbsoluteFill>
+      <Wallpaper W={W} H={H} />
+      <div style={{position: 'absolute', left: win.x, top: win.y, width: win.w, height: win.h, borderRadius: 16, overflow: 'hidden',
+        background: K.bg, border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 40px 120px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.5)',
+        opacity: winIn, transform: `translateY(${(1 - winIn) * 30}px) scale(${0.98 + 0.02 * winIn})`}}>
+        <div style={{height: BAR, display: 'flex', alignItems: 'center', padding: '0 20px', borderBottom: `1px solid ${K.line}`, position: 'relative', background: '#111113'}}>
+          {['#FF5F57', '#FEBC2E', '#28C840'].map((c) => <span key={c} style={{width: 14, height: 14, borderRadius: 7, background: c, marginRight: 9}} />)}
+          <div style={{position: 'absolute', left: 0, right: 0, textAlign: 'center', fontFamily: MONO, fontSize: 17, color: K.faint, letterSpacing: '0.04em'}}>
+            postgres.fm — episode 196
+          </div>
+        </div>
+        <div style={{position: 'relative', width: cw, height: ch, overflow: 'hidden'}}>
+          <div style={{position: 'absolute', left: 0, top: -scroll, width: cw}}>
+            {sec(0, <>
+              <Eyebrow at={0.5} color={K.green} text="POSTGRES.FM · EPISODE 196" />
+              <Head at={0.7} size={head}>CREATE TEMP TABLE<br />is not free.</Head>
+              <Mono at={1.1} size={P ? 25 : 26} style={{marginTop: 22}}>one created and dropped in every transaction,<br />vs. the same query as a CTE</Mono>
+              <Pane at={1.4} size={P ? 30 : 28} foot="PG17 · 16 VCPU · 32 CLIENTS" lines={[
+                {text: '-- temp table, every transaction', color: K.faint},
+                {text: 'create temp table t as select ...;'},
+                {text: 'drop table t;'},
+                {text: '', out: {to: 3931, color: K.red, suffix: 'tx/s'}},
+                {text: '-- the same query as a CTE', color: K.faint},
+                {text: 'with t as (select ...) select ...;'},
+                {text: '', out: {to: 88531, color: K.green, suffix: 'tx/s'}},
+              ]} />
+            </>)}
+            {sec(1, <>
+              <Eyebrow at={B[1] + 0.2} color={K.yellow} text="RESULTS · SYNTHETIC WORKLOAD" />
+              <Head at={B[1] + 0.35} size={head}>23× slower<br />in hot code.</Head>
+              <Cells at={B[1] + 0.8} row={!P} big={P ? 100 : 104} cap={P ? 21 : 20} cells={[
+                {big: '23×', color: K.red, cap: 'temp table vs CTE,\ntx/s, PG17'.replace('\n', ' ')},
+                {big: '4,096', color: K.yellow, cap: 'slots in the shared invalidation queue'},
+                {big: '91%', color: K.orange, cap: 'of DDL sessions’ active time on LWLock:SInvalWrite at 5,000 idle, PG18'},
+              ]} />
+              <Mono at={B[1] + 2.0} size={19} color={K.faint} style={{marginTop: 26, letterSpacing: '0.08em'}}>16 VCPU · MEASURED WITH DBLAB FORGE</Mono>
+            </>)}
+            {sec(2, <>
+              <Eyebrow at={B[2] + 0.2} color={K.orange} text="WHY · SHARED INVALIDATION" />
+              <Head at={B[2] + 0.35} size={P ? 70 : 72}>Every CREATE and DROP<br />is catalog DDL.</Head>
+              <div style={{marginTop: P ? 30 : 22}}><IsoQueue at={B[2]} w={inner} h={P ? 520 : 400} /></div>
+              <div style={{marginTop: P ? 10 : 0}}>
+                {[[K.orange, '~114 messages per create + drop'], [K.blue, 'every session must read every message'], [K.red, 'writers queue on SInvalWriteLock']].map(([c, s], i) => (
+                  <Mono key={i} at={B[2] + 1.6 + i * 0.9} size={P ? 27 : 26} color={K.white} style={{display: 'flex', alignItems: 'center', gap: 16, marginTop: 6}}>
+                    <span style={{color: c}}>■</span>{s}
+                  </Mono>
+                ))}
+              </div>
+            </>)}
+            {sec(3, <>
+              <Eyebrow at={B[3] + 0.2} color={K.red} text="IDLE SESSIONS · PG18 · 16 VCPU" />
+              <Head at={B[3] + 0.35} size={head}>Idle sessions<br />are not free.</Head>
+              <Mono at={B[3] + 0.6} size={P ? 24 : 24} style={{marginTop: 18}}>DDL tx/s at a 500 tx/s target, by idle sessions</Mono>
+              <div style={{marginTop: P ? 40 : 10}}><Cliff at={B[3]} w={inner} h={P ? 560 : 400} /></div>
+              <Mono at={B[3] + 3.0} size={P ? 24 : 23} color={K.red} style={{textAlign: 'right'}}>at 5,000: 91% of active time on LWLock:SInvalWrite</Mono>
+            </>)}
+            {sec(4, <>
+              <Eyebrow at={B[4] + 0.2} color={K.green} text="THE FIX" />
+              <Head at={B[4] + 0.35} size={head}>No temp tables<br />in hot code.</Head>
+              <Fade at={B[4] + 0.7} style={{marginTop: 26, fontFamily: MONO, fontSize: P ? 30 : 30, color: K.faint, position: 'relative', alignSelf: 'flex-start'}}>
+                create temp table t ...;
+                <div style={{position: 'absolute', left: -6, top: '52%', height: 3, background: K.red, width: `calc(${e(B[4] + 1.0, 0.5) * 100}% + 12px)`}} />
+              </Fade>
+              <Cells at={B[4] + 1.2} row={!P} big={P ? 60 : 62} cap={P ? 21 : 20} cells={[
+                {big: 'CTE', color: K.green, cap: 'with t as (...) select ...'},
+                {big: 'arrays', color: K.green, cap: 'array_agg() / unnest()'},
+                {big: 'PL/pgSQL', color: K.green, cap: 'records: keep rows in variables'},
+              ]} />
+            </>)}
+            {sec(5, <>
+              <Eyebrow at={B[5] + 0.2} color={K.green} text="NEW EPISODE" />
+              <Head at={B[5] + 0.35} size={P ? 110 : 120}>Postgres.FM #196</Head>
+              <Fade at={B[5] + 0.7} style={{fontFamily: SANS, fontWeight: 500, fontSize: P ? 46 : 48, letterSpacing: '-0.02em', color: K.dim, marginTop: 18}}>
+                The hidden costs of CREATE TEMP TABLE
+              </Fade>
+              <Mono at={B[5] + 0.95} size={P ? 28 : 28} color={K.white} style={{marginTop: 22}}>with Kirk Wolak</Mono>
+              <Fade at={B[5] + 1.3} style={{marginTop: 60, alignSelf: 'flex-start', border: `1px solid ${K.line}`, borderRadius: 12, padding: '18px 26px',
+                fontFamily: MONO, fontSize: P ? 36 : 36, color: K.white, background: '#0f0f10'}}>
+                <span style={{color: K.green}}>$ </span>{'open postgres.fm'.slice(0, Math.max(0, Math.floor((t - B[5] - 1.6) * 16)))}
+                <span style={{display: 'inline-block', width: 20, height: 38, marginLeft: 2, verticalAlign: 'text-bottom', background: Math.floor(t * 2.2) % 2 === 0 ? K.white : 'transparent'}} />
+              </Fade>
+            </>, 'center')}
+          </div>
+        </div>
+      </div>
+    </AbsoluteFill>
+  );
+};
