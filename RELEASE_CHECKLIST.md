@@ -30,7 +30,7 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
   - heavy condensed headline of 2–4 words;
   - host and guest heads in framed tiles, balanced (equal head size and eye level), each lit well enough; brighten a dark camera.
   - Make 2–3 options when unsure.
-- [ ] **A/B test** (Test & Compare) with up to 3 titles and/or thumbnails. It cannot run during a Premiere, so it starts once the Premiere ends; check the next day that it is running.
+- [ ] **A/B test** (Test & Compare), thumbnail only with one fixed title (see Growth rules). It starts once the video is public; check the next day that it is running.
 - [ ] **Description**:
   - hook with the key measured result, and its conditions, in the first two lines;
   - "Postgres.FM episode N";
@@ -43,7 +43,8 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
   - 2–3 hashtags at the end.
 - [ ] Made for kids: **No**.
 - [ ] Playlists, 2–3: always **Postgres.FM podcast** and **PostgreSQL in English**, plus 1 topic playlist (e.g. "PostgreSQL performance. Benchmarks", "PostgreSQL index maintenance. Bloat. VACUUM", "Postgres in containers. Docker. Kubernetes", "Postgres and AI", "Hacking Postgres").
-- [ ] Publish as Public with **instant Premiere**.
+- [ ] Publish as a normal **scheduled Public** video, not an instant Premiere (A/B tests cannot run during a Premiere). Schedule YouTube and Transistor for the same minute (Transistor: `PATCH /v1/episodes/<id>/publish` with `episode[status]=scheduled` and `episode[published_at]`).
+- [ ] Upload route for big files: Studio needs a local file, so from a remote session serve the mp4 with Range support behind a tunnel and set it on the upload input (see SKILL.md). The YouTube Data API is the clean route, but uploads from an unverified OAuth project stay Private until Google's audit; get the audit done once.
 
 ## 4. YouTube subtitles
 
@@ -51,10 +52,11 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 - [ ] **Dictionary pass:** apply the glossary in `prompt.txt` from https://gitlab.com/postgres-ai/content/postgres-fm to the subtitles and transcripts. Then read them through for names, product names (DBLab Forge, PL/pgSQL…), Postgres terms and SQL identifiers. Add new mis-hearings to the glossary in an MR to that repo.
 - [ ] Uploaded **with timing** (the YouTube SRT, built from the final video's time map; not the podcast SRT) and published.
 - [ ] **Remove YouTube's auto-generated English track** once it appears. It can take a while after upload, so check again after publishing.
-- [ ] Check whether auto-dubbing is on, and turn it off unless we want it.
+- [ ] Check whether auto-dubbing is on, and turn it off unless we want it. The switch is channel-wide (Settings → Upload defaults → Advanced settings); for one video, delete the dubbed tracks on its Languages page once they appear.
 
 ## 5. Podcast audio (Transistor)
 
+- [ ] Decide: does the audio get the cold open too? If yes, rebuild the mp3 and the transcript, and shift every podcast time in the notes by the cold-open length.
 - [ ] Audio-only master: same edit, **no overlay sounds**, about -16 LUFS, MP3 with the episode cover embedded.
 - [ ] Square cover 3000×3000 in the podcast style.
 - [ ] Draft created with `transistor.ts`. Set:
