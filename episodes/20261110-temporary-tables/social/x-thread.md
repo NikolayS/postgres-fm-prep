@@ -12,7 +12,7 @@ Character counts are X counts (a link = 23; limit 280); `posts.py` prints them.
 
 4 posts. Fact rule: the 23x (0 idle sessions) is catalog and file work, sinval is under 1% there (brief § 5); the invalidation queue is a second cost that appears only with many idle sessions. Never write the queue as the cause of the 23x.
 
-### 1/ First post (no link) — 276 chars (X weighting) — media: anim-196-x.mp4 (the 20-25 s X cut)
+### 1/ First post (no link) — 276 chars (X weighting) — media: anim-196-x.mp4 (the 28 s X cut)
 
 ```
 CREATE TEMP TABLE per transaction: 3,931 tx/s 🐢
@@ -121,7 +121,7 @@ The DBLab Forge brief, every chart and config: https://console.postgres.ai/share
 
 ## LinkedIn (v3, post this)
 
-Media: anim-196.mp4 (the full portrait animation, native upload; custom thumbnail = the final frame of slide 1). Links in the first comment: Watch / Listen / Brief, as in v3 reply 4.
+Media: anim-196.mp4 (the full portrait animation, native upload; custom thumbnail = the final frame of slide 1). Links in the first comment: Brief / Listen / Watch, as in v3 reply 4.
 
 ```
 CREATE TEMP TABLE in every transaction: 3,931 tx/s.
