@@ -115,3 +115,15 @@ Rules and lessons: [`tools/podcast-edit/PROMOTION.md`](tools/podcast-edit/PROMOT
 - [ ] Within a day: the auto subtitles are gone, auto-dubbing is off, the A/B test is running, and the RSS entry is correct.
 - [ ] Update the episode's `README.md` here and the episode table in the top `README.md`: status, publication links (YouTube, postgres.fm, blog post), the experiment DOI.
 - [ ] Note what went wrong in this release and fix the tool or this checklist.
+
+## Growth rules (from reports/2026-11-13-growth-brainstorm.md)
+
+- [ ] Publish Friday 06:30 Pacific. Schedule YouTube and Transistor on Thursday; freeze Thursday 18:00 PT. Keep 3 episodes in reserve.
+- [ ] YouTube title has "Postgres" in the sentence; problem first; at most one number, with its unit and context.
+- [ ] Thumbnail A/B test with ONE fixed title (Test & Compare, thumbnail only); one variant carries the episode title. Write down the result.
+- [ ] Normal public publish, not an instant Premiere (A/B tests cannot run during a Premiere).
+- [ ] Cold open (15–25 s: best line + chart) before the title card. From #197.
+- [ ] Description: first line starts with "Postgres …" and states the conditions; search-style chapter names; "Related episodes" with YouTube links; subscribe line.
+- [ ] End screen (Subscribe + Best for viewer) and 1–2 info cards where an older episode is mentioned.
+- [ ] After publish: pinned comment with the numbers + a question; community poll; answer comments for 24 h.
+- [ ] Second wave (Mon–Wed): speaker clip also as a Short; 2–4 min "answer" cut; blog post to HN / r/PostgreSQL / Postgres Weekly.
