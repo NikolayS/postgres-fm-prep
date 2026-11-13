@@ -12,7 +12,7 @@ CLIPS = {
     # start/end: YouTube video time (s), cut in pauses measured on the audio.
     'kirk': dict(start=1544.88, end=1598.55, name='Kirk Wolak',
                  topic='why temp tables slow down\nevery session'),
-    'nik': dict(start=1268.92, end=1309.70, name='Nik Samokhvalov',
+    'nik': dict(start=1275.06, end=1309.70, name='Nik Samokhvalov',
                 topic='idle sessions push you\noff the cliff'),
 }
 C = CLIPS[WHO]; START, END = C['start'], C['end']; DUR = END - START
@@ -131,7 +131,7 @@ meas = subprocess.run(['ffmpeg', '-hide_banner', '-ss', str(START), '-t', str(DU
 mj = json.loads(meas[meas.rindex('{'):meas.rindex('}') + 1])
 af = (f"loudnorm=I=-16:TP=-1.5:LRA=11:measured_I={mj['input_i']}:measured_TP={mj['input_tp']}:measured_LRA={mj['input_lra']}:"
       f"measured_thresh={mj['input_thresh']}:offset={mj['target_offset']}:linear=true,aresample=48000,"
-      f"afade=t=in:st=0:d=0.12,afade=t=out:st={DUR - 0.45:.2f}:d=0.45")
+      f"afade=t=in:st=0:d=0.05,afade=t=out:st={DUR - 0.45:.2f}:d=0.45")
 subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', str(START), '-t', str(DUR), '-i', SRC, '-vn', '-af', af, '-ac', '2', AUD], check=True)
 
 # ---------- video ----------

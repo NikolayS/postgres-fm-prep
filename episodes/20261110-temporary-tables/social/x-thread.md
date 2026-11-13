@@ -8,51 +8,62 @@ Character counts are X counts (a link = 23; limit 280); `posts.py` prints them.
 
 ---
 
-## v2 (2026-11-13): short, punchy, one emoji in the headline, bullets, a closing question
+## v3 (2026-11-13, after the independent review): post this
 
-The v1 posts below stay as the reference. Post v2: 4 posts at most (Nik: 3-4 max). Media: post 1 the animation (social/anim-196.mp4); replies 2 and 3 the speaker clips. No link in post 1; links in the last reply.
+4 posts. Fact rule: the 23x (0 idle sessions) is catalog and file work, sinval is under 1% there (brief § 5); the invalidation queue is a second cost that appears only with many idle sessions. Never write the queue as the cause of the 23x.
 
-### 1/ First post (no link) — 260 chars — media: anim-196.mp4
-
-```
-CREATE TEMP TABLE in every transaction: 3,931 tx/s 🐘
-Same query as a CTE: 88,531 tx/s.
-
-Add 5,000 idle sessions, and DDL waits on LWLock:SInvalWrite. Ever seen this one?
-
-New Postgres.FM with Kirk Wolak @yugedilbertfan: why it happens, and what to use instead.
-```
-
-### 2/ Reply — 184 chars — media: clip-kirk.mp4 (Kirk, YouTube 25:45-26:38)
+### 1/ First post (no link) — 276 chars (X weighting) — media: anim-196-x.mp4 (the 20-25 s X cut)
 
 ```
-Why? Every CREATE and DROP of a temp table is catalog DDL.
+CREATE TEMP TABLE per transaction: 3,931 tx/s 🐢
+Same query as a CTE: 88,531 tx/s 🐘🚀
 
-- one shared invalidation queue, 4,096 slots
-- every session must read every message
-- one create + drop: about 114 messages
+- ~23x, with 0 idle sessions
+- 5,000 idle sessions: 91% of DDL active time is one wait, LWLock:SInvalWrite
+
+New Postgres FM with Kirk Wolak @yugedilbertfan
+
+Ever seen this wait event? 🧵👇
 ```
 
-### 3/ Reply — 226 chars — media: clip-nik.mp4 (Nik on idle sessions)
+### 2/ Reply — 277 chars (X weighting) — media: clip-kirk.mp4
 
 ```
-Idle sessions are not free. DDL tx/s at a 500 tx/s target:
+Two different costs:
+
+- always: 13+ catalog rows in and out per temp table, plus files created and unlinked. That is the 23x
+- with many idle sessions: ~114 invalidation messages per create + drop, one 4,096-slot queue, and every session must read them
+
+Kirk on the second one:
+```
+
+### 3/ Reply — 271 chars (X weighting) — media: clip-nik.mp4
+
+```
+Idle sessions are not free. We asked for 500 temp-table tx/s and got:
 
 - 0 idle: 502
-- 3,000 idle: 274
-- 5,000 idle: 127
+- 1,000: 502
+- 3,000: 274
+- 5,000: 127
 
 At 5,000, the DDL sessions spend 91% of their active time waiting on LWLock:SInvalWrite (PG18, 16 vCPU, synthetic).
+
+First aid: cut idle sessions.
 ```
 
-### 4/ Reply — 244 chars — media: none (link previews)
+### 4/ Reply — 280 chars (X weighting) — media: none (link card)
 
 ```
-The fix: no temp tables in hot code. Use CTEs, or PL/pgSQL arrays and records.
+The fix: no temp tables in hot code.
+
+- CTE: 88,531 tx/s
+- PL/pgSQL arrays, records
+- if you must, one reused temp table per session: 17,741 tx/s
 
 Watch: https://www.youtube.com/watch?v=gAdhpYewLZ8
-Listen in Spotify, Apple Podcasts or any app, or here: https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
-Brief, every chart and config: https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d
+Listen (Spotify, Apple, any app): https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+Brief (DBLab Forge): https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d
 ```
 
 ## v1 (2026-11-12, reference)
