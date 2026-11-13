@@ -1,31 +1,29 @@
-import React from 'react';
+import React, {createContext, useContext} from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {font} from '../font';
 
-// Postgres.FM #196 social animation, "app window on a wallpaper" style. Silent.
-// Rule: no number stands alone; every number labels a visual drawn to true scale.
-// Numbers: the fact-checked set (brief throughput and cliff figures, ring card).
+// Postgres.FM #196 social animation, "app window on a wallpaper" style. Silent, portrait 1080x1350.
+// Rules: one idea per slide; every number labels a visual drawn to true scale; numbers appear
+// only as final measured values (no count-ups). Fact: the ~23x gap at 0 idle sessions is catalog
+// rows + file create/unlink work; the shared invalidation queue is a SECOND cost that appears
+// with many idle sessions. Numbers: the fact-checked set (brief throughput and cliff figures, ring card).
 
 const MONO = 'JetBrains Mono, Menlo, monospace';
 const SANS = 'Inter, sans-serif';
-const K = {bg: '#0a0a0a', line: 'rgba(255,255,255,0.09)', dim: 'rgba(255,255,255,0.62)', faint: 'rgba(255,255,255,0.40)',
+const K = {bg: '#0a0a0a', line: 'rgba(255,255,255,0.09)', dim: 'rgba(255,255,255,0.62)', faint: 'rgba(255,255,255,0.42)',
   green: '#3DDC84', red: '#FF6B5B', yellow: '#FFD23F', blue: '#7CC4FF', orange: '#FF8A3D', white: '#F5F5F5', track: 'rgba(255,255,255,0.06)'};
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const EASE = Easing.bezier(0.22, 1, 0.36, 1);
 const fmt = (n: number) => Math.round(n).toLocaleString('en-US');
 
-// Section start times (s); the page scrolls around each boundary.
-const S = [0, 12.6, 22.8, 27.6, 34.6, 40.9, 46.1];
-export const DUR = 51.5;
-// Content of a section starts while it scrolls in.
-const B = S.map((v, i) => (i ? v - 0.9 : v));
-
-type Fmt = 'portrait' | 'landscape';
+// A time override: the loop poster renders slide 1 frozen at t = 0.
+const TCtx = createContext<number | null>(null);
 const useT = () => {
   const frame = useCurrentFrame();
   const {fps} = useVideoConfig();
+  const over = useContext(TCtx);
   font();
-  const t = frame / fps;
+  const t = over ?? frame / fps;
   const e = (a: number, d = 0.7) => interpolate(t, [a, a + d], [0, 1], {...clamp, easing: EASE});
   return {t, e};
 };
@@ -35,61 +33,60 @@ const Fade: React.FC<{at: number; d?: number; y?: number; style?: React.CSSPrope
   const p = e(at, d);
   return <div style={{opacity: p, transform: `translateY(${(1 - p) * y}px)`, ...style}}>{children}</div>;
 };
-
 const Eyebrow: React.FC<{at: number; color: string; text: string}> = ({at, color, text}) => (
   <Fade at={at} style={{display: 'flex', alignItems: 'center', gap: 14, fontFamily: MONO, fontSize: 26, letterSpacing: '0.12em', color: K.dim}}>
     <span style={{width: 12, height: 12, borderRadius: 6, background: color, boxShadow: `0 0 14px ${color}`}} />
     {text}
   </Fade>
 );
-
 const Head: React.FC<{at: number; size: number; children: React.ReactNode; style?: React.CSSProperties}> = ({at, size, children, style}) => (
-  <Fade at={at} y={26} style={{fontFamily: SANS, fontWeight: 600, fontSize: size, letterSpacing: '-0.035em', lineHeight: 1.04, color: K.white, marginTop: 20, ...style}}>
+  <Fade at={at} y={26} style={{fontFamily: SANS, fontWeight: 600, fontSize: size, letterSpacing: '-0.035em', lineHeight: 1.06, color: K.white, marginTop: 20, ...style}}>
     {children}
   </Fade>
 );
-
 const Tiny: React.FC<{at: number; children: React.ReactNode; style?: React.CSSProperties}> = ({at, children, style}) => (
   <Fade at={at} style={{fontFamily: MONO, fontSize: 26, color: K.faint, letterSpacing: '0.04em', ...style}}>{children}</Fade>
 );
 
-// Typed code line with a block cursor while typing.
-const Typed: React.FC<{at: number; text: string; color: string; size: number; cps?: number}> = ({at, text, color, size, cps = 26}) => {
+// Typed code line (the bar's label) with a block cursor while typing.
+const Typed: React.FC<{at: number; text: string; color: string; size: number; cps?: number}> = ({at, text, color, size, cps = 40}) => {
   const {t} = useT();
   const n = Math.max(0, Math.floor((t - at) * cps));
   const done = n >= text.length;
   const blink = Math.floor(t * 2.2) % 2 === 0;
-  if (t < at) return <div style={{height: size * 1.4}} />;
   return (
-    <div style={{fontFamily: MONO, fontSize: size, lineHeight: 1.4, color: K.white, whiteSpace: 'pre'}}>
-      <span style={{color}}>=# </span>{text.slice(0, n)}
+    <div style={{fontFamily: MONO, fontSize: size, lineHeight: 1.35, color: K.white, whiteSpace: 'pre', height: size * 1.35}}>
+      <span style={{color}}>=# </span>{t >= at ? text.slice(0, n) : ''}
       <span style={{display: 'inline-block', width: size * 0.58, height: size * 1.1, verticalAlign: 'text-bottom',
-        background: !done || t - at - text.length / cps < 0.8 ? (blink ? K.white : 'transparent') : 'transparent'}} />
+        background: t >= at && (!done || t - at - text.length / cps < 0.5) && blink ? K.white : 'transparent'}} />
     </div>
   );
 };
 
-// ---------- slide 1: the race (bars to true scale) ----------
-const raceT = (at: number) => ({a: at, b: at + 2.0, r0: at + 3.4, rd: 3.0, punch: at + 6.7});
-const Race: React.FC<{at: number; w: number}> = ({at, w}) => {
+// ---------- slide: the race (bars to true scale) ----------
+const Race: React.FC<{w: number}> = ({w}) => {
   const {t, e} = useT();
-  const T = raceT(at);
+  const r0 = 1.5, rd = 1.8, punchAt = 3.4;
   const MAX = 88531;
-  // Both bars grow at the same rate in TPS: the temp-table bar stops almost at once.
-  const k = interpolate(t, [T.r0, T.r0 + T.rd], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
-  const v = (x: number) => Math.min(x, MAX * k);
+  const k = interpolate(t, [r0, r0 + rd], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
   const BH = 84;
-  const punch = e(T.punch, 0.8);
+  // A bar's final value fades in when the bar itself reaches it (same TPS rate for both bars).
+  const doneAt = (val: number) => {
+    const f = val / MAX; // invert out-cubic: k = 1-(1-x)^3
+    return r0 + rd * (1 - Math.cbrt(1 - f));
+  };
+  const punch = e(punchAt, 0.7);
   const bar = (val: number, color: string, inside: boolean, extra?: React.ReactNode) => {
-    const bw = (w * v(val)) / MAX;
+    const bw = (w * Math.min(val, MAX * k)) / MAX;
+    const lab = e(doneAt(val), 0.4);
     return (
       <div style={{position: 'relative', height: BH, background: K.track, borderRadius: 10, marginTop: 16}}>
-        <div style={{position: 'absolute', left: 0, top: 0, height: BH, width: Math.max(bw, k > 0 ? 6 : 0), background: color, borderRadius: 10,
+        <div style={{position: 'absolute', left: 0, top: 0, height: BH, width: Math.max(bw, k > 0 ? 8 : 0), background: color, borderRadius: 10,
           boxShadow: `0 0 26px ${color}55`}} />
         <div style={{position: 'absolute', top: 0, height: BH, display: 'flex', alignItems: 'center', fontFamily: SANS, fontWeight: 600, fontSize: 42,
-          letterSpacing: '-0.02em', opacity: e(T.r0, 0.4), whiteSpace: 'nowrap',
-          ...(inside && bw > 420 ? {right: w - bw + 22, color: '#06210F'} : {left: Math.max(bw, 6) + 18, color})}}>
-          {fmt(v(val))} <span style={{fontSize: 28, fontFamily: MONO, marginLeft: 10, opacity: 0.85}}>TPS</span>
+          letterSpacing: '-0.02em', opacity: lab, whiteSpace: 'nowrap',
+          ...(inside ? {right: 22, color: '#06210F'} : {left: Math.max(bw, 8) + 18, color})}}>
+          {fmt(val)} <span style={{fontSize: 28, fontFamily: MONO, marginLeft: 10, opacity: 0.85}}>TPS</span>
         </div>
         {extra}
       </div>
@@ -97,21 +94,22 @@ const Race: React.FC<{at: number; w: number}> = ({at, w}) => {
   };
   return (
     <div>
-      <Typed at={T.a} text="create temp table t …; drop table t;" color={K.red} size={30} />
+      <Typed at={0.2} text="create temp table t …" color={K.red} size={42} />
       {bar(3931, K.red, false,
         <div style={{position: 'absolute', right: 22, top: 0, height: BH, display: 'flex', alignItems: 'center', gap: 12, opacity: punch,
           transform: `translateX(${(1 - punch) * 30}px)`}}>
-          <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 62, letterSpacing: '-0.04em', color: K.red}}>23×</span>
+          <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 62, letterSpacing: '-0.04em', color: K.red}}>~23×</span>
           <span style={{fontFamily: SANS, fontWeight: 600, fontSize: 40, color: K.red}}>slower</span>
         </div>)}
-      <div style={{height: 56}} />
-      <Typed at={T.b} text="with t as (…) select …;" color={K.green} size={30} />
+      <div style={{height: 52}} />
+      <Typed at={0.85} text="with t as (…) select …" color={K.green} size={42} />
       {bar(88531, K.green, true)}
+      <Fade at={4.1} style={{fontFamily: MONO, fontSize: 30, color: K.dim, marginTop: 40}}>cost: catalog rows + files, every transaction</Fade>
     </div>
   );
 };
 
-// ---------- slide 2: the queue, filled ~114 messages per transaction ----------
+// ---------- slide: the queue (a second cost), ~114 messages per transaction ----------
 // 108 ticks x ~38 slots = 4,096; one create + drop (~114 messages) = 3 ticks; 36 transactions fill the ring.
 const qT = (at: number) => ({d0: at + 2.2, d1: at + 4.0, d2: at + 7.6});
 const txCount = (t: number, at: number) => {
@@ -124,7 +122,7 @@ const Ring: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
   const {t, e} = useT();
   const N = 108, PER = 3;
   const {d0} = qT(at);
-  const cx = w / 2, cy = h * 0.56, rx = Math.min(w * 0.42, 350), ry = rx * 0.5, PH = rx * 0.17;
+  const cx = w / 2, cy = h * 0.6, rx = Math.min(w * 0.42, 350), ry = rx * 0.5, PH = rx * 0.17;
   const tx = txCount(t, at);
   const lit = tx * PER;
   const full = tx >= 36;
@@ -132,6 +130,7 @@ const Ring: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
     const a = (i / N) * Math.PI * 2 - Math.PI / 2;
     return {i, x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry};
   }).sort((p, q) => p.y - q.y);
+  const FALL = 90;
   const fall = interpolate(t, [d0 - 1.0, d0], [0, 1], {...clamp, easing: Easing.in(Easing.cubic)});
   const a0 = -Math.PI / 2 + (1.5 / N) * Math.PI * 2;
   const tx0 = cx + Math.cos(a0) * rx, ty0 = cy + Math.sin(a0) * ry - PH;
@@ -150,7 +149,7 @@ const Ring: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
       })}
       {t < d0 + 0.2 && t > d0 - 1.2 && (
         <g opacity={interpolate(t, [d0 - 1.2, d0 - 0.9, d0, d0 + 0.2], [0, 1, 1, 0], clamp)}>
-          {[-1, 0, 1].map((j) => <line key={j} x1={tx0 + j * 16} x2={tx0 + j * 16} y1={ty0 - 190 + fall * 190} y2={ty0 - 190 + fall * 190 + PH}
+          {[-1, 0, 1].map((j) => <line key={j} x1={tx0 + j * 16} x2={tx0 + j * 16} y1={ty0 - FALL + fall * FALL} y2={ty0 - FALL + fall * FALL + PH}
             stroke={K.white} strokeWidth={6} strokeLinecap="round" filter="url(#glow)" />)}
         </g>
       )}
@@ -172,49 +171,66 @@ const RingLegend: React.FC<{at: number}> = ({at}) => {
       </div>
       <div style={{display: 'flex', alignItems: 'center', gap: 20, marginTop: 22, opacity: e(d1 - 0.2)}}>
         <span style={{fontFamily: MONO, fontSize: 38, color: tx >= 36 ? K.red : K.orange, minWidth: 140}}>× {tx}</span>
-        <span>{tx >= 36 ? <>= <span style={{color: K.red}}>queue full</span></> : 'transactions'}</span>
+        <span>{tx >= 36 ? <>= full: <span style={{color: K.red}}>laggards reset</span></> : 'transactions'}</span>
       </div>
     </div>
   );
 };
 
-// ---------- slide 3: every session reads every message ----------
+// ---------- slide: every session reads every message ----------
 const Sessions: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
   const {t, e} = useT();
   const G = 14, s = 30;
-  const ox = w / 2, oy = h / 2 - G * s * 0.5;
+  const ox = w / 2, oy = h / 2 - G * s * 0.5 + 10;
   const t0 = at + 1.6;
   const tiles: React.ReactNode[] = [];
   for (let r = 0; r < G; r++) for (let c = 0; c < G; c++) {
     const x = ox + (c - r) * s, y = oy + (c + r) * s * 0.5;
-    const ph = ((t - t0) * 0.55 - (r + c) / (2 * G) * 0.8) % 1;
+    const ph = ((t - t0) * 0.55 - ((r + c) / (2 * G)) * 0.8) % 1;
     const k = t > t0 && ph > 0 && ph < 0.32 ? 1 - ph / 0.32 : 0;
-    const col = k > 0 ? K.orange : 'rgba(124,196,255,0.34)';
+    const col = k > 0 ? K.orange : 'rgba(124,196,255,0.60)';
     tiles.push(<path key={`${r}-${c}`} d={`M${x},${y - s * 0.43} L${x + s * 0.86},${y} L${x},${y + s * 0.43} L${x - s * 0.86},${y} Z`}
-      fill={k > 0 ? col : 'none'} fillOpacity={0.25 + 0.6 * k} stroke={col} strokeWidth={1.6} opacity={0.6 + 0.4 * k} />);
+      fill={k > 0 ? col : 'none'} fillOpacity={0.25 + 0.6 * k} stroke={col} strokeWidth={1.6} opacity={0.75 + 0.25 * k} />);
   }
+  // one tile called out
+  const cx = ox + (G - 1) * s, cy = oy + (G - 1) * s * 0.5; // right corner tile
   return (
     <svg width={w} height={h} style={{display: 'block', opacity: e(at + 0.5, 0.9), overflow: 'visible'}}>
       <defs>
         <filter id="glow3" filterUnits="userSpaceOnUse" x={-100} y={-100} width={w + 200} height={h + 200}><feGaussianBlur stdDeviation="4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
       </defs>
       <g filter="url(#glow3)">{tiles}</g>
+      <g opacity={e(at + 1.1)}>
+        <path d={`M${cx},${cy - s * 0.43} L${cx + s * 0.86},${cy} L${cx},${cy + s * 0.43} L${cx - s * 0.86},${cy} Z`} fill="none" stroke={K.white} strokeWidth={3} />
+        <line x1={cx - 4} y1={cy + s * 0.5} x2={cx - 24} y2={h - 50} stroke={K.white} strokeWidth={2} />
+        <text x={w} y={h - 14} textAnchor="end" fill={K.white} fontFamily={MONO} fontSize={28}>each tile = one session</text>
+      </g>
     </svg>
   );
 };
 
-// ---------- slide 4: the cliff ----------
+// ---------- slide: the cliff ----------
 const Cliff: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
   const {e} = useT();
   const pts = [[0, 502], [1000, 502], [3000, 274], [5000, 127]];
-  const L = 92, R = w - 30, T = 80, Bt = h - 92;
+  const L = 92, R = w - 30, T = 80, Bt = h - 100;
   const X = (v: number) => L + ((R - L) * v) / 5000;
   const Y = (v: number) => Bt - ((Bt - T) * v) / 560;
-  const DRAW = 3.2;
-  const draw = e(at + 1.2, DRAW);
+  const D0 = at + 1.2, DRAW = 3.2;
+  const draw = interpolate(useT().t, [D0, D0 + DRAW], [0, 1], clamp); // linear so labels can sync to the pen
+  // path length per segment, for syncing labels to the moment the line reaches each point
+  const seg = pts.slice(1).map((p, i) => Math.hypot(X(p[0]) - X(pts[i][0]), Y(p[1]) - Y(pts[i][1])));
+  const total = seg.reduce((a, b) => a + b, 0);
+  const reach = [0, ...seg.map((_, i) => seg.slice(0, i + 1).reduce((a, b) => a + b, 0) / total)];
   const d = pts.map((p, i) => `${i ? 'L' : 'M'}${X(p[0])},${Y(p[1])}`).join(' ');
-  const len = 2200;
   const cols = [K.green, K.green, K.yellow, K.red];
+  // label placement off the line: above the flat start, upper right of 274, below left of 127
+  const lab = [
+    {x: (X(0) + X(1000)) / 2, y: Y(502) - 30, a: 'middle'},
+    null,
+    {x: X(3000) + 22, y: Y(274) - 26, a: 'start'},
+    {x: X(5000) - 18, y: Y(127) + 66, a: 'end'},
+  ];
   return (
     <svg width={w} height={h} style={{display: 'block', overflow: 'visible'}}>
       <defs>
@@ -222,29 +238,31 @@ const Cliff: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
         <filter id="glow2" filterUnits="userSpaceOnUse" x={-100} y={-100} width={w + 200} height={h + 200}><feGaussianBlur stdDeviation="5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
       </defs>
       <g opacity={e(at + 0.6)}>
-        {[0, 250, 500].map((v) => (
+        {[0, 250].map((v) => (
           <g key={v}>
             <line x1={L} x2={R} y1={Y(v)} y2={Y(v)} stroke="rgba(255,255,255,0.12)" strokeDasharray="2 8" strokeWidth={1.5} />
             <text x={L - 16} y={Y(v) + 9} textAnchor="end" fill={K.dim} fontFamily={MONO} fontSize={26}>{v}</text>
           </g>
         ))}
+        <line x1={L} x2={R} y1={Y(500)} y2={Y(500)} stroke="rgba(255,255,255,0.45)" strokeDasharray="10 8" strokeWidth={2} />
+        <text x={L - 16} y={Y(500) + 9} textAnchor="end" fill={K.dim} fontFamily={MONO} fontSize={26}>500</text>
+        <text x={R} y={Y(500) - 16} textAnchor="end" fill={K.dim} fontFamily={MONO} fontSize={28}>target: 500 TPS</text>
         <text x={L - 16} y={T - 34} textAnchor="end" fill={K.dim} fontFamily={MONO} fontSize={26}>TPS</text>
         {pts.map((p, i) => (
           <text key={i} x={X(p[0])} y={Bt + 48} textAnchor={i === 0 ? 'start' : i === 3 ? 'end' : 'middle'} fill={K.dim} fontFamily={MONO} fontSize={30}>{fmt(p[0])}</text>
         ))}
         <text x={(L + R) / 2} y={Bt + 92} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={28} letterSpacing="1">idle sessions</text>
       </g>
-      <path d={d} fill="none" stroke="url(#lg)" strokeWidth={6} strokeLinejoin="round" strokeDasharray={len} strokeDashoffset={len * (1 - draw)} filter="url(#glow2)" />
+      <path d={d} pathLength={1} fill="none" stroke="url(#lg)" strokeWidth={6} strokeLinejoin="round" strokeDasharray="1 1" strokeDashoffset={1 - draw} filter="url(#glow2)" />
       {pts.map((p, i) => {
-        const appear = e(at + 1.2 + ((X(p[0]) - L) / (R - L)) * DRAW * 0.75, 0.7);
-        if (i === 1) return <circle key={i} cx={X(p[0])} cy={Y(p[1])} r={11} fill={K.bg} stroke={cols[i]} strokeWidth={4} opacity={appear} />;
-        const lx = i === 0 ? (X(0) + X(1000)) / 2 : X(p[0]) + (i === 3 ? 8 : 0);
+        const appear = e(D0 + DRAW * reach[i] - 0.05, 0.4);
+        const l = lab[i];
         return (
           <g key={i} opacity={appear}>
             <circle cx={X(p[0])} cy={Y(p[1])} r={11} fill={K.bg} stroke={cols[i]} strokeWidth={4} />
-            <text x={lx} y={Y(p[1]) - 30} textAnchor={i === 0 ? 'middle' : i === 3 ? 'end' : 'middle'} fill={cols[i]} fontFamily={SANS} fontWeight={600} fontSize={54} letterSpacing="-1.5">
-              {fmt(p[1] * appear)}<tspan fontFamily={MONO} fontSize={28} fontWeight={400} dx={8}>TPS</tspan>
-            </text>
+            {l && <text x={l.x} y={l.y} textAnchor={l.a as 'start'} fill={cols[i]} fontFamily={SANS} fontWeight={600} fontSize={54} letterSpacing="-1.5">
+              {fmt(p[1])}<tspan fontFamily={MONO} fontSize={28} fontWeight={400} dx={8}>TPS</tspan>
+            </text>}
           </g>
         );
       })}
@@ -252,45 +270,30 @@ const Cliff: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
   );
 };
 
-// ---------- slide 5: 91% of DDL time on one lock ----------
+// ---------- slide: 91% of DDL time on one lock ----------
 const Donut: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
   const {e} = useT();
   const g = e(at + 0.8, 2.0);
-  const r = Math.min(w, h) * 0.36, cx = w / 2, cy = h / 2, sw = 64;
+  const r = Math.min(w, h) * 0.37, cx = w / 2, cy = h / 2, sw = 66;
   const C = 2 * Math.PI * r;
-  const a91 = 0.91 * g, a9 = 0.09 * e(at + 2.6, 0.8);
+  const a9 = 0.09 * e(at + 2.6, 0.8);
+  const num = e(at + 2.7, 0.5);
   return (
     <svg width={w} height={h} style={{display: 'block', overflow: 'visible', opacity: e(at + 0.5, 0.7)}}>
       <defs>
         <filter id="glow4" filterUnits="userSpaceOnUse" x={-100} y={-100} width={w + 200} height={h + 200}><feGaussianBlur stdDeviation="6" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
       </defs>
       <circle cx={cx} cy={cy} r={r} fill="none" stroke={K.track} strokeWidth={sw} />
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke={K.red} strokeWidth={sw} strokeDasharray={`${C * a91} ${C}`} transform={`rotate(-90 ${cx} ${cy})`} filter="url(#glow4)" />
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke={K.red} strokeWidth={sw} strokeDasharray={`${C * 0.91 * g} ${C}`} transform={`rotate(-90 ${cx} ${cy})`} filter="url(#glow4)" />
       <circle cx={cx} cy={cy} r={r} fill="none" stroke="rgba(255,255,255,0.32)" strokeWidth={sw}
         strokeDasharray={`${Math.max(0, C * a9 - 6)} ${C}`} transform={`rotate(${-90 + 360 * 0.91 + 1} ${cx} ${cy})`} />
-      <text x={cx} y={cy + 30} textAnchor="middle" fill={K.red} fontFamily={SANS} fontWeight={700} fontSize={130} letterSpacing="-5">{Math.round(91 * g)}%</text>
+      <text x={cx} y={cy + 36} textAnchor="middle" fill={K.red} fontFamily={SANS} fontWeight={700} fontSize={136} letterSpacing="-5" opacity={num}>91%</text>
+      <text x={cx + r * 0.62} y={cy - r - 50} textAnchor="start" fill={K.dim} fontFamily={MONO} fontSize={28} opacity={e(at + 3.2)}>9% other</text>
     </svg>
   );
 };
-const DonutLegend: React.FC<{at: number}> = ({at}) => {
-  const {e} = useT();
-  const row = (c: string, pct: string, label: React.ReactNode, a: number) => (
-    <div style={{display: 'flex', alignItems: 'center', gap: 20, marginTop: 16, opacity: e(a)}}>
-      <span style={{width: 26, height: 26, borderRadius: 6, background: c}} />
-      <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 42, color: c, minWidth: 96}}>{pct}</span>
-      <span style={{fontFamily: MONO, fontSize: 34, color: K.white}}>{label}</span>
-    </div>
-  );
-  return (
-    <div>
-      {row(K.red, '91%', 'LWLock:SInvalWrite', at + 2.0)}
-      {row('rgba(255,255,255,0.45)', '9%', 'everything else', at + 3.0)}
-    </div>
-  );
-};
 
-
-// "$ listen postgres.fm" -> backspace "listen" -> "watch": the podcast is a video now.
+// ---------- end card joke: "$ listen postgres.fm" -> backspace "listen" -> "watch" ----------
 const Joke: React.FC<{at: number}> = ({at}) => {
   const {t} = useT();
   const a = t - at;
@@ -315,24 +318,27 @@ const Joke: React.FC<{at: number}> = ({at}) => {
 
 // ---------- wallpaper ----------
 const Wallpaper: React.FC<{W: number; H: number}> = ({W, H}) => {
-  const {t} = useT();
-  const blob = (x: number, y: number, r: number, c: string, sp: number, ph: number) => (
-    <div style={{position: 'absolute', left: x + Math.sin(t * sp + ph) * 60 - r, top: y + Math.cos(t * sp * 0.8 + ph) * 40 - r,
+  const frame = useCurrentFrame();
+  const {durationInFrames} = useVideoConfig();
+  // phase loops over the composition, so the last frame matches the first
+  const t = (frame / durationInFrames) * Math.PI * 2;
+  const blob = (x: number, y: number, r: number, c: string, ph: number) => (
+    <div style={{position: 'absolute', left: x + Math.sin(t + ph) * 60 - r, top: y + Math.cos(t + ph) * 40 - r,
       width: 2 * r, height: 2 * r, borderRadius: '50%', background: c, filter: 'blur(90px)'}} />
   );
   const wave = (k: number, c: string, o: number) => {
     const pts: string[] = [];
     for (let x = -50; x <= W + 50; x += 30) {
-      const y = H * (0.42 + k * 0.17) + Math.sin(x / (W * 0.18) + t * 0.25 + k * 1.7) * H * 0.07 + Math.sin(x / (W * 0.07) + k) * H * 0.015;
+      const y = H * (0.42 + k * 0.17) + Math.sin(x / (W * 0.18) + t + k * 1.7) * H * 0.07 + Math.sin(x / (W * 0.07) + k) * H * 0.015;
       pts.push(`${x},${y}`);
     }
     return <polygon points={`-50,${H + 50} ${pts.join(' ')} ${W + 50},${H + 50}`} fill={c} opacity={o} />;
   };
   return (
     <AbsoluteFill style={{background: 'linear-gradient(150deg, #120B33 0%, #1B1150 45%, #0B1C4A 100%)', overflow: 'hidden'}}>
-      {blob(W * 0.15, H * 0.2, W * 0.35, '#5B2BB5', 0.3, 0)}
-      {blob(W * 0.85, H * 0.3, W * 0.32, '#1F56D6', 0.25, 2)}
-      {blob(W * 0.6, H * 0.95, W * 0.4, '#8A2E9E', 0.2, 4)}
+      {blob(W * 0.15, H * 0.2, W * 0.35, '#5B2BB5', 0)}
+      {blob(W * 0.85, H * 0.3, W * 0.32, '#1F56D6', 2)}
+      {blob(W * 0.6, H * 0.95, W * 0.4, '#8A2E9E', 4)}
       <svg width={W} height={H} style={{position: 'absolute', inset: 0, filter: 'blur(14px)'}}>
         {wave(0, '#3A2A9A', 0.35)}
         {wave(1, '#5A2FA8', 0.32)}
@@ -342,28 +348,125 @@ const Wallpaper: React.FC<{W: number; H: number}> = ({W, H}) => {
   );
 };
 
-// ---------- main (portrait; landscape uses the same sections, wider) ----------
-export const Win196: React.FC<{fmt: Fmt}> = ({fmt: F}) => {
-  const {t, e} = useT();
-  const {width: W, height: H} = useVideoConfig();
-  const P = F === 'portrait';
-  const win = P ? {x: 54, y: 70, w: W - 108, h: H - 140} : {x: 150, y: 76, w: W - 300, h: H - 152};
+// ---------- slides ----------
+type SlideId = 'bars' | 'queue' | 'sessions' | 'cliff' | 'donut' | 'fix' | 'end';
+type Ctx = {B: number; inner: number; jokeAt: number};
+const SLIDES: Record<SlideId, (c: Ctx) => React.ReactNode> = {
+  bars: ({inner}) => <>
+    <div>
+      <Eyebrow at={-1} color={K.green} text="POSTGRES.FM · EPISODE 196" />
+      <Head at={-1} size={86}>CREATE TEMP TABLE<br />is not free.</Head>
+    </div>
+    <Race w={inner} />
+    <Tiny at={-1}>PG17 · 16 vCPU · 32 clients · 0 idle sessions</Tiny>
+  </>,
+  queue: ({B, inner}) => <>
+    <div>
+      <Eyebrow at={B + 0.2} color={K.orange} text="A SECOND COST" />
+      <Head at={B + 0.35} size={70}>With many idle sessions,<br />one shared queue fills up.</Head>
+    </div>
+    <Ring at={B} w={inner} h={500} />
+    <RingLegend at={B} />
+    <Tiny at={B + 1.0}>schematic · Postgres sinvaladt.c</Tiny>
+  </>,
+  sessions: ({B, inner}) => <>
+    <div>
+      <Eyebrow at={B + 0.2} color={K.blue} text="A SECOND COST" />
+      <Head at={B + 0.35} size={80}>Every session must<br />read every message.</Head>
+    </div>
+    <Sessions at={B} w={inner} h={500} />
+    <div>
+      <Fade at={B + 1.2} style={{fontFamily: SANS, fontWeight: 600, fontSize: 44, color: K.blue, letterSpacing: '-0.02em'}}>Even the idle ones.</Fade>
+      <Fade at={B + 2.0} style={{fontFamily: SANS, fontWeight: 600, fontSize: 44, color: K.red, letterSpacing: '-0.02em', marginTop: 12}}>Writers queue on one lock.</Fade>
+    </div>
+  </>,
+  cliff: ({B, inner}) => <>
+    <div>
+      <Eyebrow at={B + 0.2} color={K.red} text="IDLE SESSIONS" />
+      <Head at={B + 0.35} size={86}>Idle sessions<br />are not free.</Head>
+      <Fade at={B + 0.5} style={{fontFamily: MONO, fontSize: 30, color: K.dim, marginTop: 14}}>temp-table DDL, TPS</Fade>
+    </div>
+    <Cliff at={B} w={inner} h={600} />
+    <Tiny at={B + 0.8}>PG18 · 16 vCPU · synthetic</Tiny>
+  </>,
+  donut: ({B, inner}) => <>
+    <div>
+      <Eyebrow at={B + 0.2} color={K.red} text="AT 5,000 IDLE SESSIONS" />
+      <Head at={B + 0.35} size={80}>DDL mostly waits<br />on one lock.</Head>
+    </div>
+    <Donut at={B} w={inner} h={500} />
+    <div>
+      <Fade at={B + 2.8} style={{fontFamily: MONO, fontWeight: 500, fontSize: 58, color: K.red, letterSpacing: '-0.01em'}}>LWLock:SInvalWrite</Fade>
+      <Fade at={B + 3.1} style={{fontFamily: SANS, fontWeight: 500, fontSize: 32, color: K.dim, marginTop: 10}}>share of DDL sessions' active time</Fade>
+    </div>
+    <Tiny at={B + 1.0}>PG18 · 16 vCPU · synthetic</Tiny>
+  </>,
+  fix: ({B}) => <>
+    <div>
+      <Eyebrow at={B + 0.2} color={K.green} text="THE FIX" />
+      <Head at={B + 0.35} size={86}>No temp tables<br />in hot code.</Head>
+    </div>
+    <div>
+      {['CTE', 'arrays', 'PL/pgSQL records'].map((c, i) => (
+        <Fade key={c} at={B + 0.9 + i * 0.5} style={{display: 'flex', alignItems: 'center', gap: 24, padding: '32px 0',
+          borderTop: `1px dashed ${K.line}`, borderBottom: i === 2 ? `1px dashed ${K.line}` : 'none'}}>
+          <span style={{width: 16, height: 16, borderRadius: 8, background: K.green, boxShadow: `0 0 14px ${K.green}`}} />
+          <span style={{fontFamily: SANS, fontWeight: 600, fontSize: 66, letterSpacing: '-0.03em', color: K.green}}>{c}</span>
+        </Fade>
+      ))}
+    </div>
+    <Tiny at={B + 2.2}>instead of a temp table per transaction</Tiny>
+  </>,
+  end: ({B, jokeAt}) => <>
+    <div />
+    <div>
+      <Eyebrow at={B + 0.2} color={K.green} text="NEW EPISODE" />
+      <Head at={B + 0.35} size={120}>Postgres.FM #196</Head>
+      <Fade at={B + 0.6} style={{fontFamily: SANS, fontWeight: 500, fontSize: 50, lineHeight: 1.15, letterSpacing: '-0.025em', color: K.white, marginTop: 26}}>
+        The hidden costs of<br />CREATE TEMP TABLE
+      </Fade>
+      <Fade at={B + 0.8} style={{fontFamily: SANS, fontWeight: 500, fontSize: 42, letterSpacing: '-0.02em', color: K.dim, marginTop: 18}}>
+        with Kirk Wolak
+      </Fade>
+      <Fade at={B + 1.0} style={{marginTop: 60, display: 'inline-block', border: `1px solid ${K.line}`, borderRadius: 12, padding: '20px 28px',
+        fontFamily: MONO, fontSize: 44, color: K.white, background: '#0f0f10', whiteSpace: 'pre'}}>
+        <Joke at={B + jokeAt} />
+      </Fade>
+    </div>
+    <div />
+  </>,
+};
+
+// Schedules: section start times (s); content of a section starts 0.9 s before, while it scrolls in.
+export const CUTS = {
+  full: {ids: ['bars', 'queue', 'sessions', 'cliff', 'donut', 'fix', 'end'] as SlideId[], S: [0, 8.0, 18.2, 24.8, 31.6, 37.4, 42.4], dur: 49.0, joke: 1.5},
+  x: {ids: ['bars', 'cliff', 'donut', 'fix', 'end'] as SlideId[], S: [0, 7.2, 13.6, 19.0, 22.2], dur: 25.0, joke: 0.6},
+};
+const LOOP = 0.8; // last LOOP seconds crossfade back to the opening frame
+
+export const Win196: React.FC<{fmt: Fmt; cut?: keyof typeof CUTS}> = ({cut = 'full'}) => {
+  const frame = useCurrentFrame();
+  const {fps, width: W, height: H} = useVideoConfig();
+  const t = frame / fps;
+  const C = CUTS[cut];
+  const e = (a: number, d = 0.7) => interpolate(t, [a, a + d], [0, 1], {...clamp, easing: EASE});
+  font();
+  const win = {x: 54, y: 70, w: W - 108, h: H - 140};
   const BAR = 50;
   const cw = win.w, ch = win.h - BAR;
-  const pad = P ? 60 : 84;
+  const pad = 60;
   const inner = cw - 2 * pad;
-  const scroll = S.slice(1).reduce((acc, b) => acc + e(b - 0.45, 1.0), 0) * ch;
-  const sec = (i: number, children: React.ReactNode) => (
-    <div style={{position: 'absolute', left: 0, top: i * ch, width: cw, height: ch, padding: `56px ${pad}px 52px`, boxSizing: 'border-box',
+  const scroll = C.S.slice(1).reduce((acc, b) => acc + e(b - 0.45, 1.0), 0) * ch;
+  const loop = interpolate(t, [C.dur - LOOP, C.dur - 1 / fps], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
+  const sec = (i: number, top: number, children: React.ReactNode) => (
+    <div key={i} style={{position: 'absolute', left: 0, top, width: cw, height: ch, padding: `56px ${pad}px 52px`, boxSizing: 'border-box',
       display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>{children}</div>
   );
-  const winIn = e(0, 0.9);
   return (
     <AbsoluteFill>
       <Wallpaper W={W} H={H} />
       <div style={{position: 'absolute', left: win.x, top: win.y, width: win.w, height: win.h, borderRadius: 16, overflow: 'hidden',
-        background: K.bg, border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 40px 120px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.5)',
-        opacity: winIn, transform: `translateY(${(1 - winIn) * 30}px) scale(${0.98 + 0.02 * winIn})`}}>
+        background: K.bg, border: '1px solid rgba(255,255,255,0.12)', boxShadow: '0 40px 120px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.5)'}}>
         <div style={{height: BAR, display: 'flex', alignItems: 'center', padding: '0 20px', borderBottom: `1px solid ${K.line}`, position: 'relative', background: '#111113'}}>
           {['#FF5F57', '#FEBC2E', '#28C840'].map((c) => <span key={c} style={{width: 14, height: 14, borderRadius: 7, background: c, marginRight: 9}} />)}
           <div style={{position: 'absolute', left: 0, right: 0, textAlign: 'center', fontFamily: MONO, fontSize: 20, color: K.faint, letterSpacing: '0.04em'}}>
@@ -371,87 +474,20 @@ export const Win196: React.FC<{fmt: Fmt}> = ({fmt: F}) => {
           </div>
         </div>
         <div style={{position: 'relative', width: cw, height: ch, overflow: 'hidden'}}>
-          <div style={{position: 'absolute', left: 0, top: -scroll, width: cw}}>
-            {sec(0, <>
-              <div>
-                <Eyebrow at={0.5} color={K.green} text="POSTGRES.FM · EPISODE 196" />
-                <Head at={0.7} size={86}>CREATE TEMP TABLE<br />is not free.</Head>
-              </div>
-              <Race at={1.5} w={inner} />
-              <Tiny at={2.0}>PG17 · 16 vCPU · 32 clients · synthetic</Tiny>
-            </>)}
-            {sec(1, <>
-              <div>
-                <Eyebrow at={B[1] + 0.2} color={K.orange} text="WHY" />
-                <Head at={B[1] + 0.35} size={70}>Every CREATE and DROP<br />fills one shared queue.</Head>
-              </div>
-              <Ring at={B[1]} w={inner} h={500} />
-              <RingLegend at={B[1]} />
-              <Tiny at={B[1] + 1.0}>schematic · Postgres sinvaladt.c</Tiny>
-            </>)}
-            {sec(2, <>
-              <div>
-                <Eyebrow at={B[2] + 0.2} color={K.blue} text="AND THEN" />
-                <Head at={B[2] + 0.35} size={80}>Every session must<br />read every message.</Head>
-              </div>
-              <Sessions at={B[2]} w={inner} h={520} />
-              <Fade at={B[2] + 1.2} style={{fontFamily: SANS, fontWeight: 600, fontSize: 44, color: K.blue, letterSpacing: '-0.02em'}}>Even the idle ones.</Fade>
-            </>)}
-            {sec(3, <>
-              <div>
-                <Eyebrow at={B[3] + 0.2} color={K.red} text="IDLE SESSIONS" />
-                <Head at={B[3] + 0.35} size={86}>Idle sessions<br />are not free.</Head>
-                <Fade at={B[3] + 0.5} style={{fontFamily: MONO, fontSize: 30, color: K.dim, marginTop: 14}}>temp-table DDL, TPS</Fade>
-              </div>
-              <Cliff at={B[3]} w={inner} h={600} />
-              <Tiny at={B[3] + 0.8}>PG18 · 16 vCPU · synthetic</Tiny>
-            </>)}
-            {sec(4, <>
-              <div>
-                <Eyebrow at={B[4] + 0.2} color={K.red} text="AT 5,000 IDLE SESSIONS" />
-                <Head at={B[4] + 0.35} size={80}>DDL mostly waits<br />on one lock.</Head>
-              </div>
-              <Donut at={B[4]} w={inner} h={500} />
-              <DonutLegend at={B[4]} />
-              <Tiny at={B[4] + 1.0}>share of DDL sessions' active time · PG18</Tiny>
-            </>)}
-            {sec(5, <>
-              <div>
-                <Eyebrow at={B[5] + 0.2} color={K.green} text="THE FIX" />
-                <Head at={B[5] + 0.35} size={86}>No temp tables<br />in hot code.</Head>
-              </div>
-              <div>
-                {['CTE', 'arrays', 'PL/pgSQL records'].map((c, i) => (
-                  <Fade key={c} at={B[5] + 0.9 + i * 0.5} style={{display: 'flex', alignItems: 'center', gap: 24, padding: '32px 0',
-                    borderTop: `1px dashed ${K.line}`, borderBottom: i === 2 ? `1px dashed ${K.line}` : 'none'}}>
-                    <span style={{width: 16, height: 16, borderRadius: 8, background: K.green, boxShadow: `0 0 14px ${K.green}`}} />
-                    <span style={{fontFamily: SANS, fontWeight: 600, fontSize: 66, letterSpacing: '-0.03em', color: K.green}}>{c}</span>
-                  </Fade>
-                ))}
-              </div>
-              <Tiny at={B[5] + 2.2}>instead of a temp table per transaction</Tiny>
-            </>)}
-            {sec(6, <>
-              <div />
-              <div>
-                <Eyebrow at={B[6] + 0.2} color={K.green} text="NEW EPISODE" />
-                <Head at={B[6] + 0.35} size={120}>Postgres.FM #196</Head>
-                <Fade at={B[6] + 0.6} style={{fontFamily: SANS, fontWeight: 500, fontSize: 50, lineHeight: 1.15, letterSpacing: '-0.025em', color: K.white, marginTop: 26}}>
-                  The hidden costs of<br />CREATE TEMP TABLE
-                </Fade>
-                <Fade at={B[6] + 0.8} style={{fontFamily: SANS, fontWeight: 500, fontSize: 42, letterSpacing: '-0.02em', color: K.dim, marginTop: 18}}>
-                  with Kirk Wolak
-                </Fade>
-                <Fade at={B[6] + 1.0} style={{marginTop: 60, display: 'inline-block', border: `1px solid ${K.line}`, borderRadius: 12, padding: '20px 28px',
-                  fontFamily: MONO, fontSize: 44, color: K.white, background: '#0f0f10', whiteSpace: 'pre'}}>
-                  <Joke at={B[6] + 1.5} />
-                </Fade>
-              </div>
-              <div />
-            </>)}
+          <div style={{position: 'absolute', left: 0, top: -scroll, width: cw, opacity: 1 - loop}}>
+            {C.ids.map((id, i) => sec(i, i * ch, SLIDES[id]({B: i ? C.S[i] - 0.9 : 0, inner, jokeAt: C.joke})))}
           </div>
+          {loop > 0 && (
+            <TCtx.Provider value={0}>
+              <div style={{position: 'absolute', inset: 0, opacity: loop}}>
+                {sec(99, 0, SLIDES.bars({B: 0, inner, jokeAt: 0}))}
+              </div>
+            </TCtx.Provider>
+          )}
         </div>
       </div>
     </AbsoluteFill>
   );
 };
+type Fmt = 'portrait' | 'landscape';
+export const DUR = CUTS.full.dur;
