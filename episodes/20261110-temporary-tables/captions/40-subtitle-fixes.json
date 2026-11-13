@@ -180,10 +180,6 @@
   "ON COMMIT DROP"
  ],
  [
-  "T1 in parenthesis.star",
-  "(t1).*"
- ],
- [
   "better planned",
   "better plan"
  ],
@@ -206,5 +202,29 @@
  [
   "DBAs and their agents",
   "DBREs and their agents"
+ ],
+ [
+  "T1",
+  "t1"
+ ],
+ [
+  "select star from",
+  "SELECT * FROM"
+ ],
+ [
+  "Select star",
+  "SELECT *"
+ ],
+ [
+  "select star",
+  "SELECT *"
+ ],
+ [
+  "T1 in parenthesis.star",
+  "(t1).*"
+ ],
+ [
+  "dot star",
+  ".*"
  ]
 ]

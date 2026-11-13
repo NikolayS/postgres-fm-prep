@@ -316,7 +316,7 @@ We need to distinguish things here.
 
 66
 00:04:34,250 --> 00:04:38,050
-If you use a lot of deletes, Autovacuum
+If you use a lot of deletes, autovacuum
 will ignore temporary tables, right?
 
 67
@@ -355,13 +355,13 @@ cleanup happens in, in the vacuum.
 
 74
 00:05:13,770 --> 00:05:17,410
-Like, Autovacuum runs cleanup.
+Like, autovacuum runs cleanup.
 Everything is great.
 
 75
 00:05:17,410 --> 00:05:23,110
 But if you delete in your table,
-temporary table, Autovacuum doesn't care.
+temporary table, autovacuum doesn't care.
 
 76
 00:05:23,110 --> 00:05:25,930
@@ -2163,13 +2163,13 @@ right now. So imagine you have a table,
 
 442
 00:29:52,061 --> 00:29:56,721
-and you select from it. Select star
-from this table, right? Or select...
+and you select from it. SELECT *
+FROM this table, right? Or select...
 
 443
 00:29:57,521 --> 00:30:02,621
-Let's name this table T1.
-You can say select star from the table,
+Let's name this table t1.
+You can say SELECT * FROM the table,
 
 444
 00:30:02,621 --> 00:30:07,341
@@ -2179,11 +2179,11 @@ like, several rows, several
 445
 00:30:07,461 --> 00:30:13,701
 columns, right? But then you can say
-select T1 from T1. Do you know this trick?
+SELECT t1 FROM t1. Do you know this trick?
 
 446
 00:30:15,441 --> 00:30:17,861
-Kirk: Select T1 from T1.
+Kirk: SELECT t1 FROM t1.
 
 447
 00:30:17,861 --> 00:30:20,450
@@ -2222,8 +2222,8 @@ But then you can say select array,
 
 454
 00:30:35,761 --> 00:30:40,150
-parenthesis, and inside it select
-T1 from, from T1. What will-
+parenthesis, and inside it SELECT
+t1 FROM, FROM t1. What will-
 
 455
 00:30:40,150 --> 00:30:41,150

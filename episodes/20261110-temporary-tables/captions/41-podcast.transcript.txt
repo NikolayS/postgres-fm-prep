@@ -28,9 +28,9 @@ Kirk [00:03:39]: Yeah, cliffs. You fall off of them. (Nik: Yeah.) Yeah. (Nik: Ye
 
 Nik [00:03:45]: Yeah. And so it can cause even downtime. So until recently, I always said this keeping in mind that temporary tables are bad in two areas for me. First is they're actually really hard to diagnose because you don't see them. Transaction— (Kirk: Mm.) session which created it does see it. But if you're a DBA, like, trying to... or you have an agent trying to diagnose things, connecting to database in a different session obviously, you're limited in terms of understanding what's happening. You... Like, it's hard. And second thing is second thing is bloat. You are right. Like, it's just... But not bloat of temporary tables. We need to distinguish things here.
 
-If you use a lot of deletes, Autovacuum will ignore temporary tables, right? It will just... Autovacuum doesn't care about your poor temporary tables. If you use deletes, your bloat, content, like, as, as we all know, MVCC in Postgres— (Kirk: Yep.) deletes, delete is done very fast because it's only marking tuple as deleted in this session, which probably will be, like, not so if rollback happens, right? But then, the real, clean, cleanup happens in the vacuum.
+If you use a lot of deletes, autovacuum will ignore temporary tables, right? It will just... Autovacuum doesn't care about your poor temporary tables. If you use deletes, your bloat, content, like, as, as we all know, MVCC in Postgres— (Kirk: Yep.) deletes, delete is done very fast because it's only marking tuple as deleted in this session, which probably will be, like, not so if rollback happens, right? But then, the real, clean, cleanup happens in the vacuum.
 
-Like, Autovacuum runs cleanup. Everything is great. But if you delete in your table, temporary table, Autovacuum doesn't care. It means you just accumulate a lot of dead tuples. It's not bloat, it's dead tuples actually. I tend to distinguish, dead tuples from bloat because in my def... There's no, official definition of bloat. You cannot find it in documentation So different people mean different things when they say bloat. But to me, bloat is what's left after cleaning up, dead tuples. It's empty space which is unused.
+Like, autovacuum runs cleanup. Everything is great. But if you delete in your table, temporary table, autovacuum doesn't care. It means you just accumulate a lot of dead tuples. It's not bloat, it's dead tuples actually. I tend to distinguish, dead tuples from bloat because in my def... There's no, official definition of bloat. You cannot find it in documentation So different people mean different things when they say bloat. But to me, bloat is what's left after cleaning up, dead tuples. It's empty space which is unused.
 
 It will be probably used, but in many cases it will be unlikely used because, for example, 90% of our space is empty, and nobody will come back and use it at all. Anyway... And yeah, and if you have index on temporary table, it also degrades. This touches our topic a couple of weeks ago, right? int8 versus UUID version four and version seven, and how, like, B-tree can degrade and so on over time. And in this case, nobody will use it probably at all if it's UUID version seven, so you'll just delete something.
 
@@ -200,9 +200,9 @@ Nik [00:29:36]: Well
 
 Kirk [00:29:36]: And spend time querying it over next month.
 
-Nik [00:29:39]: F-follow me, like, and again, YouTube guys, watching us on YouTube will, will see it in the center of the screen right now. So imagine you have a table, and you select from it. Select star from this table, right? Or select... Let's name this table T1. You can say select star from the table, and you will see the whole table with all, like, several rows, several columns, right? But then you can say select T1 from T1. Do you know this trick?
+Nik [00:29:39]: F-follow me, like, and again, YouTube guys, watching us on YouTube will, will see it in the center of the screen right now. So imagine you have a table, and you select from it. SELECT * FROM this table, right? Or select... Let's name this table t1. You can say SELECT * FROM the table, and you will see the whole table with all, like, several rows, several columns, right? But then you can say SELECT t1 FROM t1. Do you know this trick?
 
-Kirk [00:30:15]: Select T1 from T1. (Nik: Yeah.) Oh, where you select actually the record set itself—
+Kirk [00:30:15]: SELECT t1 FROM t1. (Nik: Yeah.) Oh, where you select actually the record set itself—
 
 Nik [00:30:21]: Yes, exactly
 
@@ -212,7 +212,7 @@ Nik [00:30:23]: You will have— (Kirk: Okay.) only one column, which is of reco
 
 Kirk [00:30:26]: Hmm
 
-Nik [00:30:27]: Or record type, and you will have, n number of rows, how many rows this table has. But then you can say select array, parenthesis, and inside it select T1 from, from T1. What will—
+Nik [00:30:27]: Or record type, and you will have, n number of rows, how many rows this table has. But then you can say select array, parenthesis, and inside it SELECT t1 FROM, FROM t1. What will—
 
 Kirk [00:30:40]: Oh, wow. (Nik: Yeah.) So that'll create an array— (Nik: Yeah.) of rows— (Nik: Yeah.) for all of the rows of the table that you're pulling.
 
@@ -220,7 +220,7 @@ Nik [00:30:47]: You basically collapsed everything to a single scalar value, whi
 
 Kirk [00:31:00]: Right. You can unnest it and pull it back.
 
-Nik [00:31:02]: You can unnest, and then you can also, use the construct, (t1) dot star. This will bring your— (Kirk: Yeah.) your columns back. So this is how you can play with it even without, direct use of arrays. But why not? Like, you use arrays as well. In any CTE, you can use it. And this is how you can have a, like, multi-stage analysis of whatever. If you need PL/pgSQL or PLPython as well, you can do it in a function as well. But why create temporary tables at all if you can do such things? Or just use—
+Nik [00:31:02]: You can unnest, and then you can also, use the construct, (t1).*. This will bring your— (Kirk: Yeah.) your columns back. So this is how you can play with it even without, direct use of arrays. But why not? Like, you use arrays as well. In any CTE, you can use it. And this is how you can have a, like, multi-stage analysis of whatever. If you need PL/pgSQL or PLPython as well, you can do it in a function as well. But why create temporary tables at all if you can do such things? Or just use—
 
 Kirk [00:31:35]: Well, usually—
 

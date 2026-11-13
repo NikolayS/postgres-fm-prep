@@ -252,14 +252,14 @@ You are right. Like, it's just...</v>
 We need to distinguish things here.</v>
 
 00:04:34.250 --> 00:04:38.050
-<v Nik>If you use a lot of deletes, Autovacuum
+<v Nik>If you use a lot of deletes, autovacuum
 will ignore temporary tables, right?</v>
 
 00:04:38.050 --> 00:04:39.550
 <v Nik>It, it will just...</v>
 
 00:04:40.730 --> 00:04:46.090
-<v Nik>Autovacuum doesn't care about your poor
+<v Nik>autovacuum doesn't care about your poor
 temporary tables. If you use deletes,</v>
 
 00:04:46.090 --> 00:04:52.210
@@ -283,12 +283,12 @@ not so if rollback happens, right?</v>
 cleanup happens in, in the vacuum.</v>
 
 00:05:13.770 --> 00:05:17.410
-<v Nik>Like, Autovacuum runs cleanup.
+<v Nik>Like, autovacuum runs cleanup.
 Everything is great.</v>
 
 00:05:17.410 --> 00:05:23.110
 <v Nik>But if you delete in your table,
-temporary table, Autovacuum doesn't care.</v>
+temporary table, autovacuum doesn't care.</v>
 
 00:05:23.110 --> 00:05:25.930
 <v Nik>It means you just accumulate
@@ -1723,12 +1723,12 @@ YouTube guys, watching us on YouTube will,</v>
 right now. So imagine you have a table,</v>
 
 00:29:52.061 --> 00:29:56.721
-<v Nik>and you select from it. Select star
-from this table, right? Or select...</v>
+<v Nik>and you select from it. SELECT *
+FROM this table, right? Or select...</v>
 
 00:29:57.521 --> 00:30:02.621
-<v Nik>Let's name this table T1.
-You can say select star from the table,</v>
+<v Nik>Let's name this table t1.
+You can say SELECT * FROM the table,</v>
 
 00:30:02.621 --> 00:30:07.341
 <v Nik>and you will see the whole table with all,
@@ -1736,10 +1736,10 @@ like, several rows, several</v>
 
 00:30:07.461 --> 00:30:13.701
 <v Nik>columns, right? But then you can say
-select T1 from T1. Do you know this trick?</v>
+SELECT t1 FROM t1. Do you know this trick?</v>
 
 00:30:15.441 --> 00:30:17.861
-<v Kirk>Select T1 from T1.</v>
+<v Kirk>SELECT t1 FROM t1.</v>
 
 00:30:17.861 --> 00:30:20.450
 <v Nik>Yeah.</v>
@@ -1770,8 +1770,8 @@ and you will have, n number of rows,</v>
 But then you can say select array,</v>
 
 00:30:35.761 --> 00:30:40.150
-<v Nik>parenthesis, and inside it select
-T1 from, from T1. What will-</v>
+<v Nik>parenthesis, and inside it SELECT
+t1 FROM, FROM t1. What will-</v>
 
 00:30:40.150 --> 00:30:41.150
 <v Kirk>Oh, wow.</v>
