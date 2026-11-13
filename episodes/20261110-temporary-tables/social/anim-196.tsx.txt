@@ -2,21 +2,21 @@ import React from 'react';
 import {AbsoluteFill, Easing, interpolate, useCurrentFrame, useVideoConfig} from 'remotion';
 import {font} from '../font';
 
-// Postgres.FM #196 social animation, "app window on a wallpaper" style.
-// Silent. Two formats from one layout: portrait 1080x1350 and landscape 1920x1080.
+// Postgres.FM #196 social animation, "app window on a wallpaper" style. Silent.
+// Rule: no number stands alone; every number labels a visual drawn to true scale.
 // Numbers: the fact-checked set (brief throughput and cliff figures, ring card).
 
 const MONO = 'JetBrains Mono, Menlo, monospace';
 const SANS = 'Inter, sans-serif';
-const K = {bg: '#0a0a0a', line: 'rgba(255,255,255,0.09)', dim: 'rgba(255,255,255,0.58)', faint: 'rgba(255,255,255,0.34)',
-  green: '#3DDC84', red: '#FF6B5B', yellow: '#FFD23F', blue: '#7CC4FF', orange: '#FF8A3D', white: '#F5F5F5'};
+const K = {bg: '#0a0a0a', line: 'rgba(255,255,255,0.09)', dim: 'rgba(255,255,255,0.62)', faint: 'rgba(255,255,255,0.40)',
+  green: '#3DDC84', red: '#FF6B5B', yellow: '#FFD23F', blue: '#7CC4FF', orange: '#FF8A3D', white: '#F5F5F5', track: 'rgba(255,255,255,0.06)'};
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
 const EASE = Easing.bezier(0.22, 1, 0.36, 1);
 const fmt = (n: number) => Math.round(n).toLocaleString('en-US');
 
-// Section start times (s). Scroll happens around each boundary.
-const S = [0, 9.4, 13.6, 18.6, 23.0, 26.2];
-export const DUR = 30;
+// Section start times (s); the page scrolls around each boundary.
+const S = [0, 8.8, 15.0, 21.0, 24.2];
+export const DUR = 28.8;
 // Content of a section starts while it scrolls in.
 const B = S.map((v, i) => (i ? v - 0.9 : v));
 
@@ -37,185 +37,262 @@ const Fade: React.FC<{at: number; d?: number; y?: number; style?: React.CSSPrope
 };
 
 const Eyebrow: React.FC<{at: number; color: string; text: string}> = ({at, color, text}) => (
-  <Fade at={at} style={{display: 'flex', alignItems: 'center', gap: 14, fontFamily: MONO, fontSize: 22, letterSpacing: '0.14em', color: K.dim}}>
-    <span style={{width: 11, height: 11, borderRadius: 6, background: color, boxShadow: `0 0 14px ${color}`}} />
+  <Fade at={at} style={{display: 'flex', alignItems: 'center', gap: 14, fontFamily: MONO, fontSize: 26, letterSpacing: '0.12em', color: K.dim}}>
+    <span style={{width: 12, height: 12, borderRadius: 6, background: color, boxShadow: `0 0 14px ${color}`}} />
     {text}
   </Fade>
 );
 
 const Head: React.FC<{at: number; size: number; children: React.ReactNode; style?: React.CSSProperties}> = ({at, size, children, style}) => (
-  <Fade at={at} y={26} style={{fontFamily: SANS, fontWeight: 600, fontSize: size, letterSpacing: '-0.035em', lineHeight: 1.04, color: K.white, marginTop: 22, ...style}}>
+  <Fade at={at} y={26} style={{fontFamily: SANS, fontWeight: 600, fontSize: size, letterSpacing: '-0.035em', lineHeight: 1.04, color: K.white, marginTop: 20, ...style}}>
     {children}
   </Fade>
 );
 
-const Mono: React.FC<{at: number; size?: number; color?: string; children: React.ReactNode; style?: React.CSSProperties}> = ({at, size = 24, color = K.dim, children, style}) => (
-  <Fade at={at} style={{fontFamily: MONO, fontSize: size, color, lineHeight: 1.45, ...style}}>{children}</Fade>
+const Tiny: React.FC<{at: number; children: React.ReactNode; style?: React.CSSProperties}> = ({at, children, style}) => (
+  <Fade at={at} style={{fontFamily: MONO, fontSize: 26, color: K.faint, letterSpacing: '0.04em', ...style}}>{children}</Fade>
 );
 
-// ---------- typing pane ----------
-type Line = {text: string; color?: string; out?: {to: number; color: string; suffix: string}};
-const Pane: React.FC<{at: number; lines: Line[]; size: number; foot: string}> = ({at, lines, size, foot}) => {
-  const {t, e} = useT();
-  const CPS = 46;
-  let cur = at + 0.5;
-  const starts = lines.map((l) => {
-    const s = cur;
-    cur += l.out ? 0.9 : l.text.length / CPS + 0.18;
-    return s;
-  });
-  const typingIdx = lines.findIndex((l, i) => !l.out && t >= starts[i] && t < starts[i] + l.text.length / CPS);
-  const lastStarted = starts.filter((s) => t >= s).length - 1;
+// Typed code line with a block cursor while typing.
+const Typed: React.FC<{at: number; text: string; color: string; size: number}> = ({at, text, color, size}) => {
+  const {t} = useT();
+  const CPS = 42;
+  const n = Math.max(0, Math.floor((t - at) * CPS));
+  const done = n >= text.length;
   const blink = Math.floor(t * 2.2) % 2 === 0;
+  if (t < at) return <div style={{height: size * 1.4}} />;
   return (
-    <Fade at={at} style={{border: `1px solid ${K.line}`, borderRadius: 14, background: '#0f0f10', overflow: 'hidden', marginTop: 34}}>
-      <div style={{display: 'flex', justifyContent: 'space-between', padding: '12px 22px', borderBottom: `1px solid ${K.line}`,
-        fontFamily: MONO, fontSize: 18, letterSpacing: '0.12em', color: K.faint}}>
-        <span>PSQL · PGBENCH</span><span>{foot}</span>
-      </div>
-      <div style={{padding: '18px 24px 22px', fontFamily: MONO, fontSize: size, lineHeight: 1.55}}>
-        {lines.map((l, i) => {
-          if (t < starts[i]) return <div key={i} style={{height: size * 1.55}} />;
-          if (l.out) {
-            const p = e(starts[i], 0.8);
-            return (
-              <div key={i} style={{color: l.out.color, fontWeight: 500, fontSize: size * 1.3, opacity: Math.min(1, p * 2), margin: '2px 0 8px'}}>
-                → {fmt(l.out.to * p)} {l.out.suffix}
-              </div>
-            );
-          }
-          const n = Math.floor((t - starts[i]) * CPS);
-          const shown = l.text.slice(0, n);
-          const cursor = (i === typingIdx || (typingIdx < 0 && i === lastStarted && !lines[i].out)) && blink;
-          return (
-            <div key={i} style={{color: l.color ?? K.white, whiteSpace: 'pre'}}>
-              {shown}
-              <span style={{display: 'inline-block', width: size * 0.6, height: size * 1.1, verticalAlign: 'text-bottom', background: cursor ? K.white : 'transparent'}} />
-            </div>
-          );
-        })}
-      </div>
-    </Fade>
-  );
-};
-
-// ---------- stat cells ----------
-type Cell = {big: string; color: string; cap: string};
-const Cells: React.FC<{at: number; cells: Cell[]; row: boolean; big: number; cap: number}> = ({at, cells, row, big, cap}) => {
-  const {e} = useT();
-  return (
-    <div style={{display: 'flex', flexDirection: row ? 'row' : 'column', border: `1px solid ${K.line}`, borderRadius: 14, marginTop: 40, overflow: 'hidden'}}>
-      {cells.map((c, i) => {
-        const p = e(at + i * 0.35, 0.8);
-        return (
-          <div key={i} style={{flex: 1, padding: row ? '34px 34px 30px' : '26px 34px 24px', opacity: p, transform: `translateY(${(1 - p) * 16}px)`,
-            borderLeft: row && i ? `1px dashed ${K.line}` : 'none', borderTop: !row && i ? `1px dashed ${K.line}` : 'none',
-            display: 'flex', flexDirection: row ? 'column' : 'row', alignItems: row ? 'flex-start' : 'center', gap: row ? 14 : 34}}>
-            <div style={{fontFamily: SANS, fontWeight: 600, fontSize: big, letterSpacing: '-0.04em', lineHeight: 1, color: c.color, minWidth: row ? 0 : big * 2.3}}>{c.big}</div>
-            <div style={{fontFamily: MONO, fontSize: cap, letterSpacing: '0.06em', lineHeight: 1.45, color: K.dim, textTransform: 'uppercase'}}>{c.cap}</div>
-          </div>
-        );
-      })}
+    <div style={{fontFamily: MONO, fontSize: size, lineHeight: 1.4, color: K.white, whiteSpace: 'pre'}}>
+      <span style={{color}}>=# </span>{text.slice(0, n)}
+      <span style={{display: 'inline-block', width: size * 0.58, height: size * 1.1, verticalAlign: 'text-bottom',
+        background: !done || t - at - text.length / CPS < 0.6 ? (blink ? K.white : 'transparent') : 'transparent'}} />
     </div>
   );
 };
 
-// ---------- isometric invalidation queue ----------
-const IsoQueue: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
+// ---------- section 1: the race (bars to true scale) ----------
+const Race: React.FC<{at: number; w: number}> = ({at, w}) => {
   const {t, e} = useT();
-  const N = 64;
-  const cx = w * 0.28, cy = h * 0.6, rx = Math.min(w * 0.24, 250), ry = rx * 0.5, PH = rx * 0.17;
-  const fill = interpolate(t, [at + 1.0, at + 4.4], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
-  const head = Math.floor(fill * N);
+  const MAX = 88531;
+  // Both bars grow at the same rate in TPS: the temp-table bar stops almost at once.
+  const r0 = at + 2.6, rd = 1.8;
+  const k = interpolate(t, [r0, r0 + rd], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+  const v = (x: number) => Math.min(x, MAX * k);
+  const BH = 76;
+  const bar = (val: number, color: string, label: string, inside: boolean) => {
+    const bw = (w * v(val)) / MAX;
+    return (
+      <div style={{position: 'relative', height: BH, background: K.track, borderRadius: 10, marginTop: 14}}>
+        <div style={{position: 'absolute', left: 0, top: 0, height: BH, width: Math.max(bw, k > 0 ? 6 : 0), background: color, borderRadius: 10,
+          boxShadow: `0 0 26px ${color}55`}} />
+        <div style={{position: 'absolute', top: 0, height: BH, display: 'flex', alignItems: 'center', fontFamily: SANS, fontWeight: 600, fontSize: 40,
+          letterSpacing: '-0.02em', opacity: e(r0, 0.4), whiteSpace: 'nowrap',
+          ...(inside && bw > 420 ? {right: w - bw + 22, color: '#06210F'} : {left: Math.max(bw, 6) + 18, color})}}>
+          {fmt(v(val))} <span style={{fontSize: 26, fontFamily: MONO, marginLeft: 10, opacity: 0.85}}>TPS</span>
+        </div>
+      </div>
+    );
+  };
+  const punch = e(r0 + rd + 0.2, 0.6);
+  return (
+    <div>
+      <Typed at={at} text="create temp table t …; drop table t;" color={K.red} size={30} />
+      {bar(3931, K.red, '', false)}
+      <div style={{height: 34}} />
+      <Typed at={at + 1.2} text="with t as (…) select …;" color={K.green} size={30} />
+      {bar(88531, K.green, '', true)}
+      <div style={{display: 'flex', alignItems: 'baseline', gap: 20, marginTop: 36, opacity: punch, transform: `scale(${0.9 + 0.1 * punch})`, transformOrigin: 'left center'}}>
+        <span style={{fontFamily: SANS, fontWeight: 700, fontSize: 120, letterSpacing: '-0.05em', color: K.red, lineHeight: 1}}>23×</span>
+        <span style={{fontFamily: SANS, fontWeight: 600, fontSize: 52, letterSpacing: '-0.03em', color: K.white}}>slower</span>
+      </div>
+    </div>
+  );
+};
+
+// ---------- section 2: the queue, filled 114 messages per transaction ----------
+const Queue: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
+  const {t, e} = useT();
+  // 108 pillars x ~38 slots = 4,096; one create + drop (~114 messages) = 3 pillars; 36 transactions fill the ring.
+  const N = 108, PER = 3, TX = 36;
+  const cx = w * 0.3, cy = h * 0.5, rx = Math.min(w * 0.27, 236), ry = rx * 0.5, PH = rx * 0.19;
+  // First transaction slowly, then the rest accelerate.
+  const d0 = at + 1.3, d1 = d0 + 1.1, d2 = d1 + 2.6;
+  const tx = t < d1 ? (t >= d0 ? 1 : 0) : 1 + Math.floor(interpolate(t, [d1, d2], [0, TX - 1], {...clamp, easing: Easing.in(Easing.quad)}) + 1e-6);
+  const lit = tx * PER;
+  const last = (n: number) => n >= lit - PER && n < lit;
+  const full = tx >= TX;
   const pillars = Array.from({length: N}, (_, i) => {
     const a = (i / N) * Math.PI * 2 - Math.PI / 2;
     return {i, x: cx + Math.cos(a) * rx, y: cy + Math.sin(a) * ry};
   }).sort((p, q) => p.y - q.y);
-  // session grid (isometric tiles)
-  const G = 13, s = Math.min(w * 0.0185, 19);
-  const ox = w * 0.74, oy = cy - G * s * 0.5;
+  // the first chunk falling into the ring
+  const fall = interpolate(t, [d0 - 0.7, d0], [0, 1], {...clamp, easing: Easing.in(Easing.cubic)});
+  // session grid
+  const G = 11, s = 17;
+  const ox = w * 0.8, oy = cy - G * s * 0.5;
   const tiles: React.ReactNode[] = [];
   for (let r = 0; r < G; r++) for (let c = 0; c < G; c++) {
     const x = ox + (c - r) * s, y = oy + (c + r) * s * 0.5;
-    const ph = ((t - at - 1.0) * 1.4 - (r + c) / (2 * G)) % 1;
-    const k = t > at + 1.0 && ph > 0 && ph < 0.3 ? 1 - ph / 0.3 : 0;
-    const col = k > 0 ? K.orange : 'rgba(124,196,255,0.30)';
+    const ph = ((t - d0) * 1.4 - (r + c) / (2 * G)) % 1;
+    const kk = t > d0 && ph > 0 && ph < 0.3 ? 1 - ph / 0.3 : 0;
+    const col = kk > 0 ? K.orange : 'rgba(124,196,255,0.32)';
     tiles.push(<path key={`${r}-${c}`} d={`M${x},${y - s * 0.42} L${x + s * 0.84},${y} L${x},${y + s * 0.42} L${x - s * 0.84},${y} Z`}
-      fill={k > 0 ? col : 'none'} fillOpacity={0.25 + 0.6 * k} stroke={col} strokeWidth={1.4} opacity={0.6 + 0.4 * k} />);
+      fill={kk > 0 ? col : 'none'} fillOpacity={0.25 + 0.6 * kk} stroke={col} strokeWidth={1.4} opacity={0.6 + 0.4 * kk} />);
   }
-  const vis = e(at + 0.4, 0.9);
+  const vis = e(at + 0.3, 0.9);
+  // first chunk: 3 pillars at the top of the ring
+  const a0 = -Math.PI / 2 + (1.5 / N) * Math.PI * 2;
+  const tx0 = cx + Math.cos(a0) * rx, ty0 = cy + Math.sin(a0) * ry - PH;
   return (
-    <svg width={w} height={h} style={{display: 'block', opacity: vis}}>
+    <svg width={w} height={h} style={{display: 'block', opacity: vis, overflow: 'visible'}}>
       <defs>
-        <filter id="glow" filterUnits="userSpaceOnUse" x={0} y={0} width={w} height={h}><feGaussianBlur stdDeviation="4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+        <filter id="glow" filterUnits="userSpaceOnUse" x={-100} y={-200} width={w + 200} height={h + 400}><feGaussianBlur stdDeviation="4" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
       </defs>
       <ellipse cx={cx} cy={cy} rx={rx} ry={ry} fill="none" stroke="rgba(255,255,255,0.10)" strokeWidth={1.5} strokeDasharray="3 7" />
-      <ellipse cx={cx} cy={cy - PH} rx={rx} ry={ry} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth={1.2} />
       {pillars.map((p) => {
-        const lit = p.i < head, isHead = p.i === head;
-        const col = isHead ? K.white : lit ? K.orange : 'rgba(255,255,255,0.20)';
-        return <line key={p.i} x1={p.x} y1={p.y} x2={p.x} y2={p.y - PH} stroke={col} strokeWidth={lit || isHead ? 5 : 3.5} strokeLinecap="round"
-          filter={lit || isHead ? 'url(#glow)' : undefined} />;
+        const isLit = p.i < lit;
+        const col = isLit ? (last(p.i) ? K.white : full ? K.red : K.orange) : 'rgba(255,255,255,0.20)';
+        return <line key={p.i} x1={p.x} y1={p.y} x2={p.x} y2={p.y - PH} stroke={col} strokeWidth={isLit ? 5 : 3.5} strokeLinecap="round"
+          filter={isLit ? 'url(#glow)' : undefined} />;
       })}
       <g filter="url(#glow)">{tiles}</g>
-      {/* a message travelling from the queue to the sessions */}
-      {t > at + 1.0 && (() => {
-        const ph = ((t - at - 1.0) * 1.4) % 1;
-        const x0 = cx + rx * 0.9, y0 = cy - PH, x1 = ox - G * s * 0.4, y1 = oy + G * s * 0.25;
-        const qx = (x0 + x1) / 2, qy = Math.min(y0, y1) - h * 0.18;
+      {/* the first create + drop chunk falls in */}
+      {t < d0 + 0.2 && t > d0 - 0.9 && (
+        <g opacity={interpolate(t, [d0 - 0.9, d0 - 0.6, d0, d0 + 0.2], [0, 1, 1, 0], clamp)}>
+          {[-1, 0, 1].map((j) => <line key={j} x1={tx0 + j * 13} x2={tx0 + j * 13} y1={ty0 - 170 + fall * 170} y2={ty0 - 170 + fall * 170 + PH}
+            stroke={K.white} strokeWidth={5} strokeLinecap="round" filter="url(#glow)" />)}
+        </g>
+      )}
+      <text x={cx} y={cy + 8} textAnchor="middle" fill={K.white} fontFamily={SANS} fontWeight={600} fontSize={74} letterSpacing="-2">4,096</text>
+      <text x={cx} y={cy + 44} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={24} letterSpacing="2">SLOTS</text>
+      <text x={ox} y={oy - s * 1.4} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={24} letterSpacing="2">SESSIONS</text>
+      {/* message path to the sessions */}
+      {t > d0 && (() => {
+        const ph = ((t - d0) * 1.4) % 1;
+        const x0 = cx + rx * 0.95, y0 = cy - PH, x1 = ox - G * s * 0.55, y1 = oy + G * s * 0.3;
+        const qx = (x0 + x1) / 2, qy = Math.min(y0, y1) - 70;
         const bx = (1 - ph) ** 2 * x0 + 2 * (1 - ph) * ph * qx + ph ** 2 * x1;
         const by = (1 - ph) ** 2 * y0 + 2 * (1 - ph) * ph * qy + ph ** 2 * y1;
-        return (
-          <g>
-            <path d={`M${x0},${y0} Q${qx},${qy} ${x1},${y1}`} fill="none" stroke="rgba(255,138,61,0.35)" strokeWidth={1.5} strokeDasharray="4 6" />
-            <circle cx={bx} cy={by} r={6} fill={K.orange} filter="url(#glow)" />
-          </g>
-        );
+        return <g><path d={`M${x0},${y0} Q${qx},${qy} ${x1},${y1}`} fill="none" stroke="rgba(255,138,61,0.35)" strokeWidth={1.5} strokeDasharray="4 6" />
+          <circle cx={bx} cy={by} r={6} fill={K.orange} filter="url(#glow)" /></g>;
       })()}
-      <text x={cx} y={cy + 4} textAnchor="middle" fill={K.white} fontFamily={SANS} fontWeight={600} fontSize={rx * 0.34} letterSpacing="-2">4,096</text>
-      <text x={cx} y={cy + rx * 0.17} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={17} letterSpacing="2.5">SLOTS</text>
-      <text x={cx} y={cy - ry - PH - 26} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={18} letterSpacing="2.5">ONE SHARED QUEUE</text>
-      <text x={ox} y={oy - s * 1.6} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={18} letterSpacing="2.5">ALL SESSIONS</text>
     </svg>
   );
 };
 
-// ---------- cliff chart ----------
+// Legend under the ring: the chunk, then the transaction count.
+const QueueLegend: React.FC<{at: number}> = ({at}) => {
+  const {t, e} = useT();
+  const d0 = at + 1.3, d1 = d0 + 1.1, d2 = d1 + 2.6;
+  const tx = t < d1 ? (t >= d0 ? 1 : 0) : 1 + Math.floor(interpolate(t, [d1, d2], [0, 35], {...clamp, easing: Easing.in(Easing.quad)}) + 1e-6);
+  const chip = (c: string) => <span style={{display: 'inline-block', width: 7, height: 34, borderRadius: 4, background: c, marginRight: 6, boxShadow: `0 0 10px ${c}`}} />;
+  return (
+    <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 38, color: K.white, letterSpacing: '-0.02em'}}>
+      <div style={{display: 'flex', alignItems: 'center', gap: 18, opacity: e(d0 - 0.8)}}>
+        <span>{chip(K.white)}{chip(K.white)}{chip(K.white)}</span>
+        <span>1 create + drop ≈ <span style={{color: K.orange}}>114 messages</span></span>
+      </div>
+      <div style={{display: 'flex', alignItems: 'center', gap: 18, marginTop: 18, opacity: e(d1)}}>
+        <span style={{fontFamily: MONO, fontSize: 34, color: tx >= 36 ? K.red : K.orange, minWidth: 128}}>× {tx}</span>
+        <span>{tx >= 36 ? <>transactions: <span style={{color: K.red}}>queue full</span></> : 'transactions'}</span>
+      </div>
+    </div>
+  );
+};
+
+// ---------- section 3: the cliff + the 91% share ----------
 const Cliff: React.FC<{at: number; w: number; h: number}> = ({at, w, h}) => {
   const {e} = useT();
   const pts = [[0, 502], [1000, 502], [3000, 274], [5000, 127]];
-  const L = 70, R = w - 70, T = 70, B = h - 70;
+  const L = 92, R = w - 30, T = 80, Bt = h - 92;
   const X = (v: number) => L + ((R - L) * v) / 5000;
-  const Y = (v: number) => B - ((B - T) * v) / 560;
-  const draw = e(at + 0.6, 2.2);
+  const Y = (v: number) => Bt - ((Bt - T) * v) / 560;
+  const draw = e(at + 0.9, 2.2);
   const d = pts.map((p, i) => `${i ? 'L' : 'M'}${X(p[0])},${Y(p[1])}`).join(' ');
   const len = 2000;
   const cols = [K.green, K.green, K.yellow, K.red];
   return (
-    <svg width={w} height={h} style={{display: 'block'}}>
+    <svg width={w} height={h} style={{display: 'block', overflow: 'visible'}}>
       <defs>
         <linearGradient id="lg" x1="0" x2="1" y1="0" y2="0"><stop offset="0.2" stopColor={K.green} /><stop offset="0.6" stopColor={K.yellow} /><stop offset="1" stopColor={K.red} /></linearGradient>
-        <filter id="glow2" filterUnits="userSpaceOnUse" x={0} y={0} width={w} height={h}><feGaussianBlur stdDeviation="5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
+        <filter id="glow2" filterUnits="userSpaceOnUse" x={-100} y={-100} width={w + 200} height={h + 200}><feGaussianBlur stdDeviation="5" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
       </defs>
-      {[0, 250, 500].map((v) => (
-        <g key={v} opacity={e(at + 0.3)}>
-          <line x1={L} x2={R} y1={Y(v)} y2={Y(v)} stroke="rgba(255,255,255,0.10)" strokeDasharray="2 8" strokeWidth={1.5} />
-          <text x={L - 14} y={Y(v) + 6} textAnchor="end" fill={K.faint} fontFamily={MONO} fontSize={17}>{v}</text>
-        </g>
-      ))}
-      <path d={d} fill="none" stroke="url(#lg)" strokeWidth={5} strokeLinejoin="round" strokeDasharray={len} strokeDashoffset={len * (1 - draw)} filter="url(#glow2)" />
+      <g opacity={e(at + 0.4)}>
+        {[0, 250, 500].map((v) => (
+          <g key={v}>
+            <line x1={L} x2={R} y1={Y(v)} y2={Y(v)} stroke="rgba(255,255,255,0.12)" strokeDasharray="2 8" strokeWidth={1.5} />
+            <text x={L - 16} y={Y(v) + 9} textAnchor="end" fill={K.dim} fontFamily={MONO} fontSize={26}>{v}</text>
+          </g>
+        ))}
+        <text x={L - 16} y={T - 34} textAnchor="end" fill={K.dim} fontFamily={MONO} fontSize={26}>TPS</text>
+        {pts.map((p, i) => (
+          <text key={i} x={X(p[0])} y={Bt + 46} textAnchor={i === 0 ? 'start' : i === 3 ? 'end' : 'middle'} fill={K.dim} fontFamily={MONO} fontSize={28}>{fmt(p[0])}</text>
+        ))}
+        <text x={(L + R) / 2} y={Bt + 88} textAnchor="middle" fill={K.dim} fontFamily={MONO} fontSize={26} letterSpacing="1">idle sessions</text>
+      </g>
+      <path d={d} fill="none" stroke="url(#lg)" strokeWidth={6} strokeLinejoin="round" strokeDasharray={len} strokeDashoffset={len * (1 - draw)} filter="url(#glow2)" />
       {pts.map((p, i) => {
-        const appear = e(at + 0.6 + (2.2 * X(p[0]) - L) / (R - L) * 0.9 + 0.1, 0.6);
-        const anchor = i === 0 ? 'start' : i === 3 ? 'end' : 'middle';
+        const appear = e(at + 0.9 + ((X(p[0]) - L) / (R - L)) * 1.6, 0.6);
+        if (i === 1) return <circle key={i} cx={X(p[0])} cy={Y(p[1])} r={10} fill={K.bg} stroke={cols[i]} strokeWidth={4} opacity={appear} />;
+        const lx = i === 0 ? (X(0) + X(1000)) / 2 : X(p[0]) + (i === 3 ? 8 : 0);
         return (
           <g key={i} opacity={appear}>
-            <circle cx={X(p[0])} cy={Y(p[1])} r={9} fill={K.bg} stroke={cols[i]} strokeWidth={4} />
-            {i !== 1 && <text x={i === 0 ? (X(0) + X(1000)) / 2 : X(p[0]) + (i === 3 ? 6 : 0)} y={Y(p[1]) - 26} textAnchor={i === 0 ? 'middle' : anchor} fill={cols[i]} fontFamily={SANS} fontWeight={600} fontSize={52} letterSpacing="-1.5">{fmt(p[1] * appear)}</text>}
-            <text x={X(p[0])} y={B + 40} textAnchor={anchor} fill={K.dim} fontFamily={MONO} fontSize={21}>{fmt(p[0])}</text>
+            <circle cx={X(p[0])} cy={Y(p[1])} r={10} fill={K.bg} stroke={cols[i]} strokeWidth={4} />
+            <text x={lx} y={Y(p[1]) - 28} textAnchor={i === 0 ? 'middle' : i === 3 ? 'end' : 'middle'} fill={cols[i]} fontFamily={SANS} fontWeight={600} fontSize={50} letterSpacing="-1.5">
+              {fmt(p[1] * appear)}<tspan fontFamily={MONO} fontSize={26} fontWeight={400} dx={8}>TPS</tspan>
+            </text>
           </g>
         );
       })}
     </svg>
+  );
+};
+
+const Share: React.FC<{at: number; w: number}> = ({at, w}) => {
+  const {e} = useT();
+  const g = e(at, 1.1);
+  const BH = 70;
+  return (
+    <div style={{opacity: e(at - 0.3, 0.5)}}>
+      <div style={{fontFamily: SANS, fontWeight: 600, fontSize: 34, color: K.white, letterSpacing: '-0.02em'}}>
+        DDL sessions' time at 5,000 idle
+      </div>
+      <div style={{position: 'relative', height: BH, marginTop: 16, borderRadius: 10, overflow: 'hidden', background: K.track}}>
+        <div style={{position: 'absolute', left: 0, top: 0, height: BH, width: w * 0.91 * g, background: K.red, boxShadow: `0 0 26px ${K.red}55`}} />
+        <div style={{position: 'absolute', left: w * 0.91 * g + 3, top: 0, height: BH, width: w * 0.09 * g, background: 'rgba(255,255,255,0.28)'}} />
+        <div style={{position: 'absolute', left: 22, top: 0, height: BH, display: 'flex', alignItems: 'center', gap: 16, opacity: e(at + 0.6, 0.5),
+          fontFamily: SANS, fontWeight: 700, fontSize: 44, color: '#2A0904'}}>
+          {Math.round(91 * g)}%<span style={{fontFamily: MONO, fontWeight: 500, fontSize: 28}}>LWLock:SInvalWrite</span>
+        </div>
+      </div>
+      <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: 10, opacity: e(at + 0.8, 0.5), fontFamily: MONO, fontSize: 26, color: K.dim}}>
+        9% everything else
+      </div>
+    </div>
+  );
+};
+
+
+// "$ listen postgres.fm" -> backspace "listen" -> "watch": the podcast is a video now.
+const Joke: React.FC<{at: number}> = ({at}) => {
+  const {t} = useT();
+  const a = t - at;
+  const rest = ' postgres.fm';
+  let pre = '', post = '';
+  if (a < 0) pre = '';
+  else if (a < 0.8) pre = ('listen' + rest).slice(0, Math.ceil((a / 0.8) * 18));
+  else if (a < 1.3) pre = 'listen' + rest;
+  else if (a < 1.7) { pre = 'listen'.slice(0, 6 - Math.floor(((a - 1.3) / 0.4) * 6)); post = rest; }
+  else if (a < 2.1) { pre = 'watch'.slice(0, Math.floor(((a - 1.7) / 0.4) * 5)); post = rest; }
+  else pre = 'watch' + rest;
+  const editing = a >= 1.3 && a < 2.1;
+  const on = editing || Math.floor(t * 2.2) % 2 === 0;
+  return (
+    <span>
+      <span style={{color: K.green}}>$ </span>{pre}
+      <span style={{display: 'inline-block', width: 26, height: 48, verticalAlign: 'text-bottom', background: on ? K.white : 'transparent', opacity: editing ? 0.85 : 1}} />
+      {post}
+    </span>
   );
 };
 
@@ -248,7 +325,7 @@ const Wallpaper: React.FC<{W: number; H: number}> = ({W, H}) => {
   );
 };
 
-// ---------- main ----------
+// ---------- main (portrait; landscape uses the same sections, wider) ----------
 export const Win196: React.FC<{fmt: Fmt}> = ({fmt: F}) => {
   const {t, e} = useT();
   const {width: W, height: H} = useVideoConfig();
@@ -258,12 +335,10 @@ export const Win196: React.FC<{fmt: Fmt}> = ({fmt: F}) => {
   const cw = win.w, ch = win.h - BAR;
   const pad = P ? 60 : 84;
   const inner = cw - 2 * pad;
-  // scroll: one section per window height
   const scroll = S.slice(1).reduce((acc, b) => acc + e(b - 0.45, 1.0), 0) * ch;
-  const head = P ? 86 : 92;
-  const sec = (i: number, children: React.ReactNode, justify: 'flex-start' | 'center' = 'flex-start') => (
-    <div style={{position: 'absolute', left: 0, top: i * ch, width: cw, height: ch, padding: `${P ? 64 : 58}px ${pad}px`, boxSizing: 'border-box',
-      display: 'flex', flexDirection: 'column', justifyContent: P ? 'center' : justify}}>{children}</div>
+  const sec = (i: number, children: React.ReactNode) => (
+    <div style={{position: 'absolute', left: 0, top: i * ch, width: cw, height: ch, padding: `56px ${pad}px 52px`, boxSizing: 'border-box',
+      display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>{children}</div>
   );
   const winIn = e(0, 0.9);
   return (
@@ -274,81 +349,73 @@ export const Win196: React.FC<{fmt: Fmt}> = ({fmt: F}) => {
         opacity: winIn, transform: `translateY(${(1 - winIn) * 30}px) scale(${0.98 + 0.02 * winIn})`}}>
         <div style={{height: BAR, display: 'flex', alignItems: 'center', padding: '0 20px', borderBottom: `1px solid ${K.line}`, position: 'relative', background: '#111113'}}>
           {['#FF5F57', '#FEBC2E', '#28C840'].map((c) => <span key={c} style={{width: 14, height: 14, borderRadius: 7, background: c, marginRight: 9}} />)}
-          <div style={{position: 'absolute', left: 0, right: 0, textAlign: 'center', fontFamily: MONO, fontSize: 17, color: K.faint, letterSpacing: '0.04em'}}>
+          <div style={{position: 'absolute', left: 0, right: 0, textAlign: 'center', fontFamily: MONO, fontSize: 20, color: K.faint, letterSpacing: '0.04em'}}>
             postgres.fm — episode 196
           </div>
         </div>
         <div style={{position: 'relative', width: cw, height: ch, overflow: 'hidden'}}>
           <div style={{position: 'absolute', left: 0, top: -scroll, width: cw}}>
             {sec(0, <>
-              <Eyebrow at={0.5} color={K.green} text="POSTGRES.FM · EPISODE 196" />
-              <Head at={0.7} size={head}>CREATE TEMP TABLE<br />is not free.</Head>
-              <Mono at={1.1} size={P ? 25 : 26} style={{marginTop: 22}}>one created and dropped in every transaction,<br />vs. the same query as a CTE</Mono>
-              <Pane at={1.4} size={P ? 30 : 28} foot="PG17 · 16 VCPU · 32 CLIENTS" lines={[
-                {text: '-- temp table, every transaction', color: K.faint},
-                {text: 'create temp table t as select ...;'},
-                {text: 'drop table t;'},
-                {text: '', out: {to: 3931, color: K.red, suffix: 'tx/s'}},
-                {text: '-- the same query as a CTE', color: K.faint},
-                {text: 'with t as (select ...) select ...;'},
-                {text: '', out: {to: 88531, color: K.green, suffix: 'tx/s'}},
-              ]} />
+              <div>
+                <Eyebrow at={0.5} color={K.green} text="POSTGRES.FM · EPISODE 196" />
+                <Head at={0.7} size={86}>CREATE TEMP TABLE<br />is not free.</Head>
+              </div>
+              <Race at={1.5} w={inner} />
+              <Tiny at={2.0}>PG17 · 16 vCPU · 32 clients · synthetic</Tiny>
             </>)}
             {sec(1, <>
-              <Eyebrow at={B[1] + 0.2} color={K.yellow} text="RESULTS · SYNTHETIC WORKLOAD" />
-              <Head at={B[1] + 0.35} size={head}>23× slower<br />in hot code.</Head>
-              <Cells at={B[1] + 0.8} row={!P} big={P ? 100 : 104} cap={P ? 21 : 20} cells={[
-                {big: '23×', color: K.red, cap: 'temp table vs CTE,\ntx/s, PG17'.replace('\n', ' ')},
-                {big: '4,096', color: K.yellow, cap: 'slots in the shared invalidation queue'},
-                {big: '91%', color: K.orange, cap: 'of DDL sessions’ active time on LWLock:SInvalWrite at 5,000 idle, PG18'},
-              ]} />
-              <Mono at={B[1] + 2.0} size={19} color={K.faint} style={{marginTop: 26, letterSpacing: '0.08em'}}>16 VCPU · MEASURED WITH DBLAB FORGE</Mono>
+              <div>
+                <Eyebrow at={B[1] + 0.2} color={K.orange} text="WHY" />
+                <Head at={B[1] + 0.35} size={70}>Every CREATE and DROP<br />fills one shared queue.</Head>
+              </div>
+              <Queue at={B[1]} w={inner} h={480} />
+              <QueueLegend at={B[1]} />
+              <Tiny at={B[1] + 1.0}>schematic · every session must read every message</Tiny>
             </>)}
             {sec(2, <>
-              <Eyebrow at={B[2] + 0.2} color={K.orange} text="WHY · SHARED INVALIDATION" />
-              <Head at={B[2] + 0.35} size={P ? 70 : 72}>Every CREATE and DROP<br />is catalog DDL.</Head>
-              <div style={{marginTop: P ? 30 : 22}}><IsoQueue at={B[2]} w={inner} h={P ? 520 : 400} /></div>
-              <div style={{marginTop: P ? 10 : 0}}>
-                {[[K.orange, '~114 messages per create + drop'], [K.blue, 'every session must read every message'], [K.red, 'writers queue on SInvalWriteLock']].map(([c, s], i) => (
-                  <Mono key={i} at={B[2] + 1.6 + i * 0.9} size={P ? 27 : 26} color={K.white} style={{display: 'flex', alignItems: 'center', gap: 16, marginTop: 6}}>
-                    <span style={{color: c}}>■</span>{s}
-                  </Mono>
-                ))}
+              <div>
+                <Eyebrow at={B[2] + 0.2} color={K.red} text="IDLE SESSIONS" />
+                <Head at={B[2] + 0.35} size={80}>Idle sessions<br />are not free.</Head>
+                <Fade at={B[2] + 0.5} style={{fontFamily: MONO, fontSize: 28, color: K.dim, marginTop: 14}}>temp-table DDL, TPS</Fade>
               </div>
+              <Cliff at={B[2]} w={inner} h={470} />
+              <Share at={B[2] + 3.4} w={inner} />
+              <Tiny at={B[2] + 0.8}>PG18 · 16 vCPU · synthetic</Tiny>
             </>)}
             {sec(3, <>
-              <Eyebrow at={B[3] + 0.2} color={K.red} text="IDLE SESSIONS · PG18 · 16 VCPU" />
-              <Head at={B[3] + 0.35} size={head}>Idle sessions<br />are not free.</Head>
-              <Mono at={B[3] + 0.6} size={P ? 24 : 24} style={{marginTop: 18}}>DDL tx/s at a 500 tx/s target, by idle sessions</Mono>
-              <div style={{marginTop: P ? 40 : 10}}><Cliff at={B[3]} w={inner} h={P ? 560 : 400} /></div>
-              <Mono at={B[3] + 3.0} size={P ? 24 : 23} color={K.red} style={{textAlign: 'right'}}>at 5,000: 91% of active time on LWLock:SInvalWrite</Mono>
+              <div>
+                <Eyebrow at={B[3] + 0.2} color={K.green} text="THE FIX" />
+                <Head at={B[3] + 0.35} size={86}>No temp tables<br />in hot code.</Head>
+              </div>
+              <div>
+                {['CTE', 'arrays', 'PL/pgSQL records'].map((c, i) => (
+                  <Fade key={c} at={B[3] + 0.9 + i * 0.3} style={{display: 'flex', alignItems: 'center', gap: 24, padding: '30px 0',
+                    borderTop: `1px dashed ${K.line}`, borderBottom: i === 2 ? `1px dashed ${K.line}` : 'none'}}>
+                    <span style={{width: 16, height: 16, borderRadius: 8, background: K.green, boxShadow: `0 0 14px ${K.green}`}} />
+                    <span style={{fontFamily: SANS, fontWeight: 600, fontSize: 64, letterSpacing: '-0.03em', color: K.green}}>{c}</span>
+                  </Fade>
+                ))}
+              </div>
+              <Tiny at={B[3] + 1.6}>instead of a temp table per transaction</Tiny>
             </>)}
             {sec(4, <>
-              <Eyebrow at={B[4] + 0.2} color={K.green} text="THE FIX" />
-              <Head at={B[4] + 0.35} size={head}>No temp tables<br />in hot code.</Head>
-              <Fade at={B[4] + 0.7} style={{marginTop: 26, fontFamily: MONO, fontSize: P ? 30 : 30, color: K.faint, position: 'relative', alignSelf: 'flex-start'}}>
-                create temp table t ...;
-                <div style={{position: 'absolute', left: -6, top: '52%', height: 3, background: K.red, width: `calc(${e(B[4] + 1.0, 0.5) * 100}% + 12px)`}} />
-              </Fade>
-              <Cells at={B[4] + 1.2} row={!P} big={P ? 60 : 62} cap={P ? 21 : 20} cells={[
-                {big: 'CTE', color: K.green, cap: 'with t as (...) select ...'},
-                {big: 'arrays', color: K.green, cap: 'array_agg() / unnest()'},
-                {big: 'PL/pgSQL', color: K.green, cap: 'records: keep rows in variables'},
-              ]} />
+              <div />
+              <div>
+                <Eyebrow at={B[4] + 0.2} color={K.green} text="NEW EPISODE" />
+                <Head at={B[4] + 0.35} size={120}>Postgres.FM #196</Head>
+                <Fade at={B[4] + 0.6} style={{fontFamily: SANS, fontWeight: 500, fontSize: 50, lineHeight: 1.15, letterSpacing: '-0.025em', color: K.white, marginTop: 26}}>
+                  The hidden costs of<br />CREATE TEMP TABLE
+                </Fade>
+                <Fade at={B[4] + 0.8} style={{fontFamily: SANS, fontWeight: 500, fontSize: 42, letterSpacing: '-0.02em', color: K.dim, marginTop: 18}}>
+                  with Kirk Wolak
+                </Fade>
+                <Fade at={B[4] + 1.0} style={{marginTop: 60, display: 'inline-block', border: `1px solid ${K.line}`, borderRadius: 12, padding: '20px 28px',
+                  fontFamily: MONO, fontSize: 44, color: K.white, background: '#0f0f10', whiteSpace: 'pre'}}>
+                  <Joke at={B[4] + 1.5} />
+                </Fade>
+              </div>
+              <div />
             </>)}
-            {sec(5, <>
-              <Eyebrow at={B[5] + 0.2} color={K.green} text="NEW EPISODE" />
-              <Head at={B[5] + 0.35} size={P ? 110 : 120}>Postgres.FM #196</Head>
-              <Fade at={B[5] + 0.7} style={{fontFamily: SANS, fontWeight: 500, fontSize: P ? 46 : 48, letterSpacing: '-0.02em', color: K.dim, marginTop: 18}}>
-                The hidden costs of CREATE TEMP TABLE
-              </Fade>
-              <Mono at={B[5] + 0.95} size={P ? 28 : 28} color={K.white} style={{marginTop: 22}}>with Kirk Wolak</Mono>
-              <Fade at={B[5] + 1.3} style={{marginTop: 60, alignSelf: 'flex-start', border: `1px solid ${K.line}`, borderRadius: 12, padding: '18px 26px',
-                fontFamily: MONO, fontSize: P ? 36 : 36, color: K.white, background: '#0f0f10'}}>
-                <span style={{color: K.green}}>$ </span>{'open postgres.fm'.slice(0, Math.max(0, Math.floor((t - B[5] - 1.6) * 16)))}
-                <span style={{display: 'inline-block', width: 20, height: 38, marginLeft: 2, verticalAlign: 'text-bottom', background: Math.floor(t * 2.2) % 2 === 0 ? K.white : 'transparent'}} />
-              </Fade>
-            </>, 'center')}
           </div>
         </div>
       </div>
