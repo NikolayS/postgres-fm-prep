@@ -50,7 +50,7 @@ Times are podcast times of the first mention.
 
 ### Other
 
-- [00:24:39] Linux performance tools (Brendan Gregg): https://www.brendangregg.com/linuxperf.html
+- [00:24:39] Linux Performance Tools, talk (Brendan Gregg): https://youtu.be/FJW8nGV4jxY
 - [00:36:41] Don't Do This: Don't create temporary tables in frequently executed code (PostgreSQL wiki): https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_create_temporary_tables_in_frequently_executed_code
 
 ~~~

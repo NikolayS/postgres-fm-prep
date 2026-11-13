@@ -31,7 +31,7 @@ Key links (video time of the first mention):
 * sinvaladt.c: MAXNUMMESSAGES = 4096 (18:32) https://github.com/postgres/postgres/blob/3d342deeb433060dbea02fdd276656a5563275d5/src/backend/storage/ipc/sinvaladt.c
 * Increase the number of fast-path lock slots, Tomas Vondra, Postgres 18 (19:10) https://github.com/postgres/postgres/commit/c4d5cb71d229095a39fda1121a75ee40e6069a2a
 * pg_ash, active session history for Postgres (24:33) https://github.com/NikolayS/pg_ash
-* Linux performance tools, Brendan Gregg (25:00) https://www.brendangregg.com/linuxperf.html
+* Linux Performance Tools, Brendan Gregg, talk (25:00) https://youtu.be/FJW8nGV4jxY
 * CREATE TABLE, ON COMMIT, docs (27:35) https://www.postgresql.org/docs/current/sql-createtable.html#SQL-CREATETABLE-PARMS-ON-COMMIT
 * Rewrite the sinval messaging mechanism, Tom Lane, 2008 (36:04) https://github.com/postgres/postgres/commit/fad153ec45299bd4d4f29dec8d9e04e2f1c08148
 * Don't create temporary tables in frequently executed code, PostgreSQL wiki (37:02) https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_create_temporary_tables_in_frequently_executed_code
@@ -45,7 +45,7 @@ Related episodes:
 
 Subscribe for a new Postgres episode every Friday: https://www.youtube.com/@PostgresTV?sub_confirmation=1
 
-All links: https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+All links, and corrections checked against the Postgres source after recording: https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
 
 [Check out the subtitles – we edit them! YouTube auto-translates them from English to other languages; try it and share it with people interested in Postgres!]
 

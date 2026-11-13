@@ -23,7 +23,7 @@
     {"group": "Tools", "title": "PgBouncer, server_reset_query (default DISCARD ALL)", "url": "https://www.pgbouncer.org/config.html#server_reset_query", "at": "00:20:24"},
     {"group": "Tools", "title": "Amazon RDS Performance Insights", "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_PerfInsights.html", "at": "00:24:06", "special": true},
     {"group": "Tools", "title": "pg_ash, active session history for Postgres", "url": "https://github.com/NikolayS/pg_ash", "at": "00:24:12"},
-    {"group": "Other", "title": "Linux performance tools (Brendan Gregg)", "url": "https://www.brendangregg.com/linuxperf.html", "at": "00:24:39"},
+    {"group": "Other", "title": "Linux Performance Tools, talk (Brendan Gregg)", "url": "https://youtu.be/FJW8nGV4jxY", "at": "00:24:39"},
     {"group": "Other", "title": "Don't Do This: Don't create temporary tables in frequently executed code (PostgreSQL wiki)", "url": "https://wiki.postgresql.org/wiki/Don%27t_Do_This#Don.27t_create_temporary_tables_in_frequently_executed_code", "at": "00:36:41"}
   ]
 }
