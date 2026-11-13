@@ -2,6 +2,7 @@
 opts={
  'a':'<div class="l l1">TEMP TABLES</div><div class="l l2"><span class="o">23x</span> SLOWER?</div>',
  'b':'<div class="l l1">5,000 IDLE</div><div class="l l2"><span class="o">SESSIONS?</span></div>',
+ 'd':'<div class="l l1">HIDDEN COSTS OF</div><div class="l l2" style="font-size:132px;top:206px"><span class="o">CREATE TEMP TABLE</span></div>',
  'c':'<div class="l l1">DON\'T USE</div><div class="l l2"><span class="o">TEMP TABLES?</span></div>',
 }
 css='''@font-face{font-family:Imp;src:url(file:///System/Library/Fonts/Supplemental/Impact.ttf)}
