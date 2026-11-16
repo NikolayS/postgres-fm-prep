@@ -10,6 +10,7 @@ Research, study packs, experiment plans and recording notes for individual Postg
 | UUIDv4 vs UUIDv7 (#194) | Published 2026-10-30: [YouTube](https://www.youtube.com/watch?v=gf8e3JkQ_8M) · [postgres.fm](https://postgres.fm/episodes/uuidv4-vs-uuidv7) | [Episode overview](episodes/20261027-uuidv4-vs-uuidv7/README.md) · [Show notes](episodes/20261027-uuidv4-vs-uuidv7/show-notes.md) · [Illustrations](episodes/20261027-uuidv4-vs-uuidv7/illustrations.md) |
 | Extensions on demand (#195) | Published 2026-11-06: [YouTube](https://www.youtube.com/watch?v=7oeAAqU00zk) · [postgres.fm](https://postgres.fm/episodes/extensions-on-demand) | [Episode overview](episodes/20261104-extensions-on-demand/README.md) · [Show notes](episodes/20261104-extensions-on-demand/show-notes.md) · [Illustrations](episodes/20261104-extensions-on-demand/illustrations.md) · [Video](episodes/20261104-extensions-on-demand/video/README.md) · [Social](episodes/20261104-extensions-on-demand/social/README.md) |
 | The hidden costs of CREATE TEMP TABLE (#196) | Recorded 2026-11-10; edit in progress | [Episode overview](episodes/20261110-temporary-tables/README.md) |
+| Postgres 19 for people who run it | Preparation; recording notes are a draft | [Episode overview](episodes/20261117-postgres-19/README.md) · [Recording notes](episodes/20261117-postgres-19/recording-notes.md) |
 
 ## Repository structure
 
