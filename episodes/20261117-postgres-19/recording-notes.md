@@ -2,7 +2,7 @@
 
 [Episode overview](README.md)
 
-**DRAFT, 2026-11-15 PT.** For Nik and Michael: read before recording, keep open while recording. Every number below is in the study brief (version 2.2), with the same unit and qualifier; where the brief is being corrected (version 2.3), these notes already use the corrected statement. The brief tested PGDG packages of 18.7 and 19 RC2, not 19.0. RC2 came out on 2026-11-12; 19.0 is planned for 2026-11-19.
+**DRAFT, 2026-11-15 PT.** For Nik and Michael: read before recording, keep open while recording. Every number below is in the study brief (version 2.3), with the same unit and qualifier.3), these notes already use the corrected statement. The brief tested PGDG packages of 18.7 and 19 RC2, not 19.0. RC2 came out on 2026-11-12; 19.0 is planned for 2026-11-19.
 
 Brief: https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 
@@ -33,7 +33,7 @@ Source: the brief, section "Postgres 19 in numbers" (PostgreSQL git history, mas
 
 ## Lead 1: upgrade day
 
-**Finding.** Three things can cost you the upgrade window: a removed setting, a `pg_upgrade --check` that says "compatible" and then fails, and a standby without zstd. One read-only script on the 18 primary flags all three; for the third it flags `wal_compression = on` on the primary, so check each standby's build for zstd by hand.
+**Finding.** Three things can cost you the upgrade window: a removed setting, a `pg_upgrade --check` that says "compatible" and then fails, and a standby without zstd. One read-only script on the 18 primary finds the first two. For the third it sees only the setting on its own server, not whether each standby's build has zstd: check those hosts by hand.
 
 **Numbers to say**
 
@@ -118,7 +118,7 @@ Source: the brief, section "Postgres 19 in numbers" (PostgreSQL git history, mas
 - pg_repack with the data larger than memory: not run. pg_repack longer than 360 s at 57,300 updates per second: not run, so we do not know when it would finish.
 - What limits the first catch-up pass on the 32-vCPU host: not shown (the backend was on CPU in 78 to 83% of its samples under the lock).
 - A lower real write rate with the data larger than memory: the server served about 30,000 updates per second at both offered rates.
-- `wal_level = minimal`, an anti-wraparound autovacuum at the start, very many changes (memory limit), the horizon cost of pg_repack and pg_squeeze, the WAL cost of pg_squeeze, and the WAL cost of pg_repack beyond one table at 1,000 updates per second.
+- `wal_level = minimal`, an anti-wraparound autovacuum at the start, very many changes (memory limit), the xmin-horizon cost of pg_repack; pg_squeeze (not run; the WAL cost to other tables was measured for pg_repack only).
 
 **Questions**
 
@@ -170,7 +170,7 @@ Anyone with many listeners on different channels: cache invalidation, a channel 
 ## Quick hits
 
 1. **JIT is off by default.** On 22 TPC-H-derived queries (32-vCPU dedicated host, 3 trials): with each version's default, 19 took 6.8% less time (geometric mean). With the same setting on both, the difference was 1.8% (JIT off) and 1.2% (JIT on): "same". JIT did not change; the default did. Per query (exploratory): q1, the longest aggregation, 4,607 ms against 3,914 ms (17.7% longer); q19, 108 against 172 ms (37.4% less). Find JIT queries in `pg_stat_statements` on 18; set `jit = on` for that role or database where it helps.
-2. **Throttled parallel VACUUM is slower.** `VACUUM (PARALLEL 4)` with a 2 ms cost delay and cost limit 200: the index phase took 113.6 s on 19 RC2 against 41.5 s on 18.7 (16-vCPU dedicated host, 3 trials). With `vacuum_cost_limit = 1000` in that session: 31.8 s on 19 RC2. What 19 changed: parallel workers now share the cost limit (release notes; commit bf42705c7dd). We did not isolate the cause: not run were 18.7 at 1000, other limits, other worker counts, and a 19 build without the cost-sharing commit. If Michael asks about the 114.6 s in section 12.5: that is the main-run median for 19 RC2; 113.6 s is the proof run, the page's pair.
+2. **Throttled parallel VACUUM is slower.** `VACUUM (PARALLEL 4)` with a 2 ms cost delay and cost limit 200: the index phase took 113.6 s on 19 RC2 against 41.5 s on 18.7 (16-vCPU dedicated host, 3 trials). With `vacuum_cost_limit = 1000` in that session: 31.8 s on 19 RC2. What 19 changed: parallel workers now share the cost limit (release notes; commit bf42705c7dd). We did not isolate this change as the only cause: not run were 18.7 at 1000, other limits, other worker counts, and a 19 build without the cost-sharing commit. If Michael asks about the 114.6 s in section 12.5: that is the main-run median for 19 RC2; 113.6 s is the proof run, the page's pair.
 3. **Autovacuum order near wraparound.** We put a table at 1.65 billion XIDs last of 121, after 120 bloated tables. 19 started it at about 13 s, 18.7 at about 152 s (16-vCPU dedicated host, 3 trials). Say "placed last": on 18 the pg_class place decides. At default weights, a table at 300 million XIDs still came last on 19. `autovacuum_freeze_score_weight` has a maximum of 10; at 10 it came first in 3 of 3 trials, but then age leads the order of all tables. Watch `pg_stat_autovacuum_scores`.
 4. **Hot queue table.** The longest gap between its vacuums was 60.0 to 60.1 s on 19 against 152.3 to 153.2 s on 18.7 (16-vCPU dedicated host, default naptime). A worker sorts its list once when it starts.
 5. **The C-library trim setting on 18 (not a 19 feature).** Point lookups over 10 partitions without pruning, 128 clients (32-vCPU dedicated host, 3 trials): 18.7 did 196,490 lookups per second, 18.7 with the glibc trim threshold 256,024 (1.30 times), 19 RC2 258,182. It depends on heap layout: at 8, 9, 12 and 16 partitions both versions trim (small test host). Cost: up to 32 MiB times the number of backends: check RAM. On Debian and Ubuntu, only the cluster's environment file reaches the server.
@@ -258,7 +258,7 @@ select name, setting from pg_settings where name in ('wal_level', 'effective_wal
 | "The radix sort explains the faster restore." | It matches the non-key index build (exploratory). The primary-key gain is not explained. |
 | "lz4 compresses better than pglz." | On our corpus lz4 stored 5 to 29% more in 8 of 9 cases. It was faster on the insert. |
 | "19 gives 58% of the locks." | 58% at 64, 61% at 128, 63% at 256. |
-| "Lock-usage alerts fire late on 19." | The other way round: thresholds above about 1.4 never fire. |
+| "Lock-usage alerts fire late on 19." | The other way round: thresholds above about 1.37 never fire (19 with max_connections 100). |
 | "pg_upgradecluster fixes the removed settings." | It fixes 2 of 3, and it does not copy conf.d. |
 | "wal_compression = on means zstd." | It means the best method compiled in; zstd on PGDG builds. |
 | "The script finds standbys without zstd." | It flags `wal_compression = on` on the primary; check each standby's build by hand. |
@@ -304,4 +304,4 @@ Time codes are placeholders until the edit.
 
 ## Checked against
 
-Numbers, links and the "do not say" list checked against the published version 2.2 of the brief, plus the corrections planned for version 2.3: the pre-check reads only the server where it runs (not the standbys); the cause of the parallel VACUUM slowdown is not isolated; lock-usage alerts above about 1.4 never fire; about 316 names are in no list back to version 10.
+Numbers, links and the "do not say" list checked against the published version 2.3 of the brief.
