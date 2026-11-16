@@ -2,7 +2,7 @@
 
 [Episode overview](README.md)
 
-**DRAFT, 2026-11-15 PT.** For Nik and Michael: read before recording, keep open while recording. Every number below is in the study brief (version 2.3), with the same unit and qualifier.3), these notes already use the corrected statement. The brief tested PGDG packages of 18.7 and 19 RC2, not 19.0. RC2 came out on 2026-11-12; 19.0 is planned for 2026-11-19.
+**DRAFT, 2026-11-16 PT.** For Nik and Michael: read before recording, keep open while recording. Every number below is in the study brief (version 3.0), with the same unit and qualifier. The brief tested PGDG packages of 18.7 and 19 RC2, not 19.0. RC2 came out on 2026-11-12; 19.0 is planned for 2026-11-19.
 
 Brief: https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 
@@ -20,6 +20,7 @@ The brief names a host by its size. Say it the same way:
 
 - "a small test host": 4 or 8 shared vCPU. These runs show **behavior** (messages, locks, order of events). Do not use them for speed.
 - "a 32-vCPU dedicated host", "a 16-vCPU dedicated host", "an 8-vCPU dedicated host": the speed runs, usually 3 trials per version. Say "median of 3 runs" only where the line below says it.
+- "thin clones on one host": copy-on-write copies of one cluster on a 16-vCPU host (ZFS clones for the upgrade rehearsals, DBLab Engine clones for the plan comparison). Say "thin clones on one host" with every plan timing.
 - The tests ran on DBLab Forge, our benchmark harness. Say the name once, if at all.
 
 ## Cold open: Postgres 19 in numbers
@@ -33,26 +34,30 @@ Source: the brief, section "Postgres 19 in numbers" (PostgreSQL git history, mas
 
 ## Lead 1: upgrade day
 
-**Finding.** Three things can cost you the upgrade window: a removed setting, a `pg_upgrade --check` that says "compatible" and then fails, and a standby without zstd. One read-only script on the 18 primary finds the first two. For the third it sees only the setting on its own server, not whether each standby's build has zstd: check those hosts by hand.
+**Finding.** Three things can cost you the upgrade window: a removed setting, a `pg_upgrade --check` that says "compatible" and then fails, and a standby without zstd. The five detection queries on the source find the first two; for the third, check each standby's build by hand. An empty result does not mean the upgrade will work, so the brief gives three steps: the detection queries, then `pg_upgrade --check`, then a rehearsal on a clone.
 
 **Numbers to say**
 
-- "pg_upgrade --check printed 'Clusters are compatible', and then the real upgrade failed. We reproduced it in 7 of 7 trigger cases, on a small test host."
-- "If you set max_locks_per_transaction to 64, 19 gives you 8,765 locks. 18 gave 14,973 for the same value." That is 58% at 64, 61% at 128 and 63% at 256 (small test host).
-- "If you never set it, you get more: the default went from 64 to 128, and that gives 17,533 locks against 14,829 on 18."
-- "On a new 18.7 cluster our pre-check script printed 16 ok lines and no HIT." (Small test host.)
+- "We ran 693 upgrade rehearsals into 19 RC2, from PGDG 14 to 18, of setups we built to break the upgrade, each on a fresh thin clone. 22 cases passed `pg_upgrade --check` and then failed the real run. 11 more cases left 19 unable to start." (A case is one setting or object in one place; the 22 cases are 89 rehearsals.)
+- "The most common one: `escape_string_warning` set on a role, a database or a function, or granted. 33 of the 89 failed rehearsals. The fix is one line on the source: `ALTER ROLE app RESET escape_string_warning;`, or REVOKE for a grant."
+- "Indexes on normalize() missed rows after pg_upgrade to 19, in 13 of 13 runs, from every source version." (A test table with every assigned code point; the rows missed hold characters newer than the source's Unicode. From 14 to 16, pg_upgrade does not warn.)
+- "Kill pg_upgrade during the file transfer: with --link, the old cluster started again after the rename of pg_control.old that the docs describe, 3 of 3. With --swap it did not start, 2 of 2."
+- "If you set max_locks_per_transaction to 64, 19 gives you 8,765 locks. 18 gave 14,973 for the same value." That is 58% at 64, 61% at 128 and 63% at 256 (small test host). If you never set it, you get more: the default went from 64 to 128, and that gives 17,533 locks against 14,829 on 18.
 - "pg_upgradecluster fixed 2 of the 3 removed settings, and it never copied conf.d."
 
 **Mechanism**
 
-- A removed setting in a config file stops 19 at start with FATAL: `io_workers`, `escape_string_warning`, `standard_conforming_strings = off`, or a `radius` line in pg_hba.conf. `pg_upgrade --check` misses them.
+- A removed setting in a config file stops 19 at start with FATAL: `io_workers`, `escape_string_warning`, `standard_conforming_strings = off`, or a `radius` line in pg_hba.conf. `pg_upgrade --check` misses them. Copied into the 19 config before `--check`, the same lines make `--check` fail (62 of 62); added after the run, 19 does not start.
 - Role, database and function settings of removed parameters, grants on them, and your own uuid-bytea casts (19 has them built in) pass `--check`. The real run fails, one problem per run; a role setting, for example, at "Restoring global objects".
-- GiST indexes on inet or cidr with btree_gist fail `--check`; an extension with no 19 package blocks pg_upgradecluster (timescaledb had none on PGDG). The same script finds both.
+- 19 RC2 has Unicode 17.0 (18 has 16.0, 14 has 13.0). An expression index on normalize(), such as OpenStreetMap's `lower(NORMALIZE(display_name, NFKC))`, keeps the old values after pg_upgrade. pg_upgrade 19 checks this only for sources from 17. Exposed: anyone with such an index and rows with characters newer than the source's Unicode; how often real data holds them, we did not measure.
+- GiST indexes on inet or cidr with btree_gist fail `--check`; an extension with no 19 package fails `--check` or blocks pg_upgradecluster (timescaledb had none on PGDG). Q5 of the detection queries lists the extensions and preload libraries; the query in section 2.5 finds the btree_gist indexes.
 - `wal_compression = on` now means the best method compiled in: zstd on PGDG builds. A standby or restore host without zstd streams, then stops with FATAL at the first zstd page. 19 also sizes the lock table exactly and no longer borrows free shared memory, so the same `max_locks_per_transaction` gives fewer locks.
 
 **What to do on Monday**
 
-- Run `pg19-precheck.sh` (brief, section 2.0) as a superuser on every 18 primary. Fix every HIT. As pg_monitor, four checks fail with "permission denied". The script reads the configuration of the server where it runs: it does not look at standbys.
+- Run the five detection queries (brief, section 2.0) on the source, in every database; Q3 needs a superuser. Fix what they list. Then run `pg_upgrade --check`, then rehearse the upgrade on a clone.
+- After the upgrade, REINDEX each index that Q4 listed, then run `bt_index_check(index, true)`.
+- Know what a killed run leaves: after `--link`, rename `global/pg_control.old` as the docs say; after `--swap`, the docs give no recovery but a restore from backup.
 - If you set `max_locks_per_transaction`, double it in the 19 config before the first start, on the primary and on every standby. pg_upgradecluster keeps the old value.
 - Keep `wal_compression = on` only if every standby, restore host and page-reading tool has zstd. Else write the method by name: `wal_compression = lz4`.
 - Copy conf.d by hand if you use pg_upgradecluster.
@@ -60,16 +65,16 @@ Source: the brief, section "Postgres 19 in numbers" (PostgreSQL git history, mas
 **What we did not show**
 
 - Managed services, Patroni, Ansible roles and operators: not tested.
-- `pg_upgrade --clone`, Citus, plv8: not tested.
-- Throughput and replica lag per `wal_compression` method: not measured.
+- Citus, plv8: not tested. `pg_upgrade --clone`: only on our ZFS with block cloning off, where it failed `--check`.
+- Logical slots across the upgrade, data at real size, Debian pg_upgradecluster in the rehearsals: not covered.
 - How often each problem happens in production: we show that it happens and under which condition.
 
 **Questions**
 
 - Michael to Nik: "Is the --check gap a bug? What did the hackers say?" (Committer Masahiko Sawada is "inclined to think these are not v19 bugs we must fix before release"; the thread is open; a generic check is proposed for the next major.)
-- Nik to Michael: "The release notes say to double max_locks_per_transaction. Who reads that line before an upgrade?"
+- Michael to Nik: "Version 2.3 of your page had a pre-check script. Where did it go?" (We withdrew it in 3.0: it missed cases that the rehearsals found. The detection queries, `pg_upgrade --check` and a rehearsal on a clone replace it. The same version withdrew our line "plans are deterministic": 488 queries changed plan between ANALYZE runs on 18.7. Every correction is named in the page's version history.)
 
-**Credit.** shihao zhong reported the `--check` gap on pgsql-hackers on 2026-10-24; we reproduced it. Heikki Linnakangas's commit message and the release notes already say to double `max_locks_per_transaction`; we measured the size of the cut. We did not find the standby-without-zstd problem in what others wrote.
+**Credit.** shihao zhong reported the `--check` gap on pgsql-hackers on 2026-10-24; we reproduced it (7 of 7 trigger cases, small test host) and then rehearsed it from 14 to 18. Heikki Linnakangas's commit message and the release notes already say to double `max_locks_per_transaction`; we measured the size of the cut. We did not find the standby-without-zstd problem in what others wrote.
 
 ## Lead 2: REPACK (CONCURRENTLY)
 
@@ -170,9 +175,9 @@ Anyone with many listeners on different channels: cache invalidation, a channel 
 ## Quick hits
 
 1. **JIT is off by default.** On 22 TPC-H-derived queries (32-vCPU dedicated host, 3 trials): with each version's default, 19 took 6.8% less time (geometric mean). With the same setting on both, the difference was 1.8% (JIT off) and 1.2% (JIT on): "same". JIT did not change; the default did. Per query (exploratory): q1, the longest aggregation, 4,607 ms against 3,914 ms (17.7% longer); q19, 108 against 172 ms (37.4% less). Find JIT queries in `pg_stat_statements` on 18; set `jit = on` for that role or database where it helps.
-2. **Throttled parallel VACUUM is slower.** `VACUUM (PARALLEL 4)` with a 2 ms cost delay and cost limit 200: the index phase took 113.6 s on 19 RC2 against 41.5 s on 18.7 (16-vCPU dedicated host, 3 trials). With `vacuum_cost_limit = 1000` in that session: 31.8 s on 19 RC2. What 19 changed: parallel workers now share the cost limit (release notes; commit bf42705c7dd). We did not isolate this change as the only cause: not run were 18.7 at 1000, other limits, other worker counts, and a 19 build without the cost-sharing commit. If Michael asks about the 114.6 s in section 12.5: that is the main-run median for 19 RC2; 113.6 s is the proof run, the page's pair.
-3. **Autovacuum order near wraparound.** We put a table at 1.65 billion XIDs last of 121, after 120 bloated tables. 19 started it at about 13 s, 18.7 at about 152 s (16-vCPU dedicated host, 3 trials). Say "placed last": on 18 the pg_class place decides. At default weights, a table at 300 million XIDs still came last on 19. `autovacuum_freeze_score_weight` has a maximum of 10; at 10 it came first in 3 of 3 trials, but then age leads the order of all tables. Watch `pg_stat_autovacuum_scores`.
-4. **Hot queue table.** The longest gap between its vacuums was 60.0 to 60.1 s on 19 against 152.3 to 153.2 s on 18.7 (16-vCPU dedicated host, default naptime). A worker sorts its list once when it starts.
+2. **Plans change on 19; rows do not.** We planned 4,273 benchmark queries (263 templates from four public benchmarks) on 18.7 and on 19 RC2 after pg_upgrade, with the same data and statistics, on thin clones. 83 of the 220 templates we could judge got another plan. One planner commit is behind 757 of the 1,199 changed queries: 8300d3ad4, a tie-break. When two parallel plans cost within 1%, 19 keeps the one with the lower startup cost; 18 kept the lower total. A 19 RC2 build without the commit gave the 18.7 plan back. Rows: equal in 594 of 594 pairs that finished on both versions. Timed on 25 of these queries (thin clones on one host, two separate run sets, no JIT), the plan change alone: 1 faster, 1 slower, 23 inconclusive. Say why "inconclusive" is the finding: on this host, verdicts moved between the two run sets in both directions, and one query took 9,891 ms on 18.7 in the first set and 3,865 ms in the second. No JIT ran (the clone images had no JIT package); a default PGDG 18 has `jit = on`, and 19 RC2 ships `jit = off`. To do: save your top plans on 18, compare them on a 19 clone, time the changed ones. The reproducer is Demo 1.
+3. **Throttled parallel VACUUM is slower.** `VACUUM (PARALLEL 4)` with a 2 ms cost delay and cost limit 200: the index phase took 113.6 s on 19 RC2 against 41.5 s on 18.7 (16-vCPU dedicated host, 3 trials). With `vacuum_cost_limit = 1000` in that session: 31.8 s on 19 RC2. What 19 changed: parallel workers now share the cost limit (release notes; commit bf42705c7dd). We did not isolate this change as the only cause: not run were 18.7 at 1000, other limits, other worker counts, and a 19 build without the cost-sharing commit. If Michael asks about the 114.6 s in section 12.5: that is the main-run median for 19 RC2; 113.6 s is the proof run, the page's pair.
+4. **Autovacuum order near wraparound.** We put a table at 1.65 billion XIDs last of 121, after 120 bloated tables. 19 started it at about 13 s, 18.7 at about 152 s (16-vCPU dedicated host, 3 trials). Say "placed last": on 18 the pg_class place decides. At default weights, a table at 300 million XIDs still came last on 19. `autovacuum_freeze_score_weight` has a maximum of 10; at 10 it came first in 3 of 3 trials, but then age leads the order of all tables. Watch `pg_stat_autovacuum_scores`.
 5. **The C-library trim setting on 18 (not a 19 feature).** Point lookups over 10 partitions without pruning, 128 clients (32-vCPU dedicated host, 3 trials): 18.7 did 196,490 lookups per second, 18.7 with the glibc trim threshold 256,024 (1.30 times), 19 RC2 258,182. It depends on heap layout: at 8, 9, 12 and 16 partitions both versions trim (small test host). Cost: up to 32 MiB times the number of backends: check RAM. On Debian and Ubuntu, only the cluster's environment file reaches the server.
 6. **jsonb with the lz4 default.** 200,000 jsonb documents of 16 KiB: 107 s on 18.7, 44 s on 19 (8-vCPU dedicated host, 3 trials), from the lz4 default alone; the data took 11.3% more space. Old values stay pglz through pg_upgrade, VACUUM FULL and REPACK. On 18 today, `default_toast_compression = lz4` gives the same speed (43 s).
 7. **Faster restore.** `pg_restore -j 1` of a 250M-row table: 589.6 s on 18.7, 464.8 s on 19 (-21.2%; 16-vCPU dedicated host, 3 trials), mostly in the index builds. Why: partly shown. In a separate exploratory run, most of the gain on the non-key index was in the in-memory sort, which fits the new radix sort. The primary-key gain is not explained. (If asked: 96.2 s against 125.0 s for the non-key index, 25.5 of the 28.8 s saved in the sort, on another host type.)
@@ -186,14 +191,34 @@ Anyone with many listeners on different channels: cache invalidation, a channel 
 
 Run as a superuser. Use only the text below: it is the text that passed our command check. Each is under two minutes except where noted.
 
-**Demo 1: the pre-check script (on 18).** Save the script from the brief, section 2.0, as `pg19-precheck.sh`, and make it executable (`chmod +x pg19-precheck.sh`). Then:
+**Demo 1: the plan tie-break (on 18 and on 19).** The small reproducer from the brief, section 3.6, on a new cluster of each version (PGDG, default settings; the script sets its own session settings). The load time was not measured: create the tables before recording.
 
-```shell
-./pg19-precheck.sh --host=/var/run/postgresql --port=5432
+```sql
+create table n as select g as n_id, 'nation ' || g as n_name
+  from generate_series(0, 24) as g;
+alter table n add primary key (n_id);
+create table c as select g as c_id, g % 25 as c_nat,
+  'customer ' || g as c_name from generate_series(1, 300000) as g;
+alter table c add primary key (c_id);
+create table o as select g as o_id,
+  ((g::bigint * 7919) % 300000 + 1)::int as o_cust,
+  date '1992-01-01' + (g % 2400) as o_date,
+  (g % 100000)::numeric(12, 2) as o_price, repeat('x', 60) as o_pad
+  from generate_series(1, 3000000) as g;
+alter table o alter column o_date set statistics 10000;
+alter table c alter column c_nat set statistics 1000;
+vacuum analyze n, c, o;
+set max_parallel_workers_per_gather = 4;
+set work_mem = '64MB';
+set random_page_cost = 1.1;
+set effective_cache_size = '40GB';
+explain select c_name, n_name, o_price
+from o join c on o_cust = c_id join n on c_nat = n_id
+where o_date < date '1992-01-10';
 ```
 
-- Expected: on a new 18.7 cluster, 16 lines start with `ok`, and the last line is `0 hit(s), 0 check(s) failed to run` (exit code 0).
-- Cleanup: none; the script only reads.
+- Expected (same plans and costs in 3 of 3 runs per version on the page): 18.7 gives a Gather (cost=1001.99..53502.21) over a parallel hash join; 19 RC2 gives a Hash Join (cost=1001.99..53528.12) over the Gather: the same startup cost, a total 0.05% higher. A 19 RC2 build without 8300d3ad4 gives the 18.7 plan.
+- Cleanup: `drop table o, c, n;`.
 
 **Demo 2: same setting, other method (on 18 and on 19).**
 
@@ -238,7 +263,7 @@ select name, setting from pg_settings where name in ('wal_level', 'effective_wal
 | "REPACK has a bug that keeps logical WAL on." | The switch back waits for the checkpoint in progress; the docs give no bound. |
 | "You can run several REPACK (CONCURRENTLY) at once." | One per instance. |
 | "2026 is a record year." | 2001 had 3,061 commits; 2026 has 3,024 to November 11. |
-| "The log of a lock pile-up is about 7 x N squared bytes." | Corrected in 2.2: it held only at 2,000 waiters. Give the measured sizes. |
+| "Plans are deterministic." | Withdrawn in 3.0: 488 queries changed plan between ANALYZE runs on 18.7. A plan counts as changed only if 18.7 gave the same plan after three ANALYZE runs. |
 | "log_lock_waits causes the stall at 2,000 waiters" or "the deadlock checks cause the stall." | The server stalled with the setting off too; that the deadlock checks cause it is partly shown. |
 | "19 fixes LISTEN/NOTIFY at scale." | It removes the wake-up of listeners on other channels. DBOS notes that the global lock at commit stays; one channel for all listeners was not tested. |
 | "pg_upgrade makes my TOAST data lz4." | No. Only new values, and values you rewrite. |
@@ -254,14 +279,14 @@ select name, setting from pg_settings where name in ('wal_level', 'effective_wal
 | "19 is 33% faster on partitioned lookups." | A C-library heap-layout effect on 18.7; at 8 partitions both were the same. |
 | "The glibc setting makes 18 as fast as 19." | It closed the gap on one query shape on one host, and it costs memory per backend. |
 | "19 reads 2x faster from disk." | Only the bitmap heap scan changed; 18.7 with `io_workers = 8` was as fast. |
-| "The sort is 45% faster on 19." | By our rule that row is "same". Rows with 2 trials are inconclusive. |
+| "The new plans make 19 faster" or "slower." | The plan change alone: 1 faster, 1 slower, 23 inconclusive, on 25 queries, thin clones on one host, no JIT. No percentage there is a property of 19. |
 | "The radix sort explains the faster restore." | It matches the non-key index build (exploratory). The primary-key gain is not explained. |
 | "lz4 compresses better than pglz." | On our corpus lz4 stored 5 to 29% more in 8 of 9 cases. It was faster on the insert. |
-| "19 gives 58% of the locks." | 58% at 64, 61% at 128, 63% at 256. |
-| "Lock-usage alerts fire late on 19." | The other way round: thresholds above about 1.37 never fire (19 with max_connections 100). |
+| "No row from the detection queries: the upgrade will work." | No row means none of the measured cases was found. Run `--check`, then rehearse on a clone. |
+| "bd3e3e9e568 changed q8 and q21" or "8300d3ad4 changed q14." | Both withdrawn in 3.0. Without 8300d3ad4, a 19 RC2 build gives the 18.7 plan of q8 and q21 back (50 of 50 queries each); the cause of the earlier q14 change is not known. |
 | "pg_upgradecluster fixes the removed settings." | It fixes 2 of 3, and it does not copy conf.d. |
 | "wal_compression = on means zstd." | It means the best method compiled in; zstd on PGDG builds. |
-| "The script finds standbys without zstd." | It flags `wal_compression = on` on the primary; check each standby's build by hand. |
+| "The detection queries find standbys without zstd." | No query on the primary shows it; check the build of each standby and restore host. |
 | Anything about managed services. | We did not test any managed service. |
 | Anything about 19.0. | This is RC2. |
 | A speed number from a small test host. | Small test hosts show behavior only. |
@@ -280,10 +305,10 @@ Time codes are placeholders until the edit.
 - [hh:mm:ss] Commit message on doubling max_locks_per_transaction (Heikki Linnakangas): https://postgrespro.com/list/id/E1w8iNH-002maX-1C@gemulon.postgresql.org
 - [hh:mm:ss] wal_compression = on picks the best method compiled in (source at REL_19_RC2): https://github.com/postgres/postgres/blob/REL_19_RC2/src/include/access/xlog.h#L89-L100
 - [hh:mm:ss] Only one REPACK (CONCURRENTLY) at a time (Christophe Pettus, The Build, 2026-05-27): https://thebuild.com/blog/repack-concurrently-pgsqueeze-gets-a-promotion/
-- [hh:mm:ss] REPACK takes the final AccessExclusiveLock (source at REL_19_RC2): https://github.com/postgres/postgres/blob/REL_19_RC2/src/backend/commands/repack.c#L3475
+- [hh:mm:ss] pg_upgrade checks Unicode changes only for sources from 17 (source at REL_19_RC2): https://github.com/postgres/postgres/blob/REL_19_RC2/src/bin/pg_upgrade/check.c#L2081-L2087
 - [hh:mm:ss] REPACK CONCURRENTLY costs (Radim Marek, boringSQL, 2026-09-28): https://boringsql.com/posts/repack-concurrently-costs/
 - [hh:mm:ss] PostgreSQL 19 open items: https://wiki.postgresql.org/wiki/PostgreSQL_19_Open_Items
-- [hh:mm:ss] One REPACK (CONCURRENTLY) at a time (revert commit): https://github.com/postgres/postgres/commit/01a80f06214
+- [hh:mm:ss] Parallel plans: startup cost breaks near-ties (commit 8300d3ad4): https://github.com/postgres/postgres/commit/8300d3ad4
 - [hh:mm:ss] NOTIFY wakes only the listeners of its channel (commit): https://github.com/postgres/postgres/commit/282b1cde9de
 - [hh:mm:ss] Joel Jacobson's first numbers (pgsql-hackers, July 2025): https://www.postgresql.org/message-id/6899c044-4a82-49be-8117-e6f669765f7e%40app.fastmail.com
 - [hh:mm:ss] LISTEN/NOTIFY scalability (DBOS): https://dbos.dev/blog/postgres-listen-notify-scalability
@@ -299,9 +324,11 @@ Time codes are placeholders until the edit.
 2. **Do Demo 3 (REPACK) live?** Recommendation: only after one rehearsal on the recording machine; else tell the result (four lock timeouts, success on attempt 5) and show the script.
 3. **We record before 19.0 (planned for 2026-11-19).** Recommendation: say "RC2" each time a number comes up.
 4. **Do we promise a re-run on 19.0?** Recommendation: only with a date.
-5. **How many quick hits?** Recommendation: if time is short, keep JIT, parallel VACUUM, first read after restore, log_lock_waits and the autovacuum order; move the rest to the show notes.
+5. **How many quick hits?** Recommendation: if time is short, keep JIT, the plan comparison, parallel VACUUM, first read after restore and log_lock_waits; move the rest to the show notes.
 6. **The glibc setting is an 18 tip, not a 19 feature. Keep it?** Recommendation: keep it, short, as "if you stay on 18 for a while"; say its memory cost in the same breath.
+7. **Say the correction on air?** Version 3.0 withdrew the pre-check script, "plans are deterministic" and two commit attributions. Recommendation: yes, through Michael's question in lead 1, in two sentences.
+8. **Demo 1 is now the plan tie-break (the script demo is gone). Do it live?** Recommendation: only with the tables created before recording; else show the two plans from the brief.
 
 ## Checked against
 
-Numbers, links and the "do not say" list checked against the published version 2.3 of the brief.
+Numbers, links and the "do not say" list checked against the published version 3.0 of the brief.
