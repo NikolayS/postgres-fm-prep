@@ -2,7 +2,7 @@
 
 [Episode overview](README.md)
 
-**DRAFT, 2026-11-15 PT.** For Nik and Michael: read before recording, keep open while recording. Every number below is in the study brief (version 2.2), with the same unit and qualifier. The brief tested PGDG packages of 18.7 and 19 RC2, not 19.0. RC2 came out on 2026-11-12; 19.0 is planned for 2026-11-19.
+**DRAFT, 2026-11-15 PT.** For Nik and Michael: read before recording, keep open while recording. Every number below is in the study brief (version 2.2), with the same unit and qualifier; where the brief is being corrected (version 2.3), these notes already use the corrected statement. The brief tested PGDG packages of 18.7 and 19 RC2, not 19.0. RC2 came out on 2026-11-12; 19.0 is planned for 2026-11-19.
 
 Brief: https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 
@@ -33,7 +33,7 @@ Source: the brief, section "Postgres 19 in numbers" (PostgreSQL git history, mas
 
 ## Lead 1: upgrade day
 
-**Finding.** You can lose the upgrade window to a removed setting, to a `pg_upgrade --check` that says "compatible" and then fails, or to a standby without zstd, and one read-only script on 18 finds these problems first.
+**Finding.** Three things can cost you the upgrade window: a removed setting, a `pg_upgrade --check` that says "compatible" and then fails, and a standby without zstd. One read-only script on the 18 primary flags all three; for the third it flags `wal_compression = on` on the primary, so check each standby's build for zstd by hand.
 
 **Numbers to say**
 
@@ -45,13 +45,14 @@ Source: the brief, section "Postgres 19 in numbers" (PostgreSQL git history, mas
 
 **Mechanism**
 
-- A removed setting in a config file stops 19 at start with FATAL: `io_workers`, `escape_string_warning`, `standard_conforming_strings = off`, or a `radius` line in pg_hba.conf. `pg_upgrade --check` does not read them.
-- Role, database and function settings of removed parameters, grants on them, and your own uuid-bytea casts (19 has them built in) pass `--check`. The real run fails when it restores them ("Restoring global objects"), one problem per run.
+- A removed setting in a config file stops 19 at start with FATAL: `io_workers`, `escape_string_warning`, `standard_conforming_strings = off`, or a `radius` line in pg_hba.conf. `pg_upgrade --check` misses them.
+- Role, database and function settings of removed parameters, grants on them, and your own uuid-bytea casts (19 has them built in) pass `--check`. The real run fails, one problem per run; a role setting, for example, at "Restoring global objects".
+- GiST indexes on inet or cidr with btree_gist fail `--check`; an extension with no 19 package blocks pg_upgradecluster (timescaledb had none on PGDG). The same script finds both.
 - `wal_compression = on` now means the best method compiled in: zstd on PGDG builds. A standby or restore host without zstd streams, then stops with FATAL at the first zstd page. 19 also sizes the lock table exactly and no longer borrows free shared memory, so the same `max_locks_per_transaction` gives fewer locks.
 
 **What to do on Monday**
 
-- Run `pg19-precheck.sh` (brief, section 2.0) as a superuser on every 18 primary. Fix every HIT. As pg_monitor, four checks fail with "permission denied".
+- Run `pg19-precheck.sh` (brief, section 2.0) as a superuser on every 18 primary. Fix every HIT. As pg_monitor, four checks fail with "permission denied". The script reads the configuration of the server where it runs: it does not look at standbys.
 - If you set `max_locks_per_transaction`, double it in the 19 config before the first start, on the primary and on every standby. pg_upgradecluster keeps the old value.
 - Keep `wal_compression = on` only if every standby, restore host and page-reading tool has zstd. Else write the method by name: `wal_compression = lz4`.
 - Copy conf.d by hand if you use pg_upgradecluster.
@@ -72,23 +73,28 @@ Source: the brief, section "Postgres 19 in numbers" (PostgreSQL git history, mas
 
 ## Lead 2: REPACK (CONCURRENTLY)
 
-**Finding.** REPACK (CONCURRENTLY) can replace pg_repack for most tables, but its final exclusive lock is short only when the table fits in memory and the write rate is well below the apply rate; when the table does not fit, the lock is tens of seconds.
+**Finding.** REPACK (CONCURRENTLY) can replace pg_repack for permanent tables with a primary key or a replica-identity index. Its final lock is short when the table and its new copy fit in memory and the write rate is well below the apply rate. With the table larger than memory and about 30,000 updates per second, it blocked the table for 21 to 25 s.
 
-**Numbers to say**
+**Numbers to say** (keep it to these three on air)
+
+- The rule: "The longer the first catch-up pass and the faster the writes, the longer the block."
+- "On a 32-vCPU dedicated host: 2.5 s median at 57,300 updates per second with the data in memory; 24.9 s median with the server capped at 12 GiB of memory. 3 runs each."
+- "An idle transaction that read the table once held REPACK, and every application client behind it, for 30.7 seconds." (Small test host, one run.)
+
+**If asked**
 
 - "With the data in memory, on a 32-vCPU dedicated host, REPACK (CONCURRENTLY) held its exclusive lock under 0.1 s with no load, 0.4 s at 28,600 updates per second, and 2.5 s at 57,300 updates per second. Median of 3 runs."
-- "Plain REPACK held its lock 53.7 s. Median of 3 runs."
-- "With the server capped at 12 GiB of memory, REPACK (CONCURRENTLY) blocked the table 24.4 to 25.2 s at 58,000 updates per second offered, 3 runs." The server served about 30,000 updates per second during the copy. At 32,200 offered: 20.6 and 20.8 s (2 runs, exploratory).
-- "At 57,300 updates per second, pg_repack had not finished when our 360-second limit stopped it, in 3 of 3 runs." REPACK (CONCURRENTLY) finished in 12.1 to 13.4 s.
-- "An idle transaction that read the table once held REPACK, and every application client behind it, for 30.7 seconds." (Small test host, one run.)
+- "Plain REPACK of the same 60-million-row table, with no load, held its lock 53.7 s. Median of 3 runs."
+- "With the server capped at 12 GiB of memory on the same 32-vCPU dedicated host, REPACK (CONCURRENTLY) blocked the table 24.4 to 25.2 s at 58,000 updates per second offered, 3 runs." The server served about 30,000 updates per second during the copy. At 32,200 offered: 20.6 and 20.8 s (2 runs, exploratory).
+- "With the data in memory, at 57,300 updates per second on the 32-vCPU dedicated host, pg_repack had not finished when our 360-second limit stopped it, in 3 of 3 runs." REPACK (CONCURRENTLY) finished in 12.1 to 13.4 s.
+- The rule as a formula: the table is blocked for about (time of the first catch-up pass + lock wait) x write rate / apply rate, in our runs. With the data larger than memory the hold was 0.91 to 0.93 of the rule; with the data in memory the rule was an upper bound (0.8 of it at 57,300, about one third at 28,600).
 
 **Mechanism**
 
 - REPACK (CONCURRENTLY) copies the table and rebuilds its indexes under SHARE UPDATE EXCLUSIVE, and collects concurrent changes through logical decoding.
 - A first catch-up pass applies the changes made during the copy, before the lock. Then REPACK takes the AccessExclusiveLock, and a second catch-up pass under the lock applies every change written during the first pass and the lock wait. REPACK has no timeout of its own.
-- **The one rule:** the table is blocked for about (time of the first catch-up pass + lock wait) x write rate / apply rate, in our runs. With the data larger than memory the hold was 0.91 to 0.93 of the rule; with the data in memory the rule was an upper bound (0.8 of it at 57,300, about one third at 28,600).
 
-**Other costs (each from the brief, each with its host)**
+**Other costs (if asked; each from the brief, each with its host)**
 
 - WAL for the whole cluster: with logical decoding on, an update of another table (1 KiB rows, 1,000 per second) wrote 1,127 bytes of WAL during REPACK (CONCURRENTLY) against 576 without it, 1.96 times; during pg_repack, 546 (32-vCPU dedicated host, 3 trials).
 - `effective_wal_level` goes from replica to logical and back, while `SHOW wal_level` says replica. On the 32-vCPU dedicated host it was back 0.00 to 0.10 s after the end in all 13 runs. On a small test host, with a checkpoint in progress, it stayed logical for 7 min 45 s, until a manual CHECKPOINT.
@@ -101,7 +107,7 @@ Source: the brief, section "Postgres 19 in numbers" (PostgreSQL git history, mas
 
 - Run the pre-checks of the brief, section 1.1: identity index, valid indexes, old transactions, prepared transactions, `max_slot_wal_keep_size`.
 - Treat the final lock like DDL: run the brief's `repack-retry.sh` (lock_timeout 1s, retry only after a lock timeout), no long transactions, a window with low writes.
-- Check that the table, its new copy and its indexes fit in shared_buffers plus page cache. If they do not, expect a block of tens of seconds.
+- On a busy table, check that the table, its new copy and its indexes fit in shared_buffers plus page cache. If they do not, expect a block of tens of seconds (21 to 25 s at about 30,000 updates per second on the 32-vCPU dedicated host).
 - During catch-up, watch `heap_tuples_updated` in `pg_stat_progress_repack`. If it grows slower than the write rate, cancel and retry when writes are low.
 - Abort with `pg_cancel_backend`. Killing psql does not stop the backend.
 - After REPACK, check that `effective_wal_level` is back to replica.
@@ -112,18 +118,18 @@ Source: the brief, section "Postgres 19 in numbers" (PostgreSQL git history, mas
 - pg_repack with the data larger than memory: not run. pg_repack longer than 360 s at 57,300 updates per second: not run, so we do not know when it would finish.
 - What limits the first catch-up pass on the 32-vCPU host: not shown (the backend was on CPU in 78 to 83% of its samples under the lock).
 - A lower real write rate with the data larger than memory: the server served about 30,000 updates per second at both offered rates.
-- `wal_level = minimal`, an anti-wraparound autovacuum at the start, very many changes (memory limit), the horizon and WAL costs of pg_repack and pg_squeeze.
+- `wal_level = minimal`, an anti-wraparound autovacuum at the start, very many changes (memory limit), the horizon cost of pg_repack and pg_squeeze, the WAL cost of pg_squeeze, and the WAL cost of pg_repack beyond one table at 1,000 updates per second.
 
 **Questions**
 
 - Michael to Nik: "I do not know my apply rate. How do I pick a window?" (Watch `heap_tuples_updated` during catch-up; pick a low write rate.)
 - Nik to Michael: "Would you uninstall pg_repack on day one of 19?"
 
-**Credit.** Radim Marek (boringSQL, 2026-09-28) showed first that the final lock grows with the write rate, that an idle reader blocks the swap, and that pg_repack can fail to catch up. We add when the lock is long, on a 32-vCPU dedicated host, and the rule. Upstream marked the lock upgrade at the swap "Won't Fix" on the 19 open items page.
+**Credit.** Radim Marek (boringSQL, 2026-09-28) showed first that the final lock grows with the write rate, that an idle reader blocks the swap, that lock_timeout throws away the whole copy, that REPACK holds the xmin horizon for the whole cluster, and that pg_repack can fail to catch up. Christophe Pettus (The Build, 2026-05-27) wrote first that only one REPACK (CONCURRENTLY) runs at a time. We add when the lock is long, on a 32-vCPU dedicated host, and the rule. Upstream marked the lock upgrade at the swap "Won't Fix" on the 19 open items page.
 
 ## Lead 3: LISTEN/NOTIFY with many listeners
 
-**Finding.** On 19 a NOTIFY wakes only the backends that listen on its channel, so applications with many listeners on different channels get a large gain with no setting and no code change.
+**Finding.** If your listeners are on many channels, 19 wakes only the right ones; nothing to set. On an 8-vCPU dedicated host with 1,000 listeners, each on its own channel, and 4 notifiers at full speed, 18.7 delivered 200 notifications per second and 19 RC2 at least 11,040 (median of 3 runs).
 
 **Numbers to say** (8-vCPU dedicated host)
 
@@ -164,21 +170,23 @@ Anyone with many listeners on different channels: cache invalidation, a channel 
 ## Quick hits
 
 1. **JIT is off by default.** On 22 TPC-H-derived queries (32-vCPU dedicated host, 3 trials): with each version's default, 19 took 6.8% less time (geometric mean). With the same setting on both, the difference was 1.8% (JIT off) and 1.2% (JIT on): "same". JIT did not change; the default did. Per query (exploratory): q1, the longest aggregation, 4,607 ms against 3,914 ms (17.7% longer); q19, 108 against 172 ms (37.4% less). Find JIT queries in `pg_stat_statements` on 18; set `jit = on` for that role or database where it helps.
-2. **Throttled parallel VACUUM is slower.** `VACUUM (PARALLEL 4)` with a 2 ms cost delay: the index phase took 113.6 s on 19 against 41.5 s on 18.7. The release notes warn of this: parallel workers now share the cost limit. With `vacuum_cost_limit = 1000` in that session: 31.8 s (16-vCPU dedicated host, 3 trials). Not run: 18.7 at 1000, other limits, other worker counts, a 19 build without the cost-sharing commit.
+2. **Throttled parallel VACUUM is slower.** `VACUUM (PARALLEL 4)` with a 2 ms cost delay and cost limit 200: the index phase took 113.6 s on 19 RC2 against 41.5 s on 18.7 (16-vCPU dedicated host, 3 trials). With `vacuum_cost_limit = 1000` in that session: 31.8 s on 19 RC2. What 19 changed: parallel workers now share the cost limit (release notes; commit bf42705c7dd). We did not isolate the cause: not run were 18.7 at 1000, other limits, other worker counts, and a 19 build without the cost-sharing commit. If Michael asks about the 114.6 s in section 12.5: that is the main-run median for 19 RC2; 113.6 s is the proof run, the page's pair.
 3. **Autovacuum order near wraparound.** We put a table at 1.65 billion XIDs last of 121, after 120 bloated tables. 19 started it at about 13 s, 18.7 at about 152 s (16-vCPU dedicated host, 3 trials). Say "placed last": on 18 the pg_class place decides. At default weights, a table at 300 million XIDs still came last on 19. `autovacuum_freeze_score_weight` has a maximum of 10; at 10 it came first in 3 of 3 trials, but then age leads the order of all tables. Watch `pg_stat_autovacuum_scores`.
 4. **Hot queue table.** The longest gap between its vacuums was 60.0 to 60.1 s on 19 against 152.3 to 153.2 s on 18.7 (16-vCPU dedicated host, default naptime). A worker sorts its list once when it starts.
 5. **The C-library trim setting on 18 (not a 19 feature).** Point lookups over 10 partitions without pruning, 128 clients (32-vCPU dedicated host, 3 trials): 18.7 did 196,490 lookups per second, 18.7 with the glibc trim threshold 256,024 (1.30 times), 19 RC2 258,182. It depends on heap layout: at 8, 9, 12 and 16 partitions both versions trim (small test host). Cost: up to 32 MiB times the number of backends: check RAM. On Debian and Ubuntu, only the cluster's environment file reaches the server.
 6. **jsonb with the lz4 default.** 200,000 jsonb documents of 16 KiB: 107 s on 18.7, 44 s on 19 (8-vCPU dedicated host, 3 trials), from the lz4 default alone; the data took 11.3% more space. Old values stay pglz through pg_upgrade, VACUUM FULL and REPACK. On 18 today, `default_toast_compression = lz4` gives the same speed (43 s).
-7. **Faster restore.** `pg_restore -j 1` of a 250M-row table: 589.6 s on 18.7, 464.8 s on 19 (-21.2%; 16-vCPU dedicated host, 3 trials), mostly in the index builds. A sort-tracing run (exploratory, another host type) built the non-key index in 96.2 s against 125.0 s, with 25.5 of the 28.8 s saved in the in-memory sort of the runs: this matches the new radix sort. The primary-key gain is not explained.
+7. **Faster restore.** `pg_restore -j 1` of a 250M-row table: 589.6 s on 18.7, 464.8 s on 19 (-21.2%; 16-vCPU dedicated host, 3 trials), mostly in the index builds. Why: partly shown. In a separate exploratory run, most of the gain on the non-key index was in the in-memory sort, which fits the new radix sort. The primary-key gain is not explained. (If asked: 96.2 s against 125.0 s for the non-key index, 25.5 of the 28.8 s saved in the sort, on another host type.)
 8. **Bulk insert with a foreign key.** `INSERT ... SELECT` of 10 million rows with an int8 key: 39 s on 18.7, 20 s on 19 (8-vCPU dedicated host, 3 trials). Without the key: 4.3 s and 4.1 s. Why the check is faster is not shown.
 9. **log_lock_waits is on by default.** No cost while no wait passes `deadlock_timeout`. In a pile-up on one row the log got 2.35 MiB at 500 waiters and 28.8 to 31.5 MiB at 2,000 (16-vCPU dedicated host, 3 trials; 2,000 is a lower bound). At 2,000 waiters the server stalled for minutes with the setting on or off. Keep it on; keep queues short with `lock_timeout`.
-10. **First read after a dump and restore.** On 19 the first read of the restored table wrote 31.18 GiB of WAL, about the heap size; on 18.7, 56 bytes (16-vCPU dedicated host). Run `VACUUM (ANALYZE)` before you let traffic in.
+10. **First read after a dump and restore.** For dump and restore (not pg_upgrade) with standbys or a WAL archive. With data checksums on (the initdb default since 18), the first read of a restored table on 19 wrote 31.18 GiB of WAL, about the heap size; on 18.7, 56 bytes (16-vCPU dedicated host, 3 trials). This confirms our RC1 study on RC2. Run `VACUUM (ANALYZE)` before you let traffic in.
+11. **Plan advice.** When a plan flips and you cannot deploy, 19 can pin the good plan for every session from SQL (`pg_plan_advice` and `pg_stash_advice`). The trap: cached plans ignore a stash change, and a changed query ID drops the advice silently. Fix statistics first; treat advice as a tracked stopgap (small test host).
+12. **io_uring with many connections.** With the systemd default soft limit of 1,024 open files and `max_connections = 1200`, neither 18.7 nor 19 RC2 started with `io_method = io_uring` (8-vCPU dedicated host, every attempt). Raise `LimitNOFILE` first: a failed restart is an outage, not a slowdown.
 
 ## Demos
 
 Run as a superuser. Use only the text below: it is the text that passed our command check. Each is under two minutes except where noted.
 
-**Demo 1: the pre-check script (on 18).** Save the script from the brief, section 2.0, as `pg19-precheck.sh`. Then:
+**Demo 1: the pre-check script (on 18).** Save the script from the brief, section 2.0, as `pg19-precheck.sh`, and make it executable (`chmod +x pg19-precheck.sh`). Then:
 
 ```shell
 ./pg19-precheck.sh --host=/var/run/postgresql --port=5432
@@ -190,13 +198,13 @@ Run as a superuser. Use only the text below: it is the text that passed our comm
 **Demo 2: same setting, other method (on 18 and on 19).**
 
 ```sql
-set wal_compression = on; show wal_compression; -- 18: pglz; 19 on PGDG: zstd
+set wal_compression = on; show wal_compression;   -- 18: pglz; 19 on PGDG: zstd
 ```
 
 - Expected: `pglz` on 18, `zstd` on 19 (PGDG).
 - Cleanup: none; it is a session setting. Close the session.
 
-**Demo 3: REPACK behind an idle reader, with the retry script (on 19).** More than a minute: rehearse it once. Before recording: a table `public.t` with a primary key (we tested 1,000,000 rows, 195 MB, with 2 clients updating at 200 per second), and `repack-retry.sh` from the brief, section 1.1.
+**Demo 3: REPACK behind an idle reader, with the retry script (on 19).** More than a minute: rehearse it once. Before recording: a table `public.t` with a primary key, and `repack-retry.sh` from the brief, section 1.1, made executable (`chmod +x repack-retry.sh`). We tested 1,000,000 rows, 195 MB, with 2 writers at 200 updates per second; the brief gives no command for the writers, and the demo without them is not tested.
 
 Session 1, then leave it open for 60 s:
 
@@ -213,11 +221,11 @@ Session 2:
 During the run, in a third session:
 
 ```sql
-select name, setting from pg_settings where name in ('wal_level', 'effective_wal_level'); -- SHOW wal_level does not show the switch
+select name, setting from pg_settings where name in ('wal_level', 'effective_wal_level');  -- SHOW wal_level does not show the switch
 ```
 
-- Expected: attempts 1 to 4 print `canceling statement due to lock timeout`, attempt 5 prints `done` after session 1 ends; `effective_wal_level` shows `logical` during the run while `wal_level` stays `replica`.
-- Cleanup: end the transaction in session 1 at 60 s. Each failed attempt leaves a FATAL line in the log and empty files until the next checkpoint.
+- Expected: attempts 1 to 4 print `canceling statement due to lock timeout`, attempt 5 prints `done` after session 1 ends; `effective_wal_level` shows `logical` while an attempt runs (not in the 15 s pause), and `wal_level` stays `replica`.
+- Cleanup: end the transaction in session 1 at 60 s. Each failed attempt copies the whole table and its WAL, and leaves a FATAL line in the log and empty files until the next checkpoint. Run `CHECKPOINT` to remove the empty files; drop `public.t` if you made it for the demo.
 
 ## Do not say
 
@@ -230,7 +238,11 @@ select name, setting from pg_settings where name in ('wal_level', 'effective_wal
 | "REPACK has a bug that keeps logical WAL on." | The switch back waits for the checkpoint in progress; the docs give no bound. |
 | "You can run several REPACK (CONCURRENTLY) at once." | One per instance. |
 | "2026 is a record year." | 2001 had 3,061 commits; 2026 has 3,024 to November 11. |
-| "The log of a lock pile-up is about 7 x N squared bytes." | Withdrawn: it held only at 2,000 waiters. Give the measured sizes. |
+| "The log of a lock pile-up is about 7 x N squared bytes." | Corrected in 2.2: it held only at 2,000 waiters. Give the measured sizes. |
+| "log_lock_waits causes the stall at 2,000 waiters" or "the deadlock checks cause the stall." | The server stalled with the setting off too; that the deadlock checks cause it is partly shown. |
+| "19 fixes LISTEN/NOTIFY at scale." | It removes the wake-up of listeners on other channels. DBOS notes that the global lock at commit stays; one channel for all listeners was not tested. |
+| "pg_upgrade makes my TOAST data lz4." | No. Only new values, and values you rewrite. |
+| "REPACK (CONCURRENTLY) never loses rows." | It lost no row in our tests: small test host, three trials of the correctness check. |
 | "log_lock_waits slows the queue drain." | At 500 waiters the drain took 0.41 s either way; at 2,000 the server stalled with it on or off. |
 | "19 vacuums wraparound tables ten times sooner." | We placed the table last in pg_class, the worst case for 18. |
 | "The new autovacuum order is worse than 18" or "we measured its harm." | A table just past its freeze age started later on 19 (122 to 125 s against 67 to 87 s): by design, harm not measured. |
@@ -249,8 +261,9 @@ select name, setting from pg_settings where name in ('wal_level', 'effective_wal
 | "Lock-usage alerts fire late on 19." | The other way round: thresholds above about 1.4 never fire. |
 | "pg_upgradecluster fixes the removed settings." | It fixes 2 of 3, and it does not copy conf.d. |
 | "wal_compression = on means zstd." | It means the best method compiled in; zstd on PGDG builds. |
+| "The script finds standbys without zstd." | It flags `wal_compression = on` on the primary; check each standby's build by hand. |
 | Anything about managed services. | We did not test any managed service. |
-| Anything about 19.0. | This is RC2. We plan to re-run the headline cells on 19.0. |
+| Anything about 19.0. | This is RC2. |
 | A speed number from a small test host. | Small test hosts show behavior only. |
 | A comparison across hosts. | Two hosts of the same type differed by about 2x on our host benchmarks. |
 | Radim Marek's or Joel Jacobson's numbers as ours. | Credit them by name; link their posts. |
@@ -266,7 +279,7 @@ Time codes are placeholders until the edit.
 - [hh:mm:ss] Lock table sizing commit, "in many cases you can acquire far fewer locks than before": https://github.com/postgres/postgres/commit/e1ad034809a
 - [hh:mm:ss] Commit message on doubling max_locks_per_transaction (Heikki Linnakangas): https://postgrespro.com/list/id/E1w8iNH-002maX-1C@gemulon.postgresql.org
 - [hh:mm:ss] wal_compression = on picks the best method compiled in (source at REL_19_RC2): https://github.com/postgres/postgres/blob/REL_19_RC2/src/include/access/xlog.h#L89-L100
-- [hh:mm:ss] REPACK docs: https://www.postgresql.org/docs/19/sql-repack.html
+- [hh:mm:ss] Only one REPACK (CONCURRENTLY) at a time (Christophe Pettus, The Build, 2026-05-27): https://thebuild.com/blog/repack-concurrently-pgsqueeze-gets-a-promotion/
 - [hh:mm:ss] REPACK takes the final AccessExclusiveLock (source at REL_19_RC2): https://github.com/postgres/postgres/blob/REL_19_RC2/src/backend/commands/repack.c#L3475
 - [hh:mm:ss] REPACK CONCURRENTLY costs (Radim Marek, boringSQL, 2026-09-28): https://boringsql.com/posts/repack-concurrently-costs/
 - [hh:mm:ss] PostgreSQL 19 open items: https://wiki.postgresql.org/wiki/PostgreSQL_19_Open_Items
@@ -284,10 +297,11 @@ Time codes are placeholders until the edit.
 
 1. **Which lead goes first?** Recommendation: upgrade day. Everyone who upgrades meets it, and the numbers bridge ("22 migration items") leads into it.
 2. **Do Demo 3 (REPACK) live?** Recommendation: only after one rehearsal on the recording machine; else tell the result (four lock timeouts, success on attempt 5) and show the script.
-3. **We record before 19.0 (planned for 2026-11-19).** Recommendation: say "RC2" each time a number comes up, and say once that we plan to re-run the headline cells on 19.0.
-4. **How many quick hits?** Recommendation: if time is short, keep JIT, parallel VACUUM, first read after restore, log_lock_waits and the autovacuum order; move the rest to the show notes.
-5. **The glibc setting is an 18 tip, not a 19 feature. Keep it?** Recommendation: keep it, short, as "if you stay on 18 for a while"; say its memory cost in the same breath.
+3. **We record before 19.0 (planned for 2026-11-19).** Recommendation: say "RC2" each time a number comes up.
+4. **Do we promise a re-run on 19.0?** Recommendation: only with a date.
+5. **How many quick hits?** Recommendation: if time is short, keep JIT, parallel VACUUM, first read after restore, log_lock_waits and the autovacuum order; move the rest to the show notes.
+6. **The glibc setting is an 18 tip, not a 19 feature. Keep it?** Recommendation: keep it, short, as "if you stay on 18 for a while"; say its memory cost in the same breath.
 
 ## Checked against
 
-Numbers, links and the "do not say" list checked against the published version 2.2 of the brief.
+Numbers, links and the "do not say" list checked against the published version 2.2 of the brief, plus the corrections planned for version 2.3: the pre-check reads only the server where it runs (not the standbys); the cause of the parallel VACUUM slowdown is not isolated; lock-usage alerts above about 1.4 never fire; about 316 names are in no list back to version 10.
