@@ -164,7 +164,7 @@ Anyone with many listeners on different channels: cache invalidation, a channel 
 ## Quick hits
 
 1. **JIT is off by default.** On 22 TPC-H-derived queries (32-vCPU dedicated host, 3 trials): with each version's default, 19 took 6.8% less time (geometric mean). With the same setting on both, the difference was 1.8% (JIT off) and 1.2% (JIT on): "same". JIT did not change; the default did. Per query (exploratory): q1, the longest aggregation, 4,607 ms against 3,914 ms (17.7% longer); q19, 108 against 172 ms (37.4% less). Find JIT queries in `pg_stat_statements` on 18; set `jit = on` for that role or database where it helps.
-2. **Throttled parallel VACUUM is slower.** `VACUUM (PARALLEL 4)` with a 2 ms cost delay: the index phase took 113.6 s on 19 against 41.5 s on 18.7, because workers now share one cost limit. With `vacuum_cost_limit = 1000` in that session: 31.8 s (16-vCPU dedicated host, 3 trials).
+2. **Throttled parallel VACUUM is slower.** `VACUUM (PARALLEL 4)` with a 2 ms cost delay: the index phase took 113.6 s on 19 against 41.5 s on 18.7. The release notes warn of this: parallel workers now share the cost limit. With `vacuum_cost_limit = 1000` in that session: 31.8 s (16-vCPU dedicated host, 3 trials). Not run: 18.7 at 1000, other limits, other worker counts, a 19 build without the cost-sharing commit.
 3. **Autovacuum order near wraparound.** We put a table at 1.65 billion XIDs last of 121, after 120 bloated tables. 19 started it at about 13 s, 18.7 at about 152 s (16-vCPU dedicated host, 3 trials). Say "placed last": on 18 the pg_class place decides. At default weights, a table at 300 million XIDs still came last on 19. `autovacuum_freeze_score_weight` has a maximum of 10; at 10 it came first in 3 of 3 trials, but then age leads the order of all tables. Watch `pg_stat_autovacuum_scores`.
 4. **Hot queue table.** The longest gap between its vacuums was 60.0 to 60.1 s on 19 against 152.3 to 153.2 s on 18.7 (16-vCPU dedicated host, default naptime). A worker sorts its list once when it starts.
 5. **The C-library trim setting on 18 (not a 19 feature).** Point lookups over 10 partitions without pruning, 128 clients (32-vCPU dedicated host, 3 trials): 18.7 did 196,490 lookups per second, 18.7 with the glibc trim threshold 256,024 (1.30 times), 19 RC2 258,182. It depends on heap layout: at 8, 9, 12 and 16 partitions both versions trim (small test host). Cost: up to 32 MiB times the number of backends: check RAM. On Debian and Ubuntu, only the cluster's environment file reaches the server.
@@ -237,6 +237,7 @@ select name, setting from pg_settings where name in ('wal_level', 'effective_wal
 | "18 handles only about 130 notifications per second." | That is 18.7 overloaded at a fixed target, 1,000 listeners, one notifier, one host size. |
 | "19 delivers 11,000 notifications per second." | "At least 11,040: our client was the limit." |
 | "19 made JIT faster" or "slower." | With the same setting the difference was 1 to 2%. The default changed. |
+| "The shared cost limit is the whole cause of the parallel VACUUM slowdown." | Not shown: we ran 19 RC2 at 200 and 1000 with 4 workers only. Say "the release notes warn of it, and a larger cost limit removed it". |
 | "19 is X percent faster." | Every number holds for one workload, one host type, one config. |
 | "19 is 33% faster on partitioned lookups." | A C-library heap-layout effect on 18.7; at 8 partitions both were the same. |
 | "The glibc setting makes 18 as fast as 19." | It closed the gap on one query shape on one host, and it costs memory per backend. |
@@ -289,4 +290,4 @@ Time codes are placeholders until the edit.
 
 ## Checked against
 
-Numbers checked against the brief candidate of 16:35 PT (version 2.2).
+Numbers, links and the "do not say" list checked against the published version 2.2 of the brief.
