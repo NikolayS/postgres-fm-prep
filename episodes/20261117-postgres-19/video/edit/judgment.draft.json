@@ -1,0 +1,496 @@
+{
+ "_draft": "First pass from the samograph (Deepgram) transcript, 2026-11-17. 'near' is source time in video1398514958.mp4: on-air time + 36 s (whisper on the full file gives 32 to 40 s at 7 points; good to about 5 s). 'phrase' is Deepgram text: re-anchor each row on the Scribe words in review.txt before running detect.ts ('/' separates turns; '...' marks words kept out of the quote). Categories rambling, hedge, hedge-trim, tech can be vetoed as a group: render.ts --keep hedge.",
+ "removals": [
+  {
+   "id": "c01",
+   "cat": "head",
+   "near": "00:38",
+   "onair": "00:00",
+   "phrase": "Do it. Yeah. If you have free disk space ... Yeah. I'm... I'd owe you a few, I think.",
+   "est_s": 38,
+   "reason": "pre-show: disk space, Rust, 'your turn to introduce'"
+  },
+  {
+   "id": "c02",
+   "cat": "rambling",
+   "near": "01:19",
+   "onair": "00:43",
+   "phrase": "I can tell I remember when we we met a couple of months ago, in London. ... But no, not not the kind of getting sick part of it.",
+   "est_s": 49,
+   "reason": "off-topic: London meeting, Michael's looks, weather"
+  },
+  {
+   "id": "c03",
+   "cat": "rambling",
+   "near": "02:46",
+   "onair": "02:10",
+   "phrase": "Yeah. I I have no idea. I don't follow. It was a joke. I I I stopped playing games after COVID. So... Yeah. Good. So let's talk about it. Where to start?",
+   "est_s": 12,
+   "reason": "after the GTA joke lands; keep the joke and Michael's quip"
+  },
+  {
+   "id": "c04",
+   "cat": "hedge",
+   "near": "05:31",
+   "onair": "04:55",
+   "phrase": "I don't think like, for me, personally, I...",
+   "est_s": 3,
+   "reason": "turn-start hedge; start at 'When I was reporting some bugs'"
+  },
+  {
+   "id": "c05",
+   "cat": "hedge",
+   "near": "06:22",
+   "onair": "05:46",
+   "phrase": "I don't know. Like, it's a good idea to compare with previous years, but definitely,",
+   "est_s": 6,
+   "reason": "hedge; keep 'for example, I just checked it yesterday'"
+  },
+  {
+   "id": "c06",
+   "cat": "rambling",
+   "near": "07:00",
+   "onair": "06:24",
+   "phrase": "And at some point, especially after under... Andres Freud said, like, since every my message where I used the, yeah, I didn't check very carefully with my hands. It's... It was an experiment. And I... Actually, I will I will return to this experiment. Understood. Like, it it it triggered him in terms of like, my transparency that I didn't check it manually. And it also, coincidentally, it was...",
+   "est_s": 26,
+   "reason": "garbled and about a colleague's private reaction; resume at 'Like, nineteen is coming, so I decided stop pushing'"
+  },
+  {
+   "id": "c07",
+   "cat": "hedge-trim",
+   "near": "07:31",
+   "onair": "06:55",
+   "phrase": "And I'm pretty sure we could find more bugs. Like, I'm not pretty sure.",
+   "est_s": 5,
+   "reason": "keep 'I hundred percent sure. Could find more bugs.' (the claim, stronger)"
+  },
+  {
+   "id": "c08",
+   "cat": "rambling",
+   "near": "07:54",
+   "onair": "07:18",
+   "phrase": "This is how things look like right now. Yeah.",
+   "est_s": 3,
+   "reason": "trailing filler"
+  },
+  {
+   "id": "c09",
+   "cat": "fix",
+   "near": "09:45",
+   "onair": "09:09",
+   "phrase": "Halloween",
+   "est_s": 1,
+   "reason": "optional: drop the wrong date word; 'this scary list from Robert Haas' stays correct (removes the CORRECTION note)"
+  },
+  {
+   "id": "c10",
+   "cat": "rambling",
+   "near": "09:57",
+   "onair": "09:21",
+   "phrase": "Was it Andres? / from home? / Or / No. ... Right?",
+   "est_s": 3,
+   "reason": "name search crosstalk; keep 'from Robert Haas'"
+  },
+  {
+   "id": "c11",
+   "cat": "rambling",
+   "near": "10:01",
+   "onair": "09:25",
+   "phrase": "And it is to get me, like, I started pulling more. AI to bug find... Findings. And I think right now, it's a good point that maybe, like, just",
+   "est_s": 11,
+   "reason": "garbled start; keep 'it was from Tomas Vondra, the blog post...'"
+  },
+  {
+   "id": "c12",
+   "cat": "rambling",
+   "near": "10:48",
+   "onair": "10:12",
+   "phrase": "So this could be, like... Overall shape will be better. Like, interesting. Right? So",
+   "est_s": 5,
+   "reason": "trailing filler"
+  },
+  {
+   "id": "c13",
+   "cat": "hedge",
+   "near": "11:30",
+   "onair": "10:54",
+   "phrase": "It's not after release at this. / Yeah. / Yeah. But but but actually, for me, it's it's different. Like, we... In spring, I already started to find bugs. And report. I just didn't put a lot of attention to it. / When speech... When's feature freeze? Spring. / It was before FuturePress. Before... Well, I don't remember details, actually. Yeah. Yeah. / It's very similar, though, I think, timing... / Similar. Yeah. Yeah.",
+   "est_s": 25,
+   "reason": "feature-freeze timing tangle with 'I don't remember details'; resume at 'But Opus 4.8 was already quite good'"
+  },
+  {
+   "id": "c14",
+   "cat": "rambling",
+   "near": "12:32",
+   "onair": "11:56",
+   "phrase": "And and, yeah, and so things should be transformed, but",
+   "est_s": 4,
+   "reason": "keep 'maybe let's talk about features'"
+  },
+  {
+   "id": "c15",
+   "cat": "rambling",
+   "near": "15:32",
+   "onair": "14:56",
+   "phrase": "What do you think about, like like, it it feels to me a little bit that using logical for this job it's not... It won't work in most... In all cases. Because like, do you think... In other word... Like, let me ask you differently.",
+   "est_s": 17,
+   "reason": "false starts; keep 'Do you think pg_repack will be over with this release...' (the logical point comes back at 17:30)"
+  },
+  {
+   "id": "c16",
+   "cat": "rambling",
+   "near": "17:40",
+   "onair": "17:04",
+   "phrase": "Ja en dat onze",
+   "est_s": 1,
+   "reason": "noise at turn start"
+  },
+  {
+   "id": "c17",
+   "cat": "rambling",
+   "near": "18:00",
+   "onair": "17:24",
+   "phrase": "It's like... It feels unsecured and so on. Like, it's just, like, not convenient, and there is some there is something that can be improved there. We should explore it separately.",
+   "est_s": 11,
+   "reason": "rambling; keep 'Like, it's password and so on.' then 'I also think...' (veto to keep 'feels insecure')"
+  },
+  {
+   "id": "c18",
+   "cat": "rambling",
+   "near": "18:38",
+   "onair": "18:02",
+   "phrase": "So there are some edge cases Yeah. Yeah. Yeah. And and",
+   "est_s": 4,
+   "reason": "filler run"
+  },
+  {
+   "id": "c19",
+   "cat": "rambling",
+   "near": "18:51",
+   "onair": "18:15",
+   "phrase": "Now. And yeah. You know it. Right?",
+   "est_s": 3,
+   "reason": "filler after the pgcompacttable idea"
+  },
+  {
+   "id": "c20",
+   "cat": "rambling",
+   "near": "19:14",
+   "onair": "18:38",
+   "phrase": "I had questions. Yeah. I actually... I was going to... I was thinking of using it a a friend and...",
+   "est_s": 7,
+   "reason": "Michael false starts; keep 'Who's on ... they don't have pg_repack'"
+  },
+  {
+   "id": "c21",
+   "cat": "rambling",
+   "near": "20:06",
+   "onair": "19:30",
+   "phrase": "I think I just... I have an additional reason why this idea might resurrected, but we will discuss it separately. / There is interesting topic. We will talk about it separately anyway. Yeah. So",
+   "est_s": 12,
+   "reason": "teaser said twice, no content"
+  },
+  {
+   "id": "c22",
+   "cat": "rambling",
+   "near": "20:28",
+   "onair": "19:52",
+   "phrase": "yeah. Well, I I like that listen to which almost in my list of don't use it.",
+   "est_s": 6,
+   "reason": "false start; keep 'You know, my list of don't use it: subtransactions and temp tables...'"
+  },
+  {
+   "id": "c23",
+   "cat": "rambling",
+   "near": "22:07",
+   "onair": "21:31",
+   "phrase": "With this improvement. Right? It's improvement. It's great that...",
+   "est_s": 3,
+   "reason": "repeats; keep 'It's great to see the progress here.'"
+  },
+  {
+   "id": "c24",
+   "cat": "rambling",
+   "near": "24:28",
+   "onair": "23:52",
+   "phrase": "No. So yeah, that's my take on it.",
+   "est_s": 3,
+   "reason": "Kirk trailing filler"
+  },
+  {
+   "id": "c25",
+   "cat": "rambling",
+   "near": "24:58",
+   "onair": "24:22",
+   "phrase": "Right? So",
+   "est_s": 1,
+   "reason": "trailing"
+  },
+  {
+   "id": "c26",
+   "cat": "rambling",
+   "near": "27:17",
+   "onair": "26:41",
+   "phrase": "Okay. Yeah. We... Last week, we we... When we, like, we our sessions, we we...",
+   "est_s": 6,
+   "reason": "false starts; keep 'Session which led to development of pgroast'"
+  },
+  {
+   "id": "c27",
+   "cat": "rambling",
+   "near": "27:49",
+   "onair": "27:13",
+   "phrase": "And I have... Like, probably, we should have a separate discussion about as well, but",
+   "est_s": 6,
+   "reason": "keep 'I have quite challenging experience...'"
+  },
+  {
+   "id": "c28",
+   "cat": "hedge-trim",
+   "near": "31:20",
+   "onair": "30:44",
+   "phrase": "As I see ... Yeah ... Right?",
+   "est_s": 2,
+   "reason": "keep 'Our testing found some overhead from using advice, around ten percent. So it's not for free.' (number is a CLARIFICATION: ~13%)"
+  },
+  {
+   "id": "c29",
+   "cat": "hedge",
+   "near": "32:35",
+   "onair": "31:59",
+   "phrase": "I just... This is my natural reaction to this. Like, just definitely can be more testing. I would I would like, for example, to I would...",
+   "est_s": 10,
+   "reason": "hedge and false starts; keep 'I will turn on track_planning in pg_stat_statements'"
+  },
+  {
+   "id": "c30",
+   "cat": "rambling",
+   "near": "32:53",
+   "onair": "32:17",
+   "phrase": "Yeah. Great thing. Yeah. Think. Yeah.",
+   "est_s": 2,
+   "reason": "trailing filler"
+  },
+  {
+   "id": "c31",
+   "cat": "rambling",
+   "near": "34:26",
+   "onair": "33:50",
+   "phrase": "Percent. So What else? What else?",
+   "est_s": 2,
+   "reason": "trailing filler"
+  },
+  {
+   "id": "c32",
+   "cat": "tech",
+   "near": "36:44",
+   "onair": "36:08",
+   "phrase": "פה / anything / Immediately received.",
+   "est_s": 1,
+   "reason": "crosstalk from lag; keep Kirk's 'about it on a web UI' sentence"
+  },
+  {
+   "id": "c33",
+   "cat": "hedge",
+   "near": "38:18",
+   "onair": "37:42",
+   "phrase": "But in some cases, I guess, it can be beneficial to use.",
+   "est_s": 4,
+   "reason": "second copy of the same hedge; the first ('in some cases, I see it can be beneficial') stays"
+  },
+  {
+   "id": "c34",
+   "cat": "hedge-trim",
+   "near": "43:06",
+   "onair": "42:30",
+   "phrase": "I guess. Right? So this is also good stuff if you use it. Right?",
+   "est_s": 5,
+   "reason": "keep 'extended statistics can now be dumped and restored'"
+  },
+  {
+   "id": "c35",
+   "cat": "rambling",
+   "near": "43:24",
+   "onair": "42:48",
+   "phrase": "Maybe all, yeah, maybe all. What kind of statistics do we have? Regular. Right? / Extended. / Extended. What else? Right? So I... I'm I'm looking / Hello? / Extra extended? / I'm on the... / Super.",
+   "est_s": 11,
+   "reason": "search for the word on air; veto if Kirk's 'stick with regular and extended' needs the lead-in"
+  },
+  {
+   "id": "c36",
+   "cat": "hedge-trim",
+   "near": "43:48",
+   "onair": "43:12",
+   "phrase": "Yeah. I'm looking at it right now. ... but I don't see support in PG restore. I hope it's just the same, like, just data and can be restored to PG statistic. Right? So ... I think so.",
+   "est_s": 13,
+   "reason": "the pg_restore case: keep 'pg_dump includes restorable extended statistics ... if you can dump, you should be able to restore it.' The guess is right (pg_restore restores them), so the note becomes 'dump with --statistics' only"
+  },
+  {
+   "id": "c37",
+   "cat": "rambling",
+   "near": "44:43",
+   "onair": "44:07",
+   "phrase": "Good. A lot of good small stuff which I will benefit personally myself. Like... So it's it's great. Good.",
+   "est_s": 7,
+   "reason": "filler"
+  },
+  {
+   "id": "c38",
+   "cat": "hedge",
+   "near": "47:46",
+   "onair": "47:10",
+   "phrase": "I guess",
+   "est_s": 1,
+   "reason": "turn start: 'We covered all our favorite features.'"
+  },
+  {
+   "id": "c39",
+   "cat": "rambling",
+   "near": "47:50",
+   "onair": "47:14",
+   "phrase": "So as usual, like, recommendation is to... Like,",
+   "est_s": 3,
+   "reason": "false start; keep 'I think recommendations would change as well'"
+  },
+  {
+   "id": "c40",
+   "cat": "rambling",
+   "near": "48:46",
+   "onair": "48:10",
+   "phrase": "but we, like, as as usual, testing on actual is, like, is great because plans will be the same as on / Yeah. And the plans...",
+   "est_s": 9,
+   "reason": "trailing; Michael's 'synthetic workloads' follows"
+  },
+  {
+   "id": "c41",
+   "cat": "tech",
+   "near": "49:57",
+   "onair": "49:21",
+   "phrase": "We hang I was just",
+   "est_s": 2,
+   "reason": "crosstalk"
+  },
+  {
+   "id": "c42",
+   "cat": "hedge",
+   "near": "49:59",
+   "onair": "49:23",
+   "phrase": "I I guess my...",
+   "est_s": 1,
+   "reason": "keep 'My recommendation, like, usually was wait until dot one, dot two.'"
+  },
+  {
+   "id": "c43",
+   "cat": "rambling",
+   "near": "52:36",
+   "onair": "52:00",
+   "phrase": "So... But I still feel like a lot of... Can be improved. Nobody has the thing yet. So... Yeah. It's...",
+   "est_s": 7,
+   "reason": "trailing; veto to keep 'Nobody has the thing yet'"
+  },
+  {
+   "id": "c44",
+   "cat": "tech",
+   "near": "52:47",
+   "onair": "52:11",
+   "phrase": "It's also not just / For ours? / it's... It's probably... / No. / I apologize, Michael. / Sorry, Michael. Go ahead.",
+   "est_s": 6,
+   "reason": "crosstalk from lag; keep Kirk's point and Michael's 'I think I understand why we're calling it plan flips'"
+  },
+  {
+   "id": "c45",
+   "cat": "tech",
+   "near": "54:08",
+   "onair": "53:32",
+   "phrase": "Your workload has. It's a big topic. It's also, like, how many are your... Yeah. You are muted. / Muted, muted, you are muted. / Totally cut out. / Sorry about that.",
+   "est_s": 18,
+   "reason": "Kirk was muted; keep 'do you know how many query IDs you actually have?' then 'So, yeah, that's a great question.'"
+  },
+  {
+   "id": "c46",
+   "cat": "rambling",
+   "near": "56:49",
+   "onair": "56:13",
+   "phrase": "it's a it's a... It's That's the problem. Yeah. So anyway,",
+   "est_s": 4,
+   "reason": "filler"
+  },
+  {
+   "id": "c47",
+   "cat": "tech",
+   "near": "58:14",
+   "onair": "57:38",
+   "phrase": "Huh? / Happy New Year.",
+   "est_s": 1,
+   "reason": "lag repeat; keep the first 'Happy New Year, Michael.'"
+  },
+  {
+   "id": "c48",
+   "cat": "tail",
+   "near": "58:27",
+   "onair": "57:51",
+   "phrase": "Good. Recorded. Usually, here jumps out ... Ok. Let me stop.",
+   "est_s": 12,
+   "reason": "after the sign-off"
+  }
+ ],
+ "keep": [
+  {
+   "near": "02:27",
+   "phrase": "Because the GTA six is being released on November nineteen.",
+   "reason": "joke lands; Michael's quip after it stays"
+  },
+  {
+   "near": "26:50",
+   "phrase": "I'll correct one thing. You said years. I think you meant decades.",
+   "reason": "joke"
+  },
+  {
+   "near": "31:21",
+   "phrase": "Okay. I'm off my soap.",
+   "reason": "Kirk's sign-off of his point"
+  },
+  {
+   "near": "46:49",
+   "phrase": "Just the deal in in post-guest twenty, and that's it. Please.",
+   "reason": "joke"
+  }
+ ],
+ "candidates": [
+  {
+   "near": "03:28",
+   "phrase": "Michael on the delay (02:52-04:55 on air)",
+   "note": "long but on topic; kept"
+  },
+  {
+   "near": "08:03",
+   "phrase": "Kirk on reverts (07:27-09:09)",
+   "note": "long; kept, it is the guest's view"
+  },
+  {
+   "near": "28:49",
+   "phrase": "Kirk on hints (28:13-30:44)",
+   "note": "2.5 min monologue; kept, it is the best explainer of the episode; cold-open B comes from it"
+  },
+  {
+   "near": "50:25",
+   "phrase": "Kirk's upgrade process (49:49-51:29)",
+   "note": "long; possible trim of the dev/staging middle (about 30 s), not proposed"
+  },
+  {
+   "near": "45:50",
+   "phrase": "for example, a specific table",
+   "note": "optional fix, not a cut category: dropping these words removes the CORRECTION note at 45:14; only if the join sounds natural"
+  }
+ ],
+ "notes": [
+  {
+   "at": "06:24",
+   "note": "Andres Freund remark: cut proposed (c06); not for the show either way"
+  },
+  {
+   "at": "22:37",
+   "note": "'SuperByTrust' in Deepgram: check the word in Scribe before captions"
+  }
+ ]
+}

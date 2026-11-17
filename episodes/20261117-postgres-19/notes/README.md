@@ -11,6 +11,7 @@ DRAFT, 2026-11-17. Not published.
 | `corrections.md` | On-screen notes (clarifications and two corrections) and the Transistor notes block, for Nik's approval |
 | `illustrations.md` | Draft code cards for the features discussed, for Nik's approval |
 | `cold-open.md` | Cold-open draft: two options with transcript excerpts, in/out times and on-screen text, for Nik's approval |
+| `edit-guidance.md` | Nik's edit guidance and the first-pass cut list (vetoable; JSON in `../video/edit/judgment.draft.json`) |
 | `ideas.md` | Ideas from the episode for future episodes or for hackers (no claims) |
 
 Before release:
