@@ -7,3 +7,4 @@ Ideas raised in or after the episode. No claims; nothing here was tested.
 - **pgcompacttable again** (00:18:15): move rows from the end of the table and truncate, for tables where logical-decoding tools do not work (very large, very busy tables).
 - **WAIT FOR LSN at the connection level** (00:36:29): choose the replica that caught up in libpq or the load balancer, not on one node.
 - **track_planning default** (00:31:42): Nik thinks the benchmark that kept pg_stat_statements.track_planning off was weak.
+- **Postgres 19 for developers** (not discussed on air): `INSERT ... ON CONFLICT DO SELECT ... RETURNING` (get-or-create), `IGNORE NULLS` in window functions, and `COPY TO ... (FORMAT json)`; all three are in the 19 RC2 release notes. A developer-facing PG19 overview on X (Alex Shapalov, 2026-11-17) covered them; a short episode or a post could take them with one SQL example each.

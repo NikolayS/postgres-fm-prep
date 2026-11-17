@@ -9,59 +9,59 @@ Sources used:
 - The study brief v3.0 (https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c), read logged out, and `../recording-notes.md`.
 - pg_hint_plan on GitHub, pganalyze, the PostgreSQL wiki, pgsql-hackers archives, GitLab docs, DBLab Engine releases.
 
-Summary: 4 wrong, 7 imprecise, the rest correct (the vacuumdb item moved to correct after a re-check). None of the wrong items is about the brief's measured numbers. On-screen correction cards are in `corrections.md`.
+Tags (2026-11-17, after Michael's feedback): **CORRECTION** means what was said is wrong; **CLARIFICATION** means what was said is fine but needs context (a default, a platform, the conditions of a number). Summary: 2 corrections, 9 clarifications, the rest correct. The vacuumdb item is correct after a re-check. On-screen notes are in `corrections.md`; they say "Correction" only for the two CORRECTION items.
 
-## Wrong
+## Corrections
 
-- **00:42:34, Michael (speech).** Claim: extended statistics in pg_dump is not in the release notes.
-  - Evidence: release-19.sgml, server applications: "Allow pg_dump to include restorable extended statistics (Corey Huinker)". Commit `c32fb29e979db4a7b92adb29007725eeacf91f64` "Include extended statistics data in pg_dump" (2026-01-27).
-  - Correction: it is in the release notes, under server applications.
-
-- **00:43:12, Nik (speech).** Claim: pg_dump includes restorable extended statistics, "but I don't see support in pg_restore".
-  - Evidence: the same commit makes the archive code accept "EXTENDED STATISTICS DATA" entries; pg_restore restores statistics by default. Dump needs `pg_dump --statistics`. At RC2 it covers ndistinct, dependencies, mcv and expression statistics.
-  - Suggested editor's note: "Correction: pg_restore restores extended statistics too (dump with --statistics)."
-
-- **00:24:47, Michael (speech).** Claim: parallel autovacuum is one of the things where "you don't have to change anything, you just upgrade".
-  - Evidence: commit `1ff3180ca0169556984ab83759477f593129794d` "Allow autovacuum to use parallel vacuum workers." `autovacuum_max_parallel_workers` has `boot_val => '0'` at RC2, so it does nothing until you set it (per table: `autovacuum_parallel_workers`). Prioritization (commit `d7965d65fc5`) is on by default, so the point holds for it.
-  - Suggested editor's note: "Parallel autovacuum is off by default: set autovacuum_max_parallel_workers."
-
-- **00:45:14, Kirk (speech).** Claim: a removed setting "may be set on, for example, a specific table".
+- **[CORRECTION] 00:45:14, Kirk (speech).** Claim: a removed setting "may be set on, for example, a specific table".
   - Evidence: `io_workers`, `escape_string_warning` and `standard_conforming_strings` are not table storage parameters. The trap is role, database and function settings, and grants on the parameters (recording notes, lead 1; shihao zhong's report).
-  - Correction: on a role, a database or a function, not a table.
+  - Fix: on a role, a database or a function, not a table. Kirk's main point, that settings on objects are easy to miss, is right.
 
-## Imprecise
-
-- **00:09:13, Nik (speech).** Claim: the revert wave "started with this Halloween scary list" from Robert Haas.
+- **[CORRECTION] 00:09:13, Nik (speech).** Claim: the revert wave "started with this Halloween scary list" from Robert Haas.
   - Evidence: the thread is "scary patch contest", Robert Haas, pgsql-hackers, 2026-08-25 (https://www.postgresql.org/message-id/CA%2BTgmob9NY6m0YNFTQ4nFH2d0iC9SQRruDYxfndGKKzh8OC80w%40mail.gmail.com). Reverts followed from 2026-08-27 to 09-16. No list from 2026-10-31 found.
-  - Correction: "scary", but late August, not Halloween. The author is right.
+  - Fix: the date. The author and the "scary" theme are right.
 
-- **00:30:46, Nik (speech).** Claim: "our testing found around ten percent overhead from using [plan] advice ... for very fast queries".
+## Clarifications
+
+- **[CLARIFICATION] 00:24:47, Michael (speech).** Said: parallel autovacuum is one of the things where "you don't have to change anything, you just upgrade".
+  - Evidence: commit `1ff3180ca0169556984ab83759477f593129794d` "Allow autovacuum to use parallel vacuum workers." `autovacuum_max_parallel_workers` has `boot_val => '0'` at RC2 (per table: `autovacuum_parallel_workers`). Prioritization (commit `d7965d65fc5`) is on by default, so the point holds for it.
+  - Context: parallel autovacuum is off by default; set `autovacuum_max_parallel_workers` to use it.
+
+- **[CLARIFICATION] 00:42:34, Michael (speech).** Said: he looked for extended statistics in pg_dump and did not see it in the release notes.
+  - Evidence: release-19.sgml, server applications: "Allow pg_dump to include restorable extended statistics (Corey Huinker)". Commit `c32fb29e979db4a7b92adb29007725eeacf91f64` "Include extended statistics data in pg_dump" (2026-01-27).
+  - Context: it is there, under server applications.
+
+- **[CLARIFICATION] 00:43:12, Nik (speech).** Said: pg_dump includes restorable extended statistics, "I don't see support in pg_restore", but "if you can dump, you should be able to restore it. I think so."
+  - Evidence: the same commit makes the archive code accept "EXTENDED STATISTICS DATA" entries; pg_restore restores statistics by default. Dump needs `pg_dump --statistics`. At RC2 it covers ndistinct, dependencies, mcv and expression statistics.
+  - Context: Nik's guess is right; pg_restore restores them.
+
+- **[CLARIFICATION] 00:30:46, Nik (speech).** Said: "our testing found around ten percent overhead from using [plan] advice ... for very fast queries".
   - Evidence: brief v3.0: `always_store_advice_details` (advice generated for every query) "cost about 13% of throughput on a trivial query"; an active stash "added about 2.5 µs per planning". Small test host, 2 trials, marked rough.
-  - Correction: about 13%, for generating advice on every query, on a trivial query, small test host.
+  - Context: about 13%, with advice generated for every query, on a trivial query, small test host.
 
-- **00:45:35, Nik (speech).** Claim: "pg_upgrade --check will report success, and then you just cannot start after upgrade".
+- **[CLARIFICATION] 00:45:35, Nik (speech).** Said: "pg_upgrade --check will report success, and then you just cannot start after upgrade".
   - Evidence: recording notes, lead 1. A removed setting in the 19 config added after `--check` stops 19 at start (FATAL). A removed setting on a role, database or function passes `--check`, and then pg_upgrade itself fails.
-  - Correction: both happen; which one depends on where the setting is.
+  - Context: both happen; which one depends on where the setting is.
 
-- **00:39:41, Michael (speech).** Claim: the EXPLAIN ANALYZE timing overhead is lower.
+- **[CLARIFICATION] 00:39:41, Michael (speech).** Said: the EXPLAIN ANALYZE timing overhead is lower.
   - Evidence: commit `294520c44487ecaade7a6ea8781b973f9ed03909` uses the CPU time-stamp counter on x86-64 (new setting `timing_clock_source`, default `auto`); on other platforms it falls back to the system clock.
-  - Correction: correct on x86-64 only.
+  - Context: on x86-64.
 
-- **00:23:09, Kirk (speech).** Implied: autovacuum prioritization lets you queue a given table again.
+- **[CLARIFICATION] 00:23:09, Kirk (speech).** Implied: autovacuum prioritization lets you queue a given table again.
   - Evidence: commit `d7965d65fc5`: five server-wide `*_score_weight` settings and the view `pg_stat_autovacuum_scores`; no per-table queue.
-  - Correction: weights for the whole server, not a per-table queue.
+  - Context: weights for the whole server; watch the order in `pg_stat_autovacuum_scores`.
 
-- **00:28:13 to 00:30:40, Kirk (speech).** Claim: with plan advice you store a good plan for a query ID "in the database" and give it a priority.
-  - Evidence: pg_stash_advice keys advice by query ID, but the stash lives in shared memory and is saved to a file (commit `c10edb102ada607eb054bc9e23690109d86849ef`), not in a table; pg_dump does not include it. There is no priority setting.
-  - Correction: the advice is kept by query ID in a stash, not in a table, and has no priority.
+- **[CLARIFICATION] 00:28:13 to 00:30:40, Kirk (speech).** Said: with plan advice you store a good plan for a query ID "in the database" and give it a priority.
+  - Evidence: pg_stash_advice keys advice by query ID; the stash lives in shared memory and is saved to a file (commit `c10edb102ada607eb054bc9e23690109d86849ef`), not in a table; pg_dump does not include it. There is no priority setting.
+  - Context: advice is kept per query ID in a stash on the server, so back it up separately.
 
-- **00:03:01, Michael (speech).** Claim: for the last few years the release came "very reliably in September".
+- **[CLARIFICATION] 00:03:01, Michael (speech).** Said: for the last few years the release came "very reliably in September".
   - Evidence: 15.0 came out 2022-10-13.
-  - Correction: September or October.
+  - Context: September or October. No on-screen note needed.
 
 ## Correct (checked)
 
-- **00:41:28, Nik (speech).** Claim: with `-j`, vacuumdb `--analyze-only` analyzed the partitions but nobody analyzed the partitioned parent; 19 fixes this.
+- **[CORRECT] 00:41:28, Nik (speech).** Claim: with `-j`, vacuumdb `--analyze-only` analyzed the partitions but nobody analyzed the partitioned parent; 19 fixes this.
   - Verdict: correct (re-checked 2026-11-17 after Nik's question; the earlier "imprecise" verdict is withdrawn). One detail to add, not a correction: since Postgres 12 the parent was skipped without `-j` too.
   - Evidence, Postgres 11 and older (`REL_11_0`, `src/bin/scripts/vacuumdb.c`): the table list comes from the catalogs only `if (parallel && (!tables || !tables->head))`, with `relkind IN (r, m)`, so only `-j` skipped the parents. Without `-j`, vacuumdb sent one database-wide `ANALYZE`, which covers partitioned tables.
   - Postgres 12 to 18: commit `e0c2933a767` "Use catalog query to discover tables to process in vacuumdb" (Nathan Bossart, 2019) uses the catalog query always, still `relkind` r and m (`REL_18_0` vacuumdb.c line 916), so the parents were skipped with or without `-j`.

@@ -40,33 +40,47 @@ Before the upgrade:
 - new defaults: jit off, log_lock_waits on, lz4 for TOAST, wal_compression = on means zstd on PGDG builds
 ```
 
-### 4/ Reply — 230 chars — media: none (link card)
+### 4/ Reply — 267 chars — media: none (link card)
 
 ```
 My advice: do not wait for 19.1. Start testing now, on clones, and give yourself a month or two to study plan changes.
+
+Which 19 feature do you test first?
 
 Brief (19 RC2 vs 18.7): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 Listen: https://postgres.fm/episodes/postgres-19
 Watch: https://www.youtube.com/watch?v=XXXXXXXXXXX
 ```
 
-## LinkedIn (v1)
+## LinkedIn (v2)
 
 Media: the brief's NOTIFY chart, or the cold-open clip. Links in the first comment: Brief / Listen / Watch, as in reply 4.
+
+v2 (2026-11-17): numbered list, one problem line per item, one small SQL example (WAIT FOR LSN), closing question. Format idea from a developer-facing PG19 overview on X (Alex Shapalov); no text taken from it.
 
 ```
 Postgres 19, LISTEN/NOTIFY with 1,000 listeners, each on its own channel: 200 notifications per second on 18.7, at least 11,040 on 19 RC2.
 
-New Postgres FM episode: Michael Christofides joins Kirk Wolak and me for this one. We went through our favorite Postgres 19 features, and what to check before you upgrade:
+New Postgres FM episode: Michael Christofides joins Kirk Wolak and me for this one. Our favorite Postgres 19 features, and what to check before you upgrade:
 
-- REPACK (CONCURRENTLY) is in core, based on pg_squeeze. Michael thinks it is fine for most workloads; on a very large, busy table I still have doubts. Watch the final lock: the longer the first catch-up pass and the faster the writes, the longer the table is blocked.
-- NOTIFY wakes only the listeners of its channel. The global lock at commit is still there.
-- Autovacuum now orders tables by a score. In our test, a table at 1.65 billion XIDs, placed last of 121, started after about 13 s on 19 RC2 and about 152 s on 18.7 (16-vCPU dedicated host, 3 trials; the worst case for 18).
-- pg_plan_advice and pg_stash_advice: keep a good plan for a query from SQL, with no hints in the application code.
-- New defaults: jit off, log_lock_waits on, lz4 for TOAST, and wal_compression = on now means zstd on PGDG builds. Check that every standby has zstd.
-- pg_upgrade --check can say OK, and the upgrade still fails: a removed or now-rejected setting on a role, database or function.
+1. REPACK (CONCURRENTLY). Shrink a bloated table without locking it for the whole rewrite. It is in core, based on pg_squeeze. Michael thinks it is fine for most workloads; on a very large, busy table I still have doubts. The final lock is longer when the first catch-up pass is long and writes are fast.
+
+2. LISTEN/NOTIFY. NOTIFY now wakes only the listeners of its channel. The global lock at commit is still there.
+
+3. Autovacuum order. Tables now get a score. In our test, a table at 1.65 billion XIDs, placed last of 121, started after about 13 s on 19 RC2 and about 152 s on 18.7 (16-vCPU dedicated host, 3 trials; the worst case for 18).
+
+4. Read your writes on a replica. Write on the primary, take the LSN, then on the replica:
+   wait for lsn '0/306EE20' with (timeout '2s');
+
+5. Plan advice. pg_plan_advice and pg_stash_advice keep a good plan for a query from SQL, with no hints in the application code.
+
+6. New defaults: jit off, log_lock_waits on, lz4 for TOAST, and wal_compression = on now means zstd on PGDG builds. Check that every standby has zstd.
+
+7. pg_upgrade --check can say OK, and the upgrade still fails: a removed or now-rejected setting on a role, database or function.
 
 My advice: do not wait for 19.1 or 19.2. Start testing now, on clones, and give yourself a month or two to study plan changes.
+
+Which Postgres 19 feature do you test first?
 
 Video, podcast (Spotify, Apple Podcasts, any app) and our study brief: first comment.
 (NOTIFY: 8-vCPU dedicated host, 4 notifiers, median of 3 runs; our client was the limit, so 11,040 is a lower bound.)
@@ -81,4 +95,5 @@ Video, podcast (Spotify, Apple Podcasts, any app) and our study brief: first com
 - Autovacuum order: commit d7965d65fc5; brief quick hit 4 (a table placed last at 1.65 billion XIDs started at about 13 s on 19, about 152 s on 18.7). The LinkedIn post uses these two numbers (16-vCPU dedicated host, 3 trials).
 - Removed or now-rejected settings (escape_string_warning, standard_conforming_strings = off) on a role, database or function pass --check, then the upgrade fails: recording notes lead 1; shihao zhong's report, pgsql-hackers, 2026-10-24.
 - New defaults: commits 7f8c88c2b87 (jit), 2aac62be8cb (log_lock_waits), 34dfca29343 (lz4 TOAST, when built with lz4), 5838806ce69 (wal_compression = on picks zstd, lz4, pglz in that order). "zstd on PGDG": recording notes demo 2.
+- WAIT FOR LSN example: syntax and the `pg_current_wal_insert_lsn()` step follow the 19 RC2 reference page (doc/src/sgml/ref/wait.sgml).
 - "Do not wait for 19.1 or 19.2": Nik at 00:49:23; "a month or two": Nik at 00:56:40.

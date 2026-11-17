@@ -7,8 +7,9 @@ DRAFT, 2026-11-17. Not published.
 | `notes.md` | Episode description, Transistor show notes with 20 links and times, link check |
 | `youtube-description.txt` | YouTube description with chapters and key links |
 | `summary.txt` | Transistor summary |
-| `fact-check.md` | Claims made on air, checked against primary sources |
-| `corrections.md` | On-screen correction cards and the Transistor corrections block, for Nik's approval |
+| `fact-check.md` | Claims made on air, checked against primary sources, each tagged CORRECTION or CLARIFICATION |
+| `corrections.md` | On-screen notes (clarifications and two corrections) and the Transistor notes block, for Nik's approval |
+| `illustrations.md` | Draft code cards for the features discussed, for Nik's approval |
 | `cold-open.md` | Cold-open draft: two options with transcript excerpts, in/out times and on-screen text, for Nik's approval |
 | `ideas.md` | Ideas from the episode for future episodes or for hackers (no claims) |
 
