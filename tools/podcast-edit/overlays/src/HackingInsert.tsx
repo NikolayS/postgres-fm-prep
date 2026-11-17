@@ -32,7 +32,7 @@ export const HackingInsert: React.FC<HackingInsertProps> = (p) => {
   const TW = 520, TH = 292, GAP = 20;
   const gridW = 3 * TW + 2 * GAP;
   const gridX = (1920 - gridW) / 2;
-  const gridY = 240;
+  const gridY = 220; // grid ends at y 884: nothing in the bottom 180 px (YouTube subtitles)
   const rowScale = 0.5;
   const rowW = 6 * TW * rowScale + 5 * GAP * rowScale;
   const rowX = (1920 - rowW) / 2;
@@ -67,9 +67,9 @@ export const HackingInsert: React.FC<HackingInsertProps> = (p) => {
         const at = T.shipAt + i * T.shipStep;
         const land = s(at, {damping: 14, stiffness: 180, mass: 0.6});
         const rel = s(at + T.releaseDelay, {damping: 10, stiffness: 300, mass: 0.5});
-        const CW = 700, CH = 394;
+        const CW = 600, CH = 338; // with the session/release strips under it, ends at about y 800
         const x = i === 0 ? 1920 / 2 - CW - 40 : 1920 / 2 + 40;
-        const y = 400;
+        const y = 330;
         return (
           <div key={i} style={{position: 'absolute', left: x, top: y, width: CW, opacity: land, transform: `translateY(${(1 - land) * 40}px)`}}>
             <div style={{width: CW, height: CH, borderRadius: 10, overflow: 'hidden', boxShadow: '0 16px 50px rgba(0,0,0,0.6)', border: '3px solid rgba(255,255,255,0.15)'}}>
@@ -82,7 +82,7 @@ export const HackingInsert: React.FC<HackingInsertProps> = (p) => {
           </div>
         );
       })}
-      <div style={{position: 'absolute', left: 0, right: 0, bottom: 56, display: 'flex', justifyContent: 'center'}}>
+      <div style={{position: 'absolute', left: 0, right: 0, bottom: 190, display: 'flex', justifyContent: 'center'}}>{/* chip at y ~834-890, above the subtitle zone */}
         <div style={{...strip, fontSize: 32, fontWeight: 500, fontFamily: 'JetBrains Mono, Menlo, monospace', padding: '8px 22px', opacity: s(T.chip), transform: `scale(${0.92 + 0.08 * s(T.chip)})`}}>{p.chip}</div>
       </div>
     </AbsoluteFill>

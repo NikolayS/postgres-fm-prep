@@ -503,7 +503,8 @@ Placement:
   band with the layout owner first. Text 40 px (strips), 44 px (names), mono
   28-32 px (chips); never below 28 px.
 - `full`: screenshots (`ShotCard`), number cards (`NumberPop`), notes and
-  charts (`FullCard`). They dim the whole frame to about 22% so they never
+  charts (`FullCard`). Nothing in the bottom 180 px (y < 900): YouTube
+  subtitles cover it. They dim the whole frame to about 22% so they never
   fight a face.
 
 Host intros (`IntroCard`, vDud guest-intro grammar): the talk freezes right

@@ -24,7 +24,8 @@ export const ShotCard: React.FC<ShotCardProps> = ({src, imageWidth, imageHeight,
   const {fps, durationInFrames} = useVideoConfig();
   font();
 
-  const inset = note ? {w: 1760, h: 860, x: 80, y: 40} : {w: 1760, h: 990, x: 80, y: 45};
+  // Keep the screenshot and the note out of the bottom 180 px (YouTube subtitles): everything ends by y 900.
+  const inset = note ? {w: 1760, h: 760, x: 80, y: 40} : {w: 1760, h: 855, x: 80, y: 45};
   const noteIn = interpolate(frame, [2.6 * fps, 2.9 * fps], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
 
   const k = inset.w / imageWidth; // image px -> card px
