@@ -20,6 +20,7 @@ Tags (2026-11-17, after Michael's feedback): **CORRECTION** means what was said 
 - **[CORRECTION] 00:09:13, Nik (speech).** Claim: the revert wave "started with this Halloween scary list" from Robert Haas.
   - Evidence: the thread is "scary patch contest", Robert Haas, pgsql-hackers, 2026-08-25 (https://www.postgresql.org/message-id/CA%2BTgmob9NY6m0YNFTQ4nFH2d0iC9SQRruDYxfndGKKzh8OC80w%40mail.gmail.com). Reverts followed from 2026-08-27 to 09-16. No list from 2026-10-31 found.
   - Fix: the date. The author and the "scary" theme are right.
+  - Resolved 2026-11-17: Nik approved edit cut c09, which drops the word "Halloween". The kept words are correct, so the on-screen correction card is removed.
 
 ## Clarifications
 

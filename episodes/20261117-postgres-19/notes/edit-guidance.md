@@ -103,7 +103,7 @@ The pg_restore case (c36) is the main one: Nik guessed on air that pg_restore re
 | id | on air | source | est. s | cut (Deepgram words) | why |
 | --- | --- | --- | --- | --- | --- |
 | c01 | 00:00 | 00:00 | 38 | Do it. Yeah. If you have free disk space ... Yeah. I'm... I'd owe you a few, I think. | pre-show: disk space, Rust, 'your turn to introduce' |
-| c09 | 09:09 | 09:45 | 1 | Halloween | optional: drop the wrong date word; 'this scary list from Robert Haas' stays correct (removes the CORRECTION note) |
+| c09 | 09:09 | 09:45 | 1 | Halloween | APPROVED by Nik 2026-11-17. Was optional: drop the wrong date word; 'this scary list from Robert Haas' stays correct (removes the CORRECTION note) |
 | c48 | 57:51 | 58:27 | 12 | Good. Recorded. Usually, here jumps out ... Ok. Let me stop. | after the sign-off |
 
 ## Kept on purpose (candidates)
