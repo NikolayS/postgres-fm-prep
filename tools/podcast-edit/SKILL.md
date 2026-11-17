@@ -497,7 +497,9 @@ Style rules (from the vDud / "вДудь" study, 2026-10-20):
 
 Placement:
 - `band`: strips, lower-thirds, link chips, quotes, gags. Default band
-  x 24-1600, y 912-1052 (constant `BAND` in `src/Band.tsx`); confirm the free
+  x 24-1600, y 724-864 (constant `BAND` in `src/Band.tsx`): right under the
+  head tiles and their name labels, never at the frame bottom (YouTube
+  subtitles sit there; Nik, 2026-11-17). Confirm the free
   band with the layout owner first. Text 40 px (strips), 44 px (names), mono
   28-32 px (chips); never below 28 px.
 - `full`: screenshots (`ShotCard`), number cards (`NumberPop`), notes and
@@ -620,7 +622,8 @@ Review checklist before the final composite:
   freezes. `--from/--until/--tail` render short windows for checks.
 - Final layout used on 2026-10-20: `layout.example.json` with big faces
   (924x594 at y 110), robot 240x135 at 1656,790; overlay band x 24-1600,
-  y 912-1052. Full render with 22 overlays: about 45 min (fast preset).
+  y 912-1052 (superseded 2026-11-17: text goes under the heads, see
+  Placement). Full render with 22 overlays: about 45 min (fast preset).
 - Verify a final: `bun $S/av-sync.ts edited.mp4 final.mp4 final.time-map.json
   20 300 1500 2900` (audio and video lag vs the map; expect |A/V| < 20 ms),
   ebur128 (-16 LUFS, true peak <= -1.5), stream durations equal. Lesson

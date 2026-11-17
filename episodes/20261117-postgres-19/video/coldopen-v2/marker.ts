@@ -19,7 +19,10 @@ const strip = (text: string, seed: number, f: number, top: number) => {
   <span style="position:relative;opacity:${textIn}">${text}</span></div></div>`;
 };
 const page = (body: string) => `<!doctype html><html><head><style>@font-face{font-family:Lato;font-weight:700;src:url("file://${BRAND}/fonts/Lato-700.woff2")}html,body{margin:0;width:1920px;height:1080px;background:transparent;overflow:hidden;font-family:Lato}</style></head><body>${body}</body></html>`;
-const tops = lines.length === 1 ? [960] : [878, 966];
+// Under the head tiles, never at the frame bottom (YouTube subtitles): TOP = first line top, default 724
+// (ep195 wide layout: tiles end at y 642, name labels end at y 714).
+const TOP = Number(process.env.TOP ?? 724);
+const tops = [TOP, TOP + 88];
 for (let li = 0; li < lines.length; li++) {
   for (let f = 0; f <= N + 3; f++) {
     // earlier lines are fully drawn; this line swipes in

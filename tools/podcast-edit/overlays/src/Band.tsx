@@ -1,8 +1,10 @@
 import {AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
 import {font} from './font';
 
-// Bottom band of the BIG-faces layout: x 24-1600, y 912-1052 (robot tile sits to the right).
-export const BAND = {x: 24, y: 912, w: 1576, h: 140};
+// Text band right UNDER the head tiles, never at the frame bottom: YouTube subtitles cover the bottom.
+// Default fits the ep195 wide layout (tiles y 300-642, name labels end at y 714): x 24-1600, y 724-864.
+// For another layout set y = tile bottom + 72 (label) + 10.
+export const BAND = {x: 24, y: 724, w: 1576, h: 140};
 
 export type BandProps = {
   kind: 'strip' | 'lower' | 'lines' | 'chips' | 'quote';

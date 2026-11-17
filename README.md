@@ -22,6 +22,8 @@ The episode's `README.md` is its entry point. Keep its research, study pack, exp
 
 ## Tooling
 
+Agent rules for this repository (including where on-screen text goes): [CLAUDE.md](CLAUDE.md).
+
 [`tools/podcast-edit/`](tools/podcast-edit/SKILL.md) is the post-production toolkit for recorded episodes, packaged as a Claude Code skill: cut fillers and false starts with a vetoable cut list, lay out and compose the final video (cards, music, overlays and their sounds), build captions, the podcast MP3, show notes and the Transistor draft. `SKILL.md` is the entry point; [`PROMOTION.md`](tools/podcast-edit/PROMOTION.md) covers the X thread, LinkedIn, animations, speaker clips and the blog post; it runs on Bun and ffmpeg. To use it as a skill, symlink the directory to `~/.claude/skills/podcast-edit`. API keys (`ELEVENLABS_API_KEY`, `TRANSISTOR_API_KEY`) come from the environment only and never belong in this repository.
 
 ## Release an episode
