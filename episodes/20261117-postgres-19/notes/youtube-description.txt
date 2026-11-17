@@ -1,0 +1,69 @@
+Postgres 19 is here: the features we like most, and what to check before you upgrade from 18.
+One number from our tests: with 1,000 listeners, each on its own channel, LISTEN/NOTIFY went from 200 notifications/s on 18.7 to at least 11,040/s on 19 RC2 (8-vCPU dedicated host, 4 notifiers, median of 3 runs; our client was the limit).
+
+Postgres.FM episode 197: Michael is back! Nik, Michael and Kirk discuss Postgres 19: why the release came in November and not in September, the features they like most, and what to check before you upgrade. They cover REPACK (CONCURRENTLY), LISTEN/NOTIFY with many listeners, autovacuum prioritization, plan advice, WAIT FOR LSN, new defaults, and how to test an upgrade now that AI makes testing cheaper.
+
+Main link: the study brief, PostgreSQL 19 RC2 vs 18.7, with every number and its conditions (PostgresAI):
+https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
+
+Chapters:
+00:00 Postgres 19: Michael is back
+01:32 Why Postgres 19 came in November: security fixes, 80 CVEs
+04:55 AI bug reports, pgsql-bugs and the reverts
+12:03 REPACK (CONCURRENTLY): pg_squeeze in core
+15:38 Do you still need pg_repack?
+19:52 LISTEN/NOTIFY with many listeners
+23:09 Autovacuum prioritization and parallel autovacuum
+25:12 pg_plan_advice: plan advice, not hints
+28:13 Why plan advice beats query hints
+31:20 New defaults: JIT off, lz4 TOAST, wal_compression, log_lock_waits
+33:58 WAIT FOR LSN: read your writes on replicas
+39:22 Lower EXPLAIN ANALYZE timing overhead
+40:30 vacuumdb, extended statistics, pgbench --continue-on-error
+44:18 Before you upgrade: removed settings, pg_upgrade --check
+47:10 How to test a Postgres upgrade: clones, synthetic load, AI
+52:38 Plan flips, regressions and the long tail of queries
+
+Key links (video time of the first mention):
+* PostgreSQL 19 release notes (2:25) https://www.postgresql.org/docs/19/release-19.html
+* What LLMs do to PostgreSQL and DBAs, depesz (6:05) https://www.depesz.com/2026/11/09/what-llms-do-to-postgresql-and-dbas/
+* Are we reverting patches because of bugs found by AI?, Tomas Vondra (9:37) https://vondra.me/posts/are-we-reverting-patches-because-of-bugs-found-by-ai/
+* Add CONCURRENTLY option to REPACK, commit (12:03) https://github.com/postgres/postgres/commit/28d534e2ae0ac888b5460f977a10cd9bb017ef98
+* What REPACK (CONCURRENTLY) costs while it runs, Radim Marek (16:04) https://boringsql.com/posts/repack-concurrently-costs/
+* Postgres LISTEN/NOTIFY does not scale, Recall.ai (20:15) https://www.recall.ai/blog/postgres-listen-notify-does-not-scale
+* Optimize LISTEN/NOTIFY via shared channel map, commit (20:40) https://github.com/postgres/postgres/commit/282b1cde9dedf456ecf02eb27caf086023a7bb71
+* Better Planner Hints with Path Generation Strategies, Lukas Fittl (25:35) https://pganalyze.com/blog/5mins-postgres-19-better-planner-hints
+* WAIT FOR, docs (34:06) https://www.postgresql.org/docs/19/sql-wait.html
+* pg_upgrade --check passes, then the upgrade fails, pgsql-hackers (45:35) https://www.postgresql.org/message-id/CAGRkXqT%2B5%2BmQhoKZFTiM4yOZtVV%3DNW506vDwFtVeG%2BVmL_W5wQ%40mail.gmail.com
+
+Related episodes:
+* pg_squeeze, with Antonin Houska https://postgres.fm/episodes/pg_squeeze
+* DBOS (LISTEN/NOTIFY) https://postgres.fm/episodes/dbos
+* Dump/restore done. Now what? https://www.youtube.com/watch?v=0R1BJBzLCoc
+* The hidden costs of CREATE TEMP TABLE https://www.youtube.com/watch?v=gAdhpYewLZ8
+
+Subscribe for a new Postgres episode every Friday: https://www.youtube.com/@PostgresTV?sub_confirmation=1
+
+All links: https://postgres.fm/episodes/postgres-19
+
+[Check out the subtitles – we edit them! YouTube auto-translates them from English to other languages; try it and share it with people interested in Postgres!]
+
+~~~
+
+What did you like or not like? What should we discuss next time? Let us know in the comments, or by tweeting us on @postgresfm https://twitter.com/PostgresFM, @samokhvalov https://twitter.com/samokhvalov and @michristofides https://twitter.com/michristofides
+
+~~~
+
+Postgres FM is produced by:
+- Michael Christofides, founder of pgMustard https://pgmustard.com/
+- Nikolay Samokhvalov, founder of PostgresAI https://postgres.ai/
+
+With credit to:
+- Jessie Draws for the elephant artwork
+- Intro and outro music: our own arrangement of Apple Loops from GarageBand
+
+~~~
+
+This is the video version. Check out https://postgres.fm to subscribe to the audio-only version, to see the transcript, guest profiles, and more.
+
+#PostgreSQL #Postgres #Database
