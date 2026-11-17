@@ -59,20 +59,20 @@ Summary: 4 wrong, 8 imprecise, the rest correct. None of the wrong items is abou
   - Evidence: pg_stash_advice keys advice by query ID, but the stash lives in shared memory and is saved to a file (commit `c10edb102ada607eb054bc9e23690109d86849ef`), not in a table; pg_dump does not include it. There is no priority setting.
   - Correction: the advice is kept by query ID in a stash, not in a table, and has no priority.
 
-- **00:02:52, Michael (speech).** Claim: for the last few years the release came "very reliably in September".
+- **00:03:01, Michael (speech).** Claim: for the last few years the release came "very reliably in September".
   - Evidence: 15.0 came out 2022-10-13.
   - Correction: September or October.
 
 ## Correct (checked)
 
-- 00:02:52, Michael: "seventy plus CVEs" in the last two minor releases. 18.6 (2026-08-13) fixed 28 and 18.7 (2026-11-12) fixed 52: 80.
+- 00:04:02, Michael: "seventy plus CVEs" in the last two minor releases. 18.6 (2026-08-13) fixed 28 and 18.7 (2026-11-12) fixed 52: 80.
 - 00:08:31, Kirk: "ten or twenty x the number of CVEs". The security page lists 7 CVEs in 2025 releases and 96 in 2026, about 14x.
 - 00:06:05, Nik: depesz on pgsql-bugs mail up and pgsql-general mail down ("What LLMs do to PostgreSQL and DBAs", 2026-11-09).
 - 00:09:37, Nik: Tomas Vondra on revert counts "about on track with past releases", later in the cycle (vondra.me, 2026-10-01).
 - 00:12:03, REPACK: `ac58465e0618941842439eb3f5a2cf8bebd5a3f1` "Introduce the REPACK command" (author Antonin Houska, 2026-03-10) and `28d534e2ae0ac888b5460f977a10cd9bb017ef98` "Add CONCURRENTLY option to REPACK", "heavily based on his own pg_squeeze". `REPACK ... USING INDEX` orders by an index (Michael, 00:13:27).
 - 00:13:37, Michael: pg_squeeze has scheduling; REPACK does not.
 - 00:20:40, Nik: NOTIFY wakes only the listeners of its channel (commit `282b1cde9dedf456ecf02eb27caf086023a7bb71`, Joel Jacobson); the global lock at commit stays (`async.c` at REL_19_RC2, `PreCommit_Notify`, `LockSharedObject(DatabaseRelationId, ..., AccessExclusiveLock)`).
-- 00:20:40, Nik: "with one thousand listeners from two hundred per second, we went to eleven thousand per second". Brief: 200/s on 18.7, at least 11,040/s on 19 RC2, 8-vCPU dedicated host, 4 notifiers, median of 3 runs, client-limited (lower bound). Put the conditions in the notes and on screen.
+- 00:21:02, Nik: "with one thousand listeners from two hundred per second, we went to eleven thousand per second". Brief: 200/s on 18.7, at least 11,040/s on 19 RC2, 8-vCPU dedicated host, 4 notifiers, median of 3 runs, client-limited (lower bound). Put the conditions in the notes and on screen.
 - 00:25:12 to 00:26:36, Michael: pg_plan_advice is in contrib, by Robert Haas (commits `5883ff30b02ceed3c5eabba4d9c09a7766f9a8fc`, `e8ec19aa321abc89fb4fd277c994f14680ba17db`). pg_hint_plan lost code: its PG19 commit `e42246a82589001de2f08255d3b4d984fb134d38` says "removing close to 2000 lines" (it uses the path generation strategy hooks, commit `4020b370f214315b8c10430301898ac21658143f`). Lukas Fittl's 5mins of Postgres episode exists (2026-02-05).
 - 00:26:52, Nik: the wiki lists optimizer hints under "Features We Do Not Want" (now on the Not_Worth_Doing page).
 - 00:31:32, JIT off by default: `7f8c88c2b872cb74882ab93dcb05529dab2a10bc` (Jelte Fennema-Nio).

@@ -1,14 +1,14 @@
-Postgres 19 is here: the features we like most, and what to check before you upgrade from 18.
+Postgres 19 is out this week: the features we like most, and what to check before you upgrade from 18.
 One number from our tests: with 1,000 listeners, each on its own channel, LISTEN/NOTIFY went from 200 notifications/s on 18.7 to at least 11,040/s on 19 RC2 (8-vCPU dedicated host, 4 notifiers, median of 3 runs; our client was the limit).
 
-Postgres.FM episode 197: Michael is back! Nik, Michael and Kirk discuss Postgres 19: why the release came in November and not in September, the features they like most, and what to check before you upgrade. They cover REPACK (CONCURRENTLY), LISTEN/NOTIFY with many listeners, autovacuum prioritization, plan advice, WAIT FOR LSN, new defaults, and how to test an upgrade now that AI makes testing cheaper.
+Postgres.FM episode 197: Michael joins Nik and Kirk for this one (he is back for good in January). They discuss Postgres 19: why the release came in November and not in September, the features they like most, and what to check before you upgrade. They cover REPACK (CONCURRENTLY), LISTEN/NOTIFY with many listeners, autovacuum prioritization, plan advice, WAIT FOR LSN, new defaults, and how to test an upgrade now that AI makes testing cheaper.
 
 Main link: the study brief, PostgreSQL 19 RC2 vs 18.7, with every number and its conditions (PostgresAI):
 https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 
-Chapters:
-00:00 Postgres 19: Michael is back
-01:32 Why Postgres 19 came in November: security fixes, 80 CVEs
+Chapters (TODO before upload: these are recording times; shift them to video times after the edit, and the key-link times too):
+00:00 Postgres 19: Michael joins Nik and Kirk
+01:32 Why Postgres 19 came in November: security fixes
 04:55 AI bug reports, pgsql-bugs and the reverts
 12:03 REPACK (CONCURRENTLY): pg_squeeze in core
 15:38 Do you still need pg_repack?

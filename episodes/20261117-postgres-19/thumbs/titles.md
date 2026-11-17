@@ -28,8 +28,8 @@ Square cover (podcast, 3000x3000): "POSTGRES 19", the three heads, samograph sti
 
 Candidates, recording times:
 
-1. 00:55:23 to 00:56:13, Nik: a query at one call per second hits a 60 s statement_timeout, and on a 96-core machine two calls per second fill the box. Strong, stands alone, about 45 s: needs a trim.
-2. 00:20:40 to 00:21:00, Nik: "with one thousand listeners from two hundred per second, we went to eleven thousand per second", with the brief's NOTIFY chart on screen. Short; add the conditions as a chip.
+1. 00:55:23 to 00:56:13, Nik: a query at one call per second hits a 60 s statement_timeout, and on a 96-core machine two calls per second fill the box. Strong, stands alone, about 50 s: needs a trim.
+2. 00:20:59 to 00:21:14, Nik: "with one thousand listeners from two hundred per second, we went to eleven thousand per second", with the brief's NOTIFY chart on screen. Short; add the conditions as a chip.
 3. 00:28:24 to 00:29:20, Kirk: "Plan hints to me is the 1975 solution ... we're 2026, baby." Funny; trim to about 20 s.
 
 Recommendation: 2 (it has a chart and a number), or 3 if Nik prefers a laugh.
