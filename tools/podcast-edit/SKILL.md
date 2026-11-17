@@ -421,6 +421,12 @@ bun $S/compose.ts layout.json out-edited.mp4 final.mp4 --intro a-intro.mp3 --out
   only while one of them is on. `track` (path relative to the layout file) makes
   the crop follow a face: see [face-track/README.md](face-track/README.md)
   (macOS Vision detection, smoothed path, ffmpeg `sendcmd` on a named crop).
+- `layout.ts` themes: `"theme": "shades"` draws the pink postgres.fm look (it is now
+  built in; `brand/layout-shades-theme.patch` is no longer needed). Assets come from
+  episode 194 `video/brand-public` (or `PODCAST_BRAND`). `"header": "line"` puts the
+  transparent wordmark (`wordmark-alpha.png`) and the title on one big centered line in
+  the free space above the tiles; `"headerSize"` is the title size (default 104 px,
+  Nik's pick for episode 197). Without `header`: the small top-left line.
 - `compose.ts`: title card 4 s (layers fade and slide in) -> 0.5 s crossfade
   -> show -> 0.6 s crossfade -> end card 10 s (`cardTitle` with "\n" breaks,
   `links`). `--end 0` drops the end card: the show crossfades straight

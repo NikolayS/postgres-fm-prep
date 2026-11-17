@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Episode 197 cold open v3: six-topic montage, hard cuts (episode 196 pacing). See sequence.md.
-# Usage: [LAYOUT=layout-final.json PRESET=medium] SOURCE=<Zoom video1398514958.mp4> T=<patched tools dir with layout.ts> WORK=<media dir> bash run.sh <out.mp4>
+# Usage: [LAYOUT=layout-final.json PRESET=medium] SOURCE=<Zoom video1398514958.mp4> T=<repo tools/podcast-edit> WORK=<media dir> bash run.sh <out.mp4>
 set -euo pipefail
 H="$(cd "$(dirname "$0")" && pwd)"; V2="$H/../coldopen-v2"; OUT=$1
 : "${SOURCE:?}" "${T:?}" "${WORK:?}"; mkdir -p "$WORK"; cd "$WORK"

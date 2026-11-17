@@ -31,7 +31,31 @@ export type LayoutConfig = {
   sharpen?: number; // cas strength, 0 = off
   center?: { from: number; to: number }[]; // edited seconds: hosts move aside, middle free for a chart
   transition?: number; // center move duration, s (default 0.6)
+  theme?: "shades"; // brand look: the pink postgres.fm "shades" style (default: navy)
+  header?: "line"; // shades: wordmark + title as one big centered line above the tiles (default: small top-left line)
+  headerSize?: number; // "line" header: title font size, px (default 104); the wordmark is 0.8 of it
 };
+
+// "shades" theme: old postgres.fm look (pink gradient + grain, script wordmark, Lato, plum).
+// Assets (fonts, wordmark-white.png, wordmark-alpha.png): episode 194 brand-public, or PODCAST_BRAND.
+export const BRAND = process.env.PODCAST_BRAND ?? join(import.meta.dir, "../../episodes/20261027-uuidv4-vs-uuidv7/video/brand-public");
+export const SHADES = {
+  plum: "#3d0f45", sub: "#7a2f80",
+  bg: "linear-gradient(180deg, #ef7de3 0%, #f39aea 50%, #faddf7 100%)",
+  fonts: ["400", "700", "900"].map((w) => `@font-face{font-family:Lato;font-weight:${w};src:url("${encodeURI(`file://${BRAND}/fonts/Lato-${w}.woff2`)}")}`).join(""),
+  grain: (w: number, h: number) => `<svg width="${w}" height="${h}" style="position:absolute;left:0;top:0;mix-blend-mode:overlay;opacity:.14"><filter id="gr"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/><feColorMatrix type="saturate" values="0"/></filter><rect width="${w}" height="${h}" filter="url(#gr)"/></svg>`,
+};
+
+// Shades header. Default: small wordmark + title at the top-left. "line": the transparent wordmark and
+// the title on one big line, centered in the free space above the highest tile (y 0..top).
+export function shadesHeader(c: LayoutConfig, places: Place[]): string {
+  const t = c.title ? esc(c.title) : "";
+  if (c.header === "line") {
+    const size = c.headerSize ?? 104, top = Math.min(...places.filter((p) => !p.small).map((p) => p.y));
+    return `<div class="hdr" style="position:absolute;left:0;width:${c.canvas.w}px;top:0px;height:${top}px;display:flex;justify-content:center;align-items:center;gap:${Math.round(size * 0.3)}px"><img src="file://${BRAND}/wordmark-alpha.png" style="height:${Math.round(size * 0.8)}px"><span style="font-family:Lato;font-weight:900;font-size:${size}px;line-height:1;letter-spacing:-1px;color:${SHADES.plum}">${t}</span></div>`;
+  }
+  return `<div class="top"><img src="file://${BRAND}/wordmark-white.png">${t ? `<span class="title">${t}</span>` : ""}</div>`;
+}
 
 const CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
 const FPS_DEFAULT = 25;
@@ -91,6 +115,16 @@ const page = (w: number, h: number, css: string, body: string, bg = "transparent
 export function chromeHtml(c: LayoutConfig): string {
   const { w, h } = c.canvas;
   const places = Object.values(c.place);
+  if (c.theme === "shades") {
+    const small = places.filter((p) => p.small && p.label).map((p) => `<div class="small" style="left:${p.x}px;top:${p.y - 34}px">${esc(p.label!)}</div>`).join("");
+    return page(w, h, `${SHADES.fonts}
+.small,.top{position:absolute;font-family:Lato;white-space:nowrap}
+.small{font-size:19px;font-weight:700;color:${SHADES.sub}}
+.top{left:${Math.min(...places.map((p) => p.x))}px;top:30px;display:flex;gap:22px;align-items:center}
+.top img{height:50px;filter:none}
+.top .title{font-size:27px;font-weight:700;color:${SHADES.plum}}`,
+      `${SHADES.grain(w, h)}${shadesHeader(c, places)}${small}`, SHADES.bg);
+  }
   const small = places.filter((p) => p.small && p.label).map((p) => `<div class="small" style="left:${p.x}px;top:${p.y - 34}px">${esc(p.label!)}</div>`).join("");
   const top = c.show || c.title
     ? `<div class="top"><span class="show">${esc(c.show ?? "")}</span>${c.title ? `<span class="title">${esc(c.title)}</span>` : ""}</div>`
@@ -112,8 +146,12 @@ export function maskHtml(p: Place): string {
   const b = boxSize(p);
   return page(b.w, b.h, "", `<svg width="${b.w}" height="${b.h}"><path d="${roundRect(0, 0, p.w, p.h, p.radius ?? 16)}" fill="#fff"/></svg>`, "#000");
 }
-export function labelHtml(p: Place, text = true): string {
+export function labelHtml(p: Place, text = true, theme?: string): string {
   const b = boxSize(p);
+  if (theme === "shades") return page(b.w, b.h, `${SHADES.fonts}.lt{position:absolute;left:0;top:${p.h + 20}px;display:flex;align-items:center;font-family:Lato;font-size:31px;color:${SHADES.plum};white-space:nowrap}
+.name{font-weight:700}.sub{color:${SHADES.sub}}
+.edge{position:absolute;left:0;top:0;width:${p.w - 4}px;height:${p.h - 4}px;border:2px solid rgba(255,255,255,0.55);border-radius:${p.radius ?? 16}px}`,
+    `<div class="edge"></div>${text && p.label && !p.small ? `<div class="lt"><span class="name">${esc(p.label)}</span>${p.sub ? `<span class="sub">&nbsp;&middot;&nbsp;${esc(p.sub)}</span>` : ""}</div>` : ""}`);
   return page(b.w, b.h, `.lt{position:absolute;left:0;top:${p.h + 22}px;display:flex;align-items:center;font-family:${FONT};font-size:30px;color:#E8EDF5;white-space:nowrap}
 .bar{display:inline-block;width:4px;height:30px;border-radius:2px;background:#4F8AD1;margin-right:14px}.name{font-weight:600}.sub{color:#93A4BD}
 .edge{position:absolute;left:0;top:0;width:${p.w - 2}px;height:${p.h - 2}px;border:1px solid rgba(255,255,255,0.10);border-radius:${p.radius ?? 16}px}`,
@@ -124,7 +162,7 @@ export function labelHtml(p: Place, text = true): string {
 export function highlightHtml(c: LayoutConfig, p: Place): string {
   const r = p.radius ?? 16;
   return `<!doctype html><html><head><style>html,body{margin:0;width:${c.canvas.w}px;height:${c.canvas.h}px;background:transparent;overflow:hidden}
-.f{position:absolute;left:${p.x - 3}px;top:${p.y - 3}px;width:${p.w}px;height:${p.h}px;border:3px solid #4F8AD1;border-radius:${r + 3}px;box-shadow:0 0 24px 4px rgba(79,138,209,0.55)}
+.f{position:absolute;left:${p.x - 3}px;top:${p.y - 3}px;width:${p.w}px;height:${p.h}px;border-radius:${r + 3}px;${c.theme === "shades" ? `border:3px solid #fff;box-shadow:0 0 26px 6px rgba(255,255,255,0.75)` : `border:3px solid #4F8AD1;box-shadow:0 0 24px 4px rgba(79,138,209,0.55)`}}
 </style></head><body><div class="f"></div></body></html>`;
 }
 
@@ -177,7 +215,7 @@ export async function prepareUi(c: LayoutConfig, work: string): Promise<string[]
   await renderHtml(chromeHtml(c), c.canvas.w, c.canvas.h, out[0]);
   for (const [name, p] of Object.entries(c.place)) {
     const b = boxSize(p);
-    for (const [kind, html] of [["mask", maskHtml(p)], ["label", labelHtml(p)], ["edge", labelHtml(p, false)]] as const) {
+    for (const [kind, html] of [["mask", maskHtml(p)], ["label", labelHtml(p, true, c.theme)], ["edge", labelHtml(p, false, c.theme)]] as const) {
       const png = join(work, `${kind}-${name}.png`);
       await renderHtml(html, b.w, b.h, png);
       out.push(png);

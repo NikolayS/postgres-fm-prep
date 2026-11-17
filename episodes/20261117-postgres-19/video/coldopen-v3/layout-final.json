@@ -63,5 +63,7 @@
    "name": "Kirk Wolak"
   }
  ],
- "theme": "shades"
+ "theme": "shades",
+ "header": "line",
+ "headerSize": 104
 }

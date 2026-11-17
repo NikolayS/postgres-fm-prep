@@ -5,7 +5,7 @@ import { afterAll, describe, expect, test } from "bun:test";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
-import { filtergraph, resolvePlaces, trackAt, trackCommands, type LayoutConfig, type Track } from "../layout";
+import { chromeHtml, filtergraph, labelHtml, resolvePlaces, trackAt, trackCommands, type LayoutConfig, type Track } from "../layout";
 import type { Detection } from "../detect-tiles";
 
 const dir = mkdtempSync(join(tmpdir(), "layout-test-"));
@@ -71,5 +71,29 @@ describe("track", () => {
     resolvePlaces(c, "/cfg");
     expect(c.place.a.track).toBe("/cfg/t/a.json");
     expect(c.place.b.track).toBe("/abs/b.json");
+  });
+});
+
+// Shades theme header (episode 197, Nik 2026-11-17): "header": "line" puts the transparent
+// wordmark and the topic on one big centered line in the free space above the tiles.
+describe("shades header", () => {
+  const shades = (extra: Partial<LayoutConfig>): LayoutConfig => ({ ...config({ a: { ...host, y: 300, h: 342, label: "A" } }), theme: "shades", title: "Postgres 19", ...extra });
+  test("default: small wordmark and a small title line at the top-left", () => {
+    const html = chromeHtml(shades({}));
+    expect(html).toContain("wordmark-white.png");
+    expect(html).toContain('<span class="title">Postgres 19</span>');
+  });
+  test('"line": transparent wordmark plus topic, centered in y 0..top of the tiles', () => {
+    const html = chromeHtml(shades({ header: "line", headerSize: 104 }));
+    expect(html).toContain("wordmark-alpha.png");
+    expect(html).not.toContain("wordmark-white.png");
+    expect(html).toMatch(/class="hdr"[^>]*>/);
+    expect(html).toContain("top:0px;height:300px");
+    expect(html).toContain("font-size:104px");
+    expect(html).toContain("height:83px"); // wordmark at 0.8 of the title size
+    expect(html).toContain(">Postgres 19<");
+  });
+  test("labels have no bar in the shades theme", () => {
+    expect(labelHtml({ ...host, label: "A" }, true, "shades")).not.toContain('class="bar"');
   });
 });
