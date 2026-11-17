@@ -2,7 +2,7 @@
 
 DRAFT, 2026-11-17. Nothing is posted. Nik posts from his accounts. Rules: no link in the first post (links in the last reply); numbers in the first line; simple English; no emojis (none approved for this one); only our product named.
 
-Handles: Michael @michristofides, Kirk @yugedilbertfan, the show @postgresfm, Nik @samokhvalov. Before posting, replace the YouTube placeholder and check that https://postgres.fm/episodes/postgres-19 is live (slug to confirm).
+Handles: Michael @michristofides, Kirk @yugedilbertfan, the show @postgresfm, Nik @samokhvalov. Before posting, replace the YouTube placeholder and check that https://postgres.fm/episodes/postgres-19 is live (slug confirmed).
 
 Character counts are X counts (a link = 23; limit 280).
 

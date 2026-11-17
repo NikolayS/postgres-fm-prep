@@ -1,6 +1,6 @@
 # Postgres 19
 
-Postgres.FM episode 197 (number to confirm). Michael and Nik, with Kirk.
+Postgres.FM episode 197. Michael and Nik, with Kirk.
 
 **DRAFT, 2026-11-17.** Nothing here is published. Open items for the host are at the end.
 
@@ -23,48 +23,54 @@ Times are recording times of the first mention (see the note above).
 ### The release
 
 - [00:02:25] PostgreSQL 19 release notes: https://www.postgresql.org/docs/19/release-19.html
-- [00:04:09] PostgreSQL security information (18.6 fixed 28 CVEs, 18.7 fixed 52): https://www.postgresql.org/support/security/
 - [00:06:05] What LLMs do to PostgreSQL and DBAs (depesz, 2026-11-09): https://www.depesz.com/2026/11/09/what-llms-do-to-postgresql-and-dbas/
 - [00:09:13] scary patch contest (Robert Haas, pgsql-hackers, 2026-08-25): https://www.postgresql.org/message-id/CA%2BTgmob9NY6m0YNFTQ4nFH2d0iC9SQRruDYxfndGKKzh8OC80w%40mail.gmail.com
 - [00:09:37] Are we reverting patches because of bugs found by AI? (Tomas Vondra, 2026-10-01): https://vondra.me/posts/are-we-reverting-patches-because-of-bugs-found-by-ai/
 - [00:09:54] pgroast, an adversarial reviewer for Postgres proposals: https://github.com/NikolayS/pgroast
 
+### Episodes we referred to
+
+- [00:12:10] Our episode on pg_squeeze, with Antonin Houska: https://postgres.fm/episodes/pg_squeeze
+- [00:20:04] The hidden costs of CREATE TEMP TABLE (our episode last week): https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+- [00:20:27] Our episode with DBOS, on LISTEN/NOTIFY at scale (its notes link the Recall.ai post): https://postgres.fm/episodes/dbos
+- [00:40:56] Dump/restore done. Now what? (our episode 193): https://postgres.fm/episodes/dump-restore-done-now-what
+
 ### REPACK
 
 - [00:12:03] Add CONCURRENTLY option to REPACK (commit, Antonin Houska; based on pg_squeeze): https://github.com/postgres/postgres/commit/28d534e2ae0ac888b5460f977a10cd9bb017ef98
-- [00:12:10] Our episode on pg_squeeze, with Antonin Houska: https://postgres.fm/episodes/pg_squeeze
 - [00:16:04] What REPACK (CONCURRENTLY) costs while it runs (Radim Marek, boringSQL, 2026-09-28): https://boringsql.com/posts/repack-concurrently-costs/
-- [00:18:15] pgcompacttable: https://github.com/dataegret/pgcompacttable
 
 ### LISTEN/NOTIFY and autovacuum
 
-- [00:20:15] Postgres LISTEN/NOTIFY does not scale (Recall.ai, 2025): https://www.recall.ai/blog/postgres-listen-notify-does-not-scale
-- [00:20:27] Our episode with DBOS: https://postgres.fm/episodes/dbos
 - [00:20:40] Optimize LISTEN/NOTIFY via shared channel map and direct advancement (commit, Joel Jacobson): https://github.com/postgres/postgres/commit/282b1cde9dedf456ecf02eb27caf086023a7bb71
 - [00:23:09] Add rudimentary table prioritization to autovacuum (commit, Nathan Bossart): https://github.com/postgres/postgres/commit/d7965d65fc5bb2139bc51c051c11428414c65160
 
 ### Plan advice
 
 - [00:25:35] Waiting for Postgres 19: Better Planner Hints with Path Generation Strategies (Lukas Fittl, 5mins of Postgres): https://pganalyze.com/blog/5mins-postgres-19-better-planner-hints
-- [00:26:52] Not Worth Doing: Features We Do Not Want (PostgreSQL wiki): https://wiki.postgresql.org/wiki/Not_Worth_Doing#Features_We_Do_Not_Want
 
 ### Other features
 
+- [00:31:32] jit: Change the default to off (commit, Jelte Fennema-Nio): https://github.com/postgres/postgres/commit/7f8c88c2b872cb74882ab93dcb05529dab2a10bc
 - [00:34:06] WAIT FOR (docs): https://www.postgresql.org/docs/19/sql-wait.html
 - [00:39:41] instrumentation: Use Time-Stamp Counter on x86-64 to lower overhead (commit, Lukas Fittl, Andres Freund, David Geier): https://github.com/postgres/postgres/commit/294520c44487ecaade7a6ea8781b973f9ed03909
 
 ### Upgrade
 
 - [00:45:35] pg_upgrade --check passes, then the upgrade fails (shihao zhong, pgsql-hackers, 2026-10-24): https://www.postgresql.org/message-id/CAGRkXqT%2B5%2BmQhoKZFTiM4yOZtVV%3DNW506vDwFtVeG%2BVmL_W5wQ%40mail.gmail.com
+- [00:53:01] RegreSQL, catch query performance regressions (Radim Marek): https://github.com/boringSQL/regresql
 
 20 links in total, the main link included (the cap is 20).
 
-### Candidates left out (swap in if wanted)
+### Dropped on 2026-11-17 to keep the cap (added 193, 196, the JIT commit and RegreSQL)
 
-- [00:53:01] RegreSQL (Radim Marek): https://github.com/boringSQL/regresql
-- [00:20:04] The hidden costs of CREATE TEMP TABLE (episode 196): https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
-- [00:40:56] Dump/restore done. Now what? (episode 193): https://postgres.fm/episodes/dump-restore-done-now-what
-- [00:31:32] jit: Change the default to off (commit, Jelte Fennema-Nio): https://github.com/postgres/postgres/commit/7f8c88c2b872cb74882ab93dcb05529dab2a10bc
+- [00:04:09] PostgreSQL security information (18.6 fixed 28 CVEs, 18.7 fixed 52): https://www.postgresql.org/support/security/ — a side number; it stays in the fact-check.
+- [00:18:15] pgcompacttable: https://github.com/dataegret/pgcompacttable — a passing idea, not a 19 topic.
+- [00:20:15] Postgres LISTEN/NOTIFY does not scale (Recall.ai, 2025): https://www.recall.ai/blog/postgres-listen-notify-does-not-scale — the DBOS episode notes link it.
+- [00:26:52] Not Worth Doing: Features We Do Not Want (PostgreSQL wiki): https://wiki.postgresql.org/wiki/Not_Worth_Doing#Features_We_Do_Not_Want — an aside.
+
+### Other candidates left out
+
 - [00:33:39] Default to log_lock_waits=on (commit, Laurenz Albe): https://github.com/postgres/postgres/commit/2aac62be8cbb870ccf8c5b3fbb8a4e4aa8a14a73
 - [00:32:44] Change wal_compression=on to the first of zstd, lz4, pglz (commit, wenhui qiu): https://github.com/postgres/postgres/commit/5838806ce696dd0759c5e4b87754e802612135e0
 - [00:25:12] pg_plan_advice (docs): https://www.postgresql.org/docs/19/pgplanadvice.html

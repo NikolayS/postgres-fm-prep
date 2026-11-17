@@ -9,7 +9,7 @@
 - **Status:** Recorded 2026-11-17 (Zoom, about 58 min on air). Release text drafts in `notes/`, `thumbs/` and `social/`; edit not started.
 - **Study material deadline:** To be confirmed, with time zone.
 - **Recording date:** 2026-11-17, 10:13 PT (18:13 UTC).
-- **Episode number:** 197 (to confirm; 196 is the latest on postgres.fm).
+- **Episode number:** 197 (confirmed 2026-11-17).
 
 ## Materials
 

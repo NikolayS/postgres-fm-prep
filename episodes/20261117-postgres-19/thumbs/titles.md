@@ -2,7 +2,7 @@
 
 DRAFT, 2026-11-17. The title promises the answer; the thumbnail asks the question. No channel or episode suffix.
 
-**postgres.fm episode title:** "Postgres 19" (slug `postgres-19`, to confirm; the 17 episode used `postgres-17`).
+**postgres.fm episode title:** "Postgres 19" (slug `postgres-19`, confirmed).
 
 ## YouTube title options
 
@@ -18,13 +18,15 @@ No A/B test for this episode: Michael takes part, and thumbnail and title experi
 
 All three people in framed tiles, balanced: Nik, Michael, Kirk. Reuse the heads from the recording (pick frames after the edit; Michael's camera may need brightening). Dark background, heavy condensed headline, 2 to 4 words.
 
-- **A:** "POSTGRES 19: UPGRADE NOW?" Small chip: "19.0, 2026-11-19" (confirm the release date first).
+- **A:** "POSTGRES 19: UPGRADE NOW?" No date chip, so it reads the same before and after 19.0.
 - **B:** "WHAT BREAKS ON 19?" Chip: "pg_upgrade --check said OK". Cover text must not frame anyone's work as a failure; this one points at a tool gap, which upstream discusses openly. Check with Nik.
 - **C:** "NOTIFY 55x FASTER?" Chip: "1,000 listeners, 19 RC2". Only with title 3.
 
 Square cover (podcast, 3000x3000): "POSTGRES 19", the three heads, samograph sticker as in 196.
 
 ## Cold open (from #197, 15 to 25 s, growth rule)
+
+The draft for Nik's approval, with the transcript excerpts and on-screen text, is in [`../notes/cold-open.md`](../notes/cold-open.md). Summary:
 
 Candidates, recording times:
 

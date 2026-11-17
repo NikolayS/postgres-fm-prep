@@ -9,7 +9,7 @@ Sources used:
 - The study brief v3.0 (https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c), read logged out, and `../recording-notes.md`.
 - pg_hint_plan on GitHub, pganalyze, the PostgreSQL wiki, pgsql-hackers archives, GitLab docs, DBLab Engine releases.
 
-Summary: 4 wrong, 8 imprecise, the rest correct. None of the wrong items is about the brief's measured numbers. Suggested on-screen editor's notes are given for the wrong ones.
+Summary: 4 wrong, 7 imprecise, the rest correct (the vacuumdb item moved to correct after a re-check). None of the wrong items is about the brief's measured numbers. On-screen correction cards are in `corrections.md`.
 
 ## Wrong
 
@@ -39,10 +39,6 @@ Summary: 4 wrong, 8 imprecise, the rest correct. None of the wrong items is abou
   - Evidence: brief v3.0: `always_store_advice_details` (advice generated for every query) "cost about 13% of throughput on a trivial query"; an active stash "added about 2.5 µs per planning". Small test host, 2 trials, marked rough.
   - Correction: about 13%, for generating advice on every query, on a trivial query, small test host.
 
-- **00:41:28, Nik (speech).** Claim: `vacuumdb --analyze-only` with `-j` now processes partitioned parents; before, parallel workers skipped them.
-  - Evidence: commits `6429e5b771dbb98aa56441677b79cdb58f6e1675` and `95b6ec52e684e5de743e5bf4a2303f6cac466682`. Before 19 the catalog query kept only relkind r and m, so parents were skipped with or without `-j` when no table list was given.
-  - Correction: the fix is not about `-j`; before 19, vacuumdb never analyzed partitioned parents unless you named them.
-
 - **00:45:35, Nik (speech).** Claim: "pg_upgrade --check will report success, and then you just cannot start after upgrade".
   - Evidence: recording notes, lead 1. A removed setting in the 19 config added after `--check` stops 19 at start (FATAL). A removed setting on a role, database or function passes `--check`, and then pg_upgrade itself fails.
   - Correction: both happen; which one depends on where the setting is.
@@ -64,6 +60,13 @@ Summary: 4 wrong, 8 imprecise, the rest correct. None of the wrong items is abou
   - Correction: September or October.
 
 ## Correct (checked)
+
+- **00:41:28, Nik (speech).** Claim: with `-j`, vacuumdb `--analyze-only` analyzed the partitions but nobody analyzed the partitioned parent; 19 fixes this.
+  - Verdict: correct (re-checked 2026-11-17 after Nik's question; the earlier "imprecise" verdict is withdrawn). One detail to add, not a correction: since Postgres 12 the parent was skipped without `-j` too.
+  - Evidence, Postgres 11 and older (`REL_11_0`, `src/bin/scripts/vacuumdb.c`): the table list comes from the catalogs only `if (parallel && (!tables || !tables->head))`, with `relkind IN (r, m)`, so only `-j` skipped the parents. Without `-j`, vacuumdb sent one database-wide `ANALYZE`, which covers partitioned tables.
+  - Postgres 12 to 18: commit `e0c2933a767` "Use catalog query to discover tables to process in vacuumdb" (Nathan Bossart, 2019) uses the catalog query always, still `relkind` r and m (`REL_18_0` vacuumdb.c line 916), so the parents were skipped with or without `-j`.
+  - Postgres 19: commit `6429e5b771dbb98aa56441677b79cdb58f6e1675` "vacuumdb: Make vacuumdb --analyze-only process partitioned tables." (Laurenz Albe, Mircea Cadariu; committed by Fujii Masao, 2025-08-20): "Previously, vacuumdb --analyze-only skipped partitioned tables. This was inconsistent, and also inconvenient after pg_upgrade, where --analyze-only is typically used to gather missing statistics." https://github.com/postgres/postgres/commit/6429e5b771dbb98aa56441677b79cdb58f6e1675 (discussion: https://www.postgresql.org/message-id/CO1PR04MB8281387B9AD9DE30976966BBC045A%40CO1PR04MB8281.namprd04.prod.outlook.com). Commit `95b6ec52e684e5de743e5bf4a2303f6cac466682` (Chao Li, 2026-06-03) does the same for `--analyze-in-stages`, which a later refactor had broken. The fix applies whether or not `-j` is used, and the parents go into the same parallel job list as the other tables.
+  - No on-screen correction.
 
 - 00:04:02, Michael: "seventy plus CVEs" in the last two minor releases. 18.6 (2026-08-13) fixed 28 and 18.7 (2026-11-12) fixed 52: 80.
 - 00:08:31, Kirk: "ten or twenty x the number of CVEs". The security page lists 7 CVEs in 2025 releases and 96 in 2026, about 14x.
