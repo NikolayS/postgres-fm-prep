@@ -1,0 +1,67 @@
+{
+ "canvas": {
+  "w": 1920,
+  "h": 1080,
+  "fps": 25
+ },
+ "tiles": "../coldopen-v2/tiles-manual.json",
+ "show": "PostgresFM",
+ "title": "Postgres 19",
+ "cardTitle": "Postgres 19",
+ "links": [],
+ "crop": {
+  "top": 0.012,
+  "bottom": 0.072,
+  "left": 0.008,
+  "right": 0.008
+ },
+ "place": {
+  "kirk": {
+   "x": 1288,
+   "y": 300,
+   "w": 608,
+   "h": 342,
+   "label": "Kirk Wolak",
+   "focusY": 0
+  },
+  "nik": {
+   "x": 24,
+   "y": 300,
+   "w": 608,
+   "h": 342,
+   "label": "Nik Samokhvalov",
+   "focusY": 0
+  },
+  "robot": {
+   "x": 1656,
+   "y": 880,
+   "w": 240,
+   "h": 135,
+   "small": true,
+   "radius": 10
+  },
+  "michael": {
+   "x": 656,
+   "y": 300,
+   "w": 608,
+   "h": 342,
+   "label": "Michael Christofides",
+   "focusY": 0
+  }
+ },
+ "highlight": [],
+ "sharpen": 0.25,
+ "transition": 0.6,
+ "cardHosts": [
+  {
+   "name": "Nik Samokhvalov"
+  },
+  {
+   "name": "Michael Christofides"
+  },
+  {
+   "name": "Kirk Wolak"
+  }
+ ],
+ "theme": "shades"
+}
