@@ -19,6 +19,7 @@ Times are YouTube video times of the first mention (see the note above).
 ### Main link
 
 - [20:49] Postgres 19 for people who run it: PostgreSQL 19 RC2 vs 18.7 (study brief, PostgresAI): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
+- [47:03] The plan comparison in the same brief: 4,273 queries planned on 18.7 and 19 RC2, causes of each plan change (section 3.6, "Diff your plans before you upgrade"): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c#plans
 
 ### The release
 

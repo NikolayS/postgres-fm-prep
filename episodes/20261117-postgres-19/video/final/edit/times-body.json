@@ -62,6 +62,7 @@
   "https://docs.gitlab.com/development/database/load_balancing/": 1976.6,
   "https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64": 2309.34,
   "https://www.postgresql.org/docs/19/logical-replication-sequences.html": 2495.12,
-  "https://gitlab.com/postgres-ai/database-lab/-/releases/v4.2.0": 2823.79
+  "https://gitlab.com/postgres-ai/database-lab/-/releases/v4.2.0": 2823.79,
+  "https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c#plans": 2823.48
  }
 }

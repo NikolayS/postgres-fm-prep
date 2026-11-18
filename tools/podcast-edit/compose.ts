@@ -86,7 +86,7 @@ async function card(work: string, name: string, w: number, h: number, parts: { t
 
 // Overlay manifest (from the overlay agent): times are edited.mp4 seconds.
 type Sfx = { file: string; at: number; gain?: number }; // gain is ignored: see --sfx-rel
-type Overlay = { file: string; outStart: number; dur: number; placement?: "band" | "full" | "center"; freezeSec?: number; sfx?: Sfx[] };
+type Overlay = { file: string; outStart: number; dur: number; placement?: string; freezeSec?: number; sfx?: Sfx[] }; // placement: "band" | "full" | "center" | a named state of place.centers
 type Freeze = { at: number; sec: number };
 
 // Edited time -> final time: the title card first, then every freeze that starts before t.
@@ -141,7 +141,9 @@ if (import.meta.main) {
   const fin = (t: number) => toFinal(t, C, freezes); // window time -> final time
 
   // "center" overlays: the hosts move aside for that window (window time, before freezes).
-  c.center = [...(c.center ?? []), ...overlays.filter((o) => o.placement === "center").map((o) => ({ from: o.outStart, to: o.outStart + o.dur }))];
+  // A placement named in some place's "centers" (e.g. "london") moves the hosts to that named state.
+  const sets = new Set(Object.values(c.place).flatMap((p) => Object.keys(p.centers ?? {})));
+  c.center = [...(c.center ?? []), ...overlays.filter((o) => o.placement === "center" || sets.has(o.placement ?? "")).map((o) => ({ from: o.outStart, to: o.outStart + o.dur, ...(o.placement !== "center" ? { set: o.placement } : {}) }))];
   // UI layers for the show (same as layout.ts).
   const uiPngs = await prepareUi(c, work);
 

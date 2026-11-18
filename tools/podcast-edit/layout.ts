@@ -17,7 +17,8 @@ import type { Detection, Rect } from "./detect-tiles";
 export type Place = { x: number; y: number; w: number; h: number; label?: string; sub?: string; radius?: number; focusX?: number; focusY?: number; small?: boolean;
   crop?: LayoutConfig["crop"]; // this tile's own crop (e.g. a screen share: all 0), instead of the global one
   track?: string; // face track JSON {w, h, path: [[t, x, y], ...]} (face-track/track.ts): the crop follows the face
-  center?: { x: number; y: number; w: number } }; // where the tile goes in the "center" state (keeps aspect)
+  center?: { x: number; y: number; w: number }; // where the tile goes in the "center" state (keeps aspect)
+  centers?: Record<string, { x: number; y: number; w: number }> }; // named extra states: a window with set "<name>" moves the tile here
 export type Track = { w: number; h: number; path: [number, number, number][] };
 export type LayoutConfig = {
   canvas: { w: number; h: number; fps: number };
@@ -29,7 +30,7 @@ export type LayoutConfig = {
   place: Record<string, Place>; // tile name -> position on the canvas
   highlight?: { tile: string; from: number | string; to: number | string }[]; // source times: the tile speaks
   sharpen?: number; // cas strength, 0 = off
-  center?: { from: number; to: number }[]; // edited seconds: hosts move aside, middle free for a chart
+  center?: { from: number; to: number; set?: string }[]; // edited seconds: hosts move aside, middle free for a chart (set: a named state from place.centers)
   transition?: number; // center move duration, s (default 0.6)
   theme?: "shades"; // brand look: the pink postgres.fm "shades" style (default: navy)
   header?: "line"; // shades: wordmark + title as one big centered line above the tiles (default: small top-left line)
@@ -251,8 +252,8 @@ export function filtergraph(c: LayoutConfig, tiles: Detection, segments: [number
   const parts = [`[0:v]split=${variants.length + 1}${variants.map((_, i) => `[s${i}]`).join("")}[sbg]`];
   parts.push(`[sbg]scale=${c.canvas.w}:${c.canvas.h},setsar=1,format=yuv420p[sb];[sb][${base}:v]overlay=0:0[bg0]`);
   const D = c.transition ?? 0.6;
-  const windows = (c.center ?? []).map((w) => [w.from - from, w.to - from] as [number, number]).filter(([, b]) => b > 0);
-  const e = centerWeight(windows, D);
+  const wins = (c.center ?? []).map((w) => ({ a: w.from - from, b: w.to - from, set: w.set })).filter((w) => w.b > 0);
+  const windows = wins.map((w) => [w.a, w.b] as [number, number]);
   let cur = "bg0";
   // Small tiles first, so a moving host tile passes over them.
   const order = [...names].sort((a, b) => Number(!!c.place[b].small) - Number(!!c.place[a].small));
@@ -283,17 +284,21 @@ export function filtergraph(c: LayoutConfig, tiles: Detection, segments: [number
     }
     const mi = base + 1 + names.indexOf(n) * 3;
     parts.push(`[${t}]format=yuva420p${bx.h > p.h ? `,pad=${bx.w}:${bx.h}:0:0:color=black@0` : ""}[p_${n}];[${mi}:v]format=gray[mk_${n}];[p_${n}][mk_${n}]alphamerge[a_${n}]`);
-    const q = p.center;
-    if (q && windows.length) {
+    // Each window moves the tile to its target: p.center, or p.centers[set] for a named state.
+    const moves = wins.flatMap((w) => { const q = w.set ? p.centers?.[w.set] : p.center; return q ? [{ w: [w.a, w.b] as [number, number], q }] : []; });
+    if (moves.length) {
+      const e = centerWeight(moves.map((m) => m.w), D);
+      const windows = moves.map((m) => m.w);
       // The name label fades out while the tile is aside: blend the labelled box into the
       // edge-only box by the same weight (only inside the windows, so it costs little).
       const on = windows.map(([a, b]) => `between(t,${a.toFixed(3)},${b.toFixed(3)})`).join("+");
       parts.push(`[a_${n}]split[a1_${n}][a2_${n}];[a1_${n}][${mi + 1}:v]overlay=0:0:format=yuv420[wl_${n}];[a2_${n}][${mi + 2}:v]overlay=0:0:format=yuv420[nl_${n}]`);
       parts.push(`[wl_${n}][nl_${n}]blend=all_expr='A+(B-A)*(${e.replace(/\bt\b/g, "T")})':enable='${on}'[box_${n}]`);
-      const k = q.w / p.w; // box scales with the tile
-      const lerp = (a: number, b: number) => `(${a}+(${b - a})*(${e}))`;
-      parts.push(`[box_${n}]scale=w='trunc(${lerp(bx.w, bx.w * k)}/2)*2':h='trunc(${lerp(bx.h, bx.h * k)}/2)*2':eval=frame:flags=bicubic[bs_${n}]`);
-      parts.push(`[${cur}][bs_${n}]overlay=x='${lerp(p.x, q.x)}':y='${lerp(p.y, q.y)}':eval=frame[o_${n}]`);
+      // Sum over the windows of (target - rest) * weight; the windows do not overlap.
+      const go = (rest: number, to: (q: { x: number; y: number; w: number }) => number) =>
+        `(${rest}${moves.map((m) => `+(${to(m.q) - rest})*(${centerWeight([m.w], D)})`).join("")})`;
+      parts.push(`[box_${n}]scale=w='trunc(${go(bx.w, (q) => (bx.w * q.w) / p.w)}/2)*2':h='trunc(${go(bx.h, (q) => (bx.h * q.w) / p.w)}/2)*2':eval=frame:flags=bicubic[bs_${n}]`);
+      parts.push(`[${cur}][bs_${n}]overlay=x='${go(p.x, (q) => q.x)}':y='${go(p.y, (q) => q.y)}':eval=frame[o_${n}]`);
     } else {
       // A tile that exists only in some Zoom layouts (a screen share) is shown only while one of them is on.
       const onlySome = vs.length < used.length ? `:enable='${enable(vs.flatMap((v) => v.u.iv))}'` : "";

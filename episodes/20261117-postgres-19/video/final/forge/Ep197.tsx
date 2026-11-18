@@ -240,11 +240,11 @@ const Stats: React.FC<StatsProps> = (p) => {
   const {s} = useT();
   return (
     <Panel {...p}>
-      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', gap: 34}}>
+      <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', height: '100%', gap: 48}}>
         {p.stats.map((x, i) => (
           <div key={i} style={{display: 'flex', alignItems: 'center', gap: 32, opacity: s(0.7 + 1.6 * i)}}>
-            <div style={{fontSize: 68, fontWeight: 800, color: x.color ?? C.s19, lineHeight: 1, width: 520, flex: 'none', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums'}}>{x.big}</div>
-            <div style={{fontSize: 28, color: C.soft, lineHeight: 1.25}}>{x.text}</div>
+            <div style={{fontSize: 104, fontWeight: 800, color: x.color ?? C.s19, lineHeight: 1, width: 560, flex: 'none', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums'}}>{x.big}</div>
+            <div style={{fontSize: 36, color: C.ink, lineHeight: 1.25}}>{x.text}</div>
           </div>
         ))}
       </div>
