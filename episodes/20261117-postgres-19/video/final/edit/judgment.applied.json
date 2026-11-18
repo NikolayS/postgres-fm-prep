@@ -1,0 +1,435 @@
+{
+ "notes": [],
+ "removals": [
+  {
+   "cat": "head",
+   "from": "0",
+   "to": "38.22",
+   "reason": "[c01] pre-show: disk space, Rust, 'your turn to introduce'"
+  },
+  {
+   "cat": "rambling",
+   "from": "81.240",
+   "to": "129.720",
+   "reason": "[c02] off-topic: London meeting, Michael's looks, weather",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "rambling",
+   "from": "169.000",
+   "to": "180.880",
+   "reason": "[c03] after the GTA joke lands; keep the joke and Michael's quip",
+   "soft": true
+  },
+  {
+   "cat": "hedge",
+   "from": "334.000",
+   "to": "337.120",
+   "reason": "[c04] turn-start hedge; start at 'When I was reporting some bugs'",
+   "soft": true
+  },
+  {
+   "cat": "hedge",
+   "from": "384.068",
+   "to": "389.008",
+   "reason": "[c05] hedge; keep 'for example, I just checked it yesterday'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "416.128",
+   "to": "440.248",
+   "reason": "[c06] garbled and about a colleague's private reaction; resume at 'Like, nineteen is coming, so I decided stop pushing'",
+   "soft": true
+  },
+  {
+   "cat": "hedge-trim",
+   "from": "459.568",
+   "to": "463.448",
+   "reason": "[c07] keep 'I hundred percent sure. Could find more bugs.' (the claim, stronger)",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "479.608",
+   "to": "482.448",
+   "reason": "[c08] trailing filler",
+   "soft": true
+  },
+  {
+   "cat": "fix",
+   "from": "593.108",
+   "to": "593.708",
+   "reason": "[c09] optional: drop the wrong date word; 'this scary list from Robert Haas' stays correct (removes the CORRECTION note)",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "600.448",
+   "to": "601.488",
+   "reason": "[c10] name search crosstalk; keep 'from Robert Haas'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "601.228",
+   "to": "601.488",
+   "reason": "[c10] name search crosstalk; keep 'from Robert Haas'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "601.528",
+   "to": "601.608",
+   "reason": "[c10] name search crosstalk; keep 'from Robert Haas'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "603.128",
+   "to": "603.288",
+   "reason": "[c10] name search crosstalk; keep 'from Robert Haas'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "604.868",
+   "to": "615.068",
+   "reason": "[c11] garbled start; keep 'it was from Tomas Vondra, the blog post...'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "649.628",
+   "to": "656.348",
+   "reason": "[c12] trailing filler",
+   "soft": true
+  },
+  {
+   "cat": "hedge",
+   "from": "695.208",
+   "to": "714.248",
+   "reason": "[c13] feature-freeze timing tangle with 'I don't remember details'; resume at 'But Opus 4.8 was already quite good'",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "rambling",
+   "from": "753.092",
+   "to": "758.192",
+   "reason": "[c14] keep 'maybe let's talk about features'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "948.952",
+   "to": "964.252",
+   "reason": "[c15] false starts; keep 'Do you think pg_repack will be over with this release...' (the logical point comes back at 17:30)",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1083.452",
+   "to": "1088.232",
+   "reason": "[c17] rambling; keep 'Like, it's password and so on.' then 'I also think...' (veto to keep 'feels insecure')",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1126.052",
+   "to": "1129.992",
+   "reason": "[c18] filler run",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1137.892",
+   "to": "1140.792",
+   "reason": "[c19] filler after the pgcompacttable idea",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1157.872",
+   "to": "1163.532",
+   "reason": "[c20] Michael false starts; keep 'Who's on ... they don't have pg_repack'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1214.412",
+   "to": "1220.992",
+   "reason": "[c21] teaser said twice, no content",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1221.472",
+   "to": "1226.312",
+   "reason": "[c21] teaser said twice, no content",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1231.072",
+   "to": "1236.792",
+   "reason": "[c22] false start; keep 'You know, my list of don't use it: subtransactions and temp tables...'",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1331.212",
+   "to": "1335.452",
+   "reason": "[c23] repeats; keep 'It's great to see the progress here.'",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1473.556",
+   "to": "1477.576",
+   "reason": "[c24] Kirk trailing filler",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1501.476",
+   "to": "1502.876",
+   "reason": "[c25] trailing",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1640.356",
+   "to": "1646.656",
+   "reason": "[c26] false starts; keep 'Session which led to development of pgroast'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1671.696",
+   "to": "1676.836",
+   "reason": "[c27] keep 'I have quite challenging experience...'",
+   "soft": true
+  },
+  {
+   "cat": "hedge-trim",
+   "from": "1882.528",
+   "to": "1882.748",
+   "reason": "[c28] keep 'Our testing found some overhead from using advice, around ten percent. So it's not for free.' (number is a CLARIFICATION: ~13%)",
+   "soft": true
+  },
+  {
+   "cat": "hedge-trim",
+   "from": "1883.248",
+   "to": "1883.908",
+   "reason": "[c28] keep 'Our testing found some overhead from using advice, around ten percent. So it's not for free.' (number is a CLARIFICATION: ~13%)",
+   "soft": true
+  },
+  {
+   "cat": "hedge-trim",
+   "from": "1891.968",
+   "to": "1892.188",
+   "reason": "[c28] keep 'Our testing found some overhead from using advice, around ten percent. So it's not for free.' (number is a CLARIFICATION: ~13%)",
+   "soft": true
+  },
+  {
+   "cat": "hedge",
+   "from": "1951.708",
+   "to": "1953.448",
+   "reason": "[c29] hedge and false starts; keep 'I will turn on track_planning in pg_stat_statements'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "1978.348",
+   "to": "1978.588",
+   "reason": "[c30] trailing filler",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "2073.168",
+   "to": "2075.168",
+   "reason": "[c31] trailing filler",
+   "soft": true
+  },
+  {
+   "cat": "hedge",
+   "from": "2205.110",
+   "to": "2205.510",
+   "reason": "[c32] hedge 'like, I don't know,' in 'I want error immediately'; (was: lag crosstalk, which Scribe did not transcribe)",
+   "soft": true
+  },
+  {
+   "cat": "hedge",
+   "from": "2306.204",
+   "to": "2310.384",
+   "reason": "[c33] second copy of the same hedge; the first ('in some cases, I see it can be beneficial') stays",
+   "soft": true
+  },
+  {
+   "cat": "hedge-trim",
+   "from": "2591.136",
+   "to": "2591.736",
+   "reason": "[c34] keep 'extended statistics can now be dumped and restored'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "2607.016",
+   "to": "2616.056",
+   "reason": "[c35] search for the word on air; veto if Kirk's 'stick with regular and extended' needs the lead-in",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "hedge-trim",
+   "from": "2631.316",
+   "to": "2632.636",
+   "reason": "[c36] the pg_restore case: keep 'pg_dump includes restorable extended statistics ... if you can dump, you should be able to restore it.' The guess is right (pg_restore restores them), so the note becomes 'dump with --statistics' only",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "hedge-trim",
+   "from": "2635.616",
+   "to": "2643.176",
+   "reason": "[c36] the pg_restore case: keep 'pg_dump includes restorable extended statistics ... if you can dump, you should be able to restore it.' The guess is right (pg_restore restores them), so the note becomes 'dump with --statistics' only",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "hedge-trim",
+   "from": "2646.516",
+   "to": "2646.956",
+   "reason": "[c36] the pg_restore case: keep 'pg_dump includes restorable extended statistics ... if you can dump, you should be able to restore it.' The guess is right (pg_restore restores them), so the note becomes 'dump with --statistics' only",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "rambling",
+   "from": "2686.396",
+   "to": "2695.956",
+   "reason": "[c37] filler",
+   "soft": true
+  },
+  {
+   "cat": "hedge",
+   "from": "2869.176",
+   "to": "2869.496",
+   "reason": "[c38] turn start: 'We covered all our favorite features.'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "2872.976",
+   "to": "2877.636",
+   "reason": "[c39] false start; keep 'I think recommendations would change as well'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "2930.948",
+   "to": "2936.548",
+   "reason": "[c40] trailing; Michael's 'synthetic workloads' follows",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "2940.068",
+   "to": "2940.628",
+   "reason": "[c40] trailing; Michael's 'synthetic workloads' follows",
+   "soft": true
+  },
+  {
+   "cat": "tech",
+   "from": "3000.408",
+   "to": "3001.550",
+   "reason": "[c41] crosstalk ('We have approaches-')",
+   "soft": true
+  },
+  {
+   "cat": "hedge",
+   "from": "3001.608",
+   "to": "3002.068",
+   "reason": "[c42] keep 'My recommendation, like, usually was wait until dot one, dot two.'",
+   "soft": true
+  },
+  {
+   "cat": "rambling",
+   "from": "3161.848",
+   "to": "3168.508",
+   "reason": "[c43] trailing; veto to keep 'Nobody has the thing yet'",
+   "soft": true
+  },
+  {
+   "cat": "tech",
+   "from": "3170.120",
+   "to": "3170.988",
+   "reason": "[c44] crosstalk from lag; keep Kirk's point and Michael's 'I think I understand why we're calling it plan flips'",
+   "soft": true
+  },
+  {
+   "cat": "tech",
+   "from": "3175.920",
+   "to": "3176.520",
+   "reason": "[c44] crosstalk from lag; keep Kirk's point and Michael's 'I think I understand why we're calling it plan flips'",
+   "soft": true
+  },
+  {
+   "cat": "tech",
+   "from": "3194.620",
+   "to": "3195.620",
+   "reason": "[c44] crosstalk from lag; keep Kirk's point and Michael's 'I think I understand why we're calling it plan flips'",
+   "soft": true
+  },
+  {
+   "cat": "tech",
+   "from": "3204.900",
+   "to": "3205.900",
+   "reason": "[c44] crosstalk from lag; keep Kirk's point and Michael's 'I think I understand why we're calling it plan flips'",
+   "soft": true
+  },
+  {
+   "cat": "tech",
+   "from": "3252.148",
+   "to": "3266.688",
+   "reason": "[c45] Kirk was muted; keep 'do you know how many query IDs you actually have?' then 'So, yeah, that's a great question.'",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "rambling",
+   "from": "3430.016",
+   "to": "3435.016",
+   "reason": "[c46] filler",
+   "soft": true
+  },
+  {
+   "cat": "tech",
+   "from": "3497.116",
+   "to": "3497.236",
+   "reason": "[c47] lag repeat; keep the first 'Happy New Year, Michael.'",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "tech",
+   "from": "3497.936",
+   "to": "3498.776",
+   "reason": "[c47] lag repeat; keep the first 'Happy New Year, Michael.'",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "tail",
+   "from": "3506.95",
+   "to": "3523.36",
+   "reason": "[c48] after the sign-off"
+  }
+ ]
+}

@@ -1,0 +1,11 @@
+--- <repo>/tools/podcast-edit/render.ts	2026-10-30 11:00:59
++++ <scratch> 12:11:38
+@@ -57,7 +57,7 @@
+ // score over REVERT_SCORE. Fewer cuts beat bad cuts. Repeat until no join needs a revert.
+ const PRIORITY = ["head", "tail", "bot", "bot-polish", "struggle", "repeat", "falsestart", "filler"];
+ const primary = (c: PlannedCut) => PRIORITY.find((p) => c.cats.includes(p)) ?? "pause";
+-const REVERT_LEVEL = 10, REVERT_SCORE = 4; // dB over the natural step; join score (joins.ts)
++const REVERT_LEVEL = 25, REVERT_SCORE = 9; // DRAFT ONLY (scratch copy): relaxed so every judgment cut is audible for review // dB over the natural step; join score (joins.ts)
+ const keepPauses: number[] = [];
+ const reverted = new Map<string, string>();
+ const srcPcm = await decodePcm(media, 1, 16000);

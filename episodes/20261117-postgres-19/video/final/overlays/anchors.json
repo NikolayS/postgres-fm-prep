@@ -1,0 +1,74 @@
+[
+ {
+  "id": "01-score-weights",
+  "onair": "00:23:09",
+  "anchor": "prioritizing and letting us queue",
+  "src": 1433.51,
+  "edited": 1174.75,
+  "text": "Note: the score weights are server-wide / see pg_stat_autovacuum_scores"
+ },
+ {
+  "id": "02-parallel-av",
+  "onair": "00:24:47",
+  "anchor": "parallel auto vacuum as well",
+  "src": 1526.38,
+  "edited": 1263.46,
+  "text": "Note: parallel autovacuum is off by default / enable with autovacuum_max_parallel_workers"
+ },
+ {
+  "id": "03-stash-advice",
+  "onair": "00:29:53",
+  "anchor": "store it in the database",
+  "src": 1831.91,
+  "edited": 1553.71,
+  "text": "Note: pg_stash_advice keeps advice per query ID on the server / pg_dump does not include it"
+ },
+ {
+  "id": "04-overhead",
+  "onair": "00:30:46",
+  "anchor": "around 10%",
+  "src": 1891.13,
+  "edited": 1611.21,
+  "text": "Note: about 13% in our test / advice generated for every query, on a trivial query (small test host)"
+ },
+ {
+  "id": "05-tsc",
+  "onair": "00:39:41",
+  "anchor": "timing overhead of explain analyze",
+  "src": 2418.38,
+  "edited": 2115.82,
+  "text": "Note: on x86-64 / CPU time-stamp counter"
+ },
+ {
+  "id": "06-release-notes",
+  "onair": "00:42:34",
+  "anchor": "didn't see it in the release notes",
+  "src": 2598.46,
+  "edited": 2292.62,
+  "text": "Note: it is in the 19 release notes / \u201cAllow pg_dump to include restorable extended statistics\u201d"
+ },
+ {
+  "id": "07-pg-restore",
+  "onair": "00:43:12",
+  "anchor": "if you can dump",
+  "src": 2643.66,
+  "edited": 2318.82,
+  "text": "Note: pg_restore restores them too / dump with pg_dump --statistics"
+ },
+ {
+  "id": "08-not-on-table",
+  "onair": "00:45:14",
+  "anchor": "a specific table",
+  "src": 2757.24,
+  "edited": 2419.04,
+  "text": "Correction: these settings cannot be set on a table / check roles, databases and functions"
+ },
+ {
+  "id": "09-upgrade-fails",
+  "onair": "00:45:35",
+  "anchor": "pg upgrade check will report success",
+  "src": 2773.6,
+  "edited": 2435.4,
+  "text": "Note: on a role or database, pg_upgrade itself fails / in the 19 config file, 19 does not start"
+ }
+]

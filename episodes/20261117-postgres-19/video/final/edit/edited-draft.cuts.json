@@ -1,0 +1,6036 @@
+{
+ "media": "../video1398514958.mp4",
+ "edl": "work/edl.json",
+ "keep": [],
+ "settings": {
+  "MAX_GAP": 0.9,
+  "TURN_EXTRA": 0.1,
+  "planner": "plan.ts (sound runs, valleys)"
+ },
+ "sourceSeconds": 3521.52,
+ "outputSeconds": 3111.24,
+ "totals": {
+  "head": {
+   "n": 1,
+   "s": 38.230000000000004
+  },
+  "filler": {
+   "n": 34,
+   "s": 31.46000000000059
+  },
+  "pause": {
+   "n": 71,
+   "s": 281.2399999999987
+  },
+  "repeat": {
+   "n": 29,
+   "s": 39.150000000000915
+  },
+  "falsestart": {
+   "n": 11,
+   "s": 5.850000000000136
+  },
+  "tail": {
+   "n": 1,
+   "s": 14.340000000000146
+  }
+ },
+ "skipped": [
+  {
+   "id": "r0002",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0003",
+   "text": "I've had a bit,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0006",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0008",
+   "text": "Um,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0010",
+   "text": "ha-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0013",
+   "text": "Except,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0015",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0016",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0020",
+   "text": "um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0021",
+   "text": "uh...",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0023",
+   "text": "I know,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0026",
+   "text": "Uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0027",
+   "text": "the,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0030",
+   "text": "reas-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0031",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0035",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0036",
+   "text": "neg- neg-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0037",
+   "text": "Um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0042",
+   "text": "st-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0043",
+   "text": "It was,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0045",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0046",
+   "text": "revis-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0048",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0052",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0053",
+   "text": "PH-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0056",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0057",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0058",
+   "text": "And,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0059",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0060",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0062",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0063",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0065",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0066",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0068",
+   "text": "100, 100% sure,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0070",
+   "text": "But-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0071",
+   "text": "I,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0072",
+   "text": "as,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0073",
+   "text": "um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0074",
+   "text": "um,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0076",
+   "text": "and they pulled,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0077",
+   "text": "my,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0078",
+   "text": "i-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0079",
+   "text": "Enjoy,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0081",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0082",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0086",
+   "text": "From,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0090",
+   "text": "Ro-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0093",
+   "text": "bl-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0094",
+   "text": "It was,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0095",
+   "text": "Tomas,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0097",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0098",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0101",
+   "text": "to,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0102",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0103",
+   "text": "go-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0106",
+   "text": "p-",
+   "reason": "no clean cut point in the pauses (clicks or noise)"
+  },
+  {
+   "id": "r0107",
+   "text": "tr-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0108",
+   "text": "or,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0114",
+   "text": "and, and,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0115",
+   "text": "And,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0117",
+   "text": "I, I,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0119",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0120",
+   "text": "I,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0121",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0122",
+   "text": "about,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0123",
+   "text": "dan-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0124",
+   "text": "I,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0126",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0127",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0129",
+   "text": "get rid of,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0130",
+   "text": "inde-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0131",
+   "text": "you can",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0132",
+   "text": "ki-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0133",
+   "text": "Um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0135",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0136",
+   "text": "do,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0137",
+   "text": "on,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0138",
+   "text": "uh-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0139",
+   "text": "It's like,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0141",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0142",
+   "text": "uh-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0144",
+   "text": "to,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0145",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0146",
+   "text": "we,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0147",
+   "text": "reindex",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0148",
+   "text": "c-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0149",
+   "text": "to,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0150",
+   "text": "sim- sim-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0151",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0152",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0154",
+   "text": "I,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0155",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0156",
+   "text": "And,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0157",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0159",
+   "text": "ov-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0161",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0162",
+   "text": "in,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0173",
+   "text": "ha-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0175",
+   "text": "I think it's,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0177",
+   "text": "Um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0180",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0181",
+   "text": "Um,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0182",
+   "text": "ex-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0184",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0185",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0187",
+   "text": "Uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0188",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0189",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0192",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0193",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0194",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0195",
+   "text": "l-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0196",
+   "text": "some,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0197",
+   "text": "so there are some edge cases. Yeah, yeah, yeah. And, and",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0199",
+   "text": "old,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0201",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0204",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0205",
+   "text": "um-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0206",
+   "text": "p-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0207",
+   "text": "ch-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0209",
+   "text": "the,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0210",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0211",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0217",
+   "text": "uh-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0218",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0219",
+   "text": "There,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0221",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0222",
+   "text": "Uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0223",
+   "text": "it's,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0224",
+   "text": "Uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0225",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0226",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0231",
+   "text": "tr-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0232",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0235",
+   "text": "are,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0240",
+   "text": "um,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0241",
+   "text": "that,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0242",
+   "text": "considered,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0243",
+   "text": "for,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0244",
+   "text": "notif-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0245",
+   "text": "Uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0252",
+   "text": "be-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0253",
+   "text": "this,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0254",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0255",
+   "text": "to,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0256",
+   "text": "show",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0257",
+   "text": "no-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0258",
+   "text": "right? So.",
+   "reason": "the removed words are not where the cut would be (So.)"
+  },
+  {
+   "id": "r0263",
+   "text": "is",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0267",
+   "text": "a,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0269",
+   "text": "k-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0271",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0272",
+   "text": "or,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0273",
+   "text": "tick-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0275",
+   "text": "ch-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0276",
+   "text": "We,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0280",
+   "text": "like,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0281",
+   "text": "we,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0283",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0284",
+   "text": "ca- ca-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0285",
+   "text": "to,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0286",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0288",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0289",
+   "text": "se-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0290",
+   "text": "um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0291",
+   "text": "is,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0293",
+   "text": "it-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0294",
+   "text": "And,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0296",
+   "text": "As I see,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0298",
+   "text": "right?",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0300",
+   "text": "w-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0301",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0302",
+   "text": "a,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0304",
+   "text": "good,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0306",
+   "text": "have,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0308",
+   "text": "be-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0311",
+   "text": "over-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0313",
+   "text": "re-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0314",
+   "text": "im-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0317",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0319",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0320",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0321",
+   "text": "with,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0322",
+   "text": "while,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0323",
+   "text": "it's,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0325",
+   "text": "a,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0329",
+   "text": "um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0330",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0331",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0332",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0333",
+   "text": "on,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0335",
+   "text": "It,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0336",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0338",
+   "text": "it,",
+   "reason": "no clean cut point in the pauses (clicks or noise)"
+  },
+  {
+   "id": "r0339",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0340",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0341",
+   "text": "On,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0343",
+   "text": "we've got,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0344",
+   "text": "per-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0346",
+   "text": "Um-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0347",
+   "text": "rep-",
+   "reason": "no clean cut point in the pauses (clicks or noise)"
+  },
+  {
+   "id": "r0349",
+   "text": "if,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0351",
+   "text": "to,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0357",
+   "text": "You,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0358",
+   "text": "uh...",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0360",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0361",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0362",
+   "text": "If it's,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0364",
+   "text": "like, I don't",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0365",
+   "text": "A-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0366",
+   "text": "think,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0367",
+   "text": "U-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0368",
+   "text": "would,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0369",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0370",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0371",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0372",
+   "text": "by,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0375",
+   "text": "b-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0377",
+   "text": "w-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0378",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0379",
+   "text": "you,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0380",
+   "text": "to,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0381",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0382",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0383",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0384",
+   "text": "it's,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0387",
+   "text": "and,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0389",
+   "text": "re-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0390",
+   "text": "I,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0392",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0393",
+   "text": "you,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0394",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0397",
+   "text": "o-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0398",
+   "text": "um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0399",
+   "text": "Um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0403",
+   "text": "I,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0407",
+   "text": "statistic-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0408",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0409",
+   "text": "w-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0412",
+   "text": "you,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0413",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0414",
+   "text": "J,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0415",
+   "text": "paral-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0417",
+   "text": "wasn't,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0419",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0420",
+   "text": "No, no,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0421",
+   "text": "We didn't,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0423",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0424",
+   "text": "the,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0425",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0426",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0427",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0430",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0432",
+   "text": "I",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0433",
+   "text": "s-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0435",
+   "text": "I would,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0439",
+   "text": "c-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0440",
+   "text": "you,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0442",
+   "text": "make,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0443",
+   "text": "I,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0444",
+   "text": "a,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0446",
+   "text": "Um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0447",
+   "text": "you,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0448",
+   "text": "um,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0451",
+   "text": "won't,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0453",
+   "text": "a,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0454",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0457",
+   "text": "how we,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0458",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0459",
+   "text": "So, so,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0460",
+   "text": "just,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0462",
+   "text": "on-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0464",
+   "text": "interest-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0467",
+   "text": "That's a,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0470",
+   "text": "re-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0471",
+   "text": "m-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0472",
+   "text": "what,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0473",
+   "text": "H-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0474",
+   "text": "would look,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0475",
+   "text": "w-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0476",
+   "text": "in,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0479",
+   "text": "on",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0480",
+   "text": "re-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0481",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0483",
+   "text": "Yeah, and the",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0484",
+   "text": "Synthetic,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0485",
+   "text": "on,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0486",
+   "text": "you're,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0488",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0489",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0492",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0494",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0495",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0496",
+   "text": "We have",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0499",
+   "text": "Start,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0500",
+   "text": "So,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0501",
+   "text": "we,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0505",
+   "text": "on,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0506",
+   "text": "pro-",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0507",
+   "text": "we,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0509",
+   "text": "Um,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0511",
+   "text": "is,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0515",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0516",
+   "text": "en-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0521",
+   "text": "a",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0522",
+   "text": "pan-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0527",
+   "text": "It,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0531",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0536",
+   "text": "one of our,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0537",
+   "text": "The problem,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0538",
+   "text": "can,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0539",
+   "text": "uh-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0540",
+   "text": "now,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0541",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0542",
+   "text": "It's, it's not,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0545",
+   "text": "What,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0547",
+   "text": "stat-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0548",
+   "text": "in,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0550",
+   "text": "it,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0551",
+   "text": "uh,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0553",
+   "text": "What,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0554",
+   "text": "Q-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0556",
+   "text": "you, you,",
+   "reason": "no clean pause after it (the words run together)"
+  },
+  {
+   "id": "r0559",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0560",
+   "text": "uh,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0561",
+   "text": "in, in,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0563",
+   "text": "I get an,",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0566",
+   "text": "com-",
+   "reason": "no clean pause before it (the words run together)"
+  },
+  {
+   "id": "r0567",
+   "text": "on, on,",
+   "reason": "no clean pause after it (the words run together)"
+  }
+ ],
+ "cuts": [
+  {
+   "n": 1,
+   "start": 0,
+   "end": 38.23,
+   "dur": 38.23,
+   "cat": "head",
+   "ids": [
+    "r0001"
+   ],
+   "text": "",
+   "gapBefore": 0,
+   "gapAfter": 0,
+   "xfade": 0,
+   "why": "head"
+  },
+  {
+   "n": 2,
+   "start": 48.8,
+   "end": 49.4,
+   "dur": 0.6,
+   "cat": "filler",
+   "ids": [
+    "r0004"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.54,
+   "gapAfter": 0.35,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 3,
+   "start": 52.16,
+   "end": 52.43,
+   "dur": 0.27,
+   "cat": "filler",
+   "ids": [
+    "r0005"
+   ],
+   "text": "uh,",
+   "gapBefore": 0.2,
+   "gapAfter": 0.13,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 4,
+   "start": 58.94,
+   "end": 59.27,
+   "dur": 0.33,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.62,
+   "gapAfter": 1.288,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 5,
+   "start": 70.045,
+   "end": 70.435,
+   "dur": 0.39,
+   "cat": "filler",
+   "ids": [
+    "r0009"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.25,
+   "gapAfter": 0.17,
+   "xfade": 0.03,
+   "why": ""
+  },
+  {
+   "n": 6,
+   "start": 81.13,
+   "end": 129.46,
+   "dur": 48.33,
+   "cat": "pause",
+   "ids": [
+    "r0011"
+   ],
+   "text": "and it's, um- I, I can tell. I remember when we we met a couple of months ago in London, I was surprised. Like, you look like you're on vacations right now. think in the center people who watch YouTube- [laughs] can see how you look usually in London, right? Which- Nice. Yeah, so- It was... Yeah, it was great to see you in London and and to meet your son as well. Um, it, yeah, that was really fun. And we had a bit of late, uh, we call it an Indian summer here, like a, a late, um, late heat wave almost, so I was in shorts. Um, but yeah, so I do enjoy, I do enjoy the warmer weather. I do actually enjoy w- colder weather in, you know, when you can dress up warm and get jumpers on and stuff, but, um, no, not, not the kind of getting sick part of it.",
+   "gapBefore": 0.24,
+   "gapAfter": 0.22,
+   "xfade": 0.02,
+   "why": "beat/laugh pause kept"
+  },
+  {
+   "n": 7,
+   "start": 139.66,
+   "end": 139.81,
+   "dur": 0.15,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.15,
+   "gapAfter": 1,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 8,
+   "start": 169.16,
+   "end": 180.95,
+   "dur": 11.79,
+   "cat": "pause",
+   "ids": [
+    "r0018"
+   ],
+   "text": "have no idea. I don't follow. It was a joke. I, I, I stopped playing games after COVID, so yeah. Good. So let's talk about it. Uh, where to start?",
+   "gapBefore": 1.7,
+   "gapAfter": 1.68,
+   "xfade": 0.02,
+   "why": "soft edge (start)"
+  },
+  {
+   "n": 9,
+   "start": 197.135,
+   "end": 197.725,
+   "dur": 0.59,
+   "cat": "repeat",
+   "ids": [
+    "r0019"
+   ],
+   "text": "it's,",
+   "gapBefore": 0.3,
+   "gapAfter": 0.23,
+   "xfade": 0.05,
+   "why": ""
+  },
+  {
+   "n": 10,
+   "start": 212.905,
+   "end": 213.325,
+   "dur": 0.42,
+   "cat": "filler",
+   "ids": [
+    "r0022"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.21,
+   "gapAfter": 0.16,
+   "xfade": 0.05,
+   "why": ""
+  },
+  {
+   "n": 11,
+   "start": 244.3175,
+   "end": 244.6375,
+   "dur": 0.32,
+   "cat": "repeat",
+   "ids": [
+    "r0024"
+   ],
+   "text": "the,",
+   "gapBefore": 0.25,
+   "gapAfter": 0.23,
+   "xfade": 0.015,
+   "why": ""
+  },
+  {
+   "n": 12,
+   "start": 286.845,
+   "end": 287.365,
+   "dur": 0.52,
+   "cat": "filler",
+   "ids": [
+    "r0028"
+   ],
+   "text": "uh,",
+   "gapBefore": 0.75,
+   "gapAfter": 0.5,
+   "xfade": 0.11,
+   "why": ""
+  },
+  {
+   "n": 13,
+   "start": 300.44,
+   "end": 301.02,
+   "dur": 0.58,
+   "cat": "filler",
+   "ids": [
+    "r0032"
+   ],
+   "text": "Um,",
+   "gapBefore": 1.04,
+   "gapAfter": 0.91,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 14,
+   "start": 302.73,
+   "end": 303.03,
+   "dur": 0.3,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.4,
+   "gapAfter": 1.1,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 15,
+   "start": 305.13,
+   "end": 305.38,
+   "dur": 0.25,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.31,
+   "gapAfter": 1.064,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 16,
+   "start": 309.3,
+   "end": 310.12,
+   "dur": 0.82,
+   "cat": "repeat",
+   "ids": [
+    "r0033",
+    "r0034"
+   ],
+   "text": "Um, as,",
+   "gapBefore": 0.6,
+   "gapAfter": 0.55,
+   "xfade": 0.04,
+   "why": ""
+  },
+  {
+   "n": 17,
+   "start": 332.325,
+   "end": 337.215,
+   "dur": 4.89,
+   "cat": "repeat",
+   "ids": [
+    "r0039",
+    "r0040"
+   ],
+   "text": "I, I don't, I don't think... Like, for me personally,",
+   "gapBefore": 0.38,
+   "gapAfter": 0.21,
+   "xfade": 0.09,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 18,
+   "start": 366.115,
+   "end": 366.605,
+   "dur": 0.49,
+   "cat": "filler",
+   "ids": [
+    "r0047"
+   ],
+   "text": "uh,",
+   "gapBefore": 0.51,
+   "gapAfter": 0.44,
+   "xfade": 0.07,
+   "why": ""
+  },
+  {
+   "n": 19,
+   "start": 383.92,
+   "end": 389.29,
+   "dur": 5.37,
+   "cat": "pause",
+   "ids": [
+    "r0050"
+   ],
+   "text": "I don't know, like, it's good idea to compare with previous years, but definitely...",
+   "gapBefore": 1.33,
+   "gapAfter": 1,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 20,
+   "start": 398.24,
+   "end": 399.29,
+   "dur": 1.05,
+   "cat": "repeat",
+   "ids": [
+    "r0055"
+   ],
+   "text": "while,",
+   "gapBefore": 0.95,
+   "gapAfter": 0.66,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 21,
+   "start": 416.06,
+   "end": 440.3,
+   "dur": 24.24,
+   "cat": "pause",
+   "ids": [
+    "r0061"
+   ],
+   "text": "and I just didn't want it. And, uh, at some point, especially af- after Andre- Andres Freund said, like, since every my message where I used AI didn't check very carefully with my hands, it, it was an experiment. I'm ac- actually, I will, I will return to this experiment. Uh, Andres said, like, he- it, it, it triggered him in terms of, um, uh, like my transparency that I didn't check it manually.",
+   "gapBefore": 0.56,
+   "gapAfter": 0.49,
+   "xfade": 0.02,
+   "why": "soft edge (start)"
+  },
+  {
+   "n": 22,
+   "start": 459.33,
+   "end": 463.42,
+   "dur": 4.09,
+   "cat": "pause",
+   "ids": [
+    "r0067"
+   ],
+   "text": "And, uh, I'm pretty sure we could find more bugs. Like, I, I'm not pretty sure.",
+   "gapBefore": 0.67,
+   "gapAfter": 0.52,
+   "xfade": 0.02,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 23,
+   "start": 476.16,
+   "end": 476.59,
+   "dur": 0.43,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.62,
+   "gapAfter": 1.188,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 24,
+   "start": 479.11,
+   "end": 482.7,
+   "dur": 3.59,
+   "cat": "pause",
+   "ids": [
+    "r0069"
+   ],
+   "text": "This is how things look like right now. Yeah.",
+   "gapBefore": 2.16,
+   "gapAfter": 1.46,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 25,
+   "start": 586.78,
+   "end": 587.34,
+   "dur": 0.56,
+   "cat": "repeat",
+   "ids": [
+    "r0080"
+   ],
+   "text": "So,",
+   "gapBefore": 0.74,
+   "gapAfter": 0.46,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 26,
+   "start": 592.945,
+   "end": 593.785,
+   "dur": 0.84,
+   "cat": "pause",
+   "ids": [
+    "r0084"
+   ],
+   "text": "Halloween",
+   "gapBefore": 0.1,
+   "gapAfter": 0.05,
+   "xfade": 0.03,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 27,
+   "start": 599.34,
+   "end": 599.59,
+   "dur": 0.25,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.31,
+   "gapAfter": 1.064,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 28,
+   "start": 600.46,
+   "end": 601.17,
+   "dur": 0.71,
+   "cat": "pause",
+   "ids": [
+    "r0087"
+   ],
+   "text": "whom? Was it Andres?",
+   "gapBefore": 0.09,
+   "gapAfter": 0.07,
+   "xfade": 0.02,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 29,
+   "start": 601.17,
+   "end": 601.39,
+   "dur": 0.22,
+   "cat": "pause",
+   "ids": [
+    "r0088",
+    "r0089"
+   ],
+   "text": "Or- No,",
+   "gapBefore": 0.07,
+   "gapAfter": 0.04,
+   "xfade": 0.02,
+   "why": "soft edge (start)"
+  },
+  {
+   "n": 30,
+   "start": 603.0175,
+   "end": 603.3475,
+   "dur": 0.33,
+   "cat": "pause",
+   "ids": [
+    "r0091"
+   ],
+   "text": "right?",
+   "gapBefore": 0.39,
+   "gapAfter": 0.3,
+   "xfade": 0.075,
+   "why": ""
+  },
+  {
+   "n": 31,
+   "start": 604.57,
+   "end": 615.07,
+   "dur": 10.5,
+   "cat": "pause",
+   "ids": [
+    "r0092"
+   ],
+   "text": "And it, this triggered me, like I started putting more AI to bug f- bug find- findings. And I think right now it's good point that, uh, maybe, like,",
+   "gapBefore": 0.57,
+   "gapAfter": 0.36,
+   "xfade": 0.04,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 32,
+   "start": 618.4625,
+   "end": 618.9425,
+   "dur": 0.48,
+   "cat": "filler",
+   "ids": [
+    "r0096"
+   ],
+   "text": "um,",
+   "gapBefore": 0.31,
+   "gapAfter": 0.26,
+   "xfade": 0.045,
+   "why": ""
+  },
+  {
+   "n": 33,
+   "start": 632.3975,
+   "end": 632.7075,
+   "dur": 0.31,
+   "cat": "falsestart",
+   "ids": [
+    "r0100"
+   ],
+   "text": "s-",
+   "gapBefore": 0.27,
+   "gapAfter": 0.17,
+   "xfade": 0.055,
+   "why": ""
+  },
+  {
+   "n": 34,
+   "start": 649.49,
+   "end": 658.84,
+   "dur": 9.35,
+   "cat": "repeat",
+   "ids": [
+    "r0104",
+    "r0105"
+   ],
+   "text": "So this could be like overall shape will be better. Like, it's interesting, right? So. There's an argument,",
+   "gapBefore": 1.22,
+   "gapAfter": 1.09,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 35,
+   "start": 692.155,
+   "end": 692.475,
+   "dur": 0.32,
+   "cat": "repeat",
+   "ids": [
+    "r0109"
+   ],
+   "text": "a,",
+   "gapBefore": 0.59,
+   "gapAfter": 0.46,
+   "xfade": 0.05,
+   "why": ""
+  },
+  {
+   "n": 36,
+   "start": 694.865,
+   "end": 713.705,
+   "dur": 18.84,
+   "cat": "pause",
+   "ids": [
+    "r0110"
+   ],
+   "text": "Yeah. Yeah. But, but, but actually for me it's, it's different. Like we, in spring already started to find bugs and report. I just didn't pull- a lot of attention feature freeze? Uh, it was before- Spring feature freeze. Before. Well, I don't remember details actually. Yeah. [laughs] Yeah. It's very similar though, I think timing-wise.",
+   "gapBefore": 0.74,
+   "gapAfter": 0.44,
+   "xfade": 0.07,
+   "why": "beat/laugh pause kept"
+  },
+  {
+   "n": 37,
+   "start": 729.3375,
+   "end": 729.9975,
+   "dur": 0.66,
+   "cat": "falsestart",
+   "ids": [
+    "r0116"
+   ],
+   "text": "um-",
+   "gapBefore": 0.51,
+   "gapAfter": 0.39,
+   "xfade": 0.115,
+   "why": ""
+  },
+  {
+   "n": 38,
+   "start": 752.715,
+   "end": 758.175,
+   "dur": 5.46,
+   "cat": "pause",
+   "ids": [
+    "r0118"
+   ],
+   "text": "and, and yeah, and, um, so things should be transformed. But,",
+   "gapBefore": 0.77,
+   "gapAfter": 0.5,
+   "xfade": 0.03,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 39,
+   "start": 820.73,
+   "end": 822.23,
+   "dur": 1.5,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 3.11,
+   "gapAfter": 1.607,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 40,
+   "start": 859.76,
+   "end": 859.99,
+   "dur": 0.23,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.45,
+   "gapAfter": 1.22,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 41,
+   "start": 948.8725,
+   "end": 964.3425,
+   "dur": 15.47,
+   "cat": "pause",
+   "ids": [
+    "r0158"
+   ],
+   "text": "What do you think about like, like it, it feels to me little bit that using logical for this job probably, uh, it's not, it won't work in most, in all cases because, like do you think p- in other word, like let me ask differently.",
+   "gapBefore": 0.16,
+   "gapAfter": 0.09,
+   "xfade": 0.045,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 42,
+   "start": 975.41,
+   "end": 976.76,
+   "dur": 1.35,
+   "cat": "falsestart",
+   "ids": [
+    "r0163"
+   ],
+   "text": "C-",
+   "gapBefore": 2.29,
+   "gapAfter": 1.2,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 43,
+   "start": 980.86,
+   "end": 981.27,
+   "dur": 0.41,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.58,
+   "gapAfter": 1.172,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 44,
+   "start": 988.9675,
+   "end": 989.5475,
+   "dur": 0.58,
+   "cat": "filler",
+   "ids": [
+    "r0164"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.79,
+   "gapAfter": 0.64,
+   "xfade": 0.095,
+   "why": ""
+  },
+  {
+   "n": 45,
+   "start": 992.505,
+   "end": 993.255,
+   "dur": 0.75,
+   "cat": "falsestart",
+   "ids": [
+    "r0165",
+    "r0166"
+   ],
+   "text": "uh, p-",
+   "gapBefore": 0.57,
+   "gapAfter": 0.42,
+   "xfade": 0.03,
+   "why": ""
+  },
+  {
+   "n": 46,
+   "start": 1006.755,
+   "end": 1007.075,
+   "dur": 0.32,
+   "cat": "repeat",
+   "ids": [
+    "r0170"
+   ],
+   "text": "on the,",
+   "gapBefore": 0.3,
+   "gapAfter": 0.27,
+   "xfade": 0.03,
+   "why": ""
+  },
+  {
+   "n": 47,
+   "start": 1025.73,
+   "end": 1026.59,
+   "dur": 0.86,
+   "cat": "repeat",
+   "ids": [
+    "r0171",
+    "r0172"
+   ],
+   "text": "um... And,",
+   "gapBefore": 0.34,
+   "gapAfter": 0.21,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 48,
+   "start": 1044.2625,
+   "end": 1044.7125,
+   "dur": 0.45,
+   "cat": "filler",
+   "ids": [
+    "r0174"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.35,
+   "gapAfter": 0.28,
+   "xfade": 0.025,
+   "why": ""
+  },
+  {
+   "n": 49,
+   "start": 1046.39,
+   "end": 1046.54,
+   "dur": 0.15,
+   "cat": "filler",
+   "ids": [
+    "r0176"
+   ],
+   "text": "uh,",
+   "gapBefore": 0.19,
+   "gapAfter": 0.13,
+   "xfade": 0.04,
+   "why": ""
+  },
+  {
+   "n": 50,
+   "start": 1054.8425,
+   "end": 1054.9625,
+   "dur": 0.12,
+   "cat": "filler",
+   "ids": [
+    "r0178"
+   ],
+   "text": "Uh,",
+   "gapBefore": 0.44,
+   "gapAfter": 0.39,
+   "xfade": 0.045,
+   "why": ""
+  },
+  {
+   "n": 51,
+   "start": 1083.3025,
+   "end": 1088.3325,
+   "dur": 5.03,
+   "cat": "pause",
+   "ids": [
+    "r0183"
+   ],
+   "text": "it's just, like, not convenient and there is some, there is something that can be improved there.",
+   "gapBefore": 0.59,
+   "gapAfter": 0.37,
+   "xfade": 0.085,
+   "why": ""
+  },
+  {
+   "n": 52,
+   "start": 1137.8225,
+   "end": 1141.0725,
+   "dur": 3.25,
+   "cat": "pause",
+   "ids": [
+    "r0200"
+   ],
+   "text": "now, and, uh, yeah. You know it, right?",
+   "gapBefore": 0.58,
+   "gapAfter": 0.55,
+   "xfade": 0.025,
+   "why": ""
+  },
+  {
+   "n": 53,
+   "start": 1157.7525,
+   "end": 1163.6625,
+   "dur": 5.91,
+   "cat": "pause",
+   "ids": [
+    "r0203"
+   ],
+   "text": "Yeah. actually... I was going to... was thinking of using it for a, a friend and,",
+   "gapBefore": 0.33,
+   "gapAfter": 0.22,
+   "xfade": 0.065,
+   "why": ""
+  },
+  {
+   "n": 54,
+   "start": 1198.27,
+   "end": 1198.77,
+   "dur": 0.5,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.73,
+   "gapAfter": 1.232,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 55,
+   "start": 1214.315,
+   "end": 1226.465,
+   "dur": 12.15,
+   "cat": "pause",
+   "ids": [
+    "r0213",
+    "r0214"
+   ],
+   "text": "think I just... I have an additional reason why this idea might be resurrected, but we will discuss it separately. There is interesting topic. Uh, we will talk about it separately anyway. Yeah, so-",
+   "gapBefore": 0.18,
+   "gapAfter": 0.09,
+   "xfade": 0.09,
+   "why": "soft edge (start, end)"
+  },
+  {
+   "n": 56,
+   "start": 1229.36,
+   "end": 1229.54,
+   "dur": 0.18,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.2,
+   "gapAfter": 1.02,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 57,
+   "start": 1230.875,
+   "end": 1237.125,
+   "dur": 6.25,
+   "cat": "pause",
+   "ids": [
+    "r0215"
+   ],
+   "text": "Yeah. Well, I, I like that listen to five, which almost in my list of don't use it.",
+   "gapBefore": 0.82,
+   "gapAfter": 0.49,
+   "xfade": 0.07,
+   "why": "beat/laugh pause kept; soft edge (start)"
+  },
+  {
+   "n": 58,
+   "start": 1317.1775,
+   "end": 1317.5575,
+   "dur": 0.38,
+   "cat": "filler",
+   "ids": [
+    "r0230"
+   ],
+   "text": "uh,",
+   "gapBefore": 0.39,
+   "gapAfter": 0.22,
+   "xfade": 0.075,
+   "why": ""
+  },
+  {
+   "n": 59,
+   "start": 1331.19,
+   "end": 1335.62,
+   "dur": 4.43,
+   "cat": "pause",
+   "ids": [
+    "r0234"
+   ],
+   "text": "With this improvement, right? It's improvement. It's great that...",
+   "gapBefore": 0.29,
+   "gapAfter": 0.27,
+   "xfade": 0.02,
+   "why": "beat/laugh pause kept; soft edge (end)"
+  },
+  {
+   "n": 60,
+   "start": 1340.75,
+   "end": 1340.91,
+   "dur": 0.16,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.16,
+   "gapAfter": 1.004,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 61,
+   "start": 1350.4075,
+   "end": 1350.8875,
+   "dur": 0.48,
+   "cat": "filler",
+   "ids": [
+    "r0239"
+   ],
+   "text": "um,",
+   "gapBefore": 0.32,
+   "gapAfter": 0.24,
+   "xfade": 0.035,
+   "why": ""
+  },
+  {
+   "n": 62,
+   "start": 1398.09,
+   "end": 1398.5,
+   "dur": 0.41,
+   "cat": "repeat",
+   "ids": [
+    "r0246"
+   ],
+   "text": "I'm,",
+   "gapBefore": 0.64,
+   "gapAfter": 0.52,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 63,
+   "start": 1417.325,
+   "end": 1417.895,
+   "dur": 0.57,
+   "cat": "filler",
+   "ids": [
+    "r0248"
+   ],
+   "text": "um,",
+   "gapBefore": 0.37,
+   "gapAfter": 0.23,
+   "xfade": 0.03,
+   "why": ""
+  },
+  {
+   "n": 64,
+   "start": 1473.45,
+   "end": 1477.58,
+   "dur": 4.13,
+   "cat": "pause",
+   "ids": [
+    "r0251"
+   ],
+   "text": "No. [laughs] So, so yeah, that's my take on it.",
+   "gapBefore": 0.68,
+   "gapAfter": 0.62,
+   "xfade": 0.06,
+   "why": "beat/laugh pause kept; soft edge (start)"
+  },
+  {
+   "n": 65,
+   "start": 1562.45,
+   "end": 1563.15,
+   "dur": 0.7,
+   "cat": "repeat",
+   "ids": [
+    "r0262"
+   ],
+   "text": "it's,",
+   "gapBefore": 1.2,
+   "gapAfter": 0.81,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 66,
+   "start": 1573.7475,
+   "end": 1574.2475,
+   "dur": 0.5,
+   "cat": "filler",
+   "ids": [
+    "r0264"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.7,
+   "gapAfter": 0.62,
+   "xfade": 0.055,
+   "why": ""
+  },
+  {
+   "n": 67,
+   "start": 1612.1775,
+   "end": 1612.7175,
+   "dur": 0.54,
+   "cat": "filler",
+   "ids": [
+    "r0270"
+   ],
+   "text": "um,",
+   "gapBefore": 0.39,
+   "gapAfter": 0.34,
+   "xfade": 0.035,
+   "why": ""
+  },
+  {
+   "n": 68,
+   "start": 1618.4825,
+   "end": 1619.0125,
+   "dur": 0.53,
+   "cat": "repeat",
+   "ids": [
+    "r0274"
+   ],
+   "text": "let,",
+   "gapBefore": 0.22,
+   "gapAfter": 0.17,
+   "xfade": 0.045,
+   "why": ""
+  },
+  {
+   "n": 69,
+   "start": 1640.29,
+   "end": 1646.7,
+   "dur": 6.41,
+   "cat": "pause",
+   "ids": [
+    "r0277"
+   ],
+   "text": "Yeah. We... Last week, we, we, when we, like, we, we... In our hacking sessions, we, we...",
+   "gapBefore": 0.19,
+   "gapAfter": 0.17,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 70,
+   "start": 1657.0375,
+   "end": 1657.2975,
+   "dur": 0.26,
+   "cat": "filler",
+   "ids": [
+    "r0278"
+   ],
+   "text": "uh,",
+   "gapBefore": 0.43,
+   "gapAfter": 0.22,
+   "xfade": 0.095,
+   "why": ""
+  },
+  {
+   "n": 71,
+   "start": 1671.38,
+   "end": 1676.81,
+   "dur": 5.43,
+   "cat": "pause",
+   "ids": [
+    "r0282"
+   ],
+   "text": "And, uh, I have, like, probably we should have a separate discussion about that as well, but",
+   "gapBefore": 0.64,
+   "gapAfter": 0.45,
+   "xfade": 0.04,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 72,
+   "start": 1723.41,
+   "end": 1723.8,
+   "dur": 0.39,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.72,
+   "gapAfter": 1.328,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 73,
+   "start": 1780.4325,
+   "end": 1780.9825,
+   "dur": 0.55,
+   "cat": "repeat",
+   "ids": [
+    "r0292"
+   ],
+   "text": "we're,",
+   "gapBefore": 0.44,
+   "gapAfter": 0.35,
+   "xfade": 0.085,
+   "why": ""
+  },
+  {
+   "n": 74,
+   "start": 1881.76,
+   "end": 1882.87,
+   "dur": 1.11,
+   "cat": "pause",
+   "ids": [
+    "r0295"
+   ],
+   "text": "Yeah.",
+   "gapBefore": 2.31,
+   "gapAfter": 1.65,
+   "xfade": 0.04,
+   "why": ""
+  },
+  {
+   "n": 75,
+   "start": 1888.6625,
+   "end": 1889.2725,
+   "dur": 0.61,
+   "cat": "filler",
+   "ids": [
+    "r0297"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.55,
+   "gapAfter": 0.47,
+   "xfade": 0.065,
+   "why": ""
+  },
+  {
+   "n": 76,
+   "start": 1896.99,
+   "end": 1897.4,
+   "dur": 0.41,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.58,
+   "gapAfter": 1.172,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 77,
+   "start": 1905.4125,
+   "end": 1905.9825,
+   "dur": 0.57,
+   "cat": "repeat",
+   "ids": [
+    "r0303"
+   ],
+   "text": "bigger,",
+   "gapBefore": 0.47,
+   "gapAfter": 0.4,
+   "xfade": 0.065,
+   "why": ""
+  },
+  {
+   "n": 78,
+   "start": 1922.2325,
+   "end": 1922.7825,
+   "dur": 0.55,
+   "cat": "filler",
+   "ids": [
+    "r0307"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.61,
+   "gapAfter": 0.5,
+   "xfade": 0.105,
+   "why": ""
+  },
+  {
+   "n": 79,
+   "start": 1924.5025,
+   "end": 1924.7125,
+   "dur": 0.21,
+   "cat": "falsestart",
+   "ids": [
+    "r0309"
+   ],
+   "text": "W-",
+   "gapBefore": 0.53,
+   "gapAfter": 0.43,
+   "xfade": 0.085,
+   "why": ""
+  },
+  {
+   "n": 80,
+   "start": 1941.0675,
+   "end": 1941.2875,
+   "dur": 0.22,
+   "cat": "repeat",
+   "ids": [
+    "r0312"
+   ],
+   "text": "It,",
+   "gapBefore": 0.47,
+   "gapAfter": 0.4,
+   "xfade": 0.035,
+   "why": ""
+  },
+  {
+   "n": 81,
+   "start": 1951.605,
+   "end": 1954.275,
+   "dur": 2.67,
+   "cat": "repeat",
+   "ids": [
+    "r0315",
+    "r0316"
+   ],
+   "text": "just definitely can be more testing. I would,",
+   "gapBefore": 0.54,
+   "gapAfter": 0.46,
+   "xfade": 0.07,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 82,
+   "start": 1978.2275,
+   "end": 1978.5975,
+   "dur": 0.37,
+   "cat": "pause",
+   "ids": [
+    "r0324"
+   ],
+   "text": "Yeah.",
+   "gapBefore": 0.53,
+   "gapAfter": 0.46,
+   "xfade": 0.055,
+   "why": ""
+  },
+  {
+   "n": 83,
+   "start": 1990.0975,
+   "end": 1990.6475,
+   "dur": 0.55,
+   "cat": "filler",
+   "ids": [
+    "r0326"
+   ],
+   "text": "um,",
+   "gapBefore": 0.2,
+   "gapAfter": 0.13,
+   "xfade": 0.035,
+   "why": ""
+  },
+  {
+   "n": 84,
+   "start": 2008.395,
+   "end": 2010.165,
+   "dur": 1.77,
+   "cat": "repeat",
+   "ids": [
+    "r0327",
+    "r0328"
+   ],
+   "text": "Um, and I,",
+   "gapBefore": 0.3,
+   "gapAfter": 0.27,
+   "xfade": 0.03,
+   "why": ""
+  },
+  {
+   "n": 85,
+   "start": 2072.99,
+   "end": 2077.19,
+   "dur": 4.2,
+   "cat": "pause",
+   "ids": [
+    "r0342"
+   ],
+   "text": "What else? What else?",
+   "gapBefore": 3.85,
+   "gapAfter": 1.72,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 86,
+   "start": 2081.785,
+   "end": 2082.285,
+   "dur": 0.5,
+   "cat": "filler",
+   "ids": [
+    "r0345"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.18,
+   "gapAfter": 0.13,
+   "xfade": 0.03,
+   "why": ""
+  },
+  {
+   "n": 87,
+   "start": 2093.49,
+   "end": 2094,
+   "dur": 0.51,
+   "cat": "filler",
+   "ids": [
+    "r0348"
+   ],
+   "text": "Um-",
+   "gapBefore": 0.62,
+   "gapAfter": 0.54,
+   "xfade": 0.08,
+   "why": ""
+  },
+  {
+   "n": 88,
+   "start": 2103.11,
+   "end": 2103.69,
+   "dur": 0.58,
+   "cat": "filler",
+   "ids": [
+    "r0350"
+   ],
+   "text": "uh,",
+   "gapBefore": 0.93,
+   "gapAfter": 0.66,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 89,
+   "start": 2111.225,
+   "end": 2111.665,
+   "dur": 0.44,
+   "cat": "filler",
+   "ids": [
+    "r0352"
+   ],
+   "text": "uh,",
+   "gapBefore": 0.59,
+   "gapAfter": 0.47,
+   "xfade": 0.09,
+   "why": ""
+  },
+  {
+   "n": 90,
+   "start": 2173.49,
+   "end": 2174.65,
+   "dur": 1.16,
+   "cat": "repeat",
+   "ids": [
+    "r0354"
+   ],
+   "text": "the wait becomes,",
+   "gapBefore": 0.88,
+   "gapAfter": 0.76,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 91,
+   "start": 2177.805,
+   "end": 2178.735,
+   "dur": 0.93,
+   "cat": "repeat",
+   "ids": [
+    "r0355"
+   ],
+   "text": "This is,",
+   "gapBefore": 0.5,
+   "gapAfter": 0.41,
+   "xfade": 0.09,
+   "why": ""
+  },
+  {
+   "n": 92,
+   "start": 2190.5325,
+   "end": 2190.7325,
+   "dur": 0.2,
+   "cat": "repeat",
+   "ids": [
+    "r0359"
+   ],
+   "text": "It's,",
+   "gapBefore": 0.32,
+   "gapAfter": 0.27,
+   "xfade": 0.045,
+   "why": ""
+  },
+  {
+   "n": 93,
+   "start": 2306.04,
+   "end": 2310.88,
+   "dur": 4.84,
+   "cat": "pause",
+   "ids": [
+    "r0385"
+   ],
+   "text": "But in some cases, I guess, uh, it can be beneficial to use.",
+   "gapBefore": 1.87,
+   "gapAfter": 1.19,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 94,
+   "start": 2386.78,
+   "end": 2387.45,
+   "dur": 0.67,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 2.01,
+   "gapAfter": 1.341,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 95,
+   "start": 2390.7,
+   "end": 2391.15,
+   "dur": 0.45,
+   "cat": "filler",
+   "ids": [
+    "r0391"
+   ],
+   "text": "um,",
+   "gapBefore": 0.45,
+   "gapAfter": 0.28,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 96,
+   "start": 2408.3975,
+   "end": 2408.6975,
+   "dur": 0.3,
+   "cat": "filler",
+   "ids": [
+    "r0395"
+   ],
+   "text": "uh,",
+   "gapBefore": 0.26,
+   "gapAfter": 0.22,
+   "xfade": 0.035,
+   "why": ""
+  },
+  {
+   "n": 97,
+   "start": 2410.2,
+   "end": 2410.73,
+   "dur": 0.53,
+   "cat": "filler",
+   "ids": [
+    "r0396"
+   ],
+   "text": "Um,",
+   "gapBefore": 0.46,
+   "gapAfter": 0.39,
+   "xfade": 0.04,
+   "why": ""
+  },
+  {
+   "n": 98,
+   "start": 2429.665,
+   "end": 2430.275,
+   "dur": 0.61,
+   "cat": "filler",
+   "ids": [
+    "r0400"
+   ],
+   "text": "um,",
+   "gapBefore": 0.8,
+   "gapAfter": 0.66,
+   "xfade": 0.07,
+   "why": ""
+  },
+  {
+   "n": 99,
+   "start": 2457.9325,
+   "end": 2458.6025,
+   "dur": 0.67,
+   "cat": "filler",
+   "ids": [
+    "r0402"
+   ],
+   "text": "um,",
+   "gapBefore": 0.66,
+   "gapAfter": 0.42,
+   "xfade": 0.025,
+   "why": ""
+  },
+  {
+   "n": 100,
+   "start": 2467.48,
+   "end": 2467.7,
+   "dur": 0.22,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.45,
+   "gapAfter": 1.22,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 101,
+   "start": 2485.2,
+   "end": 2485.41,
+   "dur": 0.21,
+   "cat": "repeat",
+   "ids": [
+    "r0405"
+   ],
+   "text": "Now,",
+   "gapBefore": 0.18,
+   "gapAfter": 0.14,
+   "xfade": 0.04,
+   "why": ""
+  },
+  {
+   "n": 102,
+   "start": 2547.3,
+   "end": 2548.03,
+   "dur": 0.73,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 2.2,
+   "gapAfter": 1.47,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 103,
+   "start": 2581.9825,
+   "end": 2582.0425,
+   "dur": 0.06,
+   "cat": "falsestart",
+   "ids": [
+    "r0428"
+   ],
+   "text": "ex-",
+   "gapBefore": 0.11,
+   "gapAfter": 0.08,
+   "xfade": 0.025,
+   "why": ""
+  },
+  {
+   "n": 104,
+   "start": 2591.0425,
+   "end": 2591.8325,
+   "dur": 0.79,
+   "cat": "pause",
+   "ids": [
+    "r0431"
+   ],
+   "text": "if you use it.",
+   "gapBefore": 0.51,
+   "gapAfter": 0.46,
+   "xfade": 0.045,
+   "why": ""
+  },
+  {
+   "n": 105,
+   "start": 2606.6425,
+   "end": 2616.0825,
+   "dur": 9.44,
+   "cat": "pause",
+   "ids": [
+    "r0434"
+   ],
+   "text": "Maybe all, yeah. Maybe all. What kind of statistics do have? Regular, right? [laughs] Extended. Uh, extended. What else, right? So I, I'm, I'm looking- All extended.",
+   "gapBefore": 0.21,
+   "gapAfter": 0.17,
+   "xfade": 0.025,
+   "why": "beat/laugh pause kept"
+  },
+  {
+   "n": 106,
+   "start": 2631.22,
+   "end": 2632.73,
+   "dur": 1.51,
+   "cat": "pause",
+   "ids": [
+    "r0436"
+   ],
+   "text": "Yeah. I'm looking at it right now.",
+   "gapBefore": 0.12,
+   "gapAfter": 0.06,
+   "xfade": 0.04,
+   "why": "beat/laugh pause kept; soft edge (start, end)"
+  },
+  {
+   "n": 107,
+   "start": 2635.465,
+   "end": 2643.515,
+   "dur": 8.05,
+   "cat": "repeat",
+   "ids": [
+    "r0437",
+    "r0438"
+   ],
+   "text": "but I don't see support, and pg_restore I hope is just the same, like, just data and can restored to pg statistic, right? So if you",
+   "gapBefore": 0.09,
+   "gapAfter": 0.06,
+   "xfade": 0.03,
+   "why": "soft edge (start, end)"
+  },
+  {
+   "n": 108,
+   "start": 2646.2675,
+   "end": 2647.1675,
+   "dur": 0.9,
+   "cat": "pause",
+   "ids": [
+    "r0441"
+   ],
+   "text": "think so.",
+   "gapBefore": 0.84,
+   "gapAfter": 0.48,
+   "xfade": 0.115,
+   "why": ""
+  },
+  {
+   "n": 109,
+   "start": 2650.4,
+   "end": 2651.01,
+   "dur": 0.61,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.92,
+   "gapAfter": 1.308,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 110,
+   "start": 2686.34,
+   "end": 2696.01,
+   "dur": 9.67,
+   "cat": "pause",
+   "ids": [
+    "r0445"
+   ],
+   "text": "A lot of good small stuff which I will benefit personally, uh, uh, myself, like, so it's, it's great. Good?",
+   "gapBefore": 0.87,
+   "gapAfter": 0.85,
+   "xfade": 0.02,
+   "why": "soft edge (start)"
+  },
+  {
+   "n": 111,
+   "start": 2708.57,
+   "end": 2709.6,
+   "dur": 1.03,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 2.53,
+   "gapAfter": 1.519,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 112,
+   "start": 2732.02,
+   "end": 2732.58,
+   "dur": 0.56,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.82,
+   "gapAfter": 1.268,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 113,
+   "start": 2745.8125,
+   "end": 2746.3925,
+   "dur": 0.58,
+   "cat": "filler",
+   "ids": [
+    "r0450"
+   ],
+   "text": "um,",
+   "gapBefore": 0.59,
+   "gapAfter": 0.46,
+   "xfade": 0.045,
+   "why": ""
+  },
+  {
+   "n": 114,
+   "start": 2788.52,
+   "end": 2788.76,
+   "dur": 0.24,
+   "cat": "falsestart",
+   "ids": [
+    "r0456"
+   ],
+   "text": "s-",
+   "gapBefore": 0.29,
+   "gapAfter": 0.27,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 115,
+   "start": 2823.3325,
+   "end": 2823.6725,
+   "dur": 0.34,
+   "cat": "repeat",
+   "ids": [
+    "r0461"
+   ],
+   "text": "for,",
+   "gapBefore": 0.11,
+   "gapAfter": 0.06,
+   "xfade": 0.025,
+   "why": ""
+  },
+  {
+   "n": 116,
+   "start": 2837.15,
+   "end": 2837.39,
+   "dur": 0.24,
+   "cat": "repeat",
+   "ids": [
+    "r0463"
+   ],
+   "text": "you're,",
+   "gapBefore": 0.24,
+   "gapAfter": 0.22,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 117,
+   "start": 2865.54,
+   "end": 2867.51,
+   "dur": 1.97,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 3.66,
+   "gapAfter": 1.689,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 118,
+   "start": 2868.955,
+   "end": 2869.515,
+   "dur": 0.56,
+   "cat": "pause",
+   "ids": [
+    "r0468"
+   ],
+   "text": "I guess",
+   "gapBefore": 0.36,
+   "gapAfter": 0.22,
+   "xfade": 0.03,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 119,
+   "start": 2872.8525,
+   "end": 2877.7525,
+   "dur": 4.9,
+   "cat": "pause",
+   "ids": [
+    "r0469"
+   ],
+   "text": "So as usual, like, recommendation is to... Like,",
+   "gapBefore": 1.27,
+   "gapAfter": 1.24,
+   "xfade": 0.025,
+   "why": ""
+  },
+  {
+   "n": 120,
+   "start": 2930.715,
+   "end": 2936.225,
+   "dur": 5.51,
+   "cat": "pause",
+   "ids": [
+    "r0482"
+   ],
+   "text": "As, as usual, testing on actual clone is, like, is great because",
+   "gapBefore": 0.56,
+   "gapAfter": 0.43,
+   "xfade": 0.05,
+   "why": ""
+  },
+  {
+   "n": 121,
+   "start": 2959.24,
+   "end": 2959.43,
+   "dur": 0.19,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.21,
+   "gapAfter": 1.024,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 122,
+   "start": 2990.37,
+   "end": 2990.71,
+   "dur": 0.34,
+   "cat": "falsestart",
+   "ids": [
+    "r0493"
+   ],
+   "text": "ex-",
+   "gapBefore": 0.27,
+   "gapAfter": 0.2,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 123,
+   "start": 3001.47,
+   "end": 3002.52,
+   "dur": 1.05,
+   "cat": "pause",
+   "ids": [
+    "r0497"
+   ],
+   "text": "I, I guess my,",
+   "gapBefore": 1.16,
+   "gapAfter": 1.01,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 124,
+   "start": 3014.65,
+   "end": 3014.83,
+   "dur": 0.18,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.2,
+   "gapAfter": 1.02,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 125,
+   "start": 3026.12,
+   "end": 3026.34,
+   "dur": 0.22,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.26,
+   "gapAfter": 1.044,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 126,
+   "start": 3047.44,
+   "end": 3048.08,
+   "dur": 0.64,
+   "cat": "filler",
+   "ids": [
+    "r0504"
+   ],
+   "text": "um,",
+   "gapBefore": 0.7,
+   "gapAfter": 0.41,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 127,
+   "start": 3107.0925,
+   "end": 3107.3725,
+   "dur": 0.28,
+   "cat": "repeat",
+   "ids": [
+    "r0510"
+   ],
+   "text": "Our,",
+   "gapBefore": 0.26,
+   "gapAfter": 0.2,
+   "xfade": 0.025,
+   "why": ""
+  },
+  {
+   "n": 128,
+   "start": 3109.505,
+   "end": 3109.925,
+   "dur": 0.42,
+   "cat": "filler",
+   "ids": [
+    "r0512"
+   ],
+   "text": "um,",
+   "gapBefore": 0.55,
+   "gapAfter": 0.45,
+   "xfade": 0.09,
+   "why": ""
+  },
+  {
+   "n": 129,
+   "start": 3118.8,
+   "end": 3119.04,
+   "dur": 0.24,
+   "cat": "falsestart",
+   "ids": [
+    "r0513"
+   ],
+   "text": "w-",
+   "gapBefore": 0.33,
+   "gapAfter": 0.31,
+   "xfade": 0.02,
+   "why": ""
+  },
+  {
+   "n": 130,
+   "start": 3138.66,
+   "end": 3138.95,
+   "dur": 0.29,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.37,
+   "gapAfter": 1.088,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 131,
+   "start": 3161.375,
+   "end": 3170.995,
+   "dur": 9.62,
+   "cat": "pause",
+   "ids": [
+    "r0517",
+    "r0518"
+   ],
+   "text": "but I still feel like lot of can be improved. Nobody has the- Right whole thing yet. So, yeah. For, for ours-",
+   "gapBefore": 0.67,
+   "gapAfter": 0.56,
+   "xfade": 0.09,
+   "why": ""
+  },
+  {
+   "n": 132,
+   "start": 3175.265,
+   "end": 3176.495,
+   "dur": 1.23,
+   "cat": "falsestart",
+   "ids": [
+    "r0519",
+    "r0520"
+   ],
+   "text": "exerci- apologize,",
+   "gapBefore": 0.19,
+   "gapAfter": 0.08,
+   "xfade": 0.07,
+   "why": "soft edge (start, end)"
+  },
+  {
+   "n": 133,
+   "start": 3194.43,
+   "end": 3195.68,
+   "dur": 1.25,
+   "cat": "pause",
+   "ids": [
+    "r0525"
+   ],
+   "text": "So sorry, Michael. Go",
+   "gapBefore": 0.35,
+   "gapAfter": 0.23,
+   "xfade": 0.02,
+   "why": "soft edge (end)"
+  },
+  {
+   "n": 134,
+   "start": 3203.11,
+   "end": 3203.35,
+   "dur": 0.24,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.3,
+   "gapAfter": 1.06,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 135,
+   "start": 3204.82,
+   "end": 3205.75,
+   "dur": 0.93,
+   "cat": "pause",
+   "ids": [
+    "r0526"
+   ],
+   "text": "it's it's",
+   "gapBefore": 0.83,
+   "gapAfter": 0.74,
+   "xfade": 0.06,
+   "why": ""
+  },
+  {
+   "n": 136,
+   "start": 3216.72,
+   "end": 3217.49,
+   "dur": 0.77,
+   "cat": "repeat",
+   "ids": [
+    "r0529",
+    "r0530"
+   ],
+   "text": "Um, I know,",
+   "gapBefore": 0.43,
+   "gapAfter": 0.37,
+   "xfade": 0.06,
+   "why": ""
+  },
+  {
+   "n": 137,
+   "start": 3239.0825,
+   "end": 3239.3925,
+   "dur": 0.31,
+   "cat": "repeat",
+   "ids": [
+    "r0532"
+   ],
+   "text": "can,",
+   "gapBefore": 0.18,
+   "gapAfter": 0.1,
+   "xfade": 0.045,
+   "why": ""
+  },
+  {
+   "n": 138,
+   "start": 3251.53,
+   "end": 3267.27,
+   "dur": 15.74,
+   "cat": "filler",
+   "ids": [
+    "r0533",
+    "r0534"
+   ],
+   "text": "your workload has. Like, it's a big topic. It's also like, how many? Uh, you're... Yeah, you're muted. Muted. Muted. You are muted. [laughs] Totally cut out. Sorry about that. Um,",
+   "gapBefore": 0.89,
+   "gapAfter": 0.56,
+   "xfade": 0.04,
+   "why": "beat/laugh pause kept; soft edge (end)"
+  },
+  {
+   "n": 139,
+   "start": 3276.6025,
+   "end": 3277.0625,
+   "dur": 0.46,
+   "cat": "falsestart",
+   "ids": [
+    "r0535"
+   ],
+   "text": "n-",
+   "gapBefore": 0.38,
+   "gapAfter": 0.26,
+   "xfade": 0.065,
+   "why": ""
+  },
+  {
+   "n": 140,
+   "start": 3346.8025,
+   "end": 3346.9625,
+   "dur": 0.16,
+   "cat": "repeat",
+   "ids": [
+    "r0546"
+   ],
+   "text": "a,",
+   "gapBefore": 0.17,
+   "gapAfter": 0.14,
+   "xfade": 0.025,
+   "why": ""
+  },
+  {
+   "n": 141,
+   "start": 3381.79,
+   "end": 3381.97,
+   "dur": 0.18,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.2,
+   "gapAfter": 1.02,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 142,
+   "start": 3429.75,
+   "end": 3435.48,
+   "dur": 5.73,
+   "cat": "pause",
+   "ids": [
+    "r0558"
+   ],
+   "text": "it's a, it's a, it's challenging. That's the problem. Yeah. So",
+   "gapBefore": 1.42,
+   "gapAfter": 0.9,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 143,
+   "start": 3457.64,
+   "end": 3458.62,
+   "dur": 0.98,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 2.38,
+   "gapAfter": 1.397,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 144,
+   "start": 3461.51,
+   "end": 3462.15,
+   "dur": 0.64,
+   "cat": "pause",
+   "ids": [],
+   "text": "",
+   "gapBefore": 1.97,
+   "gapAfter": 1.328,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 145,
+   "start": 3497.05,
+   "end": 3497.62,
+   "dur": 0.57,
+   "cat": "pause",
+   "ids": [
+    "r0568"
+   ],
+   "text": "Huh?",
+   "gapBefore": 1.38,
+   "gapAfter": 1.03,
+   "xfade": 0.12,
+   "why": ""
+  },
+  {
+   "n": 146,
+   "start": 3497.71,
+   "end": 3499.03,
+   "dur": 1.32,
+   "cat": "pause",
+   "ids": [
+    "r0569"
+   ],
+   "text": "Happy New Year.",
+   "gapBefore": 0.97,
+   "gapAfter": 0.76,
+   "xfade": 0.12,
+   "why": "beat/laugh pause kept"
+  },
+  {
+   "n": 147,
+   "start": 3507.18,
+   "end": 3521.52,
+   "dur": 14.34,
+   "cat": "tail",
+   "ids": [
+    "r0570"
+   ],
+   "text": "",
+   "gapBefore": 0,
+   "gapAfter": 0,
+   "xfade": 0,
+   "why": "tail"
+  }
+ ],
+ "muteOnly": [],
+ "audio": [
+  {
+   "a": 38.23,
+   "b": 48.8,
+   "xf": 0
+  },
+  {
+   "a": 49.4,
+   "b": 52.16,
+   "xf": 0.02
+  },
+  {
+   "a": 52.43,
+   "b": 58.94,
+   "xf": 0.02
+  },
+  {
+   "a": 59.27,
+   "b": 70.045,
+   "xf": 0.12
+  },
+  {
+   "a": 70.435,
+   "b": 81.13,
+   "xf": 0.03
+  },
+  {
+   "a": 129.46,
+   "b": 139.66,
+   "xf": 0.02
+  },
+  {
+   "a": 139.81,
+   "b": 169.16,
+   "xf": 0.12
+  },
+  {
+   "a": 180.95,
+   "b": 197.135,
+   "xf": 0.02
+  },
+  {
+   "a": 197.725,
+   "b": 212.905,
+   "xf": 0.05
+  },
+  {
+   "a": 213.325,
+   "b": 244.3175,
+   "xf": 0.05
+  },
+  {
+   "a": 244.6375,
+   "b": 286.845,
+   "xf": 0.015
+  },
+  {
+   "a": 287.365,
+   "b": 300.44,
+   "xf": 0.11
+  },
+  {
+   "a": 301.02,
+   "b": 302.73,
+   "xf": 0.12
+  },
+  {
+   "a": 303.03,
+   "b": 305.13,
+   "xf": 0.12
+  },
+  {
+   "a": 305.38,
+   "b": 309.3,
+   "xf": 0.12
+  },
+  {
+   "a": 310.12,
+   "b": 332.325,
+   "xf": 0.04
+  },
+  {
+   "a": 337.215,
+   "b": 366.115,
+   "xf": 0.09
+  },
+  {
+   "a": 366.605,
+   "b": 383.92,
+   "xf": 0.07
+  },
+  {
+   "a": 389.29,
+   "b": 398.24,
+   "xf": 0.12
+  },
+  {
+   "a": 399.29,
+   "b": 416.06,
+   "xf": 0.12
+  },
+  {
+   "a": 440.3,
+   "b": 459.33,
+   "xf": 0.02
+  },
+  {
+   "a": 463.42,
+   "b": 476.16,
+   "xf": 0.02
+  },
+  {
+   "a": 476.59,
+   "b": 479.11,
+   "xf": 0.12
+  },
+  {
+   "a": 482.7,
+   "b": 586.78,
+   "xf": 0.12
+  },
+  {
+   "a": 587.34,
+   "b": 592.945,
+   "xf": 0.12
+  },
+  {
+   "a": 593.785,
+   "b": 599.34,
+   "xf": 0.03
+  },
+  {
+   "a": 599.59,
+   "b": 600.46,
+   "xf": 0.12
+  },
+  {
+   "a": 601.39,
+   "b": 603.0175,
+   "xf": 0.02
+  },
+  {
+   "a": 603.3475,
+   "b": 604.57,
+   "xf": 0.075
+  },
+  {
+   "a": 615.07,
+   "b": 618.4625,
+   "xf": 0.04
+  },
+  {
+   "a": 618.9425,
+   "b": 632.3975,
+   "xf": 0.045
+  },
+  {
+   "a": 632.7075,
+   "b": 649.49,
+   "xf": 0.055
+  },
+  {
+   "a": 658.84,
+   "b": 692.155,
+   "xf": 0.12
+  },
+  {
+   "a": 692.475,
+   "b": 694.865,
+   "xf": 0.05
+  },
+  {
+   "a": 713.705,
+   "b": 729.3375,
+   "xf": 0.07
+  },
+  {
+   "a": 729.9975,
+   "b": 752.715,
+   "xf": 0.115
+  },
+  {
+   "a": 758.175,
+   "b": 820.73,
+   "xf": 0.03
+  },
+  {
+   "a": 822.23,
+   "b": 859.76,
+   "xf": 0.12
+  },
+  {
+   "a": 859.99,
+   "b": 948.8725,
+   "xf": 0.12
+  },
+  {
+   "a": 964.3425,
+   "b": 975.41,
+   "xf": 0.045
+  },
+  {
+   "a": 976.76,
+   "b": 980.86,
+   "xf": 0.02
+  },
+  {
+   "a": 981.27,
+   "b": 988.9675,
+   "xf": 0.12
+  },
+  {
+   "a": 989.5475,
+   "b": 992.505,
+   "xf": 0.095
+  },
+  {
+   "a": 993.255,
+   "b": 1006.755,
+   "xf": 0.03
+  },
+  {
+   "a": 1007.075,
+   "b": 1025.73,
+   "xf": 0.03
+  },
+  {
+   "a": 1026.59,
+   "b": 1044.2625,
+   "xf": 0.02
+  },
+  {
+   "a": 1044.7125,
+   "b": 1046.39,
+   "xf": 0.025
+  },
+  {
+   "a": 1046.54,
+   "b": 1054.8425,
+   "xf": 0.04
+  },
+  {
+   "a": 1054.9625,
+   "b": 1083.3025,
+   "xf": 0.045
+  },
+  {
+   "a": 1088.3325,
+   "b": 1137.8225,
+   "xf": 0.085
+  },
+  {
+   "a": 1141.0725,
+   "b": 1157.7525,
+   "xf": 0.025
+  },
+  {
+   "a": 1163.6625,
+   "b": 1198.27,
+   "xf": 0.065
+  },
+  {
+   "a": 1198.77,
+   "b": 1214.315,
+   "xf": 0.12
+  },
+  {
+   "a": 1226.465,
+   "b": 1229.36,
+   "xf": 0.09
+  },
+  {
+   "a": 1229.54,
+   "b": 1230.875,
+   "xf": 0.12
+  },
+  {
+   "a": 1237.125,
+   "b": 1317.1775,
+   "xf": 0.07
+  },
+  {
+   "a": 1317.5575,
+   "b": 1331.19,
+   "xf": 0.075
+  },
+  {
+   "a": 1335.62,
+   "b": 1340.75,
+   "xf": 0.02
+  },
+  {
+   "a": 1340.91,
+   "b": 1350.4075,
+   "xf": 0.12
+  },
+  {
+   "a": 1350.8875,
+   "b": 1398.09,
+   "xf": 0.035
+  },
+  {
+   "a": 1398.5,
+   "b": 1417.325,
+   "xf": 0.12
+  },
+  {
+   "a": 1417.895,
+   "b": 1473.45,
+   "xf": 0.03
+  },
+  {
+   "a": 1477.58,
+   "b": 1562.45,
+   "xf": 0.06
+  },
+  {
+   "a": 1563.15,
+   "b": 1573.7475,
+   "xf": 0.12
+  },
+  {
+   "a": 1574.2475,
+   "b": 1612.1775,
+   "xf": 0.055
+  },
+  {
+   "a": 1612.7175,
+   "b": 1618.4825,
+   "xf": 0.035
+  },
+  {
+   "a": 1619.0125,
+   "b": 1640.29,
+   "xf": 0.045
+  },
+  {
+   "a": 1646.7,
+   "b": 1657.0375,
+   "xf": 0.02
+  },
+  {
+   "a": 1657.2975,
+   "b": 1671.38,
+   "xf": 0.095
+  },
+  {
+   "a": 1676.81,
+   "b": 1723.41,
+   "xf": 0.04
+  },
+  {
+   "a": 1723.8,
+   "b": 1780.4325,
+   "xf": 0.12
+  },
+  {
+   "a": 1780.9825,
+   "b": 1881.76,
+   "xf": 0.085
+  },
+  {
+   "a": 1882.87,
+   "b": 1888.6625,
+   "xf": 0.04
+  },
+  {
+   "a": 1889.2725,
+   "b": 1896.99,
+   "xf": 0.065
+  },
+  {
+   "a": 1897.4,
+   "b": 1905.4125,
+   "xf": 0.12
+  },
+  {
+   "a": 1905.9825,
+   "b": 1922.2325,
+   "xf": 0.065
+  },
+  {
+   "a": 1922.7825,
+   "b": 1924.5025,
+   "xf": 0.105
+  },
+  {
+   "a": 1924.7125,
+   "b": 1941.0675,
+   "xf": 0.085
+  },
+  {
+   "a": 1941.2875,
+   "b": 1951.605,
+   "xf": 0.035
+  },
+  {
+   "a": 1954.275,
+   "b": 1978.2275,
+   "xf": 0.07
+  },
+  {
+   "a": 1978.5975,
+   "b": 1990.0975,
+   "xf": 0.055
+  },
+  {
+   "a": 1990.6475,
+   "b": 2008.395,
+   "xf": 0.035
+  },
+  {
+   "a": 2010.165,
+   "b": 2072.99,
+   "xf": 0.03
+  },
+  {
+   "a": 2077.19,
+   "b": 2081.785,
+   "xf": 0.12
+  },
+  {
+   "a": 2082.285,
+   "b": 2093.49,
+   "xf": 0.03
+  },
+  {
+   "a": 2094,
+   "b": 2103.11,
+   "xf": 0.08
+  },
+  {
+   "a": 2103.69,
+   "b": 2111.225,
+   "xf": 0.12
+  },
+  {
+   "a": 2111.665,
+   "b": 2173.49,
+   "xf": 0.09
+  },
+  {
+   "a": 2174.65,
+   "b": 2177.805,
+   "xf": 0.12
+  },
+  {
+   "a": 2178.735,
+   "b": 2190.5325,
+   "xf": 0.09
+  },
+  {
+   "a": 2190.7325,
+   "b": 2306.04,
+   "xf": 0.045
+  },
+  {
+   "a": 2310.88,
+   "b": 2386.78,
+   "xf": 0.12
+  },
+  {
+   "a": 2387.45,
+   "b": 2390.7,
+   "xf": 0.12
+  },
+  {
+   "a": 2391.15,
+   "b": 2408.3975,
+   "xf": 0.02
+  },
+  {
+   "a": 2408.6975,
+   "b": 2410.2,
+   "xf": 0.035
+  },
+  {
+   "a": 2410.73,
+   "b": 2429.665,
+   "xf": 0.04
+  },
+  {
+   "a": 2430.275,
+   "b": 2457.9325,
+   "xf": 0.07
+  },
+  {
+   "a": 2458.6025,
+   "b": 2467.48,
+   "xf": 0.025
+  },
+  {
+   "a": 2467.7,
+   "b": 2485.2,
+   "xf": 0.12
+  },
+  {
+   "a": 2485.41,
+   "b": 2547.3,
+   "xf": 0.04
+  },
+  {
+   "a": 2548.03,
+   "b": 2581.9825,
+   "xf": 0.12
+  },
+  {
+   "a": 2582.0425,
+   "b": 2591.0425,
+   "xf": 0.025
+  },
+  {
+   "a": 2591.8325,
+   "b": 2606.6425,
+   "xf": 0.045
+  },
+  {
+   "a": 2616.0825,
+   "b": 2631.22,
+   "xf": 0.025
+  },
+  {
+   "a": 2632.73,
+   "b": 2635.465,
+   "xf": 0.04
+  },
+  {
+   "a": 2643.515,
+   "b": 2646.2675,
+   "xf": 0.03
+  },
+  {
+   "a": 2647.1675,
+   "b": 2650.4,
+   "xf": 0.115
+  },
+  {
+   "a": 2651.01,
+   "b": 2686.34,
+   "xf": 0.12
+  },
+  {
+   "a": 2696.01,
+   "b": 2708.57,
+   "xf": 0.02
+  },
+  {
+   "a": 2709.6,
+   "b": 2732.02,
+   "xf": 0.12
+  },
+  {
+   "a": 2732.58,
+   "b": 2745.8125,
+   "xf": 0.12
+  },
+  {
+   "a": 2746.3925,
+   "b": 2788.52,
+   "xf": 0.045
+  },
+  {
+   "a": 2788.76,
+   "b": 2823.3325,
+   "xf": 0.02
+  },
+  {
+   "a": 2823.6725,
+   "b": 2837.15,
+   "xf": 0.025
+  },
+  {
+   "a": 2837.39,
+   "b": 2865.54,
+   "xf": 0.02
+  },
+  {
+   "a": 2867.51,
+   "b": 2868.955,
+   "xf": 0.12
+  },
+  {
+   "a": 2869.515,
+   "b": 2872.8525,
+   "xf": 0.03
+  },
+  {
+   "a": 2877.7525,
+   "b": 2930.715,
+   "xf": 0.025
+  },
+  {
+   "a": 2936.225,
+   "b": 2959.24,
+   "xf": 0.05
+  },
+  {
+   "a": 2959.43,
+   "b": 2990.37,
+   "xf": 0.12
+  },
+  {
+   "a": 2990.71,
+   "b": 3001.47,
+   "xf": 0.02
+  },
+  {
+   "a": 3002.52,
+   "b": 3014.65,
+   "xf": 0.12
+  },
+  {
+   "a": 3014.83,
+   "b": 3026.12,
+   "xf": 0.12
+  },
+  {
+   "a": 3026.34,
+   "b": 3047.44,
+   "xf": 0.12
+  },
+  {
+   "a": 3048.08,
+   "b": 3107.0925,
+   "xf": 0.12
+  },
+  {
+   "a": 3107.3725,
+   "b": 3109.505,
+   "xf": 0.025
+  },
+  {
+   "a": 3109.925,
+   "b": 3118.8,
+   "xf": 0.09
+  },
+  {
+   "a": 3119.04,
+   "b": 3138.66,
+   "xf": 0.02
+  },
+  {
+   "a": 3138.95,
+   "b": 3161.375,
+   "xf": 0.12
+  },
+  {
+   "a": 3170.995,
+   "b": 3175.265,
+   "xf": 0.09
+  },
+  {
+   "a": 3176.495,
+   "b": 3194.43,
+   "xf": 0.07
+  },
+  {
+   "a": 3195.68,
+   "b": 3203.11,
+   "xf": 0.02
+  },
+  {
+   "a": 3203.35,
+   "b": 3204.82,
+   "xf": 0.12
+  },
+  {
+   "a": 3205.75,
+   "b": 3216.72,
+   "xf": 0.06
+  },
+  {
+   "a": 3217.49,
+   "b": 3239.0825,
+   "xf": 0.06
+  },
+  {
+   "a": 3239.3925,
+   "b": 3251.53,
+   "xf": 0.045
+  },
+  {
+   "a": 3267.27,
+   "b": 3276.6025,
+   "xf": 0.04
+  },
+  {
+   "a": 3277.0625,
+   "b": 3346.8025,
+   "xf": 0.065
+  },
+  {
+   "a": 3346.9625,
+   "b": 3381.79,
+   "xf": 0.025
+  },
+  {
+   "a": 3381.97,
+   "b": 3429.75,
+   "xf": 0.12
+  },
+  {
+   "a": 3435.48,
+   "b": 3457.64,
+   "xf": 0.12
+  },
+  {
+   "a": 3458.62,
+   "b": 3461.51,
+   "xf": 0.12
+  },
+  {
+   "a": 3462.15,
+   "b": 3497.05,
+   "xf": 0.12
+  },
+  {
+   "a": 3497.62,
+   "b": 3497.71,
+   "xf": 0.12
+  },
+  {
+   "a": 3499.03,
+   "b": 3507.18,
+   "xf": 0.12
+  }
+ ],
+ "gains": [],
+ "segments": [
+  [
+   956,
+   1220
+  ],
+  [
+   1235,
+   1304
+  ],
+  [
+   1311,
+   1474
+  ],
+  [
+   1482,
+   1751
+  ],
+  [
+   1761,
+   2029
+  ],
+  [
+   3237,
+   3492
+  ],
+  [
+   3495,
+   4228
+  ],
+  [
+   4524,
+   4929
+  ],
+  [
+   4943,
+   5323
+  ],
+  [
+   5333,
+   6107
+  ],
+  [
+   6116,
+   7172
+  ],
+  [
+   7184,
+   7511
+  ],
+  [
+   7526,
+   7568
+  ],
+  [
+   7576,
+   7629
+  ],
+  [
+   7635,
+   7733
+  ],
+  [
+   7753,
+   8308
+  ],
+  [
+   8430,
+   9152
+  ],
+  [
+   9165,
+   9598
+  ],
+  [
+   9732,
+   9956
+  ],
+  [
+   9982,
+   10401
+  ],
+  [
+   11008,
+   11484
+  ],
+  [
+   11586,
+   11905
+  ],
+  [
+   11915,
+   11978
+  ],
+  [
+   12068,
+   14670
+  ],
+  [
+   14684,
+   14824
+  ],
+  [
+   14845,
+   14984
+  ],
+  [
+   14990,
+   15011
+  ],
+  [
+   15035,
+   15076
+  ],
+  [
+   15084,
+   15115
+  ],
+  [
+   15377,
+   15461
+  ],
+  [
+   15474,
+   15811
+  ],
+  [
+   15818,
+   16237
+  ],
+  [
+   16471,
+   17304
+  ],
+  [
+   17312,
+   17372
+  ],
+  [
+   17843,
+   18234
+  ],
+  [
+   18250,
+   18818
+  ],
+  [
+   18954,
+   20518
+  ],
+  [
+   20556,
+   21494
+  ],
+  [
+   21500,
+   23722
+  ],
+  [
+   24109,
+   24386
+  ],
+  [
+   24419,
+   24521
+  ],
+  [
+   24532,
+   24724
+  ],
+  [
+   24739,
+   24813
+  ],
+  [
+   24831,
+   25169
+  ],
+  [
+   25177,
+   25643
+  ],
+  [
+   25665,
+   26107
+  ],
+  [
+   26118,
+   26160
+  ],
+  [
+   26164,
+   26372
+  ],
+  [
+   26374,
+   27082
+  ],
+  [
+   27208,
+   28445
+  ],
+  [
+   28527,
+   28944
+  ],
+  [
+   29092,
+   29958
+  ],
+  [
+   29969,
+   30357
+  ],
+  [
+   30662,
+   30735
+  ],
+  [
+   30739,
+   30772
+  ],
+  [
+   30928,
+   32929
+  ],
+  [
+   32939,
+   33280
+  ],
+  [
+   33391,
+   33519
+  ],
+  [
+   33523,
+   33761
+  ],
+  [
+   33772,
+   34952
+  ],
+  [
+   34963,
+   35433
+  ],
+  [
+   35447,
+   36836
+  ],
+  [
+   36940,
+   39062
+  ],
+  [
+   39079,
+   39344
+  ],
+  [
+   39356,
+   40304
+  ],
+  [
+   40318,
+   40462
+  ],
+  [
+   40475,
+   41007
+  ],
+  [
+   41168,
+   41427
+  ],
+  [
+   41432,
+   41784
+  ],
+  [
+   41920,
+   43085
+  ],
+  [
+   43095,
+   44511
+  ],
+  [
+   44525,
+   47044
+  ],
+  [
+   47072,
+   47217
+  ],
+  [
+   47232,
+   47425
+  ],
+  [
+   47435,
+   47635
+  ],
+  [
+   47650,
+   48056
+  ],
+  [
+   48070,
+   48113
+  ],
+  [
+   48118,
+   48527
+  ],
+  [
+   48532,
+   48790
+  ],
+  [
+   48857,
+   49456
+  ],
+  [
+   49465,
+   49752
+  ],
+  [
+   49766,
+   50210
+  ],
+  [
+   50254,
+   51825
+  ],
+  [
+   51930,
+   52045
+  ],
+  [
+   52057,
+   52337
+  ],
+  [
+   52350,
+   52578
+  ],
+  [
+   52592,
+   52780
+  ],
+  [
+   52792,
+   54338
+  ],
+  [
+   54366,
+   54444
+  ],
+  [
+   54468,
+   54763
+  ],
+  [
+   54768,
+   57651
+  ],
+  [
+   57772,
+   59669
+  ],
+  [
+   59686,
+   59768
+  ],
+  [
+   59779,
+   60210
+  ],
+  [
+   60217,
+   60254
+  ],
+  [
+   60268,
+   60742
+  ],
+  [
+   60757,
+   61448
+  ],
+  [
+   61465,
+   61687
+  ],
+  [
+   61692,
+   62130
+  ],
+  [
+   62135,
+   63682
+  ],
+  [
+   63701,
+   64550
+  ],
+  [
+   64551,
+   64776
+  ],
+  [
+   64796,
+   65166
+  ],
+  [
+   65402,
+   65780
+  ],
+  [
+   65818,
+   65887
+  ],
+  [
+   66088,
+   66157
+  ],
+  [
+   66179,
+   66259
+  ],
+  [
+   66275,
+   67159
+  ],
+  [
+   67400,
+   67714
+  ],
+  [
+   67740,
+   68300
+  ],
+  [
+   68315,
+   68646
+  ],
+  [
+   68660,
+   69713
+  ],
+  [
+   69719,
+   70584
+  ],
+  [
+   70592,
+   70928
+  ],
+  [
+   70935,
+   71639
+  ],
+  [
+   71688,
+   71724
+  ],
+  [
+   71738,
+   71822
+  ],
+  [
+   71944,
+   73268
+  ],
+  [
+   73406,
+   73981
+  ],
+  [
+   73986,
+   74760
+  ],
+  [
+   74768,
+   75037
+  ],
+  [
+   75063,
+   75366
+  ],
+  [
+   75371,
+   75653
+  ],
+  [
+   75659,
+   76187
+  ],
+  [
+   76202,
+   77677
+  ],
+  [
+   77684,
+   77737
+  ],
+  [
+   77748,
+   77970
+  ],
+  [
+   77976,
+   78467
+  ],
+  [
+   78474,
+   79034
+  ],
+  [
+   79275,
+   79382
+  ],
+  [
+   79412,
+   79860
+  ],
+  [
+   79892,
+   80078
+  ],
+  [
+   80084,
+   80121
+  ],
+  [
+   80144,
+   80418
+  ],
+  [
+   80437,
+   80977
+  ],
+  [
+   80985,
+   81288
+  ],
+  [
+   81682,
+   81916
+  ],
+  [
+   81927,
+   83670
+  ],
+  [
+   83674,
+   84545
+  ],
+  [
+   84549,
+   85743
+  ],
+  [
+   85887,
+   86441
+  ],
+  [
+   86466,
+   86539
+  ],
+  [
+   86554,
+   87426
+  ],
+  [
+   87441,
+   87444
+  ],
+  [
+   87476,
+   87679
+  ]
+ ],
+ "segmentTimes": [
+  {
+   "srcStart": 38.24,
+   "srcEnd": 48.8,
+   "outStart": 0,
+   "outEnd": 10.56
+  },
+  {
+   "srcStart": 49.4,
+   "srcEnd": 52.16,
+   "outStart": 10.56,
+   "outEnd": 13.32
+  },
+  {
+   "srcStart": 52.44,
+   "srcEnd": 58.96,
+   "outStart": 13.32,
+   "outEnd": 19.84
+  },
+  {
+   "srcStart": 59.28,
+   "srcEnd": 70.04,
+   "outStart": 19.84,
+   "outEnd": 30.6
+  },
+  {
+   "srcStart": 70.44,
+   "srcEnd": 81.16,
+   "outStart": 30.6,
+   "outEnd": 41.32
+  },
+  {
+   "srcStart": 129.48,
+   "srcEnd": 139.68,
+   "outStart": 41.32,
+   "outEnd": 51.52
+  },
+  {
+   "srcStart": 139.8,
+   "srcEnd": 169.12,
+   "outStart": 51.52,
+   "outEnd": 80.84
+  },
+  {
+   "srcStart": 180.96,
+   "srcEnd": 197.16,
+   "outStart": 80.84,
+   "outEnd": 97.04
+  },
+  {
+   "srcStart": 197.72,
+   "srcEnd": 212.92,
+   "outStart": 97.04,
+   "outEnd": 112.24
+  },
+  {
+   "srcStart": 213.32,
+   "srcEnd": 244.28,
+   "outStart": 112.24,
+   "outEnd": 143.2
+  },
+  {
+   "srcStart": 244.64,
+   "srcEnd": 286.88,
+   "outStart": 143.2,
+   "outEnd": 185.44
+  },
+  {
+   "srcStart": 287.36,
+   "srcEnd": 300.44,
+   "outStart": 185.44,
+   "outEnd": 198.52
+  },
+  {
+   "srcStart": 301.04,
+   "srcEnd": 302.72,
+   "outStart": 198.52,
+   "outEnd": 200.2
+  },
+  {
+   "srcStart": 303.04,
+   "srcEnd": 305.16,
+   "outStart": 200.2,
+   "outEnd": 202.32
+  },
+  {
+   "srcStart": 305.4,
+   "srcEnd": 309.32,
+   "outStart": 202.32,
+   "outEnd": 206.24
+  },
+  {
+   "srcStart": 310.12,
+   "srcEnd": 332.32,
+   "outStart": 206.24,
+   "outEnd": 228.44
+  },
+  {
+   "srcStart": 337.2,
+   "srcEnd": 366.08,
+   "outStart": 228.44,
+   "outEnd": 257.32
+  },
+  {
+   "srcStart": 366.6,
+   "srcEnd": 383.92,
+   "outStart": 257.32,
+   "outEnd": 274.64
+  },
+  {
+   "srcStart": 389.28,
+   "srcEnd": 398.24,
+   "outStart": 274.64,
+   "outEnd": 283.6
+  },
+  {
+   "srcStart": 399.28,
+   "srcEnd": 416.04,
+   "outStart": 283.6,
+   "outEnd": 300.36
+  },
+  {
+   "srcStart": 440.32,
+   "srcEnd": 459.36,
+   "outStart": 300.36,
+   "outEnd": 319.4
+  },
+  {
+   "srcStart": 463.44,
+   "srcEnd": 476.2,
+   "outStart": 319.4,
+   "outEnd": 332.16
+  },
+  {
+   "srcStart": 476.6,
+   "srcEnd": 479.12,
+   "outStart": 332.16,
+   "outEnd": 334.68
+  },
+  {
+   "srcStart": 482.72,
+   "srcEnd": 586.8,
+   "outStart": 334.68,
+   "outEnd": 438.76
+  },
+  {
+   "srcStart": 587.36,
+   "srcEnd": 592.96,
+   "outStart": 438.76,
+   "outEnd": 444.36
+  },
+  {
+   "srcStart": 593.8,
+   "srcEnd": 599.36,
+   "outStart": 444.36,
+   "outEnd": 449.92
+  },
+  {
+   "srcStart": 599.6,
+   "srcEnd": 600.44,
+   "outStart": 449.92,
+   "outEnd": 450.76
+  },
+  {
+   "srcStart": 601.4,
+   "srcEnd": 603.04,
+   "outStart": 450.76,
+   "outEnd": 452.4
+  },
+  {
+   "srcStart": 603.36,
+   "srcEnd": 604.6,
+   "outStart": 452.4,
+   "outEnd": 453.64
+  },
+  {
+   "srcStart": 615.08,
+   "srcEnd": 618.44,
+   "outStart": 453.64,
+   "outEnd": 457
+  },
+  {
+   "srcStart": 618.96,
+   "srcEnd": 632.44,
+   "outStart": 457,
+   "outEnd": 470.48
+  },
+  {
+   "srcStart": 632.72,
+   "srcEnd": 649.48,
+   "outStart": 470.48,
+   "outEnd": 487.24
+  },
+  {
+   "srcStart": 658.84,
+   "srcEnd": 692.16,
+   "outStart": 487.24,
+   "outEnd": 520.56
+  },
+  {
+   "srcStart": 692.48,
+   "srcEnd": 694.88,
+   "outStart": 520.56,
+   "outEnd": 522.96
+  },
+  {
+   "srcStart": 713.72,
+   "srcEnd": 729.36,
+   "outStart": 522.96,
+   "outEnd": 538.6
+  },
+  {
+   "srcStart": 730,
+   "srcEnd": 752.72,
+   "outStart": 538.6,
+   "outEnd": 561.32
+  },
+  {
+   "srcStart": 758.16,
+   "srcEnd": 820.72,
+   "outStart": 561.32,
+   "outEnd": 623.88
+  },
+  {
+   "srcStart": 822.24,
+   "srcEnd": 859.76,
+   "outStart": 623.88,
+   "outEnd": 661.4
+  },
+  {
+   "srcStart": 860,
+   "srcEnd": 948.88,
+   "outStart": 661.4,
+   "outEnd": 750.28
+  },
+  {
+   "srcStart": 964.36,
+   "srcEnd": 975.44,
+   "outStart": 750.28,
+   "outEnd": 761.36
+  },
+  {
+   "srcStart": 976.76,
+   "srcEnd": 980.84,
+   "outStart": 761.36,
+   "outEnd": 765.44
+  },
+  {
+   "srcStart": 981.28,
+   "srcEnd": 988.96,
+   "outStart": 765.44,
+   "outEnd": 773.12
+  },
+  {
+   "srcStart": 989.56,
+   "srcEnd": 992.52,
+   "outStart": 773.12,
+   "outEnd": 776.08
+  },
+  {
+   "srcStart": 993.24,
+   "srcEnd": 1006.76,
+   "outStart": 776.08,
+   "outEnd": 789.6
+  },
+  {
+   "srcStart": 1007.08,
+   "srcEnd": 1025.72,
+   "outStart": 789.6,
+   "outEnd": 808.24
+  },
+  {
+   "srcStart": 1026.6,
+   "srcEnd": 1044.28,
+   "outStart": 808.24,
+   "outEnd": 825.92
+  },
+  {
+   "srcStart": 1044.72,
+   "srcEnd": 1046.4,
+   "outStart": 825.92,
+   "outEnd": 827.6
+  },
+  {
+   "srcStart": 1046.56,
+   "srcEnd": 1054.88,
+   "outStart": 827.6,
+   "outEnd": 835.92
+  },
+  {
+   "srcStart": 1054.96,
+   "srcEnd": 1083.28,
+   "outStart": 835.92,
+   "outEnd": 864.24
+  },
+  {
+   "srcStart": 1088.32,
+   "srcEnd": 1137.8,
+   "outStart": 864.24,
+   "outEnd": 913.72
+  },
+  {
+   "srcStart": 1141.08,
+   "srcEnd": 1157.76,
+   "outStart": 913.72,
+   "outEnd": 930.4
+  },
+  {
+   "srcStart": 1163.68,
+   "srcEnd": 1198.32,
+   "outStart": 930.4,
+   "outEnd": 965.04
+  },
+  {
+   "srcStart": 1198.76,
+   "srcEnd": 1214.28,
+   "outStart": 965.04,
+   "outEnd": 980.56
+  },
+  {
+   "srcStart": 1226.48,
+   "srcEnd": 1229.4,
+   "outStart": 980.56,
+   "outEnd": 983.48
+  },
+  {
+   "srcStart": 1229.56,
+   "srcEnd": 1230.88,
+   "outStart": 983.48,
+   "outEnd": 984.8
+  },
+  {
+   "srcStart": 1237.12,
+   "srcEnd": 1317.16,
+   "outStart": 984.8,
+   "outEnd": 1064.84
+  },
+  {
+   "srcStart": 1317.56,
+   "srcEnd": 1331.2,
+   "outStart": 1064.84,
+   "outEnd": 1078.48
+  },
+  {
+   "srcStart": 1335.64,
+   "srcEnd": 1340.76,
+   "outStart": 1078.48,
+   "outEnd": 1083.6
+  },
+  {
+   "srcStart": 1340.92,
+   "srcEnd": 1350.44,
+   "outStart": 1083.6,
+   "outEnd": 1093.12
+  },
+  {
+   "srcStart": 1350.88,
+   "srcEnd": 1398.08,
+   "outStart": 1093.12,
+   "outEnd": 1140.32
+  },
+  {
+   "srcStart": 1398.52,
+   "srcEnd": 1417.32,
+   "outStart": 1140.32,
+   "outEnd": 1159.12
+  },
+  {
+   "srcStart": 1417.88,
+   "srcEnd": 1473.44,
+   "outStart": 1159.12,
+   "outEnd": 1214.68
+  },
+  {
+   "srcStart": 1477.6,
+   "srcEnd": 1562.48,
+   "outStart": 1214.68,
+   "outEnd": 1299.56
+  },
+  {
+   "srcStart": 1563.16,
+   "srcEnd": 1573.76,
+   "outStart": 1299.56,
+   "outEnd": 1310.16
+  },
+  {
+   "srcStart": 1574.24,
+   "srcEnd": 1612.16,
+   "outStart": 1310.16,
+   "outEnd": 1348.08
+  },
+  {
+   "srcStart": 1612.72,
+   "srcEnd": 1618.48,
+   "outStart": 1348.08,
+   "outEnd": 1353.84
+  },
+  {
+   "srcStart": 1619,
+   "srcEnd": 1640.28,
+   "outStart": 1353.84,
+   "outEnd": 1375.12
+  },
+  {
+   "srcStart": 1646.72,
+   "srcEnd": 1657.08,
+   "outStart": 1375.12,
+   "outEnd": 1385.48
+  },
+  {
+   "srcStart": 1657.28,
+   "srcEnd": 1671.36,
+   "outStart": 1385.48,
+   "outEnd": 1399.56
+  },
+  {
+   "srcStart": 1676.8,
+   "srcEnd": 1723.4,
+   "outStart": 1399.56,
+   "outEnd": 1446.16
+  },
+  {
+   "srcStart": 1723.8,
+   "srcEnd": 1780.44,
+   "outStart": 1446.16,
+   "outEnd": 1502.8
+  },
+  {
+   "srcStart": 1781,
+   "srcEnd": 1881.76,
+   "outStart": 1502.8,
+   "outEnd": 1603.56
+  },
+  {
+   "srcStart": 1882.88,
+   "srcEnd": 1888.68,
+   "outStart": 1603.56,
+   "outEnd": 1609.36
+  },
+  {
+   "srcStart": 1889.28,
+   "srcEnd": 1897,
+   "outStart": 1609.36,
+   "outEnd": 1617.08
+  },
+  {
+   "srcStart": 1897.4,
+   "srcEnd": 1905.4,
+   "outStart": 1617.08,
+   "outEnd": 1625.08
+  },
+  {
+   "srcStart": 1906,
+   "srcEnd": 1922.24,
+   "outStart": 1625.08,
+   "outEnd": 1641.32
+  },
+  {
+   "srcStart": 1922.8,
+   "srcEnd": 1924.52,
+   "outStart": 1641.32,
+   "outEnd": 1643.04
+  },
+  {
+   "srcStart": 1924.72,
+   "srcEnd": 1941.08,
+   "outStart": 1643.04,
+   "outEnd": 1659.4
+  },
+  {
+   "srcStart": 1941.28,
+   "srcEnd": 1951.6,
+   "outStart": 1659.4,
+   "outEnd": 1669.72
+  },
+  {
+   "srcStart": 1954.28,
+   "srcEnd": 1978.24,
+   "outStart": 1669.72,
+   "outEnd": 1693.68
+  },
+  {
+   "srcStart": 1978.6,
+   "srcEnd": 1990.08,
+   "outStart": 1693.68,
+   "outEnd": 1705.16
+  },
+  {
+   "srcStart": 1990.64,
+   "srcEnd": 2008.4,
+   "outStart": 1705.16,
+   "outEnd": 1722.92
+  },
+  {
+   "srcStart": 2010.16,
+   "srcEnd": 2073,
+   "outStart": 1722.92,
+   "outEnd": 1785.76
+  },
+  {
+   "srcStart": 2077.2,
+   "srcEnd": 2081.8,
+   "outStart": 1785.76,
+   "outEnd": 1790.36
+  },
+  {
+   "srcStart": 2082.28,
+   "srcEnd": 2093.48,
+   "outStart": 1790.36,
+   "outEnd": 1801.56
+  },
+  {
+   "srcStart": 2094,
+   "srcEnd": 2103.12,
+   "outStart": 1801.56,
+   "outEnd": 1810.68
+  },
+  {
+   "srcStart": 2103.68,
+   "srcEnd": 2111.2,
+   "outStart": 1810.68,
+   "outEnd": 1818.2
+  },
+  {
+   "srcStart": 2111.68,
+   "srcEnd": 2173.52,
+   "outStart": 1818.2,
+   "outEnd": 1880.04
+  },
+  {
+   "srcStart": 2174.64,
+   "srcEnd": 2177.76,
+   "outStart": 1880.04,
+   "outEnd": 1883.16
+  },
+  {
+   "srcStart": 2178.72,
+   "srcEnd": 2190.52,
+   "outStart": 1883.16,
+   "outEnd": 1894.96
+  },
+  {
+   "srcStart": 2190.72,
+   "srcEnd": 2306.04,
+   "outStart": 1894.96,
+   "outEnd": 2010.28
+  },
+  {
+   "srcStart": 2310.88,
+   "srcEnd": 2386.76,
+   "outStart": 2010.28,
+   "outEnd": 2086.16
+  },
+  {
+   "srcStart": 2387.44,
+   "srcEnd": 2390.72,
+   "outStart": 2086.16,
+   "outEnd": 2089.44
+  },
+  {
+   "srcStart": 2391.16,
+   "srcEnd": 2408.4,
+   "outStart": 2089.44,
+   "outEnd": 2106.68
+  },
+  {
+   "srcStart": 2408.68,
+   "srcEnd": 2410.16,
+   "outStart": 2106.68,
+   "outEnd": 2108.16
+  },
+  {
+   "srcStart": 2410.72,
+   "srcEnd": 2429.68,
+   "outStart": 2108.16,
+   "outEnd": 2127.12
+  },
+  {
+   "srcStart": 2430.28,
+   "srcEnd": 2457.92,
+   "outStart": 2127.12,
+   "outEnd": 2154.76
+  },
+  {
+   "srcStart": 2458.6,
+   "srcEnd": 2467.48,
+   "outStart": 2154.76,
+   "outEnd": 2163.64
+  },
+  {
+   "srcStart": 2467.68,
+   "srcEnd": 2485.2,
+   "outStart": 2163.64,
+   "outEnd": 2181.16
+  },
+  {
+   "srcStart": 2485.4,
+   "srcEnd": 2547.28,
+   "outStart": 2181.16,
+   "outEnd": 2243.04
+  },
+  {
+   "srcStart": 2548.04,
+   "srcEnd": 2582,
+   "outStart": 2243.04,
+   "outEnd": 2277
+  },
+  {
+   "srcStart": 2582.04,
+   "srcEnd": 2591.04,
+   "outStart": 2277,
+   "outEnd": 2286
+  },
+  {
+   "srcStart": 2591.84,
+   "srcEnd": 2606.64,
+   "outStart": 2286,
+   "outEnd": 2300.8
+  },
+  {
+   "srcStart": 2616.08,
+   "srcEnd": 2631.2,
+   "outStart": 2300.8,
+   "outEnd": 2315.92
+  },
+  {
+   "srcStart": 2632.72,
+   "srcEnd": 2635.48,
+   "outStart": 2315.92,
+   "outEnd": 2318.68
+  },
+  {
+   "srcStart": 2643.52,
+   "srcEnd": 2646.28,
+   "outStart": 2318.68,
+   "outEnd": 2321.44
+  },
+  {
+   "srcStart": 2647.16,
+   "srcEnd": 2650.36,
+   "outStart": 2321.44,
+   "outEnd": 2324.64
+  },
+  {
+   "srcStart": 2651,
+   "srcEnd": 2686.36,
+   "outStart": 2324.64,
+   "outEnd": 2360
+  },
+  {
+   "srcStart": 2696,
+   "srcEnd": 2708.56,
+   "outStart": 2360,
+   "outEnd": 2372.56
+  },
+  {
+   "srcStart": 2709.6,
+   "srcEnd": 2732,
+   "outStart": 2372.56,
+   "outEnd": 2394.96
+  },
+  {
+   "srcStart": 2732.6,
+   "srcEnd": 2745.84,
+   "outStart": 2394.96,
+   "outEnd": 2408.2
+  },
+  {
+   "srcStart": 2746.4,
+   "srcEnd": 2788.52,
+   "outStart": 2408.2,
+   "outEnd": 2450.32
+  },
+  {
+   "srcStart": 2788.76,
+   "srcEnd": 2823.36,
+   "outStart": 2450.32,
+   "outEnd": 2484.92
+  },
+  {
+   "srcStart": 2823.68,
+   "srcEnd": 2837.12,
+   "outStart": 2484.92,
+   "outEnd": 2498.36
+  },
+  {
+   "srcStart": 2837.4,
+   "srcEnd": 2865.56,
+   "outStart": 2498.36,
+   "outEnd": 2526.52
+  },
+  {
+   "srcStart": 2867.52,
+   "srcEnd": 2868.96,
+   "outStart": 2526.52,
+   "outEnd": 2527.96
+  },
+  {
+   "srcStart": 2869.52,
+   "srcEnd": 2872.88,
+   "outStart": 2527.96,
+   "outEnd": 2531.32
+  },
+  {
+   "srcStart": 2877.76,
+   "srcEnd": 2930.72,
+   "outStart": 2531.32,
+   "outEnd": 2584.28
+  },
+  {
+   "srcStart": 2936.24,
+   "srcEnd": 2959.24,
+   "outStart": 2584.28,
+   "outEnd": 2607.28
+  },
+  {
+   "srcStart": 2959.44,
+   "srcEnd": 2990.4,
+   "outStart": 2607.28,
+   "outEnd": 2638.24
+  },
+  {
+   "srcStart": 2990.72,
+   "srcEnd": 3001.48,
+   "outStart": 2638.24,
+   "outEnd": 2649
+  },
+  {
+   "srcStart": 3002.52,
+   "srcEnd": 3014.64,
+   "outStart": 2649,
+   "outEnd": 2661.12
+  },
+  {
+   "srcStart": 3014.84,
+   "srcEnd": 3026.12,
+   "outStart": 2661.12,
+   "outEnd": 2672.4
+  },
+  {
+   "srcStart": 3026.36,
+   "srcEnd": 3047.48,
+   "outStart": 2672.4,
+   "outEnd": 2693.52
+  },
+  {
+   "srcStart": 3048.08,
+   "srcEnd": 3107.08,
+   "outStart": 2693.52,
+   "outEnd": 2752.52
+  },
+  {
+   "srcStart": 3107.36,
+   "srcEnd": 3109.48,
+   "outStart": 2752.52,
+   "outEnd": 2754.64
+  },
+  {
+   "srcStart": 3109.92,
+   "srcEnd": 3118.8,
+   "outStart": 2754.64,
+   "outEnd": 2763.52
+  },
+  {
+   "srcStart": 3119.04,
+   "srcEnd": 3138.68,
+   "outStart": 2763.52,
+   "outEnd": 2783.16
+  },
+  {
+   "srcStart": 3138.96,
+   "srcEnd": 3161.36,
+   "outStart": 2783.16,
+   "outEnd": 2805.56
+  },
+  {
+   "srcStart": 3171,
+   "srcEnd": 3175.28,
+   "outStart": 2805.56,
+   "outEnd": 2809.84
+  },
+  {
+   "srcStart": 3176.48,
+   "srcEnd": 3194.4,
+   "outStart": 2809.84,
+   "outEnd": 2827.76
+  },
+  {
+   "srcStart": 3195.68,
+   "srcEnd": 3203.12,
+   "outStart": 2827.76,
+   "outEnd": 2835.2
+  },
+  {
+   "srcStart": 3203.36,
+   "srcEnd": 3204.84,
+   "outStart": 2835.2,
+   "outEnd": 2836.68
+  },
+  {
+   "srcStart": 3205.76,
+   "srcEnd": 3216.72,
+   "outStart": 2836.68,
+   "outEnd": 2847.64
+  },
+  {
+   "srcStart": 3217.48,
+   "srcEnd": 3239.08,
+   "outStart": 2847.64,
+   "outEnd": 2869.24
+  },
+  {
+   "srcStart": 3239.4,
+   "srcEnd": 3251.52,
+   "outStart": 2869.24,
+   "outEnd": 2881.36
+  },
+  {
+   "srcStart": 3267.28,
+   "srcEnd": 3276.64,
+   "outStart": 2881.36,
+   "outEnd": 2890.72
+  },
+  {
+   "srcStart": 3277.08,
+   "srcEnd": 3346.8,
+   "outStart": 2890.72,
+   "outEnd": 2960.44
+  },
+  {
+   "srcStart": 3346.96,
+   "srcEnd": 3381.8,
+   "outStart": 2960.44,
+   "outEnd": 2995.28
+  },
+  {
+   "srcStart": 3381.96,
+   "srcEnd": 3429.72,
+   "outStart": 2995.28,
+   "outEnd": 3043.04
+  },
+  {
+   "srcStart": 3435.48,
+   "srcEnd": 3457.64,
+   "outStart": 3043.04,
+   "outEnd": 3065.2
+  },
+  {
+   "srcStart": 3458.64,
+   "srcEnd": 3461.56,
+   "outStart": 3065.2,
+   "outEnd": 3068.12
+  },
+  {
+   "srcStart": 3462.16,
+   "srcEnd": 3497.04,
+   "outStart": 3068.12,
+   "outEnd": 3103
+  },
+  {
+   "srcStart": 3497.64,
+   "srcEnd": 3497.76,
+   "outStart": 3103,
+   "outEnd": 3103.12
+  },
+  {
+   "srcStart": 3499.04,
+   "srcEnd": 3507.16,
+   "outStart": 3103.12,
+   "outEnd": 3111.24
+  }
+ ]
+}

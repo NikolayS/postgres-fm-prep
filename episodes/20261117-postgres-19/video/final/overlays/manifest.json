@@ -1,0 +1,114 @@
+{
+  "video": "video1876562600-edited.mp4",
+  "fps": 25,
+  "width": 1920,
+  "height": 1080,
+  "timeBase": "edited.mp4 seconds, before intro and freeze shifts",
+  "band": {
+    "x": 24,
+    "y": 912,
+    "w": 1576,
+    "h": 140
+  },
+  "overlays": [
+    {
+      "id": "01-score-weights",
+      "outStart": 1174.75,
+      "duration": 8,
+      "dur": 8,
+      "file": "01-score-weights.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [],
+      "source": "notes/corrections.md 00:23:09; anchor \"prioritizing and letting us queue\" at source 1433.51-1435.63"
+    },
+    {
+      "id": "02-parallel-av",
+      "outStart": 1263.46,
+      "duration": 8,
+      "dur": 8,
+      "file": "02-parallel-av.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [],
+      "source": "notes/corrections.md 00:24:47; anchor \"parallel auto vacuum as well\" at source 1526.38-1527.78"
+    },
+    {
+      "id": "03-stash-advice",
+      "outStart": 1553.71,
+      "duration": 8,
+      "dur": 8,
+      "file": "03-stash-advice.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [],
+      "source": "notes/corrections.md 00:29:53; anchor \"store it in the database\" at source 1831.91-1833.65"
+    },
+    {
+      "id": "04-overhead",
+      "outStart": 1611.21,
+      "duration": 8,
+      "dur": 8,
+      "file": "04-overhead.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [],
+      "source": "notes/corrections.md 00:30:46; anchor \"around 10%\" at source 1891.13-1891.91"
+    },
+    {
+      "id": "05-tsc",
+      "outStart": 2115.82,
+      "duration": 8,
+      "dur": 8,
+      "file": "05-tsc.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [],
+      "source": "notes/corrections.md 00:39:41; anchor \"timing overhead of explain analyze\" at source 2418.38-2420.60"
+    },
+    {
+      "id": "06-release-notes",
+      "outStart": 2292.62,
+      "duration": 8,
+      "dur": 8,
+      "file": "06-release-notes.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [],
+      "source": "notes/corrections.md 00:42:34; anchor \"didn't see it in the release notes\" at source 2598.46-2599.44"
+    },
+    {
+      "id": "07-pg-restore",
+      "outStart": 2318.82,
+      "duration": 8,
+      "dur": 8,
+      "file": "07-pg-restore.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [],
+      "source": "notes/corrections.md 00:43:12; anchor \"if you can dump\" at source 2643.66-2644.30"
+    },
+    {
+      "id": "08-not-on-table",
+      "outStart": 2419.04,
+      "duration": 8,
+      "dur": 8,
+      "file": "08-not-on-table.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [],
+      "source": "notes/corrections.md 00:45:14; anchor \"a specific table\" at source 2757.24-2758.20"
+    },
+    {
+      "id": "09-upgrade-fails",
+      "outStart": 2435.4,
+      "duration": 8,
+      "dur": 8,
+      "file": "09-upgrade-fails.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [],
+      "source": "notes/corrections.md 00:45:35; anchor \"pg upgrade check will report success\" at source 2773.60-2776.02"
+    }
+  ]
+}

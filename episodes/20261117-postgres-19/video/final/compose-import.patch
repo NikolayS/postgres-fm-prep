@@ -1,0 +1,11 @@
+--- <ep196-recording>/review/tools/compose.ts	2026-11-10 14:35:08
++++ <recording>/final/tools/compose.ts	2026-11-17 15:34:28
+@@ -19,7 +19,7 @@
+ import { dirname, join, resolve } from "path";
+ import { BRAND, filtergraph, prepareUi, renderHtml, SHADES, type LayoutConfig } from "./layout";
+ import type { Detection } from "./detect-tiles";
+-import { sfxOff, talkChain } from "<repo>/tools/podcast-edit/freeze-audio";
++import { sfxOff, talkChain } from "./freeze-audio";
+ 
+ const FONT = `-apple-system,"SF Pro Display","Helvetica Neue",sans-serif`;
+ const MONO = `"JetBrains Mono",ui-monospace,monospace`;
