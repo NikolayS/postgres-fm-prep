@@ -1,6 +1,6 @@
 // Announcer intro for the v4 cold opens (v4a, v4c): the shots of intro.json, timed to the announcer.
 // Name cards: the host's own Zoom tile as black-and-white video with a slow push-in, a small kicker
-// ("STARRING") and the name in big type (first name white, last name pink). The name fades in and out
+// ("STARRING") and the name in big type (first name white, last name pink) on a dark plate. The name fades in and out
 // over 0.35 s and holds in between; no typing, flash or blink on the names.
 // Usage: bun intro.ts <outdir> <seqdir>     seqdir holds nik/, michael/, kirk/ with %04d.png frames (25 fps)
 //   writes <outdir>/%04d.png at 25 fps, 1920x1080.
@@ -49,12 +49,12 @@ function shot(s: Shot, t: number, i: number): string {
       return `<div style="position:absolute;inset:0;background:${DARK}"></div>
       <img src="file://${img}" style="position:absolute;left:0;top:0;width:1920px;height:1080px;object-fit:cover;filter:grayscale(1) contrast(1.45) brightness(1.05);transform:translateX(330px) scale(${z});transform-origin:50% 40%">
       <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(22,6,27,1) 0%,rgba(22,6,27,.92) 30%,rgba(22,6,27,0) 58%)"></div>
-      <div style="position:absolute;left:120px;top:${560 + dy}px;opacity:${o};white-space:nowrap">
+      <div style="position:absolute;left:96px;top:${536 + dy}px;opacity:${o};white-space:nowrap;padding:24px 36px 28px 24px;background:rgba(22,6,27,.78);border-left:6px solid ${PINK};border-radius:4px;text-shadow:0 2px 10px rgba(0,0,0,.6)">
         <div style="font:900 30px Lato;letter-spacing:12px;color:${PINK}">${s.kicker}</div>
         <div style="font:900 96px Lato;letter-spacing:10px;color:#fff;line-height:1.05;margin-top:18px">${s.first}</div>
         <div style="font:900 96px Lato;letter-spacing:10px;color:${PINK2};line-height:1.05">${s.last}</div>
       </div>
-      <svg width="1920" height="1080" style="position:absolute;left:0;top:0;opacity:${o}">${arrow(120, 830, 820, (u - 0.3) / 0.7)}</svg>`;
+      <svg width="1920" height="1080" style="position:absolute;left:0;top:0;opacity:${o}">${arrow(96, 866, 820, (u - 0.3) / 0.7)}</svg>`;
     }
     default: { // header
       const sc = 0.92 + 0.08 * ease(u / 0.4);

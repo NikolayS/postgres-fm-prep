@@ -1,8 +1,8 @@
-# Cold open v4 (episode 197): alternative openings
+# Cold open v5 (episode 197): alternative openings
 
 `style-notes.md` has the reference study, the variants, and the license list. Build: `build.sh a|b|c`.
 
-## Announcer intro (v4a, v4c)
+## Announcer intro (v5a, v5c; v5b has the same shots without the voice)
 
 A short "Starring..." open in the style of the reference: an announcer introduces each host over that host's own shot, with a big name card.
 
@@ -18,7 +18,7 @@ Script (`intro.json` holds the text and the start time of each line, plus the sh
   - `Sah-mokh-VAH-lov` puts the stress on VAH.
   - `Kristoffideez` gives kris-TOFF-ih-deez.
   - On screen the names keep their real spelling.
-- Whisper (small) hears these lines in the render: "Live from three time zones. It's Postgres FM." / "Starring..." / "Nikolai Samokvahlov" / "Kristoffides" / "And our guest..." / "Kirk Volak" / "Tonight. Postgres 19."
+- Whisper (small) hears this in the v5a render: "Live from three time zones. It's Postgres FM. Starring Nikolai Samok Vahlov, Michael Christofides, and our guest, Kirk Volak. Tonight, Postgres 19."
 - Name cards (seconds from the start):
 
   | Name | Card on screen | Name fully readable | Announcer says the name |
@@ -27,4 +27,4 @@ Script (`intro.json` holds the text and the start time of each line, plus the sh
   | Michael | 7.95-10.65 | 8.40-10.30 | 8.15-9.76 |
   | Kirk | 11.75-14.45 | 12.20-14.10 | 11.9-12.9 |
 
-  The name fades in and out over 0.35 s; there is no typing, flash or blink on the names.
+  The name fades in and out over 0.35 s; there is no typing, flash or blink on the names. It sits on a dark plate with a pink edge, so the pink surname reads over a light wall.

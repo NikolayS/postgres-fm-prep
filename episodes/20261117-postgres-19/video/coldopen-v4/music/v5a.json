@@ -5,9 +5,9 @@
  {"file":"Throwback Funk Brass 01.caf","at":28,"beats":4},
  {"file":"Throwback Funk Brass 02.caf","at":32,"beats":4},
  {"file":"Throwback Funk Synth FX.caf","at":34,"beats":2,"gain":-6},
- {"file":"Throwback Funk Beat 02.caf","at":36,"beats":49.5,"from":4},
- {"file":"Throwback Funk Synth Bass.caf","at":36,"beats":49.5,"from":4,"gain":-1},
- {"file":"Throwback Funk Brass 01.caf","at":86,"beats":1.5,"fadeOut":1.2},
- {"file":"Throwback Funk Beat 01.caf","at":86,"beats":1,"fadeOut":0.6},
- {"file":"Throwback Funk Synth Bass.caf","at":86,"beats":1.5,"fadeOut":1.2,"gain":-1}
+ {"file":"Throwback Funk Beat 02.caf","at":36,"beats":40.5,"from":4},
+ {"file":"Throwback Funk Synth Bass.caf","at":36,"beats":40.5,"from":4,"gain":-1},
+ {"file":"Throwback Funk Brass 01.caf","at":77,"beats":1.5,"fadeOut":1.2},
+ {"file":"Throwback Funk Beat 01.caf","at":77,"beats":1,"fadeOut":0.6},
+ {"file":"Throwback Funk Synth Bass.caf","at":77,"beats":1.5,"fadeOut":1.2,"gain":-1}
 ]}
