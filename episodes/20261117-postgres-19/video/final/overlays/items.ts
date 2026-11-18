@@ -1,10 +1,10 @@
-// Episode 197 on-screen notes (notes/corrections.md), anchored on Scribe word times, mapped through edited-draft.cuts.json.
+// Episode 197 on-screen notes (notes/corrections.md), anchored on Scribe word times, mapped through the supplied cuts plan.
 export type Item = {id: string; comp: 'band'; outStart: number; duration: number; placement: 'band'; freezeSec: number; sfx: never[]; props: Record<string, unknown>; source?: string};
 export const ITEMS: Item[] = [
  {
   "id": "01-score-weights",
   "comp": "band",
-  "outStart": 1174.75,
+  "outStart": 1209.23,
   "duration": 8,
   "placement": "band",
   "freezeSec": 0,
@@ -20,7 +20,7 @@ export const ITEMS: Item[] = [
  {
   "id": "02-parallel-av",
   "comp": "band",
-  "outStart": 1263.46,
+  "outStart": 1297.94,
   "duration": 8,
   "placement": "band",
   "freezeSec": 0,
@@ -36,7 +36,7 @@ export const ITEMS: Item[] = [
  {
   "id": "03-stash-advice",
   "comp": "band",
-  "outStart": 1553.71,
+  "outStart": 1588.19,
   "duration": 8,
   "placement": "band",
   "freezeSec": 0,
@@ -50,25 +50,9 @@ export const ITEMS: Item[] = [
   "source": "notes/corrections.md 00:29:53; anchor \"store it in the database\" at source 1831.91-1833.65"
  },
  {
-  "id": "04-overhead",
-  "comp": "band",
-  "outStart": 1611.21,
-  "duration": 8,
-  "placement": "band",
-  "freezeSec": 0,
-  "sfx": [],
-  "props": {
-   "kind": "strip",
-   "prefix": "Note:",
-   "text": "about 13% in our test",
-   "sub": "advice generated for every query, on a trivial query (small test host)"
-  },
-  "source": "notes/corrections.md 00:30:46; anchor \"around 10%\" at source 1891.13-1891.91"
- },
- {
   "id": "05-tsc",
   "comp": "band",
-  "outStart": 2115.82,
+  "outStart": 2150.3,
   "duration": 8,
   "placement": "band",
   "freezeSec": 0,
@@ -84,7 +68,7 @@ export const ITEMS: Item[] = [
  {
   "id": "06-release-notes",
   "comp": "band",
-  "outStart": 2292.62,
+  "outStart": 2327.1,
   "duration": 8,
   "placement": "band",
   "freezeSec": 0,
@@ -100,7 +84,7 @@ export const ITEMS: Item[] = [
  {
   "id": "07-pg-restore",
   "comp": "band",
-  "outStart": 2318.82,
+  "outStart": 2353.3,
   "duration": 8,
   "placement": "band",
   "freezeSec": 0,
@@ -116,7 +100,7 @@ export const ITEMS: Item[] = [
  {
   "id": "08-not-on-table",
   "comp": "band",
-  "outStart": 2419.04,
+  "outStart": 2453.52,
   "duration": 8,
   "placement": "band",
   "freezeSec": 0,
@@ -133,7 +117,7 @@ export const ITEMS: Item[] = [
  {
   "id": "09-upgrade-fails",
   "comp": "band",
-  "outStart": 2435.4,
+  "outStart": 2469.88,
   "duration": 8,
   "placement": "band",
   "freezeSec": 0,

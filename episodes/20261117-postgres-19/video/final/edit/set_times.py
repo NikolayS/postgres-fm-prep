@@ -1,5 +1,5 @@
 # Rewrite the chapter and link times in notes/youtube-description.txt and notes/notes.md for a given
-# cold-open length. times-body.json holds each time relative to the start of the title card
+# cold-open length. times-body.json holds each time relative to the start of the edited show
 # (video time = cold open + value). Usage: python3 set_times.py <cold-open seconds> (0 = body only).
 import json,re,sys,os
 CO=float(sys.argv[1]); E=os.path.join(os.path.dirname(os.path.abspath(__file__)),'../../..')
@@ -26,6 +26,6 @@ for l in open(p).read().split('\n'):
     if b and b.group(4) in T['notes']: l=f"{b.group(1)}{fmt(T['notes'][b.group(4)]+CO)}{b.group(3)}{b.group(4)}{b.group(5)}"
     out.append(l)
 t='\n'.join(out)
-t=re.sub(r'\(`episode-197-final.mp4`: [^)]*\)', f"(`episode-197-final.mp4`: {'a '+str(round(CO))+' s cold open, then ' if CO else 'TODO cold open, then '}the 14 s title card, then the edited show)", t)
+t=re.sub(r'\(`episode-197-final.mp4`: [^)]*\)', f"(`episode-197-final.mp4`: {'a '+str(round(CO))+' s cold open, then ' if CO else 'TODO cold open, then '}the edited show, then the outro)", t)
 open(p,'w').write(t)
 print('set times for cold open',CO)

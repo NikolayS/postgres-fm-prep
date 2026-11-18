@@ -4,7 +4,7 @@ Postgres.FM episode 197. Hosts: Nik, Michael and Kirk.
 
 **DRAFT, 2026-11-17.** Nothing here is published. Open items for the host are at the end.
 
-**Times.** Times in brackets are YouTube video times in the final video (`episode-197-final.mp4`: TODO cold open, then the 14 s title card, then the edited show). They come from the on-air time of the first mention plus a fixed offset to the recording, snapped to the nearest word and mapped through the cuts, so each is good to about 5 s. Chapter times in `youtube-description.txt` are anchored on the first words of each section. Pre-show and post-show chatter are not in the episode.
+**Times.** Times in brackets are YouTube video times in the final video (`episode-197-final.mp4`: TODO cold open, then the edited show, then the outro). They come from the on-air time of the first mention plus a fixed offset to the recording, snapped to the nearest word and mapped through the cuts, so each is good to about 5 s. Chapter times in `youtube-description.txt` are anchored on the first words of each section. Pre-show and post-show chatter are not in the episode.
 
 ## Episode description
 
@@ -18,66 +18,66 @@ Times are YouTube video times of the first mention (see the note above).
 
 ### Main link
 
-- [20:28] Postgres 19 for people who run it: PostgreSQL 19 RC2 vs 18.7 (study brief, PostgresAI): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
+- [20:49] Postgres 19 for people who run it: PostgreSQL 19 RC2 vs 18.7 (study brief, PostgresAI): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 
 ### The release
 
-- [01:34] PostgreSQL 19 release notes: https://www.postgresql.org/docs/19/release-19.html
-- [04:59] What LLMs do to PostgreSQL and DBAs (depesz, 2026-11-09): https://www.depesz.com/2026/11/09/what-llms-do-to-postgresql-and-dbas/
-- [07:34] scary patch contest (Robert Haas, pgsql-hackers, 2026-08-25): https://www.postgresql.org/message-id/CA%2BTgmob9NY6m0YNFTQ4nFH2d0iC9SQRruDYxfndGKKzh8OC80w%40mail.gmail.com
-- [07:47] Are we reverting patches because of bugs found by AI? (Tomas Vondra, 2026-10-01): https://vondra.me/posts/are-we-reverting-patches-because-of-bugs-found-by-ai/
-- [08:01] pgroast, an adversarial reviewer for Postgres proposals: https://github.com/NikolayS/pgroast
+- [01:55] PostgreSQL 19 release notes: https://www.postgresql.org/docs/19/release-19.html
+- [05:19] What LLMs do to PostgreSQL and DBAs (depesz, 2026-11-09): https://www.depesz.com/2026/11/09/what-llms-do-to-postgresql-and-dbas/
+- [07:54] scary patch contest (Robert Haas, pgsql-hackers, 2026-08-25): https://www.postgresql.org/message-id/CA%2BTgmob9NY6m0YNFTQ4nFH2d0iC9SQRruDYxfndGKKzh8OC80w%40mail.gmail.com
+- [08:08] Are we reverting patches because of bugs found by AI? (Tomas Vondra, 2026-10-01): https://vondra.me/posts/are-we-reverting-patches-because-of-bugs-found-by-ai/
+- [08:22] pgroast, an adversarial reviewer for Postgres proposals: https://github.com/NikolayS/pgroast
 
 ### Episodes we referred to
 
-- [09:43] Our episode on pg_squeeze, with Antonin Houska: https://postgres.fm/episodes/pg_squeeze
-- [16:41] The hidden costs of CREATE TEMP TABLE (our episode last week): https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
-- [17:04] Our episode with DBOS, on LISTEN/NOTIFY at scale (its notes link the Recall.ai post): https://postgres.fm/episodes/dbos
-- [36:41] Dump/restore done. Now what? (our episode 193): https://postgres.fm/episodes/dump-restore-done-now-what
+- [10:03] Our episode on pg_squeeze, with Antonin Houska: https://postgres.fm/episodes/pg_squeeze
+- [17:02] The hidden costs of CREATE TEMP TABLE (our episode last week): https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+- [17:25] Our episode with DBOS, on LISTEN/NOTIFY at scale (its notes link the Recall.ai post): https://postgres.fm/episodes/dbos
+- [37:02] Dump/restore done. Now what? (our episode 193): https://postgres.fm/episodes/dump-restore-done-now-what
 
 ### REPACK
 
-- [09:36] Add CONCURRENTLY option to REPACK (commit, Antonin Houska; based on pg_squeeze): https://github.com/postgres/postgres/commit/28d534e2ae0ac888b5460f977a10cd9bb017ef98
-- [13:16] What REPACK (CONCURRENTLY) costs while it runs (Radim Marek, boringSQL, 2026-09-28): https://boringsql.com/posts/repack-concurrently-costs/
+- [09:56] Add CONCURRENTLY option to REPACK (commit, Antonin Houska; based on pg_squeeze): https://github.com/postgres/postgres/commit/28d534e2ae0ac888b5460f977a10cd9bb017ef98
+- [13:37] What REPACK (CONCURRENTLY) costs while it runs (Radim Marek, boringSQL, 2026-09-28): https://boringsql.com/posts/repack-concurrently-costs/
 
 ### LISTEN/NOTIFY and autovacuum
 
-- [17:17] Optimize LISTEN/NOTIFY via shared channel map and direct advancement (commit, Joel Jacobson): https://github.com/postgres/postgres/commit/282b1cde9dedf456ecf02eb27caf086023a7bb71
-- [19:40] Add rudimentary table prioritization to autovacuum (commit, Nathan Bossart): https://github.com/postgres/postgres/commit/d7965d65fc5bb2139bc51c051c11428414c65160
+- [17:38] Optimize LISTEN/NOTIFY via shared channel map and direct advancement (commit, Joel Jacobson): https://github.com/postgres/postgres/commit/282b1cde9dedf456ecf02eb27caf086023a7bb71
+- [20:00] Add rudimentary table prioritization to autovacuum (commit, Nathan Bossart): https://github.com/postgres/postgres/commit/d7965d65fc5bb2139bc51c051c11428414c65160
 
 ### Plan advice
 
-- [22:01] Waiting for Postgres 19: Better Planner Hints with Path Generation Strategies (Lukas Fittl, 5mins of Postgres): https://pganalyze.com/blog/5mins-postgres-19-better-planner-hints
+- [22:21] Waiting for Postgres 19: Better Planner Hints with Path Generation Strategies (Lukas Fittl, 5mins of Postgres): https://pganalyze.com/blog/5mins-postgres-19-better-planner-hints
 
 ### Other features
 
-- [27:40] jit: Change the default to off (commit, Jelte Fennema-Nio): https://github.com/postgres/postgres/commit/7f8c88c2b872cb74882ab93dcb05529dab2a10bc
-- [30:04] WAIT FOR (docs): https://www.postgresql.org/docs/19/sql-wait.html
-- [35:28] instrumentation: Use Time-Stamp Counter on x86-64 to lower overhead (commit, Lukas Fittl, Andres Freund, David Geier): https://github.com/postgres/postgres/commit/294520c44487ecaade7a6ea8781b973f9ed03909
+- [28:00] jit: Change the default to off (commit, Jelte Fennema-Nio): https://github.com/postgres/postgres/commit/7f8c88c2b872cb74882ab93dcb05529dab2a10bc
+- [30:24] WAIT FOR (docs): https://www.postgresql.org/docs/19/sql-wait.html
+- [35:48] instrumentation: Use Time-Stamp Counter on x86-64 to lower overhead (commit, Lukas Fittl, Andres Freund, David Geier): https://github.com/postgres/postgres/commit/294520c44487ecaade7a6ea8781b973f9ed03909
 
 ### Upgrade
 
-- [40:46] pg_upgrade --check passes, then the upgrade fails (shihao zhong, pgsql-hackers, 2026-10-24): https://www.postgresql.org/message-id/CAGRkXqT%2B5%2BmQhoKZFTiM4yOZtVV%3DNW506vDwFtVeG%2BVmL_W5wQ%40mail.gmail.com
-- [47:41] RegreSQL, catch query performance regressions (Radim Marek): https://github.com/boringSQL/regresql
+- [41:07] pg_upgrade --check passes, then the upgrade fails (shihao zhong, pgsql-hackers, 2026-10-24): https://www.postgresql.org/message-id/CAGRkXqT%2B5%2BmQhoKZFTiM4yOZtVV%3DNW506vDwFtVeG%2BVmL_W5wQ%40mail.gmail.com
+- [48:02] RegreSQL, catch query performance regressions (Radim Marek): https://github.com/boringSQL/regresql
 
 20 links in total, the main link included (the cap is 20).
 
 ### Dropped on 2026-11-17 to keep the cap (added 193, 196, the JIT commit and RegreSQL)
 
-- [03:17] PostgreSQL security information (18.6 fixed 28 CVEs, 18.7 fixed 52): https://www.postgresql.org/support/security/ — a side number; it stays in the fact-check.
-- [15:20] pgcompacttable: https://github.com/dataegret/pgcompacttable — a passing idea, not a 19 topic.
-- [16:52] Postgres LISTEN/NOTIFY does not scale (Recall.ai, 2025): https://www.recall.ai/blog/postgres-listen-notify-does-not-scale — the DBOS episode notes link it.
-- [23:10] Not Worth Doing: Features We Do Not Want (PostgreSQL wiki): https://wiki.postgresql.org/wiki/Not_Worth_Doing#Features_We_Do_Not_Want — an aside.
+- [03:38] PostgreSQL security information (18.6 fixed 28 CVEs, 18.7 fixed 52): https://www.postgresql.org/support/security/ — a side number; it stays in the fact-check.
+- [15:40] pgcompacttable: https://github.com/dataegret/pgcompacttable — a passing idea, not a 19 topic.
+- [17:13] Postgres LISTEN/NOTIFY does not scale (Recall.ai, 2025): https://www.recall.ai/blog/postgres-listen-notify-does-not-scale — the DBOS episode notes link it.
+- [23:30] Not Worth Doing: Features We Do Not Want (PostgreSQL wiki): https://wiki.postgresql.org/wiki/Not_Worth_Doing#Features_We_Do_Not_Want — an aside.
 
 ### Other candidates left out
 
-- [29:41] Default to log_lock_waits=on (commit, Laurenz Albe): https://github.com/postgres/postgres/commit/2aac62be8cbb870ccf8c5b3fbb8a4e4aa8a14a73
-- [28:48] Change wal_compression=on to the first of zstd, lz4, pglz (commit, wenhui qiu): https://github.com/postgres/postgres/commit/5838806ce696dd0759c5e4b87754e802612135e0
-- [21:39] pg_plan_advice (docs): https://www.postgresql.org/docs/19/pgplanadvice.html
-- [32:36] GitLab database load balancing, primary sticking by LSN (docs): https://docs.gitlab.com/development/database/load_balancing/
-- [38:08] Include extended statistics data in pg_dump (commit, Corey Huinker): https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64
-- [41:14] Logical replication of sequences (docs): https://www.postgresql.org/docs/19/logical-replication-sequences.html
-- [46:43] DBLab Engine 4.2.0, clone major upgrade: https://gitlab.com/postgres-ai/database-lab/-/releases/v4.2.0
+- [30:02] Default to log_lock_waits=on (commit, Laurenz Albe): https://github.com/postgres/postgres/commit/2aac62be8cbb870ccf8c5b3fbb8a4e4aa8a14a73
+- [29:09] Change wal_compression=on to the first of zstd, lz4, pglz (commit, wenhui qiu): https://github.com/postgres/postgres/commit/5838806ce696dd0759c5e4b87754e802612135e0
+- [21:59] pg_plan_advice (docs): https://www.postgresql.org/docs/19/pgplanadvice.html
+- [32:56] GitLab database load balancing, primary sticking by LSN (docs): https://docs.gitlab.com/development/database/load_balancing/
+- [38:29] Include extended statistics data in pg_dump (commit, Corey Huinker): https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64
+- [41:35] Logical replication of sequences (docs): https://www.postgresql.org/docs/19/logical-replication-sequences.html
+- [47:03] DBLab Engine 4.2.0, clone major upgrade: https://gitlab.com/postgres-ai/database-lab/-/releases/v4.2.0
 
 ~~~
 

@@ -6,12 +6,11 @@ Media are not in git. `<recording>` stands for the Zoom folder of the recording 
 
 ## Order of the final video
 
-1. Cold open: not chosen yet (Nik rejected v6; v7 is in progress).
-2. Title card: `<recording>/final-cards/card-197.mp4` (14 s, Remotion, the episode 196 CardCrazy9 style with the three hosts).
-3. The edited show in the episode layout, with 9 on-screen notes.
-4. Outro: `<recording>/final-cards/outro-197.mp4` (22.72 s: "In this episode: Postgres 19", then "Prepared by: PostgresAI"), with the episode 194 outro music.
+1. Cold open (chosen separately), carrying the opening music.
+2. The edited show, starting immediately, with 9 on-screen notes and the London photo card.
+3. Outro: `<recording>/final-cards/outro-197.mp4` (22.72 s), with the episode 194 outro music.
 
-`preview/episode-197-body.mp4` is a copy of `<recording>/final/25-final-v1.mp4` (title card, show, outro). When the cold open is chosen, one command makes the final and sets the chapter and link times for its length:
+There is no title card or intro music in the body. After rendering, copy `<recording>/final/26-final-v2.mp4` to `preview/episode-197-body-v2.mp4`. These v2 media have **not been rendered**. When the cold open is chosen:
 
 ```bash
 bash episodes/20261117-postgres-19/video/final/join.sh episodes/20261117-postgres-19/preview/<cold-open>.mp4
@@ -21,10 +20,10 @@ It writes `preview/episode-197-final.mp4` and runs `edit/set_times.py <cold-open
 
 ## Cuts
 
-- `edit/judgment.applied.json`: the 48 rows of `../edit/judgment.draft.json`, anchored again on the ElevenLabs Scribe words (`edit/anchor.py`, `edit/respan.py`, then edits by hand for c02, c06, c13, c20, c35 and c44). 43 rows are cut; c16, c18, c25, c32 and c41 are not (see `../edit/cutlist-draft.md`).
+- `edit/judgment.applied.json`: 49 rows (c02 split into c02a/c02b) derived from the 48 rows of `../edit/judgment.draft.json`, anchored again on the ElevenLabs Scribe words (`edit/anchor.py`, `edit/respan.py`, then edits by hand for c02, c06, c13, c20, c35 and c44). The original draft cut 43 rows; c16, c18, c25, c32 and c41 are not (see `../edit/cutlist-draft.md`).
 - The toolkit's automatic filler, repeat, false-start and pause cuts are added by `detect.ts`.
-- `render.ts` ran with a relaxed "heard as a jump" check (`edit/render-relaxed-joins.patch`: join score 9 instead of 4, level step 25 dB instead of 10). This differs from the toolkit default. Nik approved the cut set as he saw it in the draft, so the final keeps the same cuts.
-- `edit/edited-draft.cuts.json`: the cut plan; its `segmentTimes` map the recording to the edited show.
+- `render.ts` ran with a relaxed "heard as a jump" check (`edit/render-relaxed-joins.patch`: join score 9 instead of 4, level step 25 dB instead of 10). This differs from the toolkit default. The v2 plan uses the same thresholds, with only c02 restored in part.
+- `edit/edited-v2.cuts.json`: the current cut plan (the original `edited-draft.cuts.json` is retained); its `segmentTimes` map the recording to the edited show.
 
 ## Picture
 
@@ -36,16 +35,39 @@ It writes `preview/episode-197-final.mp4` and runs `edit/set_times.py <cold-open
 
 - `overlays/items.ts`: 9 `band` strips (toolkit `overlays/src/Band.tsx`, BAND y 724, under the name labels). The text is from `../../notes/corrections.md`, split into a strip and a smaller line.
 - Each card starts on a spoken word: `edit/items.py` finds the anchor phrase in the Scribe words and maps it through the cuts. `overlays/anchors.json` lists phrase, recording time and edited time.
-- Render: copy `tools/podcast-edit/overlays` to `<recording>/final-overlays/tool`, link `node_modules`, put `items.ts` in `scripts/`, run `bun scripts/render-all.ts`. Output: ProRes 4444 `.mov` files and `manifest.json` in `<recording>/final-overlays/overlays`.
+- Render: copy `tools/podcast-edit/overlays` to `<recording>/final-overlays/tool`, link `node_modules`, put `items.ts` in `scripts/`, run `bun scripts/render-all.ts`. Output: ProRes 4444 `.mov` files and `manifest.json` in `<recording>/final-overlays/overlays-v2` for v2 (configure the later renderer accordingly; no overlays rendered in this pass).
 
 ## Sound
 
-Intro `a-shades-long2-pad.wav` and outro `a-shades-outro.wav` from episode 194, the same arguments as episode 196 `render.sh` (`--music-lufs -20.5`, two-pass loudnorm to -16 LUFS, -1.5 dBTP).
+Only outro `a-shades-outro.wav` from episode 194; opening music belongs to the cold open. Outro arguments match episode 196 `render.sh` (`--music-lufs -20.5`, two-pass loudnorm to -16 LUFS, -1.5 dBTP).
 
 ## Render
 
-`render.sh`, on the Mac. A Hetzner VM was tried, but the upload from the Mac ran at about 0.07 MB/s, so the VM was deleted before use.
+Prepared commands only; no video rendering was run for v2:
+
+1. `bash edit/render-edited-v2.sh` from any directory regenerates the edited video with the relaxed-joins patch and `render-stable-frames.patch`. The latter preserves original downstream video frames and puts the one-frame rounding remainder in the quiet pause after “shorts”. It checks the resulting plan against the saved plan.
+2. Render the nine strips into `final-overlays/overlays-v2`, then render the London `.mov` separately when disk permits. Add its manifest entry with `dur` from `london/item.json`'s `duration`, `freezeSec: 0`, and `sfx: []`.
+3. Run `render.sh` after replacing its `<recording>`, `<repo>` and `<ep194-recording>` placeholders. It uses edited-v2, overlays-v2, explicit `--card 0` (the compose default is 13), no intro music and no opening fade, and preserves the outro arguments.
+4. Copy the body as described above, then use `join.sh`.
+
+Plan reproduction (run from `<recording>/review`): `bun <repo>/tools/podcast-edit/detect.ts work/src.words.json work/edl-v2.json --judgment <repo>/episodes/20261117-postgres-19/video/final/edit/judgment.applied.json --prosody work/prosody.json --review work/review-v2.txt`; use the render script's two patched renderer copies with `--plan-only` for planning. Keep the original EDL and plan unchanged.
 
 ## Chapters
 
-`edit/chapters.py` anchors each chapter on its first words and maps it to the final video: final = cold open + 14 s card + edited time. `edit/times-body.json` keeps every time relative to the start of the title card; `edit/set_times.py` writes them for a given cold-open length.
+`edit/chapters.py words.json [cuts.json] [cold-open seconds] [HH:MM:SS links ...]` anchors chapters to words; the cuts default is edited-v2. Final time = cold open + edited body time. `edit/times-body.json` retains its chapter/link keys; existing precise body anchors were mapped back through the old plan (subtracting its 14 s card), then forward through v2. Intro starts at zero. `python3 edit/set_times.py 0` writes body times; `join.sh` adds the chosen cold-open length later.
+
+## London photo card
+
+`london/london-card.ts --still ../../preview/illus-00-london.png` creates the opaque 1920x1080 still (invoke from this directory). It uses the existing Playwright installation under `<recording>/final-overlays/tool`; set `PLAYWRIGHT_MODULE` or `BROWSER_BIN` when needed. Source photo and still are ignored by `episodes/*/preview/`.
+
+Pixel-detected content is y=[321,2476); the four-pixel trim gives y=[325,2472). The full-width sharp photo fits y=24–900 with 18 px corners and shadow; its blurred, 35% darkened copy fills the background. No text. Later: `bun london/london-card.ts --mov <output>/london.mov --dur 23.62`. This mode writes ProRes 4444 with 0.4 s alpha fades; it has not been run.
+
+`london/item.json` anchors source 94.06–118.24 to body 51.70–75.32. Toolkit and final compose both support a full-frame opaque overlay at 0,0; no compose change is needed. Convert `duration` to the manifest's `dur`; opacity comes from the generated video, with transparency only during fades.
+
+## Forge illustrations (v2)
+
+`forge/forge-items.py` writes 11 cards from the Forge PG19 study (brief https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c; data from the brief's `figures/reader/data.json` and `numbers.json`, other values from the brief text, section named per card in `source`). Each card is anchored on a recording second and mapped through `edit/edited-v2.cuts.json`. It writes `<recording>/final-overlays/tool/scripts/items-forge.ts` and the "center" windows of `layout.json` (the hosts move to a column at x 1630 while a card is up). `forge/Ep197.tsx` is the Remotion component (`forge` composition; copy it to the tool's `src/` and register it in `Root.tsx`), `forge/render-forge.ts` renders the cards (`DUMP_PROPS=<dir>` writes props only). Linear axes only; panel x 40-1600, y 250-890. Band strip 04 ("about 13%") was replaced by card f11-advice.
+
+## London photo (v2)
+
+`london/london-card.ts` makes the full-frame London photo card (`--still out.png`, or `--mov out.mov --dur S`); `london/item.json` is its manifest entry. The photo stays out of git (`preview/` is ignored).

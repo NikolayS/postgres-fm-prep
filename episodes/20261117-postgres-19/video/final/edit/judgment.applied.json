@@ -10,8 +10,16 @@
   {
    "cat": "rambling",
    "from": "81.240",
+   "to": "83.480",
+   "reason": "[c02a] abandoned lead-in before London memory",
+   "soft": true,
+   "cutLaugh": true
+  },
+  {
+   "cat": "rambling",
+   "from": "118.840",
    "to": "129.720",
-   "reason": "[c02] off-topic: London meeting, Michael's looks, weather",
+   "reason": "[c02b] weather tangent after shorts",
    "soft": true,
    "cutLaugh": true
   },

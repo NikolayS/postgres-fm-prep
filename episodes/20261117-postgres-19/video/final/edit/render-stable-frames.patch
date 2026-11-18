@@ -1,0 +1,25 @@
+--- render.ts
++++ render.ts
+@@ -90,6 +90,22 @@
+   pieces = pieces.flatMap((p) => { const n = Math.min(p.b - p.a, left); left -= n; return n > 0.001 ? [{ ...p, b: p.a + n }] : []; });
+ }
+ const segs = videoSegments(pieces, FPS, frames);
++// Episode 197: preserve approved downstream frames despite cumulative rounding.
++// Allocate the rounding remainder to the quiet pause after "shorts".
++if (process.env.STABLE_PLAN) {
++  const prior = await Bun.file(process.env.STABLE_PLAN).json();
++  const wanted = segs.reduce((n, [a, b]) => n + b - a, 0);
++  let first = -1;
++  for (let i = 0; i < segs.length; i++) {
++    if (segs[i][0] / FPS < 129) continue;
++    const same = prior.segments.find(([a]: number[]) => a === segs[i][0]);
++    if (!same) throw new Error("Downstream segment has changed");
++    if (first < 0) first = i;
++    segs[i] = [...same];
++  }
++  if (first < 1) throw new Error("Missing restored section");
++  segs[first - 1][1] += wanted - segs.reduce((n, [a, b]) => n + b - a, 0);
++}
+ const outFrames = segs.reduce((s, [a, b]) => s + b - a, 0);
+ const srcEndFrame = segs[segs.length - 1][1];
+ const srcStartFrame = segs[0][0];
