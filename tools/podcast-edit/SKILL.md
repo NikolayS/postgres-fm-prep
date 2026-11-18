@@ -438,6 +438,15 @@ bun $S/compose.ts layout.json out-edited.mp4 final.mp4 --intro a-intro.mp3 --out
   enters ducked 10 s before the show ends, rises over 1.2 s after the
   sign-off, and its natural ending lines up with the end of the end card.
   Two-pass loudnorm (audio-only first pass) to -16 LUFS, -1.5 dBTP.
+- **Voice over music (every cut: cold opens, trailers, shorts, show).** Under speech the
+  voice must be 10 dB or more above the music + SFX, measured per bite (RMS dBFS of the voice stem vs the music and background stems;
+  also compare integrated LUFS over the bite). Level each bite on its
+  own first (about -18 LUFS before the final loudnorm), so a quiet speaker is not lost;
+  a dull mic gets presence EQ (+3 to +4 dB at 2-4 kHz). Duck the music 20 dB or more
+  under voice (a low bed plus a sidechain); full level only in gaps, cards and titles.
+  Then run whisper on each bite of the final mix: every line must transcribe cleanly.
+  Episode 197 (Michael "hard to hear" under the cold-open music): see
+  `episodes/20261117-postgres-19/video/coldopen-v8/build.sh`, which prints the table.
 - `music.ts`: ElevenLabs `POST /v1/music`, `force_instrumental`,
   mp3_44100_128 (Starter cannot download 192 kbps). `seed` cannot be used with
   `prompt`. Each option writes a `.json` provenance record (prompt, model,
