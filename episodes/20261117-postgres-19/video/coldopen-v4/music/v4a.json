@@ -1,0 +1,12 @@
+{"dir":"/Library/Audio/Apple Loops/Apple/09 Disco Funk","tailSec":2,"events":[
+ {"file":"Throwback Funk Beat 01.caf","at":0,"beats":12},
+ {"file":"Throwback Funk Synth Bass.caf","at":0,"beats":12,"gain":-1},
+ {"file":"Throwback Funk Brass 01.caf","at":0,"beats":8},
+ {"file":"Throwback Funk Brass 02.caf","at":8,"beats":4},
+ {"file":"Throwback Funk Synth FX.caf","at":10,"beats":2,"gain":-6},
+ {"file":"Throwback Funk Beat 02.caf","at":12,"beats":68.5,"from":4},
+ {"file":"Throwback Funk Synth Bass.caf","at":12,"beats":68.5,"from":12,"gain":-1},
+ {"file":"Throwback Funk Brass 01.caf","at":81,"beats":1.5,"fadeOut":1.2},
+ {"file":"Throwback Funk Beat 01.caf","at":81,"beats":1,"fadeOut":0.6},
+ {"file":"Throwback Funk Synth Bass.caf","at":81,"beats":1.5,"fadeOut":1.2,"gain":-1}
+]}
