@@ -2,7 +2,7 @@
 // London photo in the centre of the frame, the three host tiles around it (placement "london" =
 // layout.json place.*.centers.london). Transparent overlay.
 // bun london-card.ts --still out.png
-// Later, with enough disk: bun london-card.ts --mov out.mov --dur 23.62
+// bun london-card.ts --mov out.mov --dur 23.62 (PNG-in-MOV with alpha: about 5x smaller than ProRes 4444)
 // Uses the toolkit capture approach (Playwright/Chrome), no network or fonts.
 import {resolve, join} from 'node:path';
 import {mkdtempSync, rmSync} from 'node:fs';
@@ -56,7 +56,7 @@ try {
   temp=mkdtempSync(join(tmpdir(),'london-card-'));
   const png=join(temp,'card.png');await page.screenshot({path:png,omitBackground:true});
   // Transparent except the photo (centre, y 250-900); the hosts move around it (layout.json centers.london).
-  const p=Bun.spawn(['ffmpeg','-v','error','-y','-loop','1','-framerate','25','-i',png,'-t',String(dur),'-vf',`format=yuva444p10le,fade=t=in:st=0:d=0.4:alpha=1,fade=t=out:st=${dur-.4}:d=0.4:alpha=1`,'-an','-c:v','prores_ks','-profile:v','4','-pix_fmt','yuva444p10le',out],{stdout:'inherit',stderr:'inherit'});
+  const p=Bun.spawn(['ffmpeg','-v','error','-y','-loop','1','-framerate','25','-i',png,'-t',String(dur),'-vf',`format=rgba,fade=t=in:st=0:d=0.4:alpha=1,fade=t=out:st=${dur-.4}:d=0.4:alpha=1`,'-an','-c:v','png','-pix_fmt','rgba',out],{stdout:'inherit',stderr:'inherit'});
   if(await p.exited) throw new Error('ffmpeg failed');
  }
 } finally {await browser.close();if(temp) rmSync(temp,{recursive:true,force:true});}

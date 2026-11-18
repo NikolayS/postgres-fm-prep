@@ -293,7 +293,22 @@ export function filtergraph(c: LayoutConfig, tiles: Detection, segments: [number
       // edge-only box by the same weight (only inside the windows, so it costs little).
       const on = windows.map(([a, b]) => `between(t,${a.toFixed(3)},${b.toFixed(3)})`).join("+");
       parts.push(`[a_${n}]split[a1_${n}][a2_${n}];[a1_${n}][${mi + 1}:v]overlay=0:0:format=yuv420[wl_${n}];[a2_${n}][${mi + 2}:v]overlay=0:0:format=yuv420[nl_${n}]`);
-      parts.push(`[wl_${n}][nl_${n}]blend=all_expr='A+(B-A)*(${e.replace(/\bt\b/g, "T")})':enable='${on}'[box_${n}]`);
+      // blend evaluates all_expr for every pixel, so one expression with every window in it
+      // ran at about 1 fps (episode 197, 9 windows). Per window: the ramps use only that
+      // window's weight, and the hold between them is plain 'B'.
+      const ramps = windows.flatMap(([a, b]) => [[a, a + D], [b - D, b]] as [number, number][]);
+      const holds = windows.filter(([a, b]) => b - a > 2 * D).map(([a, b]) => [a + D, b - D] as [number, number]);
+      const steps = [
+        ...windows.map((w, k) => ({ expr: `A+(B-A)*(${centerWeight([w], D).replace(/\bt\b/g, "T")})`, on: ramps.slice(2 * k, 2 * k + 2) })),
+        ...holds.map((h) => ({ expr: "B", on: [h] })),
+      ];
+      parts.push(`[nl_${n}]split=${steps.length}${steps.map((_, k) => `[nl${k}_${n}]`).join("")}`);
+      steps.forEach((s, k) => {
+        const inp = k === 0 ? `wl_${n}` : `bl${k - 1}_${n}`, out = k === steps.length - 1 ? `box_${n}` : `bl${k}_${n}`;
+        const en = s.on.map(([a, b]) => `between(t,${a.toFixed(3)},${b.toFixed(3)})`).join("+");
+        parts.push(`[${inp}][nl${k}_${n}]blend=all_expr='${s.expr}':enable='${en}'[${out}]`);
+      });
+      void e, on;
       // Sum over the windows of (target - rest) * weight; the windows do not overlap.
       const go = (rest: number, to: (q: { x: number; y: number; w: number }) => number) =>
         `(${rest}${moves.map((m) => `+(${to(m.q) - rest})*(${centerWeight([m.w], D)})`).join("")})`;
