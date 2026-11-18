@@ -39,16 +39,22 @@ It writes `preview/episode-197-final.mp4` and runs `edit/set_times.py <cold-open
 
 ## Sound
 
-Only outro `a-shades-outro.wav` from episode 194; opening music belongs to the cold open. Outro arguments match episode 196 `render.sh` (`--music-lufs -20.5`, two-pass loudnorm to -16 LUFS, -1.5 dBTP).
+Only outro `a-shades-outro.wav` from episode 194; opening music belongs to the cold open. Outro arguments match episode 196 `render.sh` (`--music-lufs -20.5`, two-pass loudnorm to -16 LUFS, -1.5 dBTP), plus `--duck -21`: the music stays 21 dB under the talk (CLAUDE.md asks for 20 dB or more).
 
-## Render
+Voices: `edit/michael-boost.py` levels the edited body before compose. Michael gets the cold-open v8 presence chain and +7 dB in his turns (his microphone runs about 9 dB quiet), and Nik gets +1.5 dB. Turns come from the transcript speaker labels, mapped through the cut plan, with 40 ms ramps. The script then applies a limiter and two-pass loudnorm. Word medians after it: Michael -20.0, Nik -19.9, Kirk -18.8 dB.
 
-Prepared commands only; no video rendering was run for v2:
+## Render (v2, 2026-11-18)
 
-1. `bash edit/render-edited-v2.sh` from any directory regenerates the edited video with the relaxed-joins patch and `render-stable-frames.patch`. The latter preserves original downstream video frames and puts the one-frame rounding remainder in the quiet pause after “shorts”. It checks the resulting plan against the saved plan.
-2. Render the nine strips into `final-overlays/overlays-v2`, then render the London `.mov` separately when disk permits. Add its manifest entry with `dur` from `london/item.json`'s `duration`, `freezeSec: 0`, and `sfx: []`.
-3. Run `render.sh` after replacing its `<recording>`, `<repo>` and `<ep194-recording>` placeholders. It uses edited-v2, overlays-v2, explicit `--card 0` (the compose default is 13), no intro music and no opening fade, and preserves the outro arguments.
-4. Copy the body as described above, then use `join.sh`.
+1. `bash edit/render-edited-v2.sh` regenerates `<recording>/review/edited-v2.mp4` (3,145.72 s) and checks it against the saved plan.
+2. `python3 edit/michael-boost.py <recording> edited-v2.mp4 edited-v2-mb.mp4` (run in `<recording>/review`).
+3. Overlays in `<recording>/final-overlays/overlays-v2/` (one `manifest.json`, times in body seconds):
+   - The 8 band strips reuse the v1 `.mov` files at the v2 times from `overlays/items.ts`.
+   - The 8 Forge cards come from `bun scripts/render-forge.ts` in the overlay tool, after `python3 forge/forge-items.py` and a copy of `forge/Ep197.tsx`.
+   - `london.mov` comes from `bun london/london-card.ts --mov ... --dur 23.62`.
+   - Cards and London are PNG-in-MOV with alpha (`-c:v png -pix_fmt rgba`). This is pixel-identical to ProRes 4444 and about 5x smaller.
+4. `render.sh` (replace the `<...>` placeholders). ffmpeg hung twice at body 3,143.8 s, just before the end-card xfade. The draft body was therefore rendered as two parts and joined with stream copy at 3,029.68 s, in a 1 s pause. The parts are the same command with `--until 3029.68` and with `--from 3029.68`. The tail audio got +0.5 dB to match the head speech level.
+5. Copy to `preview/episode-197-body-v2.mp4`, then `bash join.sh <absolute path to cold open>`. The cold open must be an absolute path, because the concat list is in a temp folder.
+6. QA: `bun tools/podcast-edit/qa.ts episodes/20261117-postgres-19` with the `EP197_*` variables from `qa.json` and `cards/roots.json`.
 
 Plan reproduction (run from `<recording>/review`): `bun <repo>/tools/podcast-edit/detect.ts work/src.words.json work/edl-v2.json --judgment <repo>/episodes/20261117-postgres-19/video/final/edit/judgment.applied.json --prosody work/prosody.json --review work/review-v2.txt`; use the render script's two patched renderer copies with `--plan-only` for planning. Keep the original EDL and plan unchanged.
 
