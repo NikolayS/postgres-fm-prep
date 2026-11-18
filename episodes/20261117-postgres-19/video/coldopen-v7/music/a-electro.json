@@ -1,0 +1,11 @@
+{"dir":"/Library/Audio/Apple Loops/Apple/02 Electro House","tailSec":2,"events":[
+ {"file":"Blueprint Beat 01.caf","at":0,"beats":18},
+ {"file":"Bedrock Bass.caf","at":0,"beats":18,"gain":-1},
+ {"file":"Americana Synth.caf","at":0,"beats":18,"gain":-3},
+ {"file":"Big Snare Roll Topper.caf","at":8.5,"beats":4,"gain":-5},
+ {"file":"Basic Core Beat.caf","at":18,"beats":73.5,"from":4},
+ {"file":"Bedrock Bass.caf","at":18,"beats":73.5,"from":12,"gain":-1},
+ {"file":"Americana Synth.caf","at":92,"beats":1.5,"fadeOut":1.2,"gain":-3},
+ {"file":"Blueprint Beat 01.caf","at":92,"beats":1,"fadeOut":0.6},
+ {"file":"Bedrock Bass.caf","at":92,"beats":1.5,"fadeOut":1.2,"gain":-1}
+]}

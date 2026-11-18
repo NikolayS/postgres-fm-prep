@@ -1,0 +1,9 @@
+{"dir":"/Library/Audio/Apple Loops/Apple/07 Chillwave","tailSec":2,"events":[
+ {"file":"Crunchy Funk 01.caf","at":0,"beats":10.5},
+ {"file":"Chill Loop Guitar.caf","at":0,"beats":12},
+ {"file":"Chill Loop Bass.caf","at":2,"beats":8.5,"gain":-1},
+ {"file":"Crunchy Funk 01.caf","at":12,"beats":49,"gain":-3},
+ {"file":"Chill Loop Bass.caf","at":12,"beats":49,"gain":-1},
+ {"file":"Chill Loop Guitar.caf","at":61.333,"beats":1.5,"fadeOut":1.2},
+ {"file":"Crunchy Funk 02.caf","at":61.333,"beats":1,"fadeOut":0.6}
+]}

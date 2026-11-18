@@ -1,0 +1,11 @@
+{"dir":"/Library/Audio/Apple Loops/Apple/01 Hip Hop","tailSec":3,"events":[
+ {"file":"Legend Synth Drone.caf","at":0,"beats":12},
+ {"file":"Legend Dark Synth Pad.caf","at":1,"beats":11,"gain":-2,"fadeIn":1},
+ {"file":"Legend Beat.caf","at":2,"beats":10,"gain":-3},
+ {"file":"Legend Sub Bass.caf","at":2,"beats":10},
+ {"file":"Legend Synth Lead.caf","at":8,"beats":4,"gain":-6},
+ {"file":"Legend Synth Drone.caf","at":12,"beats":49,"from":12},
+ {"file":"Legend FX Synth Pad.caf","at":12,"beats":49,"gain":-4},
+ {"file":"Legend Beat.caf","at":12,"beats":49,"gain":-8},
+ {"file":"Legend Sub Bass.caf","at":61.333,"beats":2,"fadeOut":1.6}
+]}
