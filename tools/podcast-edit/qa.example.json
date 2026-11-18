@@ -1,0 +1,22 @@
+{
+  "out": "${REVIEW}/qa",
+  "audio": {
+    "music": "${REVIEW}/stems/music.wav",
+    "voices": {"Nik": "${REVIEW}/stems/nik.wav", "Michael": "${REVIEW}/stems/michael.wav", "Kirk": "${REVIEW}/stems/kirk.wav"},
+    "minGapDb": 10,
+    "maxSpreadDb": 3
+  },
+  "eyes": {
+    "frames": [
+      {"label": "cold open: last frame", "video": "${REVIEW}/cold-open.mp4", "t": 44.6, "expectFaces": 3},
+      {"label": "thumbnail", "image": "${REVIEW}/thumbs/thumb-a.png", "expectFaces": 3}
+    ]
+  },
+  "captions": {"records": "${REVIEW}/coldopen/frames", "frames": "${REVIEW}/coldopen/frames"},
+  "strips": {
+    "layers": [{"id": "s01-notify", "file": "${REVIEW}/overlays/s01-notify.mov", "t": 1.5}],
+    "video": "${REVIEW}/preview.mp4",
+    "items": [{"id": "s01-notify", "at": 1297.3, "box": [24, 724, 1576, 140]}]
+  },
+  "skip": {}
+}
