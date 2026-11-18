@@ -107,6 +107,16 @@ describe("lintCard: chart-first card rules", () => {
   test("numberTokens finds numbers with separators and decimals", () => {
     expect(numberTokens("from 1,013 to 65,996 rows/s in 0.02 s, PG 18.7")).toEqual(["1,013", "65,996", "0.02", "18.7"]);
   });
+
+  test("a negative display keeps its sign (U+2212 or hyphen-minus)", () => {
+    const c = good();
+    c.numbers.x = { value: -37.4, display: "\u221237%", source: c.numbers.x.source };
+    expect(lintCard(c, "card").join("\n")).not.toMatch(/does not match/);
+    c.numbers.x = { value: -37.4, display: "-37%", source: c.numbers.x.source };
+    expect(lintCard(c, "card").join("\n")).not.toMatch(/does not match/);
+    c.numbers.x = { value: -37.4, display: "37%", source: c.numbers.x.source };
+    expect(lintCard(c, "card").join("\n")).toMatch(/does not match/);
+  });
 });
 
 describe("checkProvenance: recompute every number from the raw file", () => {

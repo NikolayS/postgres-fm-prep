@@ -1,0 +1,59 @@
+{
+  "id": "f07-lz4",
+  "headline": "LZ4 by default: faster inserts",
+  "chart": {
+    "type": "bars",
+    "scale": "linear",
+    "bars": [
+      {
+        "label": "18.7",
+        "n": "pg18",
+        "color": "#2a78d6"
+      },
+      {
+        "label": "19",
+        "n": "pg19",
+        "color": "#d9822b"
+      }
+    ]
+  },
+  "heroes": [
+    {
+      "n": "pg18",
+      "label": "pglz"
+    },
+    {
+      "n": "pg19",
+      "label": "lz4"
+    }
+  ],
+  "chip": "Forge PG19 study · synthetic",
+  "numbers": {
+    "pg18": {
+      "value": 107,
+      "display": "107 s",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nprint(st.median(float(re.search(r\"insert_seconds ([0-9.]+)\",p.read_text())[1]) for p in f.glob(\"*-D04-18tc.avoff-jsonb-a[123]/d04.txt\") if \"-pilot-\" not in str(p)))' \"$F\""
+      }
+    },
+    "pg19": {
+      "value": 44,
+      "display": "44 s",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nprint(st.median(float(re.search(r\"insert_seconds ([0-9.]+)\",p.read_text())[1]) for p in f.glob(\"*-D04-19tc.avoff-jsonb-a[123]/d04.txt\") if \"-pilot-\" not in str(p)))' \"$F\""
+      }
+    }
+  },
+  "literals": [
+    "19",
+    "18.7",
+    "4"
+  ],
+  "onAir": {
+    "quote": "TOAST compression by default now uses ... LZ4",
+    "at": "29:51.205"
+  },
+  "decision": "keep"
+}

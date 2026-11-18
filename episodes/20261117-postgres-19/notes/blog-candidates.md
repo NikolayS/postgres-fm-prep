@@ -12,6 +12,8 @@ Provenance: every number below was recomputed from raw run output (logs, pgbench
 
 The audit scripts are f01.py, f06.py, perf.py, plans.py and f10.py. They were run on 2026-11-18 and are kept with the episode work files.
 
+Card manifest: `f09-rehearsal` (blog only).
+
 ## 1. Upgrade rehearsals: when `pg_upgrade --check` says OK and the upgrade still fails
 
 - **Figure:** a stacked bar per source version (14, 15, 16, 17, 18) of rehearsal outcomes. The outcomes are: clean, caught by --check, check passed then upgrade failed, 19 did not start, extension step failed, and clone refused. A second figure is a short table of the 22 "check passed, then failed" cases.

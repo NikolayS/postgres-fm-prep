@@ -1,0 +1,66 @@
+{
+  "id": "f04-autovac",
+  "headline": "Autovacuum reaches the urgent table",
+  "chart": {
+    "type": "bars",
+    "scale": "linear",
+    "bars": [
+      {
+        "label": "18.7",
+        "n": "pg18",
+        "color": "#2a78d6"
+      },
+      {
+        "label": "19",
+        "n": "pg19",
+        "color": "#d9822b"
+      }
+    ]
+  },
+  "heroes": [
+    {
+      "n": "pg18",
+      "label": "last of 121"
+    },
+    {
+      "n": "pg19",
+      "label": "first"
+    }
+  ],
+  "chip": "Forge PG19 study · synthetic",
+  "numbers": {
+    "pg18": {
+      "value": 152.3,
+      "display": "152.3 s",
+      "source": {
+        "file": "A/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[]\nfor d in f.glob(\"*-V3A1-18-a[123]*\"):\n p=d/\"server-log.txt\"\n if not p.exists():continue\n m=re.search(r'\"'\"'(\\d{4}-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d+) UTC[^\\n]*automatic [^\\n]*vacuum[^\\n]*\"bench.public.crit\"(.*?)(?=\\n\\d{4}-|\\Z)'\"'\"',p.read_text(),re.S)\n if m:\n  end=datetime.datetime.strptime(m[1],\"%Y-%m-%d %H:%M:%S.%f\").replace(tzinfo=datetime.timezone.utc).timestamp()\n  a.append(end-float(re.search(r\"elapsed: ([0-9.]+) s\",m[2])[1])-float((d/\"t0\").read_text()))\nprint(st.median(a))' \"$F\""
+      }
+    },
+    "pg19": {
+      "value": 12.9,
+      "display": "12.9 s",
+      "source": {
+        "file": "A/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[]\nfor d in f.glob(\"*-V3A1-19-a[123]*\"):\n p=d/\"server-log.txt\"\n if not p.exists():continue\n m=re.search(r'\"'\"'(\\d{4}-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d\\.\\d+) UTC[^\\n]*automatic [^\\n]*vacuum[^\\n]*\"bench.public.crit\"(.*?)(?=\\n\\d{4}-|\\Z)'\"'\"',p.read_text(),re.S)\n if m:\n  end=datetime.datetime.strptime(m[1],\"%Y-%m-%d %H:%M:%S.%f\").replace(tzinfo=datetime.timezone.utc).timestamp()\n  a.append(end-float(re.search(r\"elapsed: ([0-9.]+) s\",m[2])[1])-float((d/\"t0\").read_text()))\nprint(st.median(a))' \"$F\""
+      }
+    },
+    "rank": {
+      "value": 121,
+      "display": "121",
+      "source": {
+        "file": "A/runs",
+        "compute": "python3 -c 'import sys,statistics as st\nfrom pathlib import Path\nf=Path(sys.argv[1])\nprint(st.median([line.split()[0] for line in p.read_text().splitlines()].index(\"crit\")+1 for p in f.glob(\"*-V3A1-18-a[123]/pgclass-order.tsv\")))' \"$F\""
+      }
+    }
+  },
+  "literals": [
+    "19",
+    "18.7"
+  ],
+  "onAir": {
+    "quote": "I am a big fan of the autovacuum improvements ... the prioritization",
+    "at": "22:05.205"
+  },
+  "decision": "keep"
+}

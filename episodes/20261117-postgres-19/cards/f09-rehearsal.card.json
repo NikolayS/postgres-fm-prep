@@ -1,0 +1,78 @@
+{
+  "id": "f09-rehearsal",
+  "headline": "687 upgrade rehearsals",
+  "chip": "Forge PG19 study · synthetic",
+  "numbers": {
+    "total": {
+      "value": 687,
+      "display": "687",
+      "source": {
+        "file": "T/records/cells",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nrows=[json.loads(p.read_text())['\"'\"'outcome'\"'\"'] for p in f.glob('\"'\"'*/cell.json'\"'\"')]\nrows=[o for o in rows if not o.get('\"'\"'na'\"'\"') and o.get('\"'\"'fixture'\"'\"',{}).get('\"'\"'ok'\"'\"',True) and not o.get('\"'\"'injected'\"'\"')]\nfailed=[o for o in rows if o['\"'\"'check'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'upgrade'\"'\"']['\"'\"'exit'\"'\"']!=0]\nno_start=[o for o in rows if o['\"'\"'check'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'upgrade'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'start'\"'\"']['\"'\"'exit'\"'\"']!=0]\nprint(len(rows))' \"$F\""
+      }
+    },
+    "failed": {
+      "value": 89,
+      "display": "89",
+      "source": {
+        "file": "T/records/cells",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nrows=[json.loads(p.read_text())['\"'\"'outcome'\"'\"'] for p in f.glob('\"'\"'*/cell.json'\"'\"')]\nrows=[o for o in rows if not o.get('\"'\"'na'\"'\"') and o.get('\"'\"'fixture'\"'\"',{}).get('\"'\"'ok'\"'\"',True) and not o.get('\"'\"'injected'\"'\"')]\nfailed=[o for o in rows if o['\"'\"'check'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'upgrade'\"'\"']['\"'\"'exit'\"'\"']!=0]\nno_start=[o for o in rows if o['\"'\"'check'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'upgrade'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'start'\"'\"']['\"'\"'exit'\"'\"']!=0]\nprint(len(failed))' \"$F\""
+      }
+    },
+    "noStart": {
+      "value": 31,
+      "display": "31",
+      "source": {
+        "file": "T/records/cells",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nrows=[json.loads(p.read_text())['\"'\"'outcome'\"'\"'] for p in f.glob('\"'\"'*/cell.json'\"'\"')]\nrows=[o for o in rows if not o.get('\"'\"'na'\"'\"') and o.get('\"'\"'fixture'\"'\"',{}).get('\"'\"'ok'\"'\"',True) and not o.get('\"'\"'injected'\"'\"')]\nfailed=[o for o in rows if o['\"'\"'check'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'upgrade'\"'\"']['\"'\"'exit'\"'\"']!=0]\nno_start=[o for o in rows if o['\"'\"'check'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'upgrade'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'start'\"'\"']['\"'\"'exit'\"'\"']!=0]\nprint(len(no_start))' \"$F\""
+      }
+    },
+    "rest": {
+      "value": 567,
+      "display": "567",
+      "source": {
+        "file": "T/records/cells",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nrows=[json.loads(p.read_text())['\"'\"'outcome'\"'\"'] for p in f.glob('\"'\"'*/cell.json'\"'\"')]\nrows=[o for o in rows if not o.get('\"'\"'na'\"'\"') and o.get('\"'\"'fixture'\"'\"',{}).get('\"'\"'ok'\"'\"',True) and not o.get('\"'\"'injected'\"'\"')]\nfailed=[o for o in rows if o['\"'\"'check'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'upgrade'\"'\"']['\"'\"'exit'\"'\"']!=0]\nno_start=[o for o in rows if o['\"'\"'check'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'upgrade'\"'\"']['\"'\"'exit'\"'\"']==0 and o['\"'\"'start'\"'\"']['\"'\"'exit'\"'\"']!=0]\nprint(len(rows)-len(failed)-len(no_start))' \"$F\""
+      }
+    }
+  },
+  "literals": [
+    "19"
+  ],
+  "onAir": {
+    "quote": "testing on actual clone is great",
+    "at": "43:59.205"
+  },
+  "decision": "blog",
+  "chart": {
+    "type": "donut",
+    "scale": "linear",
+    "parts": [
+      {
+        "label": "",
+        "n": "rest",
+        "color": "#8b95a1"
+      },
+      {
+        "label": "",
+        "n": "failed",
+        "color": "#a8433b"
+      },
+      {
+        "label": "",
+        "n": "noStart",
+        "color": "#7a5bd6"
+      }
+    ]
+  },
+  "heroes": [
+    {
+      "n": "failed",
+      "label": "false OK"
+    },
+    {
+      "n": "noStart",
+      "label": "no start"
+    }
+  ]
+}

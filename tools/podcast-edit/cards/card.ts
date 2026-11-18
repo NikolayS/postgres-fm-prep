@@ -100,7 +100,7 @@ export function lintCard(c: Card | Finding, mode: "card" | "finding"): string[] 
     if (typeof n.value !== "number" || !Number.isFinite(n.value)) { e.push(`number "${k}" has no numeric value`); continue; }
     const d = displayOf(n), t = numberTokens(d);
     if (t.length !== 1) e.push(`number "${k}": display "${d}" must show exactly one number (no ranges)`);
-    else if (plain(t[0]) !== Number(n.value.toFixed(decimals(t[0]))))
+    else if ((/[-\u2212]\s*\d/.test(d) ? -1 : 1) * plain(t[0]) !== Number(n.value.toFixed(decimals(t[0]))))
       e.push(`number "${k}": display ${d} does not match the value ${n.value} at the shown precision`);
     if (HEDGES.test(d)) e.push(`number "${k}": display "${d}" hedges; show the exact number`);
   }

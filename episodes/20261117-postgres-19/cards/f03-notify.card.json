@@ -1,0 +1,54 @@
+{
+  "id": "f03-notify",
+  "headline": "NOTIFY with 1,000 listeners",
+  "chart": {
+    "type": "bars",
+    "scale": "linear",
+    "bars": [
+      {
+        "label": "18.7",
+        "n": "pg18",
+        "color": "#2a78d6"
+      },
+      {
+        "label": "19",
+        "n": "pg19",
+        "color": "#d9822b"
+      }
+    ]
+  },
+  "heroes": [
+    {
+      "n": "pg19"
+    }
+  ],
+  "chip": "Forge PG19 study · synthetic",
+  "numbers": {
+    "pg18": {
+      "value": 200,
+      "display": "200/s",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[json.loads(p.read_text()) for p in f.glob(\"*-D10c-18tc-n1000-a[123]/notify.json\")]\nprint(st.median(d[\"sent\"]/d[\"send_seconds\"] for d in a))' \"$F\""
+      }
+    },
+    "pg19": {
+      "value": 11040,
+      "display": "11,040/s",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[json.loads(p.read_text()) for p in f.glob(\"*-D10c-19tc-n1000-a[123]/notify.json\")]\nprint(st.median(d[\"sent\"]/d[\"send_seconds\"] for d in a))' \"$F\""
+      }
+    }
+  },
+  "literals": [
+    "19",
+    "18.7",
+    "1,000"
+  ],
+  "onAir": {
+    "quote": "if 1,000 listeners, from 200 per second, we went to 11,000 per second",
+    "at": "18:44.205"
+  },
+  "decision": "keep"
+}

@@ -1,0 +1,72 @@
+{
+  "id": "f11-advice",
+  "headline": "Plan advice: throughput, trivial query",
+  "chart": {
+    "type": "bars",
+    "scale": "linear",
+    "bars": [
+      {
+        "label": "off",
+        "n": "off",
+        "color": "#8b95a1"
+      },
+      {
+        "label": "on",
+        "n": "on",
+        "color": "#d9822b"
+      }
+    ]
+  },
+  "heroes": [
+    {
+      "n": "lossOff",
+      "label": "to"
+    },
+    {
+      "n": "lossLoaded"
+    }
+  ],
+  "chip": "Forge PG19 study · synthetic",
+  "numbers": {
+    "off": {
+      "value": 100,
+      "display": "100%",
+      "source": {
+        "file": "S/evidence/functional/plan-advice-study/pa-archive.tgz",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nt=tarfile.open(f)\ndef med(arm):\n return st.median(float(re.search(r\"^tps = ([\\d.]+)\",t.extractfile(m).read().decode(),re.M)[1]) for m in t.getnames() if re.fullmatch(\"pa/wsp-runs/p01-\"+arm+\"-t[12]/pgbench-p01.txt\",m))\nprint(100*med(\"off\")/med(\"off\"))' \"$F\""
+      }
+    },
+    "on": {
+      "value": 86,
+      "display": "86%",
+      "source": {
+        "file": "S/evidence/functional/plan-advice-study/pa-archive.tgz",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nt=tarfile.open(f)\ndef med(arm):\n return st.median(float(re.search(r\"^tps = ([\\d.]+)\",t.extractfile(m).read().decode(),re.M)[1]) for m in t.getnames() if re.fullmatch(\"pa/wsp-runs/p01-\"+arm+\"-t[12]/pgbench-p01.txt\",m))\nprint(100*med(\"gen\")/med(\"loaded\"))' \"$F\""
+      }
+    },
+    "lossOff": {
+      "value": -11,
+      "display": "−11",
+      "source": {
+        "file": "S/evidence/functional/plan-advice-study/pa-archive.tgz",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nt=tarfile.open(f)\ndef med(arm):\n return st.median(float(re.search(r\"^tps = ([\\d.]+)\",t.extractfile(m).read().decode(),re.M)[1]) for m in t.getnames() if re.fullmatch(\"pa/wsp-runs/p01-\"+arm+\"-t[12]/pgbench-p01.txt\",m))\nprint(100*(med(\"gen\")/med(\"off\")-1))' \"$F\""
+      }
+    },
+    "lossLoaded": {
+      "value": -14,
+      "display": "−14%",
+      "source": {
+        "file": "S/evidence/functional/plan-advice-study/pa-archive.tgz",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nt=tarfile.open(f)\ndef med(arm):\n return st.median(float(re.search(r\"^tps = ([\\d.]+)\",t.extractfile(m).read().decode(),re.M)[1]) for m in t.getnames() if re.fullmatch(\"pa/wsp-runs/p01-\"+arm+\"-t[12]/pgbench-p01.txt\",m))\nprint(100*(med(\"gen\")/med(\"loaded\")-1))' \"$F\""
+      }
+    }
+  },
+  "literals": [
+    "19"
+  ],
+  "onAir": {
+    "quote": "our testing found some overhead from using advice ... around 10%",
+    "at": "28:02.885"
+  },
+  "decision": "keep"
+}

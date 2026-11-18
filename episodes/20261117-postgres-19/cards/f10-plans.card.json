@@ -1,0 +1,86 @@
+{
+  "id": "f10-plans",
+  "headline": "Query plans changed in 19",
+  "chart": {
+    "type": "donut",
+    "scale": "linear",
+    "parts": [
+      {
+        "label": "",
+        "n": "commit",
+        "color": "#d9822b"
+      },
+      {
+        "label": "",
+        "n": "other",
+        "color": "#edc5a3"
+      },
+      {
+        "label": "",
+        "n": "same",
+        "color": "#8b95a1"
+      }
+    ]
+  },
+  "heroes": [
+    {
+      "n": "changed",
+      "label": "of 220"
+    },
+    {
+      "n": "commit",
+      "label": "of 83 from one commit"
+    }
+  ],
+  "chip": "Forge PG19 study · synthetic",
+  "numbers": {
+    "total": {
+      "value": 220,
+      "display": "220",
+      "source": {
+        "file": "X/.",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nKEYS=['\"'\"'Node Type'\"'\"','\"'\"'Join Type'\"'\"','\"'\"'Strategy'\"'\"','\"'\"'Partial Mode'\"'\"','\"'\"'Parent Relationship'\"'\"','\"'\"'Scan Direction'\"'\"','\"'\"'Relation Name'\"'\"','\"'\"'Index Name'\"'\"','\"'\"'Parallel Aware'\"'\"','\"'\"'Inner Unique'\"'\"','\"'\"'Subplan Name'\"'\"','\"'\"'CTE Name'\"'\"']\ndef root(d):\n if isinstance(d,list):d=d[0]\n return d.get('\"'\"'Plan'\"'\"',d)\ndef shape(n):\n n=root(n)\n return tuple((k,str(n[k]).split()[0] if k=='\"'\"'Subplan Name'\"'\"' else n[k]) for k in KEYS if n.get(k) is not None)+(('\"'\"'children'\"'\"',tuple(shape(c) for c in n.get('\"'\"'Plans'\"'\"',[]))),)\nD={a:{p.stem:shape(json.loads(p.read_text())) for p in (f/'\"'\"'t2-audit/plans'\"'\"'/a/'\"'\"'plans'\"'\"').glob('\"'\"'*.json'\"'\"')} for a in ['\"'\"'A'\"'\"','\"'\"'A2'\"'\"','\"'\"'A3'\"'\"','\"'\"'B'\"'\"','\"'\"'D1'\"'\"']}\nstable={q for q in D['\"'\"'A'\"'\"'] if D['\"'\"'A'\"'\"'][q]==D['\"'\"'A2'\"'\"'][q]==D['\"'\"'A3'\"'\"'][q]}\nchanged={q for q in stable if D['\"'\"'A'\"'\"'][q]!=D['\"'\"'B'\"'\"'][q]}\ndef count(qs):return len({re.sub(r'\"'\"'-s\\d+$'\"'\"','\"'\"''\"'\"',q) for q in qs})\nprint(count(stable))' \"$F\""
+      }
+    },
+    "changed": {
+      "value": 83,
+      "display": "83",
+      "source": {
+        "file": "X/.",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nKEYS=['\"'\"'Node Type'\"'\"','\"'\"'Join Type'\"'\"','\"'\"'Strategy'\"'\"','\"'\"'Partial Mode'\"'\"','\"'\"'Parent Relationship'\"'\"','\"'\"'Scan Direction'\"'\"','\"'\"'Relation Name'\"'\"','\"'\"'Index Name'\"'\"','\"'\"'Parallel Aware'\"'\"','\"'\"'Inner Unique'\"'\"','\"'\"'Subplan Name'\"'\"','\"'\"'CTE Name'\"'\"']\ndef root(d):\n if isinstance(d,list):d=d[0]\n return d.get('\"'\"'Plan'\"'\"',d)\ndef shape(n):\n n=root(n)\n return tuple((k,str(n[k]).split()[0] if k=='\"'\"'Subplan Name'\"'\"' else n[k]) for k in KEYS if n.get(k) is not None)+(('\"'\"'children'\"'\"',tuple(shape(c) for c in n.get('\"'\"'Plans'\"'\"',[]))),)\nD={a:{p.stem:shape(json.loads(p.read_text())) for p in (f/'\"'\"'t2-audit/plans'\"'\"'/a/'\"'\"'plans'\"'\"').glob('\"'\"'*.json'\"'\"')} for a in ['\"'\"'A'\"'\"','\"'\"'A2'\"'\"','\"'\"'A3'\"'\"','\"'\"'B'\"'\"','\"'\"'D1'\"'\"']}\nstable={q for q in D['\"'\"'A'\"'\"'] if D['\"'\"'A'\"'\"'][q]==D['\"'\"'A2'\"'\"'][q]==D['\"'\"'A3'\"'\"'][q]}\nchanged={q for q in stable if D['\"'\"'A'\"'\"'][q]!=D['\"'\"'B'\"'\"'][q]}\ndef count(qs):return len({re.sub(r'\"'\"'-s\\d+$'\"'\"','\"'\"''\"'\"',q) for q in qs})\nprint(count(changed))' \"$F\""
+      }
+    },
+    "same": {
+      "value": 137,
+      "display": "137",
+      "source": {
+        "file": "X/.",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nKEYS=['\"'\"'Node Type'\"'\"','\"'\"'Join Type'\"'\"','\"'\"'Strategy'\"'\"','\"'\"'Partial Mode'\"'\"','\"'\"'Parent Relationship'\"'\"','\"'\"'Scan Direction'\"'\"','\"'\"'Relation Name'\"'\"','\"'\"'Index Name'\"'\"','\"'\"'Parallel Aware'\"'\"','\"'\"'Inner Unique'\"'\"','\"'\"'Subplan Name'\"'\"','\"'\"'CTE Name'\"'\"']\ndef root(d):\n if isinstance(d,list):d=d[0]\n return d.get('\"'\"'Plan'\"'\"',d)\ndef shape(n):\n n=root(n)\n return tuple((k,str(n[k]).split()[0] if k=='\"'\"'Subplan Name'\"'\"' else n[k]) for k in KEYS if n.get(k) is not None)+(('\"'\"'children'\"'\"',tuple(shape(c) for c in n.get('\"'\"'Plans'\"'\"',[]))),)\nD={a:{p.stem:shape(json.loads(p.read_text())) for p in (f/'\"'\"'t2-audit/plans'\"'\"'/a/'\"'\"'plans'\"'\"').glob('\"'\"'*.json'\"'\"')} for a in ['\"'\"'A'\"'\"','\"'\"'A2'\"'\"','\"'\"'A3'\"'\"','\"'\"'B'\"'\"','\"'\"'D1'\"'\"']}\nstable={q for q in D['\"'\"'A'\"'\"'] if D['\"'\"'A'\"'\"'][q]==D['\"'\"'A2'\"'\"'][q]==D['\"'\"'A3'\"'\"'][q]}\nchanged={q for q in stable if D['\"'\"'A'\"'\"'][q]!=D['\"'\"'B'\"'\"'][q]}\ndef count(qs):return len({re.sub(r'\"'\"'-s\\d+$'\"'\"','\"'\"''\"'\"',q) for q in qs})\nprint(count(stable)-count(changed))' \"$F\""
+      }
+    },
+    "commit": {
+      "value": 61,
+      "display": "61",
+      "source": {
+        "file": "X/.",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nKEYS=['\"'\"'Node Type'\"'\"','\"'\"'Join Type'\"'\"','\"'\"'Strategy'\"'\"','\"'\"'Partial Mode'\"'\"','\"'\"'Parent Relationship'\"'\"','\"'\"'Scan Direction'\"'\"','\"'\"'Relation Name'\"'\"','\"'\"'Index Name'\"'\"','\"'\"'Parallel Aware'\"'\"','\"'\"'Inner Unique'\"'\"','\"'\"'Subplan Name'\"'\"','\"'\"'CTE Name'\"'\"']\ndef root(d):\n if isinstance(d,list):d=d[0]\n return d.get('\"'\"'Plan'\"'\"',d)\ndef shape(n):\n n=root(n)\n return tuple((k,str(n[k]).split()[0] if k=='\"'\"'Subplan Name'\"'\"' else n[k]) for k in KEYS if n.get(k) is not None)+(('\"'\"'children'\"'\"',tuple(shape(c) for c in n.get('\"'\"'Plans'\"'\"',[]))),)\nD={a:{p.stem:shape(json.loads(p.read_text())) for p in (f/'\"'\"'t2-audit/plans'\"'\"'/a/'\"'\"'plans'\"'\"').glob('\"'\"'*.json'\"'\"')} for a in ['\"'\"'A'\"'\"','\"'\"'A2'\"'\"','\"'\"'A3'\"'\"','\"'\"'B'\"'\"','\"'\"'D1'\"'\"']}\nstable={q for q in D['\"'\"'A'\"'\"'] if D['\"'\"'A'\"'\"'][q]==D['\"'\"'A2'\"'\"'][q]==D['\"'\"'A3'\"'\"'][q]}\nchanged={q for q in stable if D['\"'\"'A'\"'\"'][q]!=D['\"'\"'B'\"'\"'][q]}\ndef count(qs):return len({re.sub(r'\"'\"'-s\\d+$'\"'\"','\"'\"''\"'\"',q) for q in qs})\nR={}\nwith tarfile.open(f/'\"'\"'t2-revert/plans-pkg-rc2-rev.tgz'\"'\"','\"'\"'r|gz'\"'\"') as t:\n for m in t:\n  if m.isfile() and '\"'\"'/rev/plans/'\"'\"' in m.name and m.name.endswith('\"'\"'.json'\"'\"'):R[Path(m.name).stem]=shape(json.load(t.extractfile(m)))\ntie={q for q in changed if D['\"'\"'D1'\"'\"'][q]!=D['\"'\"'A'\"'\"'][q] and R[q]==D['\"'\"'A'\"'\"'][q]}\nprint(count(tie))' \"$F\""
+      }
+    },
+    "other": {
+      "value": 22,
+      "display": "22",
+      "source": {
+        "file": "X/.",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nKEYS=['\"'\"'Node Type'\"'\"','\"'\"'Join Type'\"'\"','\"'\"'Strategy'\"'\"','\"'\"'Partial Mode'\"'\"','\"'\"'Parent Relationship'\"'\"','\"'\"'Scan Direction'\"'\"','\"'\"'Relation Name'\"'\"','\"'\"'Index Name'\"'\"','\"'\"'Parallel Aware'\"'\"','\"'\"'Inner Unique'\"'\"','\"'\"'Subplan Name'\"'\"','\"'\"'CTE Name'\"'\"']\ndef root(d):\n if isinstance(d,list):d=d[0]\n return d.get('\"'\"'Plan'\"'\"',d)\ndef shape(n):\n n=root(n)\n return tuple((k,str(n[k]).split()[0] if k=='\"'\"'Subplan Name'\"'\"' else n[k]) for k in KEYS if n.get(k) is not None)+(('\"'\"'children'\"'\"',tuple(shape(c) for c in n.get('\"'\"'Plans'\"'\"',[]))),)\nD={a:{p.stem:shape(json.loads(p.read_text())) for p in (f/'\"'\"'t2-audit/plans'\"'\"'/a/'\"'\"'plans'\"'\"').glob('\"'\"'*.json'\"'\"')} for a in ['\"'\"'A'\"'\"','\"'\"'A2'\"'\"','\"'\"'A3'\"'\"','\"'\"'B'\"'\"','\"'\"'D1'\"'\"']}\nstable={q for q in D['\"'\"'A'\"'\"'] if D['\"'\"'A'\"'\"'][q]==D['\"'\"'A2'\"'\"'][q]==D['\"'\"'A3'\"'\"'][q]}\nchanged={q for q in stable if D['\"'\"'A'\"'\"'][q]!=D['\"'\"'B'\"'\"'][q]}\ndef count(qs):return len({re.sub(r'\"'\"'-s\\d+$'\"'\"','\"'\"''\"'\"',q) for q in qs})\nR={}\nwith tarfile.open(f/'\"'\"'t2-revert/plans-pkg-rc2-rev.tgz'\"'\"','\"'\"'r|gz'\"'\"') as t:\n for m in t:\n  if m.isfile() and '\"'\"'/rev/plans/'\"'\"' in m.name and m.name.endswith('\"'\"'.json'\"'\"'):R[Path(m.name).stem]=shape(json.load(t.extractfile(m)))\ntie={q for q in changed if D['\"'\"'D1'\"'\"'][q]!=D['\"'\"'A'\"'\"'][q] and R[q]==D['\"'\"'A'\"'\"'][q]}\nprint(count(changed)-count(tie))' \"$F\""
+      }
+    }
+  },
+  "literals": [
+    "19"
+  ],
+  "onAir": {
+    "quote": "I'm very curious about plan flip analysis",
+    "at": "47:48.205"
+  },
+  "decision": "keep"
+}

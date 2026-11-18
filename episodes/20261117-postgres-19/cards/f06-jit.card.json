@@ -1,0 +1,100 @@
+{
+  "id": "f06-jit",
+  "headline": "JIT off: short faster, long slower",
+  "chart": {
+    "type": "bars",
+    "scale": "linear",
+    "bars": [
+      {
+        "label": "18.7",
+        "n": "q19B31",
+        "color": "#2a78d6"
+      },
+      {
+        "label": "19",
+        "n": "q19B33",
+        "color": "#d9822b"
+      },
+      {
+        "label": "18.7",
+        "n": "q1B31",
+        "color": "#2a78d6"
+      },
+      {
+        "label": "19",
+        "n": "q1B33",
+        "color": "#d9822b"
+      }
+    ]
+  },
+  "heroes": [
+    {
+      "n": "q19change",
+      "label": "short query"
+    },
+    {
+      "n": "q1change",
+      "label": "longest query"
+    }
+  ],
+  "chip": "Forge PG19 study",
+  "numbers": {
+    "q19B31": {
+      "value": 172,
+      "display": "172 ms",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\ndef med(cell,q):\n return st.median(float(re.search(r\"Time: ([0-9.]+) ms\",p.read_text())[1]) for p in f.glob(\"*-\"+cell+\"-*-sf10-a[123]/q\"+str(q)+\".out\"))\nprint(med(\"B31\",19))' \"$F\""
+      }
+    },
+    "q19B33": {
+      "value": 108,
+      "display": "108 ms",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\ndef med(cell,q):\n return st.median(float(re.search(r\"Time: ([0-9.]+) ms\",p.read_text())[1]) for p in f.glob(\"*-\"+cell+\"-*-sf10-a[123]/q\"+str(q)+\".out\"))\nprint(med(\"B33\",19))' \"$F\""
+      }
+    },
+    "q1B31": {
+      "value": 3914,
+      "display": "3,914 ms",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\ndef med(cell,q):\n return st.median(float(re.search(r\"Time: ([0-9.]+) ms\",p.read_text())[1]) for p in f.glob(\"*-\"+cell+\"-*-sf10-a[123]/q\"+str(q)+\".out\"))\nprint(med(\"B31\",1))' \"$F\""
+      }
+    },
+    "q1B33": {
+      "value": 4607,
+      "display": "4,607 ms",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\ndef med(cell,q):\n return st.median(float(re.search(r\"Time: ([0-9.]+) ms\",p.read_text())[1]) for p in f.glob(\"*-\"+cell+\"-*-sf10-a[123]/q\"+str(q)+\".out\"))\nprint(med(\"B33\",1))' \"$F\""
+      }
+    },
+    "q19change": {
+      "value": -37,
+      "display": "−37%",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\ndef med(cell,q):\n return st.median(float(re.search(r\"Time: ([0-9.]+) ms\",p.read_text())[1]) for p in f.glob(\"*-\"+cell+\"-*-sf10-a[123]/q\"+str(q)+\".out\"))\nprint(100*(med(\"B33\",19)/med(\"B31\",19)-1))' \"$F\""
+      }
+    },
+    "q1change": {
+      "value": 17.7,
+      "display": "+17.7%",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\ndef med(cell,q):\n return st.median(float(re.search(r\"Time: ([0-9.]+) ms\",p.read_text())[1]) for p in f.glob(\"*-\"+cell+\"-*-sf10-a[123]/q\"+str(q)+\".out\"))\nprint(100*(med(\"B33\",1)/med(\"B31\",1)-1))' \"$F\""
+      }
+    }
+  },
+  "literals": [
+    "19",
+    "18.7"
+  ],
+  "onAir": {
+    "quote": "JIT being off by default feels far more sensible",
+    "at": "28:45.205"
+  },
+  "decision": "keep"
+}
