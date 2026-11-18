@@ -28,8 +28,7 @@ About the numbers on screen. They come from this study. Most are synthetic tests
 - Autovacuum order: one old table (age 1.65 billion) among 120 bloated tables, 16-vCPU dedicated host, median of 3 trials.
 - Plan advice: advice generated for every query (always_store_advice_details), trivial query, small shared test host, 4 clients, 20 s, 2 trials; 11% against the modules off, 14% against them loaded and idle.
 - JIT: 22 TPC-H-derived queries, scale factor 10, 32-vCPU dedicated host, 3 trials; per-query numbers are exploratory. JIT itself did not change; the default did.
-- lz4 TOAST: insert of 200,000 jsonb documents of 16 KiB, 8-vCPU dedicated host, 3 trials. If disk matters more, set default_toast_compression = pglz.
-- Upgrade rehearsals: 687 rehearsals into 19 RC2 from 14 to 18, each on a fresh clone, of setups we built to break the upgrade (plus 6 killed on purpose and 99 that did not apply). 89 rehearsals (22 cases) passed pg_upgrade --check and then failed; in 31 (11 cases) 19 did not start.
+- lz4 TOAST: insert of 200,000 jsonb documents of 16 KiB, 8-vCPU dedicated host, 3 trials. The table is 11.3% larger with lz4; if disk matters more, set default_toast_compression = pglz.
 - Plan changes: 4,273 benchmark queries (263 templates; 220 stable on 18.7) planned on 18.7 and 19 RC2 with the same data and statistics; 61 of the 83 changed templates come from one planner commit (a tie-break), shown by a build without it.
 
 ### The release

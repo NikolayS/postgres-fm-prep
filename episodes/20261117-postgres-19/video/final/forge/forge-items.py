@@ -31,41 +31,39 @@ STUDY = 'What the Forge study measured: '
 
 # F01 (on air "Postgres 19 is ready for release")
 bv = n['by_version']
-add('f01-numbers', S(183.62), 14, {'kind': 'v2-credits', 'title': 'Most people credited since PG 10', 'chip': 'Forge PG19 study', 'labels': {'median': 'median', 'people': '', 'commits': 'commits'}}, 'numbers.json by_version; brief "Postgres 19 in numbers"')
+add('f01-numbers', S(183.62), 14, {'kind': 'v2-credits', 'title': 'People credited in release notes', 'chip': 'Forge PG19 study', 'labels': {'people': 'in Postgres 19'}}, 'numbers.json by_version; brief "Postgres 19 in numbers"')
 
 # F02 (on air "repack concurrently will actually be fine. And there are edge cases")
 r = d['fig-repack-lock']
 lab = {0.14: '0.14 s', 3.54: '3.54 s', 27.66: '27.7 s', 85.72: '85.7 s'}
-add('f02-repack', S(992.44), 16, {'kind': 'v2-repack', 'title': 'Lock time explodes', 'chip': 'Forge PG19 study · synthetic', 'labels': {'orange': '1 row/tx', 'purple': '30 rows/tx'}}, 'data.json fig-repack-lock; brief 1.1')
+add('f02-repack', S(992.44), 16, {'kind': 'v2-repack', 'title': 'REPACK CONCURRENTLY: final lock wait', 'chip': 'Forge PG19 study · synthetic', 'labels': {'purple': '1 row/tx', 'orange': '30 rows/tx'}}, 'data.json fig-repack-lock; brief 1.1')
 
 # F03 (on air "if 1,000 listeners, from 200 per second, we went to 11,000 per second")
-add('f03-notify', S(1297.32), 15, {'kind': 'v2-notify', 'title': 'NOTIFY: 55x more throughput', 'chip': 'Forge PG19 study · synthetic', 'labels': {'listeners': 'listeners'}}, 'brief v3.0 1.2')
+add('f03-notify', S(1297.32), 15, {'kind': 'v2-notify', 'title': 'NOTIFY with 1,000 listeners', 'chip': 'Forge PG19 study · synthetic', 'labels': {}}, 'brief v3.0 1.2')
 
 # F04 (on air "a big fan of the auto vacuum improvements ... The prioritization")
 a = d['fig-autovac']; g0 = a['groups'][0]
-add('f04-autovac', S(1508.92), 15, {'kind': 'v2-autovac', 'title': 'Wraparound table goes first', 'chip': 'Forge PG19 study · synthetic', 'labels': {'tables': '121 tables'}}, 'data.json fig-autovac group 1; brief 1.3')
+add('f04-autovac', S(1508.92), 15, {'kind': 'v2-autovac', 'title': 'Autovacuum reaches the urgent table', 'chip': 'Forge PG19 study · synthetic', 'labels': {'last': 'last of 121', 'first': 'first'}}, 'data.json fig-autovac group 1; brief 1.3')
 
 # F05 VACUUM (PARALLEL) with cost delay: dropped. On air is parallel autovacuum ("just upgrade"),
 # the figure is manual VACUUM (PARALLEL); band strip 02 already says parallel autovacuum is off by default.
 
 # F11 (on air "our testing found some overhead from using advice ... around 10%"); replaces band strip 04
-add('f11-advice', S(1883.0), 13, {'kind': 'v2-advice', 'title': 'Plan advice costs throughput', 'chip': 'Forge PG19 study · synthetic', 'labels': {'off': 'off', 'on': 'on'}}, 'brief v3.0 1.4 "Cost (small test host, rough)"')
+add('f11-advice', S(1883.0), 13, {'kind': 'v2-advice', 'title': 'Plan advice: throughput, trivial query', 'chip': 'Forge PG19 study · synthetic', 'labels': {'off': 'off', 'on': 'on', 'range': 'to'}}, 'brief v3.0 1.4 "Cost (small test host, rough)"')
 
 # F06 (on air "JIT being off by default feels far more sensible")
-add('f06-jit', S(1927.68), 14, {'kind': 'v2-jit', 'title': 'JIT off by default', 'chip': 'Forge PG19 study', 'labels': {'longest': 'longest', 'short': 'short'}}, 'brief 2.10')
+add('f06-jit', S(1927.68), 14, {'kind': 'v2-jit', 'title': 'JIT off: short faster, long slower', 'chip': 'Forge PG19 study', 'labels': {'longest': 'longest query', 'short': 'short query'}}, 'brief 2.10')
 
 # F07 (on air "LZ4 in the case of toast")
-add('f07-lz4', S(1997.48), 11.5, {'kind': 'v2-lz4', 'title': 'LZ4 TOAST: faster inserts', 'chip': 'Forge PG19 study · synthetic', 'labels': {'pglz': 'pglz', 'lz4': 'lz4'}}, 'brief 2.11')
+add('f07-lz4', S(1997.48), 11.5, {'kind': 'v2-lz4', 'title': 'LZ4 by default: faster inserts', 'chip': 'Forge PG19 study · synthetic', 'labels': {'pglz': 'pglz', 'lz4': 'lz4'}}, 'brief 2.11')
 
 # F08 EXPLAIN ANALYZE timing: dropped (see REVIEW.md: the brief has no clear statement that fits the moment).
 
-# F09 (on air "full clone environment, checking that everything works"); kept only if the raw rehearsal records prove the counts
-if os.environ.get('REHEARSAL', '1') == '1':
-    add('f09-rehearsal', S(2906.44), 14, {'kind': 'v2-rehearsal', 'title': '687 upgrade rehearsals', 'chip': 'Forge PG19 study · synthetic', 'labels': {'false': 'false OK', 'start': 'no start'}}, 'data.json fig-rehearsal; brief 2.0')
+# F09 rehearsal moves to the blog; no video card.
 
 # F10 (on air "I'm very curious about plan flip analysis")
 pc = d['fig-plan-causes']; cls = {c['key']: c['light'] for c in pc['classes']}
-add('f10-plans', S(3144.8), 15, {'kind': 'v2-plans', 'title': '83 of 220 query templates changed', 'chip': 'Forge PG19 study · synthetic', 'labels': {'changed': '', 'commit': 'one commit'}}, 'data.json fig-plan-causes rows 1-2; brief 3.6')
+add('f10-plans', S(3144.8), 15, {'kind': 'v2-plans', 'title': 'Query plans changed in 19', 'chip': 'Forge PG19 study · synthetic', 'labels': {'total': 'of 220', 'changed': 'of 83', 'commit': 'from one commit'}}, 'data.json fig-plan-causes rows 1-2; brief 3.6')
 
 items.sort(key=lambda x: x['outStart'])
 

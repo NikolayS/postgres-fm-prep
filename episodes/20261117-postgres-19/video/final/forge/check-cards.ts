@@ -79,6 +79,8 @@ try {
   for(const it of items) {
     diskCheck();
     const props={...it.props,durationSec:it.duration};
+    // Spec: headline + graphic labels only; chip is excluded by visibleStrings.
+    // Whitespace-delimited row/tx is one word; numerals, versions and units are excluded.
     const strings=visibleStrings(props);
     const words=strings.flatMap((s:string)=>s.split(/\s+/)).filter((s:string)=>/\p{L}/u.test(s)&&!units.has(s)&&!/^\d+(?:\.\d+)*$/.test(s)).length;
     for(const qaNoText of [false,true]) {
@@ -100,4 +102,4 @@ try {
 } finally {rmSync(temp,{recursive:true,force:true});}
 if(process.argv.includes('--json')) console.log(JSON.stringify(results,null,2));
 else console.table(results);
-if(results.length!==9||results.some((r:any)=>!r.pass)) process.exitCode=1;
+if(results.length!==8||results.some((r:any)=>!r.pass)) process.exitCode=1;
