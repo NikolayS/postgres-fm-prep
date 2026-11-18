@@ -5,14 +5,14 @@ Usage: python3 michael-boost.py <recording dir> <in.mp4> <out.mp4> [dB]
 
 Michael's turns come from the transcript speaker labels (speaker_0 in review/work/src.words.json).
 They are mapped through edited-v2.cuts.json to output time. The audio gets +dB in his turns
-(default 8), then a limiter and the same two-pass loudnorm as render.ts (-16 LUFS, TP -2).
+(default 7) and the cold-open presence EQ, then a limiter and the same two-pass loudnorm as render.ts (-16 LUFS, TP -2).
 The video stream is copied.
 """
 import bisect, json, re, subprocess, sys
 from pathlib import Path
 
 rec, src, out = sys.argv[1:4]
-db = float(sys.argv[4]) if len(sys.argv) > 4 else 8.0
+db = float(sys.argv[4]) if len(sys.argv) > 4 else 7.0
 here = Path(__file__).resolve().parent
 W = [w for w in json.load(open(f"{rec}/review/work/src.words.json"))["words"] if w.get("type", "word") == "word"]
 seg = json.load(open(here / "edited-v2.cuts.json"))["segmentTimes"]
@@ -46,14 +46,21 @@ for a, b in outr:
     else: merged.append([a, b])
 print(f"{len(src_turns)} source turns -> {len(merged)} output ranges, {sum(b - a for a, b in merged):.0f} s, +{db} dB")
 
-expr = "+".join(f"between(t,{a:.3f},{b:.3f})" for a, b in merged)
+# Weight 0..1 with 40 ms linear ramps; volume is evaluated every 64 samples, so the switch
+# between the two paths does not click.
+R = 0.04
+expr = "+".join(f"clip((t-{a - R / 2:.3f})/{R},0,1)*clip(({b + R / 2:.3f}-t)/{R},0,1)" for a, b in merged)
 lin = 10 ** (db / 20)
-pre = f"volume='if({expr},{lin:.4f},1)':eval=frame,alimiter=limit=0.89:attack=5:release=50:level=false"
+# Michael's path: the cold-open v8 presence chain (high-pass, de-mud, presence) plus the gain;
+# the other path keeps everyone else as is. Each path is muted outside its own ranges.
+EQ = "highpass=f=90,equalizer=f=250:t=q:w=1:g=-2,equalizer=f=3000:t=q:w=0.9:g=4,equalizer=f=5500:t=q:w=1:g=2"
+pre = (f"asetnsamples=n=64,asplit[m][o];[m]{EQ},volume='{lin:.4f}*({expr})':eval=frame[m2];[o]volume='1-({expr})':eval=frame[o2];"
+       f"[m2][o2]amix=inputs=2:normalize=0,alimiter=limit=0.89:attack=5:release=50:level=false")
 LN = "loudnorm=I=-16:TP=-2.0:LRA=11"
-m = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", src, "-vn", "-af", f"{pre},{LN}:print_format=json", "-f", "null", "-"], capture_output=True, text=True).stderr
+m = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", src, "-vn", "-filter_complex", f"[0:a]{pre},{LN}:print_format=json", "-f", "null", "-"], capture_output=True, text=True).stderr
 j = json.loads(re.findall(r"\{[^{}]*\"input_i\"[^{}]*\}", m)[-1])
 ln2 = f"{LN}:measured_I={j['input_i']}:measured_TP={j['input_tp']}:measured_LRA={j['input_lra']}:measured_thresh={j['input_thresh']}:offset={j['target_offset']}:linear=true"
-subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-map", "0:v", "-map", "0:a", "-c:v", "copy", "-af", f"{pre},{ln2},aresample=48000",
+subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", src, "-filter_complex", f"[0:a]{pre},{ln2},aresample=48000[a]", "-map", "0:v", "-map", "[a]", "-c:v", "copy",
                 "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out], check=True)
 json.dump([[round(a, 3), round(b, 3)] for a, b in merged], open(Path(out).with_suffix(".michael.json"), "w"))
 print(f"wrote {out}")
