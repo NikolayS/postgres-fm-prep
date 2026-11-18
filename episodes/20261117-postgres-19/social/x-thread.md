@@ -12,7 +12,7 @@ Character counts are X counts (a link = 23; limit 280).
 
 4 posts.
 
-### 1/ First post (no link) — 278 chars — media: the brief's NOTIFY chart (18.7 vs 19 RC2, 1,000 listeners), or a speaker clip of Nik at 00:20:59 to 00:21:14
+### 1/ First post (no link) — 276 chars — media: the brief's NOTIFY chart (18.7 vs 19 RC2, 1,000 listeners), or a speaker clip of Nik at 00:20:59 to 00:21:14
 
 ```
 Postgres 19, LISTEN/NOTIFY with 1,000 listeners, each on its own channel:
@@ -20,7 +20,7 @@ Postgres 19, LISTEN/NOTIFY with 1,000 listeners, each on its own channel:
 18.7: 200 notifications/s
 19 RC2: at least 11,040/s
 
-New Postgres FM: @michristofides joins Kirk Wolak @yugedilbertfan and me for this one. Our favorite 19 features, and what to check before you upgrade.
+New Postgres FM: @michristofides, Kirk Wolak @yugedilbertfan and I talk Postgres 19. Our favorite 19 features, and what to check before you upgrade.
 ```
 
 ### 2/ Reply — 251 chars — media: speaker clip: Michael at 00:15:38 to 00:16:10, or Kirk at 00:16:14 to 00:16:50
@@ -61,7 +61,7 @@ v2 (2026-11-17): numbered list, one problem line per item, one small SQL example
 ```
 Postgres 19, LISTEN/NOTIFY with 1,000 listeners, each on its own channel: 200 notifications per second on 18.7, at least 11,040 on 19 RC2.
 
-New Postgres FM episode: Michael Christofides joins Kirk Wolak and me for this one. Our favorite Postgres 19 features, and what to check before you upgrade:
+New Postgres FM episode: Michael Christofides, Kirk Wolak and I talk about Postgres 19. Our favorite features, and what to check before you upgrade:
 
 1. REPACK (CONCURRENTLY). Shrink a bloated table without locking it for the whole rewrite. It is in core, based on pg_squeeze. Michael thinks it is fine for most workloads; on a very large, busy table I still have doubts. The final lock is longer when the first catch-up pass is long and writes are fast.
 

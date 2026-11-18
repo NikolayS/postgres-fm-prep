@@ -5,7 +5,7 @@
 ## Overview
 
 - **Question:** What stops an upgrade from 18 to 19, what do you gain, and what did we measure on 18.7 against 19 RC2?
-- **Hosts / guests:** Michael Christofides and Nikolay Samokhvalov, with Kirk Wolak.
+- **Hosts:** Nikolay Samokhvalov, Michael Christofides and Kirk Wolak (three co-hosts).
 - **Status:** Recorded 2026-11-17 (Zoom, about 58 min on air). Release text drafts in `notes/`, `thumbs/` and `social/`; edit not started.
 - **Study material deadline:** To be confirmed, with time zone.
 - **Recording date:** 2026-11-17, 10:13 PT (18:13 UTC).

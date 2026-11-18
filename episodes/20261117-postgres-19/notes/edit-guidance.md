@@ -109,7 +109,7 @@ The pg_restore case (c36) is the main one: Nik guessed on air that pg_restore re
 ## Kept on purpose (candidates)
 
 - 00:02:52 to 00:04:55, Michael on the delay: long, on topic.
-- 00:07:27 to 00:09:09, Kirk on reverts: the guest's view.
+- 00:07:27 to 00:09:09, Kirk on reverts: his view.
 - 00:28:13 to 00:30:44, Kirk on hints: the best explainer in the episode; cold-open option B comes from it.
 - 00:49:49 to 00:51:29, Kirk's upgrade process: long; a 30 s trim of the dev/staging middle is possible, not proposed.
 - Jokes: GTA 6 on November 19, "you meant decades", "I'm off my soap", "DDL in Postgres 20, please".
