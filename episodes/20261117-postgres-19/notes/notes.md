@@ -21,6 +21,17 @@ Times are YouTube video times of the first mention (see the note above).
 - [20:49] Postgres 19 for people who run it: PostgreSQL 19 RC2 vs 18.7 (study brief, PostgresAI): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 - [47:03] The plan comparison in the same brief: 4,273 queries planned on 18.7 and 19 RC2, causes of each plan change (section 3.6, "Diff your plans before you upgrade"): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c#plans
 
+About the numbers on screen. They come from this study. Most are synthetic tests of setups we built; they are not failure or speed rates of real systems. Hosts, trials and caveats per card:
+- Release credits: names in the release-notes acknowledgments of 10 to 19; commits in each development cycle (PostgreSQL git, data of 2026-11-11).
+- REPACK (CONCURRENTLY): 19.0, 16 dedicated vCPU, 20,000,000-row table, 16 writer sessions; median of 3 runs per point (2 valid runs at the first point).
+- LISTEN/NOTIFY: 1,000 listeners on their own channels, 4 notifiers, 8-vCPU dedicated host, median of 3 trials; our client was the limit, so 19 can go higher.
+- Autovacuum order: one old table (age 1.65 billion) among 120 bloated tables, 16-vCPU dedicated host, median of 3 trials.
+- Plan advice: advice generated for every query (always_store_advice_details), trivial query, small shared test host, 4 clients, 20 s, 2 trials; 11% against the modules off, 14% against them loaded and idle.
+- JIT: 22 TPC-H-derived queries, scale factor 10, 32-vCPU dedicated host, 3 trials; per-query numbers are exploratory. JIT itself did not change; the default did.
+- lz4 TOAST: insert of 200,000 jsonb documents of 16 KiB, 8-vCPU dedicated host, 3 trials. If disk matters more, set default_toast_compression = pglz.
+- Upgrade rehearsals: 687 rehearsals into 19 RC2 from 14 to 18, each on a fresh clone, of setups we built to break the upgrade (plus 6 killed on purpose and 99 that did not apply). 89 rehearsals (22 cases) passed pg_upgrade --check and then failed; in 31 (11 cases) 19 did not start.
+- Plan changes: 4,273 benchmark queries (263 templates; 220 stable on 18.7) planned on 18.7 and 19 RC2 with the same data and statistics; 61 of the 83 changed templates come from one planner commit (a tie-break), shown by a build without it.
+
 ### The release
 
 - [01:55] PostgreSQL 19 release notes: https://www.postgresql.org/docs/19/release-19.html
