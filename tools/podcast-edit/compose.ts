@@ -18,7 +18,7 @@
 import { $ } from "bun";
 import { mkdirSync } from "fs";
 import { dirname, join, resolve } from "path";
-import { filtergraph, prepareUi, renderHtml, type LayoutConfig } from "./layout";
+import { filtergraph, mergeCenter, prepareUi, renderHtml, type LayoutConfig } from "./layout";
 import type { Detection } from "./detect-tiles";
 import { sfxOff, talkChain } from "./freeze-audio";
 
@@ -143,7 +143,7 @@ if (import.meta.main) {
   // "center" overlays: the hosts move aside for that window (window time, before freezes).
   // A placement named in some place's "centers" (e.g. "london") moves the hosts to that named state.
   const sets = new Set(Object.values(c.place).flatMap((p) => Object.keys(p.centers ?? {})));
-  c.center = [...(c.center ?? []), ...overlays.filter((o) => o.placement === "center" || sets.has(o.placement ?? "")).map((o) => ({ from: o.outStart, to: o.outStart + o.dur, ...(o.placement !== "center" ? { set: o.placement } : {}) }))];
+  c.center = mergeCenter([...(c.center ?? []), ...overlays.filter((o) => o.placement === "center" || sets.has(o.placement ?? "")).map((o) => ({ from: o.outStart, to: o.outStart + o.dur, ...(o.placement !== "center" ? { set: o.placement } : {}) }))]);
   // UI layers for the show (same as layout.ts).
   const uiPngs = await prepareUi(c, work);
 

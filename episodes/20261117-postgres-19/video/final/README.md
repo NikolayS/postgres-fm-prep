@@ -41,12 +41,12 @@ It writes `preview/episode-197-final.mp4` and runs `edit/set_times.py <cold-open
 
 Only outro `a-shades-outro.wav` from episode 194; opening music belongs to the cold open. Outro arguments match episode 196 `render.sh` (`--music-lufs -20.5`, two-pass loudnorm to -16 LUFS, -1.5 dBTP), plus `--duck -21`: the music stays 21 dB under the talk (CLAUDE.md asks for 20 dB or more).
 
-Voices: `edit/michael-boost.py` levels the edited body before compose. Michael gets the cold-open v8 presence chain and +7 dB in his turns (his microphone runs about 9 dB quiet), and Nik gets +1.5 dB. Turns come from the transcript speaker labels, mapped through the cut plan, with 40 ms ramps. The script then applies a limiter and two-pass loudnorm. Word medians after it: Michael -20.0, Nik -19.9, Kirk -18.8 dB.
+Voices: `edit/michael-boost.ts` levels the edited body before compose. Michael gets the cold-open v8 presence chain and +7 dB in his turns (his microphone runs about 9 dB quiet), and Nik gets +1.5 dB. Turns come from the transcript speaker labels, mapped through the cut plan, with 40 ms ramps. The script then applies a limiter and two-pass loudnorm. Word medians after it: Michael -20.0, Nik -19.9, Kirk -18.8 dB.
 
 ## Render (v2, 2026-11-18)
 
 1. `bash edit/render-edited-v2.sh` regenerates `<recording>/review/edited-v2.mp4` (3,145.72 s) and checks it against the saved plan.
-2. `python3 edit/michael-boost.py <recording> edited-v2.mp4 edited-v2-mb.mp4` (run in `<recording>/review`).
+2. `bun edit/michael-boost.ts <recording> edited-v2.mp4 edited-v2-mb.mp4` (run in `<recording>/review`).
 3. Overlays in `<recording>/final-overlays/overlays-v2/` (one `manifest.json`, times in body seconds):
    - The 8 band strips reuse the v1 `.mov` files at the v2 times from `overlays/items.ts`.
    - The 8 Forge cards come from `bun scripts/render-forge.ts` in the overlay tool, after `python3 forge/forge-items.py` and a copy of `forge/Ep197.tsx`.
@@ -55,6 +55,16 @@ Voices: `edit/michael-boost.py` levels the edited body before compose. Michael g
 4. `render.sh` (replace the `<...>` placeholders). ffmpeg hung twice at body 3,143.8 s, just before the end-card xfade. The draft body was therefore rendered as two parts and joined with stream copy at 3,029.68 s, in a 1 s pause. The parts are the same command with `--until 3029.68` and with `--from 3029.68`. The tail audio got +0.5 dB to match the head speech level.
 5. Copy to `preview/episode-197-body-v2.mp4`, then `bash join.sh <absolute path to cold open>`. The cold open must be an absolute path, because the concat list is in a temp folder.
 6. QA: `bun tools/podcast-edit/qa.ts episodes/20261117-postgres-19` with the `EP197_*` variables from `qa.json` and `cards/roots.json`.
+
+## Render (v3, 2026-11-18): only the changed chunks
+
+Changes: f02 shortened to 9.5 s, then `radim-shot` (a real screenshot of Radim Marek's boringSQL post, 2x headless Chrome, `v2-shot` kind in `forge/Ep197.tsx`; images in the overlay tool's `public/shots/`), and the f07 card as "TOAST compression: LZ4 by default". Back-to-back center cards are one hosts-aside window (`mergeCenter` in `layout.ts`).
+
+1. `python3 forge/forge-items.py`, copy `forge/Ep197.tsx`, render the three cards (`DUMP_PROPS` + `remotion render`, then PNG-in-MOV), update `overlays-v2/manifest.json`.
+2. Render only body 790-840 s and 1730-1770 s: the `render.sh` command with `--from`/`--until`, under a watchdog (no CPU progress for 90 s: kill and retry).
+3. Split body v2's video at its keyframes (`-f segment -segment_times 789.9,839.9,1729.9,1769.9`, stream copy), put the two chunks in place of segments 1 and 3, and concat with `-itsoffset 0.021016` (body v2's video start). The audio stream of body v2 is kept as is: the cards have no sound, and the chunk audio matched it (0 lag, -0.14 dB).
+4. `bash trim-cold-open.sh preview/cold-open-v9a.mp4 preview/cold-open-v9a-trim.mp4 43.76`: the cold open ends on the last three-way split, 40 ms after the last word (seam gap about 0.37 s with the body's 0.33 s room tone), +2.5 dB to match the body start (-13.9 LUFS).
+5. `bash join.sh <absolute path>/cold-open-v9a-trim.mp4` (body: `preview/episode-197-body-v3.mp4`).
 
 Plan reproduction (run from `<recording>/review`): `bun <repo>/tools/podcast-edit/detect.ts work/src.words.json work/edl-v2.json --judgment <repo>/episodes/20261117-postgres-19/video/final/edit/judgment.applied.json --prosody work/prosody.json --review work/review-v2.txt`; use the render script's two patched renderer copies with `--plan-only` for planning. Keep the original EDL and plan unchanged.
 

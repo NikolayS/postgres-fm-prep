@@ -34,6 +34,7 @@ Postgres FM is produced by:
 
 - Michael Christofides, founder of pgMustard: https://pgmustard.com/
 - Nikolay Samokhvalov, founder of PostgresAI: https://postgres.ai/
+- Kirk Wolak, Software Architect at KiraSoft: https://www.kirasoft.com/
 
 With credit to:
 

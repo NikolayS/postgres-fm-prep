@@ -36,7 +36,11 @@ add('f01-numbers', S(183.62), 14, {'kind': 'v2-credits', 'title': 'People credit
 # F02 (on air "repack concurrently will actually be fine. And there are edge cases")
 r = d['fig-repack-lock']
 lab = {0.14: '0.14 s', 3.54: '3.54 s', 27.66: '27.7 s', 85.72: '85.7 s'}
-add('f02-repack', S(992.44), 16, {'kind': 'v2-repack', 'title': 'REPACK CONCURRENTLY: final lock wait', 'chip': 'Forge PG19 study · synthetic', 'labels': {'purple': '1 row/tx', 'orange': '30 rows/tx'}}, 'data.json fig-repack-lock; brief 1.1')
+add('f02-repack', S(992.44), 9.5, {'kind': 'v2-repack', 'title': 'REPACK CONCURRENTLY: final lock wait', 'chip': 'Forge PG19 study · synthetic', 'labels': {'purple': '1 row/tx', 'orange': '30 rows/tx'}}, 'data.json fig-repack-lock; brief 1.1')
+
+# Radim Marek's boringSQL post, a real screenshot (on air: Michael names the post in the REPACK
+# edge-case part). Starts when f02 ends. Shots: public/shots/radim-*.png (2x headless Chrome).
+add('radim-shot', S(1002.69), 9, {'kind': 'v2-shot', 'chip': 'boringsql.com \u00b7 Radim Marek', 'head': {'src': 'shots/radim-head.png', 'w': 1968, 'h': 276}, 'section': {'src': 'shots/radim-h2.png', 'w': 1408, 'h': 113}, 'body': {'src': 'shots/radim-para.png', 'w': 1408, 'h': 426, 'mark': [{'x': 353.953125, 'y': 111.5, 'w': 286.578125, 'h': 21}, {'x': 12, 'y': 143, 'w': 634.828125, 'h': 21}]}}, 'https://boringsql.com/posts/repack-concurrently-costs/ (screenshot)')
 
 # F03 (on air "if 1,000 listeners, from 200 per second, we went to 11,000 per second")
 add('f03-notify', S(1297.32), 15, {'kind': 'v2-notify', 'title': 'NOTIFY with 1,000 listeners', 'chip': 'Forge PG19 study · synthetic', 'labels': {}}, 'brief v3.0 1.2')
@@ -55,7 +59,7 @@ add('f11-advice', S(1883.0), 13, {'kind': 'v2-advice', 'title': 'Plan advice: th
 add('f06-jit', S(1927.68), 14, {'kind': 'v2-jit', 'title': 'JIT off: short faster, long slower', 'chip': 'Forge PG19 study', 'labels': {'longest': 'longest query', 'short': 'short query'}}, 'brief 2.10')
 
 # F07 (on air "LZ4 in the case of toast")
-add('f07-lz4', S(1997.48), 11.5, {'kind': 'v2-lz4', 'title': 'LZ4 by default: faster inserts', 'chip': 'Forge PG19 study · synthetic', 'labels': {'pglz': 'pglz', 'lz4': 'lz4'}}, 'brief 2.11')
+add('f07-lz4', S(1997.48), 11.5, {'kind': 'v2-lz4', 'title': 'TOAST compression: LZ4 by default', 'chip': 'Forge PG19 study · synthetic', 'labels': {'pglz': 'pglz (18.7 default)', 'lz4': 'lz4 (19 default)', 'caption': 'Insert time, 200,000 jsonb docs × 16 KiB'}}, 'brief 2.11')
 
 # F08 EXPLAIN ANALYZE timing: dropped (see REVIEW.md: the brief has no clear statement that fits the moment).
 

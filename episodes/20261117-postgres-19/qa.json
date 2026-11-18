@@ -13,15 +13,21 @@
   "eyes": {
     "frames": [
       {
-        "label": "cold open: last frame with picture (the final frame, 44.68 s, is black)",
-        "video": "${EP197_PREVIEW}/cold-open-v9a.mp4",
-        "t": 44.6,
+        "label": "cold open: last frame (trimmed at 43.76 s, the last three-way split after the last word)",
+        "video": "${EP197_PREVIEW}/cold-open-v9a-trim.mp4",
+        "t": 43.72,
+        "expectFaces": 3
+      },
+      {
+        "label": "final: last cold-open frame",
+        "video": "${EP197_PREVIEW}/episode-197-final.mp4",
+        "t": 43.72,
         "expectFaces": 3
       },
       {
         "label": "body first half second",
         "video": "${EP197_PREVIEW}/episode-197-final.mp4",
-        "t": 45.225,
+        "t": 44.26,
         "expectFaces": 3
       }
     ]
@@ -41,6 +47,11 @@
       {
         "id": "f02-repack",
         "file": "${EP197_OVERLAYS}/f02-repack.mov",
+        "t": 1.5
+      },
+      {
+        "id": "radim-shot",
+        "file": "${EP197_OVERLAYS}/radim-shot.mov",
         "t": 1.5
       },
       {
@@ -118,9 +129,9 @@
     "items": [
       {
         "id": "f01-numbers",
-        "at": 175.205,
+        "at": 174.24,
         "times": [
-          175.205
+          174.24
         ],
         "box": [
           40,
@@ -131,9 +142,22 @@
       },
       {
         "id": "f02-repack",
-        "at": 869.705,
+        "at": 859.24,
         "times": [
-          869.705
+          859.24
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      },
+      {
+        "id": "radim-shot",
+        "at": 868.77,
+        "times": [
+          868.77
         ],
         "box": [
           40,
@@ -144,9 +168,9 @@
       },
       {
         "id": "f03-notify",
-        "at": 1137.705,
+        "at": 1136.74,
         "times": [
-          1137.705
+          1136.74
         ],
         "box": [
           40,
@@ -157,9 +181,9 @@
       },
       {
         "id": "01-score-weights",
-        "at": 1256.955,
+        "at": 1255.99,
         "times": [
-          1256.955
+          1255.99
         ],
         "box": [
           24,
@@ -170,9 +194,9 @@
       },
       {
         "id": "f04-autovac",
-        "at": 1338.705,
+        "at": 1337.74,
         "times": [
-          1338.705
+          1337.74
         ],
         "box": [
           40,
@@ -183,9 +207,9 @@
       },
       {
         "id": "02-parallel-av",
-        "at": 1345.665,
+        "at": 1344.7,
         "times": [
-          1345.665
+          1344.7
         ],
         "box": [
           24,
@@ -196,9 +220,9 @@
       },
       {
         "id": "03-stash-advice",
-        "at": 1635.915,
+        "at": 1634.95,
         "times": [
-          1635.915
+          1634.95
         ],
         "box": [
           24,
@@ -209,9 +233,9 @@
       },
       {
         "id": "f11-advice",
-        "at": 1694.385,
+        "at": 1693.42,
         "times": [
-          1694.385
+          1693.42
         ],
         "box": [
           40,
@@ -222,9 +246,9 @@
       },
       {
         "id": "f06-jit",
-        "at": 1737.705,
+        "at": 1736.74,
         "times": [
-          1737.705
+          1736.74
         ],
         "box": [
           40,
@@ -235,9 +259,9 @@
       },
       {
         "id": "f07-lz4",
-        "at": 1801.205,
+        "at": 1800.24,
         "times": [
-          1801.205
+          1800.24
         ],
         "box": [
           40,
@@ -248,9 +272,9 @@
       },
       {
         "id": "05-tsc",
-        "at": 2198.025,
+        "at": 2197.06,
         "times": [
-          2198.025
+          2197.06
         ],
         "box": [
           24,
@@ -261,9 +285,9 @@
       },
       {
         "id": "06-release-notes",
-        "at": 2374.825,
+        "at": 2373.86,
         "times": [
-          2374.825
+          2373.86
         ],
         "box": [
           24,
@@ -274,9 +298,9 @@
       },
       {
         "id": "07-pg-restore",
-        "at": 2401.025,
+        "at": 2400.06,
         "times": [
-          2401.025
+          2400.06
         ],
         "box": [
           24,
@@ -287,9 +311,9 @@
       },
       {
         "id": "08-not-on-table",
-        "at": 2501.245,
+        "at": 2500.28,
         "times": [
-          2501.245
+          2500.28
         ],
         "box": [
           24,
@@ -300,9 +324,9 @@
       },
       {
         "id": "09-upgrade-fails",
-        "at": 2517.605,
+        "at": 2516.64,
         "times": [
-          2517.605
+          2516.64
         ],
         "box": [
           24,
@@ -313,9 +337,9 @@
       },
       {
         "id": "f10-plans",
-        "at": 2881.705,
+        "at": 2880.74,
         "times": [
-          2881.705
+          2880.74
         ],
         "box": [
           40,
@@ -330,6 +354,6 @@
     "png": true
   },
   "skip": {
-    "captions": "v9a caps-932-1117.jsonl exists in scratchpad/v9/fr-a, but all 186 referenced JPEG frames (0932\u20131117) were deleted by build.sh after encoding; prefix caption records/frames were not found. Cannot run the supplied records against missing frames."
+    "captions": "v9a caps-932-1117.jsonl exists in scratchpad/v9/fr-a, but all 186 referenced JPEG frames (0932–1117) were deleted by build.sh after encoding; prefix caption records/frames were not found. Cannot run the supplied records against missing frames."
   }
 }

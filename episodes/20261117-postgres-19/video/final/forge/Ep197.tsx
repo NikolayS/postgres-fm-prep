@@ -1,5 +1,5 @@
 import React from 'react';
-import {AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig, Easing, delayRender, continueRender, staticFile} from 'remotion';
+import {AbsoluteFill, Img, interpolate, spring, useCurrentFrame, useVideoConfig, Easing, delayRender, continueRender, staticFile} from 'remotion';
 import {font} from './font';
 
 // Episode 197 (Postgres 19) central illustrations from the Forge PG19 study (brief
@@ -265,11 +265,12 @@ const Stats: React.FC<StatsProps> = (p) => {
   );
 };
 
-export type ForgeProps = HBarsProps | LineProps | DotsProps | StackProps | PopProps | VBarsProps | StatsProps | V2Props;
+export type ForgeProps = CenterShotProps | HBarsProps | LineProps | DotsProps | StackProps | PopProps | VBarsProps | StatsProps | V2Props;
 export const Forge: React.FC<ForgeProps> = (p) => {
   switch (p.kind) {
     case 'v2-credits': case 'v2-repack': case 'v2-notify': case 'v2-autovac':
     case 'v2-advice': case 'v2-jit': case 'v2-lz4': case 'v2-rehearsal': case 'v2-plans': return <V2Card {...p} />;
+    case 'v2-shot': return <CenterShot {...(p as any)} />;
     case 'hbars': return <HBars {...p} />;
     case 'line': return <Line {...p} />;
     case 'dots': return <Dots {...p} />;
@@ -384,8 +385,38 @@ const V2Card: React.FC<V2Props> = (p) => {
     <svg width={1920} height={1080} style={{position:'absolute',opacity:panel}}>
       <T x={90} y={330} size={p.kind==='v2-repack'?54:56} color={C.plum} weight={800} opacity={lin(.2,.6)}>{p.title}</T>
       <g opacity={lin(.2,.6)}><rect x={p.chip?.includes('synthetic')?1210:1328} y={290} width={p.chip?.includes('synthetic')?340:222} height={40} rx={20} fill={C.plum}/><T x={1534} y={318} size={22} color="white" anchor="end">{p.chip}</T></g>
+      {labels.caption?<T x={1550} y={842} size={30} color={C.faint} anchor="end" opacity={lin(.8,1)}>{labels.caption}</T>:null}
       <svg opacity={lin(.8,1)} x={box.x} y={box.y} width={box.w} height={box.h} viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`} overflow="visible">{art}</svg>
     </svg>
 
+  </AbsoluteFill>;
+};
+
+// Center-placement real screenshot (hosts in the right column): page header on top, one
+// section below with its key sentence marked. Images are 2x captures in public/shots/
+// (scripts: capture in the episode's notes); `mark` rects are CSS px inside the `body` clip.
+export type CenterShotProps = {kind: 'v2-shot'; chip: string; head: {src: string; w: number; h: number}; section: {src: string; w: number; h: number}; body: {src: string; w: number; h: number; mark: {x: number; y: number; w: number; h: number}[]}; durationSec: number; title?: string};
+const CenterShot: React.FC<CenterShotProps> = (p) => {
+  const {frame, fps, grow, fadeOut} = useT();
+  const panel = spring({frame: Math.min(frame, .4 * fps), fps, durationInFrames: Math.round(.4 * fps), config: {damping: 18, stiffness: 200, mass: .6}});
+  const sheet = {background: '#fbfaf8', borderRadius: 12, border: '1px solid #e4e1dc', boxShadow: '0 2px 8px rgba(61,15,69,0.12)', overflow: 'hidden', position: 'absolute' as const};
+  const hw = 1080, hh = hw * p.head.h / p.head.w;
+  const bw = 1040, k = bw / p.section.w, sh = p.section.h * k, bh = p.body.h * k, gap = 22, css = bw / (p.body.w / 2);
+  const top = 455, mark = grow(1.6, .8);
+  return <AbsoluteFill style={{fontFamily: 'Inter, sans-serif', opacity: fadeOut}}>
+    <div style={{position: 'absolute', left: PANEL.x, top: PANEL.y, width: PANEL.w, height: PANEL.h, borderRadius: 20, background: 'rgba(253,253,254,0.97)', boxShadow: '0 3px 6px rgba(61,15,69,0.22)', opacity: panel, transform: `scale(${.97 + .03 * panel})`}}/>
+    <div style={{...sheet, left: 90, top: 280, width: hw, height: hh, opacity: grow(.2, .4)}}><Img src={staticFile(p.head.src)} style={{width: hw, height: hh, display: 'block'}}/></div>
+    <div style={{...sheet, left: 90, top, width: bw, height: sh + gap + bh, opacity: grow(.6, .4)}}>
+      <Img src={staticFile(p.section.src)} style={{width: bw, height: sh, display: 'block'}}/>
+      <div style={{height: gap, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><div style={{width: bw - 48, borderTop: '2px dashed #d4d0c8'}}/></div>
+      <div style={{position: 'relative', width: bw, height: bh}}>
+        <Img src={staticFile(p.body.src)} style={{width: bw, height: bh, display: 'block'}}/>
+        {p.body.mark.map((m, i) => <div key={i} style={{position: 'absolute', left: m.x * css - 4, top: m.y * css - 2, width: (m.w * css + 8) * Math.max(0, Math.min(1, mark * p.body.mark.length - i)), height: m.h * css + 4, background: 'rgba(255,214,0,0.45)', mixBlendMode: 'multiply', borderRadius: 3}}/>)}
+      </div>
+    </div>
+    <svg width={1920} height={1080} style={{position: 'absolute', opacity: grow(.2, .4)}}>
+      <rect x={1550 - 350} y={290} width={350} height={40} rx={20} fill={C.plum}/>
+      <text x={1534} y={318} fontSize={22} fill="white" fontWeight={600} textAnchor="end">{p.chip}</text>
+    </svg>
   </AbsoluteFill>;
 };

@@ -28,7 +28,7 @@ const EPISODE = /^https?:\/\/(www\.)?postgres\.fm\/episodes\//;
 
 const FEEDBACK = { text: "What did you like or not like? What should we discuss next time? Let us know via a YouTube comment, on social media, or by commenting on our Google doc!",
   social: "https://postgres.fm/people", doc: "https://docs.google.com/document/d/1PNGSn_d0A7gTR4C0p6geQyHOTgdpitKCRvafCNnT-44/edit#heading=h.v4ncheatetql" };
-const PRODUCERS = [["Michael Christofides, founder of pgMustard", "https://pgmustard.com/"], ["Nikolay Samokhvalov, founder of PostgresAI", "https://postgres.ai/"]];
+const PRODUCERS = [["Michael Christofides, founder of pgMustard", "https://pgmustard.com/"], ["Nikolay Samokhvalov, founder of PostgresAI", "https://postgres.ai/"], ["Kirk Wolak, Software Architect at KiraSoft", "https://www.kirasoft.com/"]];
 const CREDITS = ["Jessie Draws for the elephant artwork", "Intro and outro music: our own arrangement of Apple Loops from GarageBand (royalty-free under the GarageBand licence)"];
 
 // ---- Times ---------------------------------------------------------------------------------
@@ -90,7 +90,7 @@ export function buildNotes(n: Notes, m: Maps): Out {
   const html = `<div>${esc(n.summary)}<br>&nbsp;<br>${intro}&nbsp;<br>Times are podcast times of the first mention.</div>` +
     groups(n.links).map(([g, ls]) => `<div><br><strong>${esc(g)}</strong></div><ul>${ls.map(li).join("")}</ul>`).join("") +
     `<div><br></div><div>~~~<br><br>What did you like or not like? What should we discuss next time? Let us know via a YouTube comment, on <a href="${FEEDBACK.social}">social media,</a> or by commenting on <a href="${FEEDBACK.doc}">our Google doc</a>!</div>` +
-    `<div><br>~~~<br><br>Postgres FM is produced by:</div><ul>${PRODUCERS.map(([t, u]) => `<li>${esc(t.replace(/(pgMustard|PostgresAI)$/, ""))}<a href="${u}">${t.match(/(pgMustard|PostgresAI)$/)![0]}</a></li>`).join("")}</ul>` +
+    `<div><br>~~~<br><br>Postgres FM is produced by:</div><ul>${PRODUCERS.map(([t, u]) => `<li>${esc(t.replace(/(pgMustard|PostgresAI|KiraSoft)$/, ""))}<a href="${u}">${t.match(/(pgMustard|PostgresAI|KiraSoft)$/)![0]}</a></li>`).join("")}</ul>` +
     `<div><br></div><div>With credit to:</div><ul>${CREDITS.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`;
 
   // YouTube shows plain text: no markdown, no HTML; a "0:34" time is a link to that moment.

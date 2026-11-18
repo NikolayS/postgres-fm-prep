@@ -1,6 +1,6 @@
 {
   "id": "f07-lz4",
-  "headline": "LZ4 by default: faster inserts",
+  "headline": "TOAST compression: LZ4 by default",
   "chart": {
     "type": "bars",
     "scale": "linear",
@@ -15,16 +15,17 @@
         "n": "pg19",
         "color": "#d9822b"
       }
-    ]
+    ],
+    "caption": "Insert time, 200,000 jsonb docs × 16 KiB"
   },
   "heroes": [
     {
       "n": "pg18",
-      "label": "pglz"
+      "label": "pglz (18.7 default)"
     },
     {
       "n": "pg19",
-      "label": "lz4"
+      "label": "lz4 (19 default)"
     }
   ],
   "chip": "Forge PG19 study · synthetic",
@@ -43,6 +44,22 @@
       "source": {
         "file": "C/runs",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nprint(st.median(float(re.search(r\"insert_seconds ([0-9.]+)\",p.read_text())[1]) for p in f.glob(\"*-D04-19tc.avoff-jsonb-a[123]/d04.txt\") if \"-pilot-\" not in str(p)))' \"$F\""
+      }
+    },
+    "docs": {
+      "value": 200000,
+      "display": "200,000",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,re,statistics as st\nfrom pathlib import Path\nf=Path(sys.argv[1])\nprint(st.median(int(re.search(r\"compression\\|\\w+\\|(\\d+)\",p.read_text())[1]) for p in f.glob(\"*-D04-1[89]tc.avoff-jsonb-a[123]/d04.txt\") if \"-pilot-\" not in str(p)))' \"$F\""
+      }
+    },
+    "kib": {
+      "value": 16,
+      "display": "16 KiB",
+      "source": {
+        "file": "C/runs",
+        "compute": "python3 -c 'import sys,re,statistics as st\nfrom pathlib import Path\nf=Path(sys.argv[1])\nprint(st.median(int(re.search(r\"docs_raw_text_bytes\\|(\\d+)\",p.read_text())[1])/int(re.search(r\"compression\\|\\w+\\|(\\d+)\",p.read_text())[1])/1024 for p in f.glob(\"*-D04-1[89]tc.avoff-jsonb-a[123]/d04.txt\") if \"-pilot-\" not in str(p)))' \"$F\""
       }
     }
   },

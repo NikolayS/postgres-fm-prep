@@ -5,7 +5,7 @@ import { afterAll, describe, expect, test } from "bun:test";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
-import { chromeHtml, filtergraph, labelHtml, resolvePlaces, trackAt, trackCommands, type LayoutConfig, type Track } from "../layout";
+import { chromeHtml, filtergraph, mergeCenter, labelHtml, resolvePlaces, trackAt, trackCommands, type LayoutConfig, type Track } from "../layout";
 import type { Detection } from "../detect-tiles";
 
 const dir = mkdtempSync(join(tmpdir(), "layout-test-"));
@@ -96,4 +96,30 @@ describe("shades header", () => {
   test("labels have no bar in the shades theme", () => {
     expect(labelHtml({ ...host, label: "A" }, true, "shades")).not.toContain('class="bar"');
   });
+});
+
+test("back-to-back center windows of one state merge; other states and far windows stay apart", () => {
+  const m = mergeCenter([
+    { from: 820.01, to: 829.01 },
+    { from: 810.48, to: 819.98 },
+    { from: 829.2, to: 835, set: "london" },
+    { from: 900, to: 910 },
+  ]);
+  expect(m).toEqual([
+    { from: 810.48, to: 829.01 },
+    { from: 829.2, to: 835, set: "london" },
+    { from: 900, to: 910 },
+  ]);
+});
+
+test("label fade: one blend per window ramp and plain 'B' holds, never one expression with every window", () => {
+  const c = { ...config({ a: { ...host, center: { x: 1600, y: 300, w: 266 } } }), center: [{ from: 2, to: 8 }, { from: 12, to: 20 }], transition: 0.6 };
+  const { graph } = filtergraph(c, tiles, null);
+  const blends = graph.match(/blend=all_expr='[^']*':enable='[^']*'/g) ?? [];
+  expect(blends.length).toBe(4); // 2 windows (ramps) + 2 holds
+  const ramp = blends.filter((b) => !b.includes("all_expr='B'"));
+  expect(ramp.length).toBe(2);
+  expect(ramp[0]).toContain("2.000"); expect(ramp[0]).not.toContain("12.000");
+  expect(ramp[1]).toContain("12.000"); expect(ramp[1]).not.toContain("(T-2.000)");
+  expect(blends.filter((b) => b.includes("all_expr='B'")).map((b) => b.match(/enable='([^']*)'/)![1])).toEqual(["between(t,2.600,7.400)", "between(t,12.600,19.400)"]);
 });

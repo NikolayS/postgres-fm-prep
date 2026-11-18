@@ -21,6 +21,7 @@ What did you like or not like? What should we discuss next time? Let us know via
 Postgres FM is produced by:
 Michael Christofides, founder of pgMustard: https://pgmustard.com/
 Nikolay Samokhvalov, founder of PostgresAI: https://postgres.ai/
+Kirk Wolak, Software Architect at KiraSoft: https://www.kirasoft.com/
 
 With credit to:
 Jessie Draws for the elephant artwork

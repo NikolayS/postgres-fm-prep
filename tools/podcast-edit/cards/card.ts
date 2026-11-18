@@ -13,7 +13,7 @@ export type NumberRef = {
 };
 export type Ref = { label: string; n: string; color?: string };
 export type Chart =
-  | { type: "bars"; unit?: string; scale?: "linear"; bars: Ref[] }
+  | { type: "bars"; unit?: string; caption?: string; scale?: "linear"; bars: Ref[] } // caption: what was measured, under the bars
   | { type: "donut"; scale?: "linear"; parts: Ref[] }
   | { type: "line"; scale?: "linear"; xLabel?: string; yLabel?: string; series: { label: string; color?: string; points: { x: string; y: string }[] }[] };
 export type Hero = { n: string; label?: string };
@@ -59,7 +59,7 @@ export function chartRefs(c: Chart): string[] {
 export function textStrings(c: Finding): string[] {
   const ch = c.chart as any;
   const labels = [...(ch.bars ?? []), ...(ch.parts ?? []), ...(ch.series ?? [])].map((r: any) => r.label);
-  return [c.headline, c.chip, ...c.heroes.map((h) => h.label ?? ""), ...labels, ch.xLabel ?? "", ch.yLabel ?? "", ch.unit ?? ""].filter(Boolean);
+  return [c.headline, c.chip, ...c.heroes.map((h) => h.label ?? ""), ...labels, ch.xLabel ?? "", ch.yLabel ?? "", ch.unit ?? "", ch.caption ?? ""].filter(Boolean);
 }
 
 export function lintCard(c: Card | Finding, mode: "card" | "finding"): string[] {

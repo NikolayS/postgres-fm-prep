@@ -87,6 +87,19 @@ export function merge(iv: [number, number][], gap = 0.5): [number, number][] {
   return out;
 }
 
+// Center windows of the same state that touch or nearly touch become one window, so back-to-back
+// cards keep the hosts aside instead of moving them out and back in between (episode 197:
+// the REPACK chart and the boringSQL screenshot).
+export function mergeCenter(w: { from: number; to: number; set?: string }[], gap = 0.5): { from: number; to: number; set?: string }[] {
+  const out: { from: number; to: number; set?: string }[] = [];
+  for (const x of [...w].sort((a, b) => a.from - b.from)) {
+    const last = out.at(-1);
+    if (last && last.set === x.set && x.from - last.to <= gap) last.to = Math.max(last.to, x.to);
+    else out.push({ ...x });
+  }
+  return out;
+}
+
 // Crop of a tile: trim borders and the name label, then center (or focus) to the target aspect.
 export function cropFor(r: Rect, crop: LayoutConfig["crop"], p: Place): Rect {
   const x0 = r.x + r.w * crop.left, x1 = r.x + r.w * (1 - crop.right);
