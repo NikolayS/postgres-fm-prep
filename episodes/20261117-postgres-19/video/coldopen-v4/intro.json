@@ -1,0 +1,22 @@
+{
+  "note": "Announcer intro (v4a, v4c). Seconds from the start of the clip. vo: line file (from vo.sh) and start time. shots: what is on screen. Name cards hold 2.7 s; the name text fades in 0.35 s after the cut and out 0.35 s before the next shot.",
+  "end": 17.8,
+  "vo": [
+    { "line": 1, "at": 0.40, "text": "Live from three time zones... it's Postgres F M!" },
+    { "line": 2, "at": 4.45, "text": "Starring..." },
+    { "line": 3, "at": 5.45, "text": "Nikolay Sah-mokh-VAH-lov!" },
+    { "line": 4, "at": 8.15, "text": "Michael Kristoffideez!" },
+    { "line": 5, "at": 10.75, "text": "And our guest... Kirk VOH-lak!" },
+    { "line": 6, "at": 14.65, "text": "Tonight: Postgres nineteen!" }
+  ],
+  "shots": [
+    { "kind": "caps", "from": 0, "to": 2.3, "text": "LIVE FROM THREE TIME ZONES" },
+    { "kind": "wordmark", "from": 2.3, "to": 4.35 },
+    { "kind": "giant", "from": 4.35, "to": 5.25, "text": "STARRING" },
+    { "kind": "card", "from": 5.25, "to": 7.95, "who": "nik", "kicker": "STARRING", "first": "NIKOLAY", "last": "SAMOKHVALOV" },
+    { "kind": "card", "from": 7.95, "to": 10.65, "who": "michael", "kicker": "STARRING", "first": "MICHAEL", "last": "CHRISTOFIDES" },
+    { "kind": "giant", "from": 10.65, "to": 11.75, "text": "GUEST" },
+    { "kind": "card", "from": 11.75, "to": 14.45, "who": "kirk", "kicker": "AND OUR GUEST", "first": "KIRK", "last": "WOLAK" },
+    { "kind": "header", "from": 14.45, "to": 17.8 }
+  ]
+}

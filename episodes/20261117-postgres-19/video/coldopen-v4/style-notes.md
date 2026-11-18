@@ -28,11 +28,11 @@ The text rule holds: the title text ends by y 800, and the montage keeps the str
 
 ## Variants (`build.sh a|b|c`)
 
-| | Music | FX |
-|---|---|---|
-| v4a | Apple Loops "Throwback Funk" (Disco Funk), 120 BPM, A minor: beat, synth bass, brass | Title (typing, ellipse draw-ons, grain, push-ins), snap punch-ins, toolkit SFX in the title: U2 typing on the typed text, L punch on the giant words, K stroke on the ellipse and the face run, G10 on the header, G9 into the montage |
-| v4b | Apple Loops Electro House, 128 BPM: "Blueprint Beat 01", "Bedrock Bass", "Americana Synth", "Big Snare Roll Topper" build, "Basic Core Beat" bed | As v4a, timed to 128 BPM (the title is 5.6 s) |
-| v4c | v4a, plus "80s Synth FX Riser 01" into the header and into the closing line | As v4a, plus a white flash frame and an RGB split on every cut and punch-in, an impact shake on each punch-in, a punch hit on each punch-in, and flash and RGB ghosts in the title |
+| | Opening | Montage | Music | FX |
+|---|---|---|---|---|
+| v4a | Announcer intro (`intro.json`, `intro.ts`, 17.8 s), see `README.md` | Five topics, 24.8 s (CVE and NOTIFY bites dropped) | Apple Loops "Throwback Funk" (Disco Funk), 120 BPM, A minor: beat, synth bass, brass | Typed caps, wordmark, giant sliding words, name cards on the hosts' own video in black and white with a slow push-in, the ellipse on "19", grain, snap punch-ins; toolkit SFX (U2, K, L, G9, G10) |
+| v4b | The 12-beat title, no announcer (`title.ts`, 5.6 s) | All six topics, 34.2 s, with the NOTIFY strip | Apple Loops Electro House, 128 BPM: "Blueprint Beat 01", "Bedrock Bass", "Americana Synth", "Big Snare Roll Topper" build, "Basic Core Beat" bed | As v4a, with stills and typed names (the first cut, kept for comparison) |
+| v4c | As v4a | As v4a | v4a, plus "80s Synth FX Riser 01" into Kirk's card and into the closing line | As v4a, plus a white flash frame and an RGB split on every montage cut and punch-in, an impact shake and a punch on each punch-in. The intro has no flash: name cards fade in and out |
 
 All three: -16 LUFS integrated with a limiter at 0.75, fade in 0.2 s, fade out 0.6 s.
 
@@ -41,6 +41,7 @@ All three: -16 LUFS integrated with a limiter at 0.75, fade in 0.2 s, fade out 0
 | Asset | Source | License |
 |---|---|---|
 | All music loops above | Apple Loops that ship with GarageBand/Logic, from `/Library/Audio/Apple Loops/Apple/` | Royalty-free for use in your own music and soundtracks (Apple's GarageBand/Logic software license). The loops are arranged into a new cue, not distributed as stand-alone loops. Same basis as the episode 194-196 cues (`tools/podcast-edit/brand/music`). |
+| Announcer voice | ElevenLabs text to speech, premade stock voice "Bill" (`pqHfZKP75CvOlQylNhV4`), on our paid ElevenLabs account | Commercial use under the ElevenLabs paid-plan terms. A stock voice, not a clone or an imitation of any real announcer. |
 | U2, K, L, G9, G10 SFX | `tools/podcast-edit/sfx` | Synthesized by us (`generate.py`); owned by PostgresAI. |
 | Font | Lato (brand-public/fonts) | SIL Open Font License |
 | Host stills and footage | The episode 197 Zoom recording | Ours |
