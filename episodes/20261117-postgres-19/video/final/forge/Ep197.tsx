@@ -332,10 +332,10 @@ const V2Card: React.FC<V2Props> = (p) => {
   let art:React.ReactNode;
   switch(p.kind) {
     case 'v2-credits': {
-      const values=[324,313,410,380,415,411,361,463,507,645];
+      const values=[410,380,415,411,361,463,507,645]; // 12..19 (the card gate allows 8 bars)
       art=<>
         <g opacity={grow(.8,.3)}>{[0,200,400,600].map(v=><g key={v}>{v>0?<line x1={180} x2={1160} y1={800-v*.6} y2={800-v*.6} stroke={C.grey} strokeOpacity={.25}/>:null}<T x={160} y={800-v*.6} center anchor="end">{v}</T></g>)}</g>
-        {values.map((v,i)=>{const k=i===9?grow(3.2,.9):grow(1.1+.22*i,.5),h=v*.6*k,x=193+98*i,r=Math.min(8,h/2);return <g key={i}><path d={`M${x},800 V${800-h+r} Q${x},${800-h} ${x+r},${800-h} H${x+72-r} Q${x+72},${800-h} ${x+72},${800-h+r} V800 Z`} fill={i===9?C.s19:C.grey}/><T x={x+36} y={842} size={34} anchor="middle" color={i===9?C.s19:C.soft} weight={i===9?800:600} opacity={grow(.8,.3)}>{10+i}</T></g>;})}
+        {values.map((v,i)=>{const k=i===7?grow(3.2,.9):grow(1.1+.27*i,.5),h=v*.6*k,x=195+122*i,r=Math.min(8,h/2);return <g key={i}><path d={`M${x},800 V${800-h+r} Q${x},${800-h} ${x+r},${800-h} H${x+88-r} Q${x+88},${800-h} ${x+88},${800-h+r} V800 Z`} fill={i===7?C.s19:C.grey}/><T x={x+44} y={842} size={34} anchor="middle" color={i===7?C.s19:C.soft} weight={i===7?800:600} opacity={grow(.8,.3)}>{12+i}</T></g>;})}
         <T x={1215} y={610} size={160} weight={800} color={C.plum} opacity={grow(3.2,.15)}>{fmt(645*grow(3.2,.9))}</T>
         <T x={1215} y={675} size={44} color={C.s19} opacity={grow(4.1,.4)}>{labels.people}</T>
       </>;break;
@@ -380,7 +380,7 @@ const V2Card: React.FC<V2Props> = (p) => {
   const box=graphicBoxes(p)[0];
   return <AbsoluteFill data-qa-no-text={p.qaNoText || undefined} style={{fontFamily:'Inter, sans-serif',opacity:fadeOut}}>
     <NoTextStyle/>
-    <div style={{position:'absolute',left:PANEL.x,top:PANEL.y,width:PANEL.w,height:PANEL.h,borderRadius:20,background:'rgba(253,253,254,0.97)',boxShadow:'0 18px 50px rgba(61,15,69,0.28)',opacity:panel,transform:`scale(${.97+.03*panel})`}}/>
+    <div style={{position:'absolute',left:PANEL.x,top:PANEL.y,width:PANEL.w,height:PANEL.h,borderRadius:20,background:'rgba(253,253,254,0.97)',boxShadow:'0 3px 6px rgba(61,15,69,0.22)',opacity:panel,transform:`scale(${.97+.03*panel})`}}/>
     <svg width={1920} height={1080} style={{position:'absolute',opacity:panel}}>
       <T x={90} y={330} size={p.kind==='v2-repack'?54:56} color={C.plum} weight={800} opacity={lin(.2,.6)}>{p.title}</T>
       <g opacity={lin(.2,.6)}><rect x={p.chip?.includes('synthetic')?1210:1328} y={290} width={p.chip?.includes('synthetic')?340:222} height={40} rx={20} fill={C.plum}/><T x={1534} y={318} size={22} color="white" anchor="end">{p.chip}</T></g>

@@ -34,7 +34,7 @@ for(let y=0;y<=h;y++) {
 }
 if(bestB-bestA<h*.5) throw new Error('Photo bounds not found');
 const top=bestA+4, bottom=bestB-4, ch=bottom-top;
-console.log(JSON.stringify({content:[bestA,bestB],crop:{x:0,y:top,width:w,height:ch},photo:{top:250,bottom:900}}));
+console.log(JSON.stringify({content:[bestA,bestB],crop:{x:0,y:top,width:w,height:ch},photo:{top:250,bottom:890}}));
 const recording=process.env.RECORDING ?? '/Users/nik/Documents/Zoom/2026-11-17 10.02.00 .fm recording';
 const pw=process.env.PLAYWRIGHT_MODULE ?? join(recording,'final-overlays/tool/node_modules/playwright/index.mjs');
 const {chromium}=await import(pw);
@@ -48,14 +48,14 @@ try {
   const im=new Image();im.src=data;await im.decode();
   const c=document.createElement('canvas');c.width=w;c.height=ch;c.getContext('2d')!.drawImage(im,0,top,w,ch,0,0,w,ch);
   const url=c.toDataURL();
-  document.body.innerHTML=`<style>html,body{background:transparent;overflow:hidden} .photo{position:absolute;top:250px;left:50%;transform:translateX(-50%);height:650px;width:auto;border-radius:16px;box-shadow:0 14px 40px rgba(61,15,69,.35)}</style><img class="photo" src="${url}">`;
+  document.body.innerHTML=`<style>html,body{background:transparent;overflow:hidden} .photo{position:absolute;top:250px;left:50%;transform:translateX(-50%);height:640px;width:auto;border-radius:16px;box-shadow:0 3px 6px rgba(61,15,69,.3)}</style><img class="photo" src="${url}">`;
   await Promise.all([...document.images].map(i=>i.decode()));
  },{data,w,top,ch});
  if(still) await page.screenshot({path:out,omitBackground:true});
  else {
   temp=mkdtempSync(join(tmpdir(),'london-card-'));
   const png=join(temp,'card.png');await page.screenshot({path:png,omitBackground:true});
-  // Transparent except the photo (centre, y 250-900); the hosts move around it (layout.json centers.london).
+  // Transparent except the photo (centre, y 250-890); the hosts move around it (layout.json centers.london).
   const p=Bun.spawn(['ffmpeg','-v','error','-y','-loop','1','-framerate','25','-i',png,'-t',String(dur),'-vf',`format=rgba,fade=t=in:st=0:d=0.4:alpha=1,fade=t=out:st=${dur-.4}:d=0.4:alpha=1`,'-an','-c:v','png','-pix_fmt','rgba',out],{stdout:'inherit',stderr:'inherit'});
   if(await p.exited) throw new Error('ffmpeg failed');
  }

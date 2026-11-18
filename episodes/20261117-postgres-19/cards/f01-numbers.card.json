@@ -6,16 +6,6 @@
     "scale": "linear",
     "bars": [
       {
-        "label": "10",
-        "n": "pg10",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "11",
-        "n": "pg11",
-        "color": "#8b95a1"
-      },
-      {
         "label": "12",
         "n": "pg12",
         "color": "#8b95a1"
@@ -65,22 +55,6 @@
   ],
   "chip": "Forge PG19 study",
   "numbers": {
-    "pg10": {
-      "value": 324,
-      "display": "324",
-      "source": {
-        "file": "P/.",
-        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nt=subprocess.check_output([\"git\",\"-C\",str(f),\"show\",\"upstream/REL_10_STABLE:doc/src/sgml/release-10.sgml\"],text=True).split('\"'\"'<sect1 id=\"release-10\">'\"'\"',1)[1].split(\"<sect1 \",1)[0]\nprint(sum(s.count(\"<member>\") for s in re.split(r\"<sect2\\b[^>]*>\",t)[1:] if \"Acknowledg\" in re.search(r\"<title>(.*?)</title>\",s,re.S)[1]))' \"$F\""
-      }
-    },
-    "pg11": {
-      "value": 313,
-      "display": "313",
-      "source": {
-        "file": "P/.",
-        "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nt=subprocess.check_output([\"git\",\"-C\",str(f),\"show\",\"upstream/REL_11_STABLE:doc/src/sgml/release-11.sgml\"],text=True).split('\"'\"'<sect1 id=\"release-11\">'\"'\"',1)[1].split(\"<sect1 \",1)[0]\nprint(sum(s.count(\"<member>\") for s in re.split(r\"<sect2\\b[^>]*>\",t)[1:] if \"Acknowledg\" in re.search(r\"<title>(.*?)</title>\",s,re.S)[1]))' \"$F\""
-      }
-    },
     "pg12": {
       "value": 410,
       "display": "410",
@@ -148,8 +122,6 @@
   },
   "literals": [
     "19",
-    "10",
-    "11",
     "12",
     "13",
     "14",

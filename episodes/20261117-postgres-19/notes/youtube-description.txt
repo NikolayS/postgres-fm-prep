@@ -6,36 +6,37 @@ Postgres.FM episode 197: Kirk Wolak is joining Michael and me as a co-host. Nik,
 Main link: the study brief, PostgreSQL 19 RC2 vs 18.7, with every number and its conditions (PostgresAI):
 https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 
-Chapters (TODO cold open: add its length to every time; run video/final/edit/set_times.py <seconds>):
-00:00 Intro: Nik, Michael and Kirk
-01:16 Why Postgres 19 came in November: security fixes
-04:23 AI bug reports, pgsql-bugs and the reverts
-09:56 REPACK (CONCURRENTLY): pg_squeeze in core
-13:04 Do you still need pg_repack?
-16:55 LISTEN/NOTIFY with many listeners
-20:04 Autovacuum prioritization and parallel autovacuum
-21:51 pg_plan_advice: plan advice, not hints
-24:52 Why plan advice beats query hints
-27:54 New defaults: JIT off, lz4 TOAST, wal_compression, log_lock_waits
-30:20 WAIT FOR LSN: read your writes on replicas
-35:43 Lower EXPLAIN ANALYZE timing overhead
-36:40 vacuumdb, extended statistics, pgbench --continue-on-error
-39:55 Before you upgrade: removed settings, pg_upgrade --check
-42:42 How to test a Postgres upgrade: clones, synthetic load, AI
-47:20 Plan flips, regressions and the long tail of queries
+Chapters:
+00:00 Cold open
+00:44 Intro: Nik, Michael and Kirk
+02:01 Why Postgres 19 came in November: security fixes
+05:07 AI bug reports, pgsql-bugs and the reverts
+10:40 REPACK (CONCURRENTLY): pg_squeeze in core
+13:49 Do you still need pg_repack?
+17:39 LISTEN/NOTIFY with many listeners
+20:49 Autovacuum prioritization and parallel autovacuum
+22:36 pg_plan_advice: plan advice, not hints
+25:36 Why plan advice beats query hints
+28:39 New defaults: JIT off, lz4 TOAST, wal_compression, log_lock_waits
+31:05 WAIT FOR LSN: read your writes on replicas
+36:28 Lower EXPLAIN ANALYZE timing overhead
+37:24 vacuumdb, extended statistics, pgbench --continue-on-error
+40:40 Before you upgrade: removed settings, pg_upgrade --check
+43:27 How to test a Postgres upgrade: clones, synthetic load, AI
+48:05 Plan flips, regressions and the long tail of queries
 
 Key links (video time of the first mention):
-* PostgreSQL 19 release notes (01:55) https://www.postgresql.org/docs/19/release-19.html
-* What LLMs do to PostgreSQL and DBAs, depesz (05:19) https://www.depesz.com/2026/11/09/what-llms-do-to-postgresql-and-dbas/
-* Are we reverting patches because of bugs found by AI?, Tomas Vondra (08:08) https://vondra.me/posts/are-we-reverting-patches-because-of-bugs-found-by-ai/
-* Add CONCURRENTLY option to REPACK, commit (09:56) https://github.com/postgres/postgres/commit/28d534e2ae0ac888b5460f977a10cd9bb017ef98
-* What REPACK (CONCURRENTLY) costs while it runs, Radim Marek (13:37) https://boringsql.com/posts/repack-concurrently-costs/
-* Optimize LISTEN/NOTIFY via shared channel map, commit (17:38) https://github.com/postgres/postgres/commit/282b1cde9dedf456ecf02eb27caf086023a7bb71
-* Better Planner Hints with Path Generation Strategies, Lukas Fittl (22:21) https://pganalyze.com/blog/5mins-postgres-19-better-planner-hints
-* jit: Change the default to off, commit (28:00) https://github.com/postgres/postgres/commit/7f8c88c2b872cb74882ab93dcb05529dab2a10bc
-* WAIT FOR, docs (30:24) https://www.postgresql.org/docs/19/sql-wait.html
-* pg_upgrade --check passes, then the upgrade fails, pgsql-hackers (41:07) https://www.postgresql.org/message-id/CAGRkXqT%2B5%2BmQhoKZFTiM4yOZtVV%3DNW506vDwFtVeG%2BVmL_W5wQ%40mail.gmail.com
-* RegreSQL, catch query performance regressions, Radim Marek (48:02) https://github.com/boringSQL/regresql
+* PostgreSQL 19 release notes (02:40) https://www.postgresql.org/docs/19/release-19.html
+* What LLMs do to PostgreSQL and DBAs, depesz (06:04) https://www.depesz.com/2026/11/09/what-llms-do-to-postgresql-and-dbas/
+* Are we reverting patches because of bugs found by AI?, Tomas Vondra (08:52) https://vondra.me/posts/are-we-reverting-patches-because-of-bugs-found-by-ai/
+* Add CONCURRENTLY option to REPACK, commit (10:41) https://github.com/postgres/postgres/commit/28d534e2ae0ac888b5460f977a10cd9bb017ef98
+* What REPACK (CONCURRENTLY) costs while it runs, Radim Marek (14:21) https://boringsql.com/posts/repack-concurrently-costs/
+* Optimize LISTEN/NOTIFY via shared channel map, commit (18:22) https://github.com/postgres/postgres/commit/282b1cde9dedf456ecf02eb27caf086023a7bb71
+* Better Planner Hints with Path Generation Strategies, Lukas Fittl (23:06) https://pganalyze.com/blog/5mins-postgres-19-better-planner-hints
+* jit: Change the default to off, commit (28:45) https://github.com/postgres/postgres/commit/7f8c88c2b872cb74882ab93dcb05529dab2a10bc
+* WAIT FOR, docs (31:09) https://www.postgresql.org/docs/19/sql-wait.html
+* pg_upgrade --check passes, then the upgrade fails, pgsql-hackers (41:51) https://www.postgresql.org/message-id/CAGRkXqT%2B5%2BmQhoKZFTiM4yOZtVV%3DNW506vDwFtVeG%2BVmL_W5wQ%40mail.gmail.com
+* RegreSQL, catch query performance regressions, Radim Marek (48:46) https://github.com/boringSQL/regresql
 
 Related episodes:
 * pg_squeeze, with Antonin Houska https://postgres.fm/episodes/pg_squeeze

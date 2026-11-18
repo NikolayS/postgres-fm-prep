@@ -1,0 +1,335 @@
+{
+  "out": "${EP197_QA}",
+  "audio": {
+    "music": "${EP197_STEMS}/music.wav",
+    "voices": {
+      "Nik": "${EP197_STEMS}/nik.wav",
+      "Michael": "${EP197_STEMS}/michael.wav",
+      "Kirk": "${EP197_STEMS}/kirk.wav"
+    },
+    "minGapDb": 10,
+    "maxSpreadDb": 3
+  },
+  "eyes": {
+    "frames": [
+      {
+        "label": "cold open: last frame with picture (the final frame, 44.68 s, is black)",
+        "video": "${EP197_PREVIEW}/cold-open-v9a.mp4",
+        "t": 44.6,
+        "expectFaces": 3
+      },
+      {
+        "label": "body first half second",
+        "video": "${EP197_PREVIEW}/episode-197-final.mp4",
+        "t": 45.225,
+        "expectFaces": 3
+      }
+    ]
+  },
+  "strips": {
+    "layers": [
+      {
+        "id": "london",
+        "file": "${EP197_OVERLAYS}/london.mov",
+        "t": 1.5
+      },
+      {
+        "id": "f01-numbers",
+        "file": "${EP197_OVERLAYS}/f01-numbers.mov",
+        "t": 1.5
+      },
+      {
+        "id": "f02-repack",
+        "file": "${EP197_OVERLAYS}/f02-repack.mov",
+        "t": 1.5
+      },
+      {
+        "id": "f03-notify",
+        "file": "${EP197_OVERLAYS}/f03-notify.mov",
+        "t": 1.5
+      },
+      {
+        "id": "01-score-weights",
+        "file": "${EP197_OVERLAYS}/01-score-weights.mov",
+        "t": 1.5
+      },
+      {
+        "id": "f04-autovac",
+        "file": "${EP197_OVERLAYS}/f04-autovac.mov",
+        "t": 1.5
+      },
+      {
+        "id": "02-parallel-av",
+        "file": "${EP197_OVERLAYS}/02-parallel-av.mov",
+        "t": 1.5
+      },
+      {
+        "id": "03-stash-advice",
+        "file": "${EP197_OVERLAYS}/03-stash-advice.mov",
+        "t": 1.5
+      },
+      {
+        "id": "f11-advice",
+        "file": "${EP197_OVERLAYS}/f11-advice.mov",
+        "t": 1.5
+      },
+      {
+        "id": "f06-jit",
+        "file": "${EP197_OVERLAYS}/f06-jit.mov",
+        "t": 1.5
+      },
+      {
+        "id": "f07-lz4",
+        "file": "${EP197_OVERLAYS}/f07-lz4.mov",
+        "t": 1.5
+      },
+      {
+        "id": "05-tsc",
+        "file": "${EP197_OVERLAYS}/05-tsc.mov",
+        "t": 1.5
+      },
+      {
+        "id": "06-release-notes",
+        "file": "${EP197_OVERLAYS}/06-release-notes.mov",
+        "t": 1.5
+      },
+      {
+        "id": "07-pg-restore",
+        "file": "${EP197_OVERLAYS}/07-pg-restore.mov",
+        "t": 1.5
+      },
+      {
+        "id": "08-not-on-table",
+        "file": "${EP197_OVERLAYS}/08-not-on-table.mov",
+        "t": 1.5
+      },
+      {
+        "id": "09-upgrade-fails",
+        "file": "${EP197_OVERLAYS}/09-upgrade-fails.mov",
+        "t": 1.5
+      },
+      {
+        "id": "f10-plans",
+        "file": "${EP197_OVERLAYS}/f10-plans.mov",
+        "t": 1.5
+      }
+    ],
+    "video": "${EP197_PREVIEW}/episode-197-final.mp4",
+    "items": [
+      {
+        "id": "f01-numbers",
+        "at": 175.205,
+        "times": [
+          175.205
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      },
+      {
+        "id": "f02-repack",
+        "at": 869.705,
+        "times": [
+          869.705
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      },
+      {
+        "id": "f03-notify",
+        "at": 1137.705,
+        "times": [
+          1137.705
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      },
+      {
+        "id": "01-score-weights",
+        "at": 1256.955,
+        "times": [
+          1256.955
+        ],
+        "box": [
+          24,
+          724,
+          1576,
+          140
+        ]
+      },
+      {
+        "id": "f04-autovac",
+        "at": 1338.705,
+        "times": [
+          1338.705
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      },
+      {
+        "id": "02-parallel-av",
+        "at": 1345.665,
+        "times": [
+          1345.665
+        ],
+        "box": [
+          24,
+          724,
+          1576,
+          140
+        ]
+      },
+      {
+        "id": "03-stash-advice",
+        "at": 1635.915,
+        "times": [
+          1635.915
+        ],
+        "box": [
+          24,
+          724,
+          1576,
+          140
+        ]
+      },
+      {
+        "id": "f11-advice",
+        "at": 1694.385,
+        "times": [
+          1694.385
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      },
+      {
+        "id": "f06-jit",
+        "at": 1737.705,
+        "times": [
+          1737.705
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      },
+      {
+        "id": "f07-lz4",
+        "at": 1801.205,
+        "times": [
+          1801.205
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      },
+      {
+        "id": "05-tsc",
+        "at": 2198.025,
+        "times": [
+          2198.025
+        ],
+        "box": [
+          24,
+          724,
+          1576,
+          140
+        ]
+      },
+      {
+        "id": "06-release-notes",
+        "at": 2374.825,
+        "times": [
+          2374.825
+        ],
+        "box": [
+          24,
+          724,
+          1576,
+          140
+        ]
+      },
+      {
+        "id": "07-pg-restore",
+        "at": 2401.025,
+        "times": [
+          2401.025
+        ],
+        "box": [
+          24,
+          724,
+          1576,
+          140
+        ]
+      },
+      {
+        "id": "08-not-on-table",
+        "at": 2501.245,
+        "times": [
+          2501.245
+        ],
+        "box": [
+          24,
+          724,
+          1576,
+          140
+        ]
+      },
+      {
+        "id": "09-upgrade-fails",
+        "at": 2517.605,
+        "times": [
+          2517.605
+        ],
+        "box": [
+          24,
+          724,
+          1576,
+          140
+        ]
+      },
+      {
+        "id": "f10-plans",
+        "at": 2881.705,
+        "times": [
+          2881.705
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      }
+    ]
+  },
+  "cards": {
+    "png": true
+  },
+  "skip": {
+    "captions": "v9a caps-932-1117.jsonl exists in scratchpad/v9/fr-a, but all 186 referenced JPEG frames (0932\u20131117) were deleted by build.sh after encoding; prefix caption records/frames were not found. Cannot run the supplied records against missing frames."
+  }
+}
