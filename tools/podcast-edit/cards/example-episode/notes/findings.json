@@ -1,0 +1,301 @@
+{
+  "title": "Example episode",
+  "source": {
+    "label": "Example study brief",
+    "url": "https://example.com/brief"
+  },
+  "findings": [
+    {
+      "id": "notify",
+      "headline": "NOTIFY is 21.5x faster",
+      "chart": {
+        "type": "bars",
+        "bars": [
+          {
+            "label": "18",
+            "n": "pg18",
+            "color": "#2a78d6"
+          },
+          {
+            "label": "19",
+            "n": "pg19",
+            "color": "#d9822b"
+          }
+        ]
+      },
+      "heroes": [
+        {
+          "n": "ratio",
+          "label": "1,000 listeners"
+        }
+      ],
+      "chip": "Example data",
+      "numbers": {
+        "pg18": {
+          "value": 915,
+          "unit": "/s",
+          "source": {
+            "file": "raw/notify.csv",
+            "compute": "awk -F, '$1==18{print $3}' \"$F\""
+          }
+        },
+        "pg19": {
+          "value": 19686,
+          "unit": "/s",
+          "source": {
+            "file": "raw/notify.csv",
+            "compute": "awk -F, '$1==19{print $3}' \"$F\""
+          }
+        },
+        "ratio": {
+          "value": 21.5,
+          "display": "21.5x",
+          "source": {
+            "file": "raw/notify.csv",
+            "compute": "awk -F, '$1==18{a=$3} $1==19{b=$3} END{print b/a}' \"$F\""
+          }
+        }
+      },
+      "literals": [
+        "18",
+        "19",
+        "1,000"
+      ]
+    },
+    {
+      "id": "plans-causes",
+      "headline": "Why plans changed",
+      "chart": {
+        "type": "bars",
+        "bars": [
+          {
+            "label": "tie-break",
+            "n": "tie"
+          },
+          {
+            "label": "parallel",
+            "n": "par"
+          }
+        ]
+      },
+      "heroes": [
+        {
+          "n": "tie",
+          "label": "one commit"
+        }
+      ],
+      "chip": "Example data",
+      "numbers": {
+        "tie": {
+          "value": 61,
+          "source": {
+            "file": "raw/plans.csv",
+            "compute": "grep -c ',tie-break$' \"$F\""
+          }
+        },
+        "par": {
+          "value": 22,
+          "source": {
+            "file": "raw/plans.csv",
+            "compute": "grep -c ',parallel$' \"$F\""
+          }
+        }
+      }
+    },
+    {
+      "id": "plans",
+      "headline": "83 of 220 plans changed",
+      "chart": {
+        "type": "donut",
+        "parts": [
+          {
+            "label": "changed",
+            "n": "changed",
+            "color": "#d9822b"
+          },
+          {
+            "label": "same",
+            "n": "same",
+            "color": "#8b95a1"
+          }
+        ]
+      },
+      "heroes": [
+        {
+          "n": "commit",
+          "label": "from one commit"
+        }
+      ],
+      "chip": "Example data",
+      "numbers": {
+        "changed": {
+          "value": 83,
+          "source": {
+            "file": "raw/plans.csv",
+            "compute": "awk -F, 'NR>1 && $2==1' \"$F\" | wc -l"
+          }
+        },
+        "same": {
+          "value": 137,
+          "source": {
+            "file": "raw/plans.csv",
+            "compute": "awk -F, 'NR>1 && $2==0' \"$F\" | wc -l"
+          }
+        },
+        "total": {
+          "value": 220,
+          "source": {
+            "file": "raw/plans.csv",
+            "compute": "awk 'NR>1' \"$F\" | wc -l"
+          }
+        },
+        "commit": {
+          "value": 61,
+          "source": {
+            "file": "raw/plans.csv",
+            "compute": "grep -c tie-break \"$F\""
+          }
+        }
+      }
+    },
+    {
+      "id": "repack",
+      "headline": "REPACK lock wait grows",
+      "chart": {
+        "type": "line",
+        "xLabel": "rows/s",
+        "yLabel": "lock wait, s",
+        "series": [
+          {
+            "label": "wait",
+            "points": [
+              {
+                "x": "w1",
+                "y": "l1"
+              },
+              {
+                "x": "w2",
+                "y": "l2"
+              },
+              {
+                "x": "w3",
+                "y": "l3"
+              }
+            ]
+          }
+        ]
+      },
+      "heroes": [
+        {
+          "n": "l3",
+          "label": "worst wait"
+        }
+      ],
+      "chip": "Example data",
+      "numbers": {
+        "w1": {
+          "value": 1013,
+          "source": {
+            "file": "raw/repack.csv",
+            "compute": "awk -F, 'NR==2{print $1}' \"$F\""
+          }
+        },
+        "w2": {
+          "value": 30000,
+          "source": {
+            "file": "raw/repack.csv",
+            "compute": "awk -F, 'NR==3{print $1}' \"$F\""
+          }
+        },
+        "w3": {
+          "value": 65996,
+          "source": {
+            "file": "raw/repack.csv",
+            "compute": "awk -F, 'NR==4{print $1}' \"$F\""
+          }
+        },
+        "l1": {
+          "value": 0.02,
+          "unit": " s",
+          "source": {
+            "file": "raw/repack.csv",
+            "compute": "awk -F, 'NR==2{print $2}' \"$F\""
+          }
+        },
+        "l2": {
+          "value": 3.54,
+          "unit": " s",
+          "source": {
+            "file": "raw/repack.csv",
+            "compute": "awk -F, 'NR==3{print $2}' \"$F\""
+          }
+        },
+        "l3": {
+          "value": 85.72,
+          "unit": " s",
+          "source": {
+            "file": "raw/repack.csv",
+            "compute": "awk -F, 'NR==4{print $2}' \"$F\""
+          }
+        }
+      }
+    },
+    {
+      "id": "notify-listeners",
+      "headline": "NOTIFY with 1,000 listeners is 21.5x faster",
+      "chart": {
+        "type": "bars",
+        "bars": [
+          {
+            "label": "18",
+            "n": "pg18",
+            "color": "#2a78d6"
+          },
+          {
+            "label": "19",
+            "n": "pg19",
+            "color": "#d9822b"
+          }
+        ]
+      },
+      "heroes": [
+        {
+          "n": "ratio",
+          "label": "1,000 listeners"
+        }
+      ],
+      "chip": "Example data",
+      "numbers": {
+        "pg18": {
+          "value": 915,
+          "unit": "/s",
+          "source": {
+            "file": "raw/notify.csv",
+            "compute": "awk -F, '$1==18{print $3}' \"$F\""
+          }
+        },
+        "pg19": {
+          "value": 19686,
+          "unit": "/s",
+          "source": {
+            "file": "raw/notify.csv",
+            "compute": "awk -F, '$1==19{print $3}' \"$F\""
+          }
+        },
+        "ratio": {
+          "value": 21.5,
+          "display": "21.5x",
+          "source": {
+            "file": "raw/notify.csv",
+            "compute": "awk -F, '$1==18{a=$3} $1==19{b=$3} END{print b/a}' \"$F\""
+          }
+        }
+      },
+      "literals": [
+        "18",
+        "19",
+        "1,000"
+      ]
+    }
+  ]
+}

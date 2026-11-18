@@ -6,6 +6,7 @@ import {FullCard} from './FullCard';
 import {IntroCard} from './IntroCard';
 import {HackingInsert} from './HackingInsert';
 import {CenterChart} from './CenterChart';
+import {ChartCard} from './ChartCard';
 import {BioBlock, HackBlock, CompareBlock, SimpleBlock, TrapBlock, DuelBlock, ScaleBlock} from './Blocks';
 
 const FPS = 25;
@@ -108,6 +109,7 @@ export const Root = () => (
       calculateMetadata={meta}
       defaultProps={{kind: 'bars' as const, title: 'Buffer accesses', bars: [{value: 3301, label: 'Restore only'}, {value: 3301, label: 'ANALYZE only'}, {value: 34, label: 'VACUUM ANALYZE'}], unit: 'buffers', durationSec: 12}}
     />
+    <Composition id="chartcard" component={ChartCard as any} fps={FPS} width={W} height={H} durationInFrames={12 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 12} as any} />
     <Composition id="bio" component={BioBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />
     <Composition id="hack2" component={HackBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />
     <Composition id="compare" component={CompareBlock as any} fps={FPS} width={W} height={H} durationInFrames={10 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 10} as any} />

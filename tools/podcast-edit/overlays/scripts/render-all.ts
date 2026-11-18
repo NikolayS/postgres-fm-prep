@@ -9,9 +9,24 @@ const OUT = resolve(ROOT, '../overlays');
 mkdirSync(OUT, {recursive: true});
 
 import {ITEMS} from './items';
+import {gateCard} from '../../cards/gate';
 
 const only = new Set(process.argv.slice(2));
 const todo = ITEMS.filter((it) => only.size === 0 || only.has(it.id));
+// Data cards (comp "chartcard", `card`: path to <episode>/cards/<id>.card.json): the card file is
+// the props. Provenance gate: every number is recomputed from its raw file; any failure stops
+// the whole render before anything is drawn.
+const gateErrors: string[] = [];
+for (const it of todo as any[]) {
+  if (!it.card) continue;
+  const g = await gateCard(it.card);
+  if (g.errors.length) gateErrors.push(...g.errors);
+  else it.props = {...g.props, ...(it.props ?? {})};
+}
+if (gateErrors.length) {
+  console.error(`card gate failed, nothing rendered:\n${gateErrors.map((e) => `  ${e}`).join('\n')}`);
+  process.exit(1);
+}
 // DUMP_PROPS=<dir>: write <id>.props.json for the selected items and stop (for `remotion still` QA).
 if (process.env.DUMP_PROPS) {
   mkdirSync(process.env.DUMP_PROPS, {recursive: true});

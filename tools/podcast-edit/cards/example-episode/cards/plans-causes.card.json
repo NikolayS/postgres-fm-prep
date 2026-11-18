@@ -1,0 +1,13 @@
+{
+  "id": "plans-causes",
+  "headline": "Why plans changed",
+  "chart": {"type": "bars", "bars": [{"label": "tie-break", "n": "tie"}, {"label": "parallel", "n": "par"}]},
+  "heroes": [{"n": "tie", "label": "one commit"}],
+  "chip": "Example data",
+  "numbers": {
+    "tie": {"value": 61, "source": {"file": "raw/plans.csv", "compute": "grep -c ',tie-break$' \"$F\""}},
+    "par": {"value": 22, "source": {"file": "raw/plans.csv", "compute": "grep -c ',parallel$' \"$F\""}}
+  },
+  "onAir": {"quote": "I'm very curious about plan flip analysis", "at": "52:24.8"},
+  "decision": "blog"
+}

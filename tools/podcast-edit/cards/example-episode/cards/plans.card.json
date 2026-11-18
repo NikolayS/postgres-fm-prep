@@ -1,0 +1,15 @@
+{
+  "id": "plans",
+  "headline": "83 of 220 plans changed",
+  "chart": {"type": "donut", "parts": [{"label": "changed", "n": "changed", "color": "#d9822b"}, {"label": "same", "n": "same", "color": "#8b95a1"}]},
+  "heroes": [{"n": "commit", "label": "from one commit"}],
+  "chip": "Example data",
+  "numbers": {
+    "changed": {"value": 83, "source": {"file": "raw/plans.csv", "compute": "awk -F, 'NR>1 && $2==1' \"$F\" | wc -l"}},
+    "same": {"value": 137, "source": {"file": "raw/plans.csv", "compute": "awk -F, 'NR>1 && $2==0' \"$F\" | wc -l"}},
+    "total": {"value": 220, "source": {"file": "raw/plans.csv", "compute": "awk 'NR>1' \"$F\" | wc -l"}},
+    "commit": {"value": 61, "source": {"file": "raw/plans.csv", "compute": "grep -c tie-break \"$F\""}}
+  },
+  "onAir": {"quote": "I'm very curious about plan flip analysis", "at": "52:24.8"},
+  "decision": "keep"
+}
