@@ -2,7 +2,7 @@
 
 DRAFT, 2026-11-17. Nothing is posted. Nik posts from his accounts. Rules: no link in the first post (links in the last reply); numbers in the first line; simple English; no emojis (none approved for this one); only our product named.
 
-Handles: Michael @michristofides, Kirk @yugedilbertfan, the show @postgresfm, Nik @samokhvalov. Before posting, replace the YouTube placeholder and check that https://postgres.fm/episodes/postgres-19 is live (slug confirmed).
+Handles: Michael @michristofides, Kirk: no verified X handle (use plain "Kirk Wolak"; Nik to confirm his handle), the show @postgresfm, Nik @samokhvalov. Before posting, replace the YouTube placeholder and check that https://postgres.fm/episodes/postgres-19 is live (slug confirmed).
 
 Character counts are X counts (a link = 23; limit 280).
 
@@ -12,7 +12,7 @@ Character counts are X counts (a link = 23; limit 280).
 
 4 posts.
 
-### 1/ First post (no link) — 279 chars — media: the brief's NOTIFY chart (18.7 vs 19 RC2, 1,000 listeners), or a speaker clip of Nik at 00:20:59 to 00:21:14
+### 1/ First post (no link) — 267 chars — media: the brief's NOTIFY chart (18.7 vs 19 RC2, 1,000 listeners), or a speaker clip of Nik at 00:20:59 to 00:21:14
 
 ```
 Postgres 19, LISTEN/NOTIFY with 1,000 listeners, each on its own channel:
@@ -20,7 +20,7 @@ Postgres 19, LISTEN/NOTIFY with 1,000 listeners, each on its own channel:
 18.7: 200 notifications/s
 19 RC2: at least 11,040/s
 
-Postgres FM: Kirk Wolak @yugedilbertfan is joining @michristofides and me as a co-host. Our favorite 19 features, and what to check before you upgrade.
+New Postgres FM: Kirk Wolak is joining @michristofides and me as a co-host. Our favorite 19 features, and what to check before you upgrade.
 ```
 
 ### 2/ Reply — 251 chars — media: speaker clip: Michael at 00:15:38 to 00:16:10, or Kirk at 00:16:14 to 00:16:50
