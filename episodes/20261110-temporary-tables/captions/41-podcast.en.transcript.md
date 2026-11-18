@@ -484,6 +484,8 @@ Bye.
 
 Checked against the Postgres source and the [DBLab Forge study brief](https://console.postgres.ai/shared/brief/dfe99713-f5a8-483b-9aab-1606a883b75d) after recording.
 
+The full write-up with the measurements: [The hidden costs of CREATE TEMP TABLE](https://postgres.ai/blog/20261118-hidden-costs-of-create-temp-table).
+
 - **[00:03:45] What other sessions can see.** Another session cannot read the rows of a temp table, also as a superuser. It can see that the table exists: its name, columns, size and activity counters are in `pg_class`, `pg_attribute` and `pg_stat_all_tables`, under schema `pg_temp_N`. And after the owner runs `ANALYZE`, sample values of the data are in `pg_statistic`, where a superuser can read them through `pg_stats`.
 - **[00:13:32] How many catalog rows a temp table writes.** A temp table is not one catalog row. On Postgres 18.6, `CREATE TEMP TABLE t (id int)` inserts 13 rows (`pg_class` 1, `pg_type` 2, `pg_attribute` 7, `pg_depend` 3), and a `text` column makes it 31, because it adds a TOAST table and its index. `DROP TABLE` deletes the same rows. Two such `(id int)` tables and one index per query is 30 rows in and 30 out, so 10 million queries a day is at least 600 million catalog row changes a day, not 60 million.
 - **[00:14:33] What "SInval" means.** It is shared invalidation, not snapshot invalidation. `LWLock:SInvalWrite` and `LWLock:SInvalRead` are the locks on the shared invalidation queue, which carries messages that invalidate catalog cache and relation cache entries in every backend. Writers take `SInvalWriteLock` to append to it, and so do backends that finish catching up.
