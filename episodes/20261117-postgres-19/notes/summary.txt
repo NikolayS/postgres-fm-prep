@@ -1,1 +1,1 @@
-Nik, Michael and Kirk discuss Postgres 19: why the release came in November and not in September, the features they like most, and what to check before you upgrade.
+Kirk Wolak is joining Michael and me as a co-host. Nik, Michael and Kirk discuss Postgres 19: why the release came in November and not in September, the features they like most, and what to check before you upgrade.
