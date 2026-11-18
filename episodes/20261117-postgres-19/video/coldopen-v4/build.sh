@@ -3,16 +3,18 @@
 # each host's own video), then a four-bite montage (cold-open-final layout) with snap punch-ins on the
 # speaker, music ducked under the voices, and a one-hit button at the end. See style-notes.md.
 #   a: with the announcer (vo.sh); Throwback Funk, 120 BPM.
-#   b: the same opening without the announcer, for comparison; Electro House, 128 BPM.
+#   b: the same opening without the announcer; Electro House, 128 BPM. This is v6, the cold open of
+#      the final episode (Nik: no voice; Nik, Michael and Kirk are three equal co-hosts).
 #   c: as a, plus risers, a flash frame and RGB split on every montage cut and punch-in, an impact
 #      shake and a punch on every punch-in. The opening keeps calm name cards (no flash on the names).
 # Usage: SOURCE=<Zoom video1398514958.mp4> WORK=<media dir> bash build.sh a|b|c <out.mp4>
 # WORK holds the cold-open-final intermediates (coldopen-v3/run.sh with LAYOUT=layout-final.json:
-# v3.src.mov, v3.layout.mp4) and the announcer lines in v4/vo (vo.sh).
+# v3.src.mov, v3.layout.mp4) and, for a and c, the announcer lines in v4/vo (vo.sh; rerun it after
+# changing the vo text in intro.json).
 set -euo pipefail
 H="$(cd "$(dirname "$0")" && pwd)"; R="$(cd "$H/../../../.." && pwd)"; FX="$R/tools/podcast-edit/sfx"
 V=$1; OUT=$(cd "$(dirname "$2")" && pwd)/$(basename "$2"); : "${SOURCE:?}" "${WORK:?}"
-case $V in a|c) BPM=120; VO=1; BTN=77 ;; b) BPM=128; VO=0; BTN=83 ;; *) echo "variant a|b|c"; exit 1 ;; esac
+case $V in a|c) BPM=120; VO=1; BTN=75 ;; b) BPM=128; VO=0; BTN=80 ;; *) echo "variant a|b|c"; exit 1 ;; esac
 cd "$WORK"; mkdir -p v4; B=$(echo "60/$BPM" | bc -l); f3() { printf "%.3f" "$(echo "$1" | bc -l)"; }
 MD=$(ffprobe -v error -show_entries format=duration -of csv=p=0 v3.layout.mp4)
 
@@ -59,8 +61,8 @@ vf+=";[$last]trim=0:$END,fade=t=in:st=0:d=0.2,fade=t=out:st=$fo:d=0.6,format=yuv
 
 # Audio: voices (montage), announcer, music, SFX. SFX: name seconds gain(dB) [trim s], on the intro shots.
 SFX=("U2-typing-fast 0.3 -12 1.6" "K-sand-stroke-falling 0.2 -6" "G10-soft-start-quick-stop 2.3 -4" "L-punch-rough 4.35 -4"
-     "K-sand-stroke-falling 5.25 -8" "K-sand-stroke-falling 7.95 -8" "L-punch-rough 10.65 -4" "K-sand-stroke-falling 11.75 -8"
-     "G10-soft-start-quick-stop 14.45 -4" "K-sand-stroke-falling 14.7 -6" "G9-wider-band $(f3 "$TT-0.1") -6")
+     "K-sand-stroke-falling 5.25 -8" "K-sand-stroke-falling 7.95 -8" "K-sand-stroke-falling 10.65 -8"
+     "G10-soft-start-quick-stop 13.35 -4" "K-sand-stroke-falling 13.6 -6" "G9-wider-band $(f3 "$TT-0.1") -6")
 if [ $V = c ]; then for p in "${PUNCH[@]}"; do SFX+=("L-punch-rough $p -9"); done; fi
 MI=$( [ $VO = 1 ] && echo 0.55 || echo 1 )   # music level in the opening (lower under the announcer)
 d=$(printf "%.0f" "$(echo "$TT*1000" | bc)")

@@ -1,15 +1,15 @@
 {"dir":"/Library/Audio/Apple Loops/Apple/09 Disco Funk","tailSec":2,"events":[
- {"file": "Throwback Funk Beat 01.caf", "at": 0, "beats": 36},
- {"file": "Throwback Funk Synth Bass.caf", "at": 0, "beats": 36, "gain": -1},
+ {"file": "Throwback Funk Beat 01.caf", "at": 0, "beats": 34},
+ {"file": "Throwback Funk Synth Bass.caf", "at": 0, "beats": 34, "gain": -1},
  {"file": "Throwback Funk Brass 01.caf", "at": 0, "beats": 8},
- {"file": "Throwback Funk Brass 01.caf", "at": 28, "beats": 4},
- {"file": "Throwback Funk Brass 02.caf", "at": 32, "beats": 4},
- {"file": "Throwback Funk Synth FX.caf", "at": 34, "beats": 2, "gain": -6},
- {"file": "80s Synth FX Riser 01.caf", "at": 20, "beats": 8, "gain": -6},
- {"file": "80s Synth FX Riser 01.caf", "at": 63, "beats": 8, "gain": -2},
- {"file": "Throwback Funk Beat 02.caf", "at": 36, "beats": 40.5, "from": 4},
- {"file": "Throwback Funk Synth Bass.caf", "at": 36, "beats": 40.5, "from": 4, "gain": -1},
- {"file": "Throwback Funk Brass 01.caf", "at": 77, "beats": 1.5, "fadeOut": 1.2},
- {"file": "Throwback Funk Beat 01.caf", "at": 77, "beats": 1, "fadeOut": 0.6},
- {"file": "Throwback Funk Synth Bass.caf", "at": 77, "beats": 1.5, "fadeOut": 1.2, "gain": -1}
+ {"file": "Throwback Funk Brass 01.caf", "at": 26, "beats": 4},
+ {"file": "Throwback Funk Brass 02.caf", "at": 30, "beats": 4},
+ {"file": "Throwback Funk Synth FX.caf", "at": 32, "beats": 2, "gain": -6},
+ {"file": "80s Synth FX Riser 01.caf", "at": 18, "beats": 8, "gain": -6},
+ {"file": "80s Synth FX Riser 01.caf", "at": 61, "beats": 8, "gain": -2},
+ {"file": "Throwback Funk Beat 02.caf", "at": 34, "beats": 40.5, "from": 4},
+ {"file": "Throwback Funk Synth Bass.caf", "at": 34, "beats": 40.5, "from": 2, "gain": -1},
+ {"file": "Throwback Funk Brass 01.caf", "at": 75, "beats": 1.5, "fadeOut": 1.2},
+ {"file": "Throwback Funk Beat 01.caf", "at": 75, "beats": 1, "fadeOut": 0.6},
+ {"file": "Throwback Funk Synth Bass.caf", "at": 75, "beats": 1.5, "fadeOut": 1.2, "gain": -1}
 ]}

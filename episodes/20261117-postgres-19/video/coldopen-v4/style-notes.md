@@ -1,4 +1,4 @@
-# Cold open v4/v5: style study and variants
+# Cold open v4-v6: style study and variants
 
 An alternative to `preview/cold-open-final.mp4`. The final cold open does not change.
 
@@ -14,16 +14,15 @@ This is a study of the style only. We copied none of its footage, music, type or
 - **Colour.** Black, white and one red accent until the hard cut to the full-colour blue studio.
 - **Sound.** An upbeat band theme: drums, bass and stabs. It is loud from frame 1 and ends in a button as the show starts. There are no separate whooshes; the cuts sit on the drum hits. Our onset analysis was ambiguous (a flat peak between 160 and 166 BPM, so about 80-83 BPM at half time). The feel is a brisk funk/rock theme.
 
-## How v5 uses it (v4 is in git history before this change)
+## How v5/v6 use it (v4 is in git history)
 
-The opening (`intro.json`, `intro.ts`, 17.8 s) uses our brand: Lato, plum and pink, and the postgres.fm wordmark.
+The opening (`intro.json`, `intro.ts`, 16.7 s) uses our brand: Lato, plum and pink, and the postgres.fm wordmark.
 - "LIVE FROM THREE TIME ZONES" types in as tracked caps with arrow lines, then comes the wordmark.
 - A giant "STARRING" slides across the frame.
 - A name card for each host shows black-and-white video of their own Zoom tile with a slow push-in. The big name sits on a dark plate with a pink edge, so it reads over light walls.
-- A giant "GUEST" leads into Kirk's card.
 - The header is "postgres.fm Postgres 19", with the ellipse drawn on "19".
 
-Then a hard cut to the four strongest bites from `cold-open-final` (20.4 s):
+All three hosts get the same "STARRING" card; they are equal co-hosts. Then a hard cut to the four strongest bites from `cold-open-final` (20.4 s):
 1. Michael's "When would GTA 19 come out?", which follows "Tonight: Postgres 19".
 2. Kirk's revert fest.
 3. "years"/"decades".
@@ -36,8 +35,8 @@ Snap punch-ins cut to the speaker's own Zoom tile at full frame. The music drops
 | | Announcer | Music | FX |
 |---|---|---|---|
 | v5a | Yes (`README.md`) | Apple Loops "Throwback Funk" (Disco Funk), 120 BPM, A minor: beat, synth bass, brass; ducked 5 dB under the announcer | Typed caps, giant sliding words, name cards that fade in and out, grain, snap punch-ins. Toolkit SFX: U2 typing on the caps, K strokes on the cards, L punch on the giant words, G10 on the wordmark and header, G9 into the montage |
-| v5b | No, for comparison | Apple Loops Electro House, 128 BPM: "Blueprint Beat 01", "Bedrock Bass", "Americana Synth", "Big Snare Roll Topper" build, "Basic Core Beat" bed | As v5a |
-| v5c | Yes | v5a, plus "80s Synth FX Riser 01" into Kirk's card and into the closing line | As v5a, plus a white flash frame and an RGB split on every montage cut and punch-in, an impact shake and a punch on each punch-in. The name cards have no flash |
+| v5b = v6 (the final cold open) | No | Apple Loops Electro House, 128 BPM: "Blueprint Beat 01", "Bedrock Bass", "Americana Synth", "Big Snare Roll Topper" build, "Basic Core Beat" bed | As v5a |
+| v5c | Yes | v5a, plus "80s Synth FX Riser 01" into the closing line | As v5a, plus a white flash frame and an RGB split on every montage cut and punch-in, an impact shake and a punch on each punch-in. The name cards have no flash |
 
 All three: -16 LUFS integrated with a limiter at 0.75, fade in 0.2 s, fade out 0.6 s.
 
