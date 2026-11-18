@@ -4,14 +4,16 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 
 ## 1. Edit approved
 
-- [ ] Cut list reviewed: fillers, false starts, long pauses, pre-show and post-show chatter, on-air "let's cut that" moments, bot interruptions, remarks about how someone looks.
+- [ ] Cut list reviewed: hedges ("I'm not sure"), BS and tech trouble cut hard; fillers, false starts, long pauses, pre-show and post-show chatter, on-air "let's cut that" moments, bot interruptions, remarks about how someone looks.
+- [ ] `bun tools/podcast-edit/qa.ts <episode-dir>` passed before every preview sent to the host; zoomed strip crops and the card contact sheet looked at.
 - [ ] **Host approved the edit** (watched the full draft, not only the cut list).
 - [ ] Speaker names and titles are as the guest wants them. Ask; don't copy them from LinkedIn.
 
 ## 2. YouTube video
 
 - [ ] Intro and outro in place.
-- [ ] Illustrations: band cards, centre cards, charts and figures from the episode's research, each at the moment it is discussed.
+- [ ] Illustrations: band cards, centre cards, charts and figures from the episode's research, each at the moment it is discussed. Data cards are chart-first `cards/*.card.json` with every number recomputed (`cards/cards.ts check`); cards that need explaining are in `notes/blog-candidates.md`.
+- [ ] Header "postgres.fm <topic>" on one 104 px line; Nik left, Michael center, Kirk right; Kirk is a co-host, never a guest; no announcer voice; voices clearly above the music.
 - [ ] Overlay sounds follow the convention in `tools/podcast-edit/sfx/`: band cards get a typing reveal; centre cards get the sand strokes in and out, plus a punch on key reveals. Nothing bright, nothing sub-only.
 - [ ] Loudness about -16 LUFS integrated; no clipping.
 - [ ] Full decode check: no dropped or duplicated frames, A/V in sync at start, middle and end.

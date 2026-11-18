@@ -22,7 +22,7 @@ The episode's `README.md` is its entry point. Keep its research, study pack, exp
 
 ## Tooling
 
-Agent rules for this repository (including where on-screen text goes): [CLAUDE.md](CLAUDE.md).
+Agent rules for this repository (co-hosts, edit and video rules, data cards, QA): [CLAUDE.md](CLAUDE.md). Before recording, `tools/podcast-edit/cheatsheet.ts` makes the research cheat sheet; before any preview, `tools/podcast-edit/qa.ts` runs the QA gate.
 
 [`tools/podcast-edit/`](tools/podcast-edit/SKILL.md) is the post-production toolkit for recorded episodes, packaged as a Claude Code skill: cut fillers and false starts with a vetoable cut list, lay out and compose the final video (cards, music, overlays and their sounds), build captions, the podcast MP3, show notes and the Transistor draft. `SKILL.md` is the entry point; [`PROMOTION.md`](tools/podcast-edit/PROMOTION.md) covers the X thread, LinkedIn, animations, speaker clips and the blog post; it runs on Bun and ffmpeg. To use it as a skill, symlink the directory to `~/.claude/skills/podcast-edit`. API keys (`ELEVENLABS_API_KEY`, `TRANSISTOR_API_KEY`) come from the environment only and never belong in this repository.
 
@@ -32,7 +32,7 @@ To start on a new recording, use [the episode prompt](EPISODE_PROMPT.md). Follow
 
 ## Add an episode
 
-1. Create `episodes/<YYYYMMDD>-<topic-slug>/` (recording date) and copy the episode template into its `README.md`.
+1. Create `episodes/<YYYYMMDD>-<topic-slug>/` (recording date), copy the episode template into its `README.md` and `templates/episode/blog-candidates.md` into `notes/blog-candidates.md`.
 2. Fill in the question, participants, status, deadlines and planned discussion.
 3. Add the relevant documents and link them from that overview.
 4. Add an entry to the episode table above.

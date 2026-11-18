@@ -44,6 +44,11 @@ veto any cut and re-render with one command.
      ("hyphen, hyphen").
    - `candidates`: things you considered and kept (list them, so the human
      sees them). When unsure, keep.
+   - Cut hard (host, episode 197): BS and rambling, tech trouble (someone
+     muted, audio problems) and hedges ("I'm not sure", "I don't know if",
+     "maybe I'm wrong"). Where a hedge carries content, cut the hedge and keep
+     the claim. postgres.fm has three co-hosts (Nik, Michael, Kirk); never
+     call Kirk a guest.
    - `notes`: swears, factual slips, names to spell. Never cut a factual
      correction, a technical point, or a joke that lands.
    - On-air cut cues: propose these as cuts in the FIRST preview, not after
@@ -445,6 +450,8 @@ bun $S/compose.ts layout.json out-edited.mp4 final.mp4 --intro a-intro.mp3 --out
   a dull mic gets presence EQ (+3 to +4 dB at 2-4 kHz). Duck the music 20 dB or more
   under voice (a low bed plus a sidechain); full level only in gaps, cards and titles.
   Then run whisper on each bite of the final mix: every line must transcribe cleanly.
+  Boost Michael (his mic runs quiet). `qa.ts` (audio) fails a voice under 10 dB over the
+  music or more than 3 dB from the other voices.
   Episode 197 (Michael "hard to hear" under the cold-open music): see
   `episodes/20261117-postgres-19/video/coldopen-v8/build.sh`, which prints the table.
 - `music.ts`: ElevenLabs `POST /v1/music`, `force_instrumental`,
@@ -646,6 +653,45 @@ Review checklist before the final composite:
   (2026-10-20): amix began at the latest first timestamp of its inputs and
   dropped the 4 s title-card audio; every amix input is now renumbered from
   sample 0. `--audio-only` re-makes the sound of an existing render and remuxes.
+
+## Data cards, cheat sheet and QA gate
+
+Rules: root `CLAUDE.md` (data cards, cheat sheet, QA). Tools:
+
+```bash
+# Before recording: 5-8 strongest findings -> one-page cheat sheet for the hosts
+bun $S/cheatsheet.ts <episode-dir>            # notes/findings.json -> notes/cheatsheet.html + qa-out/cheatsheet.png
+# Cards: lint + recompute every number + blog-candidates rule + contact sheet
+bun $S/cards/cards.ts check <episode-dir>     # also: sheet, watch (re-check on every change)
+# Before ANY preview goes to the host
+bun $S/qa.ts <episode-dir>                    # reads <episode-dir>/qa.json (see qa.example.json)
+```
+
+- Card = `<episode>/cards/<id>.card.json` (format and lint: `cards/card.ts`). Headline of
+  6 words or fewer, one chart (`bars`, `donut`, `line`; linear, axes from 0), 1-2 heroes, a
+  chip. No `sub`, `footer` or other text fields: caveats go to the show notes. `onAir`
+  holds the quote and the edited-episode time it illustrates; `decision` is `keep` or `blog`
+  (blog cards must be in `notes/blog-candidates.md` and are never rendered).
+- Provenance: every chart value, hero and number in the text is a key in `numbers` with
+  `source.file` (raw file; `<ROOT>/...` aliases come from `cards/roots.json`, which names
+  environment variables, so private paths stay out of git) and `source.compute` (a shell
+  command that reads `$F` and prints the number). The check runs every command; the card
+  value must give the same display as the recompute. Other numbers in the text (versions,
+  setup sizes) go in `literals`. Hedge words ("about", "~", "nearly") fail.
+- Drawing: `overlays/src/card-svg.ts` is the one picture (Remotion `chartcard`, contact
+  sheet, cheat sheet). In `scripts/items.ts` give `{id, comp: 'chartcard', card:
+  '<episode>/cards/<id>.card.json', outStart, duration, placement: 'center', ...}`;
+  `render-all.ts` recomputes every card first and renders nothing if one fails. The panel is
+  the episode 197 Forge panel (x 40-1600, y 250-890: hosts in the right column).
+- Contact sheet: `qa-out/contact-sheet.png`, rewritten whenever a card or the renderer
+  changes; the host always reviews it. Example: `cards/example-episode/` (example data).
+- `qa.ts` checks: `audio` (voice stems vs the music stem: each voice 10 dB or more over the
+  music, median and p10 >= 6 dB, voices within 3 dB), `eyes` (Vision eye opening >= 0.2 on
+  key frames; episode 197 frames: open 0.24-0.44, blinks 0.07-0.16), `captions` (caption
+  boxes vs face boxes grown for hair and beard, and the bottom 180 px), `strips` (overlay
+  alpha layers cut by the frame edge or below y 900, plus 2x crops during and after each
+  swipe), `cards`. A missing section fails unless `"skip": {"<check>": "<reason>"}`.
+  Look at the crops and the contact sheet before you send the preview.
 
 ## Long-hold center blocks (no freezes)
 - Rule (Nik, 2026-10-22): blocks never freeze or pause the talk. They play over it in the "center" placement (hosts at the edges) and stay while the topic is discussed: 12-25 s for data blocks, longer when the topic runs longer. Use big numbers and few words.

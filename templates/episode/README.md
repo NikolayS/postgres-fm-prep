@@ -5,7 +5,7 @@
 ## Overview
 
 - **Question:** What should the listener understand or be able to do afterward?
-- **Hosts / guests:** To be confirmed.
+- **Hosts / guests:** Nik, Michael Christofides, Kirk Wolak (co-hosts); guests to be confirmed.
 - **Status:** Idea / preparation / ready to record / recorded / published.
 - **Study material deadline:** To be confirmed, with time zone.
 - **Recording date:** To be confirmed, with time zone.
@@ -23,6 +23,10 @@ Add links as documents are created. Common choices:
 | `observations.md` | Measured results, conditions and limitations |
 | `blog-outline.md` | Companion article structure and outstanding evidence |
 | `recording-notes.md` | Final rundown, demonstrations and follow-up points |
+| `notes/findings.json` | 5-8 strongest research findings; `tools/podcast-edit/cheatsheet.ts` turns them into the cheat sheet the hosts see before recording |
+| `notes/blog-candidates.md` | Standard file: results and cards too heavy for the video, for the blog post (template: `templates/episode/blog-candidates.md`) |
+| `cards/` | Data cards, one `<id>.card.json` each, every number with its raw file and recompute command |
+| `qa.json` | QA gate config for `tools/podcast-edit/qa.ts` (example: `tools/podcast-edit/qa.example.json`) |
 | `assets/` | Figures and other approved supporting files |
 
 ## Discussion outline
