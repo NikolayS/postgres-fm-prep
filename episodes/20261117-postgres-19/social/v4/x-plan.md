@@ -2,7 +2,7 @@
 
 DRAFT v4, 2026-11-19. Nothing is posted. Nik posts from his account. LinkedIn: [`linkedin.md`](linkedin.md). X Article: [`x-article.md`](x-article.md). Phone-size preview of every post with its media: `preview/social-v4-sheet.png`.
 
-Why v4: a second review. Lead with the upgrade trap (long form, with queries to save), now reproduced for real. Today Nik picks one of two posts: **B** (the trap) or **A-joy** (a celebration). The measured scoreboard (A) moves to tomorrow.
+Why v4: a second review. Lead with the upgrade trap (long form, with queries to save), now reproduced for real. Final review: B goes today; A-joy is later, maybe. The measured scoreboard (A) moves to tomorrow.
 
 Rules: first person; no emojis; every number from a card in `../../cards/` or from the repro (tables below); claims only about what the episode discussed or what the repro showed; channel style; media 1080x1350. Character counts are X counts (a link = 23); `build.ts sheet` checks them (280 for short posts; long-form posts are marked and allowed up to 1,000, Nik has X Premium).
 
@@ -33,9 +33,9 @@ So: 19 removed escape_string_warning (any value fails), and standard_conforming_
 | When (PT) | What |
 | --- | --- |
 | **Today, Thu 19 Nov, ~2:00 PM** | LinkedIn post + first comment (`linkedin.md`) |
-| **Today, Thu 19 Nov, ~2:00 PM** | X: **B** (upgrade trap, long form) **or A-joy** (celebration). Nik picks one. Self-reply 2 min later. |
-| Fri 20 Nov, 8:30 AM | X Unit A: measured scoreboard. (Option: if Nik wants, A can go today as a separate post 3+ hours after B.) |
-| Fri 20 Nov, 8:30 AM, if A-joy went today | X Unit B instead, and A moves to Mon 23 Nov 8:30 AM |
+| **Today, Thu 19 Nov, ~2:00 PM** | X: **B** (upgrade trap, long form). Self-reply 2 min later. |
+| Fri 20 Nov, 8:30 AM | X Unit A: measured scoreboard |
+| Later, maybe | X: A-joy (celebration) |
 | Tue 24 Nov, 8:30 AM | X Article post |
 | Wed 25 Nov, 8:30 AM | X Unit C: Kirk clip |
 | Later, one per slot | NOTIFY, lz4, JIT, REPACK, plan changes (texts below) |
@@ -48,19 +48,22 @@ So: 19 removed escape_string_warning (any value fails), and standard_conforming_
 
 ---
 
-## Today: pick one
+## Today: B (A-joy: later, maybe)
 
 ### B upgrade trap, long form — media: `s06-upgrade.png`
 
 Long form (X Premium). The image shows the real output from the repro (shortened).
 
 ```text
-pg_upgrade --check: OK.
+pg_upgrade --check: "Clusters are compatible".
 pg_upgrade: fails.
 
-Postgres 19 can do this. We reproduced it today, 18.7 to 19 RC2.
+Postgres 19 is out today. Check this before you upgrade: we reproduced it, 18.7 to 19 RC2. 3 queries to find it are below.
 
-The cause: escape_string_warning (removed in 19, any value) or standard_conforming_strings = off (19 requires on), set on a role, a database or a function. GRANT SET ON PARAMETER escape_string_warning does it too. The check passes all of them.
+The cause, set on a role, a database or a function:
+- escape_string_warning, any value (removed in 19)
+- standard_conforming_strings = off (19 requires on)
+A GRANT SET ON PARAMETER escape_string_warning does it too. --check passes all of them.
 
 Find them before your upgrade window (the pg_proc query in each database):
 

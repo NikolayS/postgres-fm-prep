@@ -11,7 +11,9 @@ Tags: type "@" and pick the person in the editor. Michael Christofides https://w
 ### Post — media: `li-carousel.pdf`
 
 ```text
-pg_upgrade --check can say OK, and the upgrade to Postgres 19 still fails. We reproduced it today, 18.7 to 19 RC2: escape_string_warning, or standard_conforming_strings = off, set on a role, a database or a function. Find them in pg_db_role_setting and pg_proc, and upgrade a clone first.
+pg_upgrade --check says "Clusters are compatible". Then the upgrade to Postgres 19 fails.
+
+We reproduced it today, 18.7 to 19 RC2: escape_string_warning, or standard_conforming_strings = off, set on a role, a database or a function. Find them in pg_db_role_setting and pg_proc, and upgrade a clone first.
 
 The good news, 19 RC2 vs 18.7 in our tests:
 - LISTEN/NOTIFY with 1,000 listeners: 200 to 11,040 notifications per second, and our test client was the limit
