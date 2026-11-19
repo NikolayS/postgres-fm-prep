@@ -36,7 +36,7 @@ Good. Fewer surprises at 3 AM for everyone. I will find something else to compla
 ```text
 Kirk Wolak on query hints in Postgres 19:
 
-"It was a great idea in 1975. The problem is, it's 2026, baby."
+"It was a great idea in 1975, okay? The problem is, we're 2026, baby."
 
 Hints were on the Postgres "we do not want" list for decades. 19 ships pg_plan_advice. Not hints. Kind of.
 ```
