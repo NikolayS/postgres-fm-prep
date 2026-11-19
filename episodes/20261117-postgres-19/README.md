@@ -60,6 +60,7 @@ Podcast audio (section 5):
 - [x] Square cover 3000x3000: `preview/covers-v2/FINAL-square.jpg` (made by the cover work, not in git), embedded in the MP3 and set as the episode artwork.
 - [x] Draft restored after the release; body-only audio, notes and polished transcript uploaded 2026-11-19 and checked through the API (same decoded audio, description, summary, transcript). Draft created with `transistor.ts`: episode 3745675 (slug `postgres-19`, status draft): title, summary, description, transcript, audio. Not published or scheduled.
 - [x] `video_url` set to https://youtu.be/VcDU-NRE3hI (Transistor stores it as https://www.youtube.com/watch?v=VcDU-NRE3hI); the youtu.be URL is in the tip of the notes (2026-11-19).
+- [x] Published 2026-11-19 06:39 PT (14:39:30 UTC), episode 197, no schedule: https://postgres.fm/episodes/postgres-19 , https://share.transistor.fm/s/1cf71ca2 . Checked logged out: the page shows the new square cover (og:image), notes, player and transcript page; RSS https://feeds.transistor.fm/postgres-fm has 197 as the newest item, duration 3159, author with Kirk, transcript tag, and the enclosure decodes to the same audio as the local MP3.
 - [x] Show notes open with the watch-on-YouTube tip.
 - [ ] Publish and check the episode page, the share page and the RSS feed (not done: draft only).
 
