@@ -292,9 +292,9 @@ export const Defaults: React.FC = () => {
   const t = useCurrentFrame();
   const sp = useSpring();
   const items = [
-    {name: 'jit', from: 'on', to: 'off', at: 14, toggle: true, on0: true},
-    {name: 'log_lock_waits', from: 'off', to: 'on', at: 34, toggle: true, on0: false},
-    {name: 'default_toast_compression', from: 'pglz', to: 'lz4', at: 54, toggle: false, on0: false},
+    {name: 'jit', from: 'on', to: 'off', at: 8, toggle: true, on0: true},
+    {name: 'log_lock_waits', from: 'off', to: 'on', at: 22, toggle: true, on0: false},
+    {name: 'default_toast_compression', from: 'pglz', to: 'lz4', at: 36, toggle: false, on0: false},
   ];
   return (
     <AbsoluteFill>

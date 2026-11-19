@@ -19,7 +19,7 @@ ev.push({f: ntf + 54, file: 'K-sand-stroke-falling.wav', gain: -2});
 ev.push({f: av + 32, file: 'K-sand-stroke-falling.wav', gain: -2});
 ev.push({f: wt + 58, file: 'G10-soft-start-quick-stop.wav', gain: -2});
 ev.push({f: pa + 50, file: 'L-punch-rough.wav', gain: 0});
-for (const k of [14, 34, 54]) ev.push({f: df + k, file: 'G10-soft-start-quick-stop.wav', gain: -3});
+for (const k of [8, 22, 36]) ev.push({f: df + k, file: 'G10-soft-start-quick-stop.wav', gain: -3});
 ev.push({f: end + 6, file: 'L-punch-rough.wav', gain: 1});
 const inputs = ev.flatMap((e) => ['-i', `${SFX}/${e.file}`]);
 const parts = ev.map((e, i) => `[${i + 1}:a]aformat=sample_rates=48000:channel_layouts=stereo,${e.dur ? `atrim=0:${e.dur.toFixed(3)},afade=t=out:st=${(e.dur - 0.08).toFixed(3)}:d=0.08,` : ''}volume=${e.gain}dB,adelay=${Math.round((e.f / fps) * 1000)}:all=1[a${i}]`);
