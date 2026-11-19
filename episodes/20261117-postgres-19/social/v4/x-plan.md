@@ -52,20 +52,19 @@ So: 19 removed escape_string_warning (any value fails), and standard_conforming_
 
 ### B upgrade trap, long form — media: `s06-upgrade.png`
 
-Long form (X Premium). The image shows the real output from the repro (shortened).
+Long form (X Premium). The image shows the real output from the repro (shortened). "7 ways": the 7 failing cases in the repro table (6 settings + 1 grant); --check passed all 7.
 
 ```text
 pg_upgrade --check: "Clusters are compatible".
 pg_upgrade: fails.
 
-Postgres 19 is out today. Check this before you upgrade: we reproduced it, 18.7 to 19 RC2. 3 queries to find it are below.
+Postgres 19 is out today. We broke the upgrade from 18.7 in 7 ways. --check caught 0 of 7.
 
 The cause, set on a role, a database or a function:
 - escape_string_warning, any value (removed in 19)
 - standard_conforming_strings = off (19 requires on)
-A GRANT SET ON PARAMETER escape_string_warning does it too. --check passes all of them.
 
-Find them before your upgrade window (the pg_proc query in each database):
+Find them (run the pg_proc query in each database):
 
 select * from pg_db_role_setting
 where setconfig::text ~ 'standard_conforming_strings|escape_string_warning';
@@ -73,15 +72,17 @@ where setconfig::text ~ 'standard_conforming_strings|escape_string_warning';
 select oid::regprocedure from pg_proc
 where proconfig::text ~ 'standard_conforming_strings|escape_string_warning';
 
-select parname from pg_parameter_acl
-where parname = 'escape_string_warning';
-
-standard_conforming_strings = on is fine. Then upgrade a clone first.
+Then upgrade a clone first.
 ```
 
 ### B self-reply, 2 minutes later
 
 ```text
+The 7th way: GRANT SET ON PARAMETER escape_string_warning. Find it with:
+
+select parname from pg_parameter_acl
+where parname = 'escape_string_warning';
+
 We talk about this and the rest of 19 in the new postgres.fm episode, @michristofides, Kirk Wolak and I: https://youtu.be/VcDU-NRE3hI
 ```
 
