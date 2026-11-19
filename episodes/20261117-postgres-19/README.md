@@ -58,7 +58,7 @@ Podcast audio (section 5):
 - [x] Decision: the audio has the cold open (host can veto), so podcast times are video times.
 - [x] Audio-only master without overlay sounds, -16.2 LUFS, -2.1 dBTP, MP3 192 kbps with the cover (`preview/episode-197-podcast.mp3`, not in git).
 - [x] Square cover 3000x3000: `preview/covers-v2/FINAL-square.jpg` (made by the cover work, not in git), embedded in the MP3 and set as the episode artwork.
-- [x] Draft created with `transistor.ts`: episode 3745675 (slug `postgres-19`, status draft): title, summary, description, transcript, audio. Not published or scheduled.
+- [x] Draft emptied until release (leak option A); restore with `bash video/podcast/restore.sh`, then publish. Draft created with `transistor.ts`: episode 3745675 (slug `postgres-19`, status draft): title, summary, description, transcript, audio. Not published or scheduled.
 - [ ] `video_url`: set when the YouTube video exists (`--episode <id> --video-url ...`), and add the URL to the tip in the notes.
 - [x] Show notes open with the watch-on-YouTube tip.
 - [ ] Publish and check the episode page, the share page and the RSS feed (not done: draft only).

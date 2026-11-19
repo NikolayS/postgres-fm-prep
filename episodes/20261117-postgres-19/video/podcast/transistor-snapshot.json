@@ -1,0 +1,32 @@
+{
+ "note": "Transistor draft 3745675 before emptying it (2026-11-18, leak option A). Restore with video/podcast/restore.sh.",
+ "show": 32147,
+ "episode": 3745675,
+ "snapshot_utc": "2026-11-19T07:24:41.930Z",
+ "title": "Postgres 19",
+ "number": 197,
+ "season": 1,
+ "type": "full",
+ "status": "draft",
+ "slug": "postgres-19",
+ "summary": "Michael, Nik, and Kirk discuss Postgres 19: why the release came in November and not in September, the features we like most, and what to check before you upgrade.",
+ "summary_matches_repo": true,
+ "description_file": "notes/notes.transistor.html",
+ "description_sha256": "a6ca80cb209164e561b3eea2daa60df300989bf786a27498181e928e727cc9b1",
+ "description_matches_repo": true,
+ "transcript_file": "captions/podcast.transcript.txt",
+ "transcript_sha256_repo": "d60402eb05b22a6092ec32aced06633a72015e7bc5cc126fc110bf0399f8b2e3",
+ "transcripts": [
+  {
+   "url": "https://share.transistor.fm/s/1cf71ca2/transcript.txt",
+   "format": "txt"
+  }
+ ],
+ "audio_file": "preview/episode-197-podcast.mp3 (not in git)",
+ "audio_sha256": "5441365e2bc515638bf4616e0d21f9813d1b6c224c5762d55dceafc1f87290c4",
+ "media_url": "https://media.transistor.fm/1cf71ca2/717f8492.mp3",
+ "duration": 3203,
+ "image_url": "https://img.transistorcdn.com/WPbwJ9DUFOs12Lubzw5qNPsgNxySCpZYpZZwImvEPa8/rs:fill:0:0:1/w:1400/h:1400/q:60/mb:500000/aHR0cHM6Ly9pbWct/dXBsb2FkLXByb2R1/Y3Rpb24udHJhbnNp/c3Rvci5mbS82Mjgy/ZTI3OTVjM2U2Yzlm/NDAxZGY4NTcxMjA4/ZGI5NC5wbmc.webp",
+ "image_note": "round-1 artwork taken from the first MP3; Nik uploads preview/covers-v2/FINAL-square.jpg in the dashboard",
+ "video_url": null
+}

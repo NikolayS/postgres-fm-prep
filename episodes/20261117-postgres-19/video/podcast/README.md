@@ -67,3 +67,11 @@ Episode 3745675 (show 32147), slug `postgres-19`, status draft, created 2026-11-
 ## Square cover
 
 `preview/covers-v2/FINAL-square.jpg` (3000x3000, from the cover work), embedded in the MP3 as the front cover and uploaded as the episode artwork.
+
+## Pre-release state of the Transistor draft (leak option A, 2026-11-18)
+
+A Transistor draft is public to anyone with its URL (share page, `postgres.fm/episodes/postgres-19`, the MP3). Until release the draft is empty: summary and description empty, transcript "Transcript coming soon.", audio a 2 s silent MP3 without ID3 tags. Title, number, season and slug are unchanged; the artwork is still the round-1 image until Nik uploads `preview/covers-v2/FINAL-square.jpg` in the dashboard (the API cannot take an image file).
+
+- `transistor-snapshot.json`: the fields before emptying (summary, description hash, transcript file, audio hash, media and image URLs). Summary and description matched the repo files.
+- Restore (does not publish): `bash episodes/20261117-postgres-19/video/podcast/restore.sh` re-sets summary, description and transcript from the repo and re-uploads `preview/episode-197-podcast.mp3`. `--dry-run` prints the plan (the dry run lists the PATCH fields; the real run also uploads the audio).
+- When a new cover lands, re-embed it in `preview/episode-197-podcast.mp3` only; do not upload it before release.
