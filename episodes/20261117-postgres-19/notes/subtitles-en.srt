@@ -55,7 +55,7 @@ Just DDL and Postgres 20 and that's it.
 
 13
 00:00:44,140 --> 00:00:48,160
-Hello, and welcome to postgres.fm,
+Hello, and welcome to Postgres.FM,
 a weekly show about all things PostgreSQL.
 
 14
@@ -1309,7 +1309,7 @@ so like additionally. But yeah,
 
 274
 00:17:35,472 --> 00:17:40,172
-Do you have another favorite for PG 19?
+Do you have another favorite for PG19?
 Moving on. [laughs]
 
 275
@@ -1593,7 +1593,7 @@ way of us getting our bloat removal, I'm-
 333
 00:21:24,716 --> 00:21:28,296
 Funny thing, behind the scene,
-this this Samograph,
+this this samograph,
 
 334
 00:21:28,296 --> 00:21:32,356
@@ -1627,7 +1627,7 @@ to show show notes, right? So.
 340
 00:21:49,636 --> 00:21:53,616
 How about you, Michael?
-What are your favorites in PG-19?
+What are your favorites in PG19?
 
 341
 00:21:54,416 --> 00:21:58,376
@@ -1716,7 +1716,7 @@ removed from pg_hint_plan.
 358
 00:22:59,756 --> 00:23:04,796
 And I know Lukas Fittl's got a really
-good, video on this, like a five minutes
+good, video on this, like a 5mins
 
 359
 00:23:04,796 --> 00:23:09,236
@@ -1799,7 +1799,7 @@ to development of pgroast,
 
 375
 00:24:08,176 --> 00:24:12,016
-we found this page in Wiki that we
+we found this page in wiki that we
 won't accept these proposals,
 
 376
@@ -2320,7 +2320,7 @@ some performance improvements as well.
 484
 00:31:00,180 --> 00:31:04,768
 The dev feature that I liked the look
-of was the wait command. WAIT FOR LSN.
+of was the WAIT command. WAIT FOR LSN.
 
 485
 00:31:05,648 --> 00:31:08,548
@@ -2651,12 +2651,12 @@ sit on top of a director.
 553
 00:35:25,684 --> 00:35:29,844
 And when I speak of a director, that's
-somebody who's kind of like pgBouncer
+somebody who's kind of like PgBouncer
 
 554
 00:35:29,844 --> 00:35:32,344
 to many different
-pgBouncer systems, right?
+PgBouncer systems, right?
 
 555
 00:35:32,344 --> 00:35:35,744
@@ -3088,7 +3088,7 @@ to some people, I think even, like, a PG18
 644
 00:40:57,136 --> 00:41:00,016
 one. Or maybe that was still...
-You know the IO workers?
+You know the I/O workers?
 
 645
 00:41:00,016 --> 00:41:03,396
@@ -3101,7 +3101,7 @@ kind of self-driving feature,
 
 647
 00:41:06,736 --> 00:41:11,316
-Nik, the self-tuning feature of the IO
+Nik, the self-tuning feature of the I/O
 workers that I think Tomas Vondra was
 
 648
@@ -3253,7 +3253,7 @@ And it's complicated, right?
 678
 00:43:02,536 --> 00:43:07,756
 So this is why [laughs] it's it's gonna
-be a HOT second before they get to DDL,
+be a hot second before they get to DDL,
 
 679
 00:43:07,756 --> 00:43:13,316

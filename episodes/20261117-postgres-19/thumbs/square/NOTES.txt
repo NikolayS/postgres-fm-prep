@@ -1,0 +1,137 @@
+postgres.fm episode 197 — POSTGRES 19
+
+OUTPUTS
+cover-3000.png: 3000 x 3000 PNG, rendered at 3x from square.html.
+cover-300.png: 300 x 300 PNG, LANCZOS preview.
+hosts.py: reproducible composition from the cleaned *-cut.png assets.
+
+REFERENCE
+Read episode 196 square.html and hosts.py, toolkit base.css and system.md;
+visually inspected episode 196 cover-3000.png. Preserved its dark radial
+background, Anton caps, cream/amber palette, red-dot Postgres.FM mark,
+robot tile and photographic cutouts. Episode title replaces the hook per brief.
+
+FRAMES
+Used the supplied ep197-thumbs/*-src.png candidates without modifying them.
+Confirmed exact pixel matches against the curated PNGs and picks JSON:
+Nik: cur/nik-1.png, N1, 1057.4 s = 17:37.40.
+Michael: cur/mic-1.png, M1, 3149.8 s = 52:29.80.
+Kirk: cur/kirk-3.png, K3, 1541.8 s = 25:41.80.
+These are FINAL-VIDEO timestamps from the candidate extractor's metadata,
+not claimed raw Zoom timestamps. The supplied images are 604 x 338 crops
+from the final video, derived from the recording's small gallery tiles.
+Read the provided tiles-manual.json to confirm host identities/positions.
+
+FACE CHECKS
+Ran the supplied Apple Vision faces binary on each actual chosen PNG.
+Full results retained in faces.jsonl. Eye landmark openness ratios:
+Nik: left .280, right .258; Michael: .288, .325; Kirk: .373, .406.
+Visually inspected all three original images and the cutouts: eyes open,
+pleasant smiles, no obstructed faces, no facial annotations or face synthesis.
+
+PROCESS
+Toolkit cutout.ts initially failed because its installed sharp native binary
+was absent. Installed an isolated copy of @imgly/background-removal-node
+1.4.5 under this folder's intermediate/, then ran the same cutout.ts with
+bun from the toolkit directory, with absolute input/output paths here.
+No repository was modified. No assets were uploaded.
+Cleaned background remnants using feathered silhouette masks; original
+cutouts retained in intermediate/*-cut-raw.png. Facial pixels were not edited.
+Equalized measured crown-to-chin heights at 1100 output pixels. Positions:
+Nik left, Michael center, Kirk right. Applied LANCZOS resizing and light
+UnsharpMask (radius 2, amount 40%, threshold 3). Slight contrast adjustment
+and mild Kirk red/exposure correction. Kept source-camera detail natural;
+small original video frames limit fine detail at 3000 pixels.
+
+VALIDATION
+Inspected composed 1000 px review and actual 300 px preview. Title fully
+visible and readable; amber 19; no text intersects faces; all three heads
+have equal crown-to-chin scale and balanced horizontal positions. Robot
+fits in upper right. Verified final PNG dimensions and RGB/RGBA modes.
+
+REBUILD
+From this folder: python3 hosts.py
+From toolkit folder:
+bun render.ts <absolute path to square.html> <absolute path to cover-3000.png> 1000 1000 3
+Then resize cover-3000.png to 300 x 300 with Pillow LANCZOS.
+The HTML references the existing toolkit base.css/fonts by absolute file URL.
+
+REVISION — 2026-11-18
+Preserved cover-3000.v1.png. Overwrote cover-3000.png (3000 x 3000)
+and cover-300.png (300 x 300); updated review-1000.png.
+Kept Nik's source/cutout, show mark, wording, colors, robot and background.
+
+Replacement frames (existing final-video crops, not raw Zoom timestamps):
+Michael: ep197-thumbs/ref/mic/01500-11.jpg, pool M8,
+1500.8 s = 25:00.80. Frontal, open eyes, relaxed closed mouth/slight smile.
+Kirk: ep197-thumbs/ref/kirk/00800-11.jpg, pool K4,
+800.8 s = 13:20.80. Frontal, open eyes, closed-mouth smile.
+Copied these into this folder as mic-src.png and kirk-src.png.
+Compared pool sheets and Michael's nearby frames; additionally inspected
+Apple Vision eye/pupil landmarks across 1545 existing Michael candidates.
+No facial synthesis or pupil manipulation. Michael's pupils are near, but
+not mathematically exactly at, the eye-landmark centers: horizontal offsets
+-0.109 and -0.014 eye widths; vertical offsets +0.100 and +0.075 eye heights.
+Kirk offsets: +0.017/+0.030 widths, -0.010/+0.005 heights. Both yaw=0.
+Eye landmarks are a gaze proxy, not proof of exact optical lens fixation.
+
+Rebuilt background removal locally using the existing isolated dependency.
+Raw replacement cutouts and reproducible Michael silhouette cleanup are in
+intermediate/*-revision-raw.png and intermediate/clean-revision.py.
+Kirk uses the episode 196 gamma 1.25 and contrast 1.08, retaining the mild
+red-channel correction. Visible facial shading remains; final facial ROI
+x2240:2820/y1950:2850 has maximum channel 203 and zero all-channel >=250
+pixels. This avoids bright rendering; it cannot recover lost source detail.
+
+All crown-to-chin heights increased from 1100 to 1265 px (+15%). Crown
+anchor moved from y1830 to y1665, retaining chin/bottom anchoring at y2930.
+Title moved down 40 CSS px (top 325). Visible gap to headphones/hair remains
+about 50 CSS px including title shadow. No title/face intersection.
+
+Re-ran supplied faces binary on all three actual source PNGs and final
+3000 px render plus 1000 px review. Sources: Nik .280/.258, Michael
+.379/.373, Kirk .275/.351 eye openness ratios. Final: Nik .280/.259,
+Michael .378/.379, Kirk .257/.293. Three faces detected in both renders.
+Detailed eye/pupil checks also rerun on replacement sources and final image;
+all final detected yaw values zero, replacement gaze offsets stable.
+Results: intermediate/revision-source-faces.jsonl,
+intermediate/revision-render-faces.jsonl, intermediate/revision-gaze.jsonl.
+Personally inspected the final 1000 px review and actual 300 px preview:
+open eyes, relaxed expressions, readable title, balanced larger heads,
+clear separation from text. Source resolution still limits fine detail.
+All writes stayed in this cover folder; no uploads, repository writes,
+or modifications to ep197-thumbs.
+
+REVISION 2 — 2026-11-18
+Preserved cover-3000.v1.png and cover-3000.v2.png. Overwrote cover-3000.png
+(3000 x 3000) and cover-300.png (300 x 300).
+Kept v2 title position, robot, Nik's frame and processing, 1265 px equal
+crown-to-chin height, crown y1665, chin y2930 and horizontal head anchors.
+
+Reviewer-selected frames freshly extracted to lossless PNG at full 604x338
+crop resolution using pool JSON t values and the original extractor logic:
+Kirk K1: t=3143.8 (52:23.80), crop=604:338:1290:302.
+Michael M8: t=1500.8 (25:00.80), crop=604:338:658:302.
+Source: <repo>/episodes/20261117-postgres-19/preview/episode-197-final.mp4
+These are final-video timestamps, not raw Zoom timestamps. Compared fresh
+extractions visually with the exact pool f thumbnails; matching expressions
+and poses. Comparison retained in intermediate/revision2-frame-comparison.png.
+
+Fresh local background removal for both; raw cutouts retained in
+intermediate/*-revision2-raw.png. Alpha-only silhouette cleanup is reproduced
+by intermediate/clean-revision2.py. Kirk source geometry now (305,20,220).
+Removed previous Kirk gamma 1.25 and contrast 1.08 processing. Source itself
+has a magenta cast, so applied restrained global white balance only:
+RGB gains 0.98 / 1.04 / 0.95. No saturation boost, local skin retouching,
+or highlight curve. Kept standard LANCZOS and light unsharp resizing.
+Source lighting and compressed video detail remain visible; no invented
+facial detail. White-balance comparison retained in intermediate/.
+
+Re-ran Apple Vision on all source PNGs and final 3000, 1000, and 300 px
+images: one face per source and three faces at every output size. Results
+saved in intermediate/revision2-faces.jsonl. Visually inspected the final
+1000 px and actual 300 px images: open eyes, selected expressions, readable
+title, no title/face overlap, equal crown-to-chin heights. Michael is the
+requested M8 pose; lens fixation is not proven by a face detector.
+All writes stayed in this cover folder. No uploads, repository writes,
+or modifications to ep197-thumbs.

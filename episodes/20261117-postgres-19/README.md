@@ -20,6 +20,8 @@
 | [`notes/youtube-description.txt`](notes/youtube-description.txt) | YouTube description draft with chapters |
 | [`notes/summary.txt`](notes/summary.txt) | Transistor summary draft |
 | [`notes/fact-check.md`](notes/fact-check.md) | Claims made on air, checked against primary sources |
+| [`captions/`](captions/) | Podcast SRT/VTT and transcript (`.md`, website `.txt`), dictionary rules (`subtitle-fixes.json`) |
+| [`video/podcast/README.md`](video/podcast/README.md) | Podcast audio master, time map, dictionary pass, Transistor notes |
 | [`thumbs/titles.md`](thumbs/titles.md) | Title options, thumbnail concepts, cold-open candidates |
 | [`social/x-thread.md`](social/x-thread.md) | X thread and LinkedIn drafts with a number check |
 
@@ -42,6 +44,31 @@ Credits and links are in the recording notes, beside each lead: shihao zhong (`p
 ## Open questions
 
 See the last section of the recording notes.
+
+## Release checklist (podcast part, 2026-11-18)
+
+YouTube subtitles (section 4):
+- [x] English subtitles built from the edited transcript (`notes/subtitles-en.srt`, final-video times).
+- [x] Dictionary pass with the `prompt.txt` glossary, then a read-through; doubtful spots checked with whisper (`video/podcast/README.md`). New mis-hearings not yet added to the glossary repository (MR to do).
+- [ ] Uploaded with timing; auto-generated track removed; auto-dubbing off (no YouTube video yet).
+
+Podcast audio (section 5):
+- [x] Decision: the audio has the cold open (host can veto), so podcast times are video times.
+- [x] Audio-only master without overlay sounds, -16.2 LUFS, -2.1 dBTP, MP3 192 kbps with the cover (`preview/episode-197-podcast.mp3`, not in git).
+- [x] Square cover 3000x3000 (`preview/cover-3000.png`, not in git).
+- [x] Draft created with `transistor.ts`: episode 3745675 (slug `postgres-19`, status draft): title, summary, description, transcript, audio. Not published or scheduled.
+- [ ] `video_url`: set when the YouTube video exists (`--episode <id> --video-url ...`), and add the URL to the tip in the notes.
+- [x] Show notes open with the watch-on-YouTube tip.
+- [ ] Publish and check the episode page, the share page and the RSS feed (not done: draft only).
+
+Transcript and podcast subtitles (section 6):
+- [x] Transcript in the new style (name and stamp only when a person starts speaking), podcast times.
+- [x] SRT/VTT for the audio version from the audio time map (`captions/podcast.en.*`).
+
+Show notes (section 7):
+- [x] One paragraph, then links grouped by topic with podcast times; 20 links, all opened on 2026-11-18.
+- [x] Brief as the Main link in the Transistor notes and in the YouTube description.
+- [x] No company or job title for a guest (no guests; Kirk is a co-host and is in the producers).
 
 ## Published links
 
