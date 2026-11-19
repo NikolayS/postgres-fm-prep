@@ -13,7 +13,7 @@ body.sq{width:1000px;height:1000px;--D:82;--ey:820px;--cn:178px;--cm:500px;--ck:
   left:calc(var(--cx) - var(--ex)*var(--s)*1px);top:calc(var(--ey) - var(--eyy)*var(--s)*1px)}
 /* pupil midpoint in the 2432 px source, and the scale that gives equal head size (eye distance, with a per-head factor) */
 .nik {--cx:var(--cn);--s:calc(var(--D)/247);      --ex:1459;--eyy:800;  z-index:3}
-.mic {--cx:var(--cm);--s:calc(var(--D)*.92/222.6); --ex:1505;--eyy:603;  z-index:2}
+.mic {--cx:var(--cm);--s:calc(var(--D)*.827/200.2);--ex:1342;--eyy:576;  z-index:2}
 .kirk{--cx:var(--ck);--s:calc(var(--D)*.76/197);  --ex:1143.5;--eyy:514.5;z-index:3}
 .mark{position:absolute;display:none;align-items:center;gap:14px;font:800 66px Inter,sans-serif;letter-spacing:-.02em;z-index:5}
 .mark i{width:26px;height:26px;border-radius:50%;background:#ff3b3b}
