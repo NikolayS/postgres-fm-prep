@@ -268,7 +268,7 @@ const Stats: React.FC<StatsProps> = (p) => {
 export type ForgeProps = CenterShotProps | HBarsProps | LineProps | DotsProps | StackProps | PopProps | VBarsProps | StatsProps | V2Props;
 export const Forge: React.FC<ForgeProps> = (p) => {
   switch (p.kind) {
-    case 'v2-credits': case 'v2-cves': case 'v2-cves-rel': case 'v2-repack': case 'v2-notify': case 'v2-autovac':
+    case 'v2-credits': case 'v2-cves': case 'v2-cves-rel': case 'v2-cves-both': case 'v2-repack': case 'v2-notify': case 'v2-autovac':
     case 'v2-advice': case 'v2-jit': case 'v2-lz4': case 'v2-rehearsal': case 'v2-plans': return <V2Card {...p} />;
     case 'v2-shot': return <CenterShot {...(p as any)} />;
     case 'hbars': return <HBars {...p} />;
@@ -284,12 +284,12 @@ export const Forge: React.FC<ForgeProps> = (p) => {
 // V2: one explicitly sized graphic viewport per card. Boxes describe the chart
 // envelope (axes, marks and numeric callouts), not the sum of painted pixels.
 export const G = {x: 90, y: 370, w: 1460, h: 490};
-export type V2Kind = 'v2-credits' | 'v2-cves' | 'v2-cves-rel' | 'v2-repack' | 'v2-notify' | 'v2-autovac' | 'v2-advice' | 'v2-jit' | 'v2-lz4' | 'v2-rehearsal' | 'v2-plans';
+export type V2Kind = 'v2-credits' | 'v2-cves' | 'v2-cves-rel' | 'v2-cves-both' | 'v2-repack' | 'v2-notify' | 'v2-autovac' | 'v2-advice' | 'v2-jit' | 'v2-lz4' | 'v2-rehearsal' | 'v2-plans';
 export type V2Props = Base & {kind: V2Kind; labels: Record<string, string>};
 export type GraphicBox = {x: number; y: number; w: number; h: number};
 export function graphicBoxes(p: {kind: string}): GraphicBox[] {
   switch (p.kind) {
-    case 'v2-credits': case 'v2-cves': case 'v2-cves-rel': case 'v2-repack': case 'v2-notify': case 'v2-autovac':
+    case 'v2-credits': case 'v2-cves': case 'v2-cves-rel': case 'v2-cves-both': case 'v2-repack': case 'v2-notify': case 'v2-autovac':
     case 'v2-advice': case 'v2-jit': case 'v2-lz4': case 'v2-rehearsal': case 'v2-plans': return [{...G}];
     default: return [];
   }
@@ -362,6 +362,28 @@ const V2Card: React.FC<V2Props> = (p) => {
         {values.map((v,i)=>{const k=hot(i)?grow(i===35?1.6:2.1,.7):grow(.5+.025*i,.4),h=Math.max(v*u*k,v?0:3),x=x0+stp*i,r=Math.min(5,h/2);return <g key={i}><path d={`M${x},800 V${800-h+r} Q${x},${800-h} ${x+r},${800-h} H${x+bw-r} Q${x+bw},${800-h} ${x+bw},${800-h+r} V800 Z`} fill={hot(i)?C.s19:C.grey}/>{hot(i)?<T x={i===35?x+bw-2:x+bw/2} y={800-h-14} size={i===36?40:32} anchor={i===35?'end':'middle'} color={C.s19} weight={800} opacity={grow(i===35?2.0:2.6,.3)}>{fmt(v*k)}</T>:null}</g>;})}
         <T x={1200} y={600} size={150} weight={800} color={C.plum} opacity={grow(3.2,.15)}>{fmt(34*grow(3.2,.9))}x</T>
         {labels.hero.split('|').map((l,i)=><T key={i} x={1206} y={662+42*i} size={34} color={C.s19} opacity={grow(3.8,.4)}>{l}</T>)}
+      </>;break;
+    }
+    case 'v2-cves-both': {
+      // Two views of the same snapshot (cards/f00-cves.card.json): CVEs per year 2019..2026 (left)
+      // and per minor-release batch 2019-02 (11.2) .. 2026-11 (18.7) (right). Linear scales, no gridlines.
+      const yv=[10,7,8,2,8,7,7,96],rv=[0,4,1,4,1,1,1,2,3,2,3,1,2,0,1,0,1,0,1,2,2,3,1,1,1,4,0,1,0,1,3,2,5,0,11,28,52];
+      const ry:[number,number][]=[[0,2019],[5,2020],[9,2021],[13,2022],[18,2023],[22,2024],[27,2025],[32,2026]];
+      const base=800,bar=(x:number,w:number,h:number,c:string,key:number)=>{const r=Math.min(w/3,h/2,6);return <path key={key} d={`M${x},${base} V${base-h+r} Q${x},${base-h} ${x+r},${base-h} H${x+w-r} Q${x+w},${base-h} ${x+w},${base-h+r} V${base} Z`} fill={c}/>;};
+      const L=labels.left.split('|'),R=labels.right.split('|');
+      art=<>
+        <line x1={800} x2={800} y1={385} y2={850} stroke={C.grey} strokeOpacity={.3} strokeWidth={2}/>
+        <T x={90} y={410} size={36} color={C.plum} weight={800} opacity={grow(.3,.3)}>{L[0]}</T>
+        <line x1={100} x2={740} y1={base} y2={base} stroke={C.grey} strokeOpacity={.5}/>
+        {yv.map((v,i)=>{const hi=i===7,k=hi?grow(1.0,.6):grow(.4+.06*i,.35),h=Math.max(v*2.6*k,2),x=110+80*i;return <g key={i}>{bar(x,52,h,hi?C.s19:C.grey,i)}<T x={x+26} y={834} size={22} anchor="middle" color={hi?C.s19:C.soft} weight={hi?800:600} opacity={grow(.4,.3)}>{2019+i}</T>{hi?<><T x={x+26} y={862} size={22} anchor="middle" color={C.s19} weight={800} opacity={grow(.4,.3)}>{L[1]}</T><T x={x+26} y={base-h-14} size={34} anchor="middle" color={C.s19} weight={800} opacity={grow(1.4,.3)}>{fmt(96*k)}</T></>:<T x={x+26} y={base-h-10} size={22} anchor="middle" color={C.soft} opacity={grow(.9,.3)}>{v}</T>}</g>;})}
+        <T x={104} y={500} size={88} weight={800} color={C.plum} opacity={grow(1.8,.15)}>{(13.7*grow(1.8,.7)).toFixed(1)}x</T>
+        <T x={108} y={540} size={26} color={C.s19} opacity={grow(2.2,.3)}>{L[2]}</T>
+        <T x={850} y={410} size={36} color={C.plum} weight={800} opacity={grow(2.4,.3)}>{R[0]}</T>
+        <line x1={845} x2={1550} y1={base} y2={base} stroke={C.grey} strokeOpacity={.5} opacity={grow(2.4,.3)}/>
+        {ry.map(([i,y])=><T key={y} x={852+18.6*i} y={834} size={20} color={y===2026?C.s19:C.soft} weight={y===2026?800:600} opacity={grow(2.4,.3)}>{y}</T>)}
+        {rv.map((v,i)=>{const hi=i>=35,k=hi?grow(i===35?3.4:3.8,.6):grow(2.5+.02*i,.35),h=Math.max(v*4.8*k,v?0:2),x=852+18.6*i;return <g key={i}>{bar(x,13,h,hi?C.s19:C.grey,i)}{hi?<T x={i===35?x+12:x+6} y={base-h-12} size={i===36?34:28} anchor={i===35?'end':'middle'} color={C.s19} weight={800} opacity={grow(i===35?3.8:4.2,.3)}>{fmt(v*k)}</T>:null}</g>;})}
+        <T x={852} y={500} size={88} weight={800} color={C.plum} opacity={grow(4.6,.15)}>{fmt(34*grow(4.6,.7))}x</T>
+        <T x={856} y={540} size={26} color={C.s19} opacity={grow(5.0,.3)}>{R[1]}</T>
       </>;break;
     }
     case 'v2-repack': {

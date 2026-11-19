@@ -1,209 +1,331 @@
 {
   "id": "f00-cves",
-  "headline": "PostgreSQL CVEs per release",
-  "chart": {
-    "type": "bars",
-    "scale": "linear",
-    "caption": "vs 1.5 per release, 2019-2025 average",
-    "bars": [
-      {
-        "label": "",
-        "n": "b11_2",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b11_3",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b11_4",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b11_5",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b12_1",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b12_2",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b12_3",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b12_4",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b13_1",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b13_2",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b13_3",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b13_4",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b14_1",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b14_2",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b14_3",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b14_4",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b14_5",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b15_1",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b15_2",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b15_3",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b15_4",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b16_1",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b16_2",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b16_3",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b16_4",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b17_1",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b17_2",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b17_3",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b17_4",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b17_5",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b17_6",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b18_1",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b18_2",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b18_3",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b18_4",
-        "color": "#8b95a1"
-      },
-      {
-        "label": "",
-        "n": "b18_6",
-        "color": "#d9822b"
-      },
-      {
-        "label": "",
-        "n": "b18_7",
-        "color": "#d9822b"
-      }
-    ]
-  },
-  "heroes": [
+  "headline": "PostgreSQL CVEs",
+  "chart": [
     {
-      "n": "ratio",
-      "label": "52 CVEs in 18.7"
+      "type": "bars",
+      "scale": "linear",
+      "title": "Per year",
+      "bars": [
+        {
+          "label": "2019",
+          "n": "y2019",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "2020",
+          "n": "y2020",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "2021",
+          "n": "y2021",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "2022",
+          "n": "y2022",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "2023",
+          "n": "y2023",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "2024",
+          "n": "y2024",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "2025",
+          "n": "y2025",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "2026 YTD",
+          "n": "y2026",
+          "color": "#d9822b"
+        }
+      ]
     },
     {
-      "n": "b18_7"
+      "type": "bars",
+      "scale": "linear",
+      "bars": [
+        {
+          "label": "",
+          "n": "b11_2",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b11_3",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b11_4",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b11_5",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b12_1",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b12_2",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b12_3",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b12_4",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b13_1",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b13_2",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b13_3",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b13_4",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b14_1",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b14_2",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b14_3",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b14_4",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b14_5",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b15_1",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b15_2",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b15_3",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b15_4",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b16_1",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b16_2",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b16_3",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b16_4",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b17_1",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b17_2",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b17_3",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b17_4",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b17_5",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b17_6",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b18_1",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b18_2",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b18_3",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b18_4",
+          "color": "#8b95a1"
+        },
+        {
+          "label": "",
+          "n": "b18_6",
+          "color": "#d9822b"
+        },
+        {
+          "label": "",
+          "n": "b18_7",
+          "color": "#d9822b"
+        }
+      ],
+      "title": "Per release"
+    }
+  ],
+  "heroes": [
+    {
+      "n": "ratio_year",
+      "label": "vs 2019-2025 avg/year"
+    },
+    {
+      "n": "ratio",
+      "label": "18.7 vs avg release"
     }
   ],
   "chip": "postgresql.org/support/security",
   "numbers": {
+    "y2019": {
+      "value": 10,
+      "display": "10",
+      "source": {
+        "file": "cards/data/security-20261118",
+        "compute": "bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2019"
+      }
+    },
+    "y2020": {
+      "value": 7,
+      "display": "7",
+      "source": {
+        "file": "cards/data/security-20261118",
+        "compute": "bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2020"
+      }
+    },
+    "y2021": {
+      "value": 8,
+      "display": "8",
+      "source": {
+        "file": "cards/data/security-20261118",
+        "compute": "bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2021"
+      }
+    },
+    "y2022": {
+      "value": 2,
+      "display": "2",
+      "source": {
+        "file": "cards/data/security-20261118",
+        "compute": "bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2022"
+      }
+    },
+    "y2023": {
+      "value": 8,
+      "display": "8",
+      "source": {
+        "file": "cards/data/security-20261118",
+        "compute": "bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2023"
+      }
+    },
+    "y2024": {
+      "value": 7,
+      "display": "7",
+      "source": {
+        "file": "cards/data/security-20261118",
+        "compute": "bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2024"
+      }
+    },
+    "y2025": {
+      "value": 7,
+      "display": "7",
+      "source": {
+        "file": "cards/data/security-20261118",
+        "compute": "bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2025"
+      }
+    },
+    "y2026": {
+      "value": 96,
+      "display": "96",
+      "source": {
+        "file": "cards/data/security-20261118",
+        "compute": "bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2026"
+      }
+    },
+    "ratio_year": {
+      "value": 13.7143,
+      "display": "13.7x",
+      "source": {
+        "file": "cards/data/security-20261118",
+        "compute": "echo \"scale=4; $(bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2026) * 7 / ($(bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2019)+$(bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2020)+$(bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2021)+$(bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2022)+$(bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2023)+$(bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2024)+$(bun cards/data/cve-per-year.ts \"$F\" \"$P\" 2025))\" | bc"
+      }
+    },
     "b11_2": {
       "value": 0,
       "display": "0",
@@ -500,14 +622,6 @@
         "compute": "bun cards/data/cve-per-release.ts \"$F\" \"$P\" --batch 18.7"
       }
     },
-    "mean": {
-      "value": 1.531,
-      "display": "1.5",
-      "source": {
-        "file": "cards/data/security-20261118",
-        "compute": "bun cards/data/cve-per-release.ts \"$F\" \"$P\" --mean 2019 2025"
-      }
-    },
     "ratio": {
       "value": 34,
       "display": "34x",
@@ -540,6 +654,13 @@
       "approvedBy": "Nik",
       "date": "2026-11-18",
       "reason": "One bar per minor-release batch, 2019 to 18.7 (37 bars); x-axis labels show years only."
+    },
+    {
+      "rule": "charts",
+      "max": 2,
+      "approvedBy": "Nik",
+      "date": "2026-11-18",
+      "reason": "Two views of one dataset on one card: CVEs per year (2026 YTD) and per minor-release batch."
     }
   ]
 }

@@ -76,6 +76,20 @@ describe("lintCard: chart-first card rules", () => {
     const anon = { ...many(37), exceptions: [{ rule: "bars", max: 40, date: "2026-11-18", reason: "x" }] };
     expect(lintCard(anon as any, "card").join()).toContain("approvedBy");
   });
+  test("two charts on one card only with a human-approved charts exception; both are linted", () => {
+    const two = () => { const c = good(); const b = (c.chart as any); (c as any).chart = [{ ...b, title: "Per year" }, { ...b, title: "Per release" }]; return c; };
+    expect(lintCard(two(), "card").join()).toContain("one chart");
+    const exc = [{ rule: "charts", max: 2, approvedBy: "Nik", date: "2026-11-18", reason: "two views of one dataset" }];
+    expect(lintCard({ ...two(), exceptions: exc } as any, "card")).toEqual([]);
+    const three = two(); (three as any).chart.push((three as any).chart[0]);
+    expect(lintCard({ ...three, exceptions: exc } as any, "card").join()).toContain("1-2 charts");
+    const bad = two(); (bad as any).chart[1].scale = "log";
+    expect(lintCard({ ...bad, exceptions: exc } as any, "card").join()).toMatch(/log/);
+    const miss = two(); (miss as any).chart[1].bars = [{ label: "", n: "missing" }];
+    expect(lintCard({ ...miss, exceptions: exc } as any, "card").join()).toMatch(/missing/);
+    const wordy = two(); (wordy as any).chart[1].title = "per release batch of minor versions";
+    expect(lintCard({ ...wordy, exceptions: exc } as any, "card").join()).toMatch(/words/);
+  });
   test("1 or 2 hero numbers", () => {
     expect(lintCard({ ...good(), heroes: [] }, "card").join("\n")).toMatch(/hero/);
     expect(lintCard({ ...good(), heroes: [{ n: "x" }, { n: "n18" }, { n: "n19" }] }, "card").join("\n")).toMatch(/hero/);
@@ -177,6 +191,19 @@ describe("cardSvg: chart-first layout, linear scales", () => {
     expect(cardSvg(d)).toContain("<path");
     const l = { ...good(), chart: { type: "line", xLabel: "rows/s", series: [{ label: "wait", points: [{ x: "n18", y: "x" }, { x: "n19", y: "x" }] }] } } as Card;
     expect(cardSvg(l)).toContain("<polyline");
+  });
+
+  test("more than 8 bars draw as linear columns; two charts sit side by side with their titles", () => {
+    const g = good(), b = (g.chart as any).bars;
+    const many = Array.from({ length: 37 }, (_, i) => b[i % 2]);
+    const c = { ...g, chart: [{ type: "bars", title: "Per year", bars: b }, { type: "bars", title: "Per release", bars: many }] } as any;
+    const svg = cardSvg(c);
+    for (const s of ["Per year", "Per release"]) expect(svg).toContain(s);
+    const cols = [...svg.matchAll(/data-col="(n1[89])"[^>]*x="([\d.]+)"[^>]*width="([\d.]+)" height="([\d.]+)"/g)];
+    expect(cols.length).toBe(37);
+    const h = (n: string) => Number(cols.find((m) => m[1] === n)![4]);
+    expect(h("n19") / h("n18")).toBeCloseTo(19686 / 915, 1);
+    const x = cols.map((m) => Number(m[2])); expect(x[0]).toBeGreaterThan(Number(svg.match(/data-n="n19"[^>]*x="([\d.]+)"/)![1]));
   });
 
   test("text is escaped", () => {

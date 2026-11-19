@@ -3,7 +3,7 @@
 // (the "center" placement, frame x 40-1600, y 250-890; nothing in the bottom 180 px):
 // chip and headline on top, the chart on the left, 1-2 hero numbers on the right.
 // Linear scales only, every axis starts at 0. Manifest format: cards/card.ts.
-import type { Card, Chart, Finding, NumberRef } from "../../cards/card";
+import { chartsOf, type Card, type Chart, type Finding, type NumberRef } from "../../cards/card";
 
 export const PANEL = { x: 40, y: 250, w: 1560, h: 640 };
 export const PALETTE = ["#2a78d6", "#d9822b", "#7a5bd6", "#3a9d6a", "#a8433b", "#8b95a1"];
@@ -29,13 +29,23 @@ type Box = { x: number; y: number; w: number; h: number };
 
 function bars(c: Extract<Chart, { type: "bars" }>, N: Record<string, NumberRef>, b: Box): string {
   const max = Math.max(...c.bars.map((r) => N[r.n].value), 0) || 1;
-  const labelW = 230, valueW = 210, gap = 18;
+  if (c.bars.length > 8) {
+    // Many bars (an approved exception): linear columns from one baseline; values on the 2 highest only.
+    const B = b.y + b.h - 8, top = b.y + 50, cw = b.w / c.bars.length, k = (B - top) / max;
+    const big = new Set([...c.bars.keys()].sort((i, j) => N[c.bars[j].n].value - N[c.bars[i].n].value).slice(0, 2));
+    return `<line x1="${b.x}" x2="${b.x + b.w}" y1="${B}" y2="${B}" stroke="${LINE}"/>` + c.bars.map((r, i) => {
+      const v = N[r.n].value, x = b.x + i * cw, h = v * k;
+      return `<rect data-col="${esc(r.n)}" x="${r1(x + cw * 0.15)}" y="${r1(B - h)}" width="${r1(cw * 0.7)}" height="${r1(h)}" fill="${r.color ?? PALETTE[5]}"/>` +
+        (big.has(i) ? text(x + cw / 2, B - h - 10, disp(N[r.n]), 34, { weight: 700, anchor: "middle" }) : "");
+    }).join("");
+  }
+  const labelW = b.w < 900 ? 150 : 230, valueW = b.w < 900 ? 90 : 210, gap = 18;
   const bh = Math.min(110, (b.h - gap * (c.bars.length - 1)) / c.bars.length);
   const top = b.y + (b.h - (bh * c.bars.length + gap * (c.bars.length - 1))) / 2;
   const scale = (b.w - labelW - valueW) / max;
   return c.bars.map((r, i) => {
     const n = N[r.n], y = top + i * (bh + gap), w = Math.max(2, n.value * scale);
-    return text(b.x + labelW - 18, y + bh / 2 + 11, r.label, 32, { anchor: "end", fill: SOFT }) +
+    return text(b.x + labelW - 18, y + bh / 2 + 11, r.label, b.w < 900 ? 26 : 32, { anchor: "end", fill: SOFT }) +
       `<rect data-n="${esc(r.n)}" x="${b.x + labelW}" y="${r1(y)}" width="${r1(w)}" height="${r1(bh)}" rx="8" fill="${r.color ?? PALETTE[i % PALETTE.length]}"/>` +
       text(b.x + labelW + w + 16, y + bh / 2 + 14, disp(n), 40, { weight: 700 });
   }).join("");
@@ -89,9 +99,15 @@ export function cardSvg(c: Card | Finding, o: { w?: number; h?: number } = {}): 
   const words = c.headline.split(/\s+/).length, hs = words <= 6 ? 56 : 44;
   const chipW = 24 + c.chip.length * 11.5;
   let body = "";
-  if (c.chart.type === "bars") body = bars(c.chart, N, chartBox);
-  else if (c.chart.type === "donut") body = donut(c.chart, N, chartBox);
-  else if (c.chart.type === "line") body = line(c.chart, N, chartBox);
+  const charts = chartsOf(c), cw = (chartBox.w - 40 * (charts.length - 1)) / charts.length;
+  charts.forEach((ch, i) => {
+    const bx = { ...chartBox, x: chartBox.x + i * (cw + 40), w: cw };
+    const tb = ch.type === "bars" && ch.title ? { ...bx, y: bx.y + 44, h: bx.h - 44 } : bx;
+    if (tb !== bx) body += text(bx.x, bx.y + 24, (ch as any).title, 30, { weight: 700, fill: PLUM });
+    if (ch.type === "bars") body += bars(ch, N, tb);
+    else if (ch.type === "donut") body += donut(ch, N, tb);
+    else if (ch.type === "line") body += line(ch, N, tb);
+  });
   const hx = W - 44 - heroW, hTop = chartBox.y + (chartBox.h - c.heroes.length * 210) / 2;
   const heroes = c.heroes.map((h, i) => {
     const y = hTop + i * 210, s = disp(N[h.n]), size = Math.min(120, Math.floor(heroW / (0.62 * s.length)));

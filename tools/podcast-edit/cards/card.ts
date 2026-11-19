@@ -1,5 +1,6 @@
 // Chart-first data card manifest (one <id>.card.json per card in <episode>/cards/) and its lint.
-// A card is: a headline of 6 words or fewer, one chart (bars, donut or line; linear scales only),
+// A card is: a headline of 6 words or fewer, one chart (bars, donut or line; linear scales only;
+// two only with a per-card "charts" exception),
 // 1-2 hero numbers and a source chip. No sentences, no footers: caveats go to the show notes.
 // Every number on the card is a key in `numbers` with its raw file and the command that
 // recomputes it (cards/provenance.ts runs it). The same shape, without onAir and decision,
@@ -13,22 +14,22 @@ export type NumberRef = {
 };
 export type Ref = { label: string; n: string; color?: string };
 export type Chart =
-  | { type: "bars"; unit?: string; caption?: string; scale?: "linear"; bars: Ref[] } // caption: what was measured, under the bars
+  | { type: "bars"; unit?: string; caption?: string; title?: string; scale?: "linear"; bars: Ref[] } // caption: what was measured, under the bars; title: short chart name (two-chart cards)
   | { type: "donut"; scale?: "linear"; parts: Ref[] }
   | { type: "line"; scale?: "linear"; xLabel?: string; yLabel?: string; series: { label: string; color?: string; points: { x: string; y: string }[] }[] };
 export type Hero = { n: string; label?: string };
 export type Finding = {
   id: string;
   headline: string;
-  chart: Chart;
+  chart: Chart | Chart[]; // an array only with an approved "charts" exception (max 2)
   heroes: Hero[];
   chip: string;
   numbers: Record<string, NumberRef>;
   literals?: string[]; // numbers in the text that are not measurements (versions, "1,000 listeners" as a setup)
 };
 // A rule exception for one card, allowed by a named human on a date (never a global change).
-// Only "bars" (more than 8 bars, up to max) exists.
-export type Exception = { rule: "bars"; max: number; approvedBy: string; date: string; reason: string };
+// "bars": more than 8 bars, up to max. "charts": two charts on one card (max 2).
+export type Exception = { rule: "bars" | "charts"; max: number; approvedBy: string; date: string; reason: string };
 export type Card = Finding & {
   exceptions?: Exception[];
   onAir: { quote: string; at: string }; // the words this card illustrates and their time in the edited episode
@@ -60,10 +61,11 @@ export function chartRefs(c: Chart): string[] {
 }
 
 // Strings a viewer reads, apart from the number displays.
+export const chartsOf = (c: Finding): Chart[] => (Array.isArray(c.chart) ? c.chart : c.chart ? [c.chart] : []);
 export function textStrings(c: Finding): string[] {
-  const ch = c.chart as any;
-  const labels = [...(ch.bars ?? []), ...(ch.parts ?? []), ...(ch.series ?? [])].map((r: any) => r.label);
-  return [c.headline, c.chip, ...c.heroes.map((h) => h.label ?? ""), ...labels, ch.xLabel ?? "", ch.yLabel ?? "", ch.unit ?? "", ch.caption ?? ""].filter(Boolean);
+  const per = chartsOf(c).flatMap((ch: any) => [...[...(ch.bars ?? []), ...(ch.parts ?? []), ...(ch.series ?? [])].map((r: any) => r.label),
+    ch.title ?? "", ch.xLabel ?? "", ch.yLabel ?? "", ch.unit ?? "", ch.caption ?? ""]);
+  return [c.headline, c.chip, ...c.heroes.map((h) => h.label ?? ""), ...per].filter(Boolean);
 }
 
 export function lintCard(c: Card | Finding, mode: "card" | "finding"): string[] {
@@ -79,23 +81,28 @@ export function lintCard(c: Card | Finding, mode: "card" | "finding"): string[] 
   if (!c.chip) e.push("chip (the source) is missing");
   else if (c.chip.split(/\s+/).length > LIMITS.chip) e.push(`chip has more than ${LIMITS.chip} words`);
 
-  // Chart: one of three forms, linear only.
-  const ch = c.chart as any;
-  if (!ch || !["bars", "donut", "line"].includes(ch.type)) e.push(`chart type must be bars, donut or line (got ${ch?.type})`);
-  if (JSON.stringify(ch ?? {}).match(/"(scale|xScale|yScale)":"(?!linear")/) || /\blog\b|logarithm/i.test(JSON.stringify(ch ?? {})))
-    e.push("log scales are not allowed (linear only); for wide ranges use value labels or two charts");
+  // Chart: one of three forms, linear only. Two charts only with an approved "charts" exception.
   const exc = (mode === "card" ? (c as Card).exceptions ?? [] : []);
-  for (const x of exc) if (x.rule !== "bars" || !x.approvedBy?.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(x.date ?? "") || !x.reason?.trim() || !(x.max > 8))
-    e.push(`exceptions: each needs rule "bars", max > 8, approvedBy (a human), date YYYY-MM-DD and reason`);
+  for (const x of exc) if (!["bars", "charts"].includes(x.rule) || !x.approvedBy?.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(x.date ?? "") || !x.reason?.trim() || !(x.rule === "bars" ? x.max > 8 : x.max === 2))
+    e.push(`exceptions: each needs rule "bars" (max > 8) or "charts" (max 2), approvedBy (a human), date YYYY-MM-DD and reason`);
   const maxBars = Math.max(8, ...exc.filter((x) => x.rule === "bars" && x.approvedBy?.trim()).map((x) => x.max));
-  if (ch?.type === "bars" && !(ch.bars?.length >= 1 && ch.bars.length <= maxBars)) e.push(`bars: use 1-${maxBars} bars`);
-  if (ch?.type === "donut" && !(ch.parts?.length >= 2 && ch.parts.length <= 6)) e.push("donut: use 2-6 parts");
-  if (ch?.type === "line" && !(ch.series?.length >= 1 && ch.series.length <= 3 && ch.series.every((s: any) => s.points?.length >= 2)))
-    e.push("line: use 1-3 series with 2 or more points each");
-  const nums = c.numbers ?? {};
-  if (ch) for (const r of chartRefs(ch)) {
-    if (!nums[r]) e.push(`chart value "${r}" is missing from numbers`);
-    else if (ch.type !== "line" && nums[r].value < 0) e.push(`chart value "${r}" is negative`);
+  const maxCharts = exc.some((x) => x.rule === "charts" && x.approvedBy?.trim() && x.max === 2) ? 2 : 1;
+  const charts = chartsOf(c as Finding), nums = c.numbers ?? {};
+  if (Array.isArray(c.chart) && maxCharts === 1) e.push("use one chart per card (two need a \"charts\" exception approved by a human)");
+  else if (charts.length > maxCharts || !charts.length) e.push(`use 1-${maxCharts} charts`);
+  for (const ch of (charts.length ? charts : [undefined]) as any[]) {
+    if (!ch || !["bars", "donut", "line"].includes(ch.type)) e.push(`chart type must be bars, donut or line (got ${ch?.type})`);
+    if (JSON.stringify(ch ?? {}).match(/"(scale|xScale|yScale)":"(?!linear")/) || /\blog\b|logarithm/i.test(JSON.stringify(ch ?? {})))
+      e.push("log scales are not allowed (linear only); for wide ranges use value labels or two charts");
+    if (ch?.type === "bars" && !(ch.bars?.length >= 1 && ch.bars.length <= maxBars)) e.push(`bars: use 1-${maxBars} bars`);
+    if (ch?.type === "donut" && !(ch.parts?.length >= 2 && ch.parts.length <= 6)) e.push("donut: use 2-6 parts");
+    if (ch?.type === "line" && !(ch.series?.length >= 1 && ch.series.length <= 3 && ch.series.every((s: any) => s.points?.length >= 2)))
+      e.push("line: use 1-3 series with 2 or more points each");
+    if (ch) for (const r of chartRefs(ch)) {
+      if (!nums[r]) e.push(`chart value "${r}" is missing from numbers`);
+      else if (ch.type !== "line" && nums[r].value < 0) e.push(`chart value "${r}" is negative`);
+    }
+    if (words(ch?.title ?? "").length > LIMITS.label) e.push(`chart title "${ch.title}" has more than ${LIMITS.label} words`);
   }
 
   if (!(c.heroes?.length >= 1 && c.heroes.length <= 2)) e.push("use 1 or 2 hero numbers");
@@ -116,8 +123,7 @@ export function lintCard(c: Card | Finding, mode: "card" | "finding"): string[] 
   // Text: short labels, no hedges, no numbers that are not declared.
   const text = textStrings(c as Finding);
   for (const s of text) if (HEDGES.test(s)) e.push(`"${s}": hedge word ("about", "~"...): show the exact number or drop it`);
-  const ch2 = (c.chart ?? {}) as any;
-  for (const r of [...(ch2.bars ?? []), ...(ch2.parts ?? []), ...(ch2.series ?? [])])
+  for (const r of chartsOf(c as Finding).flatMap((ch2: any) => [...(ch2.bars ?? []), ...(ch2.parts ?? []), ...(ch2.series ?? [])]))
     if (words(r.label ?? "").length > LIMITS.label) e.push(`label "${r.label}" has more than ${LIMITS.label} words`);
   for (const h of c.heroes ?? []) if (words(h.label ?? "").length > LIMITS.label) e.push(`hero label "${h.label}" has more than ${LIMITS.label} words`);
   const total = text.filter((s) => s !== c.chip).flatMap(words).length;

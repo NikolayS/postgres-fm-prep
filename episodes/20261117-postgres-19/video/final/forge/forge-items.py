@@ -30,7 +30,7 @@ def add(id, at, dur, props, source):
 STUDY = 'What the Forge study measured: '
 
 # F00 (on air, Kirk: "And now we had something like 10 or 20x the number of CVEs in the same year")
-add('f00-cves', S(549.708), 10, {'kind': 'v2-cves-rel', 'title': 'PostgreSQL CVEs per release', 'chip': 'postgresql.org/support/security', 'labels': {'hero': '52 CVEs in 18.7|vs 1.5 per release,|2019-2025 average'}}, 'cards/data/security-20261118 (postgresql.org/support/security, 2026-11-18); cards/f00-cves.card.json')
+add('f00-cves', S(549.708), 12, {'kind': 'v2-cves-both', 'title': 'PostgreSQL CVEs', 'chip': 'postgresql.org/support/security', 'labels': {'left': 'Per year|YTD|vs 2019-2025 avg/year', 'right': 'Per release|18.7 vs avg release'}}, 'cards/data/security-20261118 (postgresql.org/support/security, 2026-11-18); cards/f00-cves.card.json')
 
 # F01 (on air "Postgres 19 is ready for release")
 bv = n['by_version']
