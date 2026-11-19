@@ -86,7 +86,7 @@ One more case that breaks it: GRANT SET ON PARAMETER escape_string_warning. Find
 select parname from pg_parameter_acl
 where parname = 'escape_string_warning';
 
-We talk about this and the rest of 19 in the new postgres.fm episode, @michristofides, Kirk Wolak and I: https://youtu.be/VcDU-NRE3hI
+Why we always upgrade a clone first, and the rest of 19: new postgres.fm episode with @michristofides and Kirk Wolak. https://youtu.be/VcDU-NRE3hI
 ```
 
 ### A-joy celebration — media: `s00-joy.png`
