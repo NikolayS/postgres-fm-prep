@@ -237,8 +237,7 @@ ${s2.map(([x, y]) => `<circle cx="${X(x)}" cy="${Y(y)}" r="10" fill="#ff7a1a"/>`
 export function clipLayers(caps: string[]) {
   const head = page(`${top("Plan hints")}
 <div class="imp" style="position:absolute;left:64px;top:120px;font-size:120px;line-height:1">KIRK WOLAK</div>
-<div class="imp" style="position:absolute;left:64px;top:250px;font-size:72px;line-height:1;color:var(--or)">PLAN HINTS: A 1975 SOLUTION</div>
-<div class="foot" style="border:0">pg_plan_advice is new in Postgres 19. postgres.fm 197</div>`);
+<div class="imp" style="position:absolute;left:64px;top:250px;font-size:72px;line-height:1;color:var(--or)">PLAN HINTS: A 1975 SOLUTION</div>`);
   const cap = (s: string) => `<!doctype html><html><head><meta charset="utf-8"><style>@import url("file://${FONTS}");
 *{margin:0}html,body{background:transparent}body{width:${W}px;height:230px;display:flex;align-items:flex-start;justify-content:center}
 p{max-width:980px;text-align:center;font:800 54px/1.25 Inter;color:#f5f3ee;letter-spacing:-.01em}</style></head><body><p>${s}</p></body></html>`;

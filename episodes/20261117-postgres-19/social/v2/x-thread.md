@@ -77,7 +77,7 @@ Watch the final lock. At 65,996 rows/s of writes, 30 rows per transaction, it wa
 ```text
 pg_plan_advice is new in 19: keep a good plan on the server, with no hints in the app.
 
-Kirk on hints: "a great idea in 1975. The problem is, we're 2026, baby."
+Kirk: "It was a great idea in 1975, okay? The problem is, we're 2026, baby."
 
 The cost in our test: 11% to 14% less throughput on a trivial query, with advice generated for every query.
 ```
@@ -136,6 +136,6 @@ On-air sources for the claims without numbers (podcast times, `captions/podcast.
 - lz4 for TOAST "if your Postgres was built with it": Michael, 00:28:42. JIT off is a better default: Michael, 00:27:46.
 - REPACK on managed services without pg_repack: Kirk, 00:16:00. Based on pg_squeeze: commit 28d534e2ae0ac888b5460f977a10cd9bb017ef98.
 - pg_upgrade --check passes, then the upgrade fails: Nik, 00:41:00; the settings and objects as corrected in `notes/corrections.md` (role, database or function, not a table).
-- Kirk's quote: 00:24:33 ("It was a great idea in 1975, okay? The problem is, it's 2026, baby"; the clip's captions follow the audio, "we're 2026").
+- Kirk's quote: 00:24:33 (podcast time). The post and the clip caption use the words as heard in the audio, checked with whisper large-v3 on the final video: "It was a great idea in 1975, okay? The problem is, we're 2026, baby." The polished transcript has "it's 2026"; the audio says "we're".
 - "Do not wait for .1": Nik, 00:44:35. "A month or two": Nik, 00:50:38.
 - The upgrade slide shows an example `ALTER ROLE` and the outcome as labels (OK, FAILS), not pg_upgrade's output; the slide says so.
