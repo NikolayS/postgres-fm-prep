@@ -1,5 +1,5 @@
 import html
-YT=None  # YouTube URL not known yet
+YT="https://www.youtube.com/watch?v=VcDU-NRE3hI"
 A=lambda u: f'<a href="{html.escape(u)}">{html.escape(u)}</a>'
 groups=[
  ("Main link",[("21:24","Postgres 19 for people who run it: PostgreSQL 19 RC2 vs 18.7 (DBLab Forge study brief, PostgresAI)","https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c")]),
