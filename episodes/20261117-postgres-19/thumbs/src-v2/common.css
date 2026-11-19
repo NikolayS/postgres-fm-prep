@@ -1,0 +1,21 @@
+/* Episode 197 covers v2. One HTML per concept; "?sq" in the URL switches to the square cover
+   (authored at 1000x1000, rendered at 3x = 3000x3000). Heads: heads/{nik,mic,kirk}.png from prep.py,
+   2432x1356 each, placed by pupil position so the three get the same head size and one eye line. */
+@font-face{font-family:Anton;src:url(../../../../tools/podcast-edit/cover/fonts/Anton_1Ptgg87LROyAm3Kz-C8CSKlv.woff2)}
+@font-face{font-family:"Archivo Black";src:url(../../../../tools/podcast-edit/cover/fonts/Archivo_Black_HTxqL289NzCGg4MzN6KJ7eW6CYyF_jzx13E.woff2)}
+@font-face{font-family:Inter;font-weight:800;src:url(../../../../tools/podcast-edit/cover/fonts/Inter_UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuDyYAZ9hiJ-Ek-_0ew.woff2)}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{width:1280px;height:720px;overflow:hidden;position:relative;
+  --D:104;--ey:488px;--cn:236px;--cm:640px;--ck:1040px}
+body.sq{width:1000px;height:1000px;--D:82;--ey:820px;--cn:178px;--cm:500px;--ck:828px}
+.h{position:absolute;display:block;width:calc(2432px*var(--s));
+  left:calc(var(--cx) - var(--ex)*var(--s)*1px);top:calc(var(--ey) - var(--eyy)*var(--s)*1px)}
+/* pupil midpoint in the 2432 px source, and the scale that gives equal head size (eye distance, with a per-head factor) */
+.nik {--cx:var(--cn);--s:calc(var(--D)/247);      --ex:1459;--eyy:800;  z-index:3}
+.mic {--cx:var(--cm);--s:calc(var(--D)*.92/222.6); --ex:1505;--eyy:603;  z-index:2}
+.kirk{--cx:var(--ck);--s:calc(var(--D)*.76/172);   --ex:1282;--eyy:461.5;z-index:3}
+.mark{position:absolute;display:none;align-items:center;gap:14px;font:800 66px Inter,sans-serif;letter-spacing:-.02em;z-index:5}
+.mark i{width:26px;height:26px;border-radius:50%;background:#ff3b3b}
+body.sq .mark{display:flex;left:56px;top:44px}
+.t,.s{display:none} body:not(.sq) .t{display:block} body.sq .s{display:block}
