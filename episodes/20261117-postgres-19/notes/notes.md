@@ -8,7 +8,7 @@ Postgres.FM episode 197. Hosts: Nik, Michael and Kirk.
 
 ## Episode description
 
-Kirk Wolak is joining Michael and me as a co-host. We discuss Postgres 19: why the release came in November and not in September, the features we like most, and what to check before you upgrade. We cover REPACK (CONCURRENTLY), LISTEN/NOTIFY with many listeners, autovacuum prioritization, plan advice, WAIT FOR LSN, new defaults, and how to test an upgrade now that AI makes testing cheaper.
+Michael, Nik, and Kirk discuss Postgres 19: why the release came in November and not in September, the features we like most, and what to check before you upgrade. We cover REPACK (CONCURRENTLY), LISTEN/NOTIFY with many listeners, autovacuum prioritization, plan advice, WAIT FOR LSN, new defaults, and how to test an upgrade now that AI makes testing cheaper.
 
 ## Links
 

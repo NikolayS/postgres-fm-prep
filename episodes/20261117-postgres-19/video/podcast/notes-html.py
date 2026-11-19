@@ -43,7 +43,7 @@ checks=[
 ]
 e=html.escape
 tip='<div><strong>Tip: watch on YouTube. Since episode 193, the video shows charts and illustrations as we talk.</strong>'+(' '+A(YT) if YT else '')+'</div><div>&nbsp;</div>'
-intro=('<div>Kirk Wolak is joining Michael and me as a co-host. We discuss Postgres 19: why the release came in November and not in September, the features we like most, and what to check before you upgrade. We cover REPACK (CONCURRENTLY), LISTEN/NOTIFY with many listeners, autovacuum prioritization, plan advice, WAIT FOR LSN, new defaults, and how to test an upgrade now that AI makes testing cheaper.'
+intro=('<div>Michael, Nik, and Kirk discuss Postgres 19: why the release came in November and not in September, the features we like most, and what to check before you upgrade. We cover REPACK (CONCURRENTLY), LISTEN/NOTIFY with many listeners, autovacuum prioritization, plan advice, WAIT FOR LSN, new defaults, and how to test an upgrade now that AI makes testing cheaper.'
        '<br>&nbsp;<br>Here are some links to things we mentioned:&nbsp;<br>Times are podcast times of the first mention.</div>')
 body=''
 for g,items in groups:
