@@ -58,7 +58,7 @@ Long form (X Premium). The image shows the real output from the repro (shortened
 pg_upgrade --check: "Clusters are compatible".
 pg_upgrade: fails.
 
-Postgres 19 is out today. We broke the upgrade from 18.7 in 7 ways. --check caught 0 of 7.
+Postgres 19 is out today. We tested the upgrade from 18.7 and found 7 setups where it fails. --check caught 0 of 7.
 
 The cause, set on a role, a database or a function:
 - escape_string_warning, any value (removed in 19)
@@ -73,6 +73,9 @@ select oid::regprocedure from pg_proc
 where proconfig::text ~ 'standard_conforming_strings|escape_string_warning';
 
 Then upgrade a clone first.
+Reproduced on 18.7 -> 19 RC2.
+
+Send this to whoever runs your Postgres upgrades.
 ```
 
 ### B self-reply, 2 minutes later, long form (281 chars: needs X Premium, which Nik has)
