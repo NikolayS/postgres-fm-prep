@@ -68,7 +68,7 @@
       "value": 1013,
       "display": "1013",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[2] for p in f.glob(\"r1000-[123]/a-writers.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -76,7 +76,7 @@
       "value": 0.02,
       "display": "0.02",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[0] for p in f.glob(\"r1000-[123]/a-sampler.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -84,7 +84,7 @@
       "value": 4994,
       "display": "4994",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[2] for p in f.glob(\"r5000-[123]/a-writers.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -92,7 +92,7 @@
       "value": 0.14,
       "display": "0.14",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[0] for p in f.glob(\"r5000-[123]/a-sampler.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -100,7 +100,7 @@
       "value": 9989,
       "display": "9989",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[2] for p in f.glob(\"r10000-[123]/a-writers.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -108,7 +108,7 @@
       "value": 0.38,
       "display": "0.38",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[0] for p in f.glob(\"r10000-[123]/a-sampler.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -116,7 +116,7 @@
       "value": 19980,
       "display": "19980",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[2] for p in f.glob(\"r20000-[123]/a-writers.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -124,7 +124,7 @@
       "value": 1.18,
       "display": "1.18",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[0] for p in f.glob(\"r20000-[123]/a-sampler.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -132,7 +132,7 @@
       "value": 26363,
       "display": "26363",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[2] for p in f.glob(\"runc-[123]/a-writers.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -140,7 +140,7 @@
       "value": 3.54,
       "display": "3.54",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[0] for p in f.glob(\"runc-[123]/a-sampler.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -148,7 +148,7 @@
       "value": 30198,
       "display": "30198",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[2] for p in f.glob(\"r1000x30-[123]/a-writers.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -156,7 +156,7 @@
       "value": 2.44,
       "display": "2.44",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[0] for p in f.glob(\"r1000x30-[123]/a-sampler.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -164,7 +164,7 @@
       "value": 52562,
       "display": "52562",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[2] for p in f.glob(\"r2000x30-[123]/a-writers.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -172,7 +172,7 @@
       "value": 7,
       "display": "7",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[0] for p in f.glob(\"r2000x30-[123]/a-sampler.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -180,7 +180,7 @@
       "value": 56652,
       "display": "56652",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[2] for p in f.glob(\"r3000x30-[123]/a-writers.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -188,7 +188,7 @@
       "value": 27.66,
       "display": "27.66",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[0] for p in f.glob(\"r3000x30-[123]/a-sampler.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -196,7 +196,7 @@
       "value": 65996,
       "display": "65996",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[2] for p in f.glob(\"runcx30-[123]/a-writers.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -204,7 +204,7 @@
       "value": 85.72,
       "display": "85.72",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\na=[p.read_text().split()[0] for p in f.glob(\"runcx30-[123]/a-sampler.txt\")]\nprint(st.median(float(v) for v in a if v!=\"NA\"))' \"$F\""
       }
     },
@@ -212,7 +212,7 @@
       "value": 85.7,
       "display": "85.7 s",
       "source": {
-        "file": "X/w3g-1/pull/w3g/res",
+        "file": "H/w3g/res",
         "compute": "python3 -c 'import sys,json,re,statistics as st,subprocess,tarfile,datetime\nfrom pathlib import Path\nf=Path(sys.argv[1])\nprint(st.median(float(p.read_text().split()[0]) for p in f.glob(\"runcx30-[123]/a-sampler.txt\")))' \"$F\""
       }
     }
