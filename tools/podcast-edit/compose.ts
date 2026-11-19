@@ -21,6 +21,7 @@ import { dirname, join, resolve } from "path";
 import { filtergraph, mergeCenter, prepareUi, renderHtml, type LayoutConfig } from "./layout";
 import type { Detection } from "./detect-tiles";
 import { sfxOff, talkChain } from "./freeze-audio";
+import { missingSfx } from "./sfx-manifest";
 
 const FONT = `-apple-system,"SF Pro Display","Helvetica Neue",sans-serif`;
 const MONO = `"JetBrains Mono",ui-monospace,monospace`;
@@ -136,6 +137,12 @@ if (import.meta.main) {
     .filter((o) => o.outStart >= from && o.outStart < to)
     .map((o) => ({ ...o, file: resolve(mdir, o.file), t: snap(o.outStart - from), sfx: (o.sfx ?? []).map((s) => ({ ...s, file: resolve(mdir, s.file) })) }))
     .sort((a, b) => a.t - b.t);
+  // Every illustration enters with a sound cue (audio listeners know to look at the screen):
+  // render with manifest-sfx.json from sfx-manifest.ts. --no-sfx only for silent previews.
+  if (manifestPath && !args.includes("--no-sfx")) {
+    const silent = missingSfx((Array.isArray(manifest) ? manifest : manifest?.overlays ?? []) as any);
+    if (silent.length) { console.error(`overlays with no entry sound: ${silent.join(", ")}. Run sfx-manifest.ts and pass its manifest-sfx.json (or --no-sfx for a silent preview).`); process.exit(2); }
+  }
   const freezes: Freeze[] = overlays.filter((o) => (o.freezeSec ?? 0) > 0).map((o) => ({ at: o.t, sec: snap(o.freezeSec!) }));
   const F = freezes.reduce((a, f) => a + f.sec, 0);
   const fin = (t: number) => toFinal(t, C, freezes); // window time -> final time

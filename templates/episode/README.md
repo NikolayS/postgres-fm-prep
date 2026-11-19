@@ -27,6 +27,7 @@ Add links as documents are created. Common choices:
 | `notes/blog-candidates.md` | Standard file: results and cards too heavy for the video, for the blog post (template: `templates/episode/blog-candidates.md`) |
 | `cards/` | Data cards, one `<id>.card.json` each, every number with its raw file and recompute command |
 | `qa.json` | QA gate config for `tools/podcast-edit/qa.ts` (example: `tools/podcast-edit/qa.example.json`) |
+| `video/render.sh` | Final compose (template: `templates/episode/render.sh`): `sfx-manifest.ts` first, then `compose.ts` with `manifest-sfx.json`, so every overlay enters with a sound cue |
 | `assets/` | Figures and other approved supporting files |
 
 ## Discussion outline

@@ -6,7 +6,7 @@ import { $ } from "bun";
 import { mkdtempSync, rmSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
-import { exitFrom, LIB, measureExit, plan, trimTyping, typedLines, typingName, type Overlay } from "../sfx-manifest";
+import { ENTRY_MAX, exitFrom, LIB, measureExit, missingSfx, plan, revealBursts, trimTyping, typedLines, typingName, type Overlay } from "../sfx-manifest";
 
 const dir = mkdtempSync(join(tmpdir(), "sfx-manifest-"));
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
@@ -66,6 +66,14 @@ describe("plan", () => {
     const once = plan(o, { exit: 81.64, accents: [24.8] });
     expect(plan({ ...o, sfx: once.sfx }, { exit: 81.64, accents: [24.8] })).toEqual(once);
   });
+  test("a named center set (the hosts move aside, e.g. london) gets IN and OUT like a center card", () => {
+    const p = plan({ id: "london", file: "london.mov", placement: "london", dur: 23.62 }, { exit: 23.2 });
+    expect(p.sfx).toEqual([{ file: "sfx/center-in.wav", at: 0.05, gain: 1 }, { file: "sfx/center-out.wav", at: 23.1, gain: 0.7 }]);
+  });
+  test("band card with reveal bursts but no typing render keeps its file and gets typing per line", () => {
+    const p = plan({ id: "05", file: "05.mov", placement: "band", dur: 8 }, { bursts: [{ start: 0.04, end: 0.6, line: 0 }, { start: 0.6, end: 1.0, line: 1 }] });
+    expect(p).toEqual({ file: "05.mov", sfx: [{ file: "sfx/typing-560ms.wav", at: 0.04, gain: 1 }, { file: "sfx/typing-400ms.wav", at: 0.6, gain: 1 }] });
+  });
   test("full cards are left alone", () => {
     expect(plan({ id: "09", file: "09.mov", placement: "full", dur: 5, sfx }, { exit: 4 })).toEqual({ file: "09.mov", sfx });
   });
@@ -85,5 +93,29 @@ describe("on files", () => {
     const d = Number((await $`ffprobe -v error -show_entries format=duration -of csv=p=0 ${out}`.text()).trim());
     expect(d).toBeCloseTo(0.947, 2);
     expect(typingName(0.867)).toBe("typing-867ms.wav");
+  });
+});
+
+describe("missingSfx: every overlay enters with a sound", () => {
+  test("lists overlays with no sound in their first ENTRY_MAX s; a manifest with no sounds at all fails every overlay", () => {
+    const o = (id: string, sfx?: { file: string; at: number }[], placement = "center") => ({ id, file: `${id}.mov`, placement, dur: 10, sfx }) as Overlay;
+    expect(missingSfx([o("a", [{ file: "sfx/center-in.wav", at: 0.05 }]), o("b", [{ file: "sfx/typing-400ms.wav", at: 0.3 }], "band")])).toEqual([]);
+    expect(missingSfx([o("a"), o("b", [])])).toEqual(["a", "b"]);
+    expect(missingSfx([o("late", [{ file: "sfx/center-out.wav", at: ENTRY_MAX + 0.5 }])])).toEqual(["late"]);
+  });
+});
+
+describe("revealBursts: line reveal times of a wipe strip from its alpha", () => {
+  test("two lines revealed left to right one after the other: one burst per line", () => {
+    // 10x8 frames; line 0 = rows 1-2 revealed over frames 1-4, line 1 = rows 5-6 over frames 4-6.
+    const W = 10, H = 8, frames: Uint8Array[] = [];
+    for (let f = 0; f < 10; f++) {
+      const a = new Uint8Array(W * H);
+      const c0 = Math.min(W, Math.max(0, Math.round(((f - 0) / 4) * W))), c1 = Math.min(W, Math.max(0, Math.round(((f - 4) / 2) * W)));
+      for (const y of [1, 2]) for (let x = 0; x < c0; x++) a[y * W + x] = 255;
+      for (const y of [5, 6]) for (let x = 0; x < c1; x++) a[y * W + x] = 255;
+      frames.push(a);
+    }
+    expect(revealBursts(frames, W, H, 10)).toEqual([{ start: 0.1, end: 0.4, line: 0 }, { start: 0.5, end: 0.6, line: 1 }]);
   });
 });

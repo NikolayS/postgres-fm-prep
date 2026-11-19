@@ -577,7 +577,14 @@ It switches band cards to `<card>-typing.mov` when that and the typing
 bursts (`<card>-typing-bursts.json` or `<NN>-typing-bursts.json`) exist,
 measures each center card's exit from its alpha, copies the sounds into
 `overlays/sfx/` under role names, and keeps only `thud*` of the old sounds
-(`--keep`). Re-running it on its output gives the same result. The regular host gets no intro card; only the guest. `DUMP_PROPS=<dir> bun scripts/render-all.ts <id>`
+(`--keep`). Re-running it on its output gives the same result.
+Band cards without a typing render get their typed lines from their own
+alpha (each text line's wipe reveal). Named center sets (a placement such
+as `london`) get IN and OUT like center cards. Every overlay must enter
+with a sound: `sfx-manifest.ts`, `compose.ts` and `qa.ts` (check `sfx`,
+`"sfx": {"manifest": ".../manifest-sfx.json"}` in `qa.json`) fail
+otherwise; `compose.ts --no-sfx` only for a silent preview. Never render
+with the raw `manifest.json` (episode 197 lost every sound that way). The regular host gets no intro card; only the guest. `DUMP_PROPS=<dir> bun scripts/render-all.ts <id>`
 writes the props JSON for `bunx remotion still` QA frames.
 
 Freezes: on number cards where the number is the point (2-2.5 s) and on intro

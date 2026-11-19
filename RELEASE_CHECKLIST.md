@@ -14,7 +14,7 @@ Copy this list into the episode's `README.md` (or an issue) for each release and
 - [ ] Intro and outro in place.
 - [ ] Illustrations: band cards, centre cards, charts and figures from the episode's research, each at the moment it is discussed. Data cards are chart-first `cards/*.card.json` with every number recomputed (`cards/cards.ts check`); cards that need explaining are in `notes/blog-candidates.md`.
 - [ ] Header "postgres.fm <topic>" on one 104 px line; Nik left, Michael center, Kirk right; Kirk is a co-host, never a guest; no announcer voice; voices clearly above the music.
-- [ ] Overlay sounds follow the convention in `tools/podcast-edit/sfx/`: band cards get a typing reveal; centre cards get the sand strokes in and out, plus a punch on key reveals. Nothing bright, nothing sub-only.
+- [ ] Every overlay (card, photo, strip) enters with a sound cue, following the convention in `tools/podcast-edit/sfx/`: band cards get a typing reveal; centre cards get the sand strokes in and out, plus a punch on key reveals. Nothing bright, nothing sub-only. The render used `manifest-sfx.json` from `sfx-manifest.ts`, and the `qa.ts` check `sfx` passed.
 - [ ] Loudness about -16 LUFS integrated; no clipping.
 - [ ] Full decode check: no dropped or duplicated frames, A/V in sync at start, middle and end.
 - [ ] If only overlays or sounds changed after a full render, splice the changed windows (`splice.ts`) or remux the audio (`compose.ts --audio-only`). Don't re-render the whole video.

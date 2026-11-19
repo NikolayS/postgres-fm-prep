@@ -3,11 +3,12 @@
 //   bun sfx-manifest.ts <manifest.json> [--out manifest-sfx.json] [--accent <id>=<s>[,<s>...]]...
 //                       [--accent-sound L|K] [--keep thud]
 //
-// Band cards: if <card>-typing.mov and its typing bursts (<card>-typing-bursts.json, or
-// <id>-typing-bursts.json, or <NN>-typing-bursts.json for an id "NN-...") are next to the
-// manifest, the card switches to the typing render and gets one typing sound per typed line,
-// from the line's first keystroke, trimmed to the line's typing time. Without them it keeps its
-// file. Center cards: IN (G10) at 0.05 s, OUT (G9, gain 0.7) 0.1 s before the exit starts, the
+// Band cards: one typing sound per typed line, from the line's first keystroke, trimmed to the
+// line's typing time. Bursts come from <card>-typing-bursts.json, <id>-typing-bursts.json or
+// <NN>-typing-bursts.json (id "NN-...") next to the manifest; without one, from the card's own
+// alpha (each text line's wipe reveal, revealBursts). If <card>-typing.mov exists, the card
+// switches to that typing render; otherwise it keeps its file. Center cards and named center
+// sets (a placement such as "london" that moves the hosts aside): IN (G10) at 0.05 s, OUT (G9, gain 0.7) 0.1 s before the exit starts, the
 // exit measured from the overlay's alpha (the first frame of the final drop); accents (L, or K
 // with --accent-sound K) at the times given by the overlay's "accents" field or --accent (an id
 // or an id prefix, seconds from the overlay start). "full" cards are left as they are.
@@ -22,6 +23,8 @@ import { parseArgs } from "util";
 
 export const LIB = join(import.meta.dir, "sfx");
 export const IN_AT = 0.05, OUT_BEFORE = 0.1, OUT_GAIN = 0.7, ACCENT_NEAR = 0.5, TYPING_TAIL = 0.08;
+// Every overlay must enter with a sound: one starting in its first ENTRY_MAX s (qa.ts, compose.ts).
+export const ENTRY_MAX = 1.5, MIN_LINE = 0.2;
 const ACCENT_FILES: Record<string, string> = { L: "L-punch-rough.wav", K: "K-sand-stroke-falling.wav" };
 
 export type Sfx = { file: string; at: number; gain?: number };
@@ -62,10 +65,10 @@ export function plan(o: Overlay, x: { typed?: string; bursts?: Burst[]; exit?: n
   const name = (s: Sfx) => basename(s.file).replace(/\.[^.]+$/, "");
   const kept = (o.sfx ?? []).filter((s) => keep.some((p) => p && name(s).startsWith(p)) && !accents.some((a) => Math.abs(s.at - a) < ACCENT_NEAR));
   if (o.placement === "band") {
-    if (!x.typed || !x.bursts) return { file: o.file, sfx: kept };
-    return { file: x.typed, sfx: [...kept, ...typedLines(x.bursts).map((l) => ({ file: `sfx/${typingName(l.dur)}`, at: l.at, gain: 1 }))] };
+    if (!x.bursts?.length) return { file: o.file, sfx: kept };
+    return { file: x.typed ?? o.file, sfx: [...kept, ...typedLines(x.bursts).map((l) => ({ file: `sfx/${typingName(l.dur)}`, at: l.at, gain: 1 }))] };
   }
-  if (o.placement === "center") {
+  if (o.placement && o.placement !== "band" && o.placement !== "full") {
     const exit = x.exit ?? o.dur;
     return {
       file: o.file,
@@ -78,6 +81,38 @@ export function plan(o: Overlay, x: { typed?: string; bursts?: Burst[]; exit?: n
     };
   }
   return { file: o.file, sfx: o.sfx ?? [] };
+}
+
+// Overlays without a sound in their first ENTRY_MAX s (audio listeners would miss them).
+export function missingSfx(overlays: Overlay[]): string[] {
+  return overlays.filter((o) => !(o.sfx ?? []).some((s) => s.at >= 0 && s.at <= ENTRY_MAX)).map((o) => o.id ?? o.file);
+}
+
+// Line reveals of a wipe strip from alpha frames (W x H, 0-255, frame i at i / fps): text lines
+// are the row bands lit in the last frame; a line's burst runs from its first lit column to 98%
+// of its final width.
+export function revealBursts(frames: Uint8Array[], W: number, H: number, fps: number): Burst[] {
+  const last = frames[frames.length - 1], lit = (a: Uint8Array, y: number, x: number) => a[y * W + x] > 127;
+  const rows = [...Array(H).keys()].map((y) => [...Array(W).keys()].some((x) => lit(last, y, x)));
+  const bands: [number, number][] = [];
+  rows.forEach((r, y) => { if (r) { if (bands.length && bands[bands.length - 1][1] === y - 1) bands[bands.length - 1][1] = y; else bands.push([y, y]); } });
+  const cover = (a: Uint8Array, [y0, y1]: [number, number]) => { let n = 0; for (let x = 0; x < W; x++) for (let y = y0; y <= y1; y++) if (lit(a, y, x)) { n++; break; } return n; };
+  return bands.flatMap((b, line) => {
+    const full = cover(last, b), c = frames.map((f) => cover(f, b));
+    const i0 = c.findIndex((v) => v > 0), i1 = c.findIndex((v) => v >= 0.98 * full);
+    return i0 < 0 ? [] : [{ start: r3(i0 / fps), end: r3(Math.max(i1, i0) / fps), line }];
+  }).map((b, line) => ({ ...b, line }));
+}
+
+// revealBursts on the first `win` s of an overlay file (alpha at 1/4 size).
+export async function measureReveal(file: string, win = 3): Promise<Burst[]> {
+  const p = (await $`ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate,width,height -of json ${file}`.json()) as { streams: { r_frame_rate: string; width: number; height: number }[] };
+  const [a, b] = p.streams[0].r_frame_rate.split("/").map(Number), W = Math.round(p.streams[0].width / 4), H = Math.round(p.streams[0].height / 4);
+  const raw = new Uint8Array(await $`ffmpeg -v error -t ${win} -i ${file} -vf alphaextract,scale=${W}:${H}:flags=area,format=gray -f rawvideo -`.arrayBuffer());
+  const frames: Uint8Array[] = [];
+  for (let i = 0; (i + 1) * W * H <= raw.length; i++) frames.push(raw.subarray(i * W * H, (i + 1) * W * H));
+  // A line that pops in at once still gets a short typing burst.
+  return revealBursts(frames, W, H, a / (b || 1)).map((x) => ({ ...x, end: r3(Math.max(x.end, x.start + MIN_LINE)) }));
 }
 
 // Mean alpha per frame over the last `win` s of an overlay, and its exit start.
@@ -143,10 +178,10 @@ if (import.meta.main) {
     const accents = fa.length ? fa : o.accents ?? [];
     // A re-run starts from the plain card name, so the result is the same.
     const base = o.file.replace(/(-typing)?\.mov$/, ""), typedFile = `${base}-typing.mov`;
-    const bursts = o.placement === "band" && existsSync(join(mdir, typedFile)) ? findBursts(mdir, o, base) : undefined;
-    if (o.placement === "band" && !bursts) missing.push(o.id);
-    const exit = o.placement === "center" ? await measureExit(join(mdir, o.file)) : undefined;
-    const p = plan(o, { typed: bursts ? typedFile : undefined, bursts, exit, accents, keep });
+    const bursts = o.placement !== "band" ? undefined : findBursts(mdir, o, base) ?? await measureReveal(join(mdir, o.file));
+    if (o.placement === "band" && !bursts?.length) missing.push(o.id);
+    const exit = o.placement && o.placement !== "band" && o.placement !== "full" ? await measureExit(join(mdir, o.file)) : undefined;
+    const p = plan(o, { typed: bursts && existsSync(join(mdir, typedFile)) ? typedFile : undefined, bursts, exit, accents, keep });
     for (const l of bursts ? typedLines(bursts) : []) {
       const f = join(sd, typingName(l.dur));
       if (!existsSync(f)) await trimTyping(join(LIB, "U2-typing-fast.wav"), l.dur, f);
@@ -156,6 +191,8 @@ if (import.meta.main) {
     console.log(`${o.id} ${o.placement} ${o.file}${exit !== undefined ? ` exit ${exit}` : ""}: ${p.sfx.map((s) => `${basename(s.file)}@${s.at}`).join(" ")}`);
   }
   await Bun.write(out, JSON.stringify(m, null, 2) + "\n");
-  if (missing.length) console.log(`band cards without a typing render and bursts (kept as they are): ${missing.join(", ")}`);
+  if (missing.length) console.log(`band cards with no typed lines found (no sound): ${missing.join(", ")}`);
+  const silent = missingSfx(m.overlays);
+  if (silent.length) { console.error(`overlays with no entry sound: ${silent.join(", ")} (every illustration enters with a sound cue)`); process.exit(1); }
   console.log(`wrote ${out}; render with compose.ts --overlays ${out} --sfx-rel center-out=-3`);
 }

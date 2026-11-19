@@ -22,6 +22,13 @@ Full-screen cards too: keep all text, chips and screenshots out of the bottom 18
 
 QA every strip with zoomed frame crops (`qa.ts` writes them) during and after its swipe: no clipped glyphs (descenders, commas), no cut or offset band. A strip drawn with headless Chrome near the bottom of a 1080 px page got clipped by the viewport (episode 197 NOTIFY strip).
 
+## Video: sound cues on every illustration
+
+- Every card, photo and strip enters with a sound cue, so audio-only listeners know to pull out the phone and look. (Nik, episode 197: the final had no overlay sounds.)
+- Use the agreed library and convention in `tools/podcast-edit/sfx/README.md`: IN and OUT for center cards (and named center sets such as a photo card), typing for band strips, rare accents for a sudden reveal.
+- Always render with the `manifest-sfx.json` that `tools/podcast-edit/sfx-manifest.ts` makes, never the raw `manifest.json`.
+- `qa.ts` (check `sfx`) and `compose.ts` fail when an overlay has no sound in its first 1.5 s. Episode 197 lost every sound this way.
+
 ## Video: faces stay clean
 
 - No drawn annotations on people: no circles, ellipses or arrows on faces or heads, in titles, name cards or the montage. (Nik, episode 197: "bad idea, just drop it".)

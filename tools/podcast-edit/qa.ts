@@ -8,18 +8,21 @@
 //   captions  no caption over a face, none in the bottom 180 px (qa/caps.ts)
 //   strips    overlay layers not clipped, above y 900; zoomed crops of every strip (qa/strips.ts)
 //   cards     card lint + provenance recompute + blog-candidates rule + contact sheet (cards/)
+//   sfx       every overlay in the rendered manifest enters with a sound, and the files exist
+//             ("sfx": {"manifest": "<overlays>/manifest-sfx.json"}; sfx-manifest.ts makes it)
 // A check missing from qa.json FAILS unless qa.json says why it does not apply:
 //   "skip": {"eyes": "no cold open in this preview"}
 // Writes <out>/qa-summary.json and prints a pass/fail table; exit 1 on any failure.
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
-import { join, resolve } from "path";
+import { dirname, join, resolve } from "path";
 import { checkEpisodeCards } from "./cards/sheet";
 import { checkAudio } from "./qa/audio";
 import { checkCaptions } from "./qa/caps";
 import { checkEyes } from "./qa/eyes";
 import { checkStripLayers, zoomCrops } from "./qa/strips";
+import { ENTRY_MAX, missingSfx, type Overlay } from "./sfx-manifest";
 
-export const CHECKS = ["audio", "eyes", "captions", "strips", "cards"] as const;
+export const CHECKS = ["audio", "eyes", "captions", "strips", "cards", "sfx"] as const;
 type Check = (typeof CHECKS)[number];
 export type Row = { check: Check; status: "PASS" | "FAIL" | "SKIP"; detail: string; problems: string[] };
 
@@ -69,6 +72,14 @@ async function run(check: Check, cfg: any, ep: string, out: string): Promise<Omi
     if (!layers && !crops.length) problems.push('strips: give "layers" (overlay files) and/or "video" + "items" (crop boxes)');
     return { status: problems.length ? "FAIL" : "PASS", detail: `${layers} layers checked; ${crops.length} zoomed crops in ${join(out, "strip-crops")} (look at every one)`, problems };
   }
+  if (check === "sfx") {
+    if (!cfg.manifest) return { status: "FAIL", detail: 'give "manifest": the overlay manifest the render used (manifest-sfx.json)', problems: [] };
+    const m = JSON.parse(readFileSync(cfg.manifest, "utf8")), ovs: Overlay[] = Array.isArray(m) ? m : m.overlays ?? [];
+    const problems = missingSfx(ovs).map((id) => `${id}: no entry sound in its first ${ENTRY_MAX} s`);
+    for (const o of ovs) for (const x of o.sfx ?? []) if (!existsSync(resolve(dirname(cfg.manifest), x.file))) problems.push(`${o.id}: sound file ${x.file} is missing`);
+    if (ovs.length && !ovs.some((o) => o.sfx?.length)) problems.unshift("no overlay has a sound: render with manifest-sfx.json from sfx-manifest.ts, never the raw manifest.json");
+    return { status: problems.length ? "FAIL" : "PASS", detail: `${ovs.length} overlays, ${ovs.reduce((n, o) => n + (o.sfx?.length ?? 0), 0)} sounds`, problems };
+  }
   const r = await checkEpisodeCards(ep, { out, png: cfg.png ?? true });
   return { status: r.pass ? "PASS" : "FAIL", detail: `${r.cards} cards; contact sheet ${r.sheet ?? "none"}`, problems: r.errors };
 }
@@ -76,7 +87,7 @@ async function run(check: Check, cfg: any, ep: string, out: string): Promise<Omi
 if (import.meta.main) {
   const args = Bun.argv.slice(2);
   const ep = args.find((a, i) => !a.startsWith("--") && !["--config", "--only"].includes(args[i - 1]));
-  if (!ep) { console.error("Usage: bun qa.ts <episode-dir> [--config <file>] [--only audio,eyes,captions,strips,cards]"); process.exit(2); }
+  if (!ep) { console.error("Usage: bun qa.ts <episode-dir> [--config <file>] [--only audio,eyes,captions,strips,cards,sfx]"); process.exit(2); }
   const ci = args.indexOf("--config"), oi = args.indexOf("--only");
   const file = ci >= 0 ? args[ci + 1] : join(ep, "qa.json");
   const raw = existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : {};

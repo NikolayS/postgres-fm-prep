@@ -27,11 +27,11 @@ describe("qa.ts", () => {
     const ep = join(dir, "ep");
     mkdirSync(join(ep, "notes"), { recursive: true });
     writeFileSync(join(ep, "notes/blog-candidates.md"), "# Blog candidates\n");
-    writeFileSync(join(ep, "qa.json"), JSON.stringify({ out: "${QA_OUT}", skip: { audio: "test", eyes: "test", captions: "test" } }));
+    writeFileSync(join(ep, "qa.json"), JSON.stringify({ out: "${QA_OUT}", skip: { audio: "test", eyes: "test", captions: "test", sfx: "test" } }));
     const bad = qa(ep);
     expect(bad.exitCode).toBe(1);
     expect(bad.stdout.toString()).toMatch(/FAIL\s+strips\s+not configured/);
-    writeFileSync(join(ep, "qa.json"), JSON.stringify({ out: "${QA_OUT}", skip: { audio: "test", eyes: "test", captions: "test", strips: "test" } }));
+    writeFileSync(join(ep, "qa.json"), JSON.stringify({ out: "${QA_OUT}", skip: { audio: "test", eyes: "test", captions: "test", strips: "test", sfx: "test" } }));
     const ok = qa(ep);
     expect(ok.stdout.toString()).toMatch(/PASS\s+cards[\s\S]*QA PASSED/);
     expect(ok.exitCode).toBe(0);
@@ -41,9 +41,29 @@ describe("qa.ts", () => {
   test("cards: a missing blog-candidates.md fails", () => {
     const ep = join(dir, "ep2");
     mkdirSync(ep, { recursive: true });
-    writeFileSync(join(ep, "qa.json"), JSON.stringify({ out: "${QA_OUT}", skip: { audio: "t", eyes: "t", captions: "t", strips: "t" } }));
+    writeFileSync(join(ep, "qa.json"), JSON.stringify({ out: "${QA_OUT}", skip: { audio: "t", eyes: "t", captions: "t", strips: "t", sfx: "t" } }));
     const r = qa(ep);
     expect(r.exitCode).toBe(1);
     expect(r.stdout.toString()).toMatch(/blog-candidates\.md is missing/);
+  });
+
+  test("sfx: a manifest without entry sounds fails (episode 197 rendered the raw manifest.json); manifest-sfx.json passes", () => {
+    const ep = join(dir, "ep3");
+    mkdirSync(join(ep, "notes"), { recursive: true });
+    mkdirSync(join(ep, "ov/sfx"), { recursive: true });
+    writeFileSync(join(ep, "notes/blog-candidates.md"), "# Blog candidates\n");
+    writeFileSync(join(ep, "ov/sfx/center-in.wav"), "");
+    const ov = (sfx?: object[]) => ({ overlays: [{ id: "f01", file: "f01.mov", placement: "center", outStart: 10, dur: 5, ...(sfx ? { sfx } : {}) }] });
+    writeFileSync(join(ep, "ov/manifest.json"), JSON.stringify(ov()));
+    writeFileSync(join(ep, "ov/manifest-sfx.json"), JSON.stringify(ov([{ file: "sfx/center-in.wav", at: 0.05 }])));
+    const cfg = (m: string) => writeFileSync(join(ep, "qa.json"), JSON.stringify({ out: "${QA_OUT}", sfx: { manifest: join(ep, "ov", m) }, skip: { audio: "t", eyes: "t", captions: "t", strips: "t" } }));
+    cfg("manifest.json");
+    const bad = qa(ep);
+    expect(bad.exitCode).toBe(1);
+    expect(bad.stdout.toString()).toMatch(/FAIL\s+sfx[\s\S]*f01: no entry sound/);
+    cfg("manifest-sfx.json");
+    const ok = qa(ep);
+    expect(ok.stdout.toString()).toMatch(/PASS\s+sfx/);
+    expect(ok.exitCode).toBe(0);
   });
 });

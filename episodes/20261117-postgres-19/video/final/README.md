@@ -89,3 +89,14 @@ Pixel-detected content is y=[321,2476); the four-pixel trim gives y=[325,2472). 
 ## London photo (v2)
 
 `london/london-card.ts` makes the London photo overlay: the photo in the centre (y 250-900), transparent around it; placement `london` moves the host tiles to `place.*.centers.london` in `layout.json` (new in `tools/podcast-edit/layout.ts` and `compose.ts`: named states) (`--still out.png`, or `--mov out.mov --dur S`); `london/item.json` is its manifest entry. The photo stays out of git (`preview/` is ignored).
+
+## Overlay sounds (body v8, audio-only remux)
+
+The body was rendered with the raw `overlays-v2/manifest.json`, so the final had no overlay sounds. The fix needed no video re-render:
+
+1. `bun <repo>/tools/podcast-edit/sfx-manifest.ts manifest.json --out manifest-sfx.json --accent f00-cves=3.8` in `<recording>/final-overlays/overlays-v2` (copy: `overlays/manifest-sfx.json`). This gives 11 center cards and photos (London included) IN and OUT, an accent on the CVE 52 bar, and 8 band strips with two typing lines each (line reveals measured from each strip's alpha).
+2. `bun edit/sfx-stem.ts <overlays-v2>/manifest-sfx.json edit/body-v5-cuts.json 3158.922 stem.f32` places the 39 sounds as one stem, with compose.ts levels (loudest 400 ms at -20 LUFS, center-out -3 dB, plus the body mix's +0.15 dB loudnorm gain). Times are in body v5 seconds, plus the body's 21.3 ms A/V start offset.
+3. Body v7 audio + stem, amix (no normalize), the compose limiter (192 kHz, limit 0.75, attack 1 ms; its 48-sample lookahead trimmed), AAC 192k, remuxed with body v7's video by stream copy: `preview/episode-197-body-v8.mp4`. Lag against body v7: 0 samples.
+4. `bash join.sh <absolute path>/cold-open-v9a-trim.mp4`.
+
+Final: -16.0 LUFS integrated, true peak -1.8 dBTP. Each sound is 4.5-14.1 dB under the speech peak in the 8 s around it (median about 9 dB). Whisper reads the same words with and without the sounds at the NOTIFY IN, the CVE accent and the 06 strip.

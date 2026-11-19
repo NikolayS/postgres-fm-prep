@@ -374,5 +374,8 @@
   },
   "skip": {
     "captions": "v9a caps-932-1117.jsonl exists in scratchpad/v9/fr-a, but all 186 referenced JPEG frames (0932–1117) were deleted by build.sh after encoding; prefix caption records/frames were not found. Cannot run the supplied records against missing frames."
+  },
+  "sfx": {
+    "manifest": "${EP197_OVERLAYS}/manifest-sfx.json"
   }
 }

@@ -18,5 +18,6 @@
     "video": "${REVIEW}/preview.mp4",
     "items": [{"id": "s01-notify", "at": 1297.3, "box": [24, 724, 1576, 140]}]
   },
+  "sfx": {"manifest": "${REVIEW}/overlays/manifest-sfx.json"},
   "skip": {}
 }
