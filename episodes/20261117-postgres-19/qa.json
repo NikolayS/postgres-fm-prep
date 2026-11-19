@@ -45,6 +45,11 @@
         "t": 1.5
       },
       {
+        "id": "f00-cves",
+        "file": "${EP197_OVERLAYS}/f00-cves.mov",
+        "t": 1.5
+      },
+      {
         "id": "f02-repack",
         "file": "${EP197_OVERLAYS}/f02-repack.mov",
         "t": 1.5
@@ -132,6 +137,19 @@
         "at": 174.24,
         "times": [
           174.24
+        ],
+        "box": [
+          40,
+          250,
+          1560,
+          640
+        ]
+      },
+      {
+        "id": "f00-cves",
+        "at": 484.91,
+        "times": [
+          484.91
         ],
         "box": [
           40,

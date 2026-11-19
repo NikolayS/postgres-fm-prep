@@ -22,6 +22,7 @@ Times are YouTube video times of the first mention (see the note above).
 - [47:38] The plan comparison in the same brief: 4,273 queries planned on 18.7 and 19 RC2, causes of each plan change (section 3.6, "Diff your plans before you upgrade"): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c#plans
 
 About the numbers on screen. They come from this study. Most are synthetic tests of setups we built; they are not failure or speed rates of real systems. Hosts, trials and caveats per card:
+- CVEs per release: https://www.postgresql.org/support/security/ (snapshot 2026-11-18, 229 CVEs), grouped by release day from 2019 to 18.7; releases without a CVE count as 0. 18.7 fixed 52 and 18.6 fixed 28; 2019-2025 releases fixed 1.5 on average (median 1).
 - Release credits: names in the release-notes acknowledgments of 12 to 19; commits in each development cycle (PostgreSQL git, data of 2026-11-11).
 - REPACK (CONCURRENTLY): 19.0, 16 dedicated vCPU, 20,000,000-row table, 16 writer sessions; median of 3 runs per point (2 valid runs at the first point).
 - LISTEN/NOTIFY: 1,000 listeners on their own channels, 4 notifiers, 8-vCPU dedicated host, median of 3 trials; our client was the limit, so 19 can go higher.
