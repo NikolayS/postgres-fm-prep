@@ -66,4 +66,4 @@ Episode 3745675 (show 32147), slug `postgres-19`, status draft, created 2026-11-
 
 ## Square cover
 
-`../../thumbs/square/` (`square.html`, `hosts.py`, `NOTES.txt`): episode 196 style, "POSTGRES 19", Nik, Michael and Kirk at equal head size. Output `preview/cover-3000.png` (not in git), embedded in the MP3.
+`preview/covers-v2/FINAL-square.jpg` (3000x3000, from the cover work), embedded in the MP3 as the front cover and uploaded as the episode artwork.

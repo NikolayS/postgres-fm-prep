@@ -47,6 +47,8 @@ See the last section of the recording notes.
 
 ## Release checklist (podcast part, 2026-11-18)
 
+**HARD GATE: Publish only after PostgreSQL 19.0 is announced on postgresql.org; check the release notes link (https://www.postgresql.org/docs/19/release-19.html) and the 'is out' wording then.** The Transistor draft stays unscheduled until then.
+
 YouTube subtitles (section 4):
 - [x] English subtitles built from the edited transcript (`notes/subtitles-en.srt`, final-video times).
 - [x] Dictionary pass with the `prompt.txt` glossary, then a read-through; doubtful spots checked with whisper (`video/podcast/README.md`). New mis-hearings not yet added to the glossary repository (MR to do).
@@ -55,7 +57,7 @@ YouTube subtitles (section 4):
 Podcast audio (section 5):
 - [x] Decision: the audio has the cold open (host can veto), so podcast times are video times.
 - [x] Audio-only master without overlay sounds, -16.2 LUFS, -2.1 dBTP, MP3 192 kbps with the cover (`preview/episode-197-podcast.mp3`, not in git).
-- [x] Square cover 3000x3000 (`preview/cover-3000.png`, not in git).
+- [x] Square cover 3000x3000: `preview/covers-v2/FINAL-square.jpg` (made by the cover work, not in git), embedded in the MP3 and set as the episode artwork.
 - [x] Draft created with `transistor.ts`: episode 3745675 (slug `postgres-19`, status draft): title, summary, description, transcript, audio. Not published or scheduled.
 - [ ] `video_url`: set when the YouTube video exists (`--episode <id> --video-url ...`), and add the URL to the tip in the notes.
 - [x] Show notes open with the watch-on-YouTube tip.
