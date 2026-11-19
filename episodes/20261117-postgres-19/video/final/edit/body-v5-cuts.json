@@ -1,0 +1,17 @@
+{
+ "note": "Cuts applied to the rendered body after the v2 plan (body v5, 2026-11-18): Nik's restarts. 880.88-883.40 'there should be some need to... It's like, uh,' and 884.64-885.48 'Um,' (final 15:24); 1055.20-1060.64 'And now, like, there are improvements, but unfortunately not that commit. Uh, it's, it's still... Uh,' (final 18:19). Body v3 seconds; later body times move earlier by the cut lengths (8.80 s in total).",
+ "cuts": [
+  {
+   "from": 880.88,
+   "to": 883.4
+  },
+  {
+   "from": 884.64,
+   "to": 885.48
+  },
+  {
+   "from": 1055.2,
+   "to": 1060.64
+  }
+ ]
+}
