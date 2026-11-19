@@ -1,0 +1,1791 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>PostgreSQL: Security Information</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8" />
+   
+  <meta name="theme-color" content="#336791"/>
+  <meta name="copyright" content="The PostgreSQL Global Development Group" />
+  <link href="/media/css/fontawesome.css?80bec0f4" rel="stylesheet">
+  <link rel="stylesheet" href="/media/css/bootstrap-4.4.1.min.css">
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  <link rel="stylesheet" type="text/css" href="/dyncss/base.css?80bec0f4">
+
+  <script src="/media/js/theme.js?80bec0f4"></script>
+
+  
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row justify-content-md-center">
+        <div class="col">
+          <!-- Header -->
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand p-0" href="/">
+              <img class="logo" src="/media/img/about/press/elephant.png" alt="PostgreSQL Elephant Logo">
+            </a>
+            <input type="checkbox" id="navbar-toggler" aria-controls="pgNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <label for="navbar-toggler" id="navbar-toggler-label" class="navbar-toggler" tabindex="0"><span class="navbar-toggler-icon"></span></label>
+            <div class="navbar-collapse" id="pgNavbar">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item p-2"><a href="/" title="Home">Home</a></li>
+                <li class="nav-item p-2"><a href="/about/" title="About">About</a></li>
+                <li class="nav-item p-2"><a href="/download/" title="Download">Download</a></li>
+                <li class="nav-item p-2"><a href="/docs/" title="Documentation">Documentation</a></li>
+                <li class="nav-item p-2"><a href="/community/" title="Community">Community</a></li>
+                <li class="nav-item p-2"><a href="/developer/" title="Developers">Developers</a></li>
+                <li class="nav-item p-2"><a href="/support/" title="Support">Support</a></li>
+                <li class="nav-item p-2"><a href="/about/donate/" title="Donate">Donate</a></li>
+                <li class="nav-item p-2"><a href="/account/" title="Your account">Your account</a></li>
+              </ul>
+              <form role="search" method="get" action="/search/">
+                <div class="input-group">
+                  <input id="q" name="q" type="text" size="20" maxlength="255" accesskey="s"  class="form-control" placeholder="Search for...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fas fa-search"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+              </form>
+              <form id="form-theme" class="form-inline d-none">
+                <button id="btn-theme" class="btn btn-default ml-1" type="button"></button>
+              </form>
+            </div>
+          </nav>
+        </div>
+      </div>
+      <div class="row justify-content-center pg-shout-box">
+        <div class="col text-white text-center">November 12, 2026: <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">PostgreSQL 18.7, 17.12, 16.16, 15.20, 14.25, and 19 RC 2 Released!</a>
+
+</div>
+      </div>
+    </div>
+    
+<div class="container-fluid margin">
+  <div class="row">
+    <div class="col-lg-2">
+      <div id="pgSideWrap">
+       
+       <div id="pgSideNav">
+         <h2>Quick Links</h2>
+
+         <ul>
+           
+           
+           <li><a href="/support/">Support</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/versioning/">Versioning Policy</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/security/">Security</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/professional_support/">Professional Services</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/professional_hosting/">Hosting Solutions</a>
+            
+            
+           
+           </li>
+           <li class="last-child"><a href="/account/submitbug/">Report a Bug</a>
+            
+            
+           </li>
+            
+           
+        </ul>
+
+       </div>
+       
+      </div> <!-- pgSideWrap -->
+    </div>
+    <div class="col-lg-10">
+      <div id="pgContentWrap">
+        
+
+<h1>Security Information <i class="fas fa-lock"></i></h1>
+
+<p>
+  The PostgreSQL Global Development Group (PGDG) takes security seriously. This
+  allows our users to place their trust in PostgreSQL for protecting their
+  mission-critical data.
+</p>
+
+<p>
+  The PostgreSQL Global Development Group follows a model that shares
+  responsibility between PostgreSQL itself and its deployment environment,
+  including hardware, operating system, and the application layer
+  (programming language, frameworks and client libraries). The PostgreSQL
+  documentation provides info on the inherent security features of PostgreSQL
+  and how to securely configure and run PostgreSQL.
+</p>
+
+<p>
+  Security vulnerabilities can exist both in PostgreSQL and software within the
+  PostgreSQL ecosystem, including client libraries, extensions, installers,
+  and other utilities. This page walks through what is considered a security
+  vulnerability in PostgreSQL, how to report PostgreSQL security
+  vulnerabilities, and how fixes for security vulnerabilities are released.
+</p>
+
+<p>
+  Please note that the PostgreSQL Project does not offer bug bounties.
+</p>
+
+<h2>CVE Numbering Authority</h2>
+
+<p>
+  The PostgreSQL Project is a CVE Numbering Authority (CNA), working with Red Hat
+  as our CNA Root. This allows us to assign our own CVE numbers and publish CVE
+  records for PostgreSQL and closely related projects.
+</p>
+
+<p>
+  We will currently assign CVE numbers for the following projects upon request to
+  <a href="mailto:cna@postgresql.org">cna@postgresql.org</a>:
+</p>
+
+<ul>
+  <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
+  <li><a href="https://yum.postgresql.org/">PostgreSQL RPM packaging</a></li>
+  <li><a href="https://apt.postgresql.org/">PostgreSQL DEB packaging</a></li>
+  <li><a href="https://github.com/EnterpriseDB/edb-installers">PostgreSQL Windows/macOS installers (EDB)</a></li>
+  <li><a href="https://jdbc.postgresql.org/">pgJDBC</a></li>
+  <li><a href="https://odbc.postgresql.org/">psqlODBC</a></li>
+  <li><a href="https://www.pgadmin.org/">pgAdmin</a></li>
+  <li><a href="https://www.pgbouncer.org/">PgBouncer</a></li>
+  <li><a href="https://gitlab.com/dalibo/postgresql_anonymizer/">PostgreSQL Anonymizer</a></li>
+  <li><a href="https://github.com/pgvector/pgvector/">pgvector</a></li>
+</ul>
+
+<p>
+  Additional projects may request inclusion on the list above by emailing
+  <a href="mailto:cna@postgresql.org">cna@postgresql.org</a>.
+</p>
+
+<p>
+  <strong>NOTE:</strong> The security team will only assign CVEs to projects
+  when requested by members of the project. If you think you've found a security
+  issue in a project other than PostgreSQL or its packages and installers,
+  please contact the security team for that project. See below for more details.
+</p>
+
+<h2>What is a Security Vulnerability in PostgreSQL?</h2>
+
+<p>
+  A security vulnerability in PostgreSQL is an issue that allows a user to gain
+  access to privileges or data that they do not have permission to use, or
+  allows a user to execute arbitrary code through a PostgreSQL process.
+</p>
+
+<p>
+  The PostgreSQL Security Team does not consider reports on actions a PostgreSQL
+  superuser takes to be a security vulnerability. However, a report on an
+  unprivileged user escalating to superuser generally qualifies as valid.
+</p>
+
+<p>
+  The PostgreSQL Security Team typically does not consider a denial-of-service
+  on a PostgreSQL server from an authenticated, valid SQL statement to be a
+  security vulnerability. A denial-of-service issue of this nature could still
+  be a <a href="/account/submitbug/">bug</a>, and we encourage you to report it
+  on the <a href="/account/submitbug/">Report a Bug</a> page.
+</p>
+
+<p>
+  Please do not report the lack of DMARC on postgresql.org mailing lists. This
+  is by design.
+</p>
+
+<h2>Reporting a PostgreSQL Security Vulnerability</h2>
+
+<p>
+  For security vulnerabilities in PostgreSQL or any of the installers linked
+  from the <a href="/download/">PostgreSQL download page</a>, please email
+  <a href="mailto:security@postgresql.org">security@postgresql.org</a>.
+</p>
+
+<p>
+  For reporting non-security bugs, please visit the
+  <a href="/account/submitbug/">Report a Bug</a> page.
+</p>
+
+<p>
+  If you are unsure if an issue is a security vulnerability, please err on the
+  side of caution and email
+  <a href="mailto:security@postgresql.org">security@postgresql.org</a>.
+</p>
+
+<p>
+  Once a vulnerability is validated, the PostgreSQL Security Team works to fix
+  it. Our goal is to try to include any fixes as part of the next scheduled
+  PostgreSQL update release (see "PostgreSQL Security Releases"). Based on
+  factors like the timing of the report, the severity of the issues, or
+  complexity of the fix, the PostgreSQL Security Team may decide to include the
+  fix in a subsequent release, or in exceptional circumstances, issue an
+  "out-of-cycle" release.
+</p>
+
+<p>
+  We expect that no vulnerability is prematurely disclosed until the PostgreSQL
+  Project has made it available as part of its release and disclosure process.
+</p>
+
+<h2>Reporting non-PostgreSQL Security Vulnerabilities</h2>
+
+<p>
+  Please see below for how you can report security vulnerabilities in
+  PostgreSQL-related projects:
+</p>
+
+<ul>
+  <li>
+    For security vulnerabilities in the <a href="https://jdbc.postgresql.org">PostgreSQL JDBC Driver</a>,
+    please email
+    <a href="mailto:pgsql-jdbc-security@lists.postgresql.org">pgsql-jdbc-security@lists.postgresql.org</a>.
+  </li>
+  <li>
+    For security vulnerabilities in <a href="https://www.pgadmin.org/">pgAdmin</a>,
+    please email <a href="mailto:security@pgadmin.org">security@pgadmin.org</a>.
+  </li>
+  <li>
+    For security vulnerabilities in <a href="https://github.com/pgvector/pgvector/">pgvector</a>,
+    please email <a href="mailto:security@pgvector.org">security@pgvector.org</a>.
+  </li>
+  <li>
+    If you wish to report a security vulnerability for any other open source project in
+    the PostgreSQL ecosystem (e.g. a driver, an extension, or an installer) and
+    need a secure communication channel, please email
+    <a href="mailto:security@postgresql.org">security@postgresql.org</a>.
+  </li>
+</ul>
+
+<h2>PostgreSQL Security Releases</h2>
+
+<p>
+  The PostgreSQL Project releases security fixes as part of
+  <a href="/support/versioning/">minor version updates</a>. You are always
+  advised to use the latest minor version available, as it will contain other
+  non-security related fixes.
+</p>
+
+<p>
+  A new PostgreSQL major release, which contains new features, has every prior
+  security fix.
+</p>
+
+<p>
+  If you find a security vulnerability in PostgreSQL, the PostgreSQL Security
+  Team will credit you in the release notes and register a CVE for the
+  vulnerability. <strong>Please do not register a CVE independently of the
+  PostgreSQL Security Team</strong>.
+</p>
+
+<h2>PostgreSQL Security Notifications</h2>
+
+<p>
+  To receive notifications about security releases or other security
+  related news, you can subscribe to
+  the <a href="/list/">pgsql-announce</a> mailing list. If you set your
+  subscription to only include the tag <em>Security</em>, it will
+  exclude all other announcements that are sent to this list.
+</p>
+
+<h2>Known PostgreSQL Security Vulnerabilities</h2>
+
+<p>
+  The PostgreSQL Global Development Group believes that accuracy, completeness
+  and availability of security information is essential for our users. We choose
+  to pool all information on this one page, allowing easy searching for security
+  vulnerabilities over a range of criteria.  This includes:
+</p>
+
+<ul>
+  <li>Which major versions a security vulnerability is present in</li>
+  <li>Which minor version update releases a security vulnerability is fixed in</li>
+  <li>Whether an exploit requires a valid login</li>
+  <li>CVSS score</li>
+</ul>
+
+<p>
+  You can find more detailed information about a security vulnerability by
+  clicking on the links in the table below.
+</p>
+
+<h3>
+  Known PostgreSQL Security Vulnerabilities in
+  PostgreSQL 15
+</h3>
+
+
+
+<p>
+  You can filter the view of patches to show just patches for version:<br />
+  
+    <a href="/support/security/18/">18</a> -
+  
+    <a href="/support/security/17/">17</a> -
+  
+    <a href="/support/security/16/">16</a> -
+  
+    <a href="/support/security/15/">15</a> -
+  
+    <a href="/support/security/14/">14</a>
+  
+  - <a href="/support/security/">all</a>
+</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Reference</th>
+      <th>Affected</th>
+      <th>Fixed</th>
+      <th><a href="#comp">Component</a> & CVSS v3 Base Score</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120154/">CVE-2026-120154</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL INSERT ... ON CONFLICT can read rows despite row security policies<br/><br/><a href="/support/security/CVE-2026-120154/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120153/">CVE-2026-120153</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H">7.2</a><br/><span class="cvssvector">AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL extension-script substitutions allow SQL injection through object names<br/><br/><a href="/support/security/CVE-2026-120153/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120151/">CVE-2026-120151</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL plpgsql record-field type confusion executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-120151/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120150/">CVE-2026-120150</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL expanded-record domain-check use-after-free executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-120150/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120149/">CVE-2026-120149</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL FDW batch-insert mismatch executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-120149/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120148/">CVE-2026-120148</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N">8.1</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N</span>
+    </td>
+        <td>PostgreSQL extended-statistics pseudo-type confusion executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-120148/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120147/">CVE-2026-120147</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL dblink reentrant disconnect use-after-free executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-120147/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120146/">CVE-2026-120146</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL REASSIGN OWNED bypasses role SET and CREATEDB checks<br/><br/><a href="/support/security/CVE-2026-120146/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120145/">CVE-2026-120145</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL logical replication can write to subscriber system catalogs, executing arbitrary code<br/><br/><a href="/support/security/CVE-2026-120145/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120143/">CVE-2026-120143</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL transition-table cursor use-after-free executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-120143/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120141/">CVE-2026-120141</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL materialized set-returning function type confusion executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-120141/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-120139/">CVE-2026-120139</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL tuple-size integer wraparound executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-120139/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116336/">CVE-2026-116336</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL REINDEX CONCURRENTLY does not block DROP INDEX during index functions<br/><br/><a href="/support/security/CVE-2026-116336/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116335/">CVE-2026-116335</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL commutator or negator result-type confusion executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116335/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116332/">CVE-2026-116332</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL portal setup use-after-free executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116332/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116331/">CVE-2026-116331</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL min/max aggregate type confusion executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116331/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116330/">CVE-2026-116330</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL pg_dump tar restore.sql fails to block psql command injection<br/><br/><a href="/support/security/CVE-2026-116330/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116327/">CVE-2026-116327</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL security_barrier analysis can expose hidden values through indirect expressions<br/><br/><a href="/support/security/CVE-2026-116327/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116326/">CVE-2026-116326</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL plperl tied-object exceptions follow stale sigjmp_buf<br/><br/><a href="/support/security/CVE-2026-116326/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116323/">CVE-2026-116323</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL pltcl reentrant result conversion use-after-free executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116323/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116321/">CVE-2026-116321</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL unterminated name value discloses server memory<br/><br/><a href="/support/security/CVE-2026-116321/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116320/">CVE-2026-116320</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL plperl array and hash conversion use-after-free executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116320/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116319/">CVE-2026-116319</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL plperl reentrant return_next() use-after-free executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116319/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116317/">CVE-2026-116317</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL ts_rank_cd() heap buffer overflow may execute arbitrary code<br/><br/><a href="/support/security/CVE-2026-116317/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116316/">CVE-2026-116316</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL security-restricted operations can create types in pg_temp, which later queries of the session find<br/><br/><a href="/support/security/CVE-2026-116316/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116315/">CVE-2026-116315</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL tsvector_delete() heap buffer overflow executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116315/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116314/">CVE-2026-116314</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL pg_restore executes arbitrary code due to missing non-plain archive validation<br/><br/><a href="/support/security/CVE-2026-116314/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116312/">CVE-2026-116312</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15</td>
+        <td>18.7, 17.12, 16.16, 15.20</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N">5.4</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL MERGE can place the wrong row in a trigger transition table<br/><br/><a href="/support/security/CVE-2026-116312/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116311/">CVE-2026-116311</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N">5.4</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL DROP OWNED can remove restrictive row security policies from non-owned tables<br/><br/><a href="/support/security/CVE-2026-116311/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116309/">CVE-2026-116309</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL plperl blessed-reference type confusion may execute arbitrary code<br/><br/><a href="/support/security/CVE-2026-116309/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116308/">CVE-2026-116308</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL dict_int reads beyond zero-length tokens<br/><br/><a href="/support/security/CVE-2026-116308/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116307/">CVE-2026-116307</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL plperl prepared-query use-after-free executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116307/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116306/">CVE-2026-116306</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL composite-type change during field assignment executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116306/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116304/">CVE-2026-116304</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL parallel RECORD typmod use-after-free executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-116304/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-116303/">CVE-2026-116303</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL foreign key and JSON conversions bypass EXECUTE privilege on cast functions<br/><br/><a href="/support/security/CVE-2026-116303/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-19385/">CVE-2026-19385</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL pg_dump heap buffer overflow executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-19385/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-18447/">CVE-2026-18447</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL output parameter type confusion executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-18447/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-18408/">CVE-2026-18408</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL psql \unrestrict lets superuser of pg_dump origin server execute arbitrary code in psql client<br/><br/><a href="/support/security/CVE-2026-18408/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-18024/">CVE-2026-18024</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL ascii() function reads past end of buffer<br/><br/><a href="/support/security/CVE-2026-18024/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-16241/">CVE-2026-16241</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:L">3.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:L</span>
+    </td>
+        <td>PostgreSQL ECPG integer underflow can crash the client<br/><br/><a href="/support/security/CVE-2026-16241/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-16240/">CVE-2026-16240</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N">3.7</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL pg_basebackup can use backup manifest content as a format string<br/><br/><a href="/support/security/CVE-2026-16240/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-16239/">CVE-2026-16239</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL type confusion in cursor CLOSE + DECLARE executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-16239/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-16237/">CVE-2026-16237</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N">5.4</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL INSERT ... ON CONFLICT can read or modify rows despite auto-updatable view WHERE condition<br/><br/><a href="/support/security/CVE-2026-16237/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-15742/">CVE-2026-15742</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL fuzzystrmatch writes effectively-arbitrary addresses, via integer wraparound<br/><br/><a href="/support/security/CVE-2026-15742/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-15741/">CVE-2026-15741</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL expression deparse allows SQL injection via EXTRACT argument<br/><br/><a href="/support/security/CVE-2026-15741/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14680/">CVE-2026-14680</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL type confusion via &quot;internal&quot; arguments<br/><br/><a href="/support/security/CVE-2026-14680/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14679/">CVE-2026-14679</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:H">8.2</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:H</span>
+    </td>
+        <td>PostgreSQL stack buffer overflow in argument match writes 0x0 and 0x1 to server memory<br/><br/><a href="/support/security/CVE-2026-14679/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14678/">CVE-2026-14678</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL pg_trgm picksplit reads past end of buffer<br/><br/><a href="/support/security/CVE-2026-14678/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14677/">CVE-2026-14677</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL 32-bit pltcl and plperl undersize allocations, via integer wraparound<br/><br/><a href="/support/security/CVE-2026-14677/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14673/">CVE-2026-14673</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 16, 15, 14</td>
+        <td>18.6, 16.15, 15.19, 14.24</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N">3.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL amcheck does not clear untrusted search path<br/><br/><a href="/support/security/CVE-2026-14673/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14671/">CVE-2026-14671</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL refint plan cache type confusion executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-14671/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14670/">CVE-2026-14670</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL plperl tied object heap buffer overflow executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-14670/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14669/">CVE-2026-14669</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL to_char heap buffer overflow executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-14669/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14668/">CVE-2026-14668</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H">8.1</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:H</span>
+    </td>
+        <td>PostgreSQL ctid type confusion in selectivity estimator discloses derivative of arbitrary read<br/><br/><a href="/support/security/CVE-2026-14668/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14666/">CVE-2026-14666</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N">4.2</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL row security caching disregards role modifications<br/><br/><a href="/support/security/CVE-2026-14666/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14664/">CVE-2026-14664</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL regexp heap buffer overflow executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-14664/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14663/">CVE-2026-14663</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N">6.5</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL pgcrypto, for OpenSSL-disabled ciphers, silently encrypts to and decrypts from cleartext<br/><br/><a href="/support/security/CVE-2026-14663/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14662/">CVE-2026-14662</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL tsvector and tsquery undersize allocations, via integer wraparound<br/><br/><a href="/support/security/CVE-2026-14662/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-14661/">CVE-2026-14661</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H">8.1</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL dblink and subscriptions can append to arbitrary files<br/><br/><a href="/support/security/CVE-2026-14661/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6637/">CVE-2026-6637</a></span><br/>
+          <a href="/about/news/postgresql-184-1710-1614-1518-and-1423-released-3297/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.4, 17.10, 16.14, 15.18, 14.23</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL refint allows stack buffer overflow and SQL injection<br/><br/><a href="/support/security/CVE-2026-6637/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6479/">CVE-2026-6479</a></span><br/>
+          <a href="/about/news/postgresql-184-1710-1614-1518-and-1423-released-3297/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.4, 17.10, 16.14, 15.18, 14.23</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H">7.5</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H</span>
+    </td>
+        <td>PostgreSQL SSL/GSS init causes denial of service, via uncontrolled recursion<br/><br/><a href="/support/security/CVE-2026-6479/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6478/">CVE-2026-6478</a></span><br/>
+          <a href="/about/news/postgresql-184-1710-1614-1518-and-1423-released-3297/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.4, 17.10, 16.14, 15.18, 14.23</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N">6.5</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL discloses MD5-hashed passwords via covert timing channel<br/><br/><a href="/support/security/CVE-2026-6478/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6477/">CVE-2026-6477</a></span><br/>
+          <a href="/about/news/postgresql-184-1710-1614-1518-and-1423-released-3297/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.4, 17.10, 16.14, 15.18, 14.23</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL libpq lo_* functions let server superuser overwrite client stack memory<br/><br/><a href="/support/security/CVE-2026-6477/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6475/">CVE-2026-6475</a></span><br/>
+          <a href="/about/news/postgresql-184-1710-1614-1518-and-1423-released-3297/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.4, 17.10, 16.14, 15.18, 14.23</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL pg_basebackup and pg_rewind can overwrite unrelated files of origin superuser choice<br/><br/><a href="/support/security/CVE-2026-6475/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6474/">CVE-2026-6474</a></span><br/>
+          <a href="/about/news/postgresql-184-1710-1614-1518-and-1423-released-3297/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.4, 17.10, 16.14, 15.18, 14.23</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL timeofday() can disclose portions of server memory<br/><br/><a href="/support/security/CVE-2026-6474/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6473/">CVE-2026-6473</a></span><br/>
+          <a href="/about/news/postgresql-184-1710-1614-1518-and-1423-released-3297/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.4, 17.10, 16.14, 15.18, 14.23</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL server undersizes allocations, via integer wraparound<br/><br/><a href="/support/security/CVE-2026-6473/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6472/">CVE-2026-6472</a></span><br/>
+          <a href="/about/news/postgresql-184-1710-1614-1518-and-1423-released-3297/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.4, 17.10, 16.14, 15.18, 14.23</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N">5.4</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL CREATE TYPE does not check multirange schema CREATE privilege<br/><br/><a href="/support/security/CVE-2026-6472/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6471/">CVE-2026-6471</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H">7.2</a><br/><span class="cvssvector">AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL logical decoding can dlopen arbitrary file<br/><br/><a href="/support/security/CVE-2026-6471/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6470/">CVE-2026-6470</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:L</span>
+    </td>
+        <td>PostgreSQL fails to check type USAGE privilege<br/><br/><a href="/support/security/CVE-2026-6470/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6469/">CVE-2026-6469</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:L">3.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:L</span>
+    </td>
+        <td>PostgreSQL ALTER TABLE ALTER TYPE resets extended statistics ownership<br/><br/><a href="/support/security/CVE-2026-6469/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6467/">CVE-2026-6467</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H">7.2</a><br/><span class="cvssvector">AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL extension script schema mishandling executes arbitrary SQL<br/><br/><a href="/support/security/CVE-2026-6467/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6464/">CVE-2026-6464</a></span><br/>
+          <a href="/about/news/postgresql-186-1711-1615-1519-1424-and-19-beta-3-released-3365/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.6, 17.11, 16.15, 15.19, 14.24</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H">8.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL psql COPY FROM STDIN early failure processes data lines as psql commands<br/><br/><a href="/support/security/CVE-2026-6464/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-6460/">CVE-2026-6460</a></span><br/>
+          <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.7, 17.12, 16.16, 15.20, 14.25</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL type confusion after ALTER ... SET DATA TYPE executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-6460/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-2006/">CVE-2026-2006</a></span><br/>
+          <a href="/about/news/postgresql-182-178-1612-1516-and-1421-released-3235/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.2, 17.8, 16.12, 15.16, 14.21</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL missing validation of multibyte character length executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-2006/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-2005/">CVE-2026-2005</a></span><br/>
+          <a href="/about/news/postgresql-182-178-1612-1516-and-1421-released-3235/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.2, 17.8, 16.12, 15.16, 14.21</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL pgcrypto heap buffer overflow executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-2005/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-2004/">CVE-2026-2004</a></span><br/>
+          <a href="/about/news/postgresql-182-178-1612-1516-and-1421-released-3235/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.2, 17.8, 16.12, 15.16, 14.21</td>
+        <td>contrib module<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL intarray missing validation of type of input to selectivity estimator executes arbitrary code<br/><br/><a href="/support/security/CVE-2026-2004/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2026-2003/">CVE-2026-2003</a></span><br/>
+          <a href="/about/news/postgresql-182-178-1612-1516-and-1421-released-3235/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14</td>
+        <td>18.2, 17.8, 16.12, 15.16, 14.21</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL oidvector discloses a few bytes of memory<br/><br/><a href="/support/security/CVE-2026-2003/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2025-12818/">CVE-2025-12818</a></span><br/>
+          <a href="/about/news/postgresql-181-177-1611-1515-1420-and-1323-released-3171/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14, 13</td>
+        <td>18.1, 17.7, 16.11, 15.15, 14.20, 13.23</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H">5.9</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H</span>
+    </td>
+        <td>PostgreSQL libpq undersizes allocations, via integer wraparound<br/><br/><a href="/support/security/CVE-2025-12818/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2025-12817/">CVE-2025-12817</a></span><br/>
+          <a href="/about/news/postgresql-181-177-1611-1515-1420-and-1323-released-3171/">Announcement</a><br/>
+        </td>
+        <td>18, 17, 16, 15, 14, 13</td>
+        <td>18.1, 17.7, 16.11, 15.15, 14.20, 13.23</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:N/A:L</span>
+    </td>
+        <td>PostgreSQL CREATE STATISTICS does not check for schema CREATE privilege<br/><br/><a href="/support/security/CVE-2025-12817/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2025-8715/">CVE-2025-8715</a></span><br/>
+          <a href="/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/">Announcement</a><br/>
+        </td>
+        <td>17, 16, 15, 14, 13</td>
+        <td>17.6, 16.10, 15.14, 14.19, 13.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL pg_dump newline in object name executes arbitrary code in psql client and in restore target server<br/><br/><a href="/support/security/CVE-2025-8715/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2025-8714/">CVE-2025-8714</a></span><br/>
+          <a href="/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/">Announcement</a><br/>
+        </td>
+        <td>17, 16, 15, 14, 13</td>
+        <td>17.6, 16.10, 15.14, 14.19, 13.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL pg_dump lets superuser of origin server execute arbitrary code in psql client<br/><br/><a href="/support/security/CVE-2025-8714/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2025-8713/">CVE-2025-8713</a></span><br/>
+          <a href="/about/news/postgresql-176-1610-1514-1419-1322-and-18-beta-3-released-3118/">Announcement</a><br/>
+        </td>
+        <td>17, 16, 15, 14, 13</td>
+        <td>17.6, 16.10, 15.14, 14.19, 13.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>PostgreSQL optimizer statistics can expose sampled data within a view, partition, or child table<br/><br/><a href="/support/security/CVE-2025-8713/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2025-4207/">CVE-2025-4207</a></span><br/>
+          <a href="/about/news/postgresql-175-169-1513-1418-and-1321-released-3072/">Announcement</a><br/>
+        </td>
+        <td>17, 16, 15, 14, 13</td>
+        <td>17.5, 16.9, 15.13, 14.18, 13.21</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H">5.9</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:H</span>
+    </td>
+        <td>PostgreSQL GB18030 encoding validation can read one byte past end of allocation for text that fails validation<br/><br/><a href="/support/security/CVE-2025-4207/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2025-1094/">CVE-2025-1094</a></span><br/>
+          <a href="/about/news/postgresql-173-167-1511-1416-and-1319-released-3015/">Announcement</a><br/>
+        </td>
+        <td>17, 16, 15, 14, 13</td>
+        <td>17.3, 16.7, 15.11, 14.16, 13.19</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H">8.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL quoting APIs miss neutralizing quoting syntax in text that fails encoding validation<br/><br/><a href="/support/security/CVE-2025-1094/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2024-10979/">CVE-2024-10979</a></span><br/>
+          <a href="/about/news/postgresql-171-165-159-1414-1317-and-1221-released-2955/">Announcement</a><br/>
+        </td>
+        <td>17, 16, 15, 14, 13, 12</td>
+        <td>17.1, 16.5, 15.9, 14.14, 13.17, 12.21</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL PL/Perl environment variable changes execute arbitrary code<br/><br/><a href="/support/security/CVE-2024-10979/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2024-10978/">CVE-2024-10978</a></span><br/>
+          <a href="/about/news/postgresql-171-165-159-1414-1317-and-1221-released-2955/">Announcement</a><br/>
+        </td>
+        <td>17, 16, 15, 14, 13, 12</td>
+        <td>17.1, 16.5, 15.9, 14.14, 13.17, 12.21</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N">4.2</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL SET ROLE, SET SESSION AUTHORIZATION reset to wrong user ID<br/><br/><a href="/support/security/CVE-2024-10978/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2024-10977/">CVE-2024-10977</a></span><br/>
+          <a href="/about/news/postgresql-171-165-159-1414-1317-and-1221-released-2955/">Announcement</a><br/>
+        </td>
+        <td>17, 16, 15, 14, 13, 12</td>
+        <td>17.1, 16.5, 15.9, 14.14, 13.17, 12.21</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:R/S:U/C:N/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL libpq retains an error message from man-in-the-middle<br/><br/><a href="/support/security/CVE-2024-10977/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2024-10976/">CVE-2024-10976</a></span><br/>
+          <a href="/about/news/postgresql-171-165-159-1414-1317-and-1221-released-2955/">Announcement</a><br/>
+        </td>
+        <td>17, 16, 15, 14, 13, 12</td>
+        <td>17.1, 16.5, 15.9, 14.14, 13.17, 12.21</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N">4.2</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>PostgreSQL row security below e.g. subqueries disregards user ID changes<br/><br/><a href="/support/security/CVE-2024-10976/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2024-7348/">CVE-2024-7348</a></span><br/>
+          <a href="/about/news/postgresql-164-158-1413-1316-1220-and-17-beta-3-released-2910/">Announcement</a><br/>
+        </td>
+        <td>16, 15, 14, 13, 12</td>
+        <td>16.4, 15.8, 14.13, 13.16, 12.20</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL relation replacement during pg_dump executes arbitrary SQL<br/><br/><a href="/support/security/CVE-2024-7348/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2024-4317/">CVE-2024-4317</a></span><br/>
+          <a href="/about/news/postgresql-163-157-1412-1315-and-1219-released-2858/">Announcement</a><br/>
+        </td>
+        <td>16, 15, 14</td>
+        <td>16.3, 15.7, 14.12</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>Restrict visibility of &quot;pg_stats_ext&quot; and &quot;pg_stats_ext_exprs&quot; entries to the table owner<br/><br/><a href="/support/security/CVE-2024-4317/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2024-0985/">CVE-2024-0985</a></span><br/>
+          <a href="/about/news/postgresql-162-156-1411-1314-and-1218-released-2807/">Announcement</a><br/>
+        </td>
+        <td>16, 15, 14, 13, 12</td>
+        <td>16.2, 15.6, 14.11, 13.14, 12.18</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:H">8.0</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>PostgreSQL non-owner REFRESH MATERIALIZED VIEW CONCURRENTLY executes arbitrary SQL<br/><br/><a href="/support/security/CVE-2024-0985/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-39418/">CVE-2023-39418</a></span><br/>
+          <a href="/about/news/postgresql-154-149-1312-1216-1121-and-postgresql-16-beta-3-released-2689/">Announcement</a><br/>
+        </td>
+        <td>15</td>
+        <td>15.4</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N</span>
+    </td>
+        <td>MERGE fails to enforce UPDATE or SELECT row security policies<br/><br/><a href="/support/security/CVE-2023-39418/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-39417/">CVE-2023-39417</a></span><br/>
+          <a href="/about/news/postgresql-154-149-1312-1216-1121-and-postgresql-16-beta-3-released-2689/">Announcement</a><br/>
+        </td>
+        <td>15, 14, 13, 12, 11</td>
+        <td>15.4, 14.9, 13.12, 12.16, 11.21</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H">7.5</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Extension script @substitutions@ within quoting allow SQL injection<br/><br/><a href="/support/security/CVE-2023-39417/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-5870/">CVE-2023-5870</a></span><br/>
+          <a href="/about/news/postgresql-161-155-1410-1313-1217-and-1122-released-2749/">Announcement</a><br/>
+        </td>
+        <td>16, 15, 14, 13, 12, 11</td>
+        <td>16.1, 15.5, 14.10, 13.13, 12.17, 11.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:L">2.2</a><br/><span class="cvssvector">AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:L</span>
+    </td>
+        <td>Role &quot;pg_signal_backend&quot; can signal certain superuser processes<br/><br/><a href="/support/security/CVE-2023-5870/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-5869/">CVE-2023-5869</a></span><br/>
+          <a href="/about/news/postgresql-161-155-1410-1313-1217-and-1122-released-2749/">Announcement</a><br/>
+        </td>
+        <td>16, 15, 14, 13, 12, 11</td>
+        <td>16.1, 15.5, 14.10, 13.13, 12.17, 11.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Buffer overrun from integer overflow in array modification<br/><br/><a href="/support/security/CVE-2023-5869/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-5868/">CVE-2023-5868</a></span><br/>
+          <a href="/about/news/postgresql-161-155-1410-1313-1217-and-1122-released-2749/">Announcement</a><br/>
+        </td>
+        <td>16, 15, 14, 13, 12, 11</td>
+        <td>16.1, 15.5, 14.10, 13.13, 12.17, 11.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>Memory disclosure in aggregate function calls<br/><br/><a href="/support/security/CVE-2023-5868/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-2455/">CVE-2023-2455</a></span><br/>
+          <a href="/about/news/postgresql-153-148-1311-1215-and-1120-released-2637/">Announcement</a><br/>
+        </td>
+        <td>15, 14, 13, 12, 11</td>
+        <td>15.3, 14.8, 13.11, 12.15, 11.20</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N">4.2</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>Row security policies disregard user ID changes after inlining<br/><br/><a href="/support/security/CVE-2023-2455/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-2454/">CVE-2023-2454</a></span><br/>
+          <a href="/about/news/postgresql-153-148-1311-1215-and-1120-released-2637/">Announcement</a><br/>
+        </td>
+        <td>15, 14, 13, 12, 11</td>
+        <td>15.3, 14.8, 13.11, 12.15, 11.20</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H">7.2</a><br/><span class="cvssvector">AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>CREATE SCHEMA ... schema_element defeats protective search_path changes<br/><br/><a href="/support/security/CVE-2023-2454/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2022-41862/">CVE-2022-41862</a></span><br/>
+          <a href="/about/news/postgresql-152-147-1310-1214-and-1119-released-2592/">Announcement</a><br/>
+        </td>
+        <td>15, 14, 13, 12</td>
+        <td>15.2, 14.7, 13.10, 12.14</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N">3.7</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>Client memory disclosure when connecting, with Kerberos, to modified server<br/><br/><a href="/support/security/CVE-2022-41862/">more details</a></td>
+      </tr>
+    
+  </tbody>
+</table>
+
+<h3>Unsupported versions</h3>
+
+<p>
+  You can also view archived security patches for unsupported versions. Note that no further
+  security patches are made available for these versions as they are end of life.<br/>
+  
+    <a href="/support/security/13/">13</a> -
+  
+    <a href="/support/security/12/">12</a> -
+  
+    <a href="/support/security/11/">11</a> -
+  
+    <a href="/support/security/10/">10</a> -
+  
+    <a href="/support/security/9.6/">9.6</a> -
+  
+    <a href="/support/security/9.5/">9.5</a> -
+  
+    <a href="/support/security/9.4/">9.4</a> -
+  
+    <a href="/support/security/9.3/">9.3</a> -
+  
+    <a href="/support/security/9.2/">9.2</a> -
+  
+    <a href="/support/security/9.1/">9.1</a> -
+  
+    <a href="/support/security/9.0/">9.0</a> -
+  
+    <a href="/support/security/8.4/">8.4</a> -
+  
+    <a href="/support/security/8.3/">8.3</a> -
+  
+    <a href="/support/security/8.2/">8.2</a> -
+  
+    <a href="/support/security/8.1/">8.1</a> -
+  
+    <a href="/support/security/8.0/">8.0</a> -
+  
+    <a href="/support/security/7.4/">7.4</a> -
+  
+    <a href="/support/security/7.3/">7.3</a>
+  
+</p>
+
+<h3 id="comp">Components</h3>
+
+<p>
+  The following component references are used in the above table:
+</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+       <td>core server</td>
+       <td>This vulnerability exists in the core server product.</td>
+      </tr>
+
+      <tr>
+       <td>client</td>
+       <td>This vulnerability exists in a client library or client application only.</td>
+      </tr>
+
+      <tr>
+       <td>contrib module</td>
+       <td>This vulnerability exists in a contrib module. Contrib modules are not installed by default when PostgreSQL is installed from source. They may be installed by binary packages.</td>
+      </tr>
+
+      <tr>
+       <td>client contrib module</td>
+       <td>This vulnerability exists in a contrib module used on the client only.</td>
+      </tr>
+
+      <tr>
+       <td>packaging</td>
+       <td>This vulnerability exists in PostgreSQL binary packaging, e.g. an installer or RPM.</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2>The PostgreSQL Security Team</h2>
+
+<p>
+  The PostgreSQL Security Team is made up of a group of contributors to the
+  PostgreSQL project who have experience in different aspects of database and
+  information security.
+</p>
+
+<p>
+  You can find a list of members on the security team here:
+</p>
+
+<ul>
+  <li>Álvaro Herrera</li>
+  <li>Andres Freund</li>
+  <li>Andrew Dunstan</li>
+  <li>Bruce Momjian</li>
+  <li>Dave Page</li>
+  <li>Greg Stark</li>
+  <li>Heikki Linnakangas</li>
+  <li>Jacob Champion</li>
+  <li>Joe Conway</li>
+  <li>Jonathan Katz</li>
+  <li>Magnus Hagander</li>
+  <li>Masahiko Sawada</li>
+  <li>Michael Paquier</li>
+  <li>Nathan Bossart</li>
+  <li>Noah Misch</li>
+  <li>Peter Eisentraut</li>
+  <li>Peter Geoghegan</li>
+  <li>Robert Haas</li>
+  <li>Stefan Kaltenbrunner</li>
+  <li>Tom Lane</li>
+  <li>Tomas Vondra</li>
+</ul>
+
+      </div> <!-- pgContentWrap -->
+    </div>
+  </div>
+</div>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <!-- Copyright -->
+      <div class="container">
+        <a href="/about/policies/">Policies</a> |
+        <a href="/about/policies/coc/">Code of Conduct</a> |
+        <a href="/about/">About PostgreSQL</a> |
+        <a href="/about/contact/">Contact</a><br/>
+        <p>Copyright &copy; 1996-2026 The PostgreSQL Global Development Group</p>
+      </div>
+    </footer>
+    <script src="/media/js/main.js?80bec0f4"></script>
+
+  </body>
+</html>

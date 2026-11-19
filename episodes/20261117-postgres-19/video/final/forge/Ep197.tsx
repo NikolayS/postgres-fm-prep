@@ -268,7 +268,7 @@ const Stats: React.FC<StatsProps> = (p) => {
 export type ForgeProps = CenterShotProps | HBarsProps | LineProps | DotsProps | StackProps | PopProps | VBarsProps | StatsProps | V2Props;
 export const Forge: React.FC<ForgeProps> = (p) => {
   switch (p.kind) {
-    case 'v2-credits': case 'v2-repack': case 'v2-notify': case 'v2-autovac':
+    case 'v2-credits': case 'v2-cves': case 'v2-cves-rel': case 'v2-repack': case 'v2-notify': case 'v2-autovac':
     case 'v2-advice': case 'v2-jit': case 'v2-lz4': case 'v2-rehearsal': case 'v2-plans': return <V2Card {...p} />;
     case 'v2-shot': return <CenterShot {...(p as any)} />;
     case 'hbars': return <HBars {...p} />;
@@ -284,12 +284,12 @@ export const Forge: React.FC<ForgeProps> = (p) => {
 // V2: one explicitly sized graphic viewport per card. Boxes describe the chart
 // envelope (axes, marks and numeric callouts), not the sum of painted pixels.
 export const G = {x: 90, y: 370, w: 1460, h: 490};
-export type V2Kind = 'v2-credits' | 'v2-repack' | 'v2-notify' | 'v2-autovac' | 'v2-advice' | 'v2-jit' | 'v2-lz4' | 'v2-rehearsal' | 'v2-plans';
+export type V2Kind = 'v2-credits' | 'v2-cves' | 'v2-cves-rel' | 'v2-repack' | 'v2-notify' | 'v2-autovac' | 'v2-advice' | 'v2-jit' | 'v2-lz4' | 'v2-rehearsal' | 'v2-plans';
 export type V2Props = Base & {kind: V2Kind; labels: Record<string, string>};
 export type GraphicBox = {x: number; y: number; w: number; h: number};
 export function graphicBoxes(p: {kind: string}): GraphicBox[] {
   switch (p.kind) {
-    case 'v2-credits': case 'v2-repack': case 'v2-notify': case 'v2-autovac':
+    case 'v2-credits': case 'v2-cves': case 'v2-cves-rel': case 'v2-repack': case 'v2-notify': case 'v2-autovac':
     case 'v2-advice': case 'v2-jit': case 'v2-lz4': case 'v2-rehearsal': case 'v2-plans': return [{...G}];
     default: return [];
   }
@@ -341,6 +341,29 @@ const V2Card: React.FC<V2Props> = (p) => {
         <T x={1215} y={675} size={44} color={C.s19} opacity={grow(4.1,.4)}>{labels.people}</T>
       </>;break;
     }
+    case 'v2-cves': {
+      // PostgreSQL CVEs per year, 2019..2026 (cards/f00-cves.card.json; postgresql.org/support/security snapshot).
+      const values=[10,7,8,2,8,7,7,96],u=4.4;
+      art=<>
+        <g opacity={grow(.4,.3)}>{[0,25,50,75,100].map(v=><g key={v}>{v>0?<line x1={180} x2={1160} y1={800-v*u} y2={800-v*u} stroke={C.grey} strokeOpacity={.25}/>:null}<T x={160} y={800-v*u} center anchor="end">{v}</T></g>)}</g>
+        {values.map((v,i)=>{const hi=i===7,k=hi?grow(1.6,.9):grow(.5+.08*i,.4),h=Math.max(v*u*k,.01),x=195+122*i,r=Math.min(8,h/2);return <g key={i}><path d={`M${x},800 V${800-h+r} Q${x},${800-h} ${x+r},${800-h} H${x+88-r} Q${x+88},${800-h} ${x+88},${800-h+r} V800 Z`} fill={hi?C.s19:C.grey}/><T x={x+44} y={842} size={30} anchor="middle" color={hi?C.s19:C.soft} weight={hi?800:600} opacity={grow(.4,.3)}>{2019+i}</T>{hi?<T x={x+44} y={800-h-18} size={44} anchor="middle" color={C.s19} weight={800} opacity={grow(2.2,.3)}>{fmt(96*k)}</T>:null}</g>;})}
+        <T x={1200} y={600} size={124} weight={800} color={C.plum} opacity={grow(2.6,.15)}>{(13.7*grow(2.6,.9)).toFixed(1)}x</T>
+        {labels.hero.split(/ (?=\d{4}-)/).map((l,i)=><T key={i} x={1204} y={660+44*i} size={36} color={C.s19} opacity={grow(3.2,.4)}>{l}</T>)}
+      </>;break;
+    }
+    case 'v2-cves-rel': {
+      // PostgreSQL CVEs per minor-release batch, 2019-02 (11.2) .. 2026-11 (18.7); cards/f00-cves.card.json.
+      const values=[0,4,1,4,1,1,1,2,3,2,3,1,2,0,1,0,1,0,1,2,2,3,1,1,1,4,0,1,0,1,3,2,5,0,11,28,52];
+      const years:[number,number][]=[[0,2019],[5,2020],[9,2021],[13,2022],[18,2023],[22,2024],[27,2025],[32,2026]];
+      const u=8,x0=190,stp=25.4,bw=18,hot=(i:number)=>i>=35;
+      art=<>
+        <g opacity={grow(.4,.3)}>{[0,10,20,30,40,50].map(v=><g key={v}>{v>0?<line x1={180} x2={1140} y1={800-v*u} y2={800-v*u} stroke={C.grey} strokeOpacity={.25}/>:null}<T x={160} y={800-v*u} center anchor="end">{v}</T></g>)}
+          {years.map(([i,y])=><g key={y}><line x1={x0+stp*i-3} x2={x0+stp*i-3} y1={800} y2={812} stroke={C.grey} strokeOpacity={.6}/><T x={x0+stp*i} y={842} size={26} color={y===2026?C.s19:C.soft} weight={y===2026?800:600}>{y}</T></g>)}</g>
+        {values.map((v,i)=>{const k=hot(i)?grow(i===35?1.6:2.1,.7):grow(.5+.025*i,.4),h=Math.max(v*u*k,v?0:3),x=x0+stp*i,r=Math.min(5,h/2);return <g key={i}><path d={`M${x},800 V${800-h+r} Q${x},${800-h} ${x+r},${800-h} H${x+bw-r} Q${x+bw},${800-h} ${x+bw},${800-h+r} V800 Z`} fill={hot(i)?C.s19:C.grey}/>{hot(i)?<T x={i===35?x+bw-2:x+bw/2} y={800-h-14} size={i===36?40:32} anchor={i===35?'end':'middle'} color={C.s19} weight={800} opacity={grow(i===35?2.0:2.6,.3)}>{fmt(v*k)}</T>:null}</g>;})}
+        <T x={1200} y={600} size={150} weight={800} color={C.plum} opacity={grow(3.2,.15)}>{fmt(34*grow(3.2,.9))}x</T>
+        {labels.hero.split('|').map((l,i)=><T key={i} x={1206} y={662+42*i} size={34} color={C.s19} opacity={grow(3.8,.4)}>{l}</T>)}
+      </>;break;
+    }
     case 'v2-repack': {
       const X=(v:number)=>200+.019*v,Y=(v:number)=>790-4.5*v;
       const series=[[[1013,.02],[4994,.14],[9989,.38],[19980,1.18],[26363,3.54]],[[30198,2.44],[52562,7],[56652,27.66],[65996,85.72]]];
@@ -384,7 +407,7 @@ const V2Card: React.FC<V2Props> = (p) => {
     <div style={{position:'absolute',left:PANEL.x,top:PANEL.y,width:PANEL.w,height:PANEL.h,borderRadius:20,background:'rgba(253,253,254,0.97)',boxShadow:'0 3px 6px rgba(61,15,69,0.22)',opacity:panel,transform:`scale(${.97+.03*panel})`}}/>
     <svg width={1920} height={1080} style={{position:'absolute',opacity:panel}}>
       <T x={90} y={330} size={p.kind==='v2-repack'?54:56} color={C.plum} weight={800} opacity={lin(.2,.6)}>{p.title}</T>
-      <g opacity={lin(.2,.6)}><rect x={p.chip?.includes('synthetic')?1210:1328} y={290} width={p.chip?.includes('synthetic')?340:222} height={40} rx={20} fill={C.plum}/><T x={1534} y={318} size={22} color="white" anchor="end">{p.chip}</T></g>
+      <g opacity={lin(.2,.6)}><rect x={p.chip?.includes('synthetic')?1210:p.kind.startsWith('v2-cves')?1170:1328} y={290} width={p.chip?.includes('synthetic')?340:p.kind.startsWith('v2-cves')?380:222} height={40} rx={20} fill={C.plum}/><T x={1534} y={318} size={22} color="white" anchor="end">{p.chip}</T></g>
       {labels.caption?<T x={1550} y={842} size={30} color={C.faint} anchor="end" opacity={lin(.8,1)}>{labels.caption}</T>:null}
       <svg opacity={lin(.8,1)} x={box.x} y={box.y} width={box.w} height={box.h} viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`} overflow="visible">{art}</svg>
     </svg>

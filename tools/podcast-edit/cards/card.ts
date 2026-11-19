@@ -26,14 +26,18 @@ export type Finding = {
   numbers: Record<string, NumberRef>;
   literals?: string[]; // numbers in the text that are not measurements (versions, "1,000 listeners" as a setup)
 };
+// A rule exception for one card, allowed by a named human on a date (never a global change).
+// Only "bars" (more than 8 bars, up to max) exists.
+export type Exception = { rule: "bars"; max: number; approvedBy: string; date: string; reason: string };
 export type Card = Finding & {
+  exceptions?: Exception[];
   onAir: { quote: string; at: string }; // the words this card illustrates and their time in the edited episode
   decision: "keep" | "blog"; // blog: listed in notes/blog-candidates.md and not rendered
 };
 
 export const LIMITS = { headlineCard: 6, headlineFinding: 10, label: 4, chip: 6, visibleWords: 14 };
 const HEDGES = /\b(about|around|approx\w*|roughly|nearly|almost|up to|over|more than|less than)\b|~|≈/i;
-const CARD_KEYS = new Set(["id", "headline", "chart", "heroes", "chip", "numbers", "literals", "onAir", "decision"]);
+const CARD_KEYS = new Set(["id", "headline", "chart", "heroes", "chip", "numbers", "literals", "onAir", "decision", "exceptions"]);
 const FINDING_KEYS = new Set(["id", "headline", "chart", "heroes", "chip", "numbers", "literals"]);
 const TIME = /^(\d+:)?\d{1,2}:\d{2}(\.\d+)?$/;
 
@@ -80,7 +84,11 @@ export function lintCard(c: Card | Finding, mode: "card" | "finding"): string[] 
   if (!ch || !["bars", "donut", "line"].includes(ch.type)) e.push(`chart type must be bars, donut or line (got ${ch?.type})`);
   if (JSON.stringify(ch ?? {}).match(/"(scale|xScale|yScale)":"(?!linear")/) || /\blog\b|logarithm/i.test(JSON.stringify(ch ?? {})))
     e.push("log scales are not allowed (linear only); for wide ranges use value labels or two charts");
-  if (ch?.type === "bars" && !(ch.bars?.length >= 1 && ch.bars.length <= 8)) e.push("bars: use 1-8 bars");
+  const exc = (mode === "card" ? (c as Card).exceptions ?? [] : []);
+  for (const x of exc) if (x.rule !== "bars" || !x.approvedBy?.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(x.date ?? "") || !x.reason?.trim() || !(x.max > 8))
+    e.push(`exceptions: each needs rule "bars", max > 8, approvedBy (a human), date YYYY-MM-DD and reason`);
+  const maxBars = Math.max(8, ...exc.filter((x) => x.rule === "bars" && x.approvedBy?.trim()).map((x) => x.max));
+  if (ch?.type === "bars" && !(ch.bars?.length >= 1 && ch.bars.length <= maxBars)) e.push(`bars: use 1-${maxBars} bars`);
   if (ch?.type === "donut" && !(ch.parts?.length >= 2 && ch.parts.length <= 6)) e.push("donut: use 2-6 parts");
   if (ch?.type === "line" && !(ch.series?.length >= 1 && ch.series.length <= 3 && ch.series.every((s: any) => s.points?.length >= 2)))
     e.push("line: use 1-3 series with 2 or more points each");

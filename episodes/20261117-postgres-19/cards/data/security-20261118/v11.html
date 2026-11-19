@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>PostgreSQL: Security Information</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8" />
+   
+  <meta name="theme-color" content="#336791"/>
+  <meta name="copyright" content="The PostgreSQL Global Development Group" />
+  <link href="/media/css/fontawesome.css?80bec0f4" rel="stylesheet">
+  <link rel="stylesheet" href="/media/css/bootstrap-4.4.1.min.css">
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  <link rel="stylesheet" type="text/css" href="/dyncss/base.css?80bec0f4">
+
+  <script src="/media/js/theme.js?80bec0f4"></script>
+
+  
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row justify-content-md-center">
+        <div class="col">
+          <!-- Header -->
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand p-0" href="/">
+              <img class="logo" src="/media/img/about/press/elephant.png" alt="PostgreSQL Elephant Logo">
+            </a>
+            <input type="checkbox" id="navbar-toggler" aria-controls="pgNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <label for="navbar-toggler" id="navbar-toggler-label" class="navbar-toggler" tabindex="0"><span class="navbar-toggler-icon"></span></label>
+            <div class="navbar-collapse" id="pgNavbar">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item p-2"><a href="/" title="Home">Home</a></li>
+                <li class="nav-item p-2"><a href="/about/" title="About">About</a></li>
+                <li class="nav-item p-2"><a href="/download/" title="Download">Download</a></li>
+                <li class="nav-item p-2"><a href="/docs/" title="Documentation">Documentation</a></li>
+                <li class="nav-item p-2"><a href="/community/" title="Community">Community</a></li>
+                <li class="nav-item p-2"><a href="/developer/" title="Developers">Developers</a></li>
+                <li class="nav-item p-2"><a href="/support/" title="Support">Support</a></li>
+                <li class="nav-item p-2"><a href="/about/donate/" title="Donate">Donate</a></li>
+                <li class="nav-item p-2"><a href="/account/" title="Your account">Your account</a></li>
+              </ul>
+              <form role="search" method="get" action="/search/">
+                <div class="input-group">
+                  <input id="q" name="q" type="text" size="20" maxlength="255" accesskey="s"  class="form-control" placeholder="Search for...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fas fa-search"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+              </form>
+              <form id="form-theme" class="form-inline d-none">
+                <button id="btn-theme" class="btn btn-default ml-1" type="button"></button>
+              </form>
+            </div>
+          </nav>
+        </div>
+      </div>
+      <div class="row justify-content-center pg-shout-box">
+        <div class="col text-white text-center">November 12, 2026: <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">PostgreSQL 18.7, 17.12, 16.16, 15.20, 14.25, and 19 RC 2 Released!</a>
+
+</div>
+      </div>
+    </div>
+    
+<div class="container-fluid margin">
+  <div class="row">
+    <div class="col-lg-2">
+      <div id="pgSideWrap">
+       
+       <div id="pgSideNav">
+         <h2>Quick Links</h2>
+
+         <ul>
+           
+           
+           <li><a href="/support/">Support</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/versioning/">Versioning Policy</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/security/">Security</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/professional_support/">Professional Services</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/professional_hosting/">Hosting Solutions</a>
+            
+            
+           
+           </li>
+           <li class="last-child"><a href="/account/submitbug/">Report a Bug</a>
+            
+            
+           </li>
+            
+           
+        </ul>
+
+       </div>
+       
+      </div> <!-- pgSideWrap -->
+    </div>
+    <div class="col-lg-10">
+      <div id="pgContentWrap">
+        
+
+<h1>Security Information <i class="fas fa-lock"></i></h1>
+
+<p>
+  The PostgreSQL Global Development Group (PGDG) takes security seriously. This
+  allows our users to place their trust in PostgreSQL for protecting their
+  mission-critical data.
+</p>
+
+<p>
+  The PostgreSQL Global Development Group follows a model that shares
+  responsibility between PostgreSQL itself and its deployment environment,
+  including hardware, operating system, and the application layer
+  (programming language, frameworks and client libraries). The PostgreSQL
+  documentation provides info on the inherent security features of PostgreSQL
+  and how to securely configure and run PostgreSQL.
+</p>
+
+<p>
+  Security vulnerabilities can exist both in PostgreSQL and software within the
+  PostgreSQL ecosystem, including client libraries, extensions, installers,
+  and other utilities. This page walks through what is considered a security
+  vulnerability in PostgreSQL, how to report PostgreSQL security
+  vulnerabilities, and how fixes for security vulnerabilities are released.
+</p>
+
+<p>
+  Please note that the PostgreSQL Project does not offer bug bounties.
+</p>
+
+<h2>CVE Numbering Authority</h2>
+
+<p>
+  The PostgreSQL Project is a CVE Numbering Authority (CNA), working with Red Hat
+  as our CNA Root. This allows us to assign our own CVE numbers and publish CVE
+  records for PostgreSQL and closely related projects.
+</p>
+
+<p>
+  We will currently assign CVE numbers for the following projects upon request to
+  <a href="mailto:cna@postgresql.org">cna@postgresql.org</a>:
+</p>
+
+<ul>
+  <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
+  <li><a href="https://yum.postgresql.org/">PostgreSQL RPM packaging</a></li>
+  <li><a href="https://apt.postgresql.org/">PostgreSQL DEB packaging</a></li>
+  <li><a href="https://github.com/EnterpriseDB/edb-installers">PostgreSQL Windows/macOS installers (EDB)</a></li>
+  <li><a href="https://jdbc.postgresql.org/">pgJDBC</a></li>
+  <li><a href="https://odbc.postgresql.org/">psqlODBC</a></li>
+  <li><a href="https://www.pgadmin.org/">pgAdmin</a></li>
+  <li><a href="https://www.pgbouncer.org/">PgBouncer</a></li>
+  <li><a href="https://gitlab.com/dalibo/postgresql_anonymizer/">PostgreSQL Anonymizer</a></li>
+  <li><a href="https://github.com/pgvector/pgvector/">pgvector</a></li>
+</ul>
+
+<p>
+  Additional projects may request inclusion on the list above by emailing
+  <a href="mailto:cna@postgresql.org">cna@postgresql.org</a>.
+</p>
+
+<p>
+  <strong>NOTE:</strong> The security team will only assign CVEs to projects
+  when requested by members of the project. If you think you've found a security
+  issue in a project other than PostgreSQL or its packages and installers,
+  please contact the security team for that project. See below for more details.
+</p>
+
+<h2>What is a Security Vulnerability in PostgreSQL?</h2>
+
+<p>
+  A security vulnerability in PostgreSQL is an issue that allows a user to gain
+  access to privileges or data that they do not have permission to use, or
+  allows a user to execute arbitrary code through a PostgreSQL process.
+</p>
+
+<p>
+  The PostgreSQL Security Team does not consider reports on actions a PostgreSQL
+  superuser takes to be a security vulnerability. However, a report on an
+  unprivileged user escalating to superuser generally qualifies as valid.
+</p>
+
+<p>
+  The PostgreSQL Security Team typically does not consider a denial-of-service
+  on a PostgreSQL server from an authenticated, valid SQL statement to be a
+  security vulnerability. A denial-of-service issue of this nature could still
+  be a <a href="/account/submitbug/">bug</a>, and we encourage you to report it
+  on the <a href="/account/submitbug/">Report a Bug</a> page.
+</p>
+
+<p>
+  Please do not report the lack of DMARC on postgresql.org mailing lists. This
+  is by design.
+</p>
+
+<h2>Reporting a PostgreSQL Security Vulnerability</h2>
+
+<p>
+  For security vulnerabilities in PostgreSQL or any of the installers linked
+  from the <a href="/download/">PostgreSQL download page</a>, please email
+  <a href="mailto:security@postgresql.org">security@postgresql.org</a>.
+</p>
+
+<p>
+  For reporting non-security bugs, please visit the
+  <a href="/account/submitbug/">Report a Bug</a> page.
+</p>
+
+<p>
+  If you are unsure if an issue is a security vulnerability, please err on the
+  side of caution and email
+  <a href="mailto:security@postgresql.org">security@postgresql.org</a>.
+</p>
+
+<p>
+  Once a vulnerability is validated, the PostgreSQL Security Team works to fix
+  it. Our goal is to try to include any fixes as part of the next scheduled
+  PostgreSQL update release (see "PostgreSQL Security Releases"). Based on
+  factors like the timing of the report, the severity of the issues, or
+  complexity of the fix, the PostgreSQL Security Team may decide to include the
+  fix in a subsequent release, or in exceptional circumstances, issue an
+  "out-of-cycle" release.
+</p>
+
+<p>
+  We expect that no vulnerability is prematurely disclosed until the PostgreSQL
+  Project has made it available as part of its release and disclosure process.
+</p>
+
+<h2>Reporting non-PostgreSQL Security Vulnerabilities</h2>
+
+<p>
+  Please see below for how you can report security vulnerabilities in
+  PostgreSQL-related projects:
+</p>
+
+<ul>
+  <li>
+    For security vulnerabilities in the <a href="https://jdbc.postgresql.org">PostgreSQL JDBC Driver</a>,
+    please email
+    <a href="mailto:pgsql-jdbc-security@lists.postgresql.org">pgsql-jdbc-security@lists.postgresql.org</a>.
+  </li>
+  <li>
+    For security vulnerabilities in <a href="https://www.pgadmin.org/">pgAdmin</a>,
+    please email <a href="mailto:security@pgadmin.org">security@pgadmin.org</a>.
+  </li>
+  <li>
+    For security vulnerabilities in <a href="https://github.com/pgvector/pgvector/">pgvector</a>,
+    please email <a href="mailto:security@pgvector.org">security@pgvector.org</a>.
+  </li>
+  <li>
+    If you wish to report a security vulnerability for any other open source project in
+    the PostgreSQL ecosystem (e.g. a driver, an extension, or an installer) and
+    need a secure communication channel, please email
+    <a href="mailto:security@postgresql.org">security@postgresql.org</a>.
+  </li>
+</ul>
+
+<h2>PostgreSQL Security Releases</h2>
+
+<p>
+  The PostgreSQL Project releases security fixes as part of
+  <a href="/support/versioning/">minor version updates</a>. You are always
+  advised to use the latest minor version available, as it will contain other
+  non-security related fixes.
+</p>
+
+<p>
+  A new PostgreSQL major release, which contains new features, has every prior
+  security fix.
+</p>
+
+<p>
+  If you find a security vulnerability in PostgreSQL, the PostgreSQL Security
+  Team will credit you in the release notes and register a CVE for the
+  vulnerability. <strong>Please do not register a CVE independently of the
+  PostgreSQL Security Team</strong>.
+</p>
+
+<h2>PostgreSQL Security Notifications</h2>
+
+<p>
+  To receive notifications about security releases or other security
+  related news, you can subscribe to
+  the <a href="/list/">pgsql-announce</a> mailing list. If you set your
+  subscription to only include the tag <em>Security</em>, it will
+  exclude all other announcements that are sent to this list.
+</p>
+
+<h2>Known PostgreSQL Security Vulnerabilities</h2>
+
+<p>
+  The PostgreSQL Global Development Group believes that accuracy, completeness
+  and availability of security information is essential for our users. We choose
+  to pool all information on this one page, allowing easy searching for security
+  vulnerabilities over a range of criteria.  This includes:
+</p>
+
+<ul>
+  <li>Which major versions a security vulnerability is present in</li>
+  <li>Which minor version update releases a security vulnerability is fixed in</li>
+  <li>Whether an exploit requires a valid login</li>
+  <li>CVSS score</li>
+</ul>
+
+<p>
+  You can find more detailed information about a security vulnerability by
+  clicking on the links in the table below.
+</p>
+
+<h3>
+  Known PostgreSQL Security Vulnerabilities in
+  PostgreSQL 11
+</h3>
+
+
+<div class="border border-danger text-danger text-center mb-3">
+  <h1 class="text-danger">UNSUPPORTED VERSION</h1>
+  <p>
+    You are currently viewing PostgreSQL security vulnerabilities for an
+    unsupported version. If you are still using PostgreSQL 11,
+    you should upgrade as soon as possible.
+  </p>
+</div>
+
+
+<p>
+  You can filter the view of patches to show just patches for version:<br />
+  
+    <a href="/support/security/18/">18</a> -
+  
+    <a href="/support/security/17/">17</a> -
+  
+    <a href="/support/security/16/">16</a> -
+  
+    <a href="/support/security/15/">15</a> -
+  
+    <a href="/support/security/14/">14</a>
+  
+  - <a href="/support/security/">all</a>
+</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Reference</th>
+      <th>Affected</th>
+      <th>Fixed</th>
+      <th><a href="#comp">Component</a> & CVSS v3 Base Score</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-39417/">CVE-2023-39417</a></span><br/>
+          <a href="/about/news/postgresql-154-149-1312-1216-1121-and-postgresql-16-beta-3-released-2689/">Announcement</a><br/>
+        </td>
+        <td>15, 14, 13, 12, 11</td>
+        <td>15.4, 14.9, 13.12, 12.16, 11.21</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H">7.5</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Extension script @substitutions@ within quoting allow SQL injection<br/><br/><a href="/support/security/CVE-2023-39417/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-5870/">CVE-2023-5870</a></span><br/>
+          <a href="/about/news/postgresql-161-155-1410-1313-1217-and-1122-released-2749/">Announcement</a><br/>
+        </td>
+        <td>16, 15, 14, 13, 12, 11</td>
+        <td>16.1, 15.5, 14.10, 13.13, 12.17, 11.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:L">2.2</a><br/><span class="cvssvector">AV:N/AC:H/PR:H/UI:N/S:U/C:N/I:N/A:L</span>
+    </td>
+        <td>Role &quot;pg_signal_backend&quot; can signal certain superuser processes<br/><br/><a href="/support/security/CVE-2023-5870/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-5869/">CVE-2023-5869</a></span><br/>
+          <a href="/about/news/postgresql-161-155-1410-1313-1217-and-1122-released-2749/">Announcement</a><br/>
+        </td>
+        <td>16, 15, 14, 13, 12, 11</td>
+        <td>16.1, 15.5, 14.10, 13.13, 12.17, 11.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Buffer overrun from integer overflow in array modification<br/><br/><a href="/support/security/CVE-2023-5869/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-5868/">CVE-2023-5868</a></span><br/>
+          <a href="/about/news/postgresql-161-155-1410-1313-1217-and-1122-released-2749/">Announcement</a><br/>
+        </td>
+        <td>16, 15, 14, 13, 12, 11</td>
+        <td>16.1, 15.5, 14.10, 13.13, 12.17, 11.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N">4.3</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>Memory disclosure in aggregate function calls<br/><br/><a href="/support/security/CVE-2023-5868/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-2455/">CVE-2023-2455</a></span><br/>
+          <a href="/about/news/postgresql-153-148-1311-1215-and-1120-released-2637/">Announcement</a><br/>
+        </td>
+        <td>15, 14, 13, 12, 11</td>
+        <td>15.3, 14.8, 13.11, 12.15, 11.20</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N">4.2</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:L/A:N</span>
+    </td>
+        <td>Row security policies disregard user ID changes after inlining<br/><br/><a href="/support/security/CVE-2023-2455/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2023-2454/">CVE-2023-2454</a></span><br/>
+          <a href="/about/news/postgresql-153-148-1311-1215-and-1120-released-2637/">Announcement</a><br/>
+        </td>
+        <td>15, 14, 13, 12, 11</td>
+        <td>15.3, 14.8, 13.11, 12.15, 11.20</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H">7.2</a><br/><span class="cvssvector">AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>CREATE SCHEMA ... schema_element defeats protective search_path changes<br/><br/><a href="/support/security/CVE-2023-2454/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2022-2625/">CVE-2022-2625</a></span><br/>
+          <a href="/about/news/postgresql-145-138-1212-1117-1022-and-15-beta-3-released-2496/">Announcement</a><br/>
+        </td>
+        <td>14, 13, 12, 11, 10</td>
+        <td>14.5, 13.8, 12.12, 11.17, 10.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H">7.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Extension scripts replace objects not belonging to the extension<br/><br/><a href="/support/security/CVE-2022-2625/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2022-1552/">CVE-2022-1552</a></span><br/>
+          <a href="/about/news/postgresql-143-137-1211-1116-and-1021-released-2449/">Announcement</a><br/>
+        </td>
+        <td>14, 13, 12, 11, 10</td>
+        <td>14.3, 13.7, 12.11, 11.16, 10.21</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Autovacuum, REINDEX, and others omit &quot;security restricted operation&quot; sandbox<br/><br/><a href="/support/security/CVE-2022-1552/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2021-32029/">CVE-2021-32029</a></span><br/>
+          <a href="/about/news/postgresql-133-127-1112-1017-and-9622-released-2210/">Announcement</a><br/>
+        </td>
+        <td>13, 12, 11</td>
+        <td>13.3, 12.7, 11.12</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N">6.5</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N</span>
+    </td>
+        <td>Memory disclosure in partitioned-table UPDATE ... RETURNING<br/><br/><a href="/support/security/CVE-2021-32029/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2021-32028/">CVE-2021-32028</a></span><br/>
+          <a href="/about/news/postgresql-133-127-1112-1017-and-9622-released-2210/">Announcement</a><br/>
+        </td>
+        <td>13, 12, 11, 10, 9.6</td>
+        <td>13.3, 12.7, 11.12, 10.17, 9.6.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N">6.5</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N</span>
+    </td>
+        <td>Memory disclosure in INSERT ... ON CONFLICT ... DO UPDATE<br/><br/><a href="/support/security/CVE-2021-32028/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2021-32027/">CVE-2021-32027</a></span><br/>
+          <a href="/about/news/postgresql-133-127-1112-1017-and-9622-released-2210/">Announcement</a><br/>
+        </td>
+        <td>13, 12, 11, 10, 9.6</td>
+        <td>13.3, 12.7, 11.12, 10.17, 9.6.22</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N">6.5</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N</span>
+    </td>
+        <td>Buffer overrun from integer overflow in array subscripting calculations<br/><br/><a href="/support/security/CVE-2021-32027/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2021-23222/">CVE-2021-23222</a></span><br/>
+          <a href="/about/news/postgresql-141-135-129-1114-1019-and-9624-released-2349/">Announcement</a><br/>
+        </td>
+        <td>14, 13, 12, 11, 10, 9.6</td>
+        <td>14.1, 13.5, 12.9, 11.14, 10.19, 9.6.24</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N">3.7</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>libpq processes unencrypted bytes from man-in-the-middle<br/><br/><a href="/support/security/CVE-2021-23222/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2021-23214/">CVE-2021-23214</a></span><br/>
+          <a href="/about/news/postgresql-141-135-129-1114-1019-and-9624-released-2349/">Announcement</a><br/>
+        </td>
+        <td>14, 13, 12, 11, 10, 9.6</td>
+        <td>14.1, 13.5, 12.9, 11.14, 10.19, 9.6.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H">8.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Server processes unencrypted bytes from man-in-the-middle<br/><br/><a href="/support/security/CVE-2021-23214/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2021-3677/">CVE-2021-3677</a></span><br/>
+          <a href="/about/news/postgresql-134-128-1113-1018-9623-and-14-beta-3-released-2277/">Announcement</a><br/>
+        </td>
+        <td>13, 12, 11</td>
+        <td>13.4, 12.8, 11.13</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N">6.5</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N</span>
+    </td>
+        <td>Memory disclosure in certain queries<br/><br/><a href="/support/security/CVE-2021-3677/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2021-3393/">CVE-2021-3393</a></span><br/>
+          <a href="/about/news/postgresql-132-126-1111-1016-9621-and-9525-released-2165/">Announcement</a><br/>
+        </td>
+        <td>13, 12, 11</td>
+        <td>13.2, 12.6, 11.11</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>Partition constraint violation errors leak values of denied columns<br/><br/><a href="/support/security/CVE-2021-3393/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2020-25696/">CVE-2020-25696</a></span><br/>
+          <a href="/about/news/postgresql-131-125-1110-1015-9620-and-9524-released-2111/">Announcement</a><br/>
+        </td>
+        <td>13, 12, 11, 10, 9.6, 9.5</td>
+        <td>13.1, 12.5, 11.10, 10.15, 9.6.20, 9.5.24</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H">7.5</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>psql&#x27;s \gset allows overwriting specially treated variables<br/><br/><a href="/support/security/CVE-2020-25696/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2020-25695/">CVE-2020-25695</a></span><br/>
+          <a href="/about/news/postgresql-131-125-1110-1015-9620-and-9524-released-2111/">Announcement</a><br/>
+        </td>
+        <td>13, 12, 11, 10, 9.6, 9.5</td>
+        <td>13.1, 12.5, 11.10, 10.15, 9.6.20, 9.5.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Multiple features escape &quot;security restricted operation&quot; sandbox<br/><br/><a href="/support/security/CVE-2020-25695/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2020-25694/">CVE-2020-25694</a></span><br/>
+          <a href="/about/news/postgresql-131-125-1110-1015-9620-and-9524-released-2111/">Announcement</a><br/>
+        </td>
+        <td>13, 12, 11, 10, 9.6, 9.5</td>
+        <td>13.1, 12.5, 11.10, 10.15, 9.6.20, 9.5.24</td>
+        <td>client<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H">8.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Reconnection can downgrade connection security settings<br/><br/><a href="/support/security/CVE-2020-25694/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2020-14350/">CVE-2020-14350</a></span><br/>
+          <a href="/about/news/postgresql-124-119-1014-9619-9523-and-13-beta-3-released-2060/">Announcement</a><br/>
+        </td>
+        <td>12, 11, 10, 9.6, 9.5</td>
+        <td>12.4, 11.9, 10.14, 9.6.19, 9.5.23</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H">7.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Uncontrolled search path element in CREATE EXTENSION<br/><br/><a href="/support/security/CVE-2020-14350/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2020-14349/">CVE-2020-14349</a></span><br/>
+          <a href="/about/news/postgresql-124-119-1014-9619-9523-and-13-beta-3-released-2060/">Announcement</a><br/>
+        </td>
+        <td>12, 11, 10</td>
+        <td>12.4, 11.9, 10.14</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H">7.5</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Uncontrolled search path element in logical replication<br/><br/><a href="/support/security/CVE-2020-14349/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2020-10733/">CVE-2020-10733</a></span><br/>
+          <a href="/about/news/postgresql-123-118-1013-9618-and-9522-released-2038/">Announcement</a><br/>
+        </td>
+        <td>12, 11, 10, 9.6, 9.5</td>
+        <td>12.3, 11.8, 10.13, 9.6.18, 9.5.22</td>
+        <td>packaging<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H">6.7</a><br/><span class="cvssvector">AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Windows installer runs executables from uncontrolled directories<br/><br/><a href="/support/security/CVE-2020-10733/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2020-1720/">CVE-2020-1720</a></span><br/>
+          <a href="/about/news/postgresql-122-117-1012-9617-9521-and-9426-released-2011/">Announcement</a><br/>
+        </td>
+        <td>12, 11, 10, 9.6</td>
+        <td>12.2, 11.7, 10.12, 9.6.17</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N</span>
+    </td>
+        <td>ALTER ... DEPENDS ON EXTENSION is missing authorization checks.<br/><br/><a href="/support/security/CVE-2020-1720/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-10211/">CVE-2019-10211</a></span><br/>
+          <a href="/about/news/postgresql-115-1010-9615-9519-9424-and-12-beta-3-released-1960/">Announcement</a><br/>
+        </td>
+        <td>11, 10, 9.6, 9.5, 9.4</td>
+        <td>11.5, 10.10, 9.6.15, 9.5.19, 9.4.24</td>
+        <td>packaging<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">7.8</a><br/><span class="cvssvector">AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Windows installer bundled OpenSSL executes code from unprotected directory<br/><br/><a href="/support/security/CVE-2019-10211/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-10210/">CVE-2019-10210</a></span><br/>
+          <a href="/about/news/postgresql-115-1010-9615-9519-9424-and-12-beta-3-released-1960/">Announcement</a><br/>
+        </td>
+        <td>11, 10, 9.6, 9.5, 9.4</td>
+        <td>11.5, 10.10, 9.6.15, 9.5.19, 9.4.24</td>
+        <td>packaging<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H">6.7</a><br/><span class="cvssvector">AV:L/AC:H/PR:L/UI:R/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Windows installer writes superuser password to unprotected temporary file<br/><br/><a href="/support/security/CVE-2019-10210/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-10209/">CVE-2019-10209</a></span><br/>
+          <a href="/about/news/postgresql-115-1010-9615-9519-9424-and-12-beta-3-released-1960/">Announcement</a><br/>
+        </td>
+        <td>11</td>
+        <td>11.5</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>Memory disclosure in cross-type comparison for hashed subplan<br/><br/><a href="/support/security/CVE-2019-10209/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-10208/">CVE-2019-10208</a></span><br/>
+          <a href="/about/news/postgresql-115-1010-9615-9519-9424-and-12-beta-3-released-1960/">Announcement</a><br/>
+        </td>
+        <td>11, 10, 9.6, 9.5, 9.4</td>
+        <td>11.5, 10.10, 9.6.15, 9.5.19, 9.4.24</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H">7.5</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>TYPE in pg_temp executes arbitrary SQL during SECURITY DEFINER execution<br/><br/><a href="/support/security/CVE-2019-10208/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-10164/">CVE-2019-10164</a></span><br/>
+          <a href="/about/news/postgresql-114-109-9614-9518-9423-and-12-beta-2-released-1949/">Announcement</a><br/>
+        </td>
+        <td>11, 10</td>
+        <td>11.4, 10.9</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H">7.5</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>Stack-based buffer overflow via setting a password<br/><br/><a href="/support/security/CVE-2019-10164/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-10130/">CVE-2019-10130</a></span><br/>
+          <a href="/about/news/postgresql-113-108-9613-9517-and-9422-released-1939/">Announcement</a><br/>
+        </td>
+        <td>11, 10, 9.6, 9.5</td>
+        <td>11.3, 10.8, 9.6.13, 9.5.17</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N">3.1</a><br/><span class="cvssvector">AV:N/AC:H/PR:L/UI:N/S:U/C:L/I:N/A:N</span>
+    </td>
+        <td>Selectivity estimators bypass row security policies<br/><br/><a href="/support/security/CVE-2019-10130/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-10129/">CVE-2019-10129</a></span><br/>
+          <a href="/about/news/postgresql-113-108-9613-9517-and-9422-released-1939/">Announcement</a><br/>
+        </td>
+        <td>11</td>
+        <td>11.3</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N">6.5</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N</span>
+    </td>
+        <td>Memory disclosure in partition routing<br/><br/><a href="/support/security/CVE-2019-10129/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-10128/">CVE-2019-10128</a></span><br/>
+          <a href="/about/news/postgresql-113-108-9613-9517-and-9422-released-1939/">Announcement</a><br/>
+        </td>
+        <td>11, 10, 9.6, 9.5, 9.4</td>
+        <td>11.3, 10.8, 9.6.13, 9.5.17, 9.4.22</td>
+        <td>packaging<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H">7.0</a><br/><span class="cvssvector">AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>EnterpriseDB Windows installer does not clear permissive ACL entries<br/><br/><a href="/support/security/CVE-2019-10128/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-10127/">CVE-2019-10127</a></span><br/>
+          <a href="/about/news/postgresql-113-108-9613-9517-and-9422-released-1939/">Announcement</a><br/>
+        </td>
+        <td>11, 10, 9.6, 9.5, 9.4</td>
+        <td>11.3, 10.8, 9.6.13, 9.5.17, 9.4.22</td>
+        <td>packaging<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H">7.0</a><br/><span class="cvssvector">AV:L/AC:H/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>BigSQL Windows installer does not clear permissive ACL entries.<br/><br/><a href="/support/security/CVE-2019-10127/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2019-3466/">CVE-2019-3466</a></span><br/>
+          <a href="/about/news/additional-advisory-to-2019-11-14-cumulative-update-release-for-debian-and-ubuntu-users-1998/">Announcement</a><br/>
+        </td>
+        <td>12, 11, 10, 9.6, 9.5, 9.4</td>
+        <td>12.1, 11.6, 10.11, 9.6.16, 9.5.20, 9.4.25</td>
+        <td>packaging<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:H/UI:R/S:C/C:H/I:H/A:H">8.4</a><br/><span class="cvssvector">AV:N/AC:L/PR:H/UI:R/S:C/C:H/I:H/A:H</span>
+    </td>
+        <td>pg_ctlcluster script in postgresql-common does not drop privileges when creating socket/statistics temporary directories<br/><br/><a href="/support/security/CVE-2019-3466/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2018-16850/">CVE-2018-16850</a></span><br/>
+          <a href="/about/news/postgresql-111-106-9611-9515-9420-and-9325-released-1905/">Announcement</a><br/>
+        </td>
+        <td>11, 10</td>
+        <td>11.1, 10.6</td>
+        <td>core server<br/>
+          <a href="https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator?vector=AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H">8.8</a><br/><span class="cvssvector">AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H</span>
+    </td>
+        <td>SQL injection in pg_upgrade and pg_dump, via CREATE TRIGGER ... REFERENCING.<br/><br/><a href="/support/security/CVE-2018-16850/">more details</a></td>
+      </tr>
+    
+  </tbody>
+</table>
+
+<h3>Unsupported versions</h3>
+
+<p>
+  You can also view archived security patches for unsupported versions. Note that no further
+  security patches are made available for these versions as they are end of life.<br/>
+  
+    <a href="/support/security/13/">13</a> -
+  
+    <a href="/support/security/12/">12</a> -
+  
+    <a href="/support/security/11/">11</a> -
+  
+    <a href="/support/security/10/">10</a> -
+  
+    <a href="/support/security/9.6/">9.6</a> -
+  
+    <a href="/support/security/9.5/">9.5</a> -
+  
+    <a href="/support/security/9.4/">9.4</a> -
+  
+    <a href="/support/security/9.3/">9.3</a> -
+  
+    <a href="/support/security/9.2/">9.2</a> -
+  
+    <a href="/support/security/9.1/">9.1</a> -
+  
+    <a href="/support/security/9.0/">9.0</a> -
+  
+    <a href="/support/security/8.4/">8.4</a> -
+  
+    <a href="/support/security/8.3/">8.3</a> -
+  
+    <a href="/support/security/8.2/">8.2</a> -
+  
+    <a href="/support/security/8.1/">8.1</a> -
+  
+    <a href="/support/security/8.0/">8.0</a> -
+  
+    <a href="/support/security/7.4/">7.4</a> -
+  
+    <a href="/support/security/7.3/">7.3</a>
+  
+</p>
+
+<h3 id="comp">Components</h3>
+
+<p>
+  The following component references are used in the above table:
+</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+       <td>core server</td>
+       <td>This vulnerability exists in the core server product.</td>
+      </tr>
+
+      <tr>
+       <td>client</td>
+       <td>This vulnerability exists in a client library or client application only.</td>
+      </tr>
+
+      <tr>
+       <td>contrib module</td>
+       <td>This vulnerability exists in a contrib module. Contrib modules are not installed by default when PostgreSQL is installed from source. They may be installed by binary packages.</td>
+      </tr>
+
+      <tr>
+       <td>client contrib module</td>
+       <td>This vulnerability exists in a contrib module used on the client only.</td>
+      </tr>
+
+      <tr>
+       <td>packaging</td>
+       <td>This vulnerability exists in PostgreSQL binary packaging, e.g. an installer or RPM.</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2>The PostgreSQL Security Team</h2>
+
+<p>
+  The PostgreSQL Security Team is made up of a group of contributors to the
+  PostgreSQL project who have experience in different aspects of database and
+  information security.
+</p>
+
+<p>
+  You can find a list of members on the security team here:
+</p>
+
+<ul>
+  <li>Álvaro Herrera</li>
+  <li>Andres Freund</li>
+  <li>Andrew Dunstan</li>
+  <li>Bruce Momjian</li>
+  <li>Dave Page</li>
+  <li>Greg Stark</li>
+  <li>Heikki Linnakangas</li>
+  <li>Jacob Champion</li>
+  <li>Joe Conway</li>
+  <li>Jonathan Katz</li>
+  <li>Magnus Hagander</li>
+  <li>Masahiko Sawada</li>
+  <li>Michael Paquier</li>
+  <li>Nathan Bossart</li>
+  <li>Noah Misch</li>
+  <li>Peter Eisentraut</li>
+  <li>Peter Geoghegan</li>
+  <li>Robert Haas</li>
+  <li>Stefan Kaltenbrunner</li>
+  <li>Tom Lane</li>
+  <li>Tomas Vondra</li>
+</ul>
+
+      </div> <!-- pgContentWrap -->
+    </div>
+  </div>
+</div>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <!-- Copyright -->
+      <div class="container">
+        <a href="/about/policies/">Policies</a> |
+        <a href="/about/policies/coc/">Code of Conduct</a> |
+        <a href="/about/">About PostgreSQL</a> |
+        <a href="/about/contact/">Contact</a><br/>
+        <p>Copyright &copy; 1996-2026 The PostgreSQL Global Development Group</p>
+      </div>
+    </footer>
+    <script src="/media/js/main.js?80bec0f4"></script>
+
+  </body>
+</html>

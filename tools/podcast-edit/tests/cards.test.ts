@@ -66,6 +66,16 @@ describe("lintCard: chart-first card rules", () => {
     expect(lintCard(c, "card").join("\n")).toMatch(/about/i);
   });
 
+  test("more than 8 bars fails unless a human approved an exception for this card", () => {
+    const many = (n: number) => { const c = good(); (c.chart as any).bars = Array.from({ length: n }, () => ({ label: "", n: "n18" })); return c; };
+    expect(lintCard(many(9), "card").join()).toContain("1-8 bars");
+    const ok = { ...many(37), exceptions: [{ rule: "bars", max: 40, approvedBy: "Nik", date: "2026-11-18", reason: "one bar per minor release" }] };
+    expect(lintCard(ok as any, "card")).toEqual([]);
+    const over = { ...many(41), exceptions: ok.exceptions };
+    expect(lintCard(over as any, "card").join()).toContain("1-40 bars");
+    const anon = { ...many(37), exceptions: [{ rule: "bars", max: 40, date: "2026-11-18", reason: "x" }] };
+    expect(lintCard(anon as any, "card").join()).toContain("approvedBy");
+  });
   test("1 or 2 hero numbers", () => {
     expect(lintCard({ ...good(), heroes: [] }, "card").join("\n")).toMatch(/hero/);
     expect(lintCard({ ...good(), heroes: [{ n: "x" }, { n: "n18" }, { n: "n19" }] }, "card").join("\n")).toMatch(/hero/);

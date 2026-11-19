@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <title>PostgreSQL: Security Information</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Content-Type" content="text/xhtml; charset=utf-8" />
+   
+  <meta name="theme-color" content="#336791"/>
+  <meta name="copyright" content="The PostgreSQL Global Development Group" />
+  <link href="/media/css/fontawesome.css?80bec0f4" rel="stylesheet">
+  <link rel="stylesheet" href="/media/css/bootstrap-4.4.1.min.css">
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  <link rel="stylesheet" type="text/css" href="/dyncss/base.css?80bec0f4">
+
+  <script src="/media/js/theme.js?80bec0f4"></script>
+
+  
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row justify-content-md-center">
+        <div class="col">
+          <!-- Header -->
+          <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand p-0" href="/">
+              <img class="logo" src="/media/img/about/press/elephant.png" alt="PostgreSQL Elephant Logo">
+            </a>
+            <input type="checkbox" id="navbar-toggler" aria-controls="pgNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <label for="navbar-toggler" id="navbar-toggler-label" class="navbar-toggler" tabindex="0"><span class="navbar-toggler-icon"></span></label>
+            <div class="navbar-collapse" id="pgNavbar">
+              <ul class="navbar-nav mr-auto">
+                <li class="nav-item p-2"><a href="/" title="Home">Home</a></li>
+                <li class="nav-item p-2"><a href="/about/" title="About">About</a></li>
+                <li class="nav-item p-2"><a href="/download/" title="Download">Download</a></li>
+                <li class="nav-item p-2"><a href="/docs/" title="Documentation">Documentation</a></li>
+                <li class="nav-item p-2"><a href="/community/" title="Community">Community</a></li>
+                <li class="nav-item p-2"><a href="/developer/" title="Developers">Developers</a></li>
+                <li class="nav-item p-2"><a href="/support/" title="Support">Support</a></li>
+                <li class="nav-item p-2"><a href="/about/donate/" title="Donate">Donate</a></li>
+                <li class="nav-item p-2"><a href="/account/" title="Your account">Your account</a></li>
+              </ul>
+              <form role="search" method="get" action="/search/">
+                <div class="input-group">
+                  <input id="q" name="q" type="text" size="20" maxlength="255" accesskey="s"  class="form-control" placeholder="Search for...">
+                  <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit"><i class="fas fa-search"></i></button>
+                  </span>
+                </div><!-- /input-group -->
+              </form>
+              <form id="form-theme" class="form-inline d-none">
+                <button id="btn-theme" class="btn btn-default ml-1" type="button"></button>
+              </form>
+            </div>
+          </nav>
+        </div>
+      </div>
+      <div class="row justify-content-center pg-shout-box">
+        <div class="col text-white text-center">November 12, 2026: <a href="/about/news/postgresql-187-1712-1616-1520-1425-and-19-rc-2-released-3442/">PostgreSQL 18.7, 17.12, 16.16, 15.20, 14.25, and 19 RC 2 Released!</a>
+
+</div>
+      </div>
+    </div>
+    
+<div class="container-fluid margin">
+  <div class="row">
+    <div class="col-lg-2">
+      <div id="pgSideWrap">
+       
+       <div id="pgSideNav">
+         <h2>Quick Links</h2>
+
+         <ul>
+           
+           
+           <li><a href="/support/">Support</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/versioning/">Versioning Policy</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/security/">Security</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/professional_support/">Professional Services</a>
+            
+            
+           
+           </li>
+           <li><a href="/support/professional_hosting/">Hosting Solutions</a>
+            
+            
+           
+           </li>
+           <li class="last-child"><a href="/account/submitbug/">Report a Bug</a>
+            
+            
+           </li>
+            
+           
+        </ul>
+
+       </div>
+       
+      </div> <!-- pgSideWrap -->
+    </div>
+    <div class="col-lg-10">
+      <div id="pgContentWrap">
+        
+
+<h1>Security Information <i class="fas fa-lock"></i></h1>
+
+<p>
+  The PostgreSQL Global Development Group (PGDG) takes security seriously. This
+  allows our users to place their trust in PostgreSQL for protecting their
+  mission-critical data.
+</p>
+
+<p>
+  The PostgreSQL Global Development Group follows a model that shares
+  responsibility between PostgreSQL itself and its deployment environment,
+  including hardware, operating system, and the application layer
+  (programming language, frameworks and client libraries). The PostgreSQL
+  documentation provides info on the inherent security features of PostgreSQL
+  and how to securely configure and run PostgreSQL.
+</p>
+
+<p>
+  Security vulnerabilities can exist both in PostgreSQL and software within the
+  PostgreSQL ecosystem, including client libraries, extensions, installers,
+  and other utilities. This page walks through what is considered a security
+  vulnerability in PostgreSQL, how to report PostgreSQL security
+  vulnerabilities, and how fixes for security vulnerabilities are released.
+</p>
+
+<p>
+  Please note that the PostgreSQL Project does not offer bug bounties.
+</p>
+
+<h2>CVE Numbering Authority</h2>
+
+<p>
+  The PostgreSQL Project is a CVE Numbering Authority (CNA), working with Red Hat
+  as our CNA Root. This allows us to assign our own CVE numbers and publish CVE
+  records for PostgreSQL and closely related projects.
+</p>
+
+<p>
+  We will currently assign CVE numbers for the following projects upon request to
+  <a href="mailto:cna@postgresql.org">cna@postgresql.org</a>:
+</p>
+
+<ul>
+  <li><a href="https://www.postgresql.org/">PostgreSQL</a></li>
+  <li><a href="https://yum.postgresql.org/">PostgreSQL RPM packaging</a></li>
+  <li><a href="https://apt.postgresql.org/">PostgreSQL DEB packaging</a></li>
+  <li><a href="https://github.com/EnterpriseDB/edb-installers">PostgreSQL Windows/macOS installers (EDB)</a></li>
+  <li><a href="https://jdbc.postgresql.org/">pgJDBC</a></li>
+  <li><a href="https://odbc.postgresql.org/">psqlODBC</a></li>
+  <li><a href="https://www.pgadmin.org/">pgAdmin</a></li>
+  <li><a href="https://www.pgbouncer.org/">PgBouncer</a></li>
+  <li><a href="https://gitlab.com/dalibo/postgresql_anonymizer/">PostgreSQL Anonymizer</a></li>
+  <li><a href="https://github.com/pgvector/pgvector/">pgvector</a></li>
+</ul>
+
+<p>
+  Additional projects may request inclusion on the list above by emailing
+  <a href="mailto:cna@postgresql.org">cna@postgresql.org</a>.
+</p>
+
+<p>
+  <strong>NOTE:</strong> The security team will only assign CVEs to projects
+  when requested by members of the project. If you think you've found a security
+  issue in a project other than PostgreSQL or its packages and installers,
+  please contact the security team for that project. See below for more details.
+</p>
+
+<h2>What is a Security Vulnerability in PostgreSQL?</h2>
+
+<p>
+  A security vulnerability in PostgreSQL is an issue that allows a user to gain
+  access to privileges or data that they do not have permission to use, or
+  allows a user to execute arbitrary code through a PostgreSQL process.
+</p>
+
+<p>
+  The PostgreSQL Security Team does not consider reports on actions a PostgreSQL
+  superuser takes to be a security vulnerability. However, a report on an
+  unprivileged user escalating to superuser generally qualifies as valid.
+</p>
+
+<p>
+  The PostgreSQL Security Team typically does not consider a denial-of-service
+  on a PostgreSQL server from an authenticated, valid SQL statement to be a
+  security vulnerability. A denial-of-service issue of this nature could still
+  be a <a href="/account/submitbug/">bug</a>, and we encourage you to report it
+  on the <a href="/account/submitbug/">Report a Bug</a> page.
+</p>
+
+<p>
+  Please do not report the lack of DMARC on postgresql.org mailing lists. This
+  is by design.
+</p>
+
+<h2>Reporting a PostgreSQL Security Vulnerability</h2>
+
+<p>
+  For security vulnerabilities in PostgreSQL or any of the installers linked
+  from the <a href="/download/">PostgreSQL download page</a>, please email
+  <a href="mailto:security@postgresql.org">security@postgresql.org</a>.
+</p>
+
+<p>
+  For reporting non-security bugs, please visit the
+  <a href="/account/submitbug/">Report a Bug</a> page.
+</p>
+
+<p>
+  If you are unsure if an issue is a security vulnerability, please err on the
+  side of caution and email
+  <a href="mailto:security@postgresql.org">security@postgresql.org</a>.
+</p>
+
+<p>
+  Once a vulnerability is validated, the PostgreSQL Security Team works to fix
+  it. Our goal is to try to include any fixes as part of the next scheduled
+  PostgreSQL update release (see "PostgreSQL Security Releases"). Based on
+  factors like the timing of the report, the severity of the issues, or
+  complexity of the fix, the PostgreSQL Security Team may decide to include the
+  fix in a subsequent release, or in exceptional circumstances, issue an
+  "out-of-cycle" release.
+</p>
+
+<p>
+  We expect that no vulnerability is prematurely disclosed until the PostgreSQL
+  Project has made it available as part of its release and disclosure process.
+</p>
+
+<h2>Reporting non-PostgreSQL Security Vulnerabilities</h2>
+
+<p>
+  Please see below for how you can report security vulnerabilities in
+  PostgreSQL-related projects:
+</p>
+
+<ul>
+  <li>
+    For security vulnerabilities in the <a href="https://jdbc.postgresql.org">PostgreSQL JDBC Driver</a>,
+    please email
+    <a href="mailto:pgsql-jdbc-security@lists.postgresql.org">pgsql-jdbc-security@lists.postgresql.org</a>.
+  </li>
+  <li>
+    For security vulnerabilities in <a href="https://www.pgadmin.org/">pgAdmin</a>,
+    please email <a href="mailto:security@pgadmin.org">security@pgadmin.org</a>.
+  </li>
+  <li>
+    For security vulnerabilities in <a href="https://github.com/pgvector/pgvector/">pgvector</a>,
+    please email <a href="mailto:security@pgvector.org">security@pgvector.org</a>.
+  </li>
+  <li>
+    If you wish to report a security vulnerability for any other open source project in
+    the PostgreSQL ecosystem (e.g. a driver, an extension, or an installer) and
+    need a secure communication channel, please email
+    <a href="mailto:security@postgresql.org">security@postgresql.org</a>.
+  </li>
+</ul>
+
+<h2>PostgreSQL Security Releases</h2>
+
+<p>
+  The PostgreSQL Project releases security fixes as part of
+  <a href="/support/versioning/">minor version updates</a>. You are always
+  advised to use the latest minor version available, as it will contain other
+  non-security related fixes.
+</p>
+
+<p>
+  A new PostgreSQL major release, which contains new features, has every prior
+  security fix.
+</p>
+
+<p>
+  If you find a security vulnerability in PostgreSQL, the PostgreSQL Security
+  Team will credit you in the release notes and register a CVE for the
+  vulnerability. <strong>Please do not register a CVE independently of the
+  PostgreSQL Security Team</strong>.
+</p>
+
+<h2>PostgreSQL Security Notifications</h2>
+
+<p>
+  To receive notifications about security releases or other security
+  related news, you can subscribe to
+  the <a href="/list/">pgsql-announce</a> mailing list. If you set your
+  subscription to only include the tag <em>Security</em>, it will
+  exclude all other announcements that are sent to this list.
+</p>
+
+<h2>Known PostgreSQL Security Vulnerabilities</h2>
+
+<p>
+  The PostgreSQL Global Development Group believes that accuracy, completeness
+  and availability of security information is essential for our users. We choose
+  to pool all information on this one page, allowing easy searching for security
+  vulnerabilities over a range of criteria.  This includes:
+</p>
+
+<ul>
+  <li>Which major versions a security vulnerability is present in</li>
+  <li>Which minor version update releases a security vulnerability is fixed in</li>
+  <li>Whether an exploit requires a valid login</li>
+  <li>CVSS score</li>
+</ul>
+
+<p>
+  You can find more detailed information about a security vulnerability by
+  clicking on the links in the table below.
+</p>
+
+<h3>
+  Known PostgreSQL Security Vulnerabilities in
+  PostgreSQL 8.0
+</h3>
+
+
+<div class="border border-danger text-danger text-center mb-3">
+  <h1 class="text-danger">UNSUPPORTED VERSION</h1>
+  <p>
+    You are currently viewing PostgreSQL security vulnerabilities for an
+    unsupported version. If you are still using PostgreSQL 8.0,
+    you should upgrade as soon as possible.
+  </p>
+</div>
+
+
+<p>
+  You can filter the view of patches to show just patches for version:<br />
+  
+    <a href="/support/security/18/">18</a> -
+  
+    <a href="/support/security/17/">17</a> -
+  
+    <a href="/support/security/16/">16</a> -
+  
+    <a href="/support/security/15/">15</a> -
+  
+    <a href="/support/security/14/">14</a>
+  
+  - <a href="/support/security/">all</a>
+</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Reference</th>
+      <th>Affected</th>
+      <th>Fixed</th>
+      <th><a href="#comp">Component</a> & CVSS v3 Base Score</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2010-3433/">CVE-2010-3433</a></span><br/>
+          
+        </td>
+        <td>9.0, 8.4, 8.3, 8.2, 8.1, 8.0, 7.4</td>
+        <td>9.0.1, 8.4.5, 8.3.12, 8.2.18, 8.1.22, 8.0.26, 7.4.30</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>An authenticated database user can manipulate modules and tied variables in some external procedural languages to execute code with enhanced privileges.Details<br/><br/><a href="/support/security/CVE-2010-3433/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2010-1975/">CVE-2010-1975</a></span><br/>
+          
+        </td>
+        <td>8.4, 8.3, 8.2, 8.1, 8.0, 7.4</td>
+        <td>8.4.4, 8.3.11, 8.2.17, 8.1.21, 8.0.25, 7.4.29</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>An unprivileged database user can remove superuser-only
+settings that were applied to his account with ALTER USER by a superuser, thus
+bypassing settings that should be enforced.<br/><br/><a href="/support/security/CVE-2010-1975/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2010-1170/">CVE-2010-1170</a></span><br/>
+          
+        </td>
+        <td>8.4, 8.3, 8.2, 8.1, 8.0, 7.4</td>
+        <td>8.4.4, 8.3.11, 8.2.17, 8.1.21, 8.0.25, 7.4.29</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>Insecure permissions on the pltcl_modules table could allow an authenticated user to run arbitrary Tcl code on the
+                       database server if PL/Tcl is installed and enabled.<br/><br/><a href="/support/security/CVE-2010-1170/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2010-1169/">CVE-2010-1169</a></span><br/>
+          
+        </td>
+        <td>8.4, 8.3, 8.2, 8.1, 8.0, 7.4</td>
+        <td>8.4.4, 8.3.11, 8.2.17, 8.1.21, 8.0.25, 7.4.29</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>A vulnerability in Safe.pm and PL/Perl can allow an authenticated user to run arbitrary Perl code on the database
+                       server if PL/Perl is installed and enabled.<br/><br/><a href="/support/security/CVE-2010-1169/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2009-4136/">CVE-2009-4136</a></span><br/>
+          
+        </td>
+        <td>8.4, 8.3, 8.2, 8.1, 8.0, 7.4</td>
+        <td>8.4.2, 8.3.9, 8.2.15, 8.1.19, 8.0.23, 7.4.27</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>Privilege escalation via changing session state in an index function. This closes a corner case related to vulnerabilities CVE-2009-3230 and CVE-2007-6600 (below).<br/><br/><a href="/support/security/CVE-2009-4136/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2009-4034/">CVE-2009-4034</a></span><br/>
+          
+        </td>
+        <td>8.4, 8.3, 8.2, 8.1, 8.0, 7.4</td>
+        <td>8.4.2, 8.3.9, 8.2.15, 8.1.19, 8.0.23, 7.4.27</td>
+        <td>core server<br/>
+          Legacy: A</td>
+        <td>NULL Bytes in SSL Certificates can be used to falsify client or server authentication. This only affects users who have SSL enabled, perform certificate name validation or client certificate authentication, and where the Certificate Authority (CA) has been tricked into issuing invalid certificates. The use of a CA that can be trusted to always issue valid certificates is recommended to ensure you are not vulnerable to this issue.<br/><br/><a href="/support/security/CVE-2009-4034/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2009-3230/">CVE-2009-3230</a></span><br/>
+          
+        </td>
+        <td>8.4, 8.3, 8.2, 8.1, 8.0, 7.4</td>
+        <td>8.4.1, 8.3.8, 8.2.14, 8.1.18, 8.0.22, 7.4.26</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>The fix for issue CVE-2007-6600 (below) failed to include protection against misuse of RESET SESSION AUTHORIZATION.<br/><br/><a href="/support/security/CVE-2009-3230/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2009-0922/">CVE-2009-0922</a></span><br/>
+          
+        </td>
+        <td>8.3, 8.2, 8.1, 8.0, 7.4</td>
+        <td>8.3.7, 8.2.13, 8.1.17, 8.0.21, 7.4.25</td>
+        <td>core server<br/>
+          Legacy: D</td>
+        <td>It is possible to cause a momentary denial of service when there is a failure to convert a localized error message to the client-specified encoding. A valid login is required to exploit this vulnerability.<br/><br/><a href="/support/security/CVE-2009-0922/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2007-6601/">CVE-2007-6601</a></span><br/>
+          
+        </td>
+        <td>8.2, 8.1, 8.0, 7.4, 7.3</td>
+        <td>8.2.6, 8.1.11, 8.0.15, 7.4.19, 7.3.21</td>
+        <td>contrib module<br/>
+          Legacy: C</td>
+        <td>DBLink functions combined with local trust or ident access control could be used by a malicious user togain superuser privileges. A valid login is required to exploit this vulnerability.<br/><br/><a href="/support/security/CVE-2007-6601/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2007-6600/">CVE-2007-6600</a></span><br/>
+          
+        </td>
+        <td>8.2, 8.1, 8.0, 7.4, 7.3</td>
+        <td>8.2.6, 8.1.11, 8.0.15, 7.4.19, 7.3.21</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>Two vulnerabilities in how ANALYZE executes user defined functions that are part of expression indexes allows users to gain superuser privileges. A valid login that has permissions to create functions and tables is required to exploit this vulnearbility.<br/><br/><a href="/support/security/CVE-2007-6600/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2007-4769/">CVE-2007-4769</a></span><br/>
+          
+        </td>
+        <td>8.2, 8.1, 8.0, 7.4</td>
+        <td>8.2.6, 8.1.11, 8.0.15, 7.4.19</td>
+        <td>core server<br/>
+          Legacy: B</td>
+        <td>Three vulnearbilities in the regular expression handling libraries can be exploited to cause a backend crash, infinite loops or memory exhaustion. This vulnearbility can be exploited through frontend applications that allow unfiltered regular expressions to be passed in queries.<br/><br/><a href="/support/security/CVE-2007-4769/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2007-2138/">CVE-2007-2138</a></span><br/>
+          
+        </td>
+        <td>8.2, 8.1, 8.0, 7.4, 7.3</td>
+        <td>8.2.4, 8.1.9, 8.0.13, 7.4.17, 7.3.19</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>A vulnerability involving insecure search_path settings allows unprivileged users to gain the SQL privileges of the owner of any SECURITY DEFINER function they are allowed to call. Securing such a function requires both a software update and changes to the function definition.<br/><br/><a href="/support/security/CVE-2007-2138/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2007-0556/">CVE-2007-0556</a></span><br/>
+          
+        </td>
+        <td>8.2, 8.1, 8.0</td>
+        <td>8.2.2, 8.1.7, 8.0.11</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>A vulnerability involving changing the data type of a table column can easily be exploited to cause a backend crash, and in principle might be used to read database content that the user should not be able to access.<br/><br/><a href="/support/security/CVE-2007-0556/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2007-0555/">CVE-2007-0555</a></span><br/>
+          
+        </td>
+        <td>8.2, 8.1, 8.0, 7.4, 7.3</td>
+        <td>8.2.2, 8.1.7, 8.0.11, 7.4.16, 7.3.13</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>A vulnerability allows suppressing the normal checks that a SQL function returns the data type it&#x27;s declared to do. These errors can easily be exploited to cause a backend crash, and in principle might be used to read database content that the user should not be able to access.<br/><br/><a href="/support/security/CVE-2007-0555/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2006-5541/">CVE-2006-5541</a></span><br/>
+          
+        </td>
+        <td>8.1, 8.0, 7.4</td>
+        <td>8.1.5, 8.0.9, 7.4.14</td>
+        <td>core server<br/>
+          Legacy: D</td>
+        <td>A bug in the coercion of unknown literals to ANYARRAY can cause a denial of service. A valid login is required to exploit this vulnerability.<br/><br/><a href="/support/security/CVE-2006-5541/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2006-2314/">CVE-2006-2314</a></span><br/>
+          
+        </td>
+        <td>8.1, 8.0, 7.4, 7.3</td>
+        <td>8.1.4, 8.0.8, 7.4.13, 7.3.15</td>
+        <td>core server<br/>
+          Legacy: A</td>
+        <td>The widely-used practice of escaping ASCII single quote &quot;&#x27;&quot; by turning it into &quot;\&#x27;&quot; is unsafe when operating in multibyte encodings that allow 0x5c (ASCII code for backslash) as the trailing byte of a multibyte character.<br/><br/><a href="/support/security/CVE-2006-2314/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2006-2313/">CVE-2006-2313</a></span><br/>
+          
+        </td>
+        <td>8.1, 8.0, 7.4, 7.3</td>
+        <td>8.1.4, 8.0.8, 7.4.13, 7.3.15</td>
+        <td>core server<br/>
+          Legacy: A</td>
+        <td>An attacker able to submit crafted strings to an application that will embed those strings in SQL commands can use invalidly-encoded multibyte characters to bypass standard string-escaping methods, resulting in possible SQL injection.<br/><br/><a href="/support/security/CVE-2006-2313/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2006-0678/">CVE-2006-0678</a></span><br/>
+          
+        </td>
+        <td>8.0, 7.4, 7.3</td>
+        <td>8.0.7, 7.4.12, 7.3.14</td>
+        <td>core server<br/>
+          Legacy: D</td>
+        <td>A bug in the handling of SET SESSION AUTHORIZATION can cause a backend crash in Assert enabled builds. This will cause the postmaster to restart all backend, resulting in a denial of service. A valid login is required to exploit this vulnerability.<br/><br/><a href="/support/security/CVE-2006-0678/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2006-0105/">CVE-2006-0105</a></span><br/>
+          
+        </td>
+        <td>8.1, 8.0</td>
+        <td>8.1.2, 8.0.6</td>
+        <td>core server<br/>
+          Legacy: B</td>
+        <td>On Windows only, the postmaster will exit if too many connection requests arrive simultaneously. This does not affect existing database connections, but will prevent new connections from being established until the postmaster is manually restarted.<br/><br/><a href="/support/security/CVE-2006-0105/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2005-1410/">CVE-2005-1410</a></span><br/>
+          
+        </td>
+        <td>8.0, 7.4</td>
+        <td>8.0.3, 7.4.8</td>
+        <td>contrib module<br/>
+          Legacy: D</td>
+        <td>The tsearch2 contrib module declares several functions as internal even though they don&#x27;t take an internal argument. This allows attackers to cause a denial of service and may possibly have other impacts. A valid login is required to exploit this vulnerability.Note! See the announcement for special upgrade instructions.<br/><br/><a href="/support/security/CVE-2005-1410/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2005-1409/">CVE-2005-1409</a></span><br/>
+          
+        </td>
+        <td>8.0, 7.4, 7.3</td>
+        <td>8.0.3, 7.4.8, 7.3.10</td>
+        <td>core server<br/>
+          Legacy: D</td>
+        <td>Public EXECUTE access is given to certain character conversion functions that are not designed to be safe against malicious arguments. This can cause at least a denial of service. A valid login is required to exploit this vulnerability.Note! See the announcement for special upgrade instructions.<br/><br/><a href="/support/security/CVE-2005-1409/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2005-0247/">CVE-2005-0247</a></span><br/>
+          
+        </td>
+        <td>8.0, 7.4</td>
+        <td>8.0.2, 7.4.8</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>Multiple buffer overflows in the PL/PGSQL parser may allow attackers to execute arbitrary code. A valid login is required to exploit this vulnerability.<br/><br/><a href="/support/security/CVE-2005-0247/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2005-0246/">CVE-2005-0246</a></span><br/>
+          
+        </td>
+        <td>8.0, 7.4, 7.3</td>
+        <td>8.0.1, 7.4.7, 7.3.9</td>
+        <td>contrib module<br/>
+          Legacy: D</td>
+        <td>The intagg contrib module allows attackers to cause a denial of service. A valid login is required to exploit this vulnerability.<br/><br/><a href="/support/security/CVE-2005-0246/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2005-0245/">CVE-2005-0245</a></span><br/>
+          
+        </td>
+        <td>8.0, 7.4, 7.3</td>
+        <td>8.0.1, 7.4.7, 7.3.10</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>Multiple buffer overflows in the PL/PGSQL parser may allow attackers to execute arbitrary code. A valid login is required to exploit this vulnerability.<br/><br/><a href="/support/security/CVE-2005-0245/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2005-0244/">CVE-2005-0244</a></span><br/>
+          
+        </td>
+        <td>8.0, 7.4, 7.3</td>
+        <td>8.0.1, 7.4.7, 7.3.9</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>EXECUTE permissions are not properly checked when creating aggregates. A valid login is required to exploit this vulnerability.<br/><br/><a href="/support/security/CVE-2005-0244/">more details</a></td>
+      </tr>
+    
+      <tr>
+        <td>
+          <span class="nobr"><a href="/support/security/CVE-2005-0227/">CVE-2005-0227</a></span><br/>
+          
+        </td>
+        <td>8.0, 7.4, 7.3</td>
+        <td>8.0.1, 7.4.7, 7.3.9</td>
+        <td>core server<br/>
+          Legacy: C</td>
+        <td>Any database user is permitted to load arbitrary shared libraries using the LOAD command. A valid login is required to exploit this vulnerability.<br/><br/><a href="/support/security/CVE-2005-0227/">more details</a></td>
+      </tr>
+    
+  </tbody>
+</table>
+
+<h3>Unsupported versions</h3>
+
+<p>
+  You can also view archived security patches for unsupported versions. Note that no further
+  security patches are made available for these versions as they are end of life.<br/>
+  
+    <a href="/support/security/13/">13</a> -
+  
+    <a href="/support/security/12/">12</a> -
+  
+    <a href="/support/security/11/">11</a> -
+  
+    <a href="/support/security/10/">10</a> -
+  
+    <a href="/support/security/9.6/">9.6</a> -
+  
+    <a href="/support/security/9.5/">9.5</a> -
+  
+    <a href="/support/security/9.4/">9.4</a> -
+  
+    <a href="/support/security/9.3/">9.3</a> -
+  
+    <a href="/support/security/9.2/">9.2</a> -
+  
+    <a href="/support/security/9.1/">9.1</a> -
+  
+    <a href="/support/security/9.0/">9.0</a> -
+  
+    <a href="/support/security/8.4/">8.4</a> -
+  
+    <a href="/support/security/8.3/">8.3</a> -
+  
+    <a href="/support/security/8.2/">8.2</a> -
+  
+    <a href="/support/security/8.1/">8.1</a> -
+  
+    <a href="/support/security/8.0/">8.0</a> -
+  
+    <a href="/support/security/7.4/">7.4</a> -
+  
+    <a href="/support/security/7.3/">7.3</a>
+  
+</p>
+
+<h3 id="comp">Components</h3>
+
+<p>
+  The following component references are used in the above table:
+</p>
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Component</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+       <td>core server</td>
+       <td>This vulnerability exists in the core server product.</td>
+      </tr>
+
+      <tr>
+       <td>client</td>
+       <td>This vulnerability exists in a client library or client application only.</td>
+      </tr>
+
+      <tr>
+       <td>contrib module</td>
+       <td>This vulnerability exists in a contrib module. Contrib modules are not installed by default when PostgreSQL is installed from source. They may be installed by binary packages.</td>
+      </tr>
+
+      <tr>
+       <td>client contrib module</td>
+       <td>This vulnerability exists in a contrib module used on the client only.</td>
+      </tr>
+
+      <tr>
+       <td>packaging</td>
+       <td>This vulnerability exists in PostgreSQL binary packaging, e.g. an installer or RPM.</td>
+      </tr>
+  </tbody>
+</table>
+
+<h2>The PostgreSQL Security Team</h2>
+
+<p>
+  The PostgreSQL Security Team is made up of a group of contributors to the
+  PostgreSQL project who have experience in different aspects of database and
+  information security.
+</p>
+
+<p>
+  You can find a list of members on the security team here:
+</p>
+
+<ul>
+  <li>Álvaro Herrera</li>
+  <li>Andres Freund</li>
+  <li>Andrew Dunstan</li>
+  <li>Bruce Momjian</li>
+  <li>Dave Page</li>
+  <li>Greg Stark</li>
+  <li>Heikki Linnakangas</li>
+  <li>Jacob Champion</li>
+  <li>Joe Conway</li>
+  <li>Jonathan Katz</li>
+  <li>Magnus Hagander</li>
+  <li>Masahiko Sawada</li>
+  <li>Michael Paquier</li>
+  <li>Nathan Bossart</li>
+  <li>Noah Misch</li>
+  <li>Peter Eisentraut</li>
+  <li>Peter Geoghegan</li>
+  <li>Robert Haas</li>
+  <li>Stefan Kaltenbrunner</li>
+  <li>Tom Lane</li>
+  <li>Tomas Vondra</li>
+</ul>
+
+      </div> <!-- pgContentWrap -->
+    </div>
+  </div>
+</div>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <!-- Copyright -->
+      <div class="container">
+        <a href="/about/policies/">Policies</a> |
+        <a href="/about/policies/coc/">Code of Conduct</a> |
+        <a href="/about/">About PostgreSQL</a> |
+        <a href="/about/contact/">Contact</a><br/>
+        <p>Copyright &copy; 1996-2026 The PostgreSQL Global Development Group</p>
+      </div>
+    </footer>
+    <script src="/media/js/main.js?80bec0f4"></script>
+
+  </body>
+</html>
