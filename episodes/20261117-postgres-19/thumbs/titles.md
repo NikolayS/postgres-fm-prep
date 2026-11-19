@@ -36,14 +36,19 @@ Candidates (recording times; superseded: the cold open is made separately, see `
 
 Recommendation: 2 (it has a chart and a number), or 3 if Nik prefers a laugh.
 
-## Thumbnails made (2026-11-18)
+## Final title (settled 2026-11-18)
 
-Contact sheet: `preview/thumbs-sheet.png`; full size: `preview/thumbs/thumb-a.png`, `thumb-b.png`, `thumb-c.png` (media are not in git).
+**Why Postgres 19 came late (and why it's worth it)** (49). It replaces the earlier options above. The thumbnail asks, the title answers; the thumbnail does not repeat the title.
 
-- **A (recommended):** "POSTGRES 19: / UPGRADE NOW?"
-- **B:** "WHAT BREAKS / ON 19?", chip "pg_upgrade --check said OK" (check the chip with Nik, see above).
-- **C:** "DON'T WAIT / FOR 19.1" (Nik's advice on air, 00:49:23 recording time). Concept C above ("NOTIFY 55x FASTER?") is dropped: it pairs only with title 3, and title 1 is settled.
+## Thumbnails (v2, 2026-11-18)
 
-Heads, from the final video (`preview/episode-197-final.mp4`), picked with Apple Vision face and eye detection (`tools/podcast-edit/qa/faces.swift`) on every tile at 2 s steps, then at 0.25 s near the best frames: Nik 00:46:09.25, Michael 00:20:50.50, Kirk 00:25:37.50. Eyes open on all three (eye ratio 0.34-0.41 on the rendered thumbnails, 3 faces found). Balance: same eye distance (62 px), Kirk scaled by 0.85 because his eyes sit closer for his head size; eyes on one line (within 9 px); face luminance matched by gamma (Michael and Nik brightened, Kirk's hot camera toned down). Kirk is framed with his full head in the tile.
+Contact sheet: `preview/thumbs-sheet.png` (A, B, C and the square cover); full size: `preview/thumbs/thumb-a.png`, `thumb-b.png`, `thumb-c.png`; square cover: `preview/cover-197-3000.png` (media are not in git).
 
-Sources: `src/rank.py` (frame ranking), `src/tiles.py` (tiles), `src/mk.py` (HTML and headless Chrome render).
+- **A (recommended):** "96 CVEs. / WORTH THE WAIT?" 96 = PostgreSQL CVEs in 2026 to 2026-11-18, card `f00-cves`, key `y2026`.
+- **B:** "POSTGRES 19: / WORTH IT?"
+- **C:** "52 CVEs IN / ONE RELEASE?" 52 = CVEs fixed in the 18.7 release, card `f00-cves`, key `b18_7`.
+- **Square cover (3000x3000):** "POSTGRES 19 / WORTH THE WAIT?", the three heads as cutouts, the samograph sticker (episode 196 style).
+
+Faces: Nik asked for smiling faces. Candidates per person, numbered, in `preview/smiles-nik.png`, `smiles-michael.png`, `smiles-kirk.png`: Apple Vision landmarks on every tile at 2 s steps and around every laugh in the transcript, scored by mouth width and corner lift, eye opening, frontal pose and sharpness; frames with a hand near the face dropped (Vision hand pose). Current picks until Nik chooses: N1 (00:17:37.4), M1 (00:52:29.8), K3 (00:25:41.8). Rebuild with other picks: `bash src/build.sh <nik s> <michael s> <kirk s>` (final-video seconds, from the sheets). Balance: same eye distance (Kirk x0.85, Michael x0.9 for equal head size), eyes on one line, face brightness matched by gamma.
+
+Sources in `src/`: `smile.swift`, `hands.swift`, `smrank.py`, `refine.py`, `rfscore.py`, `curate.py` (candidates); `tiles.py`, `mk.py`, `hosts.py`, `square.html`, `sheet2.py`, `build.sh` (render). Earlier v1 scripts: `rank.py`.

@@ -1,10 +1,10 @@
-# Episode 197 thumbnails (1280x720). Title: "Postgres 19: favorite features and upgrade traps".
+# Episode 197 thumbnails (1280x720). Title: "Why Postgres 19 came late (and why it's worth it)".
 # The thumbnail asks; the title answers. Three co-hosts in balanced tiles: Nik, Michael, Kirk.
 import subprocess,os
 opts={
- 'a':'<div class="l l1">POSTGRES 19:</div><div class="l l2"><span class="o">UPGRADE NOW?</span></div>',
- 'b':'<div class="l l1">WHAT BREAKS</div><div class="l l2"><span class="o">ON 19?</span></div><div class="chip">pg_upgrade --check said OK</div>',
- 'c':'<div class="l l1">DON\'T WAIT</div><div class="l l2">FOR <span class="o">19.1</span></div>',
+ 'a':'<div class="l l1"><span class="o">96 CVEs.</span></div><div class="l l2">WORTH THE WAIT?</div>',
+ 'b':'<div class="l l1">POSTGRES 19:</div><div class="l l2"><span class="o">WORTH IT?</span></div>',
+ 'c':'<div class="l l1"><span class="o">52 CVEs</span> IN</div><div class="l l2">ONE RELEASE?</div>',
 }
 css='''@font-face{font-family:Imp;src:url(file:///System/Library/Fonts/Supplemental/Impact.ttf)}
 html,body{margin:0;width:1280px;height:720px;background:#111013;overflow:hidden}

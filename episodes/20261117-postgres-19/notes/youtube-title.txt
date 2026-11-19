@@ -1,1 +1,1 @@
-Postgres 19: favorite features and upgrade traps
+Why Postgres 19 came late (and why it's worth it)
