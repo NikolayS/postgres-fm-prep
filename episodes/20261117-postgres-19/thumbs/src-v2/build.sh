@@ -43,3 +43,4 @@ for ql in (90, 86, 82, 78):
     q.save(f'{o}/FINAL-square.jpg', quality=ql, subsampling=0, optimize=True)
     if os.path.getsize(f'{o}/FINAL-square.jpg') < 512000: break
 PY
+python3 ab.py "$OUT"   # Test & Compare set: ab-a.jpg, ab-b.jpg, ab-d.jpg, ab-sheet.png
