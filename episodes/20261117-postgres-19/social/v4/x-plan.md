@@ -75,7 +75,7 @@ where proconfig::text ~ 'standard_conforming_strings|escape_string_warning';
 Then upgrade a clone first.
 ```
 
-### B self-reply, 2 minutes later
+### B self-reply, 2 minutes later, long form (281 chars: needs X Premium, which Nik has)
 
 ```text
 The 7th way: GRANT SET ON PARAMETER escape_string_warning. Find it with:
