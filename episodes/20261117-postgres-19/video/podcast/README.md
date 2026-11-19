@@ -4,23 +4,20 @@
 
 Media are not in git. `<recording>` is the Zoom folder (see `../final/README.md`).
 
-## Audio master
+## Audio master (no cold open, Nik 2026-11-19)
 
-Decision (the host can veto): the podcast has the cold open too, so podcast times are video times.
+The podcast has NO cold open: it starts at Michael's "Hello, and welcome" (body time 0.33 s). Podcast time = body v5 time; video time = podcast time + 43.76 s.
 
-The podcast is the final video's audio without the overlay sounds:
-
-1. Decode the audio of `preview/cold-open-v9a-trim.mp4` and `preview/episode-197-body-v5.mp4` (body v7 audio is byte-identical to v5; body v8 adds the sound cues).
-2. Join them in the same layout as the final: the stream-copy join of `join.sh` decodes as a 1024-sample pad, the cold open (2,101,248 samples), a 1024-sample pad, then the body. So the body starts at 43.8187 s (not 43.76 s). Cross-correlation against `episode-197-final.mp4`: lag 0 for the cold open and at 6 points in the body; the only differences are the sound cues and the final's limiter.
-3. No gain or limiter: the join measures -16.0 LUFS and -1.9 dBTP already.
-4. MP3: 44.1 kHz, 192 kbps CBR (as episodes 195 and 196), ID3v2.3, the square cover as the front cover. Output: `preview/episode-197-podcast.mp3`, -16.2 LUFS, -2.1 dBTP (ebur128 on the MP3).
+1. Decode the audio of `preview/episode-197-body-v5.mp4` (body v7 audio is byte-identical; body v8 adds the overlay sounds).
+2. 0.25 s fade-in over the room tone before the first word; nothing else.
+3. No gain or limiter: -16.0 LUFS, -2.2 dBTP as is.
+4. MP3: 44.1 kHz, 192 kbps CBR, ID3v2.3, `preview/covers-v2/FINAL-square.jpg` as the front cover. Output `preview/episode-197-podcast.mp3` (52:38.9), -16.2 LUFS, -2.5 dBTP.
 
 ## Captions and transcript
 
-- `time-map.py` writes `podcast.time-map.json`: Scribe source seconds to podcast seconds, through the `edited-v2.cuts.json` segments, the body-v5 cuts and the 43.8187 s body start. Run it in a folder with `edited-v2.cuts.json` (from `<recording>/review`).
-- Build: `bun tools/podcast-edit/subtitles.ts build <recording>/review/work/src.words.json --audio-map podcast.time-map.json --speakers speaker_0=Michael,speaker_1=Nik,speaker_2=Kirk --fixes ../../captions/subtitle-fixes.json --out out/podcast --article --voices --title "Postgres 19" --music 3181-3202.7`.
-- `cold-open-cues.py` puts the 12 cold-open cues in front (from `notes/subtitles-en.srt`, +1024 samples, speakers by the source words), writes `podcast.en.srt`, `.vtt` and `.transcript.md`. Then replace `postgres_fdw/dblink` with `postgres_fdw and dblink` (a fix with spaces gets a capital first letter) and run `subtitles.ts transcript-txt`.
-- Output in `../../captions/`. `subtitles.ts check`: only reading-speed warnings.
+- `time-map.py` writes `podcast.time-map.json` (Scribe source seconds to podcast seconds through the `edited-v2.cuts.json` segments and the body-v5 cuts; body from 0). Run it in a folder with `edited-v2.cuts.json` from `<recording>/review`.
+- Build: `bun tools/podcast-edit/subtitles.ts build <recording>/review/work/src.words.json --audio-map podcast.time-map.json --speakers speaker_0=Michael,speaker_1=Nik,speaker_2=Kirk --fixes ../../captions/subtitle-fixes.json --out out/podcast --article --voices --title "Postgres 19" --music 3137.2-3158.9`, then replace `postgres_fdw/dblink` with `postgres_fdw and dblink` (a fix with spaces gets a capital first letter) and add "Michael: " to cue 1.
+- Clean verbatim (Nik: "too much Ugh"): `python3 polish.py out/podcast.transcript.md ../../captions/podcast.transcript.md pairs.txt` removes fillers (uh, um, ugh, oh, ah, mm, hmm), filler "you know" and "like,", backchannel asides, repeated words, cut-off fragments and backchannel-only turns, and merges turns of one speaker. Then `subtitles.ts transcript-txt`. The SRT/VTT keep the caption tool's own clean-up.
 
 ## Dictionary pass
 
@@ -58,7 +55,7 @@ The same pass on `notes/subtitles-en.srt` (YouTube, times unchanged; it had an e
 
 ## Show notes
 
-`notes-html.py` writes `notes/notes.transistor.html` from `notes/notes.md`: the watch-on-YouTube tip first (add the URL when the video is up), the brief as Main link, 20 links with podcast times, the numbers block, the notes block from `notes/corrections.md` (times moved to podcast times; the plan-advice cost is 11% to 14%, as the card data, not "about 13%"), and Kirk in the producers. All links opened on 2026-11-18 (HTTP 200, titles match). The second brief link (`#plans`) is left out: the brief is the Main link.
+`notes-html.py` writes `notes/notes.transistor.html` from `notes/notes.md`: the watch-on-YouTube tip first (add the URL when the video is up), the brief as Main link, 20 links with podcast times, the numbers block, the notes block from `notes/corrections.md` (times moved to podcast times; the plan-advice cost is 11% to 14%, as the card data, not "about 13%"), and Kirk in the producers. All links opened on 2026-11-18 (HTTP 200, titles match). Times: body times from `video/final/edit/times-body.json` (no cold open); the notes block anchors come from the podcast cues. The second brief link (`#plans`) is left out: the brief is the Main link.
 
 ## Transistor draft
 

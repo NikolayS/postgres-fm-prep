@@ -1,767 +1,763 @@
 {
- "note": "episode 197 podcast: source -> podcast seconds (cold open 0-43.8 s not mapped; body from 43.8187 s)",
- "intro": {
-  "start": 0,
-  "talkStart": 43.818666666666665
- },
+ "note": "episode 197 podcast: source -> podcast seconds (body from 0.0000 s)",
  "talk": {
-  "start": 43.818666666666665,
-  "end": 3180.739
+  "start": 0.0,
+  "end": 3136.92
  },
  "outro": {
-  "end": 3202.752
+  "end": 3158.933
  },
  "segments": [
   {
    "srcStart": 38.24,
    "srcEnd": 48.8,
-   "audioStart": 43.8187
+   "audioStart": 0.0
   },
   {
    "srcStart": 49.4,
    "srcEnd": 52.16,
-   "audioStart": 54.3787
+   "audioStart": 10.56
   },
   {
    "srcStart": 52.44,
    "srcEnd": 58.96,
-   "audioStart": 57.1387
+   "audioStart": 13.32
   },
   {
    "srcStart": 59.28,
    "srcEnd": 70.04,
-   "audioStart": 63.6587
+   "audioStart": 19.84
   },
   {
    "srcStart": 70.44,
    "srcEnd": 81.04,
-   "audioStart": 74.4187
+   "audioStart": 30.6
   },
   {
    "srcStart": 83.56,
    "srcEnd": 107.24,
-   "audioStart": 85.0187
+   "audioStart": 41.2
   },
   {
    "srcStart": 107.8,
    "srcEnd": 118.72,
-   "audioStart": 108.6987
+   "audioStart": 64.88
   },
   {
    "srcStart": 129.48,
    "srcEnd": 139.68,
-   "audioStart": 119.6187
+   "audioStart": 75.8
   },
   {
    "srcStart": 139.8,
    "srcEnd": 169.12,
-   "audioStart": 129.8187
+   "audioStart": 86.0
   },
   {
    "srcStart": 180.96,
    "srcEnd": 197.16,
-   "audioStart": 159.1387
+   "audioStart": 115.32
   },
   {
    "srcStart": 197.72,
    "srcEnd": 212.92,
-   "audioStart": 175.3387
+   "audioStart": 131.52
   },
   {
    "srcStart": 213.32,
    "srcEnd": 244.28,
-   "audioStart": 190.5387
+   "audioStart": 146.72
   },
   {
    "srcStart": 244.64,
    "srcEnd": 286.88,
-   "audioStart": 221.4987
+   "audioStart": 177.68
   },
   {
    "srcStart": 287.36,
    "srcEnd": 300.44,
-   "audioStart": 263.7387
+   "audioStart": 219.92
   },
   {
    "srcStart": 301.04,
    "srcEnd": 302.72,
-   "audioStart": 276.8187
+   "audioStart": 233.0
   },
   {
    "srcStart": 303.04,
    "srcEnd": 305.16,
-   "audioStart": 278.4987
+   "audioStart": 234.68
   },
   {
    "srcStart": 305.4,
    "srcEnd": 309.32,
-   "audioStart": 280.6187
+   "audioStart": 236.8
   },
   {
    "srcStart": 310.12,
    "srcEnd": 332.32,
-   "audioStart": 284.5387
+   "audioStart": 240.72
   },
   {
    "srcStart": 337.2,
    "srcEnd": 366.08,
-   "audioStart": 306.7387
+   "audioStart": 262.92
   },
   {
    "srcStart": 366.6,
    "srcEnd": 383.92,
-   "audioStart": 335.6187
+   "audioStart": 291.8
   },
   {
    "srcStart": 389.28,
    "srcEnd": 398.24,
-   "audioStart": 352.9387
+   "audioStart": 309.12
   },
   {
    "srcStart": 399.28,
    "srcEnd": 416.04,
-   "audioStart": 361.8987
+   "audioStart": 318.08
   },
   {
    "srcStart": 440.32,
    "srcEnd": 459.36,
-   "audioStart": 378.6587
+   "audioStart": 334.84
   },
   {
    "srcStart": 463.44,
    "srcEnd": 476.2,
-   "audioStart": 397.6987
+   "audioStart": 353.88
   },
   {
    "srcStart": 476.6,
    "srcEnd": 479.12,
-   "audioStart": 410.4587
+   "audioStart": 366.64
   },
   {
    "srcStart": 482.72,
    "srcEnd": 586.8,
-   "audioStart": 412.9787
+   "audioStart": 369.16
   },
   {
    "srcStart": 587.36,
    "srcEnd": 592.96,
-   "audioStart": 517.0587
+   "audioStart": 473.24
   },
   {
    "srcStart": 593.8,
    "srcEnd": 599.36,
-   "audioStart": 522.6587
+   "audioStart": 478.84
   },
   {
    "srcStart": 599.6,
    "srcEnd": 600.44,
-   "audioStart": 528.2187
+   "audioStart": 484.4
   },
   {
    "srcStart": 601.4,
    "srcEnd": 603.04,
-   "audioStart": 529.0587
+   "audioStart": 485.24
   },
   {
    "srcStart": 603.36,
    "srcEnd": 604.6,
-   "audioStart": 530.6987
+   "audioStart": 486.88
   },
   {
    "srcStart": 615.08,
    "srcEnd": 618.44,
-   "audioStart": 531.9387
+   "audioStart": 488.12
   },
   {
    "srcStart": 618.96,
    "srcEnd": 632.44,
-   "audioStart": 535.2987
+   "audioStart": 491.48
   },
   {
    "srcStart": 632.72,
    "srcEnd": 649.48,
-   "audioStart": 548.7787
+   "audioStart": 504.96
   },
   {
    "srcStart": 658.84,
    "srcEnd": 692.16,
-   "audioStart": 565.5387
+   "audioStart": 521.72
   },
   {
    "srcStart": 692.48,
    "srcEnd": 694.88,
-   "audioStart": 598.8587
+   "audioStart": 555.04
   },
   {
    "srcStart": 713.72,
    "srcEnd": 729.36,
-   "audioStart": 601.2587
+   "audioStart": 557.44
   },
   {
    "srcStart": 730.0,
    "srcEnd": 752.72,
-   "audioStart": 616.8987
+   "audioStart": 573.08
   },
   {
    "srcStart": 758.16,
    "srcEnd": 820.72,
-   "audioStart": 639.6187
+   "audioStart": 595.8
   },
   {
    "srcStart": 822.24,
    "srcEnd": 859.76,
-   "audioStart": 702.1787
+   "audioStart": 658.36
   },
   {
    "srcStart": 860.0,
    "srcEnd": 948.88,
-   "audioStart": 739.6987
+   "audioStart": 695.88
   },
   {
    "srcStart": 964.36,
    "srcEnd": 975.44,
-   "audioStart": 828.5787
+   "audioStart": 784.76
   },
   {
    "srcStart": 976.76,
    "srcEnd": 980.84,
-   "audioStart": 839.6587
+   "audioStart": 795.84
   },
   {
    "srcStart": 981.28,
    "srcEnd": 988.96,
-   "audioStart": 843.7387
+   "audioStart": 799.92
   },
   {
    "srcStart": 989.56,
    "srcEnd": 992.52,
-   "audioStart": 851.4187
+   "audioStart": 807.6
   },
   {
    "srcStart": 993.24,
    "srcEnd": 1006.76,
-   "audioStart": 854.3787
+   "audioStart": 810.56
   },
   {
    "srcStart": 1007.08,
    "srcEnd": 1025.72,
-   "audioStart": 867.8987
+   "audioStart": 824.08
   },
   {
    "srcStart": 1026.6,
    "srcEnd": 1044.28,
-   "audioStart": 886.5387
+   "audioStart": 842.72
   },
   {
    "srcStart": 1044.72,
    "srcEnd": 1046.4,
-   "audioStart": 904.2187
+   "audioStart": 860.4
   },
   {
    "srcStart": 1046.56,
    "srcEnd": 1054.88,
-   "audioStart": 905.8987
+   "audioStart": 862.08
   },
   {
    "srcStart": 1054.96,
    "srcEnd": 1065.44,
-   "audioStart": 914.2187
+   "audioStart": 870.4
   },
   {
    "srcStart": 1067.96,
    "srcEnd": 1069.2,
-   "audioStart": 924.6987
+   "audioStart": 880.88
   },
   {
    "srcStart": 1070.04,
    "srcEnd": 1083.28,
-   "audioStart": 925.9387
+   "audioStart": 882.12
   },
   {
    "srcStart": 1088.32,
    "srcEnd": 1137.8,
-   "audioStart": 939.1787
+   "audioStart": 895.36
   },
   {
    "srcStart": 1141.08,
    "srcEnd": 1157.76,
-   "audioStart": 988.6587
+   "audioStart": 944.84
   },
   {
    "srcStart": 1163.68,
    "srcEnd": 1198.32,
-   "audioStart": 1005.3387
+   "audioStart": 961.52
   },
   {
    "srcStart": 1198.76,
    "srcEnd": 1214.28,
-   "audioStart": 1039.9787
+   "audioStart": 996.16
   },
   {
    "srcStart": 1226.48,
    "srcEnd": 1229.4,
-   "audioStart": 1055.4987
+   "audioStart": 1011.68
   },
   {
    "srcStart": 1229.56,
    "srcEnd": 1230.88,
-   "audioStart": 1058.4187
+   "audioStart": 1014.6
   },
   {
    "srcStart": 1237.12,
    "srcEnd": 1273.04,
-   "audioStart": 1059.7387
+   "audioStart": 1015.92
   },
   {
    "srcStart": 1278.48,
    "srcEnd": 1317.16,
-   "audioStart": 1095.6587
+   "audioStart": 1051.84
   },
   {
    "srcStart": 1317.56,
    "srcEnd": 1331.2,
-   "audioStart": 1134.3387
+   "audioStart": 1090.52
   },
   {
    "srcStart": 1335.64,
    "srcEnd": 1340.76,
-   "audioStart": 1147.9787
+   "audioStart": 1104.16
   },
   {
    "srcStart": 1340.92,
    "srcEnd": 1350.44,
-   "audioStart": 1153.0987
+   "audioStart": 1109.28
   },
   {
    "srcStart": 1350.88,
    "srcEnd": 1398.08,
-   "audioStart": 1162.6187
+   "audioStart": 1118.8
   },
   {
    "srcStart": 1398.52,
    "srcEnd": 1417.32,
-   "audioStart": 1209.8187
+   "audioStart": 1166.0
   },
   {
    "srcStart": 1417.88,
    "srcEnd": 1473.44,
-   "audioStart": 1228.6187
+   "audioStart": 1184.8
   },
   {
    "srcStart": 1477.6,
    "srcEnd": 1562.48,
-   "audioStart": 1284.1787
+   "audioStart": 1240.36
   },
   {
    "srcStart": 1563.16,
    "srcEnd": 1573.76,
-   "audioStart": 1369.0587
+   "audioStart": 1325.24
   },
   {
    "srcStart": 1574.24,
    "srcEnd": 1612.16,
-   "audioStart": 1379.6587
+   "audioStart": 1335.84
   },
   {
    "srcStart": 1612.72,
    "srcEnd": 1618.48,
-   "audioStart": 1417.5787
+   "audioStart": 1373.76
   },
   {
    "srcStart": 1619.0,
    "srcEnd": 1640.28,
-   "audioStart": 1423.3387
+   "audioStart": 1379.52
   },
   {
    "srcStart": 1646.72,
    "srcEnd": 1657.08,
-   "audioStart": 1444.6187
+   "audioStart": 1400.8
   },
   {
    "srcStart": 1657.28,
    "srcEnd": 1671.36,
-   "audioStart": 1454.9787
+   "audioStart": 1411.16
   },
   {
    "srcStart": 1676.8,
    "srcEnd": 1723.4,
-   "audioStart": 1469.0587
+   "audioStart": 1425.24
   },
   {
    "srcStart": 1723.8,
    "srcEnd": 1780.44,
-   "audioStart": 1515.6587
+   "audioStart": 1471.84
   },
   {
    "srcStart": 1781.0,
    "srcEnd": 1881.76,
-   "audioStart": 1572.2987
+   "audioStart": 1528.48
   },
   {
    "srcStart": 1882.88,
    "srcEnd": 1888.68,
-   "audioStart": 1673.0587
+   "audioStart": 1629.24
   },
   {
    "srcStart": 1889.28,
    "srcEnd": 1897.0,
-   "audioStart": 1678.8587
+   "audioStart": 1635.04
   },
   {
    "srcStart": 1897.4,
    "srcEnd": 1905.4,
-   "audioStart": 1686.5787
+   "audioStart": 1642.76
   },
   {
    "srcStart": 1906.0,
    "srcEnd": 1922.24,
-   "audioStart": 1694.5787
+   "audioStart": 1650.76
   },
   {
    "srcStart": 1922.8,
    "srcEnd": 1924.52,
-   "audioStart": 1710.8187
+   "audioStart": 1667.0
   },
   {
    "srcStart": 1924.72,
    "srcEnd": 1941.08,
-   "audioStart": 1712.5387
+   "audioStart": 1668.72
   },
   {
    "srcStart": 1941.28,
    "srcEnd": 1951.6,
-   "audioStart": 1728.8987
+   "audioStart": 1685.08
   },
   {
    "srcStart": 1954.28,
    "srcEnd": 1978.24,
-   "audioStart": 1739.2187
+   "audioStart": 1695.4
   },
   {
    "srcStart": 1978.6,
    "srcEnd": 1990.08,
-   "audioStart": 1763.1787
+   "audioStart": 1719.36
   },
   {
    "srcStart": 1990.64,
    "srcEnd": 2008.4,
-   "audioStart": 1774.6587
+   "audioStart": 1730.84
   },
   {
    "srcStart": 2010.16,
    "srcEnd": 2073.0,
-   "audioStart": 1792.4187
+   "audioStart": 1748.6
   },
   {
    "srcStart": 2077.2,
    "srcEnd": 2081.8,
-   "audioStart": 1855.2587
+   "audioStart": 1811.44
   },
   {
    "srcStart": 2082.28,
    "srcEnd": 2093.48,
-   "audioStart": 1859.8587
+   "audioStart": 1816.04
   },
   {
    "srcStart": 2094.0,
    "srcEnd": 2103.12,
-   "audioStart": 1871.0587
+   "audioStart": 1827.24
   },
   {
    "srcStart": 2103.68,
    "srcEnd": 2111.2,
-   "audioStart": 1880.1787
+   "audioStart": 1836.36
   },
   {
    "srcStart": 2111.68,
    "srcEnd": 2173.52,
-   "audioStart": 1887.6987
+   "audioStart": 1843.88
   },
   {
    "srcStart": 2174.64,
    "srcEnd": 2177.76,
-   "audioStart": 1949.5387
+   "audioStart": 1905.72
   },
   {
    "srcStart": 2178.72,
    "srcEnd": 2190.52,
-   "audioStart": 1952.6587
+   "audioStart": 1908.84
   },
   {
    "srcStart": 2190.72,
    "srcEnd": 2306.04,
-   "audioStart": 1964.4587
+   "audioStart": 1920.64
   },
   {
    "srcStart": 2310.88,
    "srcEnd": 2386.76,
-   "audioStart": 2079.7787
+   "audioStart": 2035.96
   },
   {
    "srcStart": 2387.44,
    "srcEnd": 2390.72,
-   "audioStart": 2155.6587
+   "audioStart": 2111.84
   },
   {
    "srcStart": 2391.16,
    "srcEnd": 2408.4,
-   "audioStart": 2158.9387
+   "audioStart": 2115.12
   },
   {
    "srcStart": 2408.68,
    "srcEnd": 2410.16,
-   "audioStart": 2176.1787
+   "audioStart": 2132.36
   },
   {
    "srcStart": 2410.72,
    "srcEnd": 2429.68,
-   "audioStart": 2177.6587
+   "audioStart": 2133.84
   },
   {
    "srcStart": 2430.28,
    "srcEnd": 2457.92,
-   "audioStart": 2196.6187
+   "audioStart": 2152.8
   },
   {
    "srcStart": 2458.6,
    "srcEnd": 2467.48,
-   "audioStart": 2224.2587
+   "audioStart": 2180.44
   },
   {
    "srcStart": 2467.68,
    "srcEnd": 2485.2,
-   "audioStart": 2233.1387
+   "audioStart": 2189.32
   },
   {
    "srcStart": 2485.4,
    "srcEnd": 2547.28,
-   "audioStart": 2250.6587
+   "audioStart": 2206.84
   },
   {
    "srcStart": 2548.04,
    "srcEnd": 2582.0,
-   "audioStart": 2312.5387
+   "audioStart": 2268.72
   },
   {
    "srcStart": 2582.04,
    "srcEnd": 2591.04,
-   "audioStart": 2346.4987
+   "audioStart": 2302.68
   },
   {
    "srcStart": 2591.84,
    "srcEnd": 2606.64,
-   "audioStart": 2355.4987
+   "audioStart": 2311.68
   },
   {
    "srcStart": 2616.08,
    "srcEnd": 2631.2,
-   "audioStart": 2370.2987
+   "audioStart": 2326.48
   },
   {
    "srcStart": 2632.72,
    "srcEnd": 2635.48,
-   "audioStart": 2385.4187
+   "audioStart": 2341.6
   },
   {
    "srcStart": 2643.52,
    "srcEnd": 2646.28,
-   "audioStart": 2388.1787
+   "audioStart": 2344.36
   },
   {
    "srcStart": 2647.16,
    "srcEnd": 2650.36,
-   "audioStart": 2390.9387
+   "audioStart": 2347.12
   },
   {
    "srcStart": 2651.0,
    "srcEnd": 2686.36,
-   "audioStart": 2394.1387
+   "audioStart": 2350.32
   },
   {
    "srcStart": 2696.0,
    "srcEnd": 2708.56,
-   "audioStart": 2429.4987
+   "audioStart": 2385.68
   },
   {
    "srcStart": 2709.6,
    "srcEnd": 2732.0,
-   "audioStart": 2442.0587
+   "audioStart": 2398.24
   },
   {
    "srcStart": 2732.6,
    "srcEnd": 2745.84,
-   "audioStart": 2464.4587
+   "audioStart": 2420.64
   },
   {
    "srcStart": 2746.4,
    "srcEnd": 2788.52,
-   "audioStart": 2477.6987
+   "audioStart": 2433.88
   },
   {
    "srcStart": 2788.76,
    "srcEnd": 2823.36,
-   "audioStart": 2519.8187
+   "audioStart": 2476.0
   },
   {
    "srcStart": 2823.68,
    "srcEnd": 2837.12,
-   "audioStart": 2554.4187
+   "audioStart": 2510.6
   },
   {
    "srcStart": 2837.4,
    "srcEnd": 2865.56,
-   "audioStart": 2567.8587
+   "audioStart": 2524.04
   },
   {
    "srcStart": 2867.52,
    "srcEnd": 2868.96,
-   "audioStart": 2596.0187
+   "audioStart": 2552.2
   },
   {
    "srcStart": 2869.52,
    "srcEnd": 2872.88,
-   "audioStart": 2597.4587
+   "audioStart": 2553.64
   },
   {
    "srcStart": 2877.76,
    "srcEnd": 2930.72,
-   "audioStart": 2600.8187
+   "audioStart": 2557.0
   },
   {
    "srcStart": 2936.24,
    "srcEnd": 2959.24,
-   "audioStart": 2653.7787
+   "audioStart": 2609.96
   },
   {
    "srcStart": 2959.44,
    "srcEnd": 2990.4,
-   "audioStart": 2676.7787
+   "audioStart": 2632.96
   },
   {
    "srcStart": 2990.72,
    "srcEnd": 3001.48,
-   "audioStart": 2707.7387
+   "audioStart": 2663.92
   },
   {
    "srcStart": 3002.52,
    "srcEnd": 3014.64,
-   "audioStart": 2718.4987
+   "audioStart": 2674.68
   },
   {
    "srcStart": 3014.84,
    "srcEnd": 3026.12,
-   "audioStart": 2730.6187
+   "audioStart": 2686.8
   },
   {
    "srcStart": 3026.36,
    "srcEnd": 3047.48,
-   "audioStart": 2741.8987
+   "audioStart": 2698.08
   },
   {
    "srcStart": 3048.08,
    "srcEnd": 3107.08,
-   "audioStart": 2763.0187
+   "audioStart": 2719.2
   },
   {
    "srcStart": 3107.36,
    "srcEnd": 3109.48,
-   "audioStart": 2822.0187
+   "audioStart": 2778.2
   },
   {
    "srcStart": 3109.92,
    "srcEnd": 3118.8,
-   "audioStart": 2824.1387
+   "audioStart": 2780.32
   },
   {
    "srcStart": 3119.04,
    "srcEnd": 3138.68,
-   "audioStart": 2833.0187
+   "audioStart": 2789.2
   },
   {
    "srcStart": 3138.96,
    "srcEnd": 3161.36,
-   "audioStart": 2852.6587
+   "audioStart": 2808.84
   },
   {
    "srcStart": 3171.0,
    "srcEnd": 3175.28,
-   "audioStart": 2875.0587
+   "audioStart": 2831.24
   },
   {
    "srcStart": 3176.48,
    "srcEnd": 3194.4,
-   "audioStart": 2879.3387
+   "audioStart": 2835.52
   },
   {
    "srcStart": 3195.68,
    "srcEnd": 3203.12,
-   "audioStart": 2897.2587
+   "audioStart": 2853.44
   },
   {
    "srcStart": 3203.36,
    "srcEnd": 3204.84,
-   "audioStart": 2904.6987
+   "audioStart": 2860.88
   },
   {
    "srcStart": 3205.76,
    "srcEnd": 3216.72,
-   "audioStart": 2906.1787
+   "audioStart": 2862.36
   },
   {
    "srcStart": 3217.48,
    "srcEnd": 3239.08,
-   "audioStart": 2917.1387
+   "audioStart": 2873.32
   },
   {
    "srcStart": 3239.4,
    "srcEnd": 3251.52,
-   "audioStart": 2938.7387
+   "audioStart": 2894.92
   },
   {
    "srcStart": 3267.28,
    "srcEnd": 3276.64,
-   "audioStart": 2950.8587
+   "audioStart": 2907.04
   },
   {
    "srcStart": 3277.08,
    "srcEnd": 3346.8,
-   "audioStart": 2960.2187
+   "audioStart": 2916.4
   },
   {
    "srcStart": 3346.96,
    "srcEnd": 3381.8,
-   "audioStart": 3029.9387
+   "audioStart": 2986.12
   },
   {
    "srcStart": 3381.96,
    "srcEnd": 3429.72,
-   "audioStart": 3064.7787
+   "audioStart": 3020.96
   },
   {
    "srcStart": 3435.48,
    "srcEnd": 3457.64,
-   "audioStart": 3112.5387
+   "audioStart": 3068.72
   },
   {
    "srcStart": 3458.64,
    "srcEnd": 3461.56,
-   "audioStart": 3134.6987
+   "audioStart": 3090.88
   },
   {
    "srcStart": 3462.16,
    "srcEnd": 3497.04,
-   "audioStart": 3137.6187
+   "audioStart": 3093.8
   },
   {
    "srcStart": 3497.64,
    "srcEnd": 3497.76,
-   "audioStart": 3172.4987
+   "audioStart": 3128.68
   },
   {
    "srcStart": 3499.04,
    "srcEnd": 3507.16,
-   "audioStart": 3172.6187
+   "audioStart": 3128.8
   }
  ],
- "total": 3202.752
+ "total": 3158.933
 }

@@ -1,3091 +1,3048 @@
 WEBVTT
 
-00:00:08.519 --> 00:00:11.619
-<v Nik>Because the GTA VI is being
-released on November 19.</v>
+00:00:00.220 --> 00:00:03.070
+<v Michael>Hello, and welcome to Postgres.FM,
+a weekly show</v>
 
-00:00:11.619 --> 00:00:12.929
-[laughs]
-
-00:00:12.929 --> 00:00:16.117
-<v Michael>when would GTA 19 come out?
-Like a couple of hundred years?</v>
-
-00:00:16.117 --> 00:00:17.437
-<v Kirk>We have commit fests,</v>
-
-00:00:17.437 --> 00:00:22.487
-<v Kirk>and then we had a revert fest 10 or 20x
-the number of CVEs in the same year.</v>
-
-00:00:22.787 --> 00:00:23.851
-<v Kirk>Like, that's insane.</v>
-
-00:00:23.851 --> 00:00:28.115
-<v Nik>from 200 per second,
-we went to 11,000 per second.</v>
-
-00:00:28.115 --> 00:00:30.225
-<v Michael>no-go area for Postgres for years,</v>
-
-00:00:30.225 --> 00:00:32.585
-<v Kirk>You said years, I think you meant decades.</v>
-
-00:00:32.585 --> 00:00:34.855
-[laughs]
-<v Nik>Decades. The only thing left,</v>
-
-00:00:34.855 --> 00:00:40.135
-<v Nik>from among big gaps is just DDL, right?
-Just DDL and Postgres 20 and that's it.</v>
-
-00:00:40.135 --> 00:00:42.935
-<v Michael>The only thing. That small thing.</v>
-[laughs]
-
-00:00:44.030 --> 00:00:46.880
-<v Michael>Hello, and welcome
-to Postgres.FM, a weekly show</v>
-
-00:00:46.880 --> 00:00:48.980
+00:00:03.070 --> 00:00:05.170
 <v Michael>about all things PostgreSQL. I am Michael,</v>
 
-00:00:48.980 --> 00:00:53.079
+00:00:05.170 --> 00:00:09.260
 <v Michael>founder of pgMustard. I'm joined, I was
 gonna say as usual, but I've had a bit,</v>
 
-00:00:53.079 --> 00:00:58.639
+00:00:09.260 --> 00:00:14.820
 <v Michael>I've had a bit of a break. I am joined
 by, I guess, the two usual now, guys, Nik</v>
 
-00:00:58.699 --> 00:01:01.339
+00:00:14.880 --> 00:00:17.520
 <v Michael>from PostgresAI, and Kirk. Hey, Kirk.</v>
 
-00:01:01.719 --> 00:01:05.619
+00:00:17.900 --> 00:00:21.800
 <v Kirk>Hey. How we doing, Michael?</v>
 <v Michael>I'm keeping well. Well,</v>
 
-00:01:05.619 --> 00:01:10.219
+00:00:21.800 --> 00:00:26.400
 <v Michael>I was just telling you actually, I've had,
 the same, flu-type thing that the rest</v>
 
-00:01:10.219 --> 00:01:14.499
+00:00:26.400 --> 00:00:30.680
 <v Michael>of the UK's had for the past week. So you
 might hear it in my voice a little bit.</v>
 
-00:01:14.499 --> 00:01:17.259
+00:00:30.680 --> 00:00:33.440
 <v Michael>But feeling much better
 today and yesterday, so yeah.</v>
 
-00:01:17.259 --> 00:01:18.759
+00:00:33.440 --> 00:00:34.940
 <v Nik>How are your vacations?</v>
 
-00:01:18.759 --> 00:01:21.679
+00:00:34.940 --> 00:00:37.860
 <v Nik>How are your vacations?</v>
 <v Michael>Vacations.</v>
 
-00:01:21.679 --> 00:01:25.439
+00:00:37.860 --> 00:00:41.620
 <v Michael>So I yeah, I haven't been on vacation.
 I've been working on a new product,</v>
 
-00:01:25.439 --> 00:01:31.379
+00:00:41.620 --> 00:00:47.560
 <v Nik>I remember when we we met a couple
 of months ago in London, I was surprised.</v>
 
-00:01:31.379 --> 00:01:35.519
+00:00:47.560 --> 00:00:51.700
 <v Nik>Like, you look like you're on vacations
 right now. I think in the center</v>
 
-00:01:35.519 --> 00:01:37.679
+00:00:51.700 --> 00:00:53.860
 <v Nik>- people who watch YouTube-
 - [laughs]</v>
 
-00:01:37.679 --> 00:01:42.079
+00:00:53.860 --> 00:00:58.260
 <v Nik>can see how you look
 usually in London, right? Which-</v>
 
-00:01:42.079 --> 00:01:43.319
+00:00:58.260 --> 00:00:59.500
 <v Kirk>Nice.</v>
 <v Nik>Yeah,</v>
 
-00:01:43.319 --> 00:01:46.659
+00:00:59.500 --> 00:01:02.180
 <v Michael>It was... Yeah,
-it was great to see you in London</v>
+it was great to see you</v>
 
-00:01:46.659 --> 00:01:49.859
-<v Michael>and to meet your son as well.
-It, yeah, that was really fun.</v>
+00:01:02.180 --> 00:01:06.040
+<v Michael>in London and and to meet your son
+as well. It, yeah, that was really fun.</v>
 
-00:01:49.859 --> 00:01:55.179
+00:01:06.040 --> 00:01:11.360
 <v Michael>And we had a bit of a late, we call it
 an Indian summer here, like a, a, a late,</v>
 
-00:01:56.879 --> 00:02:00.359
+00:01:13.060 --> 00:01:16.540
 <v Michael>late heat wave almost,
 so I was in shorts. It.</v>
 
-00:02:00.719 --> 00:02:06.859
+00:01:16.900 --> 00:01:23.040
 <v Nik>So today I guess we have impossible
 task because November 19 is very well</v>
 
-00:02:06.859 --> 00:02:10.079
+00:01:23.040 --> 00:01:26.260
 <v Nik>known release date,
 but for very different software.</v>
 
-00:02:12.199 --> 00:02:14.579
+00:01:28.380 --> 00:01:30.760
 <v Nik>Do you know which one? No? Everyone knows.</v>
 
-00:02:14.579 --> 00:02:17.659
+00:01:30.760 --> 00:01:33.840
 <v Kirk>I don't.</v>
 <v Nik>Except, except some few Postgres nerds,</v>
 
-00:02:17.659 --> 00:02:20.979
+00:01:33.840 --> 00:01:37.160
 <v Nik>right? Because the GTA VI
 is being released on November 19.</v>
 
-00:02:20.979 --> 00:02:23.459
+00:01:37.160 --> 00:01:39.640
 <v Kirk>[laughs]</v>
 
-00:02:23.459 --> 00:02:30.039
+00:01:39.640 --> 00:01:46.220
 <v Nik>[laughs] And we here, sit,
 to discuss, Postgres 19, right?</v>
 
-00:02:30.919 --> 00:02:33.499
+00:01:47.100 --> 00:01:49.680
 <v Nik>Yeah, that's funny, right?</v>
 <v Kirk>Wow.</v>
 
-00:02:33.499 --> 00:02:37.899
+00:01:49.680 --> 00:01:54.080
 <v Michael>In the current GTA release cycle,
 when would GTA 19 come out?</v>
 
-00:02:37.899 --> 00:02:40.134
+00:01:54.080 --> 00:01:56.315
 <v Michael>Like a couple of hundred years?</v>
 <v Nik>I,</v>
 
-00:02:41.119 --> 00:02:45.679
+00:01:57.300 --> 00:02:01.860
 <v Kirk>Well, I think the first thing we
 need to mention is Postgres 19 is ready</v>
 
-00:02:45.679 --> 00:02:46.699
+00:02:01.860 --> 00:02:02.880
 <v Kirk>for release.</v>
 
-00:02:46.699 --> 00:02:52.039
+00:02:02.880 --> 00:02:08.220
 <v Kirk>They've updated, they've committed the
 changes from release candidate to PG nine,</v>
 
-00:02:52.039 --> 00:02:57.999
+00:02:08.220 --> 00:02:14.180
 <v Kirk>version 19, and that means it's
 imminent at this point, we hope.</v>
 
-00:02:57.999 --> 00:03:00.979
+00:02:14.180 --> 00:02:17.160
 <v Kirk>But it also... Help me out here, Michael.</v>
 
-00:03:00.979 --> 00:03:04.359
+00:02:17.160 --> 00:02:20.540
 <v Kirk>Did you slow it down by, you know,
 go working on your own project?</v>
 
-00:03:04.359 --> 00:03:07.947
+00:02:20.540 --> 00:02:24.128
 <v Kirk>Did you slow down Postgres or something?
 Seems a little late.</v>
 
-00:03:08.439 --> 00:03:10.679
+00:02:24.620 --> 00:02:26.860
 <v Michael>Yeah. I, No,
 nothing to do with me.</v>
 
-00:03:10.679 --> 00:03:15.299
+00:02:26.860 --> 00:02:31.480
 <v Michael>But I actually did want to thank
 the people that had slowed it down.</v>
 
-00:03:15.299 --> 00:03:17.999
+00:02:31.480 --> 00:02:34.180
 <v Michael>I know, I know we normally get, we get...</v>
 
-00:03:17.999 --> 00:03:24.999
+00:02:34.180 --> 00:02:41.180
 <v Michael>For the last few years it's been very,
 very reliably in September, and it,</v>
 
-00:03:25.519 --> 00:03:28.199
+00:02:41.700 --> 00:02:44.380
 <v Michael>the project aims for an annual
 release cycle, right?</v>
 
-00:03:28.199 --> 00:03:33.319
+00:02:44.380 --> 00:02:49.500
 <v Michael>Like a annual major version upgrades,
 and then quarterly minor version upgrades,</v>
 
-00:03:33.379 --> 00:03:36.999
+00:02:49.560 --> 00:02:53.180
 <v Michael>plus some security fixes
 that have come up off cadence.</v>
 
-00:03:37.359 --> 00:03:42.279
+00:02:53.540 --> 00:02:58.460
 <v Michael>And that's been so reliable for quite
 a few years, and this is quite the shift,</v>
 
-00:03:42.279 --> 00:03:45.808
+00:02:58.460 --> 00:03:01.989
 <v Michael>right? September, October,
 November, couple of months later.</v>
 
-00:03:46.479 --> 00:03:50.859
+00:03:02.660 --> 00:03:07.040
 <v Michael>I know there's been tons of articles about
 this, and you've probably discussed it.</v>
 
-00:03:50.859 --> 00:03:55.839
+00:03:07.040 --> 00:03:12.020
 <v Michael>We've probably discussed it before, but
 it's, I think most of the articles have</v>
 
-00:03:55.839 --> 00:04:00.239
+00:03:12.020 --> 00:03:16.420
 <v Michael>skewed a little bit negative, like why
 is it such a bad thing that it's delayed.</v>
 
-00:04:00.239 --> 00:04:05.499
+00:03:16.420 --> 00:03:21.680
 <v Michael>But I wanted to say I'm really
 pleased that people have firstly</v>
 
-00:04:06.559 --> 00:04:08.139
+00:03:22.740 --> 00:03:24.320
 <v Michael>prioritized the security fixes.</v>
 
-00:04:08.139 --> 00:04:11.839
+00:03:24.320 --> 00:03:28.020
 <v Michael>I think that was, like, the number
 one reason that this got delayed,</v>
 
-00:04:11.839 --> 00:04:17.439
+00:03:28.020 --> 00:03:33.620
 <v Michael>because a lot of the important, like
 a lot of the, the key committers were tied</v>
 
-00:04:17.439 --> 00:04:20.159
+00:03:33.620 --> 00:03:36.340
 <v Michael>up because they're also
 part of the security team.</v>
 
-00:04:20.159 --> 00:04:26.439
+00:03:36.340 --> 00:03:42.620
 <v Michael>And we've seen in the last two minor
 versions, like 70 plus, CVEs, so that's</v>
 
-00:04:26.439 --> 00:04:31.539
+00:03:42.620 --> 00:03:47.720
 <v Michael>a lot of work. And then obviously on top
 of that there's been... Well, I mean,</v>
 
-00:04:31.539 --> 00:04:36.799
+00:03:47.720 --> 00:03:52.980
 <v Michael>the reas- I think the reason we've got the
 CVEs is people using LLMs to find them.</v>
 
-00:04:37.459 --> 00:04:44.459
+00:03:53.640 --> 00:04:00.640
 <v Michael>And yeah, I think it's much better that
 we've delayed this and got those fixed.</v>
 
-00:04:44.659 --> 00:04:48.230
+00:04:00.840 --> 00:04:04.410
 <v Michael>As well as and I know
 the negativity's probably mostly about</v>
 
-00:04:48.230 --> 00:04:51.780
+00:04:04.410 --> 00:04:07.960
 <v Michael>the reverts that happened. But I
 think I've seen several posts. I don't</v>
 
-00:04:51.780 --> 00:04:55.930
+00:04:07.960 --> 00:04:12.110
 <v Michael>know if you two agree with this analysis.
 I've seen several posts that have argued,</v>
 
-00:04:55.930 --> 00:04:58.500
+00:04:12.110 --> 00:04:14.690
 <v Michael>actually the reverts are very
 similar to in number,</v>
 
-00:04:58.500 --> 00:05:01.359
+00:04:14.690 --> 00:04:17.540
 <v Michael>maybe a little bit bigger
 in size than previous versions.</v>
 
-00:05:01.359 --> 00:05:05.539
+00:04:17.540 --> 00:04:21.720
 <v Michael>They just happened later in the cycle,
 so it seemed worse.</v>
 
-00:05:05.899 --> 00:05:10.899
+00:04:22.080 --> 00:04:27.080
 <v Nik>Mm. When I was reporting
 some bugs found with AI of course-</v>
 
-00:05:11.259 --> 00:05:14.179
+00:04:27.440 --> 00:04:30.360
 <v Michael>Mm-hmm</v>
 <v Nik>I felt like if I keep pushing,</v>
 
-00:05:14.179 --> 00:05:16.999
+00:04:30.360 --> 00:04:33.180
 <v Nik>I can do more damage and more
 things will be reverted.</v>
 
-00:05:16.999 --> 00:05:20.159
+00:04:33.180 --> 00:04:36.340
 <v Nik>I just felt that. Like, for example, like</v>
 
-00:05:20.619 --> 00:05:25.619
+00:04:36.800 --> 00:04:41.800
 <v Nik>at least two threads where I I
 started pushing led to revert.</v>
 
-00:05:26.159 --> 00:05:30.819
+00:04:42.340 --> 00:04:47.000
 <v Nik>It was, it was part of revis-
 referential integrity stuff,</v>
 
-00:05:30.819 --> 00:05:35.967
+00:04:47.000 --> 00:04:52.148
 <v Nik>and another part was the last one I
 was It was already when I decided,</v>
 
-00:05:36.007 --> 00:05:42.107
+00:04:52.188 --> 00:04:58.288
 <v Nik>to give even more power to AI and and
 stopped, diving into details completely.</v>
 
-00:05:42.107 --> 00:05:47.587
+00:04:58.288 --> 00:05:03.768
 <v Nik>It was an experiment. We should talk
 about it separately. And it led to revert.</v>
 
-00:05:47.627 --> 00:05:52.807
+00:05:03.808 --> 00:05:08.988
 <v Nik>It was just like, oh, more and more
 bugs are coming, and then revert.</v>
 
-00:05:53.167 --> 00:05:55.578
+00:05:09.348 --> 00:05:11.760
 <v Nik>For example, I just checked it yesterday,</v>
 
-00:05:56.107 --> 00:06:03.107
+00:05:12.288 --> 00:05:19.288
 <v Nik>number of messages to pgsql-bugs, mailing
 list increased significantly, while,</v>
 
-00:06:03.267 --> 00:06:07.347
+00:05:19.448 --> 00:05:23.528
 <v Nik>number of messages
 to pgsql-general decreased.</v>
 
-00:06:07.347 --> 00:06:11.927
+00:05:23.528 --> 00:05:28.108
 <v Nik>And Depesz wrote a blog post about
 that, like, a few days ago, right?</v>
 
-00:06:12.367 --> 00:06:14.867
+00:05:28.548 --> 00:05:31.048
 <v Kirk>Yeah.</v>
 <v Nik>And and I just felt like, I...</v>
 
-00:06:14.867 --> 00:06:20.587
+00:05:31.048 --> 00:05:36.768
 <v Nik>If I keep pressure, I will probably
 trigger more reverts, So, and also</v>
 
-00:06:20.587 --> 00:06:27.027
+00:05:36.768 --> 00:05:43.208
 <v Nik>coincidentally it was, like 19 is coming,
 so I decided to stop pushing. And I, I...</v>
 
-00:06:27.027 --> 00:06:32.047
+00:05:43.208 --> 00:05:48.228
 <v Nik>My hypothesis is some guys also
 stopped pushing too much just to let,</v>
 
-00:06:33.347 --> 00:06:37.707
+00:05:49.528 --> 00:05:53.888
 <v Nik>the, like, just to let,
 the feature list, stabilize.</v>
 
-00:06:37.787 --> 00:06:41.607
+00:05:53.968 --> 00:05:57.788
 <v Nik>I 100, 100% sure,
 100% sure we could find more bugs.</v>
 
-00:06:41.607 --> 00:06:45.247
+00:05:57.788 --> 00:06:01.428
 <v Nik>We just didn't pull more
 attention to it, you know?</v>
 
-00:06:45.607 --> 00:06:52.607
+00:06:01.788 --> 00:06:08.788
 <v Nik>So right after release, I'm going to find
 more bugs. Yeah. And others will do.</v>
 
-00:06:55.107 --> 00:06:57.027
+00:06:11.288 --> 00:06:13.208
 <v Michael>Yeah, go on, Kirk.</v>
 <v Kirk>Yeah, yeah.</v>
 
-00:06:57.027 --> 00:06:59.387
+00:06:13.208 --> 00:06:15.568
 <v Kirk>But I, I just wanna back up the truck.</v>
 
-00:06:59.387 --> 00:07:04.967
+00:06:15.568 --> 00:06:21.148
 <v Kirk>So as, as we were moving into the date
 to go live, there was a big revert fest,</v>
 
-00:07:04.967 --> 00:07:10.647
+00:06:21.148 --> 00:06:26.828
 <v Kirk>right? And usually there's a revert fest
 early on in February. I think that's when,</v>
 
-00:07:11.347 --> 00:07:15.447
+00:06:27.528 --> 00:06:31.628
 <v Kirk>Andrey coined the phrase, or I heard it
 the first time, so I'll give him credit,</v>
 
-00:07:15.447 --> 00:07:19.470
+00:06:31.628 --> 00:06:35.650
 <v Kirk>but it made me laugh out loud. We have
 commit fests, and then we had a revert</v>
 
-00:07:19.470 --> 00:07:23.320
+00:06:35.650 --> 00:06:39.500
 <v Kirk>fest where, yeah, these really aren't
 ready and they're gonna need more time.</v>
 
-00:07:23.320 --> 00:07:27.470
+00:06:39.500 --> 00:06:43.650
 <v Kirk>Anyways, but they pulled those, and they
 were in a release candidate kind of level,</v>
 
-00:07:27.470 --> 00:07:29.847
+00:06:43.650 --> 00:06:46.028
 <v Kirk>and they pulled,
 and they pulled a handful.</v>
 
-00:07:29.847 --> 00:07:32.647
+00:06:46.028 --> 00:06:48.828
 <v Kirk>And I just want to give
 them credit because, look,</v>
 
-00:07:32.647 --> 00:07:38.647
+00:06:48.828 --> 00:06:54.828
 <v Kirk>you don't push bad positions, okay?
 I've never once [laughs] has pushing a bad</v>
 
-00:07:38.647 --> 00:07:42.987
+00:06:54.828 --> 00:06:59.168
 <v Kirk>position turned out beneficial
 in the tech world in my, my life.</v>
 
-00:07:42.987 --> 00:07:47.347
+00:06:59.168 --> 00:07:03.528
 <v Kirk>So I, I prefer to pull back a bit
 and regroup and come back later,</v>
 
-00:07:47.347 --> 00:07:52.787
+00:07:03.528 --> 00:07:08.968
 <v Kirk>and that's what they did. And the catch-up
 was we have the same number of committers.</v>
 
-00:07:52.787 --> 00:07:58.687
+00:07:08.968 --> 00:07:14.868
 <v Kirk>We have, like, double the number of, you
 know, ideas and patches coming through.</v>
 
-00:07:58.687 --> 00:08:04.247
+00:07:14.868 --> 00:07:20.428
 <v Kirk>And now we had something like 10 or 20x
 the number of CVEs in the same year.</v>
 
-00:08:04.547 --> 00:08:05.627
+00:07:20.728 --> 00:07:21.808
 <v Kirk>Like, that's insane.</v>
 
-00:08:05.627 --> 00:08:09.347
+00:07:21.808 --> 00:07:25.528
 <v Kirk>There's no way the committers can keep
 up with all of it. So it was bound.</v>
 
-00:08:09.347 --> 00:08:14.787
+00:07:25.528 --> 00:07:30.968
 <v Kirk>And I'm happy their focus is on stability,
 because if we lose stability,</v>
 
-00:08:14.987 --> 00:08:17.967
+00:07:31.168 --> 00:07:34.148
 <v Kirk>then we're gonna lose the mind
 share in this industry.</v>
 
-00:08:17.967 --> 00:08:21.947
+00:07:34.148 --> 00:07:38.128
 <v Kirk>We lose the mind share, we don't become
 people's first choice on new projects.</v>
 
-00:08:21.947 --> 00:08:26.647
+00:07:38.128 --> 00:07:42.828
 <v Kirk>So I, I'm just gonna say kudos
 for their decision. It's late,</v>
 
-00:08:26.650 --> 00:08:30.650
+00:07:42.830 --> 00:07:46.830
 <v Kirk>and I'm... So what? It's a Christmas gift
 now, right? [laughs] It's late enough in</v>
 
-00:08:30.650 --> 00:08:34.320
+00:07:46.830 --> 00:07:50.500
 <v Kirk>the season. Happy Thanksgiving, everyone.
 Here's your new version of Postgres.</v>
 
-00:08:34.320 --> 00:08:37.227
+00:07:50.500 --> 00:07:53.408
 <v Kirk>Enjoy it when you have a few
 days off with the family.</v>
 
-00:08:37.227 --> 00:08:43.607
+00:07:53.408 --> 00:07:59.788
 <v Nik>so, revert fest big
 wave started with this scary,</v>
 
-00:08:45.627 --> 00:08:51.127
+00:08:01.808 --> 00:08:07.308
 <v Nik>scary list, right? From, from, from No,
 from Robert Haas, Yeah.</v>
 
-00:08:51.127 --> 00:08:54.407
+00:08:07.308 --> 00:08:10.588
 <v Kirk>Yeah, Haas.</v>
 <v Nik>it's just a It was, it was from Tomas,</v>
 
-00:08:54.407 --> 00:08:59.047
+00:08:10.588 --> 00:08:15.228
 <v Nik>Tomas Vondra, the blog post about
 that it's, like, maybe the same,</v>
 
-00:08:59.047 --> 00:09:03.827
+00:08:15.228 --> 00:08:20.008
 <v Nik>but problems found later
 and revert happens later.</v>
 
-00:09:03.827 --> 00:09:06.807
+00:08:20.008 --> 00:08:22.988
 <v Nik>So the question is how
 to find problems earlier.</v>
 
-00:09:06.807 --> 00:09:11.667
+00:08:22.988 --> 00:08:27.848
 <v Nik>And this tiny project, pgroast,
 we started last week, right?</v>
 
-00:09:11.667 --> 00:09:18.567
+00:08:27.848 --> 00:08:34.748
 <v Nik>So to, to criticize, architecture and idea
 earlier before it go- gets committed.</v>
 
-00:09:18.747 --> 00:09:20.767
+00:08:34.928 --> 00:08:36.948
 <v Nik>Maybe some new tools will help.</v>
 
-00:09:20.767 --> 00:09:25.447
+00:08:36.948 --> 00:08:41.628
 <v Nik>And AI, I mean, AI could help
 to improve things at earlier stage.</v>
 
-00:09:26.107 --> 00:09:31.507
+00:08:42.288 --> 00:08:47.688
 <v Michael>there's an argument that LLMs
 got significantly better at an awful time</v>
 
-00:09:31.507 --> 00:09:36.127
+00:08:47.688 --> 00:08:52.308
 <v Michael>in the Postgres release cycle. Like,
 the... If you think about when feature</v>
 
-00:09:36.127 --> 00:09:42.887
+00:08:52.308 --> 00:08:59.068
 <v Michael>freeze is, it feels like it times very,
 very well with things like Opus 5.5,</v>
 
-00:09:42.887 --> 00:09:47.767
+00:08:59.068 --> 00:09:03.948
 <v Michael>and I think a lot of people getting
 access to quite cheap, very,</v>
 
-00:09:47.767 --> 00:09:52.027
+00:09:03.948 --> 00:09:08.208
 <v Michael>very advanced models that don't
 make that many mistakes.</v>
 
-00:09:52.030 --> 00:09:56.230
+00:09:08.210 --> 00:09:12.410
 <v Michael>That feels like awful timing for a project
 that's just about to release some things,</v>
 
-00:09:56.230 --> 00:09:59.630
+00:09:12.410 --> 00:09:15.810
 <v Michael>or great timing if you're thinking
 about it from like a startup-</v>
 
-00:09:59.630 --> 00:10:02.087
+00:09:15.810 --> 00:09:18.268
 <v Nik>It's bad after release at least.</v>
 <v Michael>timing-wise.</v>
 
-00:10:02.087 --> 00:10:05.167
+00:09:18.268 --> 00:09:21.348
 <v Nik>Similar, yeah, yeah. But Opus 4,</v>
 
-00:10:05.167 --> 00:10:07.747
+00:09:21.348 --> 00:09:23.928
 <v Nik>4.8 was already quite good.</v>
 <v Michael>Mm-hmm.</v>
 
-00:10:07.747 --> 00:10:12.547
+00:09:23.928 --> 00:09:28.728
 <v Nik>And could find a lot. It's just
 the question is can you just, like,</v>
 
-00:10:12.547 --> 00:10:17.253
+00:09:28.728 --> 00:09:33.434
 <v Nik>allocate a lot of resources to it and,
 and, and so on. And, and also there is a,</v>
 
-00:10:17.391 --> 00:10:21.251
+00:09:33.572 --> 00:09:37.432
 <v Nik>Like time for reaction, like,
 and change habits and so on, right?</v>
 
-00:10:21.251 --> 00:10:28.251
+00:09:37.432 --> 00:09:44.432
 <v Nik>So... And also there are guys who had zero
 or one. I, I, I saw a couple of guys who</v>
 
-00:10:28.291 --> 00:10:33.091
+00:09:44.472 --> 00:09:49.272
 <v Nik>mentioned around 100 times in commit
 messages this year and zero or one</v>
 
-00:10:33.431 --> 00:10:39.571
+00:09:49.612 --> 00:09:55.752
 <v Nik>times mentioned last year. So obviously
 some people pulled a lot to bug findings</v>
 
-00:10:39.951 --> 00:10:43.751
+00:09:56.132 --> 00:09:59.932
 <v Nik>maybe let's talk about features,
 right? What survived-</v>
 
-00:10:43.751 --> 00:10:45.411
+00:09:59.932 --> 00:10:01.592
 <v Michael>Yeah</v>
 <v Nik>what survived.</v>
 
-00:10:45.411 --> 00:10:48.491
+00:10:01.592 --> 00:10:04.672
 <v Nik>I, I will start with REPACK.
 Obviously it's very...</v>
 
-00:10:48.491 --> 00:10:52.851
+00:10:04.672 --> 00:10:09.032
 <v Nik>You remember Michael, how I was extremely
 surprised at the end of our episode about,</v>
 
-00:10:52.851 --> 00:10:54.011
+00:10:09.032 --> 00:10:10.192
 <v Nik>about-</v>
 <v Michael>Me too</v>
 
-00:10:54.091 --> 00:10:56.031
+00:10:10.272 --> 00:10:12.212
 <v Nik>pg_squeeze to learn-</v>
 <v Michael>Yeah</v>
 
-00:10:56.031 --> 00:11:00.531
+00:10:12.212 --> 00:10:16.712
 <v Nik>plans to push it to the core,
 and here we go. Like, it survived.</v>
 
-00:11:01.320 --> 00:11:05.370
+00:10:17.500 --> 00:10:21.550
 <v Michael>Not only did it survive, but it made
 it to the next version. Like, when-</v>
 
-00:11:05.370 --> 00:11:07.520
+00:10:21.550 --> 00:10:23.700
 <v Nik>Yeah</v>
 <v Michael>when Antonin mentioned that to us,</v>
 
-00:11:07.520 --> 00:11:11.391
+00:10:23.700 --> 00:10:27.572
 <v Michael>I was thinking, "Okay, we're talking,
 you know, several years."</v>
 
-00:11:11.391 --> 00:11:17.071
+00:10:27.572 --> 00:10:33.252
 <v Nik>Two to three years. Yeah.</v>
 <v Michael>And I think they did two big things.</v>
 
-00:11:17.071 --> 00:11:20.151
+00:10:33.252 --> 00:10:36.332
 <v Michael>Obviously the concurrently is huge,</v>
 
-00:11:20.391 --> 00:11:24.811
+00:10:36.572 --> 00:10:40.992
 <v Michael>but I think also getting rid
 of the vacuum confusion. You know,</v>
 
-00:11:24.811 --> 00:11:30.231
+00:10:40.992 --> 00:10:46.412
 <v Michael>vacuum full being so or so, you know, I,
 I... I'm gonna say dangerous, whereas-</v>
 
-00:11:30.231 --> 00:11:33.031
+00:10:46.412 --> 00:10:49.212
 <v Nik>Yeah</v>
 <v Michael>vacuum's so innocuous and useful.</v>
 
-00:11:33.031 --> 00:11:39.311
+00:10:49.212 --> 00:10:55.492
 <v Michael>That for me was always, like, quite a big
 challenge in communication and education,</v>
 
-00:11:39.311 --> 00:11:43.191
+00:10:55.492 --> 00:10:59.372
 <v Michael>and they fixed both in one go.</v>
 <v Nik>Yeah.</v>
 
-00:11:43.191 --> 00:11:46.311
+00:10:59.372 --> 00:11:02.492
 <v Kirk>Yeah.
 It's like we got a vacuum well. [laughs]</v>
 
-00:11:46.311 --> 00:11:48.171
+00:11:02.492 --> 00:11:04.352
 <v Nik>Yeah. Yeah.</v>
 <v Kirk>The vacuum full</v>
 
-00:11:48.171 --> 00:11:52.231
+00:11:04.352 --> 00:11:08.412
 <v Nik>so basically we have pg_squeeze in
 core right now, and officially supported.</v>
 
-00:11:52.231 --> 00:11:57.911
+00:11:08.412 --> 00:11:14.092
 <v Nik>And based on logical,
 decoding, it's, it can shrink,</v>
 
-00:11:59.011 --> 00:12:05.091
+00:11:15.192 --> 00:11:21.272
 <v Nik>your table and indexes and you can get
 rid of, get rid of bloat, which is good,</v>
 
-00:12:05.091 --> 00:12:07.191
+00:11:21.272 --> 00:11:23.372
 <v Nik>right?</v>
 <v Michael>Yeah.</v>
 
-00:12:07.391 --> 00:12:12.111
+00:11:23.572 --> 00:11:28.292
 <v Michael>And you can order by a, an inde-
 like you use an index for the ordering,</v>
 
-00:12:12.111 --> 00:12:15.451
+00:11:28.292 --> 00:11:31.632
 <v Michael>so you can you can get
 a cluster at the same time.</v>
 
-00:12:15.731 --> 00:12:19.966
+00:11:31.912 --> 00:11:36.147
 <v Michael>The only thing I think you can't do
 that's in squeeze is the scheduling.</v>
 
-00:12:20.491 --> 00:12:25.331
+00:11:36.672 --> 00:11:41.512
 <v Nik>Scheduling, you mean,
 to do it like, do, do it on, on weekend?</v>
 
-00:12:26.171 --> 00:12:28.524
+00:11:42.352 --> 00:11:44.705
 <v Michael>Yeah, exactly. Or at a certain,</v>
 
-00:12:28.671 --> 00:12:31.031
+00:11:44.852 --> 00:11:47.212
 <v Nik>Well-</v>
 <v Michael>I'm not sure if it's just time-based</v>
 
-00:12:31.031 --> 00:12:36.531
+00:11:47.212 --> 00:11:52.712
 <v Nik>right. It's like, it's like, Well,
 you cannot schedule anything in Postgres</v>
 
-00:12:36.871 --> 00:12:42.271
+00:11:53.052 --> 00:11:58.452
 <v Nik>without, additional means, like pg_cron
 extension or external scheduler.</v>
 
-00:12:42.411 --> 00:12:46.571
+00:11:58.592 --> 00:12:02.752
 <v Nik>And this is actually sad because
 if pg_cron was part of core or some</v>
 
-00:12:46.571 --> 00:12:49.951
+00:12:02.752 --> 00:12:06.132
 <v Nik>alternative, it would be great because,</v>
 <v Michael>Mm</v>
 
-00:12:49.951 --> 00:12:53.971
+00:12:06.132 --> 00:12:10.152
 <v Nik>it's obviously there is a need
 to, to schedule things, right?</v>
 
-00:12:54.091 --> 00:12:58.151
+00:12:10.272 --> 00:12:14.332
 <v Nik>And right, right now, like we, we have
 reindex reindex index concurrently.</v>
 
-00:12:58.151 --> 00:13:03.471
+00:12:14.332 --> 00:12:19.652
 <v Nik>We also need to do some machinery
 to, to do it on weekends, for example.</v>
 
-00:13:03.651 --> 00:13:05.711
+00:12:19.832 --> 00:12:21.892
 <v Nik>Here is a similar thing.</v>
 
-00:13:05.711 --> 00:13:09.271
+00:12:21.892 --> 00:12:25.452
 <v Nik>There is REPACK and REPACK CONCURRENTLY
 and to schedule it.</v>
 
-00:13:09.431 --> 00:13:13.451
+00:12:25.612 --> 00:12:29.632
 <v Nik>Also, like if you want to do it
 even with pg_cron purely internally,</v>
 
-00:13:13.631 --> 00:13:17.631
+00:12:29.812 --> 00:12:33.812
 <v Nik>the question is with the word
 concurrently, it's not ACID,</v>
 
-00:13:17.631 --> 00:13:23.071
+00:12:33.812 --> 00:12:39.252
 <v Nik>so it cannot be part of transaction, so
 you need the special dance. It's possible.</v>
 
-00:13:23.591 --> 00:13:27.871
+00:12:39.772 --> 00:12:44.052
 <v Nik>I think we... I, I, after Postgres 19,
 I'm going to revisit this old idea.</v>
 
-00:13:27.871 --> 00:13:32.311
+00:12:44.052 --> 00:12:48.492
 <v Nik>Not old, but it's good idea
 to have some combination of tools</v>
 
-00:13:32.471 --> 00:13:37.011
+00:12:48.652 --> 00:12:53.192
 <v Nik>which will work on any managed Postgres
 and allow you to schedule properly</v>
 
-00:13:37.011 --> 00:13:40.671
+00:12:53.192 --> 00:12:56.852
 <v Nik>and manage schedules
 and so on without any external means.</v>
 
-00:13:41.131 --> 00:13:44.531
+00:12:57.312 --> 00:13:00.712
 <v Nik>So we did it with reindex
 index concurrently. It works.</v>
 
-00:13:44.531 --> 00:13:48.691
+00:13:00.712 --> 00:13:04.872
 <v Nik>And, and we can do it
 with REPACK CONCURRENTLY as well, right?</v>
 
-00:13:48.691 --> 00:13:50.511
+00:13:04.872 --> 00:13:06.692
 <v Nik>Do you think pg_repack will</v>
 
-00:13:51.591 --> 00:13:56.031
+00:13:07.772 --> 00:13:12.212
 <v Nik>or will be over
 with this release or the need,</v>
 
-00:13:56.031 --> 00:13:58.931
+00:13:12.212 --> 00:13:15.112
 <v Nik>in, in use of pg_repack will still remain?</v>
 
-00:13:59.731 --> 00:14:04.142
+00:13:15.912 --> 00:13:20.324
 <v Michael>I'll go first. I would love
 to hear Kirk's answer as well. I think</v>
 
-00:14:04.511 --> 00:14:08.291
+00:13:20.692 --> 00:13:24.472
 <v Michael>it will be massively reduced how
 much people need repack and/or like,</v>
 
-00:14:08.291 --> 00:14:11.490
+00:13:24.472 --> 00:13:27.671
 <v Michael>not necessarily how much
 they need it, who needs it.</v>
 
-00:14:11.631 --> 00:14:17.491
+00:13:27.812 --> 00:13:33.672
 <v Michael>I think the vast majority of workloads,
 REPACK CONCURRENTLY will actually be fine.</v>
 
-00:14:17.491 --> 00:14:22.020
+00:13:33.672 --> 00:13:38.201
 <v Michael>And there are edge cases, and I think
 actually there's a really great post by</v>
 
-00:14:23.831 --> 00:14:26.731
+00:13:40.012 --> 00:13:42.912
 <v Michael>on boringSQL by a friend
 of the show, Radim,</v>
 
-00:14:27.991 --> 00:14:31.451
+00:13:44.172 --> 00:13:47.632
 <v Michael>on the exactly where you can
 kind of hit the limits currently.</v>
 
-00:14:31.451 --> 00:14:34.151
+00:13:47.632 --> 00:13:50.332
 <v Michael>But yeah, what do you think, Kirk?</v>
 <v Kirk>I was gonna say</v>
 
-00:14:34.151 --> 00:14:37.931
+00:13:50.332 --> 00:13:54.112
 <v Kirk>basically the same thing. Also,
 it's a new feature and a new version.</v>
 
-00:14:37.931 --> 00:14:41.131
+00:13:54.112 --> 00:13:57.312
 <v Kirk>There's still people out there
 struggling with 12 and 14.</v>
 
-00:14:41.131 --> 00:14:45.411
+00:13:57.312 --> 00:14:01.592
 <v Kirk>Let's be honest, everyone isn't switching
 tomorrow, okay, when it's released.</v>
 
-00:14:45.411 --> 00:14:50.311
+00:14:01.592 --> 00:14:06.492
 <v Kirk>So, but, and you can't get rid of it even
 for the people like me who would want it,</v>
 
-00:14:50.311 --> 00:14:54.031
+00:14:06.492 --> 00:14:10.212
 <v Kirk>because we've already scripted
 things to use pg_repack.</v>
 
-00:14:54.191 --> 00:14:57.151
+00:14:10.372 --> 00:14:13.332
 <v Kirk>So what I don't want
 you breaking it on me.</v>
 
-00:14:57.151 --> 00:15:02.451
+00:14:13.332 --> 00:14:18.632
 <v Kirk>I'll migrate my tools in less of an
 emergency state after I upgrade, right?</v>
 
-00:15:02.451 --> 00:15:06.351
+00:14:18.632 --> 00:14:22.532
 <v Kirk>So that's my take on it. But I think it's,
 I think it's wonderful, the more</v>
 
-00:15:06.351 --> 00:15:11.551
+00:14:22.532 --> 00:14:27.732
 <v Kirk>of that stuff that makes it in. And then I
 like Nik's idea of making sure...</v>
 
-00:15:11.551 --> 00:15:15.791
+00:14:27.732 --> 00:14:31.972
 <v Kirk>I wish pg_cron was part of the product
 offering. It should be a shipping.</v>
 
-00:15:15.791 --> 00:15:19.991
+00:14:31.972 --> 00:14:36.172
 <v Kirk>It should be one of the extensions that
 comes along for the ride, with Postgres,</v>
 
-00:15:19.991 --> 00:15:21.891
+00:14:36.172 --> 00:14:38.072
 <v Kirk>in my opinion. But yeah.</v>
 
-00:15:21.931 --> 00:15:23.091
+00:14:38.112 --> 00:14:39.272
 <v Nik>Yeah.</v>
 <v Kirk>Cool</v>
 
-00:15:23.311 --> 00:15:26.211
+00:14:39.492 --> 00:14:42.392
 <v Nik>not only pg_cron,
 also autonomous transactions.</v>
 
-00:15:26.211 --> 00:15:31.591
+00:14:42.392 --> 00:14:47.772
 <v Nik>There should be some need to connect
 to yourself without like using-</v>
 
-00:15:32.011 --> 00:15:33.791
+00:14:48.192 --> 00:14:49.972
 <v Kirk>Passwords</v>
 <v Nik>postgres_fdw and dblink.</v>
 
-00:15:33.791 --> 00:15:39.291
+00:14:49.972 --> 00:14:55.472
 <v Nik>Like, it's like password and so on. It's
 like, it feels insecure and so on. Like,</v>
 
-00:15:39.291 --> 00:15:42.091
+00:14:55.472 --> 00:14:58.272
 <v Nik>Probably we should explore it, separately.</v>
 
-00:15:42.891 --> 00:15:46.791
+00:14:59.072 --> 00:15:02.972
 <v Nik>I also think that, I agree
 with pg_repack probably will</v>
 
-00:15:47.191 --> 00:15:50.331
+00:15:03.372 --> 00:15:06.512
 <v Nik>go down in terms of popularity,
 how it's used.</v>
 
-00:15:50.971 --> 00:15:53.991
+00:15:07.152 --> 00:15:10.172
 <v Nik>But also I think both
 pg_squeeze and pg_repack,</v>
 
-00:15:53.991 --> 00:15:56.811
+00:15:10.172 --> 00:15:12.992
 <v Nik>so REPACK CONCURRENTLY
 is a successor of pg_squeeze.</v>
 
-00:15:56.811 --> 00:16:02.411
+00:15:12.992 --> 00:15:18.592
 <v Nik>They are both not, working in some
 heavily loaded large table cases.</v>
 
-00:16:02.411 --> 00:16:07.111
+00:15:18.592 --> 00:15:23.292
 <v Nik>Like, if you have 10 terabyte table
 under load, it just doesn't work.</v>
 
-00:16:07.651 --> 00:16:10.004
+00:15:23.832 --> 00:15:26.185
 <v Kirk>Mm.</v>
 <v Nik>And and also additionally, like,</v>
 
-00:16:10.131 --> 00:16:15.611
+00:15:26.312 --> 00:15:31.792
 <v Nik>logical maybe, like dealing
 with logical replications, some,</v>
 
-00:16:15.611 --> 00:16:20.611
+00:15:31.792 --> 00:15:36.792
 <v Nik>some people just don't like it, so there
 are some edge cases. Yeah, yeah, yeah.</v>
 
-00:16:20.611 --> 00:16:27.431
+00:15:36.792 --> 00:15:43.612
 <v Nik>And, and I think, honestly, like, I think
 the old, old idea of pgcompacttable might</v>
 
-00:16:27.431 --> 00:16:31.351
+00:15:43.612 --> 00:15:47.532
 <v Nik>be resurrected You just update-</v>
 <v Kirk>Is this the one where you update things-</v>
 
-00:16:31.351 --> 00:16:33.271
+00:15:47.532 --> 00:15:49.452
 <v Nik>Row by row</v>
 <v Kirk>like later in the heap?</v>
 
-00:16:33.271 --> 00:16:35.951
+00:15:49.452 --> 00:15:52.132
 <v Kirk>Yeah.</v>
 <v Nik>Yeah, yeah. Like slowly you update,</v>
 
-00:16:36.431 --> 00:16:40.451
+00:15:52.612 --> 00:15:56.632
 <v Nik>and the dead tuples go to the end,
 and then truncate,</v>
 
-00:16:40.451 --> 00:16:43.511
+00:15:56.632 --> 00:15:59.692
 <v Nik>vacuum truncates this last page.</v>
 <v Kirk>Mm.</v>
 
-00:16:43.511 --> 00:16:46.790
+00:15:59.692 --> 00:16:02.970
 <v Nik>And so, but then-</v>
 <v Kirk>I had questions. Who's on Heroku,</v>
 
-00:16:46.790 --> 00:16:50.740
+00:16:02.970 --> 00:16:06.920
 <v Kirk>and they don't have pg_repack, and that,
 that's one of the benefits, right, of,</v>
 
-00:16:50.740 --> 00:16:52.271
+00:16:06.920 --> 00:16:08.452
 <v Nik>Right</v>
 <v Kirk>pg_repack concurrently-</v>
 
-00:16:52.271 --> 00:16:54.491
+00:16:08.452 --> 00:16:10.672
 <v Nik>Right</v>
 <v Kirk>is you, even on managed services,</v>
 
-00:16:54.491 --> 00:16:55.491
+00:16:10.672 --> 00:16:11.672
 <v Kirk>you'll get it.</v>
 
-00:16:55.851 --> 00:17:00.251
+00:16:12.032 --> 00:16:16.432
 <v Kirk>So yeah, I was gonna suggest the compact
 table approach, but I think, like,</v>
 
-00:17:00.251 --> 00:17:04.631
+00:16:16.432 --> 00:16:20.812
 <v Kirk>a lot of the optimizations we have
 now around, [laughs] like HOT and...</v>
 
-00:17:04.631 --> 00:17:07.651
+00:16:20.812 --> 00:16:23.832
 <v Kirk>Like, I, I also, like I think by default,</v>
 
-00:17:07.851 --> 00:17:13.571
+00:16:24.032 --> 00:16:29.752
 <v Kirk>Postgres tries to keep updates on the same
 page, right? So I wasn't sure how... No?</v>
 
-00:17:13.911 --> 00:17:18.631
+00:16:30.092 --> 00:16:34.812
 <v Nik>Well, if you will if you
 touch index, indexed, column,</v>
 
-00:17:18.631 --> 00:17:20.980
+00:16:34.812 --> 00:16:37.160
 <v Nik>it cannot be HOT, so-</v>
 <v Kirk>No</v>
 
-00:17:20.980 --> 00:17:23.511
+00:16:37.160 --> 00:16:39.692
 <v Nik>definitely will be normal.</v>
 <v Kirk>Yeah. See, that's the trick-</v>
 
-00:17:23.511 --> 00:17:25.391
+00:16:39.692 --> 00:16:41.572
 <v Nik>Right</v>
 <v Kirk>is you have to update. Yeah, okay.</v>
 
-00:17:25.391 --> 00:17:30.211
+00:16:41.572 --> 00:16:46.392
 <v Nik>Yeah. And pgcompacttable,
 of course, it's, downside that indexes</v>
 
-00:17:30.211 --> 00:17:35.531
+00:16:46.392 --> 00:16:51.712
 <v Nik>will need to be rebuilt afterwards,
 so like additionally. But yeah,</v>
 
-00:17:35.531 --> 00:17:40.231
+00:16:51.712 --> 00:16:56.412
 <v Kirk>Do you have another favorite
 for PG19? Moving on. [laughs]</v>
 
-00:17:40.231 --> 00:17:44.031
+00:16:56.412 --> 00:17:00.212
 <v Nik>You know my list of don't use it.
 Sub-transactions, and-</v>
 
-00:17:44.031 --> 00:17:45.091
+00:17:00.212 --> 00:17:01.272
 <v Kirk>Temp tables</v>
 
-00:17:45.271 --> 00:17:50.571
+00:17:01.452 --> 00:17:06.752
 <v Nik>temporary tables last week episode.
 LISTEN/NOTIFY is almost in that list.</v>
 
-00:17:50.571 --> 00:17:56.471
+00:17:06.752 --> 00:17:12.652
 <v Nik>Almost because, like, a little bit more
 cases where it's okay to use it and...</v>
 
-00:17:56.551 --> 00:18:02.351
+00:17:12.732 --> 00:17:18.532
 <v Nik>Yeah, but you remember the post
 from Recall.ai that notify doesn't scale.</v>
 
-00:18:02.351 --> 00:18:07.991
+00:17:18.532 --> 00:17:24.172
 <v Nik>There, there is big, single lock,
 global lock on commit.</v>
 
-00:18:08.411 --> 00:18:12.111
+00:17:24.592 --> 00:17:28.292
 <v Nik>And then also DBOS, guys,
 they also touched that topic.</v>
 
-00:18:12.111 --> 00:18:18.111
+00:17:28.292 --> 00:17:34.292
 <v Nik>We discussed it on our podcast as well.
 That lock is still there, unfortunately.</v>
 
-00:18:18.271 --> 00:18:22.311
+00:17:34.452 --> 00:17:38.492
 <v Nik>But there are improvements for when you
 have a lot of listeners. It's already</v>
 
-00:18:22.311 --> 00:18:27.891
+00:17:38.492 --> 00:17:44.072
 <v Nik>great. So it's already, like,
 one problem resolved. So in some cases,</v>
 
-00:18:27.891 --> 00:18:34.371
+00:17:44.072 --> 00:17:50.552
 <v Nik>in Postgres 19, LISTEN/NOTIFY will work
 much better than, than in Postgres 18.</v>
 
-00:18:34.731 --> 00:18:40.851
+00:17:50.912 --> 00:17:57.032
 <v Nik>And we have some graphs showing
 throughput, right? So if 1,000 listeners,</v>
 
-00:18:40.851 --> 00:18:46.871
+00:17:57.032 --> 00:18:03.052
 <v Nik>from 200 per second, we went
 to 11,000 per second. And it's great.</v>
 
-00:18:46.871 --> 00:18:51.611
+00:18:03.052 --> 00:18:07.792
 <v Nik>I mean, notifications, throughput.
 So it's like drastical improvements.</v>
 
-00:18:51.611 --> 00:18:57.011
+00:18:07.792 --> 00:18:13.192
 <v Nik>But of course, if you deal with, like
 if you combine notify with in some</v>
 
-00:18:57.011 --> 00:18:59.851
+00:18:13.192 --> 00:18:16.032
 <v Nik>transactions and in highly
 concurrent environment,</v>
 
-00:18:59.851 --> 00:19:04.251
+00:18:16.032 --> 00:18:20.432
 <v Nik>that single global lock is still there,
 so Postgres 19 doesn't solve it.</v>
 
-00:19:04.511 --> 00:19:06.871
+00:18:20.692 --> 00:18:23.052
 <v Nik>So I'm partially satisfied
 with this feature.</v>
 
-00:19:06.871 --> 00:19:11.151
+00:18:23.052 --> 00:18:27.332
 <v Nik>[laughs] It's great to see the progress
 here, definitely. What about you?</v>
 
-00:19:11.151 --> 00:19:13.931
+00:18:27.332 --> 00:18:30.112
 <v Nik>What are, are your... What-</v>
 
-00:19:13.931 --> 00:19:18.511
+00:18:30.112 --> 00:18:34.692
 <v Kirk>Yeah. The first one,
 and my favorite is actually notify,</v>
 
-00:19:18.891 --> 00:19:22.071
+00:18:35.072 --> 00:18:38.252
 <v Kirk>because we actually leverage
 this in our systems.</v>
 
-00:19:22.071 --> 00:19:28.630
+00:18:38.252 --> 00:18:44.811
 <v Kirk>We have, numerous external systems and
 tools that augment what our system does</v>
 
-00:19:28.630 --> 00:19:33.091
+00:18:44.811 --> 00:18:49.272
 <v Kirk>and searches in real time behind
 the scenes to put things back together.</v>
 
-00:19:33.111 --> 00:19:39.471
+00:18:49.292 --> 00:18:55.652
 <v Kirk>So we need that. In fact, we end up using,
 pg_background to do the commit,</v>
 
-00:19:39.491 --> 00:19:44.631
+00:18:55.672 --> 00:19:00.812
 <v Kirk>so it's out of the transaction that we're
 currently in, so that there's time</v>
 
-00:19:44.631 --> 00:19:49.651
+00:19:00.812 --> 00:19:05.832
 <v Kirk>for the communication to the other servers
 who then take and lift that stuff off.</v>
 
-00:19:49.651 --> 00:19:52.171
+00:19:05.832 --> 00:19:08.352
 <v Kirk>So for me, that, that was a huge one.</v>
 
-00:19:52.171 --> 00:19:55.771
+00:19:08.352 --> 00:19:11.952
 <v Kirk>We're not currently jammed,
 but it's flagged in our system</v>
 
-00:19:55.771 --> 00:19:59.780
+00:19:11.952 --> 00:19:15.960
 <v Kirk>as, you know, as we grow, this could be
 a problem, right? Because the single-</v>
 
-00:19:59.780 --> 00:20:03.430
+00:19:15.960 --> 00:19:19.610
 <v Nik>Have you considered, have you
 considered using logical decoding for,</v>
 
-00:20:03.430 --> 00:20:07.771
+00:19:19.610 --> 00:19:23.952
 <v Nik>for notif- asynchronous notification?
 Like super bandwidth. Yeah.</v>
 
-00:20:07.771 --> 00:20:12.151
+00:19:23.952 --> 00:19:28.332
 <v Kirk>Yeah. No, we haven't.
 Again, I'm still relatively green</v>
 
-00:20:12.171 --> 00:20:16.231
+00:19:28.352 --> 00:19:32.412
 <v Kirk>at some of the Postgres stuff, so I'll
 be honest, I'll always admit where I'm</v>
 
-00:20:16.231 --> 00:20:20.051
+00:19:32.412 --> 00:19:36.232
 <v Kirk>ignorant. I can get into the nitty-gritty
 on anything if I focus on it,</v>
 
-00:20:20.051 --> 00:20:23.831
+00:19:36.232 --> 00:19:40.012
 <v Kirk>but haven't looked at that 'cause
 we haven't had to. The app works,</v>
 
-00:20:23.831 --> 00:20:26.671
+00:19:40.012 --> 00:19:42.852
 <v Kirk>and we use this in three
 or four separate places</v>
 
-00:20:26.691 --> 00:20:30.670
+00:19:42.872 --> 00:19:46.850
 <v Kirk>where we need notifications, and alerts.
 You know, one of them sends something</v>
 
-00:20:30.670 --> 00:20:34.571
+00:19:46.850 --> 00:19:50.752
 <v Kirk>to a manager if certain people do certain
 things, and he's got a little pu-...</v>
 
-00:20:34.571 --> 00:20:38.431
+00:19:50.752 --> 00:19:54.612
 <v Kirk>Right? So it's really, it's handy for us.
 I love that they're working on it,</v>
 
-00:20:38.431 --> 00:20:41.791
+00:19:54.612 --> 00:19:57.972
 <v Kirk>and I know it'll get fixed.
 The other one I like is the autovacuum,</v>
 
-00:20:41.791 --> 00:20:46.231
+00:19:57.972 --> 00:20:02.412
 <v Kirk>and there's a specific reason I like the
 changes for prioritizing and letting us</v>
 
-00:20:46.231 --> 00:20:52.211
+00:20:02.412 --> 00:20:08.392
 <v Kirk>queue things up differently, is Selma
 is gonna need this on our bloat removal-</v>
 
-00:20:52.211 --> 00:20:55.431
+00:20:08.392 --> 00:20:11.612
 <v Nik>Yeah</v>
 <v Kirk>because we need four or five passes</v>
 
-00:20:55.531 --> 00:20:59.551
+00:20:11.712 --> 00:20:15.732
 <v Kirk>on a table to clean
 out the bloat properly,</v>
 
-00:20:59.551 --> 00:21:04.771
+00:20:15.732 --> 00:20:20.952
 <v Kirk>because we have to do it incrementally.
 So we have to actually go through a table,</v>
 
-00:21:04.771 --> 00:21:08.071
+00:20:20.952 --> 00:20:24.252
 <v Kirk>and we know we only did
 step one of three steps,</v>
 
-00:21:08.071 --> 00:21:13.055
+00:20:24.252 --> 00:20:29.236
 <v Kirk>and then we have to flag it to queue it
 back up But we need some time to pass.</v>
 
-00:21:13.135 --> 00:21:17.755
+00:20:29.316 --> 00:20:33.936
 <v Kirk>So this is gonna be interesting for us.
 So I'm liking that one a lot.</v>
 
-00:21:17.755 --> 00:21:19.735
+00:20:33.936 --> 00:20:35.916
 <v Kirk>Of course, REPACK is great.</v>
 
-00:21:20.275 --> 00:21:24.775
+00:20:36.456 --> 00:20:40.956
 <v Kirk>You know, as long as it doesn't get in the
 way of us getting our bloat removal, I'm-</v>
 
-00:21:24.775 --> 00:21:28.355
+00:20:40.956 --> 00:20:44.536
 <v Nik>Funny thing, behind the scene,
 this this samograph,</v>
 
-00:21:28.355 --> 00:21:32.415
+00:20:44.536 --> 00:20:48.596
 <v Nik>it's connected to this Forge system,
 and it has some budget and freedom to do,</v>
 
-00:21:32.415 --> 00:21:38.635
+00:20:48.596 --> 00:20:54.816
 <v Nik>so it decided to do more tests of notify
 to, to compare it to this bottleneck</v>
 
-00:21:38.635 --> 00:21:42.435
+00:20:54.816 --> 00:20:58.616
 <v Nik>from Recall.ai and DBOS blog posts.
 [laughs] It just-</v>
 
-00:21:42.435 --> 00:21:44.615
+00:20:58.616 --> 00:21:00.796
 <v Kirk>Nice</v>
 <v Nik>decided to bring more data,</v>
 
-00:21:44.615 --> 00:21:49.695
+00:21:00.796 --> 00:21:05.876
 <v Nik>which we probably will include
 to show show notes, right? So.</v>
 
-00:21:49.695 --> 00:21:53.675
+00:21:05.876 --> 00:21:09.856
 <v Kirk>How about you, Michael?
 What are your favorites in PG19?</v>
 
-00:21:54.180 --> 00:21:58.435
+00:21:10.360 --> 00:21:14.616
 <v Michael>Yeah. Well, I am a big fan of the
 autovacuum improvements as well, actually.</v>
 
-00:21:58.435 --> 00:22:04.255
+00:21:14.616 --> 00:21:20.436
 <v Michael>The prioritization feels like kind of...
 Once I've heard about it, I, I thought</v>
 
-00:22:04.255 --> 00:22:08.843
+00:21:20.436 --> 00:21:25.024
 <v Michael>it's kind of embarrassing that I hadn't
 thought, why don't we have it already?</v>
 
-00:22:09.395 --> 00:22:12.235
+00:21:25.576 --> 00:21:28.416
 <v Michael>But yeah, kudos to the people
 that worked on that.</v>
 
-00:22:12.235 --> 00:22:16.855
+00:21:28.416 --> 00:21:33.036
 <v Michael>And I think parallel autovacuum as well
 will be useful for a lot of people.</v>
 
-00:22:16.855 --> 00:22:20.915
+00:21:33.036 --> 00:21:37.096
 <v Michael>I like these things that just don't, you
 don't have to change anything as a user.</v>
 
-00:22:20.915 --> 00:22:23.935
+00:21:37.096 --> 00:21:40.116
 <v Michael>You just have to upgrade,
 and then things will work better.</v>
 
-00:22:23.935 --> 00:22:26.335
+00:21:40.116 --> 00:21:42.516
 <v Nik>Yeah.</v>
 <v Michael>So those two are great.</v>
 
-00:22:26.335 --> 00:22:30.035
+00:21:42.516 --> 00:21:46.216
 <v Michael>Probably the biggest one we haven't
 mentioned yet on my list that</v>
 
-00:22:30.035 --> 00:22:34.775
+00:21:46.216 --> 00:21:50.956
 <v Michael>I'm not gonna be a big user of, but I
 think it's a huge step in a very</v>
 
-00:22:34.775 --> 00:22:39.115
+00:21:50.956 --> 00:21:55.296
 <v Michael>interesting and good direction
 for the project, is the plan advice</v>
 
-00:22:39.215 --> 00:22:42.015
+00:21:55.396 --> 00:21:58.196
 <v Michael>module that's been added to contrib.</v>
 
-00:22:42.095 --> 00:22:45.855
+00:21:58.276 --> 00:22:02.036
 <v Michael>And I know it's not hints
 and I know it's not like...</v>
 
-00:22:45.855 --> 00:22:48.972
+00:22:02.036 --> 00:22:05.154
 <v Michael>Well, but it kind of is, right? Like-</v>
 <v Kirk>It's better</v>
 
-00:22:49.170 --> 00:22:52.675
+00:22:05.350 --> 00:22:08.856
 <v Michael>it's a toolkit that can be
 used by extensions going forwards,</v>
 
-00:22:52.675 --> 00:22:57.515
+00:22:08.856 --> 00:22:13.696
 <v Michael>and I think the biggest sign of how good
 it is is how much code was able to be</v>
 
-00:22:57.515 --> 00:23:02.495
+00:22:13.696 --> 00:22:18.676
 <v Michael>removed from pg_hint_plan. And I
 know Lukas Fittl's got a really good,</v>
 
-00:23:03.095 --> 00:23:07.795
+00:22:19.276 --> 00:22:23.976
 <v Michael>video on this, like a 5mins of Postgres
 episode, that's worth checking out if you</v>
 
-00:23:07.795 --> 00:23:12.195
+00:22:23.976 --> 00:22:28.376
 <v Michael>haven't seen it already. But yeah, it...
 this doesn't replace pg_hint_plan.</v>
 
-00:23:12.195 --> 00:23:16.075
+00:22:28.376 --> 00:22:32.256
 <v Michael>There's a... it's very much a version
 one and like a, yeah, as I said,</v>
 
-00:23:16.075 --> 00:23:18.075
+00:22:32.256 --> 00:22:34.256
 <v Michael>a toolkit or a</v>
 
-00:23:19.335 --> 00:23:24.675
+00:22:35.516 --> 00:22:40.856
 <v Michael>a thing that others can build on. But this
 has been a discussion and like a no-go</v>
 
-00:23:24.675 --> 00:23:30.635
+00:22:40.856 --> 00:22:46.816
 <v Michael>area for Postgres for years, and I think
 it is a step in the direction of, let's</v>
 
-00:23:30.635 --> 00:23:37.635
+00:22:46.816 --> 00:22:53.816
 <v Michael>let people fight the fires of plan flips
 with a few tools if they want to. And,</v>
 
-00:23:37.675 --> 00:23:43.515
+00:22:53.856 --> 00:22:59.696
 <v Michael>let's try and, like, support, like maybe
 get some enterprise or, or maybe tick-</v>
 
-00:23:43.515 --> 00:23:47.755
+00:22:59.696 --> 00:23:03.936
 <v Michael>let people check a box when they're
 migrating from Oracle or trying to like</v>
 
-00:23:47.755 --> 00:23:51.555
+00:23:03.936 --> 00:23:07.736
 <v Michael>get a DB2 migration approved or something
 like that. So I think there's</v>
 
-00:23:51.555 --> 00:23:54.095
+00:23:07.736 --> 00:23:10.276
 <v Michael>loads of benefits to this,
 and it's been, I think,</v>
 
-00:23:54.095 --> 00:23:56.375
+00:23:10.276 --> 00:23:12.556
 <v Michael>implemented in quite a mature way.</v>
 <v Nik>Yeah.</v>
 
-00:23:56.375 --> 00:23:58.995
+00:23:12.556 --> 00:23:15.176
 <v Kirk>I'll correct-</v>
 <v Michael>Again, mostly led by Robert Haas.</v>
 
-00:23:58.995 --> 00:24:01.915
+00:23:15.176 --> 00:23:18.096
 <v Nik>We,</v>
 <v Kirk>I'll correct one thing. You said years,</v>
 
-00:24:01.915 --> 00:24:04.035
+00:23:18.096 --> 00:23:20.216
 <v Kirk>- I think you meant decades.
 - [laughs]</v>
 
-00:24:04.035 --> 00:24:08.155
+00:23:20.216 --> 00:23:24.336
 <v Nik>Decades. Session which
 led to development of pgroast,</v>
 
-00:24:08.235 --> 00:24:12.075
+00:23:24.416 --> 00:23:28.256
 <v Nik>we found this page in wiki that we
 won't accept these proposals,</v>
 
-00:24:12.075 --> 00:24:15.990
+00:23:28.256 --> 00:23:32.170
 <v Nik>and one of the, those
 proposals is like, hints.</v>
 
-00:24:15.990 --> 00:24:16.995
+00:23:32.170 --> 00:23:33.176
 <v Kirk>Hints.</v>
 <v Nik>Yeah.</v>
 
-00:24:16.995 --> 00:24:19.355
+00:23:33.176 --> 00:23:35.536
 <v Kirk>Mm-hmm.</v>
 <v Nik>And now we have this. I,</v>
 
-00:24:19.355 --> 00:24:23.943
+00:23:35.536 --> 00:23:40.124
 <v Nik>I actually think it's a great thing
 to have because we saw, like, like, we, we</v>
 
-00:24:24.015 --> 00:24:29.175
+00:23:40.196 --> 00:23:45.356
 <v Nik>saw that Aurora has plan management
 stuff and the ability to pin plans.</v>
 
-00:24:29.175 --> 00:24:34.915
+00:23:45.356 --> 00:23:51.096
 <v Nik>I have quite challenging experience,
 lasting many months with upgrade to 17,</v>
 
-00:24:34.915 --> 00:24:41.335
+00:23:51.096 --> 00:23:57.516
 <v Nik>from 17 to 18 because of many plan flips,
 which are actually hard to catch.</v>
 
-00:24:41.675 --> 00:24:48.075
+00:23:57.856 --> 00:24:04.256
 <v Nik>So we needed to, to improve
 our methodology, how to, how we analyze,</v>
 
-00:24:49.155 --> 00:24:51.375
+00:24:05.336 --> 00:24:07.556
 <v Nik>future plan flips before upgrading.</v>
 
-00:24:51.615 --> 00:24:56.175
+00:24:07.796 --> 00:24:12.356
 <v Nik>Now we have very comprehensive
 methodology, but like</v>
 
-00:24:56.715 --> 00:25:02.175
+00:24:12.896 --> 00:24:18.356
 <v Nik>without any gaps, but it's quite,
 like, expensive to use.</v>
 
-00:25:02.175 --> 00:25:06.355
+00:24:18.356 --> 00:24:22.536
 <v Nik>You need to actually allocate
 resources to study all the plan flips.</v>
 
-00:25:06.735 --> 00:25:10.775
+00:24:22.916 --> 00:24:26.956
 <v Nik>And then, what to do with flips. Now
 we have solution what to do with flips,</v>
 
-00:25:10.775 --> 00:25:14.115
+00:24:26.956 --> 00:24:30.296
 <v Nik>but still plan flip analysis remains</v>
 
-00:25:14.395 --> 00:25:18.495
+00:24:30.576 --> 00:24:34.676
 <v Nik>a, another challenge, right?</v>
 <v Kirk>Yeah, 'cause what's a good flip versus</v>
 
-00:25:18.495 --> 00:25:19.775
+00:24:34.676 --> 00:24:35.956
 <v Kirk>a bad flip?</v>
 <v Nik>Yeah.</v>
 
-00:25:19.775 --> 00:25:20.810
+00:24:35.956 --> 00:24:36.990
 <v Kirk>And like-</v>
 <v Nik>True</v>
 
-00:25:20.810 --> 00:25:23.310
+00:24:36.990 --> 00:24:39.490
 <v Kirk>one...
 sometimes it's a small subtle change.</v>
 
-00:25:23.310 --> 00:25:24.960
+00:24:39.490 --> 00:24:41.140
 <v Nik>Right.</v>
 <v Kirk>Sometimes it's a right</v>
 
-00:25:24.960 --> 00:25:29.835
+00:24:41.140 --> 00:24:46.016
 <v Kirk>sequential scan when it should never be.
 So, but I wanted to point out something,</v>
 
-00:25:30.235 --> 00:25:34.395
+00:24:46.416 --> 00:24:50.576
 <v Kirk>just for the people that are listening
 who might not be familiar with plan hints.</v>
 
-00:25:34.395 --> 00:25:39.875
+00:24:50.576 --> 00:24:56.056
 <v Kirk>Okay?
 Plan hints to me is the 1975 solution</v>
 
-00:25:39.955 --> 00:25:44.175
+00:24:56.136 --> 00:25:00.356
 <v Kirk>to having a query that you need
 to tell the database, "Hey,</v>
 
-00:25:44.175 --> 00:25:49.955
+00:25:00.356 --> 00:25:06.136
 <v Kirk>you're gonna calculate this wrong. So I'm
 gonna put literally a slash asterisk hint</v>
 
-00:25:49.955 --> 00:25:52.620
+00:25:06.136 --> 00:25:08.800
 <v Kirk>after the word select on my thing,</v>
 
-00:25:52.620 --> 00:25:56.375
+00:25:08.800 --> 00:25:12.556
 <v Kirk>and I'm gonna put some things in there
 and tell you what tables and indexes</v>
 
-00:25:56.375 --> 00:26:00.975
+00:25:12.556 --> 00:25:17.156
 <v Kirk>you should really be doing as your, either
 your driver table or primary, whatever.</v>
 
-00:26:00.975 --> 00:26:04.275
+00:25:17.156 --> 00:25:20.456
 <v Kirk>I'm gonna focus you because
 you're gonna make mistakes."</v>
 
-00:26:04.335 --> 00:26:07.275
+00:25:20.516 --> 00:25:23.456
 <v Kirk>And the problem is, is I want
 you to hold it right there.</v>
 
-00:26:07.275 --> 00:26:14.275
+00:25:23.456 --> 00:25:30.456
 <v Kirk>It was a great idea in 1975, okay?
 The problem is, we're 2026, baby,</v>
 
-00:26:14.515 --> 00:26:19.515
+00:25:30.696 --> 00:25:35.696
 <v Kirk>and the reality is you're hard coding
 the hint usually into the application.</v>
 
-00:26:19.540 --> 00:26:23.495
+00:25:35.720 --> 00:25:39.676
 <v Kirk>The last thing you wanna do is be tweaking
 your application because of a subtle</v>
 
-00:26:23.495 --> 00:26:27.735
+00:25:39.676 --> 00:25:43.916
 <v Kirk>change in the database, because now
 your hint is actually a bad idea,</v>
 
-00:26:27.835 --> 00:26:34.315
+00:25:44.016 --> 00:25:50.496
 <v Kirk>and that happens. And this plan with
 stashing works differently. And what...</v>
 
-00:26:34.395 --> 00:26:38.855
+00:25:50.576 --> 00:25:55.036
 <v Kirk>The high level version is this.
 You can actually calculate a good plan,</v>
 
-00:26:38.855 --> 00:26:43.935
+00:25:55.036 --> 00:26:00.116
 <v Kirk>and then you can associate
 it with the SQL ID. Okay?</v>
 
-00:26:43.935 --> 00:26:46.035
+00:26:00.116 --> 00:26:02.216
 <v Kirk>And then you can give it priority,</v>
 
-00:26:46.035 --> 00:26:51.595
+00:26:02.216 --> 00:26:07.776
 <v Kirk>and this gives you a chance as the DBA
 to change the behavior of the application</v>
 
-00:26:51.595 --> 00:26:54.175
+00:26:07.776 --> 00:26:10.356
 <v Kirk>without getting the application
 developer involved.</v>
 
-00:26:54.175 --> 00:26:57.615
+00:26:10.356 --> 00:26:13.796
 <v Kirk>He can ring you up and say, "Hey,
 I got a query running like crap."</v>
 
-00:26:57.615 --> 00:27:02.667
+00:26:13.796 --> 00:26:18.848
 <v Kirk>You can find that query. You can then work
 on You can validate your new idea</v>
 
-00:27:02.667 --> 00:27:07.707
+00:26:18.848 --> 00:26:23.888
 <v Kirk>and then store it in the database as to
 how it should handle it in the future.</v>
 
-00:27:07.707 --> 00:27:12.867
+00:26:23.888 --> 00:26:29.048
 <v Kirk>Again, it's still the newest versions of
 this, but it is architecturally the right</v>
 
-00:27:12.867 --> 00:27:17.147
+00:26:29.048 --> 00:26:33.328
 <v Kirk>solution.
 And what I love about it is long-term</v>
 
-00:27:17.327 --> 00:27:22.227
+00:26:33.508 --> 00:26:38.408
 <v Kirk>there will even be settings in there where
 you tweak it on how you want this specific</v>
 
-00:27:22.227 --> 00:27:26.867
+00:26:38.408 --> 00:26:43.048
 <v Kirk>SQL to run based on the environment
 it's running in. And, and it's like...</v>
 
-00:27:26.867 --> 00:27:30.747
+00:26:43.048 --> 00:26:46.928
 <v Kirk>And that's cool. You could never
 do that with hints, and for me,</v>
 
-00:27:30.747 --> 00:27:36.367
+00:26:46.928 --> 00:26:52.548
 <v Kirk>that's what actually makes hints bad,
 is it codifies an instance of a situation</v>
 
-00:27:36.587 --> 00:27:40.927
+00:26:52.768 --> 00:26:57.108
 <v Kirk>into the application effectively where you
 don't wanna actually go changing it later</v>
 
-00:27:40.927 --> 00:27:44.847
+00:26:57.108 --> 00:27:01.028
 <v Kirk>on just because your environment's
 different or better or faster.</v>
 
-00:27:44.960 --> 00:27:47.367
+00:27:01.140 --> 00:27:03.548
 <v Kirk>And now you can actually
 do it at the DBA level,</v>
 
-00:27:47.367 --> 00:27:51.308
+00:27:03.548 --> 00:27:07.489
 <v Kirk>which is where that, in my opinion,
 belongs. Okay, I'm off my soap.</v>
 
-00:27:53.427 --> 00:27:58.907
+00:27:09.608 --> 00:27:15.088
 <v Nik>As I see, our testing found
 some overhead from using advice.</v>
 
-00:27:59.027 --> 00:28:03.307
+00:27:15.208 --> 00:27:19.488
 <v Nik>Yeah, like around 10%, right?
 So it's not for free,</v>
 
-00:28:04.527 --> 00:28:06.927
+00:27:20.708 --> 00:27:23.108
 <v Nik>when we talk about very fast queries.</v>
 
-00:28:07.687 --> 00:28:10.847
+00:27:23.868 --> 00:27:27.028
 <v Nik>So anyway, there are some...
 And a, a long list of limitations,</v>
 
-00:28:10.847 --> 00:28:15.867
+00:27:27.028 --> 00:27:32.048
 <v Nik>but it's a great step in interesting
 direction, which I think bigger</v>
 
-00:28:16.067 --> 00:28:20.247
+00:27:32.248 --> 00:27:36.428
 <v Nik>databases actually need.
 So good, good thing to have.</v>
 
-00:28:20.527 --> 00:28:21.527
+00:27:36.708 --> 00:27:37.708
 <v Kirk>Mm-hmm.</v>
 
-00:28:22.787 --> 00:28:23.787
+00:27:38.968 --> 00:27:39.968
 <v Nik>What else?</v>
 
-00:28:26.587 --> 00:28:29.822
+00:27:42.768 --> 00:27:46.003
 <v Michael>I have, I have one that-</v>
 <v Kirk>You got one more? Go ahead</v>
 
-00:28:29.827 --> 00:28:32.787
+00:27:46.008 --> 00:27:48.968
 <v Michael>quite a lot, Nik.
 Better defaults.</v>
 
-00:28:33.047 --> 00:28:34.170
+00:27:49.228 --> 00:27:50.350
 <v Michael>I think-</v>
 <v Nik>Oh</v>
 
-00:28:34.170 --> 00:28:37.007
+00:27:50.350 --> 00:27:53.188
 <v Michael>a couple have changed
 in a really good direction.</v>
 
-00:28:37.007 --> 00:28:38.007
+00:27:53.188 --> 00:27:54.188
 <v Nik>Yeah.</v>
 
-00:28:38.587 --> 00:28:41.747
+00:27:54.768 --> 00:27:57.928
 <v Michael>JIT being off by default
 feels far more sensible to me</v>
 
-00:28:41.747 --> 00:28:43.307
+00:27:57.928 --> 00:27:59.488
 <v Michael>than it being on by default.</v>
 
-00:28:43.307 --> 00:28:47.747
+00:27:59.488 --> 00:28:03.928
 <v Nik>It was long overdue. It should be
 off by default from very beginning, yes.</v>
 
-00:28:47.747 --> 00:28:49.100
+00:28:03.928 --> 00:28:05.281
 <v Kirk>We turned it off.</v>
 
-00:28:49.147 --> 00:28:53.947
+00:28:05.328 --> 00:28:10.128
 <v Nik>it actually shows lack of testing,
 proper testing before feature is released,</v>
 
-00:28:53.947 --> 00:28:57.027
+00:28:10.128 --> 00:28:13.208
 <v Nik>and this is, can be this can
 be improved with AI. I just...</v>
 
-00:28:57.027 --> 00:29:01.307
+00:28:13.208 --> 00:28:17.488
 <v Nik>This is my natural reaction to this, like
 I would like, for example, to propose,</v>
 
-00:29:01.307 --> 00:29:07.087
+00:28:17.488 --> 00:28:23.268
 <v Nik>I would, I will do it, to turn
 on track_planning in pg_stat_statements</v>
 
-00:29:07.467 --> 00:29:13.727
+00:28:23.648 --> 00:28:29.908
 <v Nik>because benchmark, which led to decision
 to keep it off was weak. While</v>
 
-00:29:14.567 --> 00:29:17.650
+00:28:30.748 --> 00:28:33.830
 <v Nik>same with, with JIT, but vice versa.
 It was on by default-</v>
 
-00:29:17.650 --> 00:29:19.807
+00:28:33.830 --> 00:28:35.988
 <v Michael>Yes</v>
 <v Nik>while, while it could be understood</v>
 
-00:29:19.807 --> 00:29:25.167
+00:28:35.988 --> 00:28:41.348
 <v Nik>earlier that it's, it's the wrong idea
 to keep it on. Great thing. Great thing.</v>
 
-00:29:26.227 --> 00:29:29.047
+00:28:42.408 --> 00:28:45.228
 <v Michael>And another one,
 I know it's less... Like</v>
 
-00:29:29.047 --> 00:29:31.947
+00:28:45.228 --> 00:28:48.128
 <v Michael>JIT, I think can really bite people.
 This one not so much.</v>
 
-00:29:31.947 --> 00:29:36.547
+00:28:48.128 --> 00:28:52.728
 <v Michael>This is much more just like a, a small
 improvement, which is the TOAST</v>
 
-00:29:36.547 --> 00:29:39.047
+00:28:52.728 --> 00:28:55.228
 <v Michael>compression by default now uses-</v>
 <v Nik>Mm-hmm</v>
 
-00:29:39.047 --> 00:29:43.127
+00:28:55.228 --> 00:28:59.308
 <v Michael>well, in fact, a couple of
 compression things now default to better</v>
 
-00:29:43.127 --> 00:29:48.147
+00:28:59.308 --> 00:29:04.328
 <v Michael>compression or more modern compression
 algorithms. LZ4 in the case of TOAST,</v>
 
-00:29:48.147 --> 00:29:52.500
+00:29:04.328 --> 00:29:08.681
 <v Michael>if you, if your Postgres was built
 with that, which a lot of them now are.</v>
 
-00:29:52.547 --> 00:29:57.287
+00:29:08.728 --> 00:29:13.468
 <v Michael>And I read about another one actually.
 WAL compression. If you've just left...</v>
 
-00:29:57.287 --> 00:30:02.327
+00:29:13.468 --> 00:29:18.508
 <v Michael>If you've turned it on a few years ago,
 for example, before it had more options,</v>
 
-00:30:02.427 --> 00:30:08.547
+00:29:18.608 --> 00:29:24.728
 <v Michael>it will now pick, Zstandard or LZ4, I
 think in that order, if they're available,</v>
 
-00:30:08.547 --> 00:30:10.167
+00:29:24.728 --> 00:29:26.348
 <v Michael>instead of-</v>
 <v Nik>Yeah</v>
 
-00:30:10.167 --> 00:30:13.747
+00:29:26.348 --> 00:29:29.928
 <v Michael>it used to, it's kind
 of like pglz unless you specify.</v>
 
-00:30:13.747 --> 00:30:18.550
+00:29:29.928 --> 00:29:34.730
 <v Nik>It, it's one of the things,
 the Forge system flagged as like if it's</v>
 
-00:30:18.550 --> 00:30:22.507
+00:29:34.730 --> 00:29:38.688
 <v Nik>available on the primary but not available
 on, on replica, it can be a problem.</v>
 
-00:30:22.507 --> 00:30:24.367
+00:29:38.688 --> 00:29:40.548
 <v Nik>So. [laughs]</v>
 <v Michael>Hmm. Interesting.</v>
 
-00:30:24.367 --> 00:30:29.247
+00:29:40.548 --> 00:29:45.428
 <v Nik>Yeah. Yeah. And there's another
 default which I like a lot. It, it,</v>
 
-00:30:30.327 --> 00:30:34.607
+00:29:46.508 --> 00:29:50.788
 <v Nik>it, it takes a little bit
 of my consulting bread because</v>
 
-00:30:34.847 --> 00:30:40.827
+00:29:51.028 --> 00:29:57.008
 <v Nik>we always say enable it, but now it's
 enabled by default. It's, log_lock_waits.</v>
 
-00:30:41.387 --> 00:30:43.187
+00:29:57.568 --> 00:29:59.368
 <v Michael>Yes.</v>
 <v Nik>Yeah. Yeah.</v>
 
-00:30:44.027 --> 00:30:45.850
+00:30:00.208 --> 00:30:02.032
 <v Michael>On, on by default now.</v>
 
-00:30:46.507 --> 00:30:52.547
+00:30:02.688 --> 00:30:08.728
 <v Nik>Yeah. Yeah. So and this is definitely
 a good thing to have enabled by default,</v>
 
-00:30:52.947 --> 00:30:56.990
+00:30:09.128 --> 00:30:13.170
 <v Nik>100%.</v>
 <v Michael>One more dev feature, and then I think</v>
 
-00:30:56.990 --> 00:30:59.947
+00:30:13.170 --> 00:30:16.128
 <v Michael>we've got, we've got some
 performance improvements as well.</v>
 
-00:30:59.947 --> 00:31:04.827
+00:30:16.128 --> 00:30:21.008
 <v Michael>The dev feature that I liked the look
 of was the WAIT command. WAIT FOR LSN.</v>
 
-00:31:05.707 --> 00:31:08.607
+00:30:21.888 --> 00:30:24.788
 <v Kirk>Yes</v>
 <v Michael>so this is like for</v>
 
-00:31:08.887 --> 00:31:12.027
+00:30:25.068 --> 00:30:28.208
 <v Michael>reading your writes on replicas.</v>
 <v Kirk>Right</v>
 
-00:31:12.027 --> 00:31:16.707
+00:30:28.208 --> 00:30:32.888
 <v Michael>if, if you've got not got much
 lag, you can effectively just delay</v>
 
-00:31:16.707 --> 00:31:21.927
+00:30:32.888 --> 00:30:38.108
 <v Michael>your read by maybe even just a few
 milliseconds, to let the replica sync</v>
 
-00:31:21.927 --> 00:31:26.127
+00:30:38.108 --> 00:30:42.308
 <v Michael>and then do the read query instead
 of having to like stick to the primary to,</v>
 
-00:31:26.127 --> 00:31:29.927
+00:30:42.308 --> 00:30:46.108
 <v Michael>to serve those like, recently written-</v>
 <v Nik>Yeah</v>
 
-00:31:29.927 --> 00:31:33.987
+00:30:46.108 --> 00:30:50.168
 <v Kirk>Again, let me just add
 the comment for the dumber people like-</v>
 
-00:31:33.987 --> 00:31:36.587
+00:30:50.168 --> 00:30:52.768
 <v Michael>Mm-hmm</v>
 <v Kirk>about what this really is about.</v>
 
-00:31:37.347 --> 00:31:40.387
+00:30:53.528 --> 00:30:56.568
 <v Kirk>You start growing your Postgres footprint.</v>
 
-00:31:40.387 --> 00:31:43.407
+00:30:56.568 --> 00:30:59.588
 <v Kirk>You have your primary server
 which can handle read writes.</v>
 
-00:31:43.407 --> 00:31:46.467
+00:30:59.588 --> 00:31:02.648
 <v Kirk>You get a handful
 or more of read replicas.</v>
 
-00:31:46.467 --> 00:31:48.907
+00:31:02.648 --> 00:31:05.088
 <v Kirk>They can only do read transactions.</v>
 
-00:31:48.907 --> 00:31:54.167
+00:31:05.088 --> 00:31:10.348
 <v Kirk>So you want to go to your read replicas to
 do your read queries, read-only queries.</v>
 
-00:31:54.167 --> 00:31:56.107
+00:31:10.348 --> 00:31:12.288
 <v Kirk>You write to the main server,</v>
 
-00:31:56.107 --> 00:32:00.787
+00:31:12.288 --> 00:31:16.968
 <v Kirk>and this new command lets your application
 basically do a write to the main server.</v>
 
-00:32:00.787 --> 00:32:05.847
+00:31:16.968 --> 00:31:22.028
 <v Kirk>And when it goes to query the results
 back from the read-only replica,</v>
 
-00:32:05.847 --> 00:32:09.407
+00:31:22.028 --> 00:31:25.588
 <v Kirk>which you're doing for efficiency reasons,
 it actually says,</v>
 
-00:32:09.407 --> 00:32:13.787
+00:31:25.588 --> 00:31:29.968
 <v Kirk>"WAIT FOR LSN," and you give the LSN
 number you just got back from the main,</v>
 
-00:32:13.787 --> 00:32:18.407
+00:31:29.968 --> 00:31:34.588
 <v Kirk>and it'll actually inject that pause
 there. Now, you don't do this if there's</v>
 
-00:32:18.407 --> 00:32:22.527
+00:31:34.588 --> 00:31:38.708
 <v Kirk>a 13-minute wait between the stuff
 you're doing, I mean, obviously, right?</v>
 
-00:32:22.527 --> 00:32:27.547
+00:31:38.708 --> 00:31:43.728
 <v Kirk>But many systems have gotten this down
 to really fast, to millisecond level.</v>
 
-00:32:27.547 --> 00:32:33.047
+00:31:43.728 --> 00:31:49.228
 <v Kirk>And this is beautiful because the wait
 becomes more transparent to the developer.</v>
 
-00:32:33.087 --> 00:32:36.747
+00:31:49.268 --> 00:31:52.928
 <v Kirk>This is the kind of thing I really
 enjoy from a development standpoint.</v>
 
-00:32:36.747 --> 00:32:40.750
+00:31:52.928 --> 00:31:56.930
 <v Kirk>You, you did the right thing, and you're
 not punished for doing the right thing.</v>
 
-00:32:40.750 --> 00:32:44.750
+00:31:56.930 --> 00:32:00.930
 <v Nik>Yeah. That's interesting that you
 mentioned you're not doing this if, It's,</v>
 
-00:32:44.750 --> 00:32:47.047
+00:32:00.930 --> 00:32:03.228
 <v Nik>it's like the difference is huge</v>
 
-00:32:48.483 --> 00:32:52.003
+00:32:04.664 --> 00:32:08.184
 <v Nik>It tells me that it could be improved,
 saying I want to wait,</v>
 
-00:32:52.003 --> 00:32:55.923
+00:32:08.184 --> 00:32:12.104
 <v Nik>but only if, difference is, like, shorter.</v>
 
-00:32:55.923 --> 00:33:01.103
+00:32:12.104 --> 00:32:17.284
 <v Nik>If it's, if it's bigger, I want, like,
 I don't know, error immediately received.</v>
 
-00:33:01.103 --> 00:33:05.830
+00:32:17.284 --> 00:32:22.010
 <v Kirk>Well- And think, think about
 in a web UI. You just made an update,</v>
 
-00:33:05.830 --> 00:33:09.583
+00:32:22.010 --> 00:32:25.764
 <v Kirk>and the little patch on your screen
 that's supposed to reflect that update,</v>
 
-00:33:09.583 --> 00:33:12.930
+00:32:25.764 --> 00:32:29.110
 <v Kirk>now you can have it, I believe it
 works with a timeout. So you can</v>
 
-00:33:12.930 --> 00:33:16.670
+00:32:29.110 --> 00:32:32.850
 <v Kirk>actually have the timeout from not
 getting it fast enough, put the spinning</v>
 
-00:33:16.670 --> 00:33:20.310
+00:32:32.850 --> 00:32:36.490
 <v Kirk>hourglass in that little widget
 on the web, because it hasn't got a time.</v>
 
-00:33:20.310 --> 00:33:23.210
+00:32:36.490 --> 00:32:39.390
 <v Nik>I don't want timeout,
 because a timeout would, would,</v>
 
-00:33:23.210 --> 00:33:24.763
+00:32:39.390 --> 00:32:40.944
 <v Nik>be a time waste for me.</v>
 
-00:33:24.763 --> 00:33:29.410
+00:32:40.944 --> 00:32:45.591
 <v Nik>I want to immediately switch to different
 replica, for example. You know, like,</v>
 
-00:33:29.503 --> 00:33:33.883
+00:32:45.684 --> 00:32:50.064
 <v Nik>my problem is that this feature already
 implemented by, by many load balancers.</v>
 
-00:33:33.883 --> 00:33:39.003
+00:32:50.064 --> 00:32:55.184
 <v Nik>For example, if you look at GitLab's,
 load balancer code, many,</v>
 
-00:33:39.003 --> 00:33:42.743
+00:32:55.184 --> 00:32:58.924
 <v Nik>many years ago it was implemented
 based on LSNs by very smart people,</v>
 
-00:33:42.743 --> 00:33:45.043
+00:32:58.924 --> 00:33:01.224
 <v Nik>so it's very smart and advanced.</v>
 
-00:33:45.263 --> 00:33:51.323
+00:33:01.444 --> 00:33:07.504
 <v Nik>And just this feature, when you think
 if I do it inside one specific replica,</v>
 
-00:33:51.323 --> 00:33:56.963
+00:33:07.504 --> 00:33:13.144
 <v Nik>and you have, for example, five replicas,
 I have concerns, because I want to, I want</v>
 
-00:33:56.983 --> 00:34:03.883
+00:33:13.164 --> 00:33:20.064
 <v Nik>better, like, solution, observing all
 replicas and then deciding where to go.</v>
 
-00:34:03.883 --> 00:34:08.543
+00:33:20.064 --> 00:33:24.724
 <v Nik>I mean, in some cases I see it can be
 beneficial, but probably this feature</v>
 
-00:34:08.543 --> 00:34:14.583
+00:33:24.724 --> 00:33:30.764
 <v Nik>belongs not to SQL, but better to libpq
 parameters like we have already when, you,</v>
 
-00:34:14.583 --> 00:34:19.223
+00:33:30.764 --> 00:33:35.404
 <v Nik>you can specify multiple hosts
 to, to in connection strings, right?</v>
 
-00:34:19.303 --> 00:34:23.883
+00:33:35.484 --> 00:33:40.064
 <v Nik>And then you can say,
 target_session_attrs and so on. Like,</v>
 
-00:34:23.883 --> 00:34:30.083
+00:33:40.064 --> 00:33:46.264
 <v Nik>maybe it should be there saying, "I want,
 to choose a replica, the best one.</v>
 
-00:34:30.083 --> 00:34:32.683
+00:33:46.264 --> 00:33:48.864
 <v Nik>Also, maybe I need to wait for this LSN."</v>
 
-00:34:32.683 --> 00:34:37.080
+00:33:48.864 --> 00:33:53.260
 <v Nik>But then, like, it's, it's it's
 different architectural level for me, you</v>
 
-00:34:37.080 --> 00:34:38.683
+00:33:53.260 --> 00:33:54.864
 <v Nik>know? It's not inside-</v>
 <v Kirk>Right</v>
 
-00:34:38.683 --> 00:34:40.650
+00:33:54.864 --> 00:33:56.830
 <v Nik>one node. And-</v>
 <v Kirk>Well, and then-</v>
 
-00:34:40.650 --> 00:34:43.083
+00:33:56.830 --> 00:33:59.264
 <v Nik>I'm just not going to use
 it [laughs] this time.</v>
 
-00:34:43.083 --> 00:34:46.740
+00:33:59.264 --> 00:34:02.920
 <v Kirk>Well, again, I'm, I, I get more
 in touch with the application guys,</v>
 
-00:34:46.740 --> 00:34:51.543
+00:34:02.920 --> 00:34:07.724
 <v Kirk>right, and the applications. And what this
 just did was took the hardest task away</v>
 
-00:34:51.543 --> 00:34:57.103
+00:34:07.724 --> 00:34:13.284
 <v Kirk>of knowing if it's updated yet or not.
 So, and, and the guesswork.</v>
 
-00:34:57.103 --> 00:35:00.883
+00:34:13.284 --> 00:34:17.064
 <v Kirk>So what happens is if you make something
 hard to use, people won't use it.</v>
 
-00:35:00.883 --> 00:35:03.883
+00:34:17.064 --> 00:34:20.064
 <v Kirk>Or worse, they'll come up with constructs-</v>
 
-00:35:03.883 --> 00:35:06.123
+00:34:20.064 --> 00:34:22.304
 <v Nik>Mm</v>
 <v Kirk>that are probably worse, right?</v>
 
-00:35:06.123 --> 00:35:11.203
+00:34:22.304 --> 00:34:27.384
 <v Kirk>Where they remember the ID column coming
 back or a change ID or something else,</v>
 
-00:35:11.203 --> 00:35:15.983
+00:34:27.384 --> 00:34:32.164
 <v Kirk>and then they're clearing it that way on
 the replica until they get it. Ugh. Like,</v>
 
-00:35:15.983 --> 00:35:19.723
+00:34:32.164 --> 00:34:35.904
 <v Kirk>you know. Anyhow, but I, I do appreciate
 the change, and here's the deal.</v>
 
-00:35:19.723 --> 00:35:22.383
+00:34:35.904 --> 00:34:38.564
 <v Kirk>Other people a long time
 ago implemented stuff,</v>
 
-00:35:22.383 --> 00:35:25.743
+00:34:38.564 --> 00:34:41.924
 <v Kirk>and then this can still
 sit on top of a director.</v>
 
-00:35:25.743 --> 00:35:29.903
+00:34:41.924 --> 00:34:46.084
 <v Kirk>And when I speak of a director, that's
 somebody who's kind of like PgBouncer</v>
 
-00:35:29.903 --> 00:35:32.403
+00:34:46.084 --> 00:34:48.584
 <v Kirk>to many different
 PgBouncer systems, right?</v>
 
-00:35:32.403 --> 00:35:35.803
+00:34:48.584 --> 00:34:51.984
 <v Kirk>So when you connect,
 it forwards your connection to the next,</v>
 
-00:35:35.803 --> 00:35:41.323
+00:34:51.984 --> 00:34:57.504
 <v Kirk>and it load balances across to your
 various read replicas. So you don't know</v>
 
-00:35:41.323 --> 00:35:44.690
+00:34:57.504 --> 00:35:00.870
 <v Kirk>which one you're connecting to,
 and if it falls too far behind,</v>
 
-00:35:44.690 --> 00:35:46.790
+00:35:00.870 --> 00:35:02.970
 <v Kirk>that's the job of the director in my book-</v>
 
-00:35:46.790 --> 00:35:49.090
+00:35:02.970 --> 00:35:05.270
 <v Nik>Mm</v>
 <v Kirk>from an architecture standpoint. If one</v>
 
-00:35:49.090 --> 00:35:53.240
+00:35:05.270 --> 00:35:09.420
 <v Kirk>of the read replicas is really far behind
 and it doesn't meet your normal criteria,</v>
 
-00:35:53.240 --> 00:35:58.983
+00:35:09.420 --> 00:35:15.164
 <v Kirk>stop directing traffic to it. But anyways,
 I, I'm sorry I interrupted you,</v>
 
-00:35:58.983 --> 00:36:03.463
+00:35:15.164 --> 00:35:19.644
 <v Kirk>pretty heavily, Michael, but I just wanted
 to make sure that the people like me kind</v>
 
-00:36:03.463 --> 00:36:08.423
+00:35:19.644 --> 00:35:24.604
 <v Kirk>of understood the nuance of that LSN
 and what it was really about.</v>
 
-00:36:09.123 --> 00:36:13.083
+00:35:25.304 --> 00:35:29.264
 <v Michael>Oh, no, you, you did a great job,
 and I've, I'm out of practice,</v>
 
-00:36:13.083 --> 00:36:18.523
+00:35:29.264 --> 00:35:34.704
 <v Michael>remembering to explain things first
 before diving into, the detail. But yeah,</v>
 
-00:36:18.583 --> 00:36:23.863
+00:35:34.764 --> 00:35:40.044
 <v Michael>one more on the performance side that
 we've discussed before, Nik, is the time,</v>
 
-00:36:23.863 --> 00:36:28.923
+00:35:40.044 --> 00:35:45.104
 <v Michael>the observer effect or timing overhead
 of EXPLAIN ANALYZE. I know that there's</v>
 
-00:36:28.923 --> 00:36:33.123
+00:35:45.104 --> 00:35:49.304
 <v Michael>always tons of performance improvements
 in each Postgres version, and this is no</v>
 
-00:36:33.123 --> 00:36:37.903
+00:35:49.304 --> 00:35:54.084
 <v Michael>different. There are lots of, I would say,
 smaller, like, tweaks and, like,</v>
 
-00:36:37.903 --> 00:36:43.383
+00:35:54.084 --> 00:35:59.564
 <v Michael>query rewriting rules, but this one, like
 we've talked in the past about the timing</v>
 
-00:36:43.383 --> 00:36:50.283
+00:35:59.564 --> 00:36:06.464
 <v Michael>overhead of EXPLAIN ANALYZE and also
 auto_explain with timing on. And yeah,</v>
 
-00:36:50.283 --> 00:36:54.203
+00:36:06.464 --> 00:36:10.384
 <v Michael>kudos to the people that worked
 on this, because I think it,</v>
 
-00:36:54.823 --> 00:37:01.503
+00:36:11.004 --> 00:36:17.684
 <v Michael>it actually changes the calculus
 on having auto_explain on with timing on</v>
 
-00:37:01.963 --> 00:37:05.623
+00:36:18.144 --> 00:36:21.804
 <v Michael>for either all your queries
 or, not logging all of them,</v>
 
-00:37:05.623 --> 00:37:10.423
+00:36:21.804 --> 00:36:26.604
 <v Michael>but like analyzing all of them, or like
 for some sample that like, you know,</v>
 
-00:37:10.423 --> 00:37:13.639
+00:36:26.604 --> 00:36:29.820
 <v Michael>10% of your queries or 5% or 1%,
 something like that.</v>
 
-00:37:14.403 --> 00:37:17.703
+00:36:30.584 --> 00:36:33.884
 <v Nik>Yeah. Well, I, I have also
 one more improvement to mention-</v>
 
-00:37:17.703 --> 00:37:21.103
+00:36:33.884 --> 00:36:37.284
 <v Michael>- [laughs]
 - which was challenging.</v>
 
-00:37:21.103 --> 00:37:23.203
+00:36:37.284 --> 00:36:39.384
 <v Nik>I remember many times during upgrades,</v>
 
-00:37:23.203 --> 00:37:26.743
+00:36:39.384 --> 00:36:42.924
 <v Nik>when after upgrade you want
 to analyze your database.</v>
 
-00:37:26.963 --> 00:37:30.783
+00:36:43.144 --> 00:36:46.964
 <v Nik>Before, statistics started to copy, right?</v>
 
-00:37:30.783 --> 00:37:36.583
+00:36:46.964 --> 00:36:52.764
 <v Nik>Now, now with like statistics being
 transferred from old server to new one,</v>
 
-00:37:36.743 --> 00:37:42.443
+00:36:52.924 --> 00:36:58.624
 <v Nik>probably this feature is less important.
 But as we few weeks ago had a, an episode</v>
 
-00:37:42.443 --> 00:37:46.325
+00:36:58.624 --> 00:37:02.506
 <v Nik>about what you should do after
 restoring from a dump, for example,</v>
 
-00:37:46.363 --> 00:37:53.363
+00:37:02.544 --> 00:37:09.544
 <v Nik>you need your statistics to be created and
 doing it with a single analyze command.</v>
 
-00:37:54.223 --> 00:37:57.703
+00:37:10.404 --> 00:37:13.884
 <v Nik>In large database it's very slow,
 so you want to parallelize it,</v>
 
-00:37:57.703 --> 00:38:00.463
+00:37:13.884 --> 00:37:16.644
 <v Nik>and there is a good CLI
 tool called vacuumdb.</v>
 
-00:38:00.463 --> 00:38:05.083
+00:37:16.644 --> 00:37:21.264
 <v Nik>So you can use vacuumdb with analyze-only
 option to skip vacuuming.</v>
 
-00:38:05.083 --> 00:38:10.703
+00:37:21.264 --> 00:37:26.884
 <v Nik>Although after restoring, from, from
 [laughs] backup as we discussed in detail,</v>
 
-00:38:10.703 --> 00:38:17.263
+00:37:26.884 --> 00:37:33.444
 <v Nik>you, you want vacuum, right? But anyway,
 vacuumdb analyze-only, now with hyphen J,</v>
 
-00:38:17.263 --> 00:38:24.263
+00:37:33.444 --> 00:37:40.444
 <v Nik>J jobs, parallel mode, takes care
 of parent tables and partition tables.</v>
 
-00:38:24.383 --> 00:38:29.363
+00:37:40.564 --> 00:37:45.544
 <v Nik>So plans will be fine. Because
 before that it wouldn't, it wasn't,</v>
 
-00:38:29.363 --> 00:38:32.245
+00:37:45.544 --> 00:37:48.426
 <v Nik>wasn't the case and it
 was not convenient at all.</v>
 
-00:38:33.243 --> 00:38:37.803
+00:37:49.424 --> 00:37:53.984
 <v Kirk>So just to be clear,
 it wasn't processing the</v>
 
-00:38:38.883 --> 00:38:41.423
+00:37:55.064 --> 00:37:57.604
 <v Kirk>extra children tables in-</v>
 
-00:38:42.200 --> 00:38:45.955
+00:37:58.380 --> 00:38:02.136
 <v Nik>No, no, no, no, no. Children were
 all processed, but for parent table,</v>
 
-00:38:45.955 --> 00:38:48.835
+00:38:02.136 --> 00:38:05.016
 <v Nik>which doesn't have data itself.</v>
 <v Kirk>Okay.</v>
 
-00:38:48.860 --> 00:38:52.215
+00:38:05.040 --> 00:38:08.396
 <v Nik>We didn't, we didn't have statistics,
 because once you specify</v>
 
-00:38:52.215 --> 00:38:54.640
+00:38:08.396 --> 00:38:10.820
 <v Nik>number of jobs, parallel workers-</v>
 <v Kirk>Right</v>
 
-00:38:54.640 --> 00:38:58.160
+00:38:10.820 --> 00:38:14.340
 <v Nik>they go to children and work,
 but then nobody updates the parents.</v>
 
-00:38:58.160 --> 00:38:59.990
+00:38:14.340 --> 00:38:16.170
 <v Kirk>Nobody updated the partition-</v>
 <v Nik>Yeah</v>
 
-00:38:59.990 --> 00:39:01.275
+00:38:16.170 --> 00:38:17.456
 <v Kirk>the main partition.</v>
 <v Nik>Yeah.</v>
 
-00:39:01.275 --> 00:39:04.355
+00:38:17.456 --> 00:38:20.536
 <v Kirk>Ah. Good.</v>
 <v Nik>By the way, pg_dump also now,</v>
 
-00:39:04.355 --> 00:39:09.855
+00:38:20.536 --> 00:38:26.036
 <v Nik>takes care of restoring, extended
 statistics. The case statistics, now</v>
 
-00:39:09.995 --> 00:39:14.115
+00:38:26.176 --> 00:38:30.296
 <v Nik>can be restored and, and dumped
 and restored, I guess, right?</v>
 
-00:39:14.115 --> 00:39:16.700
+00:38:30.296 --> 00:38:32.880
 <v Nik>So this is also good stuff-</v>
 <v Michael>Yeah.</v>
 
-00:39:16.700 --> 00:39:19.660
+00:38:32.880 --> 00:38:35.840
 <v Michael>I didn't see that in the release notes.
 I'd... I was looking</v>
 
-00:39:19.660 --> 00:39:23.550
+00:38:35.840 --> 00:38:39.730
 <v Michael>for it and thought that it happened, but I
 didn't see it in the release notes, so I</v>
 
-00:39:23.550 --> 00:39:27.500
+00:38:39.730 --> 00:38:43.680
 <v Michael>was surprised it didn't make it, 'cause I
 think that now means that all statistics</v>
 
-00:39:27.500 --> 00:39:28.980
+00:38:43.680 --> 00:38:45.160
 <v Michael>can be dumped out of Postgres.</v>
 
-00:39:28.980 --> 00:39:30.995
+00:38:45.160 --> 00:38:47.176
 <v Nik>Ah.</v>
 <v Michael>Was that the only exception? [laughs]</v>
 
-00:39:30.995 --> 00:39:33.510
+00:38:47.176 --> 00:38:49.690
 <v Nik>I'm looking at-</v>
 <v Kirk>You could have extension-based</v>
 
-00:39:33.510 --> 00:39:34.715
+00:38:49.690 --> 00:38:50.896
 <v Kirk>statistics or something-</v>
 
-00:39:34.715 --> 00:39:36.975
+00:38:50.896 --> 00:38:53.156
 <v Nik>Oh</v>
 <v Kirk>that may not get carried. So I would,</v>
 
-00:39:36.975 --> 00:39:40.570
+00:38:53.156 --> 00:38:56.750
 <v Kirk>I would hammer down on saying all.
 Okay? I would stick with-</v>
 
-00:39:40.570 --> 00:39:42.975
+00:38:56.750 --> 00:38:59.156
 <v Nik>Yeah</v>
 <v Kirk>regular and extended statistics are now</v>
 
-00:39:42.975 --> 00:39:45.435
+00:38:59.156 --> 00:39:01.616
 <v Kirk>copied over,
 and leave it at that. [laughs]</v>
 
-00:39:45.435 --> 00:39:49.195
+00:39:01.616 --> 00:39:05.376
 <v Nik>pg_dump include restorable extended
 statistics, if you can dump, you,</v>
 
-00:39:49.195 --> 00:39:51.815
+00:39:05.376 --> 00:39:07.996
 <v Nik>you should be able to restore it.</v>
 <v Michael>Yeah.</v>
 
-00:39:52.415 --> 00:39:55.595
+00:39:08.596 --> 00:39:11.776
 <v Nik>Yeah.</v>
 <v Michael>Makes sense. Nice one.</v>
 
-00:39:55.595 --> 00:39:59.595
+00:39:11.776 --> 00:39:15.776
 <v Nik>Oh, specifically, like, there
 are some small things which just make,</v>
 
-00:39:59.595 --> 00:40:02.675
+00:39:15.776 --> 00:39:18.856
 <v Nik>make your life difficult
 if you don't have them.</v>
 
-00:40:02.675 --> 00:40:06.775
+00:39:18.856 --> 00:39:22.956
 <v Nik>Another thing is that in pgbench,
 we have --continue-on-error.</v>
 
-00:40:07.755 --> 00:40:10.695
+00:39:23.936 --> 00:39:26.876
 <v Michael>Oh.</v>
 <v Nik>I, I wrote so many shell scripts</v>
 
-00:40:10.695 --> 00:40:15.795
+00:39:26.876 --> 00:39:31.976
 <v Nik>to simulate this behavior, because if I...
 Sometimes if it just reads some error,</v>
 
-00:40:15.795 --> 00:40:20.275
+00:39:31.976 --> 00:39:36.456
 <v Nik>like max connection reached and so on, you
 just still want to continue your workload</v>
 
-00:40:20.275 --> 00:40:22.922
+00:39:36.456 --> 00:39:39.103
 <v Nik>for your, like,
 for experimentation purposes.</v>
 
-00:40:23.015 --> 00:40:26.191
+00:39:39.196 --> 00:39:42.372
 <v Nik>Now it's just a, a CLI option,
 which is great to have.</v>
 
-00:40:28.015 --> 00:40:29.995
+00:39:44.196 --> 00:39:46.176
 <v Nik>Yeah. Good.</v>
 <v Michael>Yeah.</v>
 
-00:40:30.395 --> 00:40:33.815
+00:39:46.576 --> 00:39:49.996
 <v Kirk>Now that's the good news.
 There's some warnings though,</v>
 
-00:40:33.815 --> 00:40:34.820
+00:39:49.996 --> 00:39:51.000
 <v Kirk>right?</v>
 <v Michael>Oh, yeah.</v>
 
-00:40:34.820 --> 00:40:37.970
+00:39:51.000 --> 00:39:54.150
 <v Kirk>So have you seen some
 of the warnings it tells you about?</v>
 
-00:40:37.970 --> 00:40:41.305
+00:39:54.150 --> 00:39:57.487
 <v Kirk>What's going on with that?
 I'll throw that over to Michael.</v>
 
-00:40:42.335 --> 00:40:46.110
+00:39:58.516 --> 00:40:02.290
 <v Michael>Yeah. I think... Are there
 a couple of parameters that have been</v>
 
-00:40:46.110 --> 00:40:48.715
+00:40:02.290 --> 00:40:04.896
 <v Michael>removed, so that if you've
 got them specified, like,</v>
 
-00:40:48.715 --> 00:40:53.055
+00:40:04.896 --> 00:40:09.236
 <v Michael>in your config file, you, you won't be
 able to restart without them? Including,</v>
 
-00:40:53.055 --> 00:40:57.415
+00:40:09.236 --> 00:40:13.596
 <v Michael>and this might be a surprise to some
 people, I think even, like, a PG18 one.</v>
 
-00:40:57.415 --> 00:41:00.075
+00:40:13.596 --> 00:40:16.256
 <v Michael>Or maybe that was still...
 You know the I/O workers?</v>
 
-00:41:00.075 --> 00:41:06.795
+00:40:16.256 --> 00:40:22.976
 <v Michael>In fact, we didn't talk about these
 at all. The kind of self-driving feature,</v>
 
-00:41:06.795 --> 00:41:11.375
+00:40:22.976 --> 00:40:27.556
 <v Michael>Nik, the self-tuning feature of the
 I/O workers that I think Tomas Vondra was</v>
 
-00:41:11.375 --> 00:41:16.355
+00:40:27.556 --> 00:40:32.536
 <v Michael>working on that's had a parameter removed.
 I haven't checked if that's one of them,</v>
 
-00:41:16.355 --> 00:41:20.061
+00:40:32.536 --> 00:40:36.242
 <v Michael>but yeah, basically there's,
 some parameters that are no longer</v>
 
-00:41:20.435 --> 00:41:23.975
+00:40:36.616 --> 00:40:40.156
 <v Michael>in Postgres that if you specify them,
 it won't, won't start.</v>
 
-00:41:24.755 --> 00:41:28.535
+00:40:40.936 --> 00:40:44.716
 <v Kirk>And be careful, because you
 may have that set on, for example,</v>
 
-00:41:28.535 --> 00:41:29.995
+00:40:44.716 --> 00:40:46.176
 <v Kirk>a specific table.</v>
 
-00:41:30.435 --> 00:41:34.855
+00:40:46.616 --> 00:40:51.036
 <v Kirk>So one of the great features
 of Postgres is you can override things-</v>
 
-00:41:35.075 --> 00:41:36.755
+00:40:51.256 --> 00:40:52.936
 <v Michael>Yeah</v>
 <v Kirk>on various objects,</v>
 
-00:41:36.795 --> 00:41:41.815
+00:40:52.976 --> 00:40:57.996
 <v Kirk>and if you use that stuff on a specific
 object, you might not find it as fast.</v>
 
-00:41:41.815 --> 00:41:43.115
+00:40:57.996 --> 00:40:59.296
 <v Kirk>And,</v>
 <v Michael>Yeah</v>
 
-00:41:43.115 --> 00:41:46.855
+00:40:59.296 --> 00:41:03.036
 <v Kirk>so yeah, so that's a, a red flag.</v>
 <v Nik>And pg_upgrade --check will report</v>
 
-00:41:46.855 --> 00:41:49.115
+00:41:03.036 --> 00:41:05.296
 <v Nik>success, and then you just-</v>
 <v Kirk>Yeah</v>
 
-00:41:49.115 --> 00:41:53.275
+00:41:05.296 --> 00:41:09.456
 <v Nik>cannot start after upgrade. Yeah,
 that's... That just means that as usual,</v>
 
-00:41:53.275 --> 00:41:57.175
+00:41:09.456 --> 00:41:13.356
 <v Nik>you need to test it thoroughly
 before going to production.</v>
 
-00:41:57.375 --> 00:42:01.195
+00:41:13.556 --> 00:41:17.376
 <v Nik>For example, upgrading on a clone
 separately, checking everything works,</v>
 
-00:42:01.195 --> 00:42:06.055
+00:41:17.376 --> 00:41:22.236
 <v Nik>and then, already then proceeding
 to production, right? Testing on clones</v>
 
-00:42:06.195 --> 00:42:12.395
+00:41:22.376 --> 00:41:28.576
 <v Nik>remains important. By the way, how we,
 how we didn't touch any logical</v>
 
-00:42:12.475 --> 00:42:15.795
+00:41:28.656 --> 00:41:31.976
 <v Nik>replication improvements,
 specifically replication of sequences?</v>
 
-00:42:15.795 --> 00:42:18.115
+00:41:31.976 --> 00:41:34.296
 <v Michael>Sequences, yeah.</v>
 <v Nik>Important, yeah.</v>
 
-00:42:18.195 --> 00:42:22.995
+00:41:34.376 --> 00:41:39.176
 <v Nik>The only thing left, from among
 big gaps is just DDL, right? Which-</v>
 
-00:42:22.995 --> 00:42:25.555
+00:41:39.176 --> 00:41:41.736
 <v Michael>- The only thing. That small thing.
 - [laughs]</v>
 
-00:42:25.555 --> 00:42:26.555
+00:41:41.736 --> 00:41:42.736
 <v Michael>Yeah.</v>
 
-00:42:26.735 --> 00:42:30.775
+00:41:42.916 --> 00:41:46.956
 <v Nik>Just DDL and Postgres 20 and that's it.</v>
 <v Michael>Yeah.</v>
 
-00:42:30.775 --> 00:42:32.115
+00:41:46.956 --> 00:41:48.296
 <v Nik>Please.</v>
 <v Kirk>Yeah.</v>
 
-00:42:32.275 --> 00:42:37.655
+00:41:48.456 --> 00:41:53.836
 <v Kirk>So, so, so just, just again for the slower
 listeners like me, you have either DML,</v>
 
-00:42:37.655 --> 00:42:41.655
+00:41:53.836 --> 00:41:57.836
 <v Kirk>data manipulation language, or DDL,
 data definition language stuff.</v>
 
-00:42:41.655 --> 00:42:46.055
+00:41:57.836 --> 00:42:02.236
 <v Kirk>So there's only two things in there,
 and one of them's not supported,</v>
 
-00:42:46.055 --> 00:42:50.835
+00:42:02.236 --> 00:42:07.016
 <v Kirk>and it's partially because you're
 changing... When you do change DDL,</v>
 
-00:42:50.835 --> 00:42:56.415
+00:42:07.016 --> 00:42:12.596
 <v Kirk>it effectively creates DML that affects
 the tables that PG is running on.</v>
 
-00:42:56.595 --> 00:43:00.655
+00:42:12.776 --> 00:42:16.836
 <v Kirk>So you're actually changing the underlying
 structure in a very interest-</v>
 
-00:43:00.655 --> 00:43:02.595
+00:42:16.836 --> 00:42:18.776
 <v Kirk>And it's complicated, right?</v>
 
-00:43:02.595 --> 00:43:07.815
+00:42:18.776 --> 00:42:23.996
 <v Kirk>So this is why [laughs] it's it's gonna
 be a hot second before they get to DDL,</v>
 
-00:43:07.815 --> 00:43:13.375
+00:42:23.996 --> 00:42:29.556
 <v Kirk>but I tell you what, once they do, I think
 a lot of people are gonna be really happy.</v>
 
-00:43:13.435 --> 00:43:15.964
+00:42:29.616 --> 00:42:32.145
 <v Kirk>That's a, that's a nice
 hurdle to overcome.</v>
 
-00:43:16.975 --> 00:43:20.035
+00:42:33.156 --> 00:42:36.216
 <v Nik>Good.
 We covered our favorite features.</v>
 
-00:43:20.915 --> 00:43:25.268
+00:42:37.096 --> 00:42:41.449
 <v Nik>I think recommendations should change
 as well, because testing can be done</v>
 
-00:43:25.835 --> 00:43:29.315
+00:42:42.016 --> 00:42:45.496
 <v Nik>in, like, more actively
 earlier because of AI, right?</v>
 
-00:43:30.355 --> 00:43:35.175
+00:42:46.536 --> 00:42:51.356
 <v Nik>So what, what do you think? How would
 testing of production systems would look,</v>
 
-00:43:35.175 --> 00:43:39.395
+00:42:51.356 --> 00:42:55.576
 <v Nik>would look like now when
 we have AI and we can</v>
 
-00:43:39.675 --> 00:43:44.695
+00:42:55.856 --> 00:43:00.876
 <v Nik>test thoroughly before actually switching
 it in production? Or just clone, right?</v>
 
-00:43:45.035 --> 00:43:50.395
+00:43:01.216 --> 00:43:06.576
 <v Nik>You test all your application
 in, in full clone environment,</v>
 
-00:43:51.455 --> 00:43:57.635
+00:43:07.636 --> 00:43:13.816
 <v Nik>checking that everything works.
 As usual, you need just to... Like,</v>
 
-00:43:57.635 --> 00:44:02.635
+00:43:13.816 --> 00:43:18.816
 <v Nik>such environments should, be detached
 from the world, not sending any emails,</v>
 
-00:44:02.635 --> 00:44:04.475
+00:43:18.816 --> 00:43:20.656
 <v Nik>not making any API calls, right?</v>
 
-00:44:04.475 --> 00:44:08.595
+00:43:20.656 --> 00:43:24.776
 <v Nik>Because if you test
 your application on on actual copy</v>
 
-00:44:09.127 --> 00:44:13.667
+00:43:25.308 --> 00:43:29.848
 <v Nik>It can be dangerous, but it's like it's
 outside of database, but we like...</v>
 
-00:44:14.147 --> 00:44:18.487
+00:43:30.328 --> 00:43:34.668
 <v Nik>the plans will be the same
 and so on. Yeah, and the plan-</v>
 
-00:44:18.487 --> 00:44:22.330
+00:43:34.668 --> 00:43:38.510
 <v Michael>Synthetic, synthetic workloads
 are a bit easier to generate now.</v>
 
-00:44:22.330 --> 00:44:25.040
+00:43:38.510 --> 00:43:41.220
 <v Nik>Of course. Yeah.</v>
 <v Michael>So it... I think one of the hardest</v>
 
-00:44:25.040 --> 00:44:27.587
+00:43:41.220 --> 00:43:43.768
 <v Michael>things with these is actually having,
 you know,</v>
 
-00:44:27.707 --> 00:44:32.507
+00:43:43.888 --> 00:43:48.688
 <v Michael>even if you test on, on a clone of
 production, if there's no traffic, you're,</v>
 
-00:44:32.507 --> 00:44:36.010
+00:43:48.688 --> 00:43:52.190
 <v Michael>you're gonna miss a whole category
 of blocking related issues.</v>
 
-00:44:36.010 --> 00:44:37.170
+00:43:52.190 --> 00:43:53.350
 <v Nik>Right.</v>
 <v Michael>Or sequences-</v>
 
-00:44:37.170 --> 00:44:38.350
+00:43:53.350 --> 00:43:54.530
 <v Nik>That's a great point</v>
 
-00:44:38.350 --> 00:44:41.440
+00:43:54.530 --> 00:43:57.620
 <v Michael>advancing and that kind of thing.</v>
 <v Nik>It's actually the whole idea behind</v>
 
-00:44:41.440 --> 00:44:46.767
+00:43:57.620 --> 00:44:02.948
 <v Nik>the DBLab Forge is that now we can
 understanding some telemetry from, like,</v>
 
-00:44:46.767 --> 00:44:51.767
+00:44:02.948 --> 00:44:07.948
 <v Nik>RCA from root cause analysis
 from production problem, we can simulate</v>
 
-00:44:51.987 --> 00:44:54.307
+00:44:08.168 --> 00:44:10.488
 <v Nik>with synthetic data purely.</v>
 <v Michael>Mm-hmm.</v>
 
-00:44:54.307 --> 00:44:55.987
+00:44:10.488 --> 00:44:12.168
 <v Nik>We can simulate, reproduce,</v>
 
-00:44:55.987 --> 00:45:00.287
+00:44:12.168 --> 00:44:16.468
 <v Nik>and, like, this very problem and study it
 in detail in non-production environment.</v>
 
-00:45:00.287 --> 00:45:01.927
+00:44:16.468 --> 00:44:18.108
 <v Nik>This is actually the idea.</v>
 
-00:45:02.167 --> 00:45:06.887
+00:44:18.348 --> 00:44:23.068
 <v Nik>So you're absolutely right about that. Now
 it becomes much easier because like you,</v>
 
-00:45:06.887 --> 00:45:11.067
+00:44:23.068 --> 00:44:27.248
 <v Nik>a lot of small experiments are done,
 in automated fashion.</v>
 
-00:45:11.487 --> 00:45:17.427
+00:44:27.668 --> 00:44:33.608
 <v Nik>And plan flip analysis is important thing,
 as we said, right? So, so I guess-</v>
 
-00:45:17.427 --> 00:45:18.947
+00:44:33.608 --> 00:44:35.128
 <v Kirk>We have approaches-</v>
 
-00:45:18.947 --> 00:45:24.607
+00:44:35.128 --> 00:44:40.788
 <v Nik>my recommendation, like, usually
 was wait until, like, .1, .2 version,</v>
 
-00:45:24.607 --> 00:45:28.087
+00:44:40.788 --> 00:44:44.268
 <v Nik>but now I think, the better
 recommendation is don't wait.</v>
 
-00:45:28.087 --> 00:45:32.647
+00:44:44.268 --> 00:44:48.828
 <v Nik>Start, start testing earlier,
 and because you...</v>
 
-00:45:32.647 --> 00:45:37.227
+00:44:48.828 --> 00:44:53.408
 <v Nik>Like, most people have much more capacity
 thanks to AI, and why not, right?</v>
 
-00:45:37.227 --> 00:45:41.467
+00:44:53.408 --> 00:44:57.648
 <v Nik>Start testing earlier and then jump
 to a new version sooner, you know,</v>
 
-00:45:42.087 --> 00:45:43.427
+00:44:58.268 --> 00:44:59.608
 <v Nik>with proper testing.</v>
 
-00:45:43.867 --> 00:45:48.587
+00:45:00.048 --> 00:45:04.768
 <v Kirk>So, so our approach has been in
 the past that we, we pull the full data,</v>
 
-00:45:48.907 --> 00:45:51.527
+00:45:05.088 --> 00:45:07.708
 <v Kirk>we put it in a dev environment first,</v>
 
-00:45:51.527 --> 00:45:56.607
+00:45:07.708 --> 00:45:12.788
 <v Kirk>and then we run the process through a dev
 environment with a combo of usually a dev</v>
 
-00:45:56.607 --> 00:46:00.667
+00:45:12.788 --> 00:45:16.848
 <v Kirk>person and an IT person,
 that double-checks everything,</v>
 
-00:46:00.667 --> 00:46:04.387
+00:45:16.848 --> 00:45:20.568
 <v Kirk>that makes sure everything passes,
 follow up with some queries.</v>
 
-00:46:04.387 --> 00:46:07.667
+00:45:20.568 --> 00:45:23.848
 <v Kirk>Then that dev environment
 is actually put into development,</v>
 
-00:46:07.667 --> 00:46:12.967
+00:45:23.848 --> 00:45:29.148
 <v Kirk>and that person is recompiling what's
 going through Git and stuff and pushing it</v>
 
-00:46:12.967 --> 00:46:18.547
+00:45:29.148 --> 00:45:34.728
 <v Kirk>through on, on their machine, and then
 that's a predecessor to the IT department</v>
 
-00:46:18.547 --> 00:46:23.267
+00:45:34.728 --> 00:45:39.448
 <v Kirk>kind of doing the automated script
 stuff that then gets run in staging.</v>
 
-00:46:23.367 --> 00:46:28.570
+00:45:39.548 --> 00:45:44.750
 <v Kirk>So we go from one dev, we, we automate
 it a bit, we push it into staging.</v>
 
-00:46:28.570 --> 00:46:31.527
+00:45:44.750 --> 00:45:47.708
 <v Kirk>The other devs can still be
 on the old version in our book.</v>
 
-00:46:31.527 --> 00:46:35.927
+00:45:47.708 --> 00:45:52.108
 <v Kirk>And then after it goes through staging
 and and it's there for a day or two,</v>
 
-00:46:35.927 --> 00:46:39.907
+00:45:52.108 --> 00:45:56.088
 <v Kirk>then what we do is we have the other
 devs upgrade their environments,</v>
 
-00:46:39.907 --> 00:46:45.687
+00:45:56.088 --> 00:46:01.868
 <v Kirk>to match this, and then we move it into
 the backup system first because it does</v>
 
-00:46:45.687 --> 00:46:51.227
+00:46:01.868 --> 00:46:07.408
 <v Kirk>80% of what production does, but more in a
 backup mode, right? Failure kind of stuff.</v>
 
-00:46:51.227 --> 00:46:54.847
+00:46:07.408 --> 00:46:11.028
 <v Kirk>And then we migrate it through
 the systems. That's been our approach.</v>
 
-00:46:54.847 --> 00:46:58.287
+00:46:11.028 --> 00:46:14.468
 <v Kirk>I don't see it changing other
 than giving a first pass</v>
 
-00:46:58.287 --> 00:47:02.207
+00:46:14.468 --> 00:46:18.388
 <v Kirk>to the AIs to say, "Hey, just,
 you know, fire this up, restore it."</v>
 
-00:47:02.207 --> 00:47:07.347
+00:46:18.388 --> 00:46:23.528
 <v Kirk>Our problem is, is the restore is, if we
 don't do it the right way, it's 72 hours,</v>
 
-00:47:07.387 --> 00:47:11.087
+00:46:23.568 --> 00:46:27.268
 <v Kirk>and it just takes forever for that,
 you know, feeding up the data,</v>
 
-00:47:11.087 --> 00:47:15.087
+00:46:27.268 --> 00:46:31.268
 <v Kirk>feeding up everything else.
 And I've yet to solve that problem yet,</v>
 
-00:47:15.087 --> 00:47:19.507
+00:46:31.268 --> 00:46:35.688
 <v Kirk>but you know, I need to work that.
 Once I get that worked, where it can be up</v>
 
-00:47:19.507 --> 00:47:23.067
+00:46:35.688 --> 00:46:39.248
 <v Kirk>and running faster, great.</v>
 <v Nik>So since you manage Postgres yourself,</v>
 
-00:47:23.067 --> 00:47:26.587
+00:46:39.248 --> 00:46:42.768
 <v Nik>you should use pg_createsubscriber
 these days, right?</v>
 
-00:47:26.587 --> 00:47:33.127
+00:46:42.768 --> 00:46:49.308
 <v Nik>To convert, physical replica to logical
 replica and then upgrade it. That's it.</v>
 
-00:47:33.127 --> 00:47:34.327
+00:46:49.308 --> 00:46:50.508
 <v Kirk>Note to self.</v>
 
-00:47:34.327 --> 00:47:37.367
+00:46:50.508 --> 00:46:53.548
 <v Nik>Yeah, yeah, yeah.
 This is how, like, it should be done.</v>
 
-00:47:37.367 --> 00:47:41.407
+00:46:53.548 --> 00:46:57.588
 <v Nik>And I'm very curious about plan flip
 analysis because this is big topic.</v>
 
-00:47:41.407 --> 00:47:45.207
+00:46:57.588 --> 00:47:01.388
 <v Nik>We implemented recently in DBLab Engine,
 we implemented</v>
 
-00:47:45.347 --> 00:47:51.267
+00:47:01.528 --> 00:47:07.448
 <v Nik>ability to upgrade clones just pressing a
 button, and then you can start analyzing.</v>
 
-00:47:51.267 --> 00:47:55.907
+00:47:07.448 --> 00:47:12.088
 <v Nik>You can have two clones and start
 analyzing plans. So, It's</v>
 
-00:47:55.907 --> 00:47:59.767
+00:47:12.088 --> 00:47:15.948
 <v Kirk>just having the dev be able to run
 it in their environment, it Michael.</v>
 
-00:47:59.767 --> 00:48:04.767
+00:47:15.948 --> 00:47:20.948
 <v Kirk>It exercises enough the code
 that if we had a a plan flip,</v>
 
-00:48:04.847 --> 00:48:08.307
+00:47:21.028 --> 00:47:24.488
 <v Kirk>like our most used table
 is 200 million rows.</v>
 
-00:48:08.347 --> 00:48:14.387
+00:47:24.528 --> 00:47:30.568
 <v Kirk>Any pan, any plan flip on that table
 is immediately, dissatisfied.</v>
 
-00:48:14.387 --> 00:48:15.387
+00:47:30.568 --> 00:47:31.568
 <v Kirk>- [laughs]
 - Yeah.</v>
 
-00:48:15.387 --> 00:48:19.400
+00:47:31.568 --> 00:47:35.580
 <v Kirk>It, it, it never hides, right? Ahead.</v>
 <v Michael>Yeah. Well, I was gonna say,</v>
 
-00:48:19.400 --> 00:48:23.607
+00:47:35.580 --> 00:47:39.788
 <v Michael>I think I understand why we're calling it
 plan flips, and I, I think that's a useful</v>
 
-00:48:23.607 --> 00:48:28.967
+00:47:39.788 --> 00:47:45.148
 <v Michael>phrase. But query...
 It's performance degradation, right? It,</v>
 
-00:48:28.967 --> 00:48:31.467
+00:47:45.148 --> 00:47:47.648
 <v Nik>Yeah</v>
 <v Michael>that's the big issue,</v>
 
-00:48:31.467 --> 00:48:37.147
+00:47:47.648 --> 00:47:53.328
 <v Michael>and I think actually that hints
 at some easier to catch solutions.</v>
 
-00:48:37.287 --> 00:48:41.367
+00:47:53.468 --> 00:47:57.548
 <v Michael>I know Radim was working on this, like,
 with his RegreSQL.</v>
 
-00:48:41.367 --> 00:48:45.400
+00:47:57.548 --> 00:48:01.580
 <v Michael>I think that's a regressions is more of
 like an interesting way of thinking about</v>
 
-00:48:45.400 --> 00:48:46.420
+00:48:01.580 --> 00:48:02.600
 <v Michael>it rather than flips.</v>
 
-00:48:46.420 --> 00:48:50.180
+00:48:02.600 --> 00:48:06.360
 <v Michael>'Cause the plan might change, a plan shape
 might change, but the, if the performance</v>
 
-00:48:50.180 --> 00:48:52.767
+00:48:06.360 --> 00:48:08.948
 <v Michael>hasn't changed, is that a big deal?</v>
 <v Nik>Of course. Yeah.</v>
 
-00:48:52.767 --> 00:48:55.490
+00:48:08.948 --> 00:48:11.670
 <v Michael>Yeah.</v>
 <v Nik>Not all flips are bad, of course. It can</v>
 
-00:48:55.490 --> 00:48:57.670
+00:48:11.670 --> 00:48:13.850
 <v Nik>be improvement because new version,</v>
 <v Michael>Yeah</v>
 
-00:48:57.670 --> 00:48:59.900
+00:48:13.850 --> 00:48:16.080
 <v Nik>has better plan.
 It can happen, definitely.</v>
 
-00:48:59.900 --> 00:49:03.380
+00:48:16.080 --> 00:48:19.560
 <v Nik>But we, when we talk about... It's,
 regression is very great, good word here.</v>
 
-00:49:03.380 --> 00:49:05.580
+00:48:19.560 --> 00:48:21.760
 <v Michael>Yeah.</v>
 <v Nik>There are... A separate question here</v>
 
-00:49:05.580 --> 00:49:08.947
+00:48:21.760 --> 00:48:25.128
 <v Nik>is, like, Kirk, do you know how
 many query IDs you actually have?</v>
 
-00:49:08.947 --> 00:49:12.527
+00:48:25.128 --> 00:48:28.708
 <v Michael>- [laughs]
 - so yeah, that's a great question.</v>
 
-00:49:12.527 --> 00:49:16.487
+00:48:28.708 --> 00:48:32.668
 <v Kirk>I don't know the exact number.
 I do know the following truth.</v>
 
-00:49:16.527 --> 00:49:21.767
+00:48:32.708 --> 00:48:37.948
 <v Kirk>We have about 40 queries
 that are 80 to 90%-</v>
 
-00:49:21.767 --> 00:49:23.547
+00:48:37.948 --> 00:48:39.728
 <v Nik>Okay</v>
 <v Kirk>of our work.</v>
 
-00:49:23.687 --> 00:49:27.867
+00:48:39.868 --> 00:48:44.048
 <v Nik>In terms of time, like database
 execution time, or in general?</v>
 
-00:49:27.867 --> 00:49:32.487
+00:48:44.048 --> 00:48:48.668
 <v Kirk>Number of executions and... Right?
 Because one of our, one of our key ones</v>
 
-00:49:32.487 --> 00:49:36.150
+00:48:48.668 --> 00:48:52.330
 <v Kirk>is a search</v>
 <v Michael>That actually does all the heavy</v>
 
-00:49:36.150 --> 00:49:37.300
+00:48:52.330 --> 00:48:53.480
 <v Michael>work and takes the time</v>
 
-00:49:37.300 --> 00:49:41.400
+00:48:53.480 --> 00:48:57.580
 <v Nik>The problem, the problem is the tail
 can be really long and something in tail</v>
 
-00:49:41.400 --> 00:49:44.015
+00:48:57.580 --> 00:49:00.196
 <v Nik>can, can flip so badly that,</v>
 <v Michael>Yeah</v>
 
-00:49:44.075 --> 00:49:48.655
+00:49:00.256 --> 00:49:04.836
 <v Nik>so you need to analyze everything.
 And what I now, what I'm now,</v>
 
-00:49:48.655 --> 00:49:53.100
+00:49:04.836 --> 00:49:09.280
 <v Nik>now thinking about is that if you see,
 if you have pg_stat_statements,</v>
 
-00:49:53.100 --> 00:49:57.055
+00:49:09.280 --> 00:49:13.236
 <v Nik>I know you don't have pg_stat_statements,
 by the way. It's, it's not, it's not,</v>
 
-00:49:57.055 --> 00:49:59.035
+00:49:13.236 --> 00:49:15.216
 <v Nik>common. Most people have.</v>
 <v Michael>Mm.</v>
 
-00:49:59.035 --> 00:50:03.835
+00:49:15.216 --> 00:49:20.016
 <v Nik>And if you see pg_stat_statements.max
 5,000 by default, and you see all of them</v>
 
-00:50:03.835 --> 00:50:09.715
+00:49:20.016 --> 00:49:25.896
 <v Nik>are filled, big question, what kind of
 like iceberg hides behind those 4, 5,000?</v>
 
-00:50:09.715 --> 00:50:13.775
+00:49:25.896 --> 00:49:29.956
 <v Nik>What, what is drift and so on?</v>
 <v Michael>You can query</v>
 
-00:50:13.775 --> 00:50:16.890
+00:49:29.956 --> 00:49:33.070
 <v Michael>for deallocations.
 I learned that recently. Like you can see-</v>
 
-00:50:16.890 --> 00:50:18.080
+00:49:33.070 --> 00:49:34.260
 <v Nik>Yeah</v>
 <v Michael>how many times.</v>
 
-00:50:18.080 --> 00:50:19.315
+00:49:34.260 --> 00:49:35.496
 <v Michael>Yeah, that's really cool.</v>
 
-00:50:19.315 --> 00:50:22.075
+00:49:35.496 --> 00:49:38.256
 <v Nik>That's cool.</v>
 <v Michael>But is it... Nik, I had a question.</v>
 
-00:50:22.075 --> 00:50:25.155
+00:49:38.256 --> 00:49:41.336
 <v Michael>When you said it's,
 you have to look at everything,</v>
 
-00:50:25.155 --> 00:50:29.595
+00:49:41.336 --> 00:49:45.776
 <v Michael>I suspect another thing to look
 at in the tail is calls.</v>
 
-00:50:29.595 --> 00:50:33.740
+00:49:45.776 --> 00:49:49.920
 <v Michael>So a query that's in the tail that's
 very infrequent, even if it flipped,</v>
 
-00:50:33.740 --> 00:50:36.320
+00:49:49.920 --> 00:49:52.500
 <v Michael>would not cause that bad an issue.</v>
 <v Nik>It can. It can-</v>
 
-00:50:36.320 --> 00:50:38.480
+00:49:52.500 --> 00:49:54.660
 <v Michael>But if it was huge... Okay. Yeah.</v>
 <v Nik>Can be.</v>
 
-00:50:38.480 --> 00:50:41.590
+00:49:54.660 --> 00:49:57.770
 <v Michael>But I'm thinking the bigger
 issues might be the ones with lots</v>
 
-00:50:41.590 --> 00:50:45.375
+00:49:57.770 --> 00:50:01.556
 <v Michael>of calls, even if they're like
 microseconds and they flipped.</v>
 
-00:50:45.375 --> 00:50:49.530
+00:50:01.556 --> 00:50:05.710
 <v Nik>Imagine. Very simple example.
 Imagine you have statement_timeout 60,</v>
 
-00:50:49.530 --> 00:50:52.135
+00:50:05.710 --> 00:50:08.316
 <v Nik>which is quite high for, in, in my books.
 It should-</v>
 
-00:50:52.135 --> 00:50:55.295
+00:50:08.316 --> 00:50:11.476
 <v Michael>Yeah</v>
 <v Nik>it should be 30, 15 or 10.</v>
 
-00:50:55.695 --> 00:50:59.615
+00:50:11.876 --> 00:50:15.796
 <v Michael>Yeah.</v>
 <v Nik>But let's have 60. You have big machine,</v>
 
-00:50:59.615 --> 00:51:05.915
+00:50:15.796 --> 00:50:22.096
 <v Nik>like 96 cores, and then you have
 a query which is just one QPS, right?</v>
 
-00:51:06.095 --> 00:51:10.195
+00:50:22.276 --> 00:50:26.376
 <v Nik>And then it suddenly started to be
 so slow it reaches a statement_timeout.</v>
 
-00:51:10.195 --> 00:51:16.415
+00:50:26.376 --> 00:50:32.596
 <v Nik>So it, it takes... During one minute you
 will have already 60, active sessions,</v>
 
-00:51:17.135 --> 00:51:21.415
+00:50:33.316 --> 00:50:37.596
 <v Nik>busy with this work. One QPS work.</v>
 <v Michael>Yeah. Good point.</v>
 
-00:51:21.415 --> 00:51:26.375
+00:50:37.596 --> 00:50:42.556
 <v Nik>What, what if it was two QPS?
 You already more than 100 active sessions,</v>
 
-00:51:26.375 --> 00:51:32.915
+00:50:42.556 --> 00:50:49.096
 <v Nik>and you have only 96 cores. So it's can be
 somewhere in at the very end of the tail</v>
 
-00:51:32.915 --> 00:51:35.155
+00:50:49.096 --> 00:50:51.336
 <v Nik>might hit you really hard.
 That's a problem.</v>
 
-00:51:35.155 --> 00:51:37.495
+00:50:51.336 --> 00:50:53.676
 <v Michael>Yeah.</v>
 <v Nik>So that's why we need to analyze</v>
 
-00:51:37.495 --> 00:51:40.755
+00:50:53.676 --> 00:50:56.936
 <v Nik>everything, and if pg_stat_statements
 don't show everything,</v>
 
-00:51:40.755 --> 00:51:45.835
+00:50:56.936 --> 00:51:02.016
 <v Nik>then your methodology shouldn't be based
 on pg_stat_statements. Only, like you,</v>
 
-00:51:45.835 --> 00:51:52.355
+00:51:02.016 --> 00:51:08.536
 <v Nik>you, you could look to it for some macro
 metrics, but to analyze everything,</v>
 
-00:51:52.835 --> 00:51:58.215
+00:51:09.016 --> 00:51:14.396
 <v Nik>anyway, that's why you should start
 earlier and give yourself a month or two</v>
 
-00:51:58.215 --> 00:52:05.215
+00:51:14.396 --> 00:51:21.396
 <v Nik>to study the behavior of your database
 and its workload on Postgres 19. Right?</v>
 
-00:52:06.015 --> 00:52:11.355
+00:51:22.196 --> 00:51:27.536
 <v Nik>Not, do it in, in, in rushing,
 like in one week. Should take longer.</v>
 
-00:52:12.115 --> 00:52:13.955
+00:51:28.296 --> 00:51:30.136
 <v Michael>Yeah. I like that.</v>
 <v Nik>Good?</v>
 
-00:52:15.195 --> 00:52:18.515
+00:51:31.376 --> 00:51:34.696
 <v Nik>I think, probably that's it. Good.</v>
 
-00:52:18.515 --> 00:52:21.715
+00:51:34.696 --> 00:51:37.896
 <v Michael>Nice one.</v>
 <v Nik>Thank you, Michael, for visiting us.</v>
 
-00:52:21.715 --> 00:52:24.600
+00:51:37.896 --> 00:51:40.780
 <v Nik>[laughs] Yeah.</v>
 <v Michael>Thank, thank you</v>
 
-00:52:24.600 --> 00:52:26.255
+00:51:40.780 --> 00:51:42.436
 <v Michael>guys for releasing in my absence.</v>
 
-00:52:26.255 --> 00:52:30.655
+00:51:42.436 --> 00:51:46.836
 <v Michael>It's fun to be a listener. I get an, I get
 an extra Postgres podcast in my feed now.</v>
 
-00:52:30.655 --> 00:52:35.395
+00:51:46.836 --> 00:51:51.576
 <v Kirk>[laughs] and in honor,
 in honor of the fact that you're coming</v>
 
-00:52:35.395 --> 00:52:38.030
+00:51:51.576 --> 00:51:54.210
 <v Kirk>back, I wore the yellow shirt for you.</v>
 <v Nik>Oh, nice.</v>
 
-00:52:38.030 --> 00:52:39.635
+00:51:54.210 --> 00:51:55.816
 <v Kirk>So I'm I get to come back.</v>
 
-00:52:39.635 --> 00:52:43.755
+00:51:55.816 --> 00:51:59.936
 <v Kirk>You're not getting... I'll wear the red
 shirt on, on, on the last day I'm with you</v>
 
-00:52:43.755 --> 00:52:45.060
+00:51:59.936 --> 00:52:01.240
 <v Kirk>guys. So-</v>
 <v Nik>Well-</v>
 
-00:52:45.060 --> 00:52:48.770
+00:52:01.240 --> 00:52:04.950
 <v Kirk>I'm just keeping your seat warm.</v>
 <v Michael>Yeah. I'll be back in January, so you've</v>
 
-00:52:48.770 --> 00:52:50.635
+00:52:04.950 --> 00:52:06.816
 <v Michael>got a little while left.</v>
 <v Kirk>Oh, good.</v>
 
-00:52:50.635 --> 00:52:53.300
+00:52:06.816 --> 00:52:09.480
 <v Nik>Happy New Year, Michael. [laughs]</v>
 <v Michael>Yeah.</v>
 
-00:52:53.300 --> 00:52:55.695
+00:52:09.480 --> 00:52:11.876
 <v Kirk>- [laughs]
 - And Merry Christmas. Happy Thanksgiving.</v>
 
-00:52:55.695 --> 00:52:58.435
+00:52:11.876 --> 00:52:14.616
 <v Nik>And Merry Christmas. Yes.</v>
 <v Michael>Yeah. [laughs]</v>
 
-00:52:58.435 --> 00:52:59.695
+00:52:14.616 --> 00:52:15.876
 <v Nik>Yeah. Okay.</v>
 <v Michael>Ah.</v>
 
-00:52:59.700 --> 00:53:00.739
+00:52:15.880 --> 00:52:16.920
 <v Kirk>Bye.</v>
 <v Michael>See you guys.</v>
 
-00:53:01.000 --> 00:53:06.425
+00:52:17.200 --> 00:52:22.625
 [music]
 
-00:53:06.425 --> 00:53:11.850
+00:52:22.625 --> 00:52:28.050
 [music]
 
-00:53:11.850 --> 00:53:17.275
+00:52:28.050 --> 00:52:33.475
 [music]
 
-00:53:17.275 --> 00:53:22.700
+00:52:33.475 --> 00:52:38.900
 [music]

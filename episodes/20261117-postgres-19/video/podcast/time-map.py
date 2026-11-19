@@ -4,7 +4,10 @@
 # BODY0: the final's audio join, measured: 1024-sample pad + cold open (2,101,248) + 1024-sample pad.
 import json,os
 HERE=os.path.dirname(os.path.abspath(__file__))
-BODY0=(1024+2101248+1024)/48000
+# Podcast without the cold open (Nik, 2026-11-19): the body starts at 0. With the cold open it was
+# (1024+2101248+1024)/48000 = 43.8187 s (the final's join layout).
+import sys
+BODY0=float(sys.argv[1]) if len(sys.argv)>1 else 0.0
 st=json.load(open('edited-v2.cuts.json'))['segmentTimes']
 cuts=json.load(open(os.path.join(HERE,'../final/edit/body-v5-cuts.json')))['cuts']
 def v5(t):  # body v3 -> v5 (t not inside a cut)
@@ -20,9 +23,9 @@ for s in st:
         if y-x<1e-6: continue
         src=s['srcStart']+(x-a)
         segs.append({'srcStart':round(src,4),'srcEnd':round(src+(y-x),4),'audioStart':round(BODY0+v5(x),4)})
-total=153732096/48000
+total=151628800/48000 if BODY0==0 else 153732096/48000
 talk_end=segs[-1]['audioStart']+segs[-1]['srcEnd']-segs[-1]['srcStart']
-m={'note':'episode 197 podcast: source -> podcast seconds (cold open 0-43.8 s not mapped; body from %.4f s)'%BODY0,
-   'intro':{'start':0,'talkStart':BODY0},'talk':{'start':BODY0,'end':round(talk_end,3)},'outro':{'end':round(total,3)},'segments':segs,'total':round(total,3)}
+m={'note':'episode 197 podcast: source -> podcast seconds (body from %.4f s)'%BODY0,
+   'talk':{'start':BODY0,'end':round(talk_end,3)},'outro':{'end':round(total,3)},'segments':segs,'total':round(total,3)}
 json.dump(m,open('podcast.time-map.json','w'),indent=1)
 print(len(segs),'segments; talk end',talk_end,'total',total)

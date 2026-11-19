@@ -4,7 +4,7 @@ Postgres.FM episode 197. Hosts: Nik, Michael and Kirk.
 
 **DRAFT, 2026-11-17.** Nothing here is published. Open items for the host are at the end.
 
-**Times.** Times in brackets are YouTube video times in the final video (`episode-197-final.mp4`: a 44 s cold open, then the edited show, then the outro). They come from the on-air time of the first mention plus a fixed offset to the recording, snapped to the nearest word and mapped through the cuts, so each is good to about 5 s. Chapter times in `youtube-description.txt` are anchored on the first words of each section. Pre-show and post-show chatter are not in the episode.
+**Times.** Times in brackets are podcast times (`preview/episode-197-podcast.mp3`: no cold open, so 00:00 is Michael's "Hello, and welcome"; video time = podcast time + 43.76 s). YouTube times are in `youtube-description.txt`. Do not run `video/final/edit/set_times.py` on this file again: it would add the cold open back. They come from the on-air time of the first mention plus a fixed offset to the recording, snapped to the nearest word and mapped through the cuts, so each is good to about 5 s. Chapter times in `youtube-description.txt` are anchored on the first words of each section. Pre-show and post-show chatter are not in the episode.
 
 ## Episode description
 
@@ -14,12 +14,12 @@ Michael, Nik, and Kirk discuss Postgres 19: why the release came in November and
 
 Here are some links to things they mentioned:
 
-Times are YouTube video times of the first mention (see the note above).
+Times are podcast times of the first mention (see the note above).
 
 ### Main link
 
-- [21:24] Postgres 19 for people who run it: PostgreSQL 19 RC2 vs 18.7 (study brief, PostgresAI): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
-- [47:38] The plan comparison in the same brief: 4,273 queries planned on 18.7 and 19 RC2, causes of each plan change (section 3.6, "Diff your plans before you upgrade"): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c#plans
+- [20:40] Postgres 19 for people who run it: PostgreSQL 19 RC2 vs 18.7 (study brief, PostgresAI): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
+- [46:54] The plan comparison in the same brief: 4,273 queries planned on 18.7 and 19 RC2, causes of each plan change (section 3.6, "Diff your plans before you upgrade"): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c#plans
 
 About the numbers on screen. They come from this study. Most are synthetic tests of setups we built; they are not failure or speed rates of real systems. Hosts, trials and caveats per card:
 - CVEs per release: https://www.postgresql.org/support/security/ (snapshot 2026-11-18, 229 CVEs), grouped by release day from 2019 to 18.7; releases without a CVE count as 0. 18.7 fixed 52 and 18.6 fixed 28; 2019-2025 releases fixed 1.5 on average (median 1).
@@ -34,62 +34,62 @@ About the numbers on screen. They come from this study. Most are synthetic tests
 
 ### The release
 
-- [02:39] PostgreSQL 19 release notes: https://www.postgresql.org/docs/19/release-19.html
-- [06:03] What LLMs do to PostgreSQL and DBAs (depesz, 2026-11-09): https://www.depesz.com/2026/11/09/what-llms-do-to-postgresql-and-dbas/
-- [08:38] scary patch contest (Robert Haas, pgsql-hackers, 2026-08-25): https://www.postgresql.org/message-id/CA%2BTgmob9NY6m0YNFTQ4nFH2d0iC9SQRruDYxfndGKKzh8OC80w%40mail.gmail.com
-- [08:51] Are we reverting patches because of bugs found by AI? (Tomas Vondra, 2026-10-01): https://vondra.me/posts/are-we-reverting-patches-because-of-bugs-found-by-ai/
-- [09:05] pgroast, an adversarial reviewer for Postgres proposals: https://github.com/NikolayS/pgroast
+- [01:55] PostgreSQL 19 release notes: https://www.postgresql.org/docs/19/release-19.html
+- [05:19] What LLMs do to PostgreSQL and DBAs (depesz, 2026-11-09): https://www.depesz.com/2026/11/09/what-llms-do-to-postgresql-and-dbas/
+- [07:54] scary patch contest (Robert Haas, pgsql-hackers, 2026-08-25): https://www.postgresql.org/message-id/CA%2BTgmob9NY6m0YNFTQ4nFH2d0iC9SQRruDYxfndGKKzh8OC80w%40mail.gmail.com
+- [08:08] Are we reverting patches because of bugs found by AI? (Tomas Vondra, 2026-10-01): https://vondra.me/posts/are-we-reverting-patches-because-of-bugs-found-by-ai/
+- [08:22] pgroast, an adversarial reviewer for Postgres proposals: https://github.com/NikolayS/pgroast
 
 ### Episodes we referred to
 
-- [10:47] Our episode on pg_squeeze, with Antonin Houska: https://postgres.fm/episodes/pg_squeeze
-- [17:42] The hidden costs of CREATE TEMP TABLE (our episode last week): https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
-- [18:05] Our episode with DBOS, on LISTEN/NOTIFY at scale (its notes link the Recall.ai post): https://postgres.fm/episodes/dbos
-- [37:37] Dump/restore done. Now what? (our episode 193): https://postgres.fm/episodes/dump-restore-done-now-what
+- [10:03] Our episode on pg_squeeze, with Antonin Houska: https://postgres.fm/episodes/pg_squeeze
+- [16:58] The hidden costs of CREATE TEMP TABLE (our episode last week): https://postgres.fm/episodes/the-hidden-costs-of-create-temp-table
+- [17:21] Our episode with DBOS, on LISTEN/NOTIFY at scale (its notes link the Recall.ai post): https://postgres.fm/episodes/dbos
+- [36:53] Dump/restore done. Now what? (our episode 193): https://postgres.fm/episodes/dump-restore-done-now-what
 
 ### REPACK
 
-- [10:40] Add CONCURRENTLY option to REPACK (commit, Antonin Houska; based on pg_squeeze): https://github.com/postgres/postgres/commit/28d534e2ae0ac888b5460f977a10cd9bb017ef98
-- [14:20] What REPACK (CONCURRENTLY) costs while it runs (Radim Marek, boringSQL, 2026-09-28): https://boringsql.com/posts/repack-concurrently-costs/
+- [09:56] Add CONCURRENTLY option to REPACK (commit, Antonin Houska; based on pg_squeeze): https://github.com/postgres/postgres/commit/28d534e2ae0ac888b5460f977a10cd9bb017ef98
+- [13:37] What REPACK (CONCURRENTLY) costs while it runs (Radim Marek, boringSQL, 2026-09-28): https://boringsql.com/posts/repack-concurrently-costs/
 
 ### LISTEN/NOTIFY and autovacuum
 
-- [18:15] Optimize LISTEN/NOTIFY via shared channel map and direct advancement (commit, Joel Jacobson): https://github.com/postgres/postgres/commit/282b1cde9dedf456ecf02eb27caf086023a7bb71
-- [20:35] Add rudimentary table prioritization to autovacuum (commit, Nathan Bossart): https://github.com/postgres/postgres/commit/d7965d65fc5bb2139bc51c051c11428414c65160
+- [17:31] Optimize LISTEN/NOTIFY via shared channel map and direct advancement (commit, Joel Jacobson): https://github.com/postgres/postgres/commit/282b1cde9dedf456ecf02eb27caf086023a7bb71
+- [19:51] Add rudimentary table prioritization to autovacuum (commit, Nathan Bossart): https://github.com/postgres/postgres/commit/d7965d65fc5bb2139bc51c051c11428414c65160
 
 ### Plan advice
 
-- [22:56] Waiting for Postgres 19: Better Planner Hints with Path Generation Strategies (Lukas Fittl, 5mins of Postgres): https://pganalyze.com/blog/5mins-postgres-19-better-planner-hints
+- [22:13] Waiting for Postgres 19: Better Planner Hints with Path Generation Strategies (Lukas Fittl, 5mins of Postgres): https://pganalyze.com/blog/5mins-postgres-19-better-planner-hints
 
 ### Other features
 
-- [28:35] jit: Change the default to off (commit, Jelte Fennema-Nio): https://github.com/postgres/postgres/commit/7f8c88c2b872cb74882ab93dcb05529dab2a10bc
-- [30:59] WAIT FOR (docs): https://www.postgresql.org/docs/19/sql-wait.html
-- [36:23] instrumentation: Use Time-Stamp Counter on x86-64 to lower overhead (commit, Lukas Fittl, Andres Freund, David Geier): https://github.com/postgres/postgres/commit/294520c44487ecaade7a6ea8781b973f9ed03909
+- [27:52] jit: Change the default to off (commit, Jelte Fennema-Nio): https://github.com/postgres/postgres/commit/7f8c88c2b872cb74882ab93dcb05529dab2a10bc
+- [30:16] WAIT FOR (docs): https://www.postgresql.org/docs/19/sql-wait.html
+- [35:40] instrumentation: Use Time-Stamp Counter on x86-64 to lower overhead (commit, Lukas Fittl, Andres Freund, David Geier): https://github.com/postgres/postgres/commit/294520c44487ecaade7a6ea8781b973f9ed03909
 
 ### Upgrade
 
-- [41:42] pg_upgrade --check passes, then the upgrade fails (shihao zhong, pgsql-hackers, 2026-10-24): https://www.postgresql.org/message-id/CAGRkXqT%2B5%2BmQhoKZFTiM4yOZtVV%3DNW506vDwFtVeG%2BVmL_W5wQ%40mail.gmail.com
-- [48:37] RegreSQL, catch query performance regressions (Radim Marek): https://github.com/boringSQL/regresql
+- [40:58] pg_upgrade --check passes, then the upgrade fails (shihao zhong, pgsql-hackers, 2026-10-24): https://www.postgresql.org/message-id/CAGRkXqT%2B5%2BmQhoKZFTiM4yOZtVV%3DNW506vDwFtVeG%2BVmL_W5wQ%40mail.gmail.com
+- [47:53] RegreSQL, catch query performance regressions (Radim Marek): https://github.com/boringSQL/regresql
 
 20 links in total, the main link included (the cap is 20).
 
 ### Dropped on 2026-11-17 to keep the cap (added 193, 196, the JIT commit and RegreSQL)
 
-- [04:22] PostgreSQL security information (18.6 fixed 28 CVEs, 18.7 fixed 52): https://www.postgresql.org/support/security/ — a side number; it stays in the fact-check.
-- [16:21] pgcompacttable: https://github.com/dataegret/pgcompacttable — a passing idea, not a 19 topic.
-- [17:53] Postgres LISTEN/NOTIFY does not scale (Recall.ai, 2025): https://www.recall.ai/blog/postgres-listen-notify-does-not-scale — the DBOS episode notes link it.
-- [24:05] Not Worth Doing: Features We Do Not Want (PostgreSQL wiki): https://wiki.postgresql.org/wiki/Not_Worth_Doing#Features_We_Do_Not_Want — an aside.
+- [03:38] PostgreSQL security information (18.6 fixed 28 CVEs, 18.7 fixed 52): https://www.postgresql.org/support/security/ — a side number; it stays in the fact-check.
+- [15:37] pgcompacttable: https://github.com/dataegret/pgcompacttable — a passing idea, not a 19 topic.
+- [17:09] Postgres LISTEN/NOTIFY does not scale (Recall.ai, 2025): https://www.recall.ai/blog/postgres-listen-notify-does-not-scale — the DBOS episode notes link it.
+- [23:22] Not Worth Doing: Features We Do Not Want (PostgreSQL wiki): https://wiki.postgresql.org/wiki/Not_Worth_Doing#Features_We_Do_Not_Want — an aside.
 
 ### Other candidates left out
 
-- [30:37] Default to log_lock_waits=on (commit, Laurenz Albe): https://github.com/postgres/postgres/commit/2aac62be8cbb870ccf8c5b3fbb8a4e4aa8a14a73
-- [29:44] Change wal_compression=on to the first of zstd, lz4, pglz (commit, wenhui qiu): https://github.com/postgres/postgres/commit/5838806ce696dd0759c5e4b87754e802612135e0
-- [22:34] pg_plan_advice (docs): https://www.postgresql.org/docs/19/pgplanadvice.html
-- [33:31] GitLab database load balancing, primary sticking by LSN (docs): https://docs.gitlab.com/development/database/load_balancing/
-- [39:04] Include extended statistics data in pg_dump (commit, Corey Huinker): https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64
-- [42:10] Logical replication of sequences (docs): https://www.postgresql.org/docs/19/logical-replication-sequences.html
-- [47:38] DBLab Engine 4.2.0, clone major upgrade: https://gitlab.com/postgres-ai/database-lab/-/releases/v4.2.0
+- [29:53] Default to log_lock_waits=on (commit, Laurenz Albe): https://github.com/postgres/postgres/commit/2aac62be8cbb870ccf8c5b3fbb8a4e4aa8a14a73
+- [29:00] Change wal_compression=on to the first of zstd, lz4, pglz (commit, wenhui qiu): https://github.com/postgres/postgres/commit/5838806ce696dd0759c5e4b87754e802612135e0
+- [21:50] pg_plan_advice (docs): https://www.postgresql.org/docs/19/pgplanadvice.html
+- [32:47] GitLab database load balancing, primary sticking by LSN (docs): https://docs.gitlab.com/development/database/load_balancing/
+- [38:20] Include extended statistics data in pg_dump (commit, Corey Huinker): https://github.com/postgres/postgres/commit/c32fb29e979db4a7b92adb29007725eeacf91f64
+- [41:26] Logical replication of sequences (docs): https://www.postgresql.org/docs/19/logical-replication-sequences.html
+- [46:54] DBLab Engine 4.2.0, clone major upgrade: https://gitlab.com/postgres-ai/database-lab/-/releases/v4.2.0
 
 ~~~
 

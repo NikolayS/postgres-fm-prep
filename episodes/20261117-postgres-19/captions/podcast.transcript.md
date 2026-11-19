@@ -1,372 +1,322 @@
 # Postgres 19
 
-**Nik** [00:00:08]
+**Michael** [00:00:00]
 
-Because the GTA VI is being released on November 19.
+Hello, and welcome to Postgres.FM, a weekly show about all things PostgreSQL. I am Michael, founder of pgMustard. I'm joined, I was gonna say as usual, but I've had a bit of a break. I am joined by, I guess, the two usual now, guys, Nik from PostgresAI, and Kirk. Hey, Kirk.
 
-**Michael** [00:00:12]
-
-When would GTA 19 come out? Like a couple of hundred years?
-
-**Kirk** [00:00:16]
-
-We have commit fests, and then we had a revert fest 10 or 20x the number of CVEs in the same year. Like, that's insane.
-
-**Nik** [00:00:23]
-
-From 200 per second, we went to 11,000 per second.
-
-**Michael** [00:00:28]
-
-No-go area for Postgres for years,
-
-**Kirk** [00:00:30]
-
-You said years, I think you meant decades.
-
-**Nik** [00:00:33]
-
-Decades. The only thing left, from among big gaps is just DDL, right? Just DDL and Postgres 20 and that's it.
-
-**Michael** [00:00:40]
-
-The only thing. That small thing.
-
-**Michael** [00:00:44]
-
-Hello, and welcome to Postgres.FM, a weekly show about all things PostgreSQL. I am Michael, founder of pgMustard. I'm joined, I was gonna say as usual, but I've had a bit, I've had a bit of a break. I am joined by, I guess, the two usual now, guys, Nik from PostgresAI, and Kirk. Hey, Kirk.
-
-**Kirk** [00:01:01]
+**Kirk** [00:00:17]
 
 Hey. How we doing, Michael?
 
-**Michael** [00:01:04]
+**Michael** [00:00:20]
 
 I'm keeping well. Well, I was just telling you actually, I've had, the same, flu-type thing that the rest of the UK's had for the past week. So you might hear it in my voice a little bit. But feeling much better today and yesterday, so yeah.
 
-**Nik** [00:01:17]
+**Nik** [00:00:33]
 
-How are your vacations? How are your vacations?
+How are your vacations?
 
-**Michael** [00:01:20]
+**Michael** [00:00:37]
 
 Vacations. So I yeah, I haven't been on vacation. I've been working on a new product,
 
-**Nik** [00:01:25]
+**Nik** [00:00:41]
 
-I remember when we met a couple of months ago in London, I was surprised. Like, you look like you're on vacations right now. I think in the center people who watch YouTube— can see how you look usually in London, right? Which— *(Kirk: Nice.)* Yeah,
+I remember when we met a couple of months ago in London, I was surprised. You look like you're on vacations right now. I think in the center people who watch YouTube— can see how you look usually in London, right? Which— *(Kirk: Nice.)* Yeah,
 
-**Michael** [00:01:43]
+**Michael** [00:00:59]
 
 It was... Yeah, it was great to see you in London and to meet your son as well. It, yeah, that was really fun. And we had a bit of a late, we call it an Indian summer here, like a late, late heat wave almost, so I was in shorts. It.
 
-**Nik** [00:02:00]
+**Nik** [00:01:16]
 
 So today I guess we have impossible task because November 19 is very well known release date, but for very different software. Do you know which one? No? Everyone knows.
 
-**Kirk** [00:02:14]
+**Kirk** [00:01:30]
 
 I don't.
 
-**Nik** [00:02:14]
+**Nik** [00:01:31]
 
-Except, except some few Postgres nerds, right? Because the GTA VI is being released on November 19. And we here, sit, to discuss, Postgres 19, right? Yeah, that's funny, right?
+Except some few Postgres nerds, right? Because the GTA VI is being released on November 19. And we here, sit, to discuss, Postgres 19, right? Yeah, that's funny, right?
 
-**Kirk** [00:02:33]
+**Kirk** [00:01:49]
 
 Wow.
 
-**Michael** [00:02:33]
+**Michael** [00:01:49]
 
 In the current GTA release cycle, when would GTA 19 come out? Like a couple of hundred years?
 
-**Nik** [00:02:39]
+**Kirk** [00:01:57]
 
-I,
+Well, I think the first thing we need to mention is Postgres 19 is ready for release. They've updated, they've committed the changes from release candidate to PG nine, version 19, and that means it's imminent at this point, we hope. But it also... Help me out here, Michael. Did you slow it down by go working on your own project? Did you slow down Postgres or something? Seems a little late.
 
-**Kirk** [00:02:41]
-
-Well, I think the first thing we need to mention is Postgres 19 is ready for release. They've updated, they've committed the changes from release candidate to PG nine, version 19, and that means it's imminent at this point, we hope. But it also... Help me out here, Michael. Did you slow it down by, you know, go working on your own project? Did you slow down Postgres or something? Seems a little late.
-
-**Michael** [00:03:08]
+**Michael** [00:02:24]
 
 Yeah. I, No, nothing to do with me. But I actually did want to thank the people that had slowed it down. I know we normally get, we get... For the last few years it's been very, very reliably in September, and it, the project aims for an annual release cycle, right? Like a annual major version upgrades, and then quarterly minor version upgrades, plus some security fixes that have come up off cadence.
 
-And that's been so reliable for quite a few years, and this is quite the shift, right? September, October, November, couple of months later. I know there's been tons of articles about this, and you've probably discussed it. We've probably discussed it before, but it's, I think most of the articles have skewed a little bit negative, like why is it such a bad thing that it's delayed. But I wanted to say I'm really pleased that people have firstly prioritized the security fixes. I think that was, like, the number one reason that this got delayed, because a lot of the important, like a lot of the key committers were tied up because they're also part of the security team.
+And that's been so reliable for quite a few years, and this is quite the shift, right? September, October, November, couple of months later. I know there's been tons of articles about this, and you've probably discussed it. We've probably discussed it before, but it's, I think most of the articles have skewed a little bit negative, like why is it such a bad thing that it's delayed. But I wanted to say I'm really pleased that people have firstly prioritized the security fixes. I think that was the number one reason that this got delayed, because a lot of the important, like a lot of the key committers were tied up because they're also part of the security team.
 
 And we've seen in the last two minor versions, like 70 plus, CVEs, so that's a lot of work. And then obviously on top of that there's been... Well, I mean, the reas— I think the reason we've got the CVEs is people using LLMs to find them. And yeah, I think it's much better that we've delayed this and got those fixed. As well as and I know the negativity's probably mostly about the reverts that happened. But I think I've seen several posts. I don't know if you two agree with this analysis. I've seen several posts that have argued, actually the reverts are very similar to in number, maybe a little bit bigger in size than previous versions.
 
 They just happened later in the cycle, so it seemed worse.
 
-**Nik** [00:05:05]
+**Nik** [00:04:22]
 
-Mm. When I was reporting some bugs found with AI of course— *(Michael: Mm-hmm.)* I felt like if I keep pushing, I can do more damage and more things will be reverted. I just felt that. Like, for example, like at least two threads where I started pushing led to revert. It was part of revis— referential integrity stuff, and another part was the last one I was It was already when I decided, to give even more power to AI and stopped, diving into details completely. It was an experiment. We should talk about it separately.
+When I was reporting some bugs found with AI of course— I felt like if I keep pushing, I can do more damage and more things will be reverted. I just felt that. For example, like at least two threads where I started pushing led to revert. It was part of referential integrity stuff, and another part was the last one I was It was already when I decided, to give even more power to AI and stopped, diving into details completely. It was an experiment. We should talk about it separately.
 
-And it led to revert. It was just like, oh, more and more bugs are coming, and then revert. For example, I just checked it yesterday, number of messages to pgsql-bugs, mailing list increased significantly, while, number of messages to pgsql-general decreased. And Depesz wrote a blog post about that, like, a few days ago, right? *(Kirk: Yeah.)* And I just felt like, I... If I keep pressure, I will probably trigger more reverts, So, and also coincidentally it was, like 19 is coming, so I decided to stop pushing.
+And it led to revert. It was just like, more and more bugs are coming, and then revert. For example, I just checked it yesterday, number of messages to pgsql-bugs, mailing list increased significantly, while, number of messages to pgsql-general decreased. And Depesz wrote a blog post about that a few days ago, right? And I just felt like, I... If I keep pressure, I will probably trigger more reverts, So, and also coincidentally it was, like 19 is coming, so I decided to stop pushing.
 
-And I... My hypothesis is some guys also stopped pushing too much just to let, the, like, just to let, the feature list, stabilize. I 100, 100% sure, 100% sure we could find more bugs. We just didn't pull more attention to it, you know? So right after release, I'm going to find more bugs. Yeah. And others will do.
+And I... My hypothesis is some guys also stopped pushing too much just to let, the just to let, the feature list, stabilize. I 100% sure we could find more bugs. We just didn't pull more attention to it? So right after release, I'm going to find more bugs. Yeah. And others will do.
 
-**Michael** [00:06:55]
+**Michael** [00:06:11]
 
 Yeah, go on, Kirk.
 
-**Kirk** [00:06:56]
+**Kirk** [00:06:12]
 
-Yeah, yeah. But I just wanna back up the truck. So as, as we were moving into the date to go live, there was a big revert fest, right? And usually there's a revert fest early on in February. I think that's when, Andrey coined the phrase, or I heard it the first time, so I'll give him credit, but it made me laugh out loud. We have commit fests, and then we had a revert fest where, yeah, these really aren't ready and they're gonna need more time. Anyways, but they pulled those, and they were in a release candidate kind of level, and they pulled, and they pulled a handful.
+Yeah. But I just wanna back up the truck. So as we were moving into the date to go live, there was a big revert fest, right? And usually there's a revert fest early on in February. I think that's when, Andrey coined the phrase, or I heard it the first time, so I'll give him credit, but it made me laugh out loud. We have commit fests, and then we had a revert fest where, yeah, these really aren't ready and they're gonna need more time. Anyways, but they pulled those, and they were in a release candidate kind of level, and they pulled a handful.
 
-And I just want to give them credit because, look, you don't push bad positions, okay? I've never once has pushing a bad position turned out beneficial in the tech world in my life. So I prefer to pull back a bit and regroup and come back later, and that's what they did. And the catch-up was we have the same number of committers. We have, like, double the number of, you know, ideas and patches coming through. And now we had something like 10 or 20x the number of CVEs in the same year.
+And I just want to give them credit because, look, you don't push bad positions, okay? I've never once has pushing a bad position turned out beneficial in the tech world in my life. So I prefer to pull back a bit and regroup and come back later, and that's what they did. And the catch-up was we have the same number of committers. We have double the number of ideas and patches coming through. And now we had something like 10 or 20x the number of CVEs in the same year.
 
-Like, that's insane. There's no way the committers can keep up with all of it. So it was bound. And I'm happy their focus is on stability, because if we lose stability, then we're gonna lose the mind share in this industry. We lose the mind share, we don't become people's first choice on new projects. So I, I'm just gonna say kudos for their decision. It's late, and I'm... So what? It's a Christmas gift now, right? It's late enough in the season. Happy Thanksgiving, everyone. Here's your new version of Postgres. Enjoy, enjoy it when you have a few days off with the family.
+That's insane. There's no way the committers can keep up with all of it. So it was bound. And I'm happy their focus is on stability, because if we lose stability, then we're gonna lose the mind share in this industry. We lose the mind share, we don't become people's first choice on new projects. So I'm just gonna say kudos for their decision. It's late, and I'm... So what? It's a Christmas gift now, right? It's late enough in the season. Happy Thanksgiving, everyone. Here's your new version of Postgres. Enjoy it when you have a few days off with the family.
 
-**Nik** [00:08:37]
+**Nik** [00:07:53]
 
 So, revert fest big wave started with this scary, scary list, right? From, from, from No, from Robert Haas, Yeah.
 
-**Kirk** [00:08:51]
+**Kirk** [00:08:07]
 
 Yeah, Haas.
 
-**Nik** [00:08:51]
+**Nik** [00:08:08]
 
-It's just a it was from Tomas, Tomas Vondra, the blog post about that it's, like, maybe the same, but problems found later and revert happens later. So the question is how to find problems earlier. And this tiny project, pgroast, we started last week, right? So to criticize, architecture and idea earlier before it go— gets committed. Maybe some new tools will help. And AI, I mean, AI could help to improve things at earlier stage.
+It's just a it was from Tomas Vondra, the blog post about that it's maybe the same, but problems found later and revert happens later. So the question is how to find problems earlier. And this tiny project, pgroast, we started last week, right? So to criticize, architecture and idea earlier before it go— gets committed. Maybe some new tools will help. And AI, I mean, AI could help to improve things at earlier stage.
 
-**Michael** [00:09:26]
+**Michael** [00:08:42]
 
-There's an argument that LLMs got significantly better at an awful time in the Postgres release cycle. Like, the... If you think about when feature freeze is, it feels like it times very, very well with things like Opus 5.5, and I think a lot of people getting access to quite cheap, very, very advanced models that don't make that many mistakes. That feels like awful timing for a project that's just about to release some things, or, or great timing if you're thinking about it from like a startup—
+There's an argument that LLMs got significantly better at an awful time in the Postgres release cycle. The... If you think about when feature freeze is, it feels like it times very, very well with things like Opus 5.5, and I think a lot of people getting access to quite cheap, very, very advanced models that don't make that many mistakes. That feels like awful timing for a project that's just about to release some things, or, or great timing if you're thinking about it from like a startup—
 
-**Nik** [00:09:59]
+**Nik** [00:09:15]
 
 It's bad after release at least.
 
-**Michael** [00:10:01]
+**Michael** [00:09:17]
 
 Timing-wise.
 
-**Nik** [00:10:02]
+**Nik** [00:09:18]
 
-Similar, yeah, yeah. But Opus 4, 4.8 was already quite good. *(Michael: Mm-hmm.)* And could find a lot. It's just the question is can you just, like, allocate a lot of resources to it and so on. And also there is a, Like time for reaction, like, and change habits and so on, right? So... And also there are guys who had zero or one. I saw a couple of guys who mentioned around 100 times in commit messages this year and zero or one times mentioned last year. So obviously some people pulled a lot to bug findings maybe let's talk about features, right?
+Similar, yeah. But Opus 4.8 was already quite good. And could find a lot. It's just the question is can you just allocate a lot of resources to it and so on. And also there is a, Like time for reaction and change habits and so on, right? So... And also there are guys who had zero or one. I saw a couple of guys who mentioned around 100 times in commit messages this year and zero or one times mentioned last year. So obviously some people pulled a lot to bug findings maybe let's talk about features, right?
 
-What survived— *(Michael: Yeah.)* what survived. I will start with REPACK. Obviously it's very... You remember Michael, how I was extremely surprised at the end of our episode about, about—
+What survived. I will start with REPACK. Obviously it's very... You remember Michael, how I was extremely surprised at the end of our episode about—
 
-**Michael** [00:10:53]
+**Michael** [00:10:09]
 
 Me too
 
-**Nik** [00:10:54]
+**Nik** [00:10:10]
 
-pg_squeeze to learn— *(Michael: Yeah.)* plans to push it to the core, and here we go. Like, it survived.
+pg_squeeze to learn— plans to push it to the core, and here we go. It survived.
 
-**Michael** [00:11:01]
+**Michael** [00:10:17]
 
-Not only did it survive, but it made it to the next version. Like, when— *(Nik: Yeah.)* when Antonin mentioned that to us, I was thinking, "Okay, we're talking, you know, several years."
+Not only did it survive, but it made it to the next version. When Antonin mentioned that to us, I was thinking, "Okay, we're talking several years."
 
-**Nik** [00:11:11]
+**Nik** [00:10:27]
 
 Two to three years. Yeah.
 
-**Michael** [00:11:13]
+**Michael** [00:10:29]
 
-And I think they did two big things. Obviously the concurrently is huge, but I think also getting rid of the vacuum confusion. You know, vacuum full being so or so, you know, I... I'm gonna say dangerous, whereas— *(Nik: Yeah.)* vacuum's so innocuous and useful. That for me was always, like, quite a big challenge in communication and education, and they fixed both in one go.
+And I think they did two big things. Obviously the concurrently is huge, but I think also getting rid of the vacuum confusion. Vacuum full being so or so I... I'm gonna say dangerous, whereas— vacuum's so innocuous and useful. That for me was always quite a big challenge in communication and education, and they fixed both in one go.
 
-**Nik** [00:11:43]
+**Kirk** [00:10:59]
 
-Yeah.
+Yeah. It's like we got a vacuum well. The vacuum full
 
-**Kirk** [00:11:43]
+**Nik** [00:11:04]
 
-Yeah. It's like we got a vacuum well. *(Nik: Yeah. Yeah.)* The vacuum full
+So basically we have pg_squeeze in core right now, and officially supported. And based on logical, decoding, it's, it can shrink, your table and indexes and you can get rid of bloat, which is good, right?
 
-**Nik** [00:11:48]
-
-So basically we have pg_squeeze in core right now, and officially supported. And based on logical, decoding, it's, it can shrink, your table and indexes and you can get rid of, get rid of bloat, which is good, right?
-
-**Michael** [00:12:06]
+**Michael** [00:11:22]
 
 Yeah. And you can order by a, an inde— like you use an index for the ordering, so you can get a cluster at the same time. The only thing I think you can't do that's in squeeze is the scheduling.
 
-**Nik** [00:12:20]
+**Nik** [00:11:36]
 
-Scheduling, you mean, to do it like, do, do it on weekend?
+Scheduling, you mean, to do it like, do it on weekend?
 
-**Michael** [00:12:26]
+**Michael** [00:11:42]
 
 Yeah, exactly. Or at a certain,
 
-**Nik** [00:12:28]
-
-Well—
-
-**Michael** [00:12:29]
-
 I'm not sure if it's just time-based
 
-**Nik** [00:12:31]
+**Nik** [00:11:47]
 
-Right. It's like, Well, you cannot schedule anything in Postgres without, additional means, like pg_cron extension or external scheduler. And this is actually sad because if pg_cron was part of core or some alternative, it would be great because, *(Michael: Mm.)* it's obviously there is a need to schedule things, right? And right, right now, like we have reindex index concurrently. We also need to do some machinery to do it on weekends, for example. Here is a similar thing. There is REPACK and REPACK CONCURRENTLY and to schedule it. Also, like if you want to do it even with pg_cron purely internally, the question is with the word concurrently, it's not ACID, so it cannot be part of transaction, so you need the special dance.
+Right. It's like, Well, you cannot schedule anything in Postgres without, additional means, like pg_cron extension or external scheduler. And this is actually sad because if pg_cron was part of core or some alternative, it would be great because, it's obviously there is a need to schedule things, right? And right now, like we have reindex index concurrently. We also need to do some machinery to do it on weekends, for example. Here is a similar thing. There is REPACK and REPACK CONCURRENTLY and to schedule it. Also, like if you want to do it even with pg_cron purely internally, the question is with the word concurrently, it's not ACID, so it cannot be part of transaction, so you need the special dance.
 
 It's possible. I think we... I, after Postgres 19, I'm going to revisit this old idea. Not old, but it's good idea to have some combination of tools which will work on any managed Postgres and allow you to schedule properly and manage schedules and so on without any external means. So we did it with reindex index concurrently. It works. And we can do it with REPACK CONCURRENTLY as well, right? Do you think pg_repack will or will be over with this release or the need, in use of pg_repack will still remain?
 
-**Michael** [00:13:59]
+**Michael** [00:13:15]
 
 I'll go first. I would love to hear Kirk's answer as well. I think it will be massively reduced how much people need repack and/or like, not necessarily how much they need it, who needs it. I think the vast majority of workloads, REPACK CONCURRENTLY will actually be fine. And there are edge cases, and I think actually there's a really great post by on boringSQL by a friend of the show, Radim, on the exactly where you can kind of hit the limits currently. But yeah, what do you think, Kirk?
 
-**Kirk** [00:14:33]
+**Kirk** [00:13:49]
 
-I was gonna say basically the same thing. Also, it's a new feature and a new version. There's still people out there struggling with 12 and 14. Let's be honest, everyone isn't switching tomorrow, okay, when it's released. So, but, and you can't get rid of it even for the people like me who would want it, because we've already scripted things to use pg_repack. So what I don't want you breaking it on me. I'll migrate my tools in less of an emergency state after I upgrade, right? So that's my take on it. But I think it's, I think it's wonderful, the more of that stuff that makes it in.
+I was gonna say basically the same thing. Also, it's a new feature and a new version. There's still people out there struggling with 12 and 14. Let's be honest, everyone isn't switching tomorrow, okay, when it's released. So, but, and you can't get rid of it even for the people like me who would want it, because we've already scripted things to use pg_repack. So what I don't want you breaking it on me. I'll migrate my tools in less of an emergency state after I upgrade, right? So that's my take on it. But I think it's wonderful, the more of that stuff that makes it in.
 
-And then I like Nik's idea of making sure... I wish pg_cron was part of the product offering. It should be a shipping. It should be one of the extensions that comes along for the ride, with Postgres, in my opinion. But yeah. *(Nik: Yeah.)* Cool
+And then I like Nik's idea of making sure... I wish pg_cron was part of the product offering. It should be a shipping. It should be one of the extensions that comes along for the ride, with Postgres, in my opinion. But yeah. Cool
 
-**Nik** [00:15:23]
+**Nik** [00:14:39]
 
 Not only pg_cron, also autonomous transactions. There should be some need to connect to yourself without like using—
 
-**Kirk** [00:15:32]
+**Kirk** [00:14:48]
 
 Passwords
 
-**Nik** [00:15:32]
+**Nik** [00:14:48]
 
-postgres_fdw and dblink. Like, it's like password and so on. It's like, it feels insecure and so on. Like, Probably we should explore it, separately. I also think that, I agree with pg_repack probably will go down in terms of popularity, how it's used. But also I think both pg_squeeze and pg_repack, so REPACK CONCURRENTLY is a successor of pg_squeeze. They are both not, working in some heavily loaded large table cases. Like, if you have 10 terabyte table under load, it just doesn't work. *(Kirk: Mm.)*
+postgres_fdw and dblink. It's like password and so on. It's like, it feels insecure and so on. Probably we should explore it, separately. I also think that, I agree with pg_repack probably will go down in terms of popularity, how it's used. But also I think both pg_squeeze and pg_repack, so REPACK CONCURRENTLY is a successor of pg_squeeze. They are both not, working in some heavily loaded large table cases. If you have 10 terabyte table under load, it just doesn't work.
 
-And also additionally, like, logical maybe, like dealing with logical replications, some, some people just don't like it, so there are some edge cases. Yeah, yeah, yeah. And I think, honestly, like, I think the old, old idea of pgcompacttable might be resurrected You just update—
+And also additionally logical maybe, like dealing with logical replications, some people just don't like it, so there are some edge cases. Yeah. And I think, honestly I think the old, old idea of pgcompacttable might be resurrected You just update—
 
-**Kirk** [00:16:29]
+**Kirk** [00:15:45]
 
 Is this the one where you update things—
 
-**Nik** [00:16:31]
+**Nik** [00:15:47]
 
 Row by row
 
-**Kirk** [00:16:31]
+**Kirk** [00:15:47]
 
 Like later in the heap? Yeah.
 
-**Nik** [00:16:33]
+**Nik** [00:15:49]
 
-Yeah, yeah. Like slowly you update, and the dead tuples go to the end, and then truncate, vacuum truncates this last page. *(Kirk: Mm.)* And so, but then—
+Yeah. Like slowly you update, and the dead tuples go to the end, and then truncate, vacuum truncates this last page. And so, but then—
 
-**Kirk** [00:16:44]
+**Kirk** [00:16:00]
 
-I had questions. Who's on Heroku, and they don't have pg_repack, and that, that's one of the benefits, right, of, *(Nik: Right.)* pg_repack concurrently— *(Nik: Right.)* is you, even on managed services, you'll get it. So yeah, I was gonna suggest the compact table approach, but I think, like, a lot of the optimizations we have now around, like HOT and... Like, I also, like I think by default, Postgres tries to keep updates on the same page, right? So I wasn't sure how... No?
+I had questions. Who's on Heroku, and they don't have pg_repack, and that's one of the benefits, right, of, pg_repack concurrently— is you, even on managed services, you'll get it. So yeah, I was gonna suggest the compact table approach, but I think a lot of the optimizations we have now around, like HOT and... I also, like I think by default, Postgres tries to keep updates on the same page, right? So I wasn't sure how... No?
 
-**Nik** [00:17:13]
+**Nik** [00:16:30]
 
 Well, if you will if you touch index, indexed, column, it cannot be HOT, so—
 
-**Kirk** [00:17:21]
+**Kirk** [00:16:37]
 
 No
 
-**Nik** [00:17:21]
+**Nik** [00:16:37]
 
 Definitely will be normal.
 
-**Kirk** [00:17:21]
+**Kirk** [00:16:38]
 
-Yeah. See, that's the trick— *(Nik: Right.)* is you have to update. Yeah, okay.
+Yeah. See, that's the trick— is you have to update. Yeah, okay.
 
-**Nik** [00:17:25]
+**Nik** [00:16:41]
 
 Yeah. And pgcompacttable, of course, it's, downside that indexes will need to be rebuilt afterwards, so like additionally. But yeah,
 
-**Kirk** [00:17:35]
+**Kirk** [00:16:51]
 
 Do you have another favorite for PG19? Moving on.
 
-**Nik** [00:17:40]
+**Nik** [00:16:56]
 
 You know my list of don't use it. Sub-transactions, and—
 
-**Kirk** [00:17:44]
+**Kirk** [00:17:00]
 
 Temp tables
 
-**Nik** [00:17:45]
+**Nik** [00:17:01]
 
-Temporary tables last week episode. LISTEN/NOTIFY is almost in that list. Almost because, like, a little bit more cases where it's okay to use it and... Yeah, but you remember the post from Recall.ai that notify doesn't scale. There is big, single lock, global lock on commit. And then also DBOS, guys, they also touched that topic. We discussed it on our podcast as well. That lock is still there, unfortunately. But there are improvements for when you have a lot of listeners. It's already great. So it's already, like, one problem resolved.
+Temporary tables last week episode. LISTEN/NOTIFY is almost in that list. Almost because a little bit more cases where it's okay to use it and... Yeah, but you remember the post from Recall.ai that notify doesn't scale. There is big, single lock, global lock on commit. And then also DBOS, guys, they also touched that topic. We discussed it on our podcast as well. That lock is still there, unfortunately. But there are improvements for when you have a lot of listeners. It's already great. So it's already one problem resolved.
 
-So in some cases, in Postgres 19, LISTEN/NOTIFY will work much better than, than in Postgres 18. And we have some graphs showing throughput, right? So if 1,000 listeners, from 200 per second, we went to 11,000 per second. And it's great. I mean, notifications, throughput. So it's like drastical improvements. But of course, if you deal with, like if you combine notify with in some transactions and in highly concurrent environment, that single global lock is still there, so Postgres 19 doesn't solve it.
+So in some cases, in Postgres 19, LISTEN/NOTIFY will work much better than in Postgres 18. And we have some graphs showing throughput, right? So if 1,000 listeners, from 200 per second, we went to 11,000 per second. And it's great. I mean, notifications, throughput. So it's like drastical improvements. But of course, if you deal with, like if you combine notify with in some transactions and in highly concurrent environment, that single global lock is still there, so Postgres 19 doesn't solve it.
 
-So I'm partially satisfied with this feature. It's great to see the progress here, definitely. What about you? What are, are your... What—
+So I'm partially satisfied with this feature. It's great to see the progress here, definitely. What about you? What are your... What—
 
-**Kirk** [00:19:13]
+**Kirk** [00:18:30]
 
-Yeah. The first one, and my favorite is actually notify, because we actually leverage this in our systems. We have, numerous external systems and tools that augment what our system does and searches in real time behind the scenes to put things back together. So we need that. In fact, we end up using, pg_background to do the commit, so it's out of the transaction that we're currently in, so that there's time for the communication to the other servers who then take and lift that stuff off. So for me, that was a huge one. We're not currently jammed, but it's flagged in our system as, you know, as we grow, this could be a problem, right?
+Yeah. The first one, and my favorite is actually notify, because we actually leverage this in our systems. We have, numerous external systems and tools that augment what our system does and searches in real time behind the scenes to put things back together. So we need that. In fact, we end up using, pg_background to do the commit, so it's out of the transaction that we're currently in, so that there's time for the communication to the other servers who then take and lift that stuff off. So for me, that was a huge one. We're not currently jammed, but it's flagged in our system as we grow, this could be a problem, right?
 
 Because the single—
 
-**Nik** [00:20:00]
+**Nik** [00:19:16]
 
-Have you considered, have you considered using logical decoding for notif— asynchronous notification? Like super bandwidth. Yeah.
+Have you considered using logical decoding for asynchronous notification? Like super bandwidth. Yeah.
 
-**Kirk** [00:20:07]
+**Kirk** [00:19:23]
 
-Yeah. No, we haven't. Again, I'm still relatively green at some of the Postgres stuff, so I'll be honest, I'll always admit where I'm ignorant. I can get into the nitty-gritty on anything if I focus on it, but haven't looked at that 'cause we haven't had to. The app works, and we use this in three or four separate places where we need notifications, and alerts. You know, one of them sends something to a manager if certain people do certain things, and he's got a little pu-... Right? So it's really, it's handy for us. I love that they're working on it, and I know it'll get fixed. The other one I like is the autovacuum, and there's a specific reason I like the changes for prioritizing and letting us queue things up differently, is Selma is gonna need this on our bloat removal— *(Nik: Yeah.)* because we need four or five passes on a table to clean out the bloat properly, because we have to do it incrementally.
+Yeah. No, we haven't. Again, I'm still relatively green at some of the Postgres stuff, so I'll be honest, I'll always admit where I'm ignorant. I can get into the nitty-gritty on anything if I focus on it, but haven't looked at that 'cause we haven't had to. The app works, and we use this in three or four separate places where we need notifications, and alerts. One of them sends something to a manager if certain people do certain things, and he's got a little pu-... Right? So it's really, it's handy for us. I love that they're working on it, and I know it'll get fixed. The other one I like is the autovacuum, and there's a specific reason I like the changes for prioritizing and letting us queue things up differently, is Selma is gonna need this on our bloat removal— because we need four or five passes on a table to clean out the bloat properly, because we have to do it incrementally.
 
-So we have to actually go through a table, and we know we only did step one of three steps, and then we have to flag it to queue it back up But we need some time to pass. So this is gonna be interesting for us. So I'm liking that one a lot. Of course, REPACK is great. You know, as long as it doesn't get in the way of us getting our bloat removal, I'm—
+So we have to actually go through a table, and we know we only did step one of three steps, and then we have to flag it to queue it back up But we need some time to pass. So this is gonna be interesting for us. So I'm liking that one a lot. Of course, REPACK is great. As long as it doesn't get in the way of us getting our bloat removal, I'm—
 
-**Nik** [00:21:24]
+**Nik** [00:20:40]
 
 Funny thing, behind the scene, this samograph, it's connected to this Forge system, and it has some budget and freedom to do, so it decided to do more tests of notify to compare it to this bottleneck from Recall.ai and DBOS blog posts. It just— *(Kirk: Nice.)* decided to bring more data, which we probably will include to show notes, right? So.
 
-**Kirk** [00:21:49]
+**Kirk** [00:21:05]
 
 How about you, Michael? What are your favorites in PG19?
 
-**Michael** [00:21:54]
+**Michael** [00:21:10]
 
-Yeah. Well, I am a big fan of the autovacuum improvements as well, actually. The prioritization feels like kind of... Once I've heard about it, I thought it's kind of embarrassing that I hadn't thought, why don't we have it already? But yeah, kudos to the people that worked on that. And I think parallel autovacuum as well will be useful for a lot of people. I like these things that just don't, you don't have to change anything as a user. You just have to upgrade, and then things will work better. *(Nik: Yeah.)*
+Yeah. Well, I am a big fan of the autovacuum improvements as well, actually. The prioritization feels like kind of... Once I've heard about it, I thought it's kind of embarrassing that I hadn't thought, why don't we have it already? But yeah, kudos to the people that worked on that. And I think parallel autovacuum as well will be useful for a lot of people. I like these things that just don't, you don't have to change anything as a user. You just have to upgrade, and then things will work better.
 
 So those two are great. Probably the biggest one we haven't mentioned yet on my list that I'm not gonna be a big user of, but I think it's a huge step in a very interesting and good direction for the project, is the plan advice module that's been added to contrib. And I know it's not hints and I know it's not like... Well, but it kind of is, right? Like—
 
-**Kirk** [00:22:47]
+**Kirk** [00:22:03]
 
 It's better
 
-**Michael** [00:22:49]
+**Michael** [00:22:05]
 
-It's a toolkit that can be used by extensions going forwards, and I think the biggest sign of how good it is how much code was able to be removed from pg_hint_plan. And I know Lukas Fittl's got a really good, video on this, like a 5mins of Postgres episode, that's worth checking out if you haven't seen it already. But yeah, it... this doesn't replace pg_hint_plan. There's a... it's very much a version one and like a, yeah, as I said, a toolkit or a thing that others can build on. But this has been a discussion and like a no-go area for Postgres for years, and I think it is a step in the direction of, let's let people fight the fires of plan flips with a few tools if they want to.
+It's a toolkit that can be used by extensions going forwards, and I think the biggest sign of how good it is how much code was able to be removed from pg_hint_plan. And I know Lukas Fittl's got a really good, video on this, like a 5mins of Postgres episode, that's worth checking out if you haven't seen it already. But yeah, it... This doesn't replace pg_hint_plan. There's a... It's very much a version one and like a, yeah, as I said, a toolkit or a thing that others can build on. But this has been a discussion and like a no-go area for Postgres for years, and I think it is a step in the direction of, let's let people fight the fires of plan flips with a few tools if they want to.
 
-And, let's try and, like, support, like maybe get some enterprise or, or maybe tick— let people check a box when they're migrating from Oracle or trying to like get a DB2 migration approved or something like that. So I think there's loads of benefits to this, and it's been, I think, implemented in quite a mature way.
+And, let's try and support, like maybe get some enterprise or maybe tick— let people check a box when they're migrating from Oracle or trying to like get a DB2 migration approved or something like that. So I think there's loads of benefits to this, and it's been, I think, implemented in quite a mature way.
 
-**Nik** [00:23:56]
-
-Yeah.
-
-**Kirk** [00:23:56]
+**Kirk** [00:23:12]
 
 I'll correct—
 
-**Michael** [00:23:56]
+**Michael** [00:23:13]
 
 Again, mostly led by Robert Haas.
 
-**Nik** [00:23:58]
+**Nik** [00:23:15]
 
 We,
 
-**Kirk** [00:23:59]
+**Kirk** [00:23:15]
 
 I'll correct one thing. You said years, I think you meant decades.
 
-**Nik** [00:24:04]
+**Nik** [00:23:20]
 
 Decades. Session which led to development of pgroast, we found this page in wiki that we won't accept these proposals, and one of the, those proposals is like, hints.
 
-**Kirk** [00:24:16]
+**Kirk** [00:23:32]
 
-Hints. *(Nik: Yeah.)* Mm-hmm.
+Hints.
 
-**Nik** [00:24:17]
+**Nik** [00:23:33]
 
-And now we have this. I actually think it's a great thing to have because we saw, like, we saw that Aurora has plan management stuff and the ability to pin plans. I have quite challenging experience, lasting many months with upgrade to 17, from 17 to 18 because of many plan flips, which are actually hard to catch. So we needed to improve our methodology, how to, how we analyze, future plan flips before upgrading.
+And now we have this. I actually think it's a great thing to have because we saw that Aurora has plan management stuff and the ability to pin plans. I have quite challenging experience, lasting many months with upgrade to 17, from 17 to 18 because of many plan flips, which are actually hard to catch. So we needed to improve our methodology, how to, how we analyze, future plan flips before upgrading.
 
-Now we have very comprehensive methodology, but like without any gaps, but it's quite, like, expensive to use. You need to actually allocate resources to study all the plan flips. And then, what to do with flips. Now we have solution what to do with flips, but still plan flip analysis remains a, another challenge, right?
+Now we have very comprehensive methodology, but like without any gaps, but it's quite expensive to use. You need to actually allocate resources to study all the plan flips. And then, what to do with flips. Now we have solution what to do with flips, but still plan flip analysis remains a, another challenge, right?
 
-**Kirk** [00:25:16]
+**Kirk** [00:24:33]
 
-Yeah, 'cause what's a good flip versus a bad flip? *(Nik: Yeah.)* And like— *(Nik: True.)* one... sometimes it's a small subtle change. *(Nik: Right.)* Sometimes it's a right sequential scan when it should never be. So, but I wanted to point out something, just for the people that are listening who might not be familiar with plan hints. Okay? Plan hints to me is the 1975 solution to having a query that you need to tell the database, "Hey, you're gonna calculate this wrong. So I'm gonna put literally a slash asterisk hint after the word select on my thing, and I'm gonna put some things in there and tell you what tables and indexes you should really be doing as your, either your driver table or primary, whatever.
+Yeah, 'cause what's a good flip versus a bad flip? And like— one... Sometimes it's a small subtle change. Sometimes it's a right sequential scan when it should never be. So, but I wanted to point out something, just for the people that are listening who might not be familiar with plan hints. Okay? Plan hints to me is the 1975 solution to having a query that you need to tell the database, "Hey, you're gonna calculate this wrong. So I'm gonna put literally a slash asterisk hint after the word select on my thing, and I'm gonna put some things in there and tell you what tables and indexes you should really be doing as your, either your driver table or primary, whatever.
 
 I'm gonna focus you because you're gonna make mistakes." And the problem is I want you to hold it right there. It was a great idea in 1975, okay? The problem is, we're 2026, baby, and the reality is you're hard coding the hint usually into the application. The last thing you wanna do is be tweaking your application because of a subtle change in the database, because now your hint is actually a bad idea, and that happens. And this plan with stashing works differently. And what... The high level version is this. You can actually calculate a good plan, and then you can associate it with the SQL ID. Okay?
 
@@ -374,424 +324,394 @@ And then you can give it priority, and this gives you a chance as the DBA to cha
 
 And it's like... And that's cool. You could never do that with hints, and for me, that's what actually makes hints bad, is it codifies an instance of a situation into the application effectively where you don't wanna actually go changing it later on just because your environment's different or better or faster. And now you can actually do it at the DBA level, which is where that, in my opinion, belongs. Okay, I'm off my soap.
 
-**Nik** [00:27:53]
+**Nik** [00:27:09]
 
-As I see, our testing found some overhead from using advice. Yeah, like around 10%, right? So it's not for free, when we talk about very fast queries. So anyway, there are some... And a long list of limitations, but it's a great step in interesting direction, which I think bigger databases actually need. So good, good thing to have. *(Kirk: Mm-hmm.)* What else?
+As I see, our testing found some overhead from using advice. Yeah, like around 10%, right? So it's not for free, when we talk about very fast queries. So anyway, there are some... And a long list of limitations, but it's a great step in interesting direction, which I think bigger databases actually need. So good thing to have. What else?
 
-**Michael** [00:28:26]
+**Michael** [00:27:43]
 
 I have one that—
 
-**Kirk** [00:28:27]
+**Kirk** [00:27:44]
 
 You got one more? Go ahead
 
-**Michael** [00:28:29]
+**Michael** [00:27:46]
 
-Quite a lot, Nik. Better defaults. I think— *(Nik: Oh.)* a couple have changed in a really good direction. *(Nik: Yeah.)* JIT being off by default feels far more sensible to me than it being on by default.
+Quite a lot, Nik. Better defaults. I think— a couple have changed in a really good direction. JIT being off by default feels far more sensible to me than it being on by default.
 
-**Nik** [00:28:43]
+**Nik** [00:27:59]
 
 It was long overdue. It should be off by default from very beginning, yes.
 
-**Kirk** [00:28:47]
+**Kirk** [00:28:03]
 
 We turned it off.
 
-**Nik** [00:28:49]
+**Nik** [00:28:05]
 
-It actually shows lack of testing, proper testing before feature is released, and this is, can be this can be improved with AI. I just... This is my natural reaction to this, like I would like, for example, to propose, I would, I will do it, to turn on track_planning in pg_stat_statements because benchmark, which led to decision to keep it off was weak. While same with, with JIT, but vice versa. It was on by default— *(Michael: Yes.)* while, while it could be understood earlier that it's the wrong idea to keep it on.
+It actually shows lack of testing, proper testing before feature is released, and this is, can be this can be improved with AI. I just... This is my natural reaction to this, like I would like, for example, to propose, I would, I will do it, to turn on track_planning in pg_stat_statements because benchmark, which led to decision to keep it off was weak. While same with JIT, but vice versa. It was on by default— while it could be understood earlier that it's the wrong idea to keep it on.
 
 Great thing. Great thing.
 
-**Michael** [00:29:26]
+**Michael** [00:28:42]
 
-And another one, I know it's less... Like JIT, I think can really bite people. This one not so much. This is much more just like a small improvement, which is the TOAST compression by default now uses— *(Nik: Mm-hmm.)* well, in fact, a couple of compression things now default to better compression or more modern compression algorithms. LZ4 in the case of TOAST, if you, if your Postgres was built with that, which a lot of them now are.
+And another one, I know it's less... Like JIT, I think can really bite people. This one not so much. This is much more just like a small improvement, which is the TOAST compression by default now uses— well, in fact, a couple of compression things now default to better compression or more modern compression algorithms. LZ4 in the case of TOAST, if you, if your Postgres was built with that, which a lot of them now are.
 
-And I read about another one actually. WAL compression. If you've just left... If you've turned it on a few years ago, for example, before it had more options, it will now pick, Zstandard or LZ4, I think in that order, if they're available, instead of— *(Nik: Yeah.)* it used to, it's kind of like pglz unless you specify.
+And I read about another one actually. WAL compression. If you've just left... If you've turned it on a few years ago, for example, before it had more options, it will now pick, Zstandard or LZ4, I think in that order, if they're available, instead of— it used to, it's kind of like pglz unless you specify.
 
-**Nik** [00:30:13]
+**Nik** [00:29:29]
 
-It, it's one of the things, the Forge system flagged as like if it's available on the primary but not available on replica, it can be a problem. So.
+It's one of the things, the Forge system flagged as like if it's available on the primary but not available on replica, it can be a problem. So.
 
-**Michael** [00:30:23]
+**Michael** [00:29:39]
 
-Hmm. Interesting.
+Interesting.
 
-**Nik** [00:30:24]
+**Nik** [00:29:40]
 
-Yeah. Yeah. And there's another default which I like a lot. It takes a little bit of my consulting bread because we always say enable it, but now it's enabled by default. It's, log_lock_waits. *(Michael: Yes.)* Yeah. Yeah.
+Yeah. Yeah. And there's another default which I like a lot. It takes a little bit of my consulting bread because we always say enable it, but now it's enabled by default. It's, log_lock_waits. Yeah. Yeah.
 
-**Michael** [00:30:44]
+**Michael** [00:30:00]
 
 On by default now.
 
-**Nik** [00:30:46]
+**Nik** [00:30:02]
 
 Yeah. Yeah. So and this is definitely a good thing to have enabled by default, 100%.
 
-**Michael** [00:30:55]
+**Michael** [00:30:11]
 
-One more dev feature, and then I think we've got, we've got some performance improvements as well. The dev feature that I liked the look of was the WAIT command. WAIT FOR LSN. *(Kirk: Yes.)* so this is like for reading your writes on replicas. *(Kirk: Right.)* if you've got not got much lag, you can effectively just delay your read by maybe even just a few milliseconds, to let the replica sync and then do the read query instead of having to like stick to the primary to serve those like, recently written—
+One more dev feature, and then I think we've got some performance improvements as well. The dev feature that I liked the look of was the WAIT command. WAIT FOR LSN. So this is like for reading your writes on replicas. If you've got not got much lag, you can effectively just delay your read by maybe even just a few milliseconds, to let the replica sync and then do the read query instead of having to like stick to the primary to serve those like, recently written—
 
-**Nik** [00:31:29]
+**Kirk** [00:30:46]
 
-Yeah
-
-**Kirk** [00:31:29]
-
-Again, let me just add the comment for the dumber people like— *(Michael: Mm-hmm.)* about what this really is about. You start growing your Postgres footprint. You have your primary server which can handle read writes. You get a handful or more of read replicas. They can only do read transactions. So you want to go to your read replicas to do your read queries, read-only queries. You write to the main server, and this new command lets your application basically do a write to the main server. And when it goes to query the results back from the read-only replica, which you're doing for efficiency reasons, it actually says, "WAIT FOR LSN," and you give the LSN number you just got back from the main, and it'll actually inject that pause there.
+Again, let me just add the comment for the dumber people like— about what this really is about. You start growing your Postgres footprint. You have your primary server which can handle read writes. You get a handful or more of read replicas. They can only do read transactions. So you want to go to your read replicas to do your read queries, read-only queries. You write to the main server, and this new command lets your application basically do a write to the main server. And when it goes to query the results back from the read-only replica, which you're doing for efficiency reasons, it actually says, "WAIT FOR LSN," and you give the LSN number you just got back from the main, and it'll actually inject that pause there.
 
 Now, you don't do this if there's a 13-minute wait between the stuff you're doing, I mean, obviously, right? But many systems have gotten this down to really fast, to millisecond level. And this is beautiful because the wait becomes more transparent to the developer. This is the kind of thing I really enjoy from a development standpoint. You did the right thing, and you're not punished for doing the right thing.
 
-**Nik** [00:32:40]
+**Nik** [00:31:56]
 
-Yeah. That's interesting that you mentioned you're not doing this if, it's like the difference is huge It tells me that it could be improved, saying I want to wait, but only if, difference is, like, shorter. If it's bigger, I want, like, I don't know, error immediately received.
+Yeah. That's interesting that you mentioned you're not doing this if, it's like the difference is huge It tells me that it could be improved, saying I want to wait, but only if, difference is shorter. If it's bigger, I want I don't know, error immediately received.
 
-**Kirk** [00:33:01]
+**Kirk** [00:32:17]
 
-Well— And think, think about in a web UI. You just made an update, and the little patch on your screen that's supposed to reflect that update, now you can have it, I believe it works with a timeout. So you can actually have the timeout from not getting it fast enough, put the spinning hourglass in that little widget on the web, because it hasn't got a time.
+Well— And think about in a web UI. You just made an update, and the little patch on your screen that's supposed to reflect that update, now you can have it, I believe it works with a timeout. So you can actually have the timeout from not getting it fast enough, put the spinning hourglass in that little widget on the web, because it hasn't got a time.
 
-**Nik** [00:33:20]
+**Nik** [00:32:36]
 
-I don't want timeout, because a timeout would, would, be a time waste for me. I want to immediately switch to different replica, for example. You know, like, my problem is that this feature already implemented by, by many load balancers. For example, if you look at GitLab's, load balancer code, many, many years ago it was implemented based on LSNs by very smart people, so it's very smart and advanced.
+I don't want timeout, because a timeout would, be a time waste for me. I want to immediately switch to different replica, for example. Like, my problem is that this feature already implemented by many load balancers. For example, if you look at GitLab's, load balancer code, many, many years ago it was implemented based on LSNs by very smart people, so it's very smart and advanced.
 
-And just this feature, when you think if I do it inside one specific replica, and you have, for example, five replicas, I have concerns, because I want to, I want better, like, solution, observing all replicas and then deciding where to go. I mean, in some cases I see it can be beneficial, but probably this feature belongs not to SQL, but better to libpq parameters like we have already when, you can specify multiple hosts to in connection strings, right? And then you can say, target_session_attrs and so on. Like, maybe it should be there saying, "I want, to choose a replica, the best one. Also, maybe I need to wait for this LSN."
+And just this feature, when you think if I do it inside one specific replica, and you have, for example, five replicas, I have concerns, because I want to, I want better solution, observing all replicas and then deciding where to go. I mean, in some cases I see it can be beneficial, but probably this feature belongs not to SQL, but better to libpq parameters like we have already when, you can specify multiple hosts to in connection strings, right? And then you can say, target_session_attrs and so on. Maybe it should be there saying, "I want, to choose a replica, the best one. Also, maybe I need to wait for this LSN."
 
-But then, like, it's different architectural level for me, you know? It's not inside— *(Kirk: Right.)* one node. And—
+But then it's different architectural level for me? It's not inside— one node. And—
 
-**Kirk** [00:34:40]
+**Kirk** [00:33:56]
 
 Well, and then—
 
-**Nik** [00:34:40]
+**Nik** [00:33:57]
 
 I'm just not going to use it this time.
 
-**Kirk** [00:34:43]
+**Kirk** [00:33:59]
 
-Well, again, I'm, I get more in touch with the application guys, right, and the applications. And what this just did was took the hardest task away of knowing if it's updated yet or not. So, and the guesswork. So what happens is if you make something hard to use, people won't use it. Or worse, they'll come up with constructs— *(Nik: Mm.)* that are probably worse, right? Where they remember the ID column coming back or a change ID or something else, and then they're clearing it that way on the replica until they get it. Ugh. Like, you know. Anyhow, but I do appreciate the change, and here's the deal. Other people a long time ago implemented stuff, and then this can still sit on top of a director.
+Well, again, I'm, I get more in touch with the application guys, right, and the applications. And what this just did was took the hardest task away of knowing if it's updated yet or not. So, and the guesswork. So what happens is if you make something hard to use, people won't use it. Or worse, they'll come up with constructs— that are probably worse, right? Where they remember the ID column coming back or a change ID or something else, and then they're clearing it that way on the replica until they get it. Anyhow, but I do appreciate the change, and here's the deal. Other people a long time ago implemented stuff, and then this can still sit on top of a director.
 
-And when I speak of a director, that's somebody who's kind of like PgBouncer to many different PgBouncer systems, right? So when you connect, it forwards your connection to the next, and it load balances across to your various read replicas. So you don't know which one you're connecting to, and if it falls too far behind, that's the job of the director in my book— *(Nik: Mm.)* from an architecture standpoint. If one of the read replicas is really far behind and it doesn't meet your normal criteria, stop directing traffic to it.
+And when I speak of a director, that's somebody who's kind of like PgBouncer to many different PgBouncer systems, right? So when you connect, it forwards your connection to the next, and it load balances across to your various read replicas. So you don't know which one you're connecting to, and if it falls too far behind, that's the job of the director in my book— from an architecture standpoint. If one of the read replicas is really far behind and it doesn't meet your normal criteria, stop directing traffic to it.
 
-But anyways, I, I'm sorry I interrupted you, pretty heavily, Michael, but I just wanted to make sure that the people like me kind of understood the nuance of that LSN and what it was really about.
+But anyways, I'm sorry I interrupted you, pretty heavily, Michael, but I just wanted to make sure that the people like me kind of understood the nuance of that LSN and what it was really about.
 
-**Michael** [00:36:09]
+**Michael** [00:35:25]
 
-Oh, no, you did a great job, and I've, I'm out of practice, remembering to explain things first before diving into, the detail. But yeah, one more on the performance side that we've discussed before, Nik, is the time, the observer effect or timing overhead of EXPLAIN ANALYZE. I know that there's always tons of performance improvements in each Postgres version, and this is no different. There are lots of, I would say, smaller, like, tweaks and, like, query rewriting rules, but this one, like we've talked in the past about the timing overhead of EXPLAIN ANALYZE and also auto_explain with timing on.
+No, you did a great job, and I've, I'm out of practice, remembering to explain things first before diving into, the detail. But yeah, one more on the performance side that we've discussed before, Nik, is the time, the observer effect or timing overhead of EXPLAIN ANALYZE. I know that there's always tons of performance improvements in each Postgres version, and this is no different. There are lots of, I would say, smaller tweaks and query rewriting rules, but this one, like we've talked in the past about the timing overhead of EXPLAIN ANALYZE and also auto_explain with timing on.
 
-And yeah, kudos to the people that worked on this, because I think it actually changes the calculus on having auto_explain on with timing on for either all your queries or, not logging all of them, but like analyzing all of them, or like for some sample that like, you know, 10% of your queries or 5% or 1%, something like that.
+And yeah, kudos to the people that worked on this, because I think it actually changes the calculus on having auto_explain on with timing on for either all your queries or, not logging all of them, but like analyzing all of them, or like for some sample that like 10% of your queries or 5% or 1%, something like that.
 
-**Nik** [00:37:14]
+**Nik** [00:36:30]
 
-Yeah. Well, I have also one more improvement to mention— which was challenging. I remember many times during upgrades, when after upgrade you want to analyze your database. Before, statistics started to copy, right? Now, now with like statistics being transferred from old server to new one, probably this feature is less important. But as we few weeks ago had a, an episode about what you should do after restoring from a dump, for example, you need your statistics to be created and doing it with a single analyze command.
+Yeah. Well, I have also one more improvement to mention— which was challenging. I remember many times during upgrades, when after upgrade you want to analyze your database. Before, statistics started to copy, right? Now with like statistics being transferred from old server to new one, probably this feature is less important. But as we few weeks ago had a, an episode about what you should do after restoring from a dump, for example, you need your statistics to be created and doing it with a single analyze command.
 
-In large database it's very slow, so you want to parallelize it, and there is a good CLI tool called vacuumdb. So you can use vacuumdb with analyze-only option to skip vacuuming. Although after restoring, from, from backup as we discussed in detail, you want vacuum, right? But anyway, vacuumdb analyze-only, now with hyphen J, J jobs, parallel mode, takes care of parent tables and partition tables. So plans will be fine. Because before that it wouldn't, it wasn't, wasn't the case and it was not convenient at all.
+In large database it's very slow, so you want to parallelize it, and there is a good CLI tool called vacuumdb. So you can use vacuumdb with analyze-only option to skip vacuuming. Although after restoring, from backup as we discussed in detail, you want vacuum, right? But anyway, vacuumdb analyze-only, now with hyphen J jobs, parallel mode, takes care of parent tables and partition tables. So plans will be fine. Because before that it wouldn't, it wasn't the case and it was not convenient at all.
 
-**Kirk** [00:38:33]
+**Kirk** [00:37:49]
 
 So just to be clear, it wasn't processing the extra children tables in—
 
-**Nik** [00:38:42]
+**Nik** [00:37:58]
 
-No, no, no, no, no. Children were all processed, but for parent table, which doesn't have data itself. *(Kirk: Okay.)* We didn't have statistics, because once you specify number of jobs, parallel workers— *(Kirk: Right.)* they go to children and work, but then nobody updates the parents.
+No, no, no, no, no. Children were all processed, but for parent table, which doesn't have data itself. We didn't have statistics, because once you specify number of jobs, parallel workers— they go to children and work, but then nobody updates the parents.
 
-**Kirk** [00:38:58]
+**Kirk** [00:38:14]
 
-Nobody updated the partition— *(Nik: Yeah.)* the main partition. *(Nik: Yeah.)* Ah. Good.
+Nobody updated the partition— the main partition. Good.
 
-**Nik** [00:39:02]
+**Nik** [00:38:18]
 
 By the way, pg_dump also now, takes care of restoring, extended statistics. The case statistics, now can be restored and dumped and restored, I guess, right? So this is also good stuff—
 
-**Michael** [00:39:16]
+**Michael** [00:38:32]
 
 Yeah. I didn't see that in the release notes. I'd... I was looking for it and thought that it happened, but I didn't see it in the release notes, so I was surprised it didn't make it, 'cause I think that now means that all statistics can be dumped out of Postgres.
 
-**Nik** [00:39:29]
-
-Ah.
-
-**Michael** [00:39:29]
-
 Was that the only exception?
 
-**Nik** [00:39:30]
+**Nik** [00:38:47]
 
 I'm looking at—
 
-**Kirk** [00:39:31]
+**Kirk** [00:38:47]
 
-You could have extension-based statistics or something— *(Nik: Oh.)* that may not get carried. So I would hammer down on saying all. Okay? I would stick with— *(Nik: Yeah.)* regular and extended statistics are now copied over, and leave it at that.
+You could have extension-based statistics or something— that may not get carried. So I would hammer down on saying all. Okay? I would stick with— regular and extended statistics are now copied over, and leave it at that.
 
-**Nik** [00:39:45]
+**Nik** [00:39:01]
 
-pg_dump include restorable extended statistics, if you can dump, you should be able to restore it. *(Michael: Yeah.)* Yeah.
+pg_dump include restorable extended statistics, if you can dump, you should be able to restore it. Yeah.
 
-**Michael** [00:39:52]
+**Michael** [00:39:09]
 
 Makes sense. Nice one.
 
-**Nik** [00:39:55]
+**Nik** [00:39:11]
 
-Oh, specifically, like, there are some small things which just make, make your life difficult if you don't have them. Another thing is that in pgbench, we have --continue-on-error. *(Michael: Oh.)* I wrote so many shell scripts to simulate this behavior, because if I... Sometimes if it just reads some error, like max connection reached and so on, you just still want to continue your workload for your, like, for experimentation purposes. Now it's just a CLI option, which is great to have.
+Specifically there are some small things which just make your life difficult if you don't have them. Another thing is that in pgbench, we have --continue-on-error. I wrote so many shell scripts to simulate this behavior, because if I... Sometimes if it just reads some error, like max connection reached and so on, you just still want to continue your workload for your for experimentation purposes. Now it's just a CLI option, which is great to have.
 
 Yeah. Good.
 
-**Michael** [00:40:29]
-
-Yeah.
-
-**Kirk** [00:40:30]
+**Kirk** [00:39:46]
 
 Now that's the good news. There's some warnings though, right?
 
-**Michael** [00:40:34]
-
-Oh, yeah.
-
-**Kirk** [00:40:34]
-
 So have you seen some of the warnings it tells you about? What's going on with that? I'll throw that over to Michael.
 
-**Michael** [00:40:42]
+**Michael** [00:39:58]
 
-Yeah. I think... Are there a couple of parameters that have been removed, so that if you've got them specified, like, in your config file, you won't be able to restart without them? Including, and this might be a surprise to some people, I think even, like, a PG18 one. Or maybe that was still... You know the I/O workers? In fact, we didn't talk about these at all. The kind of self-driving feature, Nik, the self-tuning feature of the I/O workers that I think Tomas Vondra was working on that's had a parameter removed. I haven't checked if that's one of them, but yeah, basically there's, some parameters that are no longer in Postgres that if you specify them, it won't, won't start.
+Yeah. I think... Are there a couple of parameters that have been removed, so that if you've got them specified in your config file, you won't be able to restart without them? Including, and this might be a surprise to some people, I think even a PG18 one. Or maybe that was still... You know the I/O workers? In fact, we didn't talk about these at all. The kind of self-driving feature, Nik, the self-tuning feature of the I/O workers that I think Tomas Vondra was working on that's had a parameter removed. I haven't checked if that's one of them, but yeah, basically there's, some parameters that are no longer in Postgres that if you specify them, it won't start.
 
-**Kirk** [00:41:24]
+**Kirk** [00:40:40]
 
-And be careful, because you may have that set on, for example, a specific table. So one of the great features of Postgres is you can override things— *(Michael: Yeah.)* on various objects, and if you use that stuff on a specific object, you might not find it as fast. And, *(Michael: Yeah.)* so yeah, so that's a red flag.
+And be careful, because you may have that set on, for example, a specific table. So one of the great features of Postgres is you can override things— on various objects, and if you use that stuff on a specific object, you might not find it as fast. And, so yeah, so that's a red flag.
 
-**Nik** [00:41:44]
+**Nik** [00:41:00]
 
-And pg_upgrade --check will report success, and then you just— *(Kirk: Yeah.)* cannot start after upgrade. Yeah, that's... That just means that as usual, you need to test it thoroughly before going to production. For example, upgrading on a clone separately, checking everything works, and then, already then proceeding to production, right? Testing on clones remains important. By the way, how we didn't touch any logical replication improvements, specifically replication of sequences?
+And pg_upgrade --check will report success, and then you just— cannot start after upgrade. Yeah, that's... That just means that as usual, you need to test it thoroughly before going to production. For example, upgrading on a clone separately, checking everything works, and then, already then proceeding to production, right? Testing on clones remains important. By the way, how we didn't touch any logical replication improvements, specifically replication of sequences?
 
-**Michael** [00:42:15]
+**Michael** [00:41:31]
 
 Sequences, yeah.
 
-**Nik** [00:42:16]
+**Nik** [00:41:32]
 
 Important, yeah. The only thing left, from among big gaps is just DDL, right? Which—
 
-**Michael** [00:42:22]
+**Michael** [00:41:39]
 
 The only thing. That small thing. Yeah.
 
-**Nik** [00:42:26]
+**Nik** [00:41:42]
 
-Just DDL and Postgres 20 and that's it. *(Michael: Yeah.)* Please.
+Just DDL and Postgres 20 and that's it. Please.
 
-**Kirk** [00:42:31]
+**Kirk** [00:41:47]
 
-Yeah. So just, just again for the slower listeners like me, you have either DML, data manipulation language, or DDL, data definition language stuff. So there's only two things in there, and one of them's not supported, and it's partially because you're changing... When you do change DDL, it effectively creates DML that affects the tables that PG is running on. So you're actually changing the underlying structure in a very interest— And it's complicated, right? So this is why it's gonna be a hot second before they get to DDL, but I tell you what, once they do, I think a lot of people are gonna be really happy. That's a, that's a nice hurdle to overcome.
+Yeah. So just again for the slower listeners like me, you have either DML, data manipulation language, or DDL, data definition language stuff. So there's only two things in there, and one of them's not supported, and it's partially because you're changing... When you do change DDL, it effectively creates DML that affects the tables that PG is running on. So you're actually changing the underlying structure in a very interest— And it's complicated, right? So this is why it's gonna be a hot second before they get to DDL, but I tell you what, once they do, I think a lot of people are gonna be really happy. That's a nice hurdle to overcome.
 
-**Nik** [00:43:16]
+**Nik** [00:42:33]
 
-Good. We covered our favorite features. I think recommendations should change as well, because testing can be done in, like, more actively earlier because of AI, right? So what do you think? How would testing of production systems would look, would look like now when we have AI and we can test thoroughly before actually switching it in production? Or just clone, right? You test all your application in full clone environment, checking that everything works.
+Good. We covered our favorite features. I think recommendations should change as well, because testing can be done in more actively earlier because of AI, right? So what do you think? How would testing of production systems would look like now when we have AI and we can test thoroughly before actually switching it in production? Or just clone, right? You test all your application in full clone environment, checking that everything works.
 
-As usual, you need just to... Like, such environments should, be detached from the world, not sending any emails, not making any API calls, right? Because if you test your application on actual copy It can be dangerous, but it's like it's outside of database, but we like... the plans will be the same and so on. Yeah, and the plan—
+As usual, you need just to... Such environments should, be detached from the world, not sending any emails, not making any API calls, right? Because if you test your application on actual copy It can be dangerous, but it's like it's outside of database, but we like... The plans will be the same and so on. Yeah, and the plan—
 
-**Michael** [00:44:18]
+**Michael** [00:43:34]
 
-Synthetic, synthetic workloads are a bit easier to generate now.
+Synthetic workloads are a bit easier to generate now.
 
-**Nik** [00:44:22]
+**Nik** [00:43:38]
 
 Of course. Yeah.
 
-**Michael** [00:44:22]
+**Michael** [00:43:39]
 
-So it... I think one of the hardest things with these is actually having, you know, even if you test on a clone of production, if there's no traffic, you're, you're gonna miss a whole category of blocking related issues. *(Nik: Right.)* Or sequences—
+So it... I think one of the hardest things with these is actually having even if you test on a clone of production, if there's no traffic, you're gonna miss a whole category of blocking related issues. Or sequences—
 
-**Nik** [00:44:37]
+**Nik** [00:43:53]
 
 That's a great point
 
-**Michael** [00:44:38]
+**Michael** [00:43:54]
 
 Advancing and that kind of thing.
 
-**Nik** [00:44:38]
+**Nik** [00:43:55]
 
-It's actually the whole idea behind the DBLab Forge is that now we can understanding some telemetry from, like, RCA from root cause analysis from production problem, we can simulate with synthetic data purely. *(Michael: Mm-hmm.)* We can simulate, reproduce, and, like, this very problem and study it in detail in non-production environment. This is actually the idea. So you're absolutely right about that. Now it becomes much easier because like you, a lot of small experiments are done, in automated fashion.
+It's actually the whole idea behind the DBLab Forge is that now we can understanding some telemetry from RCA from root cause analysis from production problem, we can simulate with synthetic data purely. We can simulate, reproduce, and this very problem and study it in detail in non-production environment. This is actually the idea. So you're absolutely right about that. Now it becomes much easier because like you, a lot of small experiments are done, in automated fashion.
 
 And plan flip analysis is important thing, as we said, right? So I guess—
 
-**Kirk** [00:45:17]
+**Kirk** [00:44:33]
 
 We have approaches—
 
-**Nik** [00:45:18]
+**Nik** [00:44:35]
 
-My recommendation, like, usually was wait until, like, .1, .2 version, but now I think, the better recommendation is don't wait. Start, start testing earlier, and because you... Like, most people have much more capacity thanks to AI, and why not, right? Start testing earlier and then jump to a new version sooner, you know, with proper testing.
+My recommendation usually was wait until .1, .2 version, but now I think, the better recommendation is don't wait. Start testing earlier, and because you... Most people have much more capacity thanks to AI, and why not, right? Start testing earlier and then jump to a new version sooner with proper testing.
 
-**Kirk** [00:45:44]
+**Kirk** [00:45:00]
 
 So our approach has been in the past that we pull the full data, we put it in a dev environment first, and then we run the process through a dev environment with a combo of usually a dev person and an IT person, that double-checks everything, that makes sure everything passes, follow up with some queries. Then that dev environment is actually put into development, and that person is recompiling what's going through Git and stuff and pushing it through on their machine, and then that's a predecessor to the IT department kind of doing the automated script stuff that then gets run in staging. So we go from one dev, we automate it a bit, we push it into staging.
 
-The other devs can still be on the old version in our book. And then after it goes through staging and it's there for a day or two, then what we do is we have the other devs upgrade their environments, to match this, and then we move it into the backup system first because it does 80% of what production does, but more in a backup mode, right? Failure kind of stuff. And then we migrate it through the systems. That's been our approach. I don't see it changing other than giving a first pass to the AIs to say, "Hey, just, you know, fire this up, restore it." Our problem is the restore is, if we don't do it the right way, it's 72 hours, and it just takes forever for that, you know, feeding up the data, feeding up everything else.
+The other devs can still be on the old version in our book. And then after it goes through staging and it's there for a day or two, then what we do is we have the other devs upgrade their environments, to match this, and then we move it into the backup system first because it does 80% of what production does, but more in a backup mode, right? Failure kind of stuff. And then we migrate it through the systems. That's been our approach. I don't see it changing other than giving a first pass to the AIs to say, "Hey, just fire this up, restore it." Our problem is the restore is, if we don't do it the right way, it's 72 hours, and it just takes forever for that feeding up the data, feeding up everything else.
 
 And I've yet to solve that problem yet, but you know, I need to work that. Once I get that worked, where it can be up and running faster, great.
 
-**Nik** [00:47:21]
+**Nik** [00:46:37]
 
 So since you manage Postgres yourself, you should use pg_createsubscriber these days, right? To convert, physical replica to logical replica and then upgrade it. That's it.
 
-**Kirk** [00:47:33]
+**Kirk** [00:46:49]
 
 Note to self.
 
-**Nik** [00:47:34]
+**Nik** [00:46:50]
 
-Yeah, yeah, yeah. This is how, like, it should be done. And I'm very curious about plan flip analysis because this is big topic. We implemented recently in DBLab Engine, we implemented ability to upgrade clones just pressing a button, and then you can start analyzing. You can have two clones and start analyzing plans. So, It's
+Yeah. This is how it should be done. And I'm very curious about plan flip analysis because this is big topic. We implemented recently in DBLab Engine, we implemented ability to upgrade clones just pressing a button, and then you can start analyzing. You can have two clones and start analyzing plans. So, It's
 
-**Kirk** [00:47:55]
+**Kirk** [00:47:12]
 
-Just having the dev be able to run it in their environment, it Michael. It exercises enough the code that if we had a plan flip, like our most used table is 200 million rows. Any pan, any plan flip on that table is immediately, dissatisfied. *(Nik: Yeah.)* It never hides, right? Ahead.
+Just having the dev be able to run it in their environment, it Michael. It exercises enough the code that if we had a plan flip, like our most used table is 200 million rows. Any pan, any plan flip on that table is immediately, dissatisfied. It never hides, right? Ahead.
 
-**Michael** [00:48:18]
+**Michael** [00:47:34]
 
-Yeah. Well, I was gonna say, I think I understand why we're calling it plan flips, and I think that's a useful phrase. But query... It's performance degradation, right? It, *(Nik: Yeah.)* that's the big issue, and I think actually that hints at some easier to catch solutions. I know Radim was working on this, like, with his RegreSQL. I think that's a regressions is more of like an interesting way of thinking about it rather than flips. 'Cause the plan might change, a plan shape might change, but the, if the performance hasn't changed, is that a big deal?
+Yeah. Well, I was gonna say, I think I understand why we're calling it plan flips, and I think that's a useful phrase. But query... It's performance degradation, right? It, that's the big issue, and I think actually that hints at some easier to catch solutions. I know Radim was working on this with his RegreSQL. I think that's a regressions is more of like an interesting way of thinking about it rather than flips. 'Cause the plan might change, a plan shape might change, but the, if the performance hasn't changed, is that a big deal?
 
-**Nik** [00:48:52]
+**Nik** [00:48:08]
 
-Of course. Yeah. *(Michael: Yeah.)* Not all flips are bad, of course. It can be improvement because new version, *(Michael: Yeah.)* has better plan. It can happen, definitely. But we, when we talk about... It's, regression is very great, good word here. *(Michael: Yeah.)* There are... A separate question here is, like, Kirk, do you know how many query IDs you actually have?
+Of course. Yeah. Not all flips are bad, of course. It can be improvement because new version, has better plan. It can happen, definitely. But we, when we talk about... It's, regression is very great, good word here. There are... A separate question here is Kirk, do you know how many query IDs you actually have?
 
-**Kirk** [00:49:10]
+**Kirk** [00:48:27]
 
-So yeah, that's a great question. I don't know the exact number. I do know the following truth. We have about 40 queries that are 80 to 90%- *(Nik: Okay.)* of our work.
+So yeah, that's a great question. I don't know the exact number. I do know the following truth. We have about 40 queries that are 80 to 90%- of our work.
 
-**Nik** [00:49:23]
+**Nik** [00:48:39]
 
 In terms of time, like database execution time, or in general?
 
-**Kirk** [00:49:27]
+**Kirk** [00:48:44]
 
-Number of executions and... Right? Because one of our, one of our key ones is a search
+Number of executions and... Right? Because one of our key ones is a search
 
-**Michael** [00:49:34]
+**Michael** [00:48:50]
 
 That actually does all the heavy work and takes the time
 
-**Nik** [00:49:37]
+**Nik** [00:48:53]
 
-The problem is the tail can be really long and something in tail can, can flip so badly that, *(Michael: Yeah.)* so you need to analyze everything. And what I now, what I'm now, now thinking about is that if you see, if you have pg_stat_statements, I know you don't have pg_stat_statements, by the way. It's not, common. Most people have. *(Michael: Mm.)* And if you see pg_stat_statements.max 5,000 by default, and you see all of them are filled, big question, what kind of like iceberg hides behind those 4, 5,000?
+The problem is the tail can be really long and something in tail can flip so badly that, so you need to analyze everything. And what I now, what I'm now thinking about is that if you see, if you have pg_stat_statements, I know you don't have pg_stat_statements, by the way. It's not, common. Most people have. And if you see pg_stat_statements.max 5,000 by default, and you see all of them are filled, big question, what kind of like iceberg hides behind those 4, 5,000?
 
 What is drift and so on?
 
-**Michael** [00:50:13]
+**Michael** [00:49:29]
 
-You can query for deallocations. I learned that recently. Like you can see— *(Nik: Yeah.)* how many times. Yeah, that's really cool.
+You can query for deallocations. I learned that recently. Like you can see— how many times. Yeah, that's really cool.
 
-**Nik** [00:50:19]
+**Nik** [00:49:35]
 
 That's cool.
 
-**Michael** [00:50:19]
+**Michael** [00:49:35]
 
 But is it... Nik, I had a question. When you said it's, you have to look at everything, I suspect another thing to look at in the tail is calls. So a query that's in the tail that's very infrequent, even if it flipped, would not cause that bad an issue.
 
-**Nik** [00:50:36]
+**Nik** [00:49:52]
 
 It can. It can—
 
-**Michael** [00:50:36]
+**Michael** [00:49:52]
 
 But if it was huge... Okay. Yeah.
 
-**Nik** [00:50:38]
+**Nik** [00:49:54]
 
 Can be.
 
-**Michael** [00:50:38]
+**Michael** [00:49:54]
 
 But I'm thinking the bigger issues might be the ones with lots of calls, even if they're like microseconds and they flipped.
 
-**Nik** [00:50:45]
+**Nik** [00:50:01]
 
-Imagine. Very simple example. Imagine you have statement_timeout 60, which is quite high for, in my books. It should— *(Michael: Yeah.)* it should be 30, 15 or 10. *(Michael: Yeah.)* But let's have 60. You have big machine, like 96 cores, and then you have a query which is just one QPS, right? And then it suddenly started to be so slow it reaches a statement_timeout. So it takes... During one minute you will have already 60, active sessions, busy with this work.
+Imagine. Very simple example. Imagine you have statement_timeout 60, which is quite high for, in my books. It should be 30, 15 or 10. But let's have 60. You have big machine, like 96 cores, and then you have a query which is just one QPS, right? And then it suddenly started to be so slow it reaches a statement_timeout. So it takes... During one minute you will have already 60, active sessions, busy with this work.
 
 One QPS work.
 
-**Michael** [00:51:20]
+**Michael** [00:50:37]
 
 Yeah. Good point.
 
-**Nik** [00:51:21]
+**Nik** [00:50:38]
 
-What if it was two QPS? You already more than 100 active sessions, and you have only 96 cores. So it's can be somewhere in at the very end of the tail might hit you really hard. That's a problem. *(Michael: Yeah.)* So that's why we need to analyze everything, and if pg_stat_statements don't show everything, then your methodology shouldn't be based on pg_stat_statements. Only, like you could look to it for some macro metrics, but to analyze everything, anyway, that's why you should start earlier and give yourself a month or two to study the behavior of your database and its workload on Postgres 19.
+What if it was two QPS? You already more than 100 active sessions, and you have only 96 cores. So it's can be somewhere in at the very end of the tail might hit you really hard. That's a problem. So that's why we need to analyze everything, and if pg_stat_statements don't show everything, then your methodology shouldn't be based on pg_stat_statements. Only, like you could look to it for some macro metrics, but to analyze everything, anyway, that's why you should start earlier and give yourself a month or two to study the behavior of your database and its workload on Postgres 19.
 
 Right? Not, do it in rushing, like in one week. Should take longer.
 
-**Michael** [00:52:12]
+**Michael** [00:51:28]
 
 Yeah. I like that.
 
-**Nik** [00:52:13]
+**Nik** [00:51:29]
 
 Good? I think, probably that's it. Good.
 
-**Michael** [00:52:18]
+**Michael** [00:51:34]
 
 Nice one.
 
-**Nik** [00:52:20]
+**Nik** [00:51:36]
 
 Thank you, Michael, for visiting us. Yeah.
 
-**Michael** [00:52:23]
+**Michael** [00:51:40]
 
-Thank, thank you guys for releasing in my absence. It's fun to be a listener. I get an, I get an extra Postgres podcast in my feed now.
+Thank you guys for releasing in my absence. It's fun to be a listener. I get an extra Postgres podcast in my feed now.
 
-**Kirk** [00:52:33]
+**Kirk** [00:51:49]
 
 And in honor of the fact that you're coming back, I wore the yellow shirt for you.
 
-**Nik** [00:52:37]
+**Nik** [00:51:54]
 
-Oh, nice.
+Nice.
 
-**Kirk** [00:52:38]
+**Kirk** [00:51:54]
 
 So I'm I get to come back. You're not getting... I'll wear the red shirt on the last day I'm with you guys. So—
 
-**Nik** [00:52:45]
-
-Well—
-
-**Kirk** [00:52:45]
-
 I'm just keeping your seat warm.
 
-**Michael** [00:52:47]
+**Michael** [00:52:03]
 
 Yeah. I'll be back in January, so you've got a little while left.
 
-**Kirk** [00:52:50]
+**Kirk** [00:52:06]
 
-Oh, good.
+Good.
 
-**Nik** [00:52:50]
+**Nik** [00:52:06]
 
 Happy New Year, Michael.
 
-**Michael** [00:52:53]
+**Michael** [00:52:09]
 
 Yeah. And Merry Christmas. Happy Thanksgiving.
 
-**Nik** [00:52:55]
+**Nik** [00:52:11]
 
-And Merry Christmas. Yes. *(Michael: Yeah.)* Yeah. Okay.
+And Merry Christmas. Yes. Yeah. Okay.
 
-**Michael** [00:52:59]
-
-Ah.
-
-**Kirk** [00:52:59]
+**Kirk** [00:52:16]
 
 Bye.
 
-**Michael** [00:53:00]
+**Michael** [00:52:16]
 
 See you guys.

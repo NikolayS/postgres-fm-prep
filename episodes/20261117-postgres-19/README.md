@@ -55,16 +55,16 @@ YouTube subtitles (section 4):
 - [ ] Uploaded with timing; auto-generated track removed; auto-dubbing off (no YouTube video yet).
 
 Podcast audio (section 5):
-- [x] Decision: the audio has the cold open (host can veto), so podcast times are video times.
-- [x] Audio-only master without overlay sounds, -16.2 LUFS, -2.1 dBTP, MP3 192 kbps with the cover (`preview/episode-197-podcast.mp3`, not in git).
+- [x] Decision (Nik, 2026-11-19): NO cold open in the podcast audio or transcript; it starts at "Hello, and welcome". Podcast time = video time - 43.76 s.
+- [x] Audio-only master: body only, 0.25 s fade-in, no overlay sounds, 52:38.9, -16.2 LUFS, -2.5 dBTP, MP3 192 kbps with `covers-v2/FINAL-square.jpg` (MA version) embedded (`preview/episode-197-podcast.mp3`, not in git).
 - [x] Square cover 3000x3000: `preview/covers-v2/FINAL-square.jpg` (made by the cover work, not in git), embedded in the MP3 and set as the episode artwork.
-- [x] Draft emptied until release (leak option A); restore with `bash video/podcast/restore.sh`, then publish. Draft created with `transistor.ts`: episode 3745675 (slug `postgres-19`, status draft): title, summary, description, transcript, audio. Not published or scheduled.
-- [x] `video_url` = https://www.youtube.com/watch?v=VcDU-NRE3hI, and the URL is in the tip of the notes (2026-11-19).
+- [x] Draft restored after the release; body-only audio, notes and polished transcript uploaded 2026-11-19 and checked through the API (same decoded audio, description, summary, transcript). Draft created with `transistor.ts`: episode 3745675 (slug `postgres-19`, status draft): title, summary, description, transcript, audio. Not published or scheduled.
+- [x] `video_url` set to https://youtu.be/VcDU-NRE3hI (Transistor stores it as https://www.youtube.com/watch?v=VcDU-NRE3hI); the youtu.be URL is in the tip of the notes (2026-11-19).
 - [x] Show notes open with the watch-on-YouTube tip.
 - [ ] Publish and check the episode page, the share page and the RSS feed (not done: draft only).
 
 Transcript and podcast subtitles (section 6):
-- [x] Transcript in the new style (name and stamp only when a person starts speaking), podcast times.
+- [x] Transcript in the new style (name and stamp only when a person starts speaking), podcast times, clean verbatim (`video/podcast/polish.py`: fillers, repeats, false starts removed).
 - [x] SRT/VTT for the audio version from the audio time map (`captions/podcast.en.*`).
 
 Show notes (section 7):
