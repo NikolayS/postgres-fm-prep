@@ -22,12 +22,14 @@ for p, c in P.items():
     left = round(c['ex'] * s - W / 2 - c['dx']); top = round(c['ey'] * s - E)
     assert 0 <= left and left + W <= big.width and 0 <= top and top + H <= big.height, (p, left, top, big.size)
     big.crop((left, top, left + W, top + H)).save(f'work/yt-{p}.png')
-V = {'v1': ('POSTGRES 19', 'IS OUT'), 'v2': ('POSTGRES 19:', 'WHAT MADE IT?'), 'v3': ('FINALLY,', 'POSTGRES 19')}
+V = {'v1': ('POSTGRES 19', 'IS OUT'), 'v2': ('POSTGRES 19:', 'WHAT MADE IT?'), 'v3': ('FINALLY,', 'POSTGRES 19'),
+     'h1': ('DO YOU STILL NEED', 'pg_repack?'), 'h2': ('PLAN ADVICE <span class="or">or</span>', 'HINTS?'), 'h3': ('WILL YOUR PLANS', 'FLIP ON 19?')}
 css = '''@font-face{font-family:Imp;src:url(file:///System/Library/Fonts/Supplemental/Impact.ttf)}
 html,body{margin:0;width:1280px;height:720px;background:#111013;overflow:hidden}
-.l{position:absolute;left:46px;font-family:Imp;line-height:1;letter-spacing:0.5px;white-space:nowrap;font-size:158px}
+.l{position:absolute;left:46px;font-family:Imp;line-height:1;letter-spacing:0.5px;white-space:nowrap;font-size:158px;width:max-content}
 .l1{top:30px;color:#f5f3ee}
 .l2{top:192px;color:#ff7a1a}
+.or{font-size:.5em;color:#8a8f98;margin-left:.12em}
 .tile{position:absolute;top:376px;width:376px;height:316px;border:6px solid #f5f3ee;background:#000}
 .tile img{display:block;width:376px;height:316px}
 .t1{left:40px}.t2{left:446px}.t3{left:852px}
@@ -35,20 +37,26 @@ html,body{margin:0;width:1280px;height:720px;background:#111013;overflow:hidden}
 chrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
 for k, (a, b) in V.items():
     open(f'work/yt-{k}.html', 'w').write(f'<!doctype html><html><head><meta charset="utf-8"><style>{css}</style></head><body><div class="l l1">{a}</div><div class="l l2">{b}</div>'
-        '<div class="tile t1"><img src="yt-nik.png"></div><div class="tile t2"><img src="yt-mic.png"></div><div class="tile t3"><img src="yt-kirk.png"></div></body></html>')
-    subprocess.run([chrome, '--headless=new', '--disable-gpu', '--hide-scrollbars', '--force-device-scale-factor=1', '--window-size=1280,720',
+        '<div class="tile t1"><img src="yt-nik.png"></div><div class="tile t2"><img src="yt-mic.png"></div><div class="tile t3"><img src="yt-kirk.png"></div>'
+        '<script>document.fonts.load("158px Imp").then(()=>{for(const e of document.querySelectorAll(".l")){let z=158;while(e.offsetWidth>1190&&z>80){z-=2;e.style.fontSize=z+"px"}e.style.marginTop=(158-z)*0.55+"px"}})</script></body></html>')
+    subprocess.run([chrome, '--headless=new', '--disable-gpu', '--hide-scrollbars', '--force-device-scale-factor=1', '--window-size=1280,720', '--virtual-time-budget=3000',
                     f'--screenshot={here}/work/yt-{k}.png', f'file://{here}/work/yt-{k}.html'], capture_output=True)
     Image.open(f'work/yt-{k}.png').convert('RGB').save(f'{out}/yt-{k}.jpg', quality=93, subsampling=0, optimize=True)
-# Sheet: the three variants and the episode 196 thumbnail, full view and playlist size (420x236).
+# Sheets: variants in full view, then at playlist size (420x236) next to the episode 196 thumbnail.
 ref = Image.open(f'{here}/../../../20261110-temporary-tables/thumbs/thumb-d.png').convert('RGB')
-rows = [('V1', f'{out}/yt-v1.jpg'), ('V2', f'{out}/yt-v2.jpg'), ('V3', f'{out}/yt-v3.jpg')]
 f = ImageFont.truetype('/System/Library/Fonts/Helvetica.ttc', 28)
-S = Image.new('RGB', (40 + 3 * 660, 40 + 360 + 60 + 236 + 70), (228, 228, 224)); d = ImageDraw.Draw(S)
-for i, (n, fn) in enumerate(rows):
-    t = Image.open(fn); S.paste(t.resize((640, 360), Image.LANCZOS), (20 + i * 660, 20)); d.text((20 + i * 660, 388), n, fill=(20, 20, 20), font=f)
-    S.paste(t.resize((420, 236), Image.LANCZOS), (20 + (i + 1) * 440, 440)); d.text((20 + (i + 1) * 440, 684), n + ' at playlist size', fill=(20, 20, 20), font=f)
-S.paste(ref.resize((420, 236), Image.LANCZOS), (20, 440)); d.text((20, 684), 'Episode 196 (reference)', fill=(20, 20, 20), font=f)
-S.save(f'{out}/yt-sheet.png')
+def sheet(name, full, small):
+    S = Image.new('RGB', (40 + 3 * 660, 40 + 360 + 60 + (236 + 70) * ((len(small) + 4) // 4)), (228, 228, 224)); d = ImageDraw.Draw(S)
+    for i, k in enumerate(full):
+        S.paste(Image.open(f'{out}/yt-{k}.jpg').resize((640, 360), Image.LANCZOS), (20 + i * 660, 20)); d.text((20 + i * 660, 388), k.upper(), fill=(20, 20, 20), font=f)
+    for j, k in enumerate(['196'] + small):
+        x, y = 20 + (j % 4) * 440, 440 + (j // 4) * 306
+        S.paste((ref if k == '196' else Image.open(f'{out}/yt-{k}.jpg')).resize((420, 236), Image.LANCZOS), (x, y))
+        d.text((x, y + 244), 'Episode 196 (reference)' if k == '196' else k.upper() + ' at playlist size', fill=(20, 20, 20), font=f)
+    S.save(f'{out}/{name}')
+sheet('yt-sheet.png', ['v1', 'v2', 'v3'], ['v1', 'v2', 'v3'])
+sheet('yt-sheet-h.png', ['h1', 'h2', 'h3'], ['h1', 'h2', 'h3', 'v1', 'v2', 'v3'])
+rows = [(k, f'{out}/yt-{k}.jpg') for k in V]
 # Eyes and duration-badge check.
 o = subprocess.run([f'{here}/work/face'], input='\n'.join(fn for _, fn in rows) + '\n', capture_output=True, text=True).stdout
 for l in o.splitlines():
