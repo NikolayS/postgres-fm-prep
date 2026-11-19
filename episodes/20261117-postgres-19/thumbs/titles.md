@@ -35,3 +35,15 @@ Candidates (recording times; superseded: the cold open is made separately, see `
 3. 00:28:24 to 00:29:20, Kirk: "Plan hints to me is the 1975 solution ... we're 2026, baby." Funny; trim to about 20 s.
 
 Recommendation: 2 (it has a chart and a number), or 3 if Nik prefers a laugh.
+
+## Thumbnails made (2026-11-18)
+
+Contact sheet: `preview/thumbs-sheet.png`; full size: `preview/thumbs/thumb-a.png`, `thumb-b.png`, `thumb-c.png` (media are not in git).
+
+- **A (recommended):** "POSTGRES 19: / UPGRADE NOW?"
+- **B:** "WHAT BREAKS / ON 19?", chip "pg_upgrade --check said OK" (check the chip with Nik, see above).
+- **C:** "DON'T WAIT / FOR 19.1" (Nik's advice on air, 00:49:23 recording time). Concept C above ("NOTIFY 55x FASTER?") is dropped: it pairs only with title 3, and title 1 is settled.
+
+Heads, from the final video (`preview/episode-197-final.mp4`), picked with Apple Vision face and eye detection (`tools/podcast-edit/qa/faces.swift`) on every tile at 2 s steps, then at 0.25 s near the best frames: Nik 00:46:09.25, Michael 00:20:50.50, Kirk 00:25:37.50. Eyes open on all three (eye ratio 0.34-0.41 on the rendered thumbnails, 3 faces found). Balance: same eye distance (62 px), Kirk scaled by 0.85 because his eyes sit closer for his head size; eyes on one line (within 9 px); face luminance matched by gamma (Michael and Nik brightened, Kirk's hot camera toned down). Kirk is framed with his full head in the tile.
+
+Sources: `src/rank.py` (frame ranking), `src/tiles.py` (tiles), `src/mk.py` (HTML and headless Chrome render).

@@ -1,50 +1,74 @@
-# Episode 197 (Postgres 19): X thread and LinkedIn post
+# Episode 197 (Postgres 19): X thread
 
-DRAFT, 2026-11-17. Nothing is posted. Nik posts from his accounts. Rules: no link in the first post (links in the last reply); numbers in the first line; simple English; no emojis (none approved for this one); only our product named.
+DRAFT v2, 2026-11-18. Nothing is posted. Nik posts from his accounts. Rules: numbers in the first line; no link in the first post (links in the last reply); simple English; no emojis; only our product named. LinkedIn variant: [`linkedin.md`](linkedin.md).
 
-Handles: Michael @michristofides, Kirk: no verified X handle (use plain "Kirk Wolak"; Nik to confirm his handle), the show @postgresfm, Nik @samokhvalov. Before posting, replace the YouTube placeholder and check that https://postgres.fm/episodes/postgres-19 is live (slug confirmed).
+Handles (checked 2026-11-18): Michael @michristofides (linked from https://www.pgmustard.com/about), the show @PostgresFM (linked from https://postgres.fm), Nik @samokhvalov (GitHub profile of NikolayS). Kirk: no verified X handle (no link on his GitHub profile, https://github.com/kirkw), so plain "Kirk Wolak"; add the handle only when Nik confirms it.
 
-Character counts are X counts (a link = 23; limit 280).
+Before posting: replace the YouTube placeholder, and check that https://postgres.fm/episodes/postgres-19 is live. Character counts are X counts (a link = 23; limit 280).
 
 ---
 
-## v1 (2026-11-17)
-
-4 posts.
-
-### 1/ First post (no link) — 267 chars — media: the brief's NOTIFY chart (18.7 vs 19 RC2, 1,000 listeners), or a speaker clip of Nik at 00:20:59 to 00:21:14
+### 1/ First post (no link) — 273 chars — media: the NOTIFY card (`preview/illus-03-notify.png`), or the NOTIFY speaker clip if one is cut
 
 ```
-Postgres 19, LISTEN/NOTIFY with 1,000 listeners, each on its own channel:
+Postgres 19, LISTEN/NOTIFY with 1,000 listeners:
 
 18.7: 200 notifications/s
-19 RC2: at least 11,040/s
+19 RC2: 11,040/s (at least: our client was the limit)
 
-New Postgres FM: Kirk Wolak is joining @michristofides and me as a co-host. Our favorite 19 features, and what to check before you upgrade.
+New Postgres FM. Michael @michristofides is back: Kirk Wolak, Michael and I on our favorite 19 features, and what to check before you upgrade.
 ```
 
-### 2/ Reply — 251 chars — media: speaker clip: Michael at 00:15:38 to 00:16:10, or Kirk at 00:16:14 to 00:16:50
+### 2/ Reply — 219 chars — media: the CVE card (`preview/illus-09-cves-v3.png`)
 
 ```
-REPACK (CONCURRENTLY) is in core now, based on pg_squeeze. Michael thinks it will be fine for most workloads.
+Part of why 19 came in November, not September: security work.
 
-Watch the final lock. In our tests on 19 RC2: the longer the first catch-up pass and the faster the writes, the longer the table is blocked.
+PostgreSQL CVEs in 2026 so far: 96. From 2019 to 2025: 2 to 10 per year.
+
+The 18.7 release alone fixed 52 CVEs, 34x the average minor release of 2019-2025.
 ```
 
-### 3/ Reply — 266 chars — media: none
+### 3/ Reply — 246 chars — media: the autovacuum card (`preview/illus-04-autovac.png`)
+
+```
+Favorites, measured on 19 RC2 vs 18.7:
+
+- Autovacuum order: a table near wraparound, placed last of 121. Vacuum started after 12.9 s on 19, 152.3 s on 18.7
+- lz4 for TOAST by default: 200,000 jsonb docs of 16 KiB inserted in 44 s, 107 s with pglz
+```
+
+### 4/ Reply — 256 chars — media: the JIT card (`preview/illus-06-jit.png`)
+
+```
+New defaults cut both ways. jit = off on 19:
+
+- a short query: 172 ms to 108 ms (-37%)
+- the longest query: 3,914 ms to 4,607 ms (+17.7%)
+
+REPACK (CONCURRENTLY) is in core. Watch the final lock. With fast writes, the final lock wait was 85.7 s in our test.
+```
+
+### 5/ Reply — 249 chars — media: the plans card (`preview/illus-08-plans.png`)
 
 ```
 Before the upgrade:
 
-- pg_upgrade --check says OK, the upgrade still fails: escape_string_warning or standard_conforming_strings = off set on a role or database
-- new defaults: jit off, log_lock_waits on, lz4 for TOAST, wal_compression = on means zstd on PGDG builds
+- pg_upgrade --check can say OK, and the upgrade still fails: escape_string_warning or standard_conforming_strings = off set on a role, database or function
+- 83 of 220 query plans changed in our test, 61 of them from one commit
 ```
 
-### 4/ Reply — 267 chars — media: none (link card)
+### 6/ Reply — 264 chars — media: Kirk's speaker clip, "1975 solution ... 2026, baby" (`preview/clip-kirk-1975-*.mp4`)
 
 ```
-My advice: do not wait for 19.1. Start testing now, on clones, and give yourself a month or two to study plan changes.
+pg_plan_advice can keep a good plan without hints in the app. Generating advice for every query cost 11% to 14% throughput on a trivial query in our test.
 
+My advice: do not wait for 19.1. Test on clones now, and give yourself a month or two to study plan changes.
+```
+
+### 7/ Reply — 147 chars — media: none (link card)
+
+```
 Which 19 feature do you test first?
 
 Brief (19 RC2 vs 18.7): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
@@ -52,48 +76,27 @@ Listen: https://postgres.fm/episodes/postgres-19
 Watch: https://www.youtube.com/watch?v=XXXXXXXXXXX
 ```
 
-## LinkedIn (v2)
-
-Media: the brief's NOTIFY chart, or the cold-open clip. Links in the first comment: Brief / Listen / Watch, as in reply 4.
-
-v2 (2026-11-17): numbered list, one problem line per item, one small SQL example (WAIT FOR LSN), closing question. Format idea from a developer-facing PG19 overview on X (Alex Shapalov); no text taken from it.
-
-```
-Postgres 19, LISTEN/NOTIFY with 1,000 listeners, each on its own channel: 200 notifications per second on 18.7, at least 11,040 on 19 RC2.
-
-New Postgres FM episode, on Postgres 19. Kirk Wolak is joining Michael Christofides and me as a co-host. Our favorite features, and what to check before you upgrade:
-
-1. REPACK (CONCURRENTLY). Shrink a bloated table without locking it for the whole rewrite. It is in core, based on pg_squeeze. Michael thinks it is fine for most workloads; on a very large, busy table I still have doubts. The final lock is longer when the first catch-up pass is long and writes are fast.
-
-2. LISTEN/NOTIFY. NOTIFY now wakes only the listeners of its channel. The global lock at commit is still there.
-
-3. Autovacuum order. Tables now get a score. In our test, a table at 1.65 billion XIDs, placed last of 121, started after about 13 s on 19 RC2 and about 152 s on 18.7 (16-vCPU dedicated host, 3 trials; the worst case for 18).
-
-4. Read your writes on a replica. Write on the primary, take the LSN, then on the replica:
-   wait for lsn '0/306EE20' with (timeout '2s');
-
-5. Plan advice. pg_plan_advice and pg_stash_advice keep a good plan for a query from SQL, with no hints in the application code.
-
-6. New defaults: jit off, log_lock_waits on, lz4 for TOAST, and wal_compression = on now means zstd on PGDG builds. Check that every standby has zstd.
-
-7. pg_upgrade --check can say OK, and the upgrade still fails: a removed or now-rejected setting on a role, database or function.
-
-My advice: do not wait for 19.1 or 19.2. Start testing now, on clones, and give yourself a month or two to study plan changes.
-
-Which Postgres 19 feature do you test first?
-
-Video, podcast (Spotify, Apple Podcasts, any app) and our study brief: first comment.
-(NOTIFY: 8-vCPU dedicated host, 4 notifiers, median of 3 runs; our client was the limit, so 11,040 is a lower bound.)
-```
-
 ## Number check
 
-- 200 vs at least 11,040 notifications/s, 1,000 listeners each on its own channel: brief v3.0 and recording notes lead 3 (8-vCPU dedicated host, 4 notifiers, median of 3 runs, client-limited lower bound). Said on air at 00:21:02 as "200 to 11,000".
-- REPACK (CONCURRENTLY) based on pg_squeeze: commit 28d534e2ae0ac888b5460f977a10cd9bb017ef98 ("heavily based on his own pg_squeeze"). "Fine for most workloads": Michael at 00:15:38, his opinion.
-- The final-lock rule: brief v3.0, recording notes lead 2 ("The longer the first catch-up pass and the faster the writes, the longer the block"). Measured on 19 RC2.
-- NOTIFY global lock at commit stays: async.c at REL_19_RC2, PreCommit_Notify.
-- Autovacuum order: commit d7965d65fc5; brief quick hit 4 (a table placed last at 1.65 billion XIDs started at about 13 s on 19, about 152 s on 18.7). The LinkedIn post uses these two numbers (16-vCPU dedicated host, 3 trials).
-- Removed or now-rejected settings (escape_string_warning, standard_conforming_strings = off) on a role, database or function pass --check, then the upgrade fails: recording notes lead 1; shihao zhong's report, pgsql-hackers, 2026-10-24.
-- New defaults: commits 7f8c88c2b87 (jit), 2aac62be8cb (log_lock_waits), 34dfca29343 (lz4 TOAST, when built with lz4), 5838806ce69 (wal_compression = on picks zstd, lz4, pglz in that order). "zstd on PGDG": recording notes demo 2.
-- WAIT FOR LSN example: syntax and the `pg_current_wal_insert_lsn()` step follow the 19 RC2 reference page (doc/src/sgml/ref/wait.sgml).
-- "Do not wait for 19.1 or 19.2": Nik at 00:49:23; "a month or two": Nik at 00:56:40.
+Every number is from a card in `../cards/` (the card's `numbers.<key>`; its `source` gives the raw file and the command that recomputes it), except where marked.
+
+| Post | Number | Card and key |
+| --- | --- | --- |
+| 1 | 1,000 listeners; 200/s on 18.7; 11,040/s on 19 RC2 | `f03-notify`: literal 1,000, `pg18`, `pg19`. "At least, client-limited": brief v3.0 and recording notes lead 3 (8-vCPU dedicated host, 4 notifiers, median of 3 runs). |
+| 2 | 96 CVEs in 2026 (to 2026-11-18) | `f00-cves`: `y2026` |
+| 2 | 2 to 10 per year, 2019-2025 | `f00-cves`: min `y2022` = 2, max `y2019` = 10 |
+| 2 | 52 CVEs in 18.7; 34x the average minor release 2019-2025 | `f00-cves`: `b18_7`, `ratio` |
+| 3 | last of 121; 12.9 s on 19; 152.3 s on 18.7 | `f04-autovac`: `rank`, `pg19`, `pg18` |
+| 3 | 200,000 jsonb docs of 16 KiB; 44 s lz4; 107 s pglz | `f07-lz4`: `docs`, `kib`, `pg19`, `pg18` |
+| 4 | short query 172 to 108 ms, -37%; longest query 3,914 to 4,607 ms, +17.7% | `f06-jit`: `q19B31`, `q19B33`, `q19change`, `q1B31`, `q1B33`, `q1change` |
+| 4 | REPACK final lock wait 85.7 s with fast writes | `f02-repack`: `wait` (30 rows per transaction, uncapped writers, `runcx30x` = 65,996 rows/s) |
+| 5 | 83 of 220 plans changed; 61 of 83 from one commit | `f10-plans`: `changed`, `total`, `commit` |
+| 6 | 11% to 14% throughput cost, advice generated for every query, trivial query | `f11-advice`: `lossOff` (-11, vs advice off), `lossLoaded` (-14, vs a loaded stash) |
+
+Facts without numbers:
+
+- REPACK (CONCURRENTLY) in core, based on pg_squeeze: commit 28d534e2ae0ac888b5460f977a10cd9bb017ef98.
+- `pg_upgrade --check` says OK, the upgrade fails (escape_string_warning, or standard_conforming_strings = off, on a role, database or function): recording notes lead 1; shihao zhong's report, pgsql-hackers, 2026-10-24; corrected wording in `../notes/corrections.md` (00:45:14).
+- jit off by default: commit 7f8c88c2b87. lz4 for TOAST by default (when built with lz4): commit 34dfca29343.
+- Part of the delay was security work: on air (Michael, Nik, about 00:07:58 in the final, the CVE card).
+- "Do not wait for 19.1": Nik at 00:49:23 (recording); "a month or two": Nik at 00:56:40 (recording).
