@@ -15,13 +15,26 @@ Handles: Michael is @michristofides (https://x.com/michristofides). Kirk Wolak h
 | When (PT) | What |
 | --- | --- |
 | Fri 20 Nov, 7:00 AM | LinkedIn post + first comment with links (`linkedin.md`) |
-| Fri 20 Nov, 7:30 AM | X Unit A: hero post |
-| Fri 20 Nov, 7:32 AM | X Unit A: self-reply with links |
-| Mon 23 Nov, 8:00 AM | X Unit B: upgrade trap |
-| Wed 25 Nov, 8:00 AM | X Unit C: Kirk clip |
+| Fri 20 Nov, before 8:30 AM | X Article published (optional, [`x-article.md`](x-article.md)) |
+| Fri 20 Nov, 8:30 AM | X Unit A: hero post |
+| Fri 20 Nov, 8:32 AM | X Unit A: self-reply with links (or with the Article link) |
+| Fri 20 Nov, ~8:50 AM and ~9:15 AM | Follow-ups in Nik's own thread under Unit A (checklist below) |
+| Mon 23 Nov, 8:30 AM | X Unit B: upgrade trap |
+| Wed 25 Nov, 8:30 AM | X Unit C: Kirk clip |
 | Later, one per slot, no fixed dates | NOTIFY, lz4, JIT, REPACK, plan changes (texts below, from v2) |
 
+Why 8:30 AM: in a measured comparison with a Postgres account that gets about 20x more views per follower, the posts went out in a consistent 8:20-11:45 AM PT slot, as native video, standalone (not quotes), with the author active in the replies for the first hour. Same slot every day: Fri, Mon, Wed.
+
 Ask Michael to repost Unit A (and the LinkedIn post) within 30 minutes of posting.
+
+## First 60 minutes after each X unit (checklist for Nik)
+
+- [ ] Stay in the replies for the full hour. Answer every comment, with a fact or a question back, not only "thanks".
+- [ ] By +30 min: ask Michael (@michristofides) and @PostgresFM to repost, not quote.
+- [ ] ~+20 min (Unit A only): reply in your own thread with the NOTIFY slide and its post text (below, "NOTIFY").
+- [ ] ~+45 min (Unit A only): reply in your own thread with the lz4 slide and its post text (below, "lz4 default").
+- [ ] Do not quote-post your own posts; reply in the thread.
+- [ ] Do not delete and repost a post that starts slowly.
 
 ---
 
@@ -54,6 +67,20 @@ Watch: https://youtu.be/VcDU-NRE3hI
 Listen: https://postgres.fm/episodes/postgres-19
 Data: https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 ```
+
+### Option: A2 links to the Article
+
+If the X Article ([`x-article.md`](x-article.md)) is published first, use this self-reply instead. The Article holds all the links (episode, podcast, data).
+
+```text
+We talk it all through in the new postgres.fm episode: @michristofides, Kirk Wolak and I.
+
+Which 19 feature do you test first?
+
+Every number, with the catches, in one read: https://x.com/i/article/PLACEHOLDER
+```
+
+The URL is a placeholder until the Article is published.
 
 ## Unit B
 

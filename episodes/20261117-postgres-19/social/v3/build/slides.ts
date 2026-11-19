@@ -247,3 +247,27 @@ p{max-width:980px;text-align:center;font:800 54px/1.25 Inter;color:#f5f3ee;lette
 <div style="position:absolute;left:0;right:0;top:700px;text-align:center;font:800 52px Inter;color:var(--or)">postgres.fm/episodes/postgres-19</div>`);
   return { head, caps: caps.map(cap), end };
 }
+
+// X Article cover, 1500x500, channel style. Numbers from the cards.
+export async function articleCover(): Promise<string> {
+  const n18 = await v("f03-notify", "pg18"), n19 = await v("f03-notify", "pg19");
+  const ratio = Math.floor(n19 / n18);
+  return `<!doctype html><html><head><meta charset="utf-8"><style>${CSS}
+body{width:1500px;height:500px}
+.l{position:absolute;left:80px;top:70px;font:800 32px Inter;color:var(--mute)}
+.l b{color:var(--ink)} .l i{display:inline-block;width:16px;height:16px;border-radius:50%;background:var(--or);margin-right:12px;vertical-align:2px}
+.t{position:absolute;left:76px;top:130px;font:400 150px/1 Impact;text-transform:uppercase;white-space:nowrap}
+.s{position:absolute;left:80px;top:310px;font:800 44px/1.25 Inter;color:var(--ink)}
+.c{position:absolute;right:80px;top:70px;text-align:right}
+.t em{color:var(--or);font-style:normal}
+.chip{display:inline-block;background:var(--or);color:#111013;font:400 120px/1 Impact;padding:14px 32px 10px;border-radius:16px}
+.cl{font:700 30px Inter;color:var(--mute);margin-top:16px}
+</style></head><body>
+<div class="l"><i></i><b>postgres.fm</b> 197 &middot; 19 RC2 vs 18.7</div>
+<div class="t" data-fit style="right:440px">Postgres 19, <em>measured</em></div>
+<div class="s">What got faster.<br><span class="or">What to check before you upgrade.</span></div>
+<div class="c"><span class="chip">${ratio}x</span><div class="cl">LISTEN/NOTIFY<br>with 1,000 listeners.<br>At least.</div></div>
+<script>for (const el of document.querySelectorAll('[data-fit]')) { let s = parseFloat(getComputedStyle(el).fontSize);
+  while (el.scrollWidth > el.clientWidth + 1 && s > 40) { s -= 2; el.style.fontSize = s + 'px'; } }</script>
+</body></html>`;
+}

@@ -7,7 +7,7 @@
 // Needs Google Chrome, ffmpeg, and the cover tool's node_modules (cd tools/podcast-edit/cover && bun install).
 import { chromium, type Page } from "../../../../../tools/podcast-edit/cover/node_modules/playwright-core";
 import { mkdirSync, existsSync } from "node:fs";
-import { EP, W, H, slides, clipLayers } from "./slides";
+import { EP, W, H, slides, clipLayers, articleCover } from "./slides";
 
 const OUT = `${EP}/preview/social-v3`;
 const TMP = `${OUT}/.tmp`;
@@ -145,13 +145,40 @@ if (all || want.has("pdf")) {
   console.log("wrote li-carousel.pdf");
 }
 
+// ---- X Article: cover (1500x500) and a phone preview (430x932) of its first screen
+const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
+const article = async () => {
+  const src = await Bun.file(`${EP}/social/v3/x-article.md`).text();
+  const title = src.match(/^## Title\n\n(.+)$/m)![1];
+  const body = src.split(/^## Body\n/m)[1].split(/^---$/m)[0].trim();
+  return { title, body, words: body.replace(/^Image: .*$/gm, "").split(/\s+/).filter(Boolean).length };
+};
+if (all || want.has("article") || want.has("sheet")) {
+  await shot(await articleCover(), `${OUT}/article-cover.png`, 1500, 500);
+  const { title, body, words } = await article();
+  const md2html = (s: string) => s.split(/\n\n+/).map(p => p.startsWith("### ") ? `<h3>${esc(p.slice(4))}</h3>`
+    : p.startsWith("Image: ") ? (/`(s\d\d-[a-z0-9]+\.png)`/.test(p) ? `<img class="fig" src="file://${OUT}/${p.match(/`(s\d\d-[a-z0-9]+\.png)`/)![1]}">` : "")
+    : `<p>${esc(p).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\n/g, "<br>")}</p>`).join("");
+  const phone = `<!doctype html><html><head><meta charset="utf-8"><style>*{box-sizing:border-box;margin:0}
+body{width:430px;background:#fff;font-family:system-ui,-apple-system,Helvetica,sans-serif;color:#0f1419}
+.bar{height:44px;display:flex;align-items:center;padding:0 16px;font:700 17px system-ui,Helvetica;border-bottom:1px solid #eff3f4}
+.cover{width:430px;display:block}.in{padding:14px 16px}h1{font:800 26px/1.2 system-ui,Helvetica,sans-serif;margin:4px 0 12px}
+.by{display:flex;gap:10px;align-items:center;font-size:15px;color:#536471;margin-bottom:14px}.by i{width:36px;height:36px;border-radius:50%;background:#111013;display:block}.by b{color:#0f1419}
+p{font-size:17px;line-height:1.45;margin:0 0 14px}h3{font:800 21px/1.25 system-ui,Helvetica,sans-serif;margin:20px 0 10px}code{font:14px Menlo}
+.fig{width:100%;border-radius:12px;margin:4px 0 14px;display:block}</style></head><body>
+<div class="bar">&larr;&nbsp;&nbsp;Article</div><img class="cover" src="file://${OUT}/article-cover.png">
+<div class="in"><h1>${esc(title)}</h1><div class="by"><i></i><span><b>Nik Samokhvalov</b><br>Article &middot; ${words} words</span></div>${md2html(body)}</div></body></html>`;
+  await shot(phone, `${OUT}/article-phone.png`, 430, 932);
+  if (words < 600 || words > 900) throw new Error("article words out of 600-900: " + words);
+  console.log("wrote article-cover.png, article-phone.png;", words, "words");
+}
+
 // ---- contact sheet: every post text next to its media, at phone width
 if (all || want.has("sheet")) {
   const md = (f: string) => Bun.file(`${EP}/social/v3/${f}`).text();
-  const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
   type Post = { title: string; text: string; media: string[]; count: number };
   const xcount = (s: string) => [...s.replace(/https?:\/\/\S+/g, "x".repeat(23))].length;
-  const parse = (src: string): Post[] => [...src.matchAll(/^### (.+)\n[\s\S]*?```text\n([\s\S]*?)```/gm)].map(m => ({
+  const parse = (src: string): Post[] => [...src.matchAll(/^### (.+)\n(?:(?!#)[^\n]*\n)*?```text\n([\s\S]*?)```/gm)].map(m => ({
     title: m[1].replace(/`/g, ""), text: m[2].trimEnd(), count: xcount(m[2].trimEnd()),
     media: [...m[1].matchAll(/`([^`]+\.(?:png|jpg|mp4|pdf))`/g)].map(x => x[1]),
   }));
@@ -182,7 +209,11 @@ h2{font:800 30px -apple-system;margin:0 0 18px}.cols{display:flex;gap:28px;align
 </style></head><body>
 <h2>postgres.fm 197 &middot; social v3 drafts (not posted) &middot; phone width 430 px</h2>
 <div class="cols"><div><h2 style="font-size:22px">X: standalone posts, in schedule order</h2><div class="grid">${xs.map(p => postHtml(p, "X")).join("")}</div></div>
-<div class="li"><h2 style="font-size:22px">LinkedIn</h2>${li.map(p => postHtml(p, "LinkedIn")).join("")}</div></div></body></html>`;
+<div class="li"><h2 style="font-size:22px">LinkedIn</h2>${li.map(p => postHtml(p, "LinkedIn")).join("")}
+<h2 style="font-size:22px;margin-top:28px">X Article (optional, before Unit A)</h2>
+<div class="post"><div class="who"><b>Cover</b> <span>1500x500 &middot; article-cover.png</span></div><div class="m"><img src="file://${OUT}/article-cover.png"></div>
+<div class="who" style="margin-top:14px"><b>First screen on a phone</b> <span>430x932 &middot; ${(await article()).words} words</span></div>
+<div class="m"><img src="file://${OUT}/article-phone.png" style="width:430px"></div></div></div></div></body></html>`;
   const p = await browser.newPage({ viewport: { width: 2496, height: 1000 } });
   await Bun.write(`${TMP}/sheet.html`, sheet);
   await p.goto(`file://${TMP}/sheet.html`, { waitUntil: "networkidle" });
