@@ -1,0 +1,335 @@
+old: postgres (PostgreSQL) 18.7
+new: postgres (PostgreSQL) 19rc2
+
+=================== case: control: no setting
+SQL on 18.7: 
+--- find query 1 (role and database settings):
+ role | database | setconfig 
+------+----------+-----------
+(0 rows)
+
+--- find query 2 (function settings):
+ function | proconfig 
+----------+-----------
+(0 rows)
+
+--- find query 3 (grants on the parameters):
+ parname | paracl 
+---------+--------
+(0 rows)
+
+--- pg_upgrade --check:
+    *Clusters are compatible*
+    exit code: 0
+--- pg_upgrade:
+    Upgrade Complete
+    exit code: 0
+    after the upgrade, on 19 (connect as app to appdb):
+      connected; standard_conforming_strings = on
+
+=================== case: role: standard_conforming_strings = off
+SQL on 18.7: alter role app set standard_conforming_strings = off
+--- find query 1 (role and database settings):
+ role | database |             setconfig             
+------+----------+-----------------------------------
+ app  | -        | {standard_conforming_strings=off}
+(1 row)
+
+--- find query 2 (function settings):
+ function | proconfig 
+----------+-----------
+(0 rows)
+
+--- find query 3 (grants on the parameters):
+ parname | paracl 
+---------+--------
+(0 rows)
+
+--- pg_upgrade --check:
+    *Clusters are compatible*
+    exit code: 0
+--- pg_upgrade:
+    *failure*
+    the probable cause of the failure.
+    Failure, exiting
+    exit code: 1
+    restore error from the pg_upgrade logs:
+      
+      2026-11-19 13:13:07.191 PST [64390] ERROR:  non-standard string literals are not supported
+      2026-11-19 13:13:07.191 PST [64390] STATEMENT:  ALTER ROLE "app" SET "standard_conforming_strings" TO 'off';
+      command: "<repro-dir>/inst-REL_19_RC2/bin/pg_ctl" -w -D "new" -o "" -m fast stop >> "new/pg_upgrade_output.d/20261119T131306.121/log/pg_upgrade_server.log" 2>&1
+      --
+      
+      command: "<repro-dir>/inst-REL_19_RC2/bin/psql" --echo-queries --set ON_ERROR_STOP=on --no-psqlrc --dbname=template1 --host <socket-dir> --port 55419 --username postgres -f "new/pg_upgrade_output.d/20261119T131306.121/dump/pg_upgrade_dump_globals.sql" >> "new/pg_upgrade_output.d/20261119T131306.121/log/pg_upgrade_utility.log" 2>&1
+      SET default_transaction_read_only = off;
+      SET
+      --
+      ALTER ROLE "app" SET "standard_conforming_strings" TO 'off';
+      psql:new/pg_upgrade_output.d/20261119T131306.121/dump/pg_upgrade_dump_globals.sql:36: ERROR:  non-standard string literals are not supported
+
+=================== case: role: escape_string_warning = off
+SQL on 18.7: alter role app set escape_string_warning = off
+--- find query 1 (role and database settings):
+ role | database |          setconfig          
+------+----------+-----------------------------
+ app  | -        | {escape_string_warning=off}
+(1 row)
+
+--- find query 2 (function settings):
+ function | proconfig 
+----------+-----------
+(0 rows)
+
+--- find query 3 (grants on the parameters):
+ parname | paracl 
+---------+--------
+(0 rows)
+
+--- pg_upgrade --check:
+    *Clusters are compatible*
+    exit code: 0
+--- pg_upgrade:
+    *failure*
+    the probable cause of the failure.
+    Failure, exiting
+    exit code: 1
+    restore error from the pg_upgrade logs:
+      
+      2026-11-19 13:13:10.011 PST [64755] ERROR:  unrecognized configuration parameter "escape_string_warning"
+      2026-11-19 13:13:10.011 PST [64755] STATEMENT:  ALTER ROLE "app" SET "escape_string_warning" TO 'off';
+      command: "<repro-dir>/inst-REL_19_RC2/bin/pg_ctl" -w -D "new" -o "" -m fast stop >> "new/pg_upgrade_output.d/20261119T131308.952/log/pg_upgrade_server.log" 2>&1
+      --
+      
+      command: "<repro-dir>/inst-REL_19_RC2/bin/psql" --echo-queries --set ON_ERROR_STOP=on --no-psqlrc --dbname=template1 --host <socket-dir> --port 55419 --username postgres -f "new/pg_upgrade_output.d/20261119T131308.952/dump/pg_upgrade_dump_globals.sql" >> "new/pg_upgrade_output.d/20261119T131308.952/log/pg_upgrade_utility.log" 2>&1
+      SET default_transaction_read_only = off;
+      SET
+      --
+      ALTER ROLE "app" SET "escape_string_warning" TO 'off';
+      psql:new/pg_upgrade_output.d/20261119T131308.952/dump/pg_upgrade_dump_globals.sql:36: ERROR:  unrecognized configuration parameter "escape_string_warning"
+
+=================== case: database: standard_conforming_strings = off
+SQL on 18.7: alter database appdb set standard_conforming_strings = off
+--- find query 1 (role and database settings):
+ role | database |             setconfig             
+------+----------+-----------------------------------
+ -    | appdb    | {standard_conforming_strings=off}
+(1 row)
+
+--- find query 2 (function settings):
+ function | proconfig 
+----------+-----------
+(0 rows)
+
+--- find query 3 (grants on the parameters):
+ parname | paracl 
+---------+--------
+(0 rows)
+
+--- pg_upgrade --check:
+    *Clusters are compatible*
+    exit code: 0
+--- pg_upgrade:
+    *failure*
+    the probable cause of the failure.
+    Failure, exiting
+    exit code: 1
+    restore error from the pg_upgrade logs:
+      pg_restore: from TOC entry 2940; 0 0 DATABASE PROPERTIES appdb postgres
+      pg_restore: error: could not execute query: ERROR:  non-standard string literals are not supported
+      Command was: ALTER DATABASE "appdb" SET "standard_conforming_strings" TO 'off';
+      
+      --
+      2026-11-19 13:13:13.137 PST [65086] LOG:  checkpoint complete: fast force wait: wrote 26 buffers (0.2%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.001 s; sync files=0, longest=0.000 s, average=0.000 s; distance=7 kB, estimate=248 kB; lsn=0/0704EBE0, redo lsn=0/0704EB88
+      2026-11-19 13:13:13.315 PST [65113] ERROR:  non-standard string literals are not supported
+      2026-11-19 13:13:13.315 PST [65113] STATEMENT:  ALTER DATABASE "appdb" SET "standard_conforming_strings" TO 'off';
+      	
+      --
+      
+      command: "<repro-dir>/inst-REL_19_RC2/bin/psql" --echo-queries --set ON_ERROR_STOP=on --no-psqlrc --dbname=template1 --host <socket-dir> --port 55419 --username postgres -f "new/pg_upgrade_output.d/20261119T131311.815/dump/pg_upgrade_dump_globals.sql" >> "new/pg_upgrade_output.d/20261119T131311.815/log/pg_upgrade_utility.log" 2>&1
+
+=================== case: database: escape_string_warning = on
+SQL on 18.7: alter database appdb set escape_string_warning = on
+--- find query 1 (role and database settings):
+ role | database |         setconfig          
+------+----------+----------------------------
+ -    | appdb    | {escape_string_warning=on}
+(1 row)
+
+--- find query 2 (function settings):
+ function | proconfig 
+----------+-----------
+(0 rows)
+
+--- find query 3 (grants on the parameters):
+ parname | paracl 
+---------+--------
+(0 rows)
+
+--- pg_upgrade --check:
+    *Clusters are compatible*
+    exit code: 0
+--- pg_upgrade:
+    *failure*
+    the probable cause of the failure.
+    Failure, exiting
+    exit code: 1
+    restore error from the pg_upgrade logs:
+      pg_restore: from TOC entry 2940; 0 0 DATABASE PROPERTIES appdb postgres
+      pg_restore: error: could not execute query: ERROR:  unrecognized configuration parameter "escape_string_warning"
+      Command was: ALTER DATABASE "appdb" SET "escape_string_warning" TO 'on';
+      
+      --
+      2026-11-19 13:13:16.724 PST [65508] LOG:  checkpoint complete: fast force wait: wrote 26 buffers (0.2%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.002 s; sync files=0, longest=0.000 s, average=0.000 s; distance=7 kB, estimate=248 kB; lsn=0/0704EBE0, redo lsn=0/0704EB88
+      2026-11-19 13:13:16.800 PST [65534] ERROR:  unrecognized configuration parameter "escape_string_warning"
+      2026-11-19 13:13:16.800 PST [65534] STATEMENT:  ALTER DATABASE "appdb" SET "escape_string_warning" TO 'on';
+      	
+      --
+      
+      command: "<repro-dir>/inst-REL_19_RC2/bin/psql" --echo-queries --set ON_ERROR_STOP=on --no-psqlrc --dbname=template1 --host <socket-dir> --port 55419 --username postgres -f "new/pg_upgrade_output.d/20261119T131315.405/dump/pg_upgrade_dump_globals.sql" >> "new/pg_upgrade_output.d/20261119T131315.405/log/pg_upgrade_utility.log" 2>&1
+
+=================== case: function: standard_conforming_strings = off
+SQL on 18.7: create function f() returns int language sql set standard_conforming_strings = off return 1
+--- find query 1 (role and database settings):
+ role | database | setconfig 
+------+----------+-----------
+(0 rows)
+
+--- find query 2 (function settings):
+ function |             proconfig             
+----------+-----------------------------------
+ f()      | {standard_conforming_strings=off}
+(1 row)
+
+--- find query 3 (grants on the parameters):
+ parname | paracl 
+---------+--------
+(0 rows)
+
+--- pg_upgrade --check:
+    *Clusters are compatible*
+    exit code: 0
+--- pg_upgrade:
+    *failure*
+    the probable cause of the failure.
+    Failure, exiting
+    exit code: 1
+    restore error from the pg_upgrade logs:
+      pg_restore: from TOC entry 219; 1255 16386 FUNCTION f() postgres
+      pg_restore: error: could not execute query: ERROR:  non-standard string literals are not supported
+      Command was: CREATE FUNCTION "public"."f"() RETURNS integer
+          LANGUAGE "sql"
+      --
+      2026-11-19 13:13:20.098 PST [65828] LOG:  checkpoint complete: fast force wait: wrote 26 buffers (0.2%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.001 s, total=0.002 s; sync files=0, longest=0.000 s, average=0.000 s; distance=7 kB, estimate=248 kB; lsn=0/0704EBE0, redo lsn=0/0704EB88
+      2026-11-19 13:13:20.203 PST [65855] ERROR:  non-standard string literals are not supported
+      2026-11-19 13:13:20.203 PST [65855] STATEMENT:  CREATE FUNCTION "public"."f"() RETURNS integer
+      	    LANGUAGE "sql"
+      --
+      
+      command: "<repro-dir>/inst-REL_19_RC2/bin/psql" --echo-queries --set ON_ERROR_STOP=on --no-psqlrc --dbname=template1 --host <socket-dir> --port 55419 --username postgres -f "new/pg_upgrade_output.d/20261119T131318.845/dump/pg_upgrade_dump_globals.sql" >> "new/pg_upgrade_output.d/20261119T131318.845/log/pg_upgrade_utility.log" 2>&1
+
+=================== case: function: escape_string_warning = off
+SQL on 18.7: create function f() returns int language sql set escape_string_warning = off return 1
+--- find query 1 (role and database settings):
+ role | database | setconfig 
+------+----------+-----------
+(0 rows)
+
+--- find query 2 (function settings):
+ function |          proconfig          
+----------+-----------------------------
+ f()      | {escape_string_warning=off}
+(1 row)
+
+--- find query 3 (grants on the parameters):
+ parname | paracl 
+---------+--------
+(0 rows)
+
+--- pg_upgrade --check:
+    *Clusters are compatible*
+    exit code: 0
+--- pg_upgrade:
+    *failure*
+    the probable cause of the failure.
+    Failure, exiting
+    exit code: 1
+    restore error from the pg_upgrade logs:
+      pg_restore: from TOC entry 219; 1255 16386 FUNCTION f() postgres
+      pg_restore: error: could not execute query: ERROR:  unrecognized configuration parameter "escape_string_warning"
+      Command was: CREATE FUNCTION "public"."f"() RETURNS integer
+          LANGUAGE "sql"
+      --
+      2026-11-19 13:13:23.246 PST [66164] LOG:  checkpoint complete: fast force wait: wrote 26 buffers (0.2%), wrote 1 SLRU buffers; 0 WAL file(s) added, 0 removed, 0 recycled; write=0.001 s, sync=0.000 s, total=0.001 s; sync files=0, longest=0.000 s, average=0.000 s; distance=7 kB, estimate=248 kB; lsn=0/0704EBE0, redo lsn=0/0704EB88
+      2026-11-19 13:13:23.324 PST [66191] ERROR:  unrecognized configuration parameter "escape_string_warning"
+      2026-11-19 13:13:23.324 PST [66191] STATEMENT:  CREATE FUNCTION "public"."f"() RETURNS integer
+      	    LANGUAGE "sql"
+      --
+      
+      command: "<repro-dir>/inst-REL_19_RC2/bin/psql" --echo-queries --set ON_ERROR_STOP=on --no-psqlrc --dbname=template1 --host <socket-dir> --port 55419 --username postgres -f "new/pg_upgrade_output.d/20261119T131322.135/dump/pg_upgrade_dump_globals.sql" >> "new/pg_upgrade_output.d/20261119T131322.135/log/pg_upgrade_utility.log" 2>&1
+
+=================== case: role: standard_conforming_strings = on (allowed value)
+SQL on 18.7: alter role app set standard_conforming_strings = on
+--- find query 1 (role and database settings):
+ role | database |            setconfig             
+------+----------+----------------------------------
+ app  | -        | {standard_conforming_strings=on}
+(1 row)
+
+--- find query 2 (function settings):
+ function | proconfig 
+----------+-----------
+(0 rows)
+
+--- find query 3 (grants on the parameters):
+ parname | paracl 
+---------+--------
+(0 rows)
+
+--- pg_upgrade --check:
+    *Clusters are compatible*
+    exit code: 0
+--- pg_upgrade:
+    Upgrade Complete
+    exit code: 0
+    after the upgrade, on 19 (connect as app to appdb):
+      connected; standard_conforming_strings = on
+
+=================== case: grant: set on parameter escape_string_warning
+SQL on 18.7: grant set on parameter escape_string_warning to app
+--- find query 1 (role and database settings):
+ role | database | setconfig 
+------+----------+-----------
+(0 rows)
+
+--- find query 2 (function settings):
+ function | proconfig 
+----------+-----------
+(0 rows)
+
+--- find query 3 (grants on the parameters):
+        parname        |                paracl                 
+-----------------------+---------------------------------------
+ escape_string_warning | {postgres=sA/postgres,app=s/postgres}
+(1 row)
+
+--- pg_upgrade --check:
+    *Clusters are compatible*
+    exit code: 0
+--- pg_upgrade:
+    *failure*
+    the probable cause of the failure.
+    Failure, exiting
+    exit code: 1
+    restore error from the pg_upgrade logs:
+      
+      2026-11-19 13:13:29.840 PST [66881] ERROR:  unrecognized configuration parameter "escape_string_warning"
+      2026-11-19 13:13:29.840 PST [66881] STATEMENT:  GRANT SET ON PARAMETER "escape_string_warning" TO "app";
+      command: "<repro-dir>/inst-REL_19_RC2/bin/pg_ctl" -w -D "new" -o "" -m fast stop >> "new/pg_upgrade_output.d/20261119T131328.728/log/pg_upgrade_server.log" 2>&1
+      --
+      
+      command: "<repro-dir>/inst-REL_19_RC2/bin/psql" --echo-queries --set ON_ERROR_STOP=on --no-psqlrc --dbname=template1 --host <socket-dir> --port 55419 --username postgres -f "new/pg_upgrade_output.d/20261119T131328.728/dump/pg_upgrade_dump_globals.sql" >> "new/pg_upgrade_output.d/20261119T131328.728/log/pg_upgrade_utility.log" 2>&1
+      SET default_transaction_read_only = off;
+      SET
+      --
+      GRANT SET ON PARAMETER "escape_string_warning" TO "app";
+      psql:new/pg_upgrade_output.d/20261119T131328.728/dump/pg_upgrade_dump_globals.sql:39: ERROR:  unrecognized configuration parameter "escape_string_warning"

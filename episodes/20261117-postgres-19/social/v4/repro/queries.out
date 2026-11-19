@@ -1,0 +1,24 @@
+--- 18.7, appdb:
+select * from pg_db_role_setting
+where setconfig::text ~ 'standard_conforming_strings|escape_string_warning';
+ setdatabase | setrole |             setconfig             
+-------------+---------+-----------------------------------
+           0 |   16384 | {standard_conforming_strings=off}
+           0 |   16385 | {standard_conforming_strings=on}
+       16386 |       0 | {escape_string_warning=off}
+(3 rows)
+
+select oid::regprocedure from pg_proc
+where proconfig::text ~ 'standard_conforming_strings|escape_string_warning';
+    oid     
+------------
+ f(integer)
+(1 row)
+
+select parname from pg_parameter_acl
+where parname = 'escape_string_warning';
+        parname        
+-----------------------
+ escape_string_warning
+(1 row)
+
