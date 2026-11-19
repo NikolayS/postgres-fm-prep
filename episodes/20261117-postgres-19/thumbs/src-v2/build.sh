@@ -44,3 +44,4 @@ for ql in (90, 86, 82, 78):
     if os.path.getsize(f'{o}/FINAL-square.jpg') < 512000: break
 PY
 python3 ab.py "$OUT"   # Test & Compare set: ab-a.jpg, ab-b.jpg, ab-d.jpg, ab-sheet.png
+python3 yt.py "$OUT"   # channel-style thumbnails yt-v1..v3.jpg and yt-sheet.png (episode 196 template)
