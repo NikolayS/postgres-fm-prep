@@ -1,79 +1,83 @@
 # Episode 197 (Postgres 19): X thread
 
-DRAFT v2, 2026-11-18. Nothing is posted. Nik posts from his accounts. Rules: numbers in the first line; no link in the first post (links in the last reply); simple English; no emojis; only our product named. LinkedIn variant: [`linkedin.md`](linkedin.md).
+DRAFT v3, 2026-11-19. Nothing is posted. Nik posts from his accounts. Rules: numbers in the first line; no link in the first post (links in the last reply); one media item per post; simple English; no emojis; only our product named. LinkedIn variant: [`linkedin.md`](linkedin.md). One-page preview of both: `preview/social-preview.png`.
 
-Handles (checked 2026-11-18): Michael @michristofides (linked from https://www.pgmustard.com/about), the show @PostgresFM (linked from https://postgres.fm), Nik @samokhvalov (GitHub profile of NikolayS). Kirk: no verified X handle (no link on his GitHub profile, https://github.com/kirkw), so plain "Kirk Wolak"; add the handle only when Nik confirms it.
+Handles (checked 2026-11-19 on https://postgres.fm/people): Michael https://x.com/michristofides, Nik https://x.com/samokhvalov, the show https://x.com/PostgresFM. Kirk has no X account listed there (LinkedIn and GitHub only), so plain "Kirk Wolak".
 
-Before posting: replace the YouTube placeholder, and check that https://postgres.fm/episodes/postgres-19 is live. Character counts are X counts (a link = 23; limit 280).
+Live: YouTube https://youtu.be/VcDU-NRE3hI ("Postgres 19 is out! What survived the revert fest?"); https://postgres.fm/episodes/postgres-19 returned HTTP 200 on 2026-11-19. Character counts are X counts (a link = 23; limit 280).
+
+Media: `preview/social/` (git-ignored, like all of `preview/`). The 1200x675 card images are rendered from `../cards/*.card.json` with the card renderer (`tools/podcast-edit/overlays/src/card-svg.ts`); no new charts. Nothing in the bottom 180 px, no faces covered. Not used: the REPACK card (its axis labels overlap at this size) and the plan advice card (its hero splits "-11 to -14%" over two lines).
 
 ---
 
-### 1/ First post (no link) — 273 chars — media: the NOTIFY card (`preview/illus-03-notify.png`), or the NOTIFY speaker clip if one is cut
+### 1/ First post (no link) — 277 chars — media: `preview/social/x1-notify.png` (NOTIFY card, 1200x675)
 
 ```
-Postgres 19, LISTEN/NOTIFY with 1,000 listeners:
+Postgres 19, LISTEN/NOTIFY with 1,000 listeners, synthetic test:
 
 18.7: 200 notifications/s
-19 RC2: 11,040/s (at least: our client was the limit)
+19 RC2: 11,040/s, at least (our client was the limit)
 
-New Postgres FM. Michael @michristofides is back: Kirk Wolak, Michael and I on our favorite 19 features, and what to check before you upgrade.
+New Postgres FM out now. Michael @michristofides, Kirk Wolak and I on our favorite 19 features and what to check before upgrading.
 ```
 
-### 2/ Reply — 219 chars — media: the CVE card (`preview/illus-09-cves-v3.png`)
+### 2/ Reply — 223 chars — media: `preview/social/x2-cves.png` (CVE card, 1200x675)
 
 ```
 Part of why 19 came in November, not September: security work.
 
-PostgreSQL CVEs in 2026 so far: 96. From 2019 to 2025: 2 to 10 per year.
+PostgreSQL CVEs in 2026, to Nov 18: 96. From 2019 to 2025: 2 to 10 per year.
 
 The 18.7 release alone fixed 52 CVEs, 34x the average minor release of 2019-2025.
 ```
 
-### 3/ Reply — 246 chars — media: the autovacuum card (`preview/illus-04-autovac.png`)
+### 3/ Reply — 255 chars — media: `preview/social/x3-autovac.png` (autovacuum card, 1200x675)
 
 ```
-Favorites, measured on 19 RC2 vs 18.7:
+Two favorites, 19 RC2 vs 18.7, synthetic tests:
 
-- Autovacuum order: a table near wraparound, placed last of 121. Vacuum started after 12.9 s on 19, 152.3 s on 18.7
+- Autovacuum order. A table near wraparound, placed last of 121: vacuum started after 12.9 s on 19, 152.3 s on 18.7
 - lz4 for TOAST by default: 200,000 jsonb docs of 16 KiB inserted in 44 s, 107 s with pglz
 ```
 
-### 4/ Reply — 256 chars — media: the JIT card (`preview/illus-06-jit.png`)
+### 4/ Reply — 270 chars — media: `preview/social/x4-jit.png` (JIT card, 1200x675)
 
 ```
-New defaults cut both ways. jit = off on 19:
+New defaults cut both ways. jit = off on 19, TPC-H-derived queries:
 
 - a short query: 172 ms to 108 ms (-37%)
 - the longest query: 3,914 ms to 4,607 ms (+17.7%)
 
-REPACK (CONCURRENTLY) is in core. Watch the final lock. With fast writes, the final lock wait was 85.7 s in our test.
+REPACK (CONCURRENTLY) is in core. Watch the final lock: 85.7 s wait in our test, at 65,996 rows/s of writes.
 ```
 
-### 5/ Reply — 249 chars — media: the plans card (`preview/illus-08-plans.png`)
+### 5/ Reply — 249 chars — media: `preview/social/x5-plans.png` (plans card, 1200x675)
 
 ```
-Before the upgrade:
+Before you upgrade:
 
 - pg_upgrade --check can say OK, and the upgrade still fails: escape_string_warning or standard_conforming_strings = off set on a role, database or function
 - 83 of 220 query plans changed in our test, 61 of them from one commit
 ```
 
-### 6/ Reply — 264 chars — media: Kirk's speaker clip, "1975 solution ... 2026, baby" (`preview/clip-kirk-1975-*.mp4`)
+### 6/ Reply — 275 chars — media: `preview/social/x6-clip-kirk-1975.mp4` (Kirk, "Plan hints, to me, is the 1975 solution", 56 s, 1080x1080, captions, ends on postgres.fm)
 
 ```
-pg_plan_advice can keep a good plan without hints in the app. Generating advice for every query cost 11% to 14% throughput on a trivial query in our test.
+pg_plan_advice can keep a good plan without hints in the app. Kirk's take on hints: a 1975 solution.
 
-My advice: do not wait for 19.1. Test on clones now, and give yourself a month or two to study plan changes.
+Advice for every query cost 11% to 14% throughput on a trivial query in our test.
+
+My advice: do not wait for 19.1. Test on clones now, and give plan changes a month or two.
 ```
 
-### 7/ Reply — 147 chars — media: none (link card)
+### 7/ Reply (links) — 152 chars — media: `preview/social/x7-thumbnail.jpg` (the YouTube thumbnail; an attached image replaces the link card)
 
 ```
 Which 19 feature do you test first?
 
-Brief (19 RC2 vs 18.7): https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
+Watch: https://youtu.be/VcDU-NRE3hI
 Listen: https://postgres.fm/episodes/postgres-19
-Watch: https://www.youtube.com/watch?v=XXXXXXXXXXX
+Study brief, 19 RC2 vs 18.7: https://console.postgres.ai/shared/brief/01a1e0e2-b826-73de-8300-9e56a1eb124c
 ```
 
 ## Number check
@@ -89,7 +93,8 @@ Every number is from a card in `../cards/` (the card's `numbers.<key>`; its `sou
 | 3 | last of 121; 12.9 s on 19; 152.3 s on 18.7 | `f04-autovac`: `rank`, `pg19`, `pg18` |
 | 3 | 200,000 jsonb docs of 16 KiB; 44 s lz4; 107 s pglz | `f07-lz4`: `docs`, `kib`, `pg19`, `pg18` |
 | 4 | short query 172 to 108 ms, -37%; longest query 3,914 to 4,607 ms, +17.7% | `f06-jit`: `q19B31`, `q19B33`, `q19change`, `q1B31`, `q1B33`, `q1change` |
-| 4 | REPACK final lock wait 85.7 s with fast writes | `f02-repack`: `wait` (30 rows per transaction, uncapped writers, `runcx30x` = 65,996 rows/s) |
+| 4 | jit: 22 TPC-H-derived queries (scale factor 10) | `notes/notes.md` line 31; recording notes, JIT finding |
+| 4 | REPACK final lock wait 85.7 s at 65,996 rows/s of writes | `f02-repack`: `wait`, `runcx30x` (30 rows per transaction, uncapped writers) |
 | 5 | 83 of 220 plans changed; 61 of 83 from one commit | `f10-plans`: `changed`, `total`, `commit` |
 | 6 | 11% to 14% throughput cost, advice generated for every query, trivial query | `f11-advice`: `lossOff` (-11, vs advice off), `lossLoaded` (-14, vs a loaded stash) |
 
