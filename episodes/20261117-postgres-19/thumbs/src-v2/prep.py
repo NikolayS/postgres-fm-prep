@@ -1,6 +1,7 @@
 # Episode 197 covers v2: head cutouts from the final video, picks N1, M1, K1.
 # Steps: tile frame (608x342) -> Real-ESRGAN x4 (realesrgan-x4plus) -> Apple Vision person mask (seg.swift)
-# -> mask repairs and exposure here. No face retouching: only tone curves and mask edits.
+# -> here: blend the ESRGAN image 50/50 with a plain Lanczos x4 of the tile (ESRGAN alone looks painted),
+# mask repairs and exposure. No face retouching: only tone curves and mask edits.
 # Usage: python3 prep.py <dir with {nik,mic,kirk}-x4.png and -cut.png>  -> heads/{nik,mic,kirk}.png
 import sys, os
 import numpy as np
@@ -19,6 +20,8 @@ def tone(rgb, gamma=1.0, contrast=1.0, sat=1.0, rmul=1.0, shoulder=None):
 
 for p in ('nik', 'mic', 'kirk'):
     rgb = Image.open(f'{d}/{p}-x4.png').convert('RGB')
+    soft = Image.open(f'{d}/{p}-raw.png').convert('RGB').resize(rgb.size, Image.LANCZOS)
+    rgb = Image.blend(soft, rgb, 0.5)
     al = np.asarray(Image.open(f'{d}/{p}-cut.png').getchannel('A')).astype(np.float32)
     px = np.asarray(rgb).astype(np.float32)
     if p == 'mic':
@@ -36,7 +39,7 @@ for p in ('nik', 'mic', 'kirk'):
     A = A.point(lambda v: max(0, min(255, int((v - 90) * 2.2))))
     if p == 'nik':  rgb = tone(rgb, gamma=0.86, contrast=1.08, sat=1.06)
     if p == 'mic':  rgb = tone(rgb, gamma=0.92, contrast=1.10, sat=0.96, rmul=0.97)
-    if p == 'kirk': rgb = tone(rgb, gamma=1.18, contrast=1.10, sat=0.80, rmul=0.97, shoulder=(0.82, 0.6))
-    rgb = rgb.filter(ImageFilter.UnsharpMask(radius=4, percent=40, threshold=2))
+    if p == 'kirk': rgb = tone(rgb, gamma=1.04, contrast=1.10, sat=0.80, rmul=0.97, shoulder=(0.82, 0.6))
+    rgb = rgb.filter(ImageFilter.UnsharpMask(radius=5, percent=55, threshold=2))
     out = Image.merge('RGBA', (*rgb.split(), A)).crop((0, 0, 2432, 1356))   # drop the tile border at the bottom
     out.save(f'heads/{p}.png'); print(p, out.size)

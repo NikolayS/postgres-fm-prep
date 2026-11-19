@@ -1,6 +1,6 @@
 #!/bin/bash
 # Episode 197 covers v2: heads, 4 thumbnails (1280x720), 4 square covers (3000x3000), review sheet.
-# Usage: bash build.sh [--heads]   (--heads re-extracts and upscales the picks N1, M1, K1)
+# Usage: bash build.sh [--heads]   (--heads re-extracts and upscales the picks N1, M1, K3)
 # Needs: ffmpeg, Google Chrome, python3 + Pillow + numpy, swiftc; for --heads also realesrgan-ncnn-vulkan
 # (https://github.com/xinntao/Real-ESRGAN/releases, v0.2.5.0) in $REALESRGAN.
 set -e; cd "$(dirname "$0")"
@@ -9,7 +9,7 @@ CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 mkdir -p "$OUT" work
 if [ "$1" = "--heads" ] || [ ! -f heads/nik.png ]; then
   [ -x work/seg ] || swiftc -O seg.swift -o work/seg
-  for a in nik:1057.4:24 mic:3149.8:656 kirk:3143.8:1288; do   # person : final-video seconds : tile x
+  for a in nik:1057.4:24 mic:3149.8:656 kirk:1541.8:1288; do   # person : final-video seconds : tile x
     IFS=: read p t x <<<"$a"
     ffmpeg -v error -ss $t -i "$V" -frames:v 1 -vf "crop=608:342:$x:300" -y work/$p-raw.png
     "${REALESRGAN:?set REALESRGAN to the realesrgan-ncnn-vulkan binary}" -i work/$p-raw.png -o work/$p-x4.png -n realesrgan-x4plus
@@ -25,3 +25,14 @@ for f in a-cut b-made-it c-git-log d-finally; do
     --screenshot="$OUT/square-$f.png" "file://$PWD/$f.html?sq" 2>/dev/null
 done
 python3 sheet.py "$OUT"
+# Final pick (2026-11-18): concept C. JPGs for YouTube (under 2 MB) and the podcast square (under 512 KB).
+python3 - "$OUT" <<'PY'
+import sys, os
+from PIL import Image
+o = sys.argv[1]
+Image.open(f'{o}/thumb-c-git-log.png').convert('RGB').save(f'{o}/FINAL-thumb.jpg', quality=93, subsampling=0, optimize=True)
+q = Image.open(f'{o}/square-c-git-log.png').convert('RGB')
+for ql in (90, 86, 82, 78):
+    q.save(f'{o}/FINAL-square.jpg', quality=ql, subsampling=0, optimize=True)
+    if os.path.getsize(f'{o}/FINAL-square.jpg') < 512000: break
+PY
