@@ -32,16 +32,6 @@ for f in a-cut b-made-it c-git-log d-finally; do
     --screenshot="$OUT/square-$f.png" "file://$PWD/$f.html?sq" 2>/dev/null
 done
 python3 sheet.py "$OUT"
-# Final pick (2026-11-18): concept C. JPGs for YouTube (under 2 MB) and the podcast square (under 512 KB).
-python3 - "$OUT" <<'PY'
-import sys, os
-from PIL import Image
-o = sys.argv[1]
-Image.open(f'{o}/thumb-c-git-log.png').convert('RGB').save(f'{o}/FINAL-thumb.jpg', quality=93, subsampling=0, optimize=True)
-q = Image.open(f'{o}/square-c-git-log.png').convert('RGB')
-for ql in (90, 86, 82, 78):
-    q.save(f'{o}/FINAL-square.jpg', quality=ql, subsampling=0, optimize=True)
-    if os.path.getsize(f'{o}/FINAL-square.jpg') < 512000: break
-PY
-python3 ab.py "$OUT"   # Test & Compare set: ab-a.jpg, ab-b.jpg, ab-d.jpg, ab-sheet.png
+# Final (2026-11-19): the channel-style V1, written by yt.py as FINAL-thumb.jpg and FINAL-square.jpg.
+# Concepts A-D above are kept as rejected drafts (thumb-*.png, square-*.png); ab.py is no longer run.
 python3 yt.py "$OUT"   # channel-style thumbnails yt-v1..v3.jpg and yt-sheet.png (episode 196 template)

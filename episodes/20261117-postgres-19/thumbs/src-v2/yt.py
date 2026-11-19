@@ -79,6 +79,9 @@ def sheet(name, full, small):
 sheet('yt-sheet.png', ['v1', 'v2', 'v3'], ['v1', 'v2', 'v3'])
 sheet('yt-sheet-h.png', ['h1', 'h2', 'h3'], ['h1', 'h2', 'h3', 'v1', 'v2', 'v3'])
 rows = [(k, f'{out}/yt-{k}.jpg') for k in V] + [('sq', f'{out}/FINAL-square-v1.jpg')]
+# Canonical files = what is live: V1 thumbnail and the V1 square.
+import shutil
+shutil.copyfile(f'{out}/yt-v1.jpg', f'{out}/FINAL-thumb.jpg'); shutil.copyfile(f'{out}/FINAL-square-v1.jpg', f'{out}/FINAL-square.jpg')
 # Eyes and duration-badge check.
 o = subprocess.run([f'{here}/work/face'], input='\n'.join(fn for _, fn in rows) + '\n', capture_output=True, text=True).stdout
 for l in o.splitlines():
