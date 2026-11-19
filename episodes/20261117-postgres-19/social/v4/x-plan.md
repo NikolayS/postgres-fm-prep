@@ -58,7 +58,7 @@ Long form (X Premium). The image shows the real output from the repro (shortened
 pg_upgrade --check: "Clusters are compatible".
 pg_upgrade: fails.
 
-Postgres 19 is out today. We tested the upgrade from 18.7 and found 7 setups where it fails. --check caught 0 of 7.
+Postgres 19 is out today. We tested the upgrade from 18.7: two old settings break it, and --check catches neither.
 
 The cause, set on a role, a database or a function:
 - escape_string_warning, any value (removed in 19)
@@ -81,7 +81,7 @@ Send this to whoever runs your Postgres upgrades.
 ### B self-reply, 2 minutes later, long form (281 chars: needs X Premium, which Nik has)
 
 ```text
-The 7th way: GRANT SET ON PARAMETER escape_string_warning. Find it with:
+One more case that breaks it: GRANT SET ON PARAMETER escape_string_warning. Find it with:
 
 select parname from pg_parameter_acl
 where parname = 'escape_string_warning';
