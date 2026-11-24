@@ -2,6 +2,42 @@
 
 Copy this list into the episode's `README.md` (or an issue) for each release and tick items as they are done. Nothing is published without the host's explicit OK. Tool details live in [`tools/podcast-edit/SKILL.md`](tools/podcast-edit/SKILL.md).
 
+## 0. Production: from the recording to the full draft
+
+Do these in order. The first thing the host sees is the **full composed episode**, not a cut list or a cuts-only video (Nik, 2026-11-10 and 2026-11-24: "i need full draft with everything already", "where is coldstart? intro? framing for our heads?"). Read how the last 4 episodes were made before you start: each episode folder has `video/README.md` or `video/final/README.md`.
+
+1. [ ] **Study the last 4 episodes**: their compose scripts and layouts, cold opens, title cards, outros, overlays, music levels, and the host's corrections in their notes. Reuse their tools and settings. Write down what this episode does differently, and why.
+2. [ ] **Review folder.** Make one numbered folder for the host, `<recording>/review/for-nik/`, with `00-INDEX.md`. Every preview, clip, still and list for the host goes there, with numbered descriptive names. Every report gives full absolute paths.
+3. [ ] **Transcribe** once (Scribe). Check speaker labels. Note when a host is away (camera off, "I'll be right back").
+4. [ ] **Cut hard.** Detect, judge, prosody, plan, audit the joins (`SKILL.md`). Cut hedges, rambling, tech trouble and on-air "let's cut that".
+5. [ ] **Bad-moments sweep** of the whole transcript and of the rendered edit:
+   - a host leaving, being away or coming back, and every later reference to it ("welcome back", "where were we", "Good. Great. Great.");
+   - every profanity (fuck, shit, damn and variants, also in other languages), in the Scribe words and in the meeting bot transcript. No bleeps: cut the word, or the whole phrase if the join jumps;
+   - complaints about insects, coffee, the room, tech problems, screen sharing, "are we recording", remarks about bots or the setup, references to talk before the recording;
+   - anything else off-topic, embarrassing or unprofessional. When in doubt, cut it and list it as restorable.
+   A cut with no clean join gets a wider cut (the whole sentence), not a pass. Check by grepping the aligned transcript of the render. List every removed moment for the host: source time, what it was, cut id. List what you kept on purpose, and why.
+6. [ ] **Layout and framing**: heads in framed tiles, Nik left, Michael center, Kirk right. Use the absent-host layout when a host is away (episode 196). Header "postgres.fm <topic>" on one line at 104 px. The meeting-bot tile is small, and note-taker tiles are never shown. Check a still.
+7. [ ] **Title card**: a Remotion card on the shades intro cue, crazier than the last one (not longer). Have fun with the elephant, never with the heads. If a host is absent, make one friendly joke about it. The numbers on the card match the source.
+8. [ ] **Illustrations, made and placed** (not only planned). Match the density of the last episodes (about 15-20 in an hour). Each one matches what is said at that moment, and every number matches the source:
+   - real screenshots of quoted pages, with the URL printed;
+   - figures from the post or brief;
+   - band strips with one fact each;
+   - an Editor's note only as a vetoable default.
+   Text goes under the heads, never over faces, and nothing in the bottom 180 px. Every overlay enters with a sound cue (`manifest-sfx.json`). Make a review list for the host: number, timecode, quote, what it shows, source, and one preview image each.
+9. [ ] **Cold-open variants**: 3-4 separate clips of 10-25 s, in the episode layout with marker strips and a sound stroke (episode 197 `coldopen-v2`). Give one line each (source time, quote, why it hooks) and a recommendation. The final video uses the recommended variant until the host picks.
+10. [ ] **Outro** fits the episode: no Forge frame without an experiment.
+11. [ ] **Compose** under `watchdog.ts`: `--music-lufs -20.5 --duck -21 --duck-ramp 3 --intro-fade 8`. Then the cold open in front, by stream copy.
+12. [ ] **Level the voices**: each voice 10 dB or more over the music, voices within 3 dB (`qa.ts` audio), Michael boosted.
+13. [ ] **QA**: `qa.ts` with every check that applies; a skip needs a written reason. Look at extracted frames: cold open, title card, several body points, every overlay, the outro.
+14. [ ] **Package up to publishing**:
+    - title options;
+    - then 2-3 thumbnails and the square cover, with everyone on the episode, eyes open and heads balanced;
+    - podcast MP3 (no overlay sounds; no cold open unless the host wants it);
+    - notes and description with final times (video times and podcast times differ);
+    - chapters.
+    Put each one in the review folder.
+15. [ ] **Report** to the host: the review folder path, what waits for the host's choice, and what was kept on purpose. Nothing is uploaded or published without the host's go.
+
 ## 1. Edit approved
 
 - [ ] Cut list reviewed: hedges ("I'm not sure"), BS and tech trouble cut hard; fillers, false starts, long pauses, pre-show and post-show chatter, on-air "let's cut that" moments, bot interruptions, remarks about how someone looks.
@@ -126,7 +162,7 @@ Rules and lessons: [`tools/podcast-edit/PROMOTION.md`](tools/podcast-edit/PROMOT
 - [ ] YouTube title has "Postgres" in the sentence; problem first; at most one number, with its unit and context.
 - [ ] Thumbnail A/B test with ONE fixed title (Test & Compare, thumbnail only); one variant carries the episode title. Write down the result.
 - [ ] Normal public publish, not an instant Premiere (A/B tests cannot run during a Premiere).
-- [ ] Cold open (15–25 s: best line + chart) before the title card. From #197.
+- [ ] Cold open (15–25 s: best line + chart) before the title card, chosen from 3-4 variants (section 0). From #197.
 - [ ] Description: first line starts with "Postgres …" and states the conditions; search-style chapter names; "Related episodes" with YouTube links; subscribe line.
 - [ ] End screen (Subscribe + Best for viewer) and 1–2 info cards where an older episode is mentioned.
 - [ ] After publish: pinned comment with the numbers + a question; community poll; answer comments for 24 h.

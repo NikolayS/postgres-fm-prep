@@ -23,10 +23,10 @@ Here are some links to things they mentioned:
 - [08:01] PGAIBench (results, method, replays): https://pgaibench.dev/
 - [08:01] PGAIBench source, data and prompts (Apache 2.0): https://github.com/NikolayS/pgaibench
 - [11:11] The tasks (public catalog): https://pgaibench.dev/scenarios/
-- [33:19] AAA and Track 2 (AI Control) results: https://pgaibench.dev/control/
-- [50:46] Related work map (DBA-Bench, SWE-bench and others): https://pgaibench.dev/related-work/
-- [50:46] DBA-Bench (arXiv): https://arxiv.org/abs/2607.22165
-- [50:48] SWE-bench (arXiv): https://arxiv.org/abs/2310.06770
+- [32:54] AAA and Track 2 (AI Control) results: https://pgaibench.dev/control/
+- [50:04] Related work map (DBA-Bench, SWE-bench and others): https://pgaibench.dev/related-work/
+- [50:04] DBA-Bench (arXiv): https://arxiv.org/abs/2607.22165
+- [50:06] SWE-bench (arXiv): https://arxiv.org/abs/2310.06770
 
 ### Operations practice
 
@@ -35,7 +35,7 @@ Here are some links to things they mentioned:
 - [26:30] Systems Performance, Brendan Gregg: https://www.brendangregg.com/systems-performance-2nd-edition-book.html
 - [28:23] Mirroring in PgDog: https://docs.pgdog.dev/features/mirroring/
 - [28:23] Mirroring in PgCat: https://github.com/postgresml/pgcat#mirroring
-- [38:34] pg_repack: https://github.com/reorg/pg_repack
+- [38:09] pg_repack: https://github.com/reorg/pg_repack
 
 ### Testing on clones
 
@@ -57,13 +57,13 @@ Here are some links to things they mentioned:
 | Blog post | 08:01 "I created this benchmark called PG AI Bench" | 200, numbers below match it |
 | pgaibench.dev, GitHub | 08:01 | 200 |
 | Scenarios | 11:11 "those tasks ... very properly chosen" | 200 |
-| Control | 33:19 "three As, triple A, AAA" | 200 |
-| Related work, DBA-Bench, SWE-bench | 50:46 "I learned from other benchmarks, like DBA bench ... SWE bench" | 200 |
+| Control | 32:54 "three As, triple A, AAA" | 200 |
+| Related work, DBA-Bench, SWE-bench | 50:04 "I learned from other benchmarks, like DBA bench ... SWE bench" | 200 |
 | SRE book | 07:12 "proper change request workflow, like from Google SRE books" | 200 |
 | max_locks_per_transaction | 17:33 (said as "max slots per transaction") | 200 |
 | Systems Performance | 26:30 "as Brendan Gregg says in all his books" | 200 |
 | PgDog, PgCat mirroring | 28:23 "traffic mirroring ... PgDog, PgCat support it" | 200; PgCat marks mirroring experimental |
-| pg_repack | 38:34 | 200 |
+| pg_repack | 38:09 | 200 |
 | DBLab Engine, DBLab Forge | 25:29, 25:37 | 200 |
 | BUFFERS by default | 08:45 "we spent with Michael two years talking that buffers is needed" | 200 |
 | Index maintenance | 12:35 "We have an episode about index maintenance" | 200 |
@@ -74,5 +74,5 @@ Here are some links to things they mentioned:
 1. Episode number 198 and the slug (proposed `pgaibench`).
 2. Title: options in `../thumbs/titles.md`.
 3. Credit line: Nik thanks David Ventimiglia (Supabase) on air for feedback on the post (spelled as in the post). Link him? Not added.
-4. "Jeff" at 34:53 (source 40:42): probably Jev; whisper also hears "Jeff". Check by ear before captions.
+4. "Jeff" at 34:28 (source 40:17): probably Jev; whisper also hears "Jeff". Check by ear before captions.
 5. The 11:11 time for the scenarios link is where the tasks are first described ("Those tasks ... 18 tasks"); the post counts 19 live scenarios (see `fact-check.md`).

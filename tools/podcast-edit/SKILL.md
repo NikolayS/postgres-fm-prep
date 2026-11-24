@@ -5,6 +5,8 @@ description: Post-process a podcast or Zoom recording - cut fillers (uh, um), st
 
 # Podcast edit
 
+**For postgres.fm episodes, follow [`RELEASE_CHECKLIST.md`](../../RELEASE_CHECKLIST.md) section 0 in order.** The first draft the host sees is the full composed episode with cold-open variants, illustrations and a review folder, never a cuts-only video.
+
 Edit a recorded conversation so it is smooth to hear. Jump cuts in the video
 are fine; the audience listens. Every cut is listed in an EDL, and a human can
 veto any cut and re-render with one command.
