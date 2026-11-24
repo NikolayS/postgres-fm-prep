@@ -1,0 +1,67 @@
+Postgres changes made by AI, measured: acting alone, 10 models caused 13 harmful changes in 408 live primary changes. Replayed through AAA (Analyst, Auditor, Actor), 12 of the 13 were blocked and 377 of 378 safe changes were still approved.
+PGAIBench v0.2: 19 tasks, live two-node Postgres 18.7 clusters under load, 5 repeats per task.
+
+Postgres.FM episode 198. Nik and Kirk discuss whether AI can safely change production Postgres. Nik built PGAIBench to measure it, with tasks taken mostly from real production failures. Even a top model, acting alone, restarted nodes against an explicit rule in 5 of 5 runs. Then we talk about AAA: an Analyst that proposes, a deterministic Actor that rehearses on a live clone and applies only approved steps, and an independent Auditor in between.
+
+Main link:
+https://postgres.ai/blog/20261123-pgaibench
+
+Chapters (DRAFT: edited-draft times; add the cold open and title card after the final compose):
+00:00 One engineer, 1,000 Postgres clusters
+04:32 Would you let AI run DDL on production?
+08:01 PGAIBench: tasks from real Postgres incidents
+10:23 Step one: AI acting alone
+12:07 The trap: indexes used only on replicas
+14:02 How the benchmark runs
+16:15 A top model restarted nodes in 5 of 5 runs
+18:30 Two axes: safety and usefulness
+20:36 Why the best models still fail: overconfidence
+23:35 Test on a clone: half the harms gone at zero AI cost
+27:24 "The actor is deterministic. The production environment is not."
+30:18 Separation of roles: builder and reviewer
+33:19 AAA: Analyst, Auditor, Actor
+37:34 The Auditor between Analyst and Actor
+41:18 What happens after the Auditor approves
+44:21 13 harms down to 1
+44:41 A DBA on top: AI as the mentee
+47:37 Findings and limits
+48:57 Everything in Git: GitOps for database changes
+50:58 Kirk's rules for safe automation
+
+Key links (DRAFT: edited-draft time of the first mention):
+* PGAIBench (08:01) https://pgaibench.dev/
+* PGAIBench on GitHub (08:01) https://github.com/NikolayS/pgaibench
+* AAA and AI Control results (33:19) https://pgaibench.dev/control/
+* DBLab Engine (25:29) https://github.com/postgres-ai/database-lab-engine
+* DBLab Forge (25:37) https://postgres.ai/products/dblab-forge
+* DBA-Bench (50:46) https://arxiv.org/abs/2607.22165
+
+Related episodes:
+* BUFFERS by default https://postgres.fm/episodes/buffers-by-default
+* Index maintenance https://postgres.fm/episodes/index-maintenance
+* Postgres 19 https://postgres.fm/episodes/postgres-19
+
+Full show notes: https://postgres.fm/episodes/<slug>
+
+Subscribe for a new episode every week.
+
+~~~
+
+What did you like or not like? What should we discuss next time? Let us know in the comments or on social media: https://postgres.fm/people
+
+~~~
+
+Postgres FM is produced by:
+- Michael Christofides, founder of pgMustard https://pgmustard.com/
+- Nikolay Samokhvalov, founder of PostgresAI https://postgres.ai/
+- Kirk Wolak, Software Architect at KiraSoft https://www.kirasoft.com/
+
+With credit to:
+- Jessie Draws for the elephant artwork
+- Intro and outro music: our own arrangement of Apple Loops from GarageBand
+
+~~~
+
+This is the video version. Check out https://postgres.fm to subscribe to the audio-only version, to see the transcript, guest profiles, and more.
+
+#PostgreSQL #Postgres #AI

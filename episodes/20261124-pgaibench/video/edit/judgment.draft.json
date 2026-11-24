@@ -1,0 +1,255 @@
+{
+  "removals": [
+    {
+      "id": "c01",
+      "cat": "head",
+      "from": "0",
+      "to": "53.2",
+      "reason": "pre-show: recording and transcription icons, talk about the absent co-host"
+    },
+    {
+      "id": "c02",
+      "cat": "struggle",
+      "near": "03:20",
+      "phrase": "So what I'm saying, we want to have, uh, we... Like, the, the vision is,",
+      "reason": "abandoned starts; resume at 'You know, we both have a friend'",
+      "soft": true
+    },
+    {
+      "id": "c05",
+      "cat": "struggle",
+      "near": "09:40",
+      "phrase": "Yeah. So you're, you're, you're m-... Yeah.",
+      "speaker": "speaker_1",
+      "reason": "false start; keep Kirk's 'Sarcasm. Sorry.' and 'Well, it's not sarcasm'",
+      "soft": true
+    },
+    {
+      "id": "c06",
+      "cat": "hedge",
+      "near": "10:12",
+      "phrase": "And maybe, maybe, it's not 100%, I'm not... I cannot, uh, like claim it, but maybe",
+      "reason": "hedge; keep 'our role with Michael was there a little bit as well'",
+      "soft": true
+    },
+    {
+      "id": "c07",
+      "cat": "hedge",
+      "near": "10:58",
+      "phrase": "Of course, maybe it's not like a lot, but it's, it- it's a little bit. Uh, yeah.",
+      "reason": "hedge after 'This is my true belief'"
+    },
+    {
+      "id": "c08",
+      "cat": "rambling",
+      "near": "15:15",
+      "phrase": "That's why, like, if you show this- Do you wanna share the screen of the summary at all? I know this is a podcast, but on that summary, we're gonna get to some of the graphs and stuff. Yeah. And, uh, or you can tell the AI to bring it in when you're ready. But",
+      "reason": "show-format talk (screen share) and Nik's abandoned start; keep Kirk's 'I think you're getting ready to hit a point...'",
+      "soft": true
+    },
+    {
+      "id": "c10",
+      "cat": "struggle",
+      "near": "15:40",
+      "phrase": "again, like, human baseline is not established here, but these cases are for human errors directly. Uh, it's, it's not random tasks. And, uh, the first main finding is that all the AIs, uh, did some harmful stuff. Actually, no. Like,",
+      "reason": "repeat of 12:27-15:06 and a wrong claim corrected at once ('all the AIs did harm': Sonnet had 0); keep 'Right. So the... how it worked'"
+    },
+    {
+      "id": "c11",
+      "cat": "rambling",
+      "near": "19:20",
+      "phrase": "So models, as we say, this is your production. We tell it it's important. Like, this is task. Go and solve this, this task. So Fable, in some task, uh, in some problem, uh, if Fable caused, uh, out of... We had th- five rehearsals for each task. Right? And in five, in, in five, uh, cases out of five, Fable decided to change setting and restart, and then it blocked itself in two cases, like stopped at the last moment. But in three cases it did stop, in three, in three durations o- out of five we, we did. And, and actually caused, uh, downtime of this playground, right?",
+      "reason": "second telling of the 5-of-5 Fable story (first at 18:13); keep the 'playground' clarification and 'Which reminds me...'",
+      "soft": true
+    },
+    {
+      "id": "c12",
+      "cat": "tech",
+      "near": "24:34",
+      "phrase": "But when we make changes for, like... Oh, f***, f***ing fly. I, I'm, like, I need to kill it somehow. This- this first time I have this, like... Now I had another problem, coffee on laptop spilled. Did you knock your coffee over? O- over the old laptop, yeah. Ah. Okay. Oh, that's... All right. So, so that, um, uh- It's just like it's on my face all the time. Like, what's happening? Like, ah. Yeah, yeah. Oh my God, I saw it dive-bombing your eyeball, and I'm like, \"He's gonna react to this now.\" So yeah. Um, anyhow, while, while you're taking care of that, don't worry. So, so, um,",
+      "reason": "fly and coffee spill (40 s); resume at Kirk's 'So, so, and true to form for you'",
+      "soft": true,
+      "cutLaugh": true
+    },
+    {
+      "id": "c14",
+      "cat": "hedge",
+      "near": "28:07",
+      "phrase": "Maybe I should press more. But",
+      "reason": "hedge",
+      "soft": true
+    },
+    {
+      "id": "c15",
+      "cat": "struggle",
+      "near": "29:57",
+      "from": "1797.556",
+      "to": "1798.976",
+      "reason": "turn-taking crosstalk 'Or- / Next... Go ahead. / Yeah. / Well-'; resume at 'Testing is hard'",
+      "soft": true
+    },
+    {
+      "id": "c16",
+      "cat": "tech",
+      "near": "33:45",
+      "phrase": "All good? All right. Yeah. Yeah, yeah, we're good. I just, uh... I'm gonna mute myself for a couple seconds. Keep talking. I can hear you. All right. Maybe let's, let's have a pause. I, I hate this fly. Oh. All right. If you wanna do that, great. I need... I just need, like, three minutes of a break. Apologies. No problem. Let's, let's, uh, have a break. I need a break with to fight this fly. I, I hope, uh, our pooling will remove pieces which was moved. Wipe out coffee from anybody. Some carpet as well. Man. Go away. Okay. I hope this fly would fly away. Fly away. Yeah. All right.",
+      "reason": "break for the fly (about 2 min); resume at 'So the separation of roles'",
+      "soft": true,
+      "cutLaugh": true
+    },
+    {
+      "id": "c18",
+      "cat": "struggle",
+      "near": "39:38",
+      "phrase": "uh, actually let's talk about the second role is",
+      "reason": "restart; keep 'The second role is actor'"
+    },
+    {
+      "id": "c23",
+      "cat": "rambling",
+      "near": "53:32",
+      "phrase": "Uh, for me it's... There are several interesting... Let's wrap it up.",
+      "reason": "on-air wrap cue; keep 'Several interesting findings'",
+      "soft": true
+    },
+    {
+      "id": "c26",
+      "cat": "hedge",
+      "near": "56:09",
+      "phrase": "I don't know, like,",
+      "reason": "hedge; keep 'just CI/CD pipeline'"
+    },
+    {
+      "id": "c27",
+      "cat": "tail",
+      "from": "3614.0",
+      "to": "3617.0",
+      "reason": "after the sign-off: 'Phew.', 'Stop recording'"
+    }
+  ],
+  "keep": [],
+  "fillers": [],
+  "beats": [
+    {
+      "near": "06:31",
+      "phrase": "I dropped the production database.",
+      "reason": "joke",
+      "side": "after"
+    },
+    {
+      "near": "09:34",
+      "phrase": "you're perfectly safe, right?",
+      "reason": "sarcasm joke",
+      "side": "after"
+    },
+    {
+      "near": "31:01",
+      "phrase": "The production environment is not.",
+      "reason": "soundbite",
+      "side": "after"
+    },
+    {
+      "near": "58:25",
+      "phrase": "I don't want AI to automate my ability to make mistakes at scale.",
+      "reason": "soundbite",
+      "side": "after"
+    }
+  ],
+  "gains": [],
+  "candidates": [
+    {
+      "near": "11:31",
+      "phrase": "everyone in my team refused to do it",
+      "note": "kept: why there is no human baseline yet (content)"
+    },
+    {
+      "near": "17:04",
+      "phrase": "Gemini 4 Neon is not in the results",
+      "note": "kept: scope of the results; veto to cut the aside (16:59-17:18)"
+    },
+    {
+      "near": "14:15",
+      "phrase": "it was GitLab, I think",
+      "note": "kept: the multi-installation index case"
+    },
+    {
+      "near": "22:17",
+      "phrase": "you see the graphs right now",
+      "note": "kept: on-air cue for the Track 1 chart; needs a card at this moment"
+    },
+    {
+      "near": "22:34",
+      "phrase": "if you hear the sound you just heard",
+      "note": "kept: explains the overlay sound cue; a card with a sound cue must enter just before it"
+    },
+    {
+      "near": "39:07",
+      "phrase": "right now you see on the, on, in the center of the screen",
+      "note": "kept: on-air cue for the AAA diagram"
+    },
+    {
+      "near": "20:48",
+      "phrase": "escalation almost, right?",
+      "note": "kept: Kirk's estimate, not a post number (see fact check)"
+    },
+    {
+      "near": "47:09",
+      "phrase": "I don't remember which one.",
+      "note": "hedge kept: no clean pause before Kirk's 'Hold up'"
+    },
+    {
+      "near": "50:01",
+      "phrase": "I don't remember exactly which error.",
+      "note": "hedge kept: no clean pause before it"
+    },
+    {
+      "near": "54:07",
+      "phrase": "Actor is already used word here, right?",
+      "note": "on-air word fix kept: the cut was heard as a jump"
+    },
+    {
+      "near": "54:28",
+      "phrase": "we talked about it before the recording actually",
+      "note": "pre-show reference kept: no clean pause before it"
+    },
+    {
+      "near": "38:39",
+      "phrase": "Like, how to say it properly?",
+      "note": "kept: Kirk's 'responsibility' correction is part of the exchange"
+    }
+  ],
+  "notes": [
+    {
+      "at": "14:56",
+      "note": "'Max slots per transaction' = max_locks_per_transaction (caption fix)"
+    },
+    {
+      "at": "29:22",
+      "note": "'PG bench AI version 0.2' = PGAIBench v0.2 (caption fix)"
+    },
+    {
+      "at": "31:55",
+      "note": "'PGDoc, PGCat' = PgDog, PgCat (caption fix)"
+    },
+    {
+      "at": "40:42",
+      "note": "'Jeff' = Jev? check by ear before captions"
+    },
+    {
+      "at": "43:49",
+      "note": "slip: 'neither analyst nor actor have access to production'; in AAA only the Actor writes to production. Editor's note candidate"
+    },
+    {
+      "at": "56:25",
+      "note": "'DBLup4' = DBLab Forge; 'PGI bench' = PGAIBench; 'DBAbench' = DBA-Bench (caption fixes)"
+    },
+    {
+      "at": "24:35",
+      "note": "swear (fly), inside cut c12"
+    },
+    {
+      "at": "59:17",
+      "note": "'David Vintemiya from Supabase': spell the name from the blog acknowledgments"
+    }
+  ]
+}

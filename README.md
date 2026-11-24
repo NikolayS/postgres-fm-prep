@@ -11,6 +11,7 @@ Research, study packs, experiment plans and recording notes for individual Postg
 | Extensions on demand (#195) | Published 2026-11-06: [YouTube](https://www.youtube.com/watch?v=7oeAAqU00zk) · [postgres.fm](https://postgres.fm/episodes/extensions-on-demand) | [Episode overview](episodes/20261104-extensions-on-demand/README.md) · [Show notes](episodes/20261104-extensions-on-demand/show-notes.md) · [Illustrations](episodes/20261104-extensions-on-demand/illustrations.md) · [Video](episodes/20261104-extensions-on-demand/video/README.md) · [Social](episodes/20261104-extensions-on-demand/social/README.md) |
 | The hidden costs of CREATE TEMP TABLE (#196) | Recorded 2026-11-10; edit in progress | [Episode overview](episodes/20261110-temporary-tables/README.md) |
 | Postgres 19 (#197) | Podcast published 2026-11-19 06:39 PT | [Episode overview](episodes/20261117-postgres-19/README.md) · [postgres.fm](https://postgres.fm/episodes/postgres-19) · [Transistor share](https://share.transistor.fm/s/1cf71ca2) · [YouTube](https://youtu.be/VcDU-NRE3hI) · [Show notes](episodes/20261117-postgres-19/notes/notes.md) · [Social drafts](episodes/20261117-postgres-19/social/x-thread.md) |
+| Can AI safely change production Postgres? (#198, to confirm) | Recorded 2026-11-24; edit draft for review | [Episode overview](episodes/20261124-pgaibench/README.md) · [Cut list](episodes/20261124-pgaibench/video/edit/cutlist-draft.md) · [Show notes](episodes/20261124-pgaibench/notes/notes.md) |
 
 ## Repository structure
 

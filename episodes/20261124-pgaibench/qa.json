@@ -1,0 +1,15 @@
+{
+  "out": "${EP198_REVIEW}/qa",
+  "eyes": {
+    "frames": [
+      {"label": "edit draft: first frame of the episode (Hello)", "video": "${EP198_REVIEW}/pgfm198-edited.mp4", "t": 1.0, "expectFaces": 2}
+    ]
+  },
+  "skip": {
+    "audio": "edit draft: no music bed, no stems yet (compose not started)",
+    "captions": "edit draft: no burned-in captions or punch-ins",
+    "strips": "edit draft: no overlays yet",
+    "sfx": "edit draft: no overlays yet",
+    "cards": "edit draft: no data cards yet (plan in notes/illustrations.md)"
+  }
+}
