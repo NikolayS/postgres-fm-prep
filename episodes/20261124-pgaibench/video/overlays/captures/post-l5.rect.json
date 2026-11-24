@@ -1,0 +1,56 @@
+{
+  "url": "https://postgres.ai/blog/20261123-pgaibench",
+  "start": "Scale complacency on",
+  "end": "After seeing the passing clone summary",
+  "clip": {
+    "x": 244,
+    "y": 154.109375,
+    "width": 612,
+    "height": 346.5625
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "After seeing the passing clone summary, GLM flipped to approve in 4 of 5",
+      "rects": [
+        {
+          "x": 547.140625,
+          "y": 267.171875,
+          "w": 37.765625,
+          "h": 27
+        },
+        {
+          "x": 65.546875,
+          "y": 290.96875,
+          "w": 384.28125,
+          "h": 27
+        },
+        {
+          "x": 449.828125,
+          "y": 293.578125,
+          "w": 64.765625,
+          "h": 23.78125
+        },
+        {
+          "x": 452.21875,
+          "y": 295.96875,
+          "w": 59.984375,
+          "h": 19
+        },
+        {
+          "x": 514.59375,
+          "y": 290.96875,
+          "w": 24.765625,
+          "h": 27
+        },
+        {
+          "x": 539.359375,
+          "y": 290.96875,
+          "w": 45.75,
+          "h": 27
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-24T23:20:48.365Z"
+}

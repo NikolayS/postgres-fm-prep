@@ -1,0 +1,43 @@
+{
+  "url": "https://www.postgresql.org/docs/18/runtime-config-locks.html",
+  "start": "css=#GUC-MAX-LOCKS-PER-TRANSACTION",
+  "end": "Otherwise, queries will not be allowed in the standby server.",
+  "clip": {
+    "x": 58.328125,
+    "y": 679.453125,
+    "width": 883.34375,
+    "height": 277.09375
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "When running a standby server, you must set this parameter to have the same or higher value as on the primary server.",
+      "rects": [
+        {
+          "x": 78,
+          "y": 220.875,
+          "w": 753.328125,
+          "h": 19
+        },
+        {
+          "x": 78,
+          "y": 242.484375,
+          "w": 45.78125,
+          "h": 19
+        }
+      ]
+    },
+    {
+      "text": "css=#GUC-MAX-LOCKS-PER-TRANSACTION .varname",
+      "rects": [
+        {
+          "x": 14,
+          "y": 16,
+          "w": 216.046875,
+          "h": 17
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-24T23:19:09.446Z"
+}

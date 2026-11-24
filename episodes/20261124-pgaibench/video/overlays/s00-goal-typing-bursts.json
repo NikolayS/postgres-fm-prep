@@ -1,0 +1,12 @@
+{
+  "overlay": "s00-goal-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 2.15,
+      "chars": 51,
+      "line": 0
+    }
+  ]
+}

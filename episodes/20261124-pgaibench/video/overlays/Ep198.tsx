@@ -122,23 +122,25 @@ export const Band198: React.FC<Band198Props> = (p) => {
   );
 };
 
-// ---------- screenshot card (real captures, scripts/shot.ts) ----------
+// ---------- screenshot card (real captures; rects from <name>.rect.json, never estimated) ----------
 type Rect = {x: number; y: number; w: number; h: number};
-export type Shot198 = {src: string; w: number; h: number; url: string; zooms?: {rect: Rect; at: number; scale: number; dur?: number}[]};
-export type ShotCard198Props = {shot: Shot198; durationSec: number};
+export type Shot198 = {
+  src: string; w: number; h: number; url: string;
+  at?: number; // s from the overlay start when this shot replaces the previous one (first: 0)
+  hl?: {rects: Rect[]; at: number; kind?: 'underline' | 'box'}[]; // red underline or box, grows in at `at`
+  zooms?: {rect: Rect; at: number; scale: number; dur?: number}[];
+};
+export type ShotCard198Props = {shot?: Shot198; shots?: Shot198[]; durationSec: number};
 const URL_H = 44;
 const PAD = {t: 22, x: 40, b: 14};
 const AREA = {w: PANEL198.w - 2 * PAD.x, h: PANEL198.h - PAD.t - PAD.b - URL_H - 6};
+const RED = '#E5322D';
 
-export const ShotCard198: React.FC<ShotCard198Props> = ({shot: sh}) => {
-  const frame = useCurrentFrame();
-  const {fps, durationInFrames} = useVideoConfig();
-  font();
-  const k = spring({frame, fps, config: {damping: 16, stiffness: 160, mass: 0.7}});
-  const fadeOut = interpolate(frame, [durationInFrames - 0.3 * fps, durationInFrames], [1, 0], {extrapolateLeft: 'clamp'});
+const ShotView: React.FC<{sh: Shot198; frame: number; fps: number}> = ({sh, frame, fps}) => {
+  const t0 = sh.at ?? 0;
   const sc = Math.min(AREA.w / sh.w, AREA.h / sh.h, 3);
   const W = sh.w * sc, H = sh.h * sc;
-  const pin = interpolate(frame, [0, 1.0 * fps], [0.94, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+  const pin = interpolate(frame, [t0 * fps, (t0 + 1.0) * fps], [0.94, 1], {...clamp, easing: Easing.out(Easing.cubic)});
   let cz = 1, cx = W / 2, cy = H / 2;
   for (const zm of sh.zooms ?? []) {
     const g = interpolate(frame, [zm.at * fps, (zm.at + (zm.dur ?? 1.0)) * fps], [0, 1], {...clamp, easing: Easing.inOut(Easing.cubic)});
@@ -149,16 +151,49 @@ export const ShotCard198: React.FC<ShotCard198Props> = ({shot: sh}) => {
   const txx = Math.min(0, Math.max(W - W * zz, W / 2 - cx * zz));
   const tyy = Math.min(0, Math.max(H - H * zz, H / 2 - cy * zz));
   return (
+    <div style={{width: W, height: H, position: 'relative', overflow: 'hidden', borderRadius: 10}}>
+      <div style={{position: 'absolute', left: 0, top: 0, width: W, height: H, transform: `translate(${txx}px, ${tyy}px) scale(${zz})`, transformOrigin: '0 0'}}>
+        <Img src={staticFile(sh.src)} style={{width: W, height: H, display: 'block'}} />
+        {(sh.hl ?? []).map((h, i) => {
+          const g = interpolate(frame, [h.at * fps, (h.at + 0.6) * fps], [0, 1], {...clamp, easing: Easing.out(Easing.cubic)});
+          return h.rects.map((r, j) => h.kind === 'box' ? (
+            <div key={`${i}-${j}`} style={{position: 'absolute', left: r.x * sc - 8, top: r.y * sc - 6, width: r.w * sc + 16, height: r.h * sc + 12, border: `5px solid ${RED}`, borderRadius: 8, opacity: g, boxSizing: 'border-box'}} />
+          ) : (
+            // a long underline grows line by line, left to right
+            <div key={`${i}-${j}`} style={{position: 'absolute', left: r.x * sc, top: (r.y + r.h) * sc + 1, width: r.w * sc * Math.max(0, Math.min(1, g * h.rects.length - j)), height: 5, background: RED, borderRadius: 3}} />
+          ));
+        })}
+      </div>
+    </div>
+  );
+};
+
+export const ShotCard198: React.FC<ShotCard198Props> = (p) => {
+  const frame = useCurrentFrame();
+  const {fps, durationInFrames} = useVideoConfig();
+  font();
+  const t = frame / fps;
+  const shots = p.shots ?? (p.shot ? [p.shot] : []);
+  const k = spring({frame, fps, config: {damping: 16, stiffness: 160, mass: 0.7}});
+  const fadeOut = interpolate(frame, [durationInFrames - 0.3 * fps, durationInFrames], [1, 0], {extrapolateLeft: 'clamp'});
+  let cur = 0;
+  shots.forEach((x, i) => { if (t >= (x.at ?? 0)) cur = i; });
+  return (
     <AbsoluteFill style={{fontFamily: 'Inter, sans-serif', opacity: fadeOut}}>
-      <div style={{position: 'absolute', left: PANEL198.x, top: PANEL198.y, width: PANEL198.w, height: PANEL198.h, background: 'rgba(27,27,31,0.96)', borderRadius: 18, padding: `${PAD.t}px ${PAD.x}px ${PAD.b}px`, boxSizing: 'border-box', display: 'flex', flexDirection: 'column', opacity: k, transform: `scale(${0.97 + 0.03 * k})`, overflow: 'hidden'}}>
-        <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-          <div style={{width: W, height: H, position: 'relative', overflow: 'hidden', borderRadius: 10}}>
-            <div style={{position: 'absolute', left: 0, top: 0, width: W, height: H, transform: `translate(${txx}px, ${tyy}px) scale(${zz})`, transformOrigin: '0 0'}}>
-              <Img src={staticFile(sh.src)} style={{width: W, height: H, display: 'block'}} />
+      <div style={{position: 'absolute', left: PANEL198.x, top: PANEL198.y, width: PANEL198.w, height: PANEL198.h, background: 'rgba(27,27,31,0.96)', borderRadius: 18, padding: `${PAD.t}px ${PAD.x}px ${PAD.b}px`, boxSizing: 'border-box', opacity: k, transform: `scale(${0.97 + 0.03 * k})`, overflow: 'hidden'}}>
+        {shots.map((sh, i) => {
+          if (i !== cur && i !== cur - 1) return null;
+          const next = shots[i + 1];
+          const out = next ? interpolate(t, [(next.at ?? 0) - 0.35, next.at ?? 0], [1, 0], clamp) : 1;
+          const inK = i === 0 ? 1 : interpolate(t, [(sh.at ?? 0) - 0.05, (sh.at ?? 0) + 0.35], [0, 1], clamp);
+          if (out <= 0) return null;
+          return (
+            <div key={i} style={{position: 'absolute', left: PAD.x, top: PAD.t, right: PAD.x, bottom: PAD.b, display: 'flex', flexDirection: 'column', opacity: out * inK}}>
+              <div style={{flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center'}}><ShotView sh={sh} frame={frame} fps={fps} /></div>
+              <div style={{height: URL_H, marginTop: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 30, color: DIM, opacity: i === 0 ? interpolate(frame, [0.4 * fps, 0.8 * fps], [0, 1], clamp) : 1}}>{sh.url}</div>
             </div>
-          </div>
-        </div>
-        <div style={{height: URL_H, marginTop: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 30, color: DIM, opacity: interpolate(frame, [0.4 * fps, 0.8 * fps], [0, 1], clamp)}}>{sh.url}</div>
+          );
+        })}
       </div>
     </AbsoluteFill>
   );

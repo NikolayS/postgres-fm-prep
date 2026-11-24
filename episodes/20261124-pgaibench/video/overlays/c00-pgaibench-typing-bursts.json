@@ -1,0 +1,24 @@
+{
+  "overlay": "c00-pgaibench-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 0.883,
+      "chars": 13,
+      "line": 0
+    },
+    {
+      "start": 1.233,
+      "end": 1.7,
+      "chars": 14,
+      "line": 0
+    },
+    {
+      "start": 2.05,
+      "end": 2.15,
+      "chars": 3,
+      "line": 0
+    }
+  ]
+}

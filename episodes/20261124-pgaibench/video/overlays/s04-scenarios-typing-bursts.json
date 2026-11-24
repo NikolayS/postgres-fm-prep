@@ -1,0 +1,18 @@
+{
+  "overlay": "s04-scenarios-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 0.883,
+      "chars": 13,
+      "line": 0
+    },
+    {
+      "start": 1.233,
+      "end": 1.9,
+      "chars": 20,
+      "line": 0
+    }
+  ]
+}

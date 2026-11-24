@@ -1,0 +1,61 @@
+{
+  "url": "https://postgres.ai/blog/20261123-pgaibench",
+  "start": "Hidden async standby slowdown (task",
+  "end": "What broke on the async standby",
+  "clip": {
+    "x": 244,
+    "y": 153.671875,
+    "width": 612,
+    "height": 350
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "saw idx_scan = 0 on the primary and dropped all three indexes",
+      "rects": [
+        {
+          "x": 273.703125,
+          "y": 66.0625,
+          "w": 33.734375,
+          "h": 27
+        },
+        {
+          "x": 307.4375,
+          "y": 68.671875,
+          "w": 107.609375,
+          "h": 23.78125
+        },
+        {
+          "x": 309.828125,
+          "y": 71.0625,
+          "w": 102.828125,
+          "h": 19
+        },
+        {
+          "x": 415.046875,
+          "y": 66.0625,
+          "w": 150.625,
+          "h": 27
+        },
+        {
+          "x": 65.546875,
+          "y": 89.859375,
+          "w": 191.4375,
+          "h": 27
+        }
+      ]
+    },
+    {
+      "text": "18.0×",
+      "rects": [
+        {
+          "x": 65.546875,
+          "y": 294.234375,
+          "w": 52.34375,
+          "h": 27
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-24T23:20:41.471Z"
+}

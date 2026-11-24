@@ -1,0 +1,32 @@
+{
+  "url": "https://arxiv.org/abs/2607.22165",
+  "start": "css=#abs .dateline",
+  "end": "css=#abs blockquote.abstract",
+  "clip": {
+    "x": 0,
+    "y": 77.28125,
+    "width": 836,
+    "height": 440.53125
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "DBA-Bench: A Production-Fidelity Benchmark for LLM-Based Database Operations Agents",
+      "rects": [
+        {
+          "x": 20,
+          "y": 28.828125,
+          "w": 733.546875,
+          "h": 28
+        },
+        {
+          "x": 20,
+          "y": 56.828125,
+          "w": 343.984375,
+          "h": 28
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-24T23:20:54.575Z"
+}

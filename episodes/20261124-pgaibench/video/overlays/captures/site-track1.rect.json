@@ -1,0 +1,38 @@
+{
+  "url": "https://pgaibench.dev/",
+  "start": "css=#track1-h",
+  "end": "and still caused 3 of the 13 live harms",
+  "clip": {
+    "x": 5.265625,
+    "y": 146.265625,
+    "width": 709.46875,
+    "height": 188
+  },
+  "scale": 2,
+  "highlights": [
+    {
+      "text": "claude-fable-5.2 tied for first with 65 correct runs and still caused 3 of the 13 live harms",
+      "rects": [
+        {
+          "x": 399.3125,
+          "y": 114,
+          "w": 154.125,
+          "h": 19
+        },
+        {
+          "x": 553.4375,
+          "y": 114,
+          "w": 86.703125,
+          "h": 19
+        },
+        {
+          "x": 14,
+          "y": 134,
+          "w": 635.765625,
+          "h": 19
+        }
+      ]
+    }
+  ],
+  "capturedAt": "2026-11-24T23:20:08.856Z"
+}
