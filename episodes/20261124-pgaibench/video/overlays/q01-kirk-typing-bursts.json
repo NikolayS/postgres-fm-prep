@@ -1,0 +1,18 @@
+{
+  "overlay": "q01-kirk-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.383,
+      "chars": 28,
+      "line": 0
+    },
+    {
+      "start": 1.85,
+      "end": 3.017,
+      "chars": 35,
+      "line": 1
+    }
+  ]
+}

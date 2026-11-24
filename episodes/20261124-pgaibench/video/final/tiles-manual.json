@@ -1,0 +1,7 @@
+{
+ "video": "~/Documents/Zoom/2026-11-24 10.37.15 .fm recording/video1808680036.mp4",
+ "width": 1280, "height": 720, "every": 10,
+ "note": "2x2 Zoom gallery, stable for the whole recording. Bottom-left tile is the Circleback.ai note-taker: deliberately not listed, so it is never shown. Kirk's camera is off (avatar) at source 2018-2151 s.",
+ "layouts": [{"id": "L0", "tiles": {"kirk": {"x": 0, "y": 0, "w": 640, "h": 360}, "nik": {"x": 640, "y": 0, "w": 640, "h": 360}, "robot": {"x": 640, "y": 360, "w": 640, "h": 360}}}],
+ "intervals": [{"start": 0, "end": 3617, "layout": "L0"}]
+}

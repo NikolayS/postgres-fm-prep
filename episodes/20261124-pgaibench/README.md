@@ -6,7 +6,7 @@
 
 - **Question:** Can AI safely change production Postgres, and what does it take: PGAIBench results with models acting alone, and the AAA protocol (Analyst, Auditor, Actor).
 - **Hosts:** Nikolay Samokhvalov and Kirk Wolak (co-hosts). Michael Christofides did not take part in this recording.
-- **Status:** Recorded 2026-11-24 (Zoom, 60:17 raw, about 59 min on air). Edit draft and release text drafts ready for the host's review; no cold open, cards or final compose yet.
+- **Status:** Recorded 2026-11-24 (Zoom, 60:17 raw). Full composed final (55:02) and podcast MP3 (54:46) ready for the host's review; QA passed. Nothing published.
 - **Recording date:** 2026-11-24, 10:37 PT (18:37 UTC); the show starts at 00:53 of the recording.
 - **Episode number:** 198 (to confirm).
 
@@ -24,7 +24,11 @@
 | [`notes/illustrations.md`](notes/illustrations.md) | Card plan, with the two moments where the host points at the screen on air |
 | [`thumbs/titles.md`](thumbs/titles.md) | Title options and thumbnail concepts |
 | [`notes/blog-candidates.md`](notes/blog-candidates.md) | Standard file (empty: the blog post already exists) |
-| [`qa.json`](qa.json) | QA gate config for the draft (`EP198_REVIEW` = the recording's `review/` folder) |
+| [`video/final/README.md`](video/final/README.md) | Final video and podcast: recipe, build steps, what differs from episodes 196 and 197 |
+| [`video/card/`](video/card/), [`video/outro/`](video/outro/) | Remotion sources: title card (14 s) and outro |
+| [`video/overlays/overlay-plan.md`](video/overlays/overlay-plan.md) | 8 overlays with times, texts, sources and sounds |
+| [`thumbs/src/`](thumbs/src/) | Thumbnail and square cover generator |
+| [`qa.json`](qa.json) | QA gate config (`EP198_REVIEW` = the recording's `review/` folder) |
 
 ## Discussion outline (as recorded)
 
@@ -40,4 +44,4 @@ All numbers come from the published post https://postgres.ai/blog/20261123-pgaib
 
 ## Release checklist
 
-Not started: see [`RELEASE_CHECKLIST.md`](../../RELEASE_CHECKLIST.md). First gate: the host approves the edit draft.
+See [`RELEASE_CHECKLIST.md`](../../RELEASE_CHECKLIST.md). Prepared up to publishing: final video, podcast MP3, thumbnails (3 options), square cover, notes and description with final times. Upload and publish wait for the host's go.

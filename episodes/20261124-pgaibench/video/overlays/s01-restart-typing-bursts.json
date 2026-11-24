@@ -1,0 +1,12 @@
+{
+  "overlay": "s01-restart-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 1.95,
+      "chars": 45,
+      "line": 0
+    }
+  ]
+}

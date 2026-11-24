@@ -1,0 +1,12 @@
+{
+  "overlay": "s03-safe-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 2.25,
+      "chars": 54,
+      "line": 0
+    }
+  ]
+}

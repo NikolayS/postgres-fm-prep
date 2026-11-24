@@ -1,0 +1,197 @@
+{
+  "video": "pgfm198-edited.mp4",
+  "fps": 25,
+  "width": 1920,
+  "height": 1080,
+  "timeBase": "edited.mp4 seconds, before intro and freeze shifts",
+  "band": {
+    "x": 120,
+    "y": 744,
+    "w": 1480,
+    "h": 144
+  },
+  "layout": "center placement: hosts move to place.<host>.center (right column, x 1630) in layout.json",
+  "overlays": [
+    {
+      "id": "s01-restart",
+      "outStart": 975.84,
+      "duration": 8.6,
+      "dur": 8.6,
+      "file": "s01-restart-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1500ms.wav",
+          "at": 0.45,
+          "gain": 1
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (\"broke an explicit no-restart rule in all 5 of 5 repeats\", claude-fable-5.2:high, task C18)",
+      "srcStart": 1095.6,
+      "srcEnd": 1104.2,
+      "words": "Nik: \"five out of five cases\" (1095.72-1097.42) ... \"After being told, do not restart the server\" (1101.90-1103.90)"
+    },
+    {
+      "id": "f01-track1",
+      "outStart": 1174.17,
+      "duration": 35.47,
+      "dur": 35.47,
+      "file": "f01-track1.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 35.1,
+          "gain": 0.7
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench Figure 1 (Track 1 outcomes, 10 models acting alone, 949 runs); live page captured 2026-11-24, dark theme, 2x",
+      "srcStart": 1335.85,
+      "srcEnd": 1372.2,
+      "words": "Nik: \"you see the graphs right now\" (1335.96-1337.08) ... \"if you hear the sound you just heard\" (1355.16) ... \"so yeah, this is the picture\" (1370.64-1371.92)"
+    },
+    {
+      "id": "s02-gate",
+      "outStart": 1555.1,
+      "duration": 7.6,
+      "dur": 7.6,
+      "file": "s02-gate-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1767ms.wav",
+          "at": 0.45,
+          "gain": 1
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (\"Clone gate ($0 LLM): stopped 6 of 13 harms (46.2%) ... while blocking 0 of 395 non-harmful changes\")",
+      "srcStart": 1766.3,
+      "srcEnd": 1773.9,
+      "words": "Nik: \"it removed half of harm- harmful actions\" (1766.46-1769.80) ... \"dropped twice, which is good\" (1771.76-1773.80)"
+    },
+    {
+      "id": "q01-kirk",
+      "outStart": 1647.1,
+      "duration": 7,
+      "dur": 7,
+      "file": "q01-kirk-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-933ms.wav",
+          "at": 0.45,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typing-1167ms.wav",
+          "at": 1.85,
+          "gain": 1
+        }
+      ],
+      "source": "on air (Kirk), his exact words",
+      "srcStart": 1860.3,
+      "srcEnd": 1867.3,
+      "words": "Kirk: \"I have a soundbite for this.\" (1858.17-1859.93) \"The actor is deterministic.\" (1860.43-1862.09) \"The production environment is not.\" (1862.15-1863.90)"
+    },
+    {
+      "id": "f02-aaa",
+      "outStart": 1998.86,
+      "duration": 38.02,
+      "dur": 38.02,
+      "file": "f02-aaa.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 37.66,
+          "gain": 0.7
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench Figure 2 (AAA: three roles, and the path of one change request); the post's hero is a 3D canvas animation, so the static Figure 2 is used; live page captured 2026-11-24, dark theme, 2x",
+      "srcStart": 2342.5,
+      "srcEnd": 2384.6,
+      "words": "Nik: \"three As, triple A, AAA\" (2342.66-2345.00) \"right now you see ... in the center of the screen\" (2346.80-2349.40) ... \"First is analyst\" (2364.60) ... \"actor, which will execute this change\" (2381.42-2384.40)"
+    },
+    {
+      "id": "n01-editor",
+      "outStart": 2281.76,
+      "duration": 7,
+      "dur": 7,
+      "file": "n01-editor-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1967ms.wav",
+          "at": 0.45,
+          "gain": 1
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (\"only after the Auditor signs off does the Actor apply the approved steps verbatim to production\"; Figure 2: \"Production Postgres: only the Actor changes it\"); notes/fact-check.md 37:58 (43:49)",
+      "srcStart": 2632.2,
+      "srcEnd": 2639.2,
+      "words": "Nik: \"neither analyst nor actor have access to production, right?\" (2628.60-2632.90)",
+      "vetoable": "Editor's note; on air Nik says \"neither analyst nor actor have access to production\" (he means the Analyst and the Auditor)"
+    },
+    {
+      "id": "f03-waterfall",
+      "outStart": 2660.43,
+      "duration": 14.05,
+      "dur": 14.05,
+      "file": "f03-waterfall.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 13.66,
+          "gain": 0.7
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench Figure 3 (Track 1 + AAA replay: 13 -> 7 -> 1, -92.3%); live page captured 2026-11-24, dark theme, 2x",
+      "srcStart": 3015.35,
+      "srcEnd": 3029.4,
+      "words": "Kirk: \"so you went from 13 harms down to one at the end of the day\" (3015.40-3019.40) \"by structuring this a little better\" (3019.78-3021.40)"
+    },
+    {
+      "id": "s03-safe",
+      "outStart": 2800.18,
+      "duration": 7.2,
+      "dur": 7.2,
+      "file": "s03-safe-typing.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1800ms.wav",
+          "at": 0.45,
+          "gain": 1
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (\"approving 377 of 378 safe or unclassified changes (99.7%)\")",
+      "srcStart": 3155.1,
+      "srcEnd": 3162.3,
+      "words": "Nik: \"almost 400, uh, only one was blocked by mistake\" (3153.86-3156.98)"
+    }
+  ]
+}

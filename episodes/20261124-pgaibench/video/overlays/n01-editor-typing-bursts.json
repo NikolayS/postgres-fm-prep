@@ -1,0 +1,12 @@
+{
+  "overlay": "n01-editor-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 2.417,
+      "chars": 59,
+      "line": 0
+    }
+  ]
+}

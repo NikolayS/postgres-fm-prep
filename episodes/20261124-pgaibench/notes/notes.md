@@ -4,7 +4,7 @@ Postgres.FM episode 198 (number to confirm). Hosts: Nik and Kirk.
 
 **DRAFT, 2026-11-24.** Nothing here is published. Open items for the host are at the end.
 
-**Times.** Times in brackets are times in the edited draft (`review/pgfm198-edited.mp4`, 00:00 = Nik's "Hello, this is PostgresFM"). As for episode 197, the podcast audio has no cold open, so these are also podcast times if the edit stays as it is. Re-map them with `find.ts` after any veto or re-render. YouTube times are in `youtube-description.txt` (they need the cold open and title card added after the final compose).
+**Times.** Times in brackets are podcast times (`podcast/postgres-fm-198-final.mp3`: 13 s intro music, then the show; no cold open, as episode 197). This file is generated from `notes.edited.md` (edited-draft times) by `video/final/set_times.ts`; edit that file, not this one. YouTube times are in `youtube-description.txt` (cold open + title card + show).
 
 ## Episode description
 
@@ -16,37 +16,37 @@ Here are some links to things they mentioned:
 
 ### Main link
 
-- [08:01] PGAIBench and AAA: can AI safely change production Postgres? (blog post, 2026-11-23): https://postgres.ai/blog/20261123-pgaibench
+- [08:14] PGAIBench and AAA: can AI safely change production Postgres? (blog post, 2026-11-23): https://postgres.ai/blog/20261123-pgaibench
 
 ### PGAIBench
 
-- [08:01] PGAIBench (results, method, replays): https://pgaibench.dev/
-- [08:01] PGAIBench source, data and prompts (Apache 2.0): https://github.com/NikolayS/pgaibench
-- [11:11] The tasks (public catalog): https://pgaibench.dev/scenarios/
-- [33:19] AAA and Track 2 (AI Control) results: https://pgaibench.dev/control/
-- [50:46] Related work map (DBA-Bench, SWE-bench and others): https://pgaibench.dev/related-work/
-- [50:46] DBA-Bench (arXiv): https://arxiv.org/abs/2607.22165
-- [50:48] SWE-bench (arXiv): https://arxiv.org/abs/2310.06770
+- [08:14] PGAIBench (results, method, replays): https://pgaibench.dev/
+- [08:14] PGAIBench source, data and prompts (Apache 2.0): https://github.com/NikolayS/pgaibench
+- [11:24] The tasks (public catalog): https://pgaibench.dev/scenarios/
+- [33:32] AAA and Track 2 (AI Control) results: https://pgaibench.dev/control/
+- [50:59] Related work map (DBA-Bench, SWE-bench and others): https://pgaibench.dev/related-work/
+- [50:59] DBA-Bench (arXiv): https://arxiv.org/abs/2607.22165
+- [51:01] SWE-bench (arXiv): https://arxiv.org/abs/2310.06770
 
 ### Operations practice
 
-- [07:12] Site Reliability Engineering, the Google SRE book: https://sre.google/sre-book/table-of-contents/
-- [17:33] max_locks_per_transaction (the setting behind the 5-of-5 restart task): https://www.postgresql.org/docs/18/runtime-config-locks.html#GUC-MAX-LOCKS-PER-TRANSACTION
-- [26:30] Systems Performance, Brendan Gregg: https://www.brendangregg.com/systems-performance-2nd-edition-book.html
-- [28:23] Mirroring in PgDog: https://docs.pgdog.dev/features/mirroring/
-- [28:23] Mirroring in PgCat: https://github.com/postgresml/pgcat#mirroring
-- [38:34] pg_repack: https://github.com/reorg/pg_repack
+- [07:25] Site Reliability Engineering, the Google SRE book: https://sre.google/sre-book/table-of-contents/
+- [17:46] max_locks_per_transaction (the setting behind the 5-of-5 restart task): https://www.postgresql.org/docs/18/runtime-config-locks.html#GUC-MAX-LOCKS-PER-TRANSACTION
+- [26:43] Systems Performance, Brendan Gregg: https://www.brendangregg.com/systems-performance-2nd-edition-book.html
+- [28:36] Mirroring in PgDog: https://docs.pgdog.dev/features/mirroring/
+- [28:36] Mirroring in PgCat: https://github.com/postgresml/pgcat#mirroring
+- [38:47] pg_repack: https://github.com/reorg/pg_repack
 
 ### Testing on clones
 
-- [25:29] DBLab Engine (thin clones and branching): https://github.com/postgres-ai/database-lab-engine
-- [25:37] DBLab Forge (dedicated primary and standby environments): https://postgres.ai/products/dblab-forge
+- [25:42] DBLab Engine (thin clones and branching): https://github.com/postgres-ai/database-lab-engine
+- [25:50] DBLab Forge (dedicated primary and standby environments): https://postgres.ai/products/dblab-forge
 
 ### Episodes we referred to
 
-- [08:45] BUFFERS by default: https://postgres.fm/episodes/buffers-by-default
-- [12:35] Index maintenance: https://postgres.fm/episodes/index-maintenance
-- [27:50] Postgres 19 (plan flips): https://postgres.fm/episodes/postgres-19
+- [08:58] BUFFERS by default: https://postgres.fm/episodes/buffers-by-default
+- [12:48] Index maintenance: https://postgres.fm/episodes/index-maintenance
+- [28:03] Postgres 19 (plan flips): https://postgres.fm/episodes/postgres-19
 
 18 links. All opened (HTTP 200) on 2026-11-24.
 

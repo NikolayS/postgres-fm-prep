@@ -1,0 +1,12 @@
+{
+  "overlay": "s02-gate-typing.mov",
+  "timeBase": "seconds from the overlay start",
+  "bursts": [
+    {
+      "start": 0.45,
+      "end": 2.217,
+      "chars": 53,
+      "line": 0
+    }
+  ]
+}

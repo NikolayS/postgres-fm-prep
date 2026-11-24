@@ -1,15 +1,223 @@
 {
-  "out": "${EP198_REVIEW}/qa",
-  "eyes": {
-    "frames": [
-      {"label": "edit draft: first frame of the episode (Hello)", "video": "${EP198_REVIEW}/pgfm198-edited.mp4", "t": 1.0, "expectFaces": 2}
-    ]
+ "out": "${EP198_REVIEW}/qa",
+ "audio": {
+  "music": "${EP198_REVIEW}/final/stems/music.wav",
+  "voices": {
+   "Nik": "${EP198_REVIEW}/final/stems/nik.wav",
+   "Kirk": "${EP198_REVIEW}/final/stems/kirk.wav"
   },
-  "skip": {
-    "audio": "edit draft: no music bed, no stems yet (compose not started)",
-    "captions": "edit draft: no burned-in captions or punch-ins",
-    "strips": "edit draft: no overlays yet",
-    "sfx": "edit draft: no overlays yet",
-    "cards": "edit draft: no data cards yet (plan in notes/illustrations.md)"
-  }
+  "minGapDb": 10,
+  "maxSpreadDb": 3
+ },
+ "eyes": {
+  "frames": [
+   {
+    "label": "cold open: last frame before the fade (Nik 'Often.')",
+    "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
+    "t": 16.4,
+    "expectFaces": 2
+   },
+   {
+    "label": "cold open: first frame",
+    "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
+    "t": 0.1,
+    "expectFaces": 2
+   },
+   {
+    "label": "body: first frames after the title card",
+    "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
+    "t": 31.2,
+    "expectFaces": 2
+   },
+   {
+    "label": "thumbnail A",
+    "image": "${EP198_REVIEW}/covers/thumb-a.png",
+    "expectFaces": 2
+   },
+   {
+    "label": "thumbnail B",
+    "image": "${EP198_REVIEW}/covers/thumb-b.png",
+    "expectFaces": 2
+   },
+   {
+    "label": "thumbnail C",
+    "image": "${EP198_REVIEW}/covers/thumb-c.png",
+    "expectFaces": 2
+   },
+   {
+    "label": "square cover",
+    "image": "${EP198_REVIEW}/covers/square-3000.png",
+    "expectFaces": 2
+   }
+  ]
+ },
+ "strips": {
+  "layers": [
+   {
+    "id": "s01-restart",
+    "file": "${EP198_REVIEW}/overlays/out/s01-restart-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "s01-restart",
+    "file": "${EP198_REVIEW}/overlays/out/s01-restart-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "s02-gate",
+    "file": "${EP198_REVIEW}/overlays/out/s02-gate-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "s02-gate",
+    "file": "${EP198_REVIEW}/overlays/out/s02-gate-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "q01-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q01-kirk-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "q01-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q01-kirk-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "n01-editor",
+    "file": "${EP198_REVIEW}/overlays/out/n01-editor-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "n01-editor",
+    "file": "${EP198_REVIEW}/overlays/out/n01-editor-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "s03-safe",
+    "file": "${EP198_REVIEW}/overlays/out/s03-safe-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "s03-safe",
+    "file": "${EP198_REVIEW}/overlays/out/s03-safe-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f01-track1",
+    "file": "${EP198_REVIEW}/overlays/out/f01-track1.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f01-track1",
+    "file": "${EP198_REVIEW}/overlays/out/f01-track1.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f02-aaa",
+    "file": "${EP198_REVIEW}/overlays/out/f02-aaa.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f02-aaa",
+    "file": "${EP198_REVIEW}/overlays/out/f02-aaa.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f03-waterfall",
+    "file": "${EP198_REVIEW}/overlays/out/f03-waterfall.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f03-waterfall",
+    "file": "${EP198_REVIEW}/overlays/out/f03-waterfall.mov",
+    "t": 3.0
+   }
+  ],
+  "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
+  "items": [
+   {
+    "id": "s01-restart",
+    "at": 1005.96,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     1006.26,
+     1007.46,
+     1009.96
+    ]
+   },
+   {
+    "id": "s02-gate",
+    "at": 1585.22,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     1585.52,
+     1586.72,
+     1589.22
+    ]
+   },
+   {
+    "id": "q01-kirk",
+    "at": 1677.22,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     1677.52,
+     1678.72,
+     1681.22
+    ]
+   },
+   {
+    "id": "n01-editor",
+    "at": 2311.88,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     2312.18,
+     2313.38,
+     2315.88
+    ]
+   },
+   {
+    "id": "s03-safe",
+    "at": 2830.3,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     2830.6,
+     2831.8,
+     2834.3
+    ]
+   }
+  ]
+ },
+ "sfx": {
+  "manifest": "${EP198_REVIEW}/overlays/out/manifest-sfx.json"
+ },
+ "skip": {
+  "captions": "no burned-in captions or punch-ins in episode 198: text is only in band strips and center cards (checked by strips)",
+  "cards": "no data cards (cards/*.card.json): the three center cards are screenshots of the published post's figures, URL printed below; numbers are the post's own"
+ }
 }

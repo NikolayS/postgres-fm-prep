@@ -1,0 +1,25 @@
+--- <ep197-recording>/final/tools/compose.ts	2026-11-18 15:47:40
++++ <review>/tools/compose.ts	2026-11-24 14:09:15
+@@ -113,7 +113,7 @@
+   const to = flag("--until") ? Number(flag("--until")) : full;
+   const from = flag("--tail") ? full - Number(flag("--tail")) : Number(flag("--from") ?? 0);
+   const C = from > 0 ? 0 : Number(flag("--card") ?? 5), E = Number(flag("--end") ?? 8), DUCK = Number(flag("--duck") ?? -15);
+-  const X1 = 0.8, X2 = 0.8, MUSIC_LUFS = -18, SFX_M = Number(flag("--sfx-lufs") ?? -20);
++  const X1 = 0.8, X2 = 0.8, MUSIC_LUFS = Number(flag("--music-lufs") ?? -18), SFX_M = Number(flag("--sfx-lufs") ?? -20);
+   const FADE_IN = 1.0, FADE_OUT = 2.0; // from black / to black, picture and sound
+   const BED_LEAD = Number(flag("--bed-lead") ?? 30); // longest outro-bed lead under the closing talk
+ 
+@@ -210,7 +210,12 @@
+     g.push(`[${cur}]format=yuv420p,setsar=1,fps=${fps},settb=1/${fps}[${name}]`);
+   };
+   let vout = "show";
+-  if (C > 0) {
++  const cardVideo = flag("--card-video"); // ep198: ported from the ep196 copy (animated Remotion title card)
++  if (C > 0 && cardVideo) {
++    g.push(`[${add(["-i", cardVideo])}:v]format=yuv420p,setsar=1,fps=${fps},tpad=stop_mode=clone:stop_duration=2,trim=duration=${C + X1},setpts=PTS-STARTPTS,settb=1/${fps}[tcard]`);
++    g.push(`[tcard][show]xfade=transition=fade:duration=${X1}:offset=${C}[v1]`);
++    vout = "v1";
++  } else if (C > 0) {
+     buildCard("tcard", tc, C + X1);
+     g.push(`[tcard][show]xfade=transition=fade:duration=${X1}:offset=${C}[v1]`);
+     vout = "v1";
