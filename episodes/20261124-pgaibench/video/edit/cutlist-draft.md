@@ -4,6 +4,8 @@ Video: `review/pgfm198-edited.mp4` in the Zoom recording folder (not in git; no 
 
 Source 60:16.7 -> draft 54:10.0. Judgment cuts: 16 rows, all applied; the toolkit's filler, repeat, false-start and pause cuts are in `pgfm198-edited.cuts.md` next to the video.
 
+Checks (2026-11-24): 97 joins, none above score 6 (joins.ts on the rendered audio); video, audio and plan all 54:09.96; A/V lag 0, -20 and -10 ms at start, middle and end; -16.0 LUFS; `qa.ts` passed (eyes; other checks skipped with reasons, see `../../qa.json`). The big joins (c08, c11, c12, c16) were re-transcribed with local whisper and read cleanly.
+
 | id | category | draft video | source | cut s | removed | why |
 | --- | --- | --- | --- | --- | --- | --- |
 | c01 | head | 00:00.0 | 00:00.5 | 49.5 | (head/tail) | pre-show: recording and transcription icons, talk about the absent co-host |
