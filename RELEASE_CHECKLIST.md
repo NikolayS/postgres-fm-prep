@@ -9,7 +9,7 @@ Do these in order. The first thing the host sees is the **full composed episode*
 1. [ ] **Study the last 4 episodes**: their compose scripts and layouts, cold opens, title cards, outros, overlays, music levels, and the host's corrections in their notes. Reuse their tools and settings. Write down what this episode does differently, and why.
 2. [ ] **Review folder.** Make one numbered folder for the host, `<recording>/review/for-nik/`, with `00-INDEX.md`. Every preview, clip, still and list for the host goes there, with numbered descriptive names. Every report gives full absolute paths.
 3. [ ] **Transcribe** once (Scribe). Check speaker labels. Note when a host is away (camera off, "I'll be right back").
-4. [ ] **Cut hard.** Detect, judge, prosody, plan, audit the joins (`SKILL.md`). Cut hedges, rambling, tech trouble and on-air "let's cut that".
+4. [ ] **Cut hard.** Detect, judge, prosody, plan, audit the joins (`SKILL.md`). Cut hedges, rambling, tech trouble and on-air "let's cut that". The first minutes get a second, stricter pass for the hosts' stumbles (restarts, broken grammar, word salad): the opening sets the impression (Nik, episode 198: "'it's still /// already so' moment in the beginning is embarrassing"). Keep the clean take of each thought; every cut stays a restorable row; check each join by re-transcription.
 5. [ ] **Bad-moments sweep** of the whole transcript and of the rendered edit:
    - a host leaving, being away or coming back, and every later reference to it ("welcome back", "where were we", "Good. Great. Great.");
    - every profanity (fuck, shit, damn and variants, also in other languages), in the Scribe words and in the meeting bot transcript. No bleeps: cut the word, or the whole phrase if the join jumps;

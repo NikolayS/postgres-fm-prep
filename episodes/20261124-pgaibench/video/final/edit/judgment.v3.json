@@ -1,0 +1,998 @@
+{
+ "removals": [
+  {
+   "id": "c01",
+   "cat": "head",
+   "from": "0",
+   "to": "53.2",
+   "reason": "pre-show: recording and transcription icons, talk about the absent co-host"
+  },
+  {
+   "id": "c02",
+   "cat": "struggle",
+   "reason": "abandoned starts; resume at 'You know, we both have a friend'",
+   "soft": true,
+   "from": "198.620",
+   "to": "203.160",
+   "matched": "So what I'm saying, we want to have, uh, we... Like, the, the vision is,"
+  },
+  {
+   "id": "c05",
+   "cat": "struggle",
+   "speaker": "speaker_1",
+   "reason": "false start; keep Kirk's 'Sarcasm. Sorry.' and 'Well, it's not sarcasm'",
+   "soft": true,
+   "from": "580.968",
+   "to": "583.188",
+   "matched": "Yeah. So you're, you're, you're m-... Yeah."
+  },
+  {
+   "id": "c06",
+   "cat": "hedge",
+   "reason": "hedge; keep 'our role with Michael was there a little bit as well'",
+   "soft": true,
+   "from": "611.788",
+   "to": "616.888",
+   "matched": "And maybe, maybe, it's not 100%, I'm not... I cannot, uh, like claim it, but maybe"
+  },
+  {
+   "id": "c07",
+   "cat": "hedge",
+   "reason": "hedge after 'This is my true belief'",
+   "from": "658.648",
+   "to": "663.328",
+   "matched": "Of course, maybe it's not like a lot, but it's, it- it's a little bit. Uh, yeah."
+  },
+  {
+   "id": "c08",
+   "cat": "rambling",
+   "reason": "show-format talk (screen share) and Nik's abandoned start; keep Kirk's 'I think you're getting ready to hit a point...'",
+   "soft": true,
+   "from": "915.644",
+   "to": "927.584",
+   "matched": "That's why, like, if you show this- Do you wanna share the screen of the summary at all? I know this is a podcast, but on that summary, we're gonna get to some of the graphs and stuff. Yeah. And, uh, or you can tell the AI to bring it in when you're ready. But"
+  },
+  {
+   "id": "c10",
+   "cat": "struggle",
+   "reason": "repeat of 12:27-15:06 and a wrong claim corrected at once ('all the AIs did harm': Sonnet had 0); keep 'Right. So the... how it worked'",
+   "from": "939.604",
+   "to": "959.684",
+   "matched": "again, like, human baseline is, is not established here, but these cases are for human errors directly. Uh, it's, it's not random tasks. And, uh, the first main finding is that all the AIs, uh, did some harmful stuff. Actually, no. Like,"
+  },
+  {
+   "id": "c11",
+   "cat": "rambling",
+   "reason": "second telling of the 5-of-5 Fable story (first at 18:13); keep the 'playground' clarification and 'Which reminds me...'",
+   "soft": true,
+   "from": "1160.564",
+   "to": "1201.304",
+   "matched": "So models, as we say, this is your production. We tell it it's important. Like, this is task. Go and, go and solve this, this task. So Fable, in some task, uh, in some problem, uh, if Fable caused, uh, out of... We had th- five rehearsals for each task. Mm-hmm. Right? And in five, in, in five, uh, cases out of five, Fable decided to change setting and restart, and then it blocked itself in two cases, like stopped at the last moment. But in three cases it did stop, in three, in three durations o- out of five we, we did. And, and actually caused, uh, downtime of this playground, right?"
+  },
+  {
+   "id": "c12",
+   "cat": "tech",
+   "reason": "fly and coffee spill (40 s); resume at Kirk's 'So, so, and true to form for you'",
+   "soft": true,
+   "cutLaugh": true,
+   "from": "1474.476",
+   "to": "1515.736",
+   "matched": "But when we make changes for, like... Oh, fuck, fucking fly. I, I'm, like, I need to kill it somehow. This- ... this first time I have this, like... Now I had another problem, coffee on laptop spilled. Did you knock your coffee over? O- over the old laptop, yeah. Ah. Okay. Oh, that's... All right. So, so that, um, uh- It's just like it's on my face all the time. Like, what's happening? Like, ah. Yeah, yeah. Oh my God, I saw it dive-bombing your eyeball, and I'm like, \"He's gonna react to this now.\" So yeah. Um, anyhow, while, while you're taking care of that, don't worry. So, so, um,"
+  },
+  {
+   "id": "c14",
+   "cat": "hedge",
+   "reason": "hedge",
+   "soft": true,
+   "from": "1692.716",
+   "to": "1694.116",
+   "matched": "Maybe I should press more. But"
+  },
+  {
+   "id": "c15",
+   "cat": "struggle",
+   "near": "29:57",
+   "from": "1797.556",
+   "to": "1798.976",
+   "reason": "turn-taking crosstalk 'Or- / Next... Go ahead. / Yeah. / Well-'; resume at 'Testing is hard'",
+   "soft": true
+  },
+  {
+   "id": "c16",
+   "cat": "tech",
+   "reason": "Kirk away (camera off from 33:38) and the fly break, plus Nik's unfinished testing aside and the re-entry 'Good. Great. Great. Great. So'; Kirk's 'So.' leads into 'the separation of roles'",
+   "soft": true,
+   "cutLaugh": true,
+   "from": "2004.95",
+   "to": "2158.50"
+  },
+  {
+   "id": "c18",
+   "cat": "struggle",
+   "reason": "restart; keep 'The second role is actor'",
+   "from": "2378.782",
+   "to": "2381.322",
+   "matched": "uh, actually let's talk about the second role is"
+  },
+  {
+   "id": "c23",
+   "cat": "rambling",
+   "reason": "on-air wrap cue; keep 'Several interesting findings'",
+   "soft": true,
+   "from": "3212.342",
+   "to": "3215.702",
+   "matched": "Uh, for me it's... There are several interesting... Let's wrap it up."
+  },
+  {
+   "id": "c26",
+   "cat": "hedge",
+   "reason": "hedge; keep 'just CI/CD pipeline'",
+   "from": "3369.692",
+   "to": "3370.092",
+   "matched": "I don't know, like,"
+  },
+  {
+   "id": "c27",
+   "cat": "tail",
+   "from": "3614.0",
+   "to": "3617.0",
+   "reason": "after the sign-off: 'Phew.', 'Stop recording'"
+  },
+  {
+   "id": "c28",
+   "cat": "hedge",
+   "from": "2828.84",
+   "to": "2831.70",
+   "reason": "hedge 'Only one left. I don't remember which one.' and Kirk's 'Hold up.' (no pause between them); resume at Nik's 'Yeah.' and Kirk's question",
+   "soft": true
+  },
+  {
+   "id": "c30",
+   "cat": "struggle",
+   "from": "3240.40",
+   "to": "3251.52",
+   "reason": "on-air word fix and preamble 'it looks like... Yeah, well, I, I knew it, but it was confirmed by this study that multiple actors are... My, my not actors. Actor is already used word here, right? But'; resume 'And, uh, third, multiple players and teamwork is great'",
+   "soft": true
+  },
+  {
+   "id": "c31",
+   "cat": "rambling",
+   "from": "3266.25",
+   "to": "3270.45",
+   "reason": "pre-show reference 'like, uh, we talked about it before the recording actually, you s-'; resume 'you actually, I saw you want to place human somewhere'",
+   "soft": true
+  },
+  {
+   "id": "c32",
+   "cat": "stumble",
+   "from": "78.540",
+   "to": "85.020",
+   "reason": "broken sentence 'out the- out there will be... It, it's still already so. It's, it's already so. Um,'; resume 'they will be without proper human attention'",
+   "soft": true,
+   "matched": "out the- out there will be... It, it's still already so. It's, it's already so. Um,"
+  },
+  {
+   "id": "c33",
+   "cat": "stumble",
+   "from": "132.600",
+   "to": "132.940",
+   "reason": "restart 'like, we, we, we do need'; keep 'we, we do need'",
+   "soft": true,
+   "matched": "like, we,"
+  },
+  {
+   "id": "c35",
+   "cat": "stumble",
+   "from": "149.040",
+   "to": "150.280",
+   "reason": "restart and hedge 'I, I, I believe, um,'; keep 'Anyway, there should be'",
+   "soft": true,
+   "matched": "I, I, I believe, um,"
+  },
+  {
+   "id": "c36",
+   "cat": "stumble",
+   "from": "238.620",
+   "to": "240.560",
+   "reason": "filler run 'And, uh, yeah, that's,'; keep 'That's it actually'",
+   "soft": true,
+   "matched": "And, uh, yeah, that's,"
+  },
+  {
+   "id": "c37",
+   "cat": "stumble",
+   "from": "258.360",
+   "to": "259.160",
+   "reason": "filler 'teams of, um, for example'; keep 'teams, for example'",
+   "soft": true,
+   "matched": "of, um,"
+  },
+  {
+   "id": "c38",
+   "cat": "stumble",
+   "from": "261.940",
+   "to": "263.220",
+   "reason": "abandoned start 'which are usually... Like, m-'; keep 'I know many of them'",
+   "soft": true,
+   "matched": "which are usually... Like, m-"
+  },
+  {
+   "id": "c39",
+   "cat": "stumble",
+   "from": "353.080",
+   "to": "353.640",
+   "reason": "restart 'or, uh, s- CLI'; keep 'or CLI'",
+   "soft": true,
+   "matched": "uh, s-"
+  },
+  {
+   "id": "c40",
+   "cat": "stumble",
+   "from": "373.988",
+   "to": "374.508",
+   "reason": "restart 'If, if, uh, we had'; keep 'If we had'",
+   "soft": true,
+   "matched": "if, uh,"
+  },
+  {
+   "id": "c41",
+   "cat": "stumble",
+   "from": "380.848",
+   "to": "380.908",
+   "reason": "cut-off 'm- many'",
+   "soft": true,
+   "matched": "m-"
+  },
+  {
+   "id": "c42",
+   "cat": "stumble",
+   "from": "400.388",
+   "to": "400.968",
+   "reason": "restart 'that people... The people'; keep 'The people already do it'",
+   "soft": true,
+   "matched": "that people..."
+  },
+  {
+   "id": "c44",
+   "cat": "stumble",
+   "from": "536.808",
+   "to": "537.148",
+   "reason": "restart 'uh, risk, risk, possible risk'; keep 'risk, possible risk'",
+   "soft": true,
+   "matched": "... uh, risk,"
+  },
+  {
+   "id": "c45",
+   "cat": "stumble",
+   "from": "543.608",
+   "to": "545.728",
+   "reason": "restart 'And, uh, this is, this is what I...'; keep 'This is why I created'",
+   "soft": true,
+   "matched": "And, uh, this is, this is what I..."
+  },
+  {
+   "id": "c46",
+   "cat": "stumble",
+   "from": "548.688",
+   "to": "548.828",
+   "reason": "repeat 'PG, PG AI Bench'",
+   "soft": true,
+   "matched": "PG,"
+  },
+  {
+   "id": "c48",
+   "cat": "stumble",
+   "from": "684.208",
+   "to": "684.528",
+   "reason": "repeat 'to do, to establish'",
+   "soft": true,
+   "matched": "to do,"
+  },
+  {
+   "id": "c49",
+   "cat": "stumble",
+   "from": "692.468",
+   "to": "693.208",
+   "reason": "restart 'uh, in sh- on short notice'; keep 'on short notice'",
+   "soft": true,
+   "matched": "uh, in sh-"
+  },
+  {
+   "id": "c50",
+   "cat": "stumble",
+   "from": "753.924",
+   "to": "755.504",
+   "reason": "abandoned start 'Those tasks, uh, it's just...'",
+   "soft": true,
+   "matched": "Those tasks, uh, it's just..."
+  },
+  {
+   "id": "c51",
+   "cat": "stumble",
+   "from": "764.704",
+   "to": "765.104",
+   "reason": "cut-off 'h- uh, after'",
+   "soft": true,
+   "matched": "h- uh,"
+  },
+  {
+   "id": "c52",
+   "cat": "stumble",
+   "from": "783.484",
+   "to": "783.604",
+   "reason": "restart 'This, these questions'",
+   "soft": true,
+   "matched": "This,"
+  },
+  {
+   "id": "c53",
+   "cat": "stumble",
+   "from": "857.124",
+   "to": "857.484",
+   "reason": "restart 'It, uh, it was a case'",
+   "soft": true,
+   "matched": "It, uh,"
+  },
+  {
+   "id": "c54",
+   "cat": "stumble",
+   "from": "875.904",
+   "to": "876.404",
+   "reason": "restart 'so but it, it's still needed'; keep 'it's still needed'",
+   "soft": true,
+   "matched": "so but it,"
+  },
+  {
+   "id": "c55",
+   "cat": "stumble",
+   "from": "1010.024",
+   "to": "1011.724",
+   "reason": "restart 'like, to getting-' (and Kirk's prompt 'Yeah. Control'); keep 'for the sake of, pure results'",
+   "soft": true,
+   "matched": "like, to getting- Yeah. Control"
+  },
+  {
+   "id": "c56",
+   "cat": "stumble",
+   "from": "1121.464",
+   "to": "1122.924",
+   "reason": "restart 'And then, uh, five of... So five of, of five'; keep 'So five of five'",
+   "soft": true,
+   "matched": "And then, uh, five of..."
+  },
+  {
+   "id": "c57",
+   "cat": "stumble",
+   "from": "1212.604",
+   "to": "1213.744",
+   "reason": "restart 'on, on, um, s- standbys'",
+   "soft": true,
+   "matched": "on, um, s-"
+  },
+  {
+   "id": "c58",
+   "cat": "stumble",
+   "from": "1217.004",
+   "to": "1217.144",
+   "reason": "restart 'It's, it was in this'",
+   "soft": true,
+   "matched": "It's,"
+  },
+  {
+   "id": "c59",
+   "cat": "stumble",
+   "from": "1283.324",
+   "to": "1284.204",
+   "reason": "restart 'Uh, well, it... Harm can be'",
+   "soft": true,
+   "matched": "Uh, well, it..."
+  },
+  {
+   "id": "c60",
+   "cat": "stumble",
+   "from": "1291.064",
+   "to": "1292.024",
+   "reason": "restart 'you, you can, uh, you can lead'",
+   "soft": true,
+   "matched": "you, you can, uh,"
+  },
+  {
+   "id": "c61",
+   "cat": "stumble",
+   "from": "1323.684",
+   "to": "1324.244",
+   "reason": "abandoned start 'You cannot...'",
+   "soft": true,
+   "matched": "You cannot..."
+  },
+  {
+   "id": "c62",
+   "cat": "stumble",
+   "from": "1415.644",
+   "to": "1417.204",
+   "reason": "restart 'make, like to put, to feed'; keep 'tried to feed'",
+   "soft": true,
+   "matched": "make, like to put, to"
+  },
+  {
+   "id": "c63",
+   "cat": "stumble",
+   "from": "1444.224",
+   "to": "1445.804",
+   "reason": "abandoned start 'I always tell... Uh,'",
+   "soft": true,
+   "matched": "I always tell... Uh,"
+  },
+  {
+   "id": "c64",
+   "cat": "stumble",
+   "from": "1454.084",
+   "to": "1455.124",
+   "reason": "abandoned start 'And if you put... Like,'",
+   "soft": true,
+   "matched": "And if you put... Like,"
+  },
+  {
+   "id": "c65",
+   "cat": "stumble",
+   "from": "1632.036",
+   "to": "1632.176",
+   "reason": "cut-off 'bef- instead'",
+   "soft": true,
+   "matched": "bef-"
+  },
+  {
+   "id": "c66",
+   "cat": "stumble",
+   "from": "1648.756",
+   "to": "1648.816",
+   "reason": "cut-off 'h- see'",
+   "soft": true,
+   "matched": "h-"
+  },
+  {
+   "id": "c67",
+   "cat": "stumble",
+   "from": "1656.076",
+   "to": "1657.476",
+   "reason": "restart 'Th- that's like, like- they, they can,'; keep 'They can explain failure modes'",
+   "soft": true,
+   "matched": "Th- that's like, like- Yeah ... they, they can,"
+  },
+  {
+   "id": "c68",
+   "cat": "stumble",
+   "from": "1713.856",
+   "to": "1715.096",
+   "reason": "restart 'if you have access, if you give,'; keep 'if you give access'",
+   "soft": true,
+   "matched": "if you have access, if you give,"
+  },
+  {
+   "id": "c69",
+   "cat": "stumble",
+   "from": "1721.356",
+   "to": "1724.556",
+   "reason": "abandoned start 'uh, if it, um, uh, solving some task,'",
+   "soft": true,
+   "matched": "uh, if it, um, uh, solving some task,"
+  },
+  {
+   "id": "c70",
+   "cat": "stumble",
+   "from": "1758.256",
+   "to": "1762.296",
+   "reason": "abandoned start 'it already solves, uh, half of... Like'; keep 'in our PG AI bench 0.2 it removed half'",
+   "soft": true,
+   "matched": "it already solves, uh, half of... Like"
+  },
+  {
+   "id": "c71",
+   "cat": "stumble",
+   "from": "1767.716",
+   "to": "1767.956",
+   "reason": "cut-off 'harm- harmful'",
+   "soft": true,
+   "matched": "harm-"
+  },
+  {
+   "id": "c72",
+   "cat": "stumble",
+   "from": "1849.372",
+   "to": "1849.472",
+   "reason": "cut-off 'related pro- for example'",
+   "soft": true,
+   "matched": "pro-"
+  },
+  {
+   "id": "c73",
+   "cat": "stumble",
+   "from": "1852.832",
+   "to": "1853.132",
+   "reason": "restart 'for sp- to specific'",
+   "soft": true,
+   "matched": "for sp-"
+  },
+  {
+   "id": "c74",
+   "cat": "stumble",
+   "from": "1896.652",
+   "to": "1897.412",
+   "reason": "restart 'the, the, like, the right one'",
+   "soft": true,
+   "matched": "the, the, like,"
+  },
+  {
+   "id": "c75",
+   "cat": "stumble",
+   "from": "1910.352",
+   "to": "1910.772",
+   "reason": "cut-off 'like, mirror- traffic mirroring'",
+   "soft": true,
+   "matched": "like, mirror-"
+  },
+  {
+   "id": "c76",
+   "cat": "stumble",
+   "from": "1913.272",
+   "to": "1915.032",
+   "reason": "restart 'there are some... almost'; keep 'there are some tools'",
+   "soft": true,
+   "matched": "there are some... almost"
+  },
+  {
+   "id": "c77",
+   "cat": "stumble",
+   "from": "1919.832",
+   "to": "1920.332",
+   "reason": "word salad 'extremely still extremely hard'; keep 'still extremely hard'",
+   "soft": true,
+   "matched": "extremely"
+  },
+  {
+   "id": "c78",
+   "cat": "stumble",
+   "from": "2219.302",
+   "to": "2220.362",
+   "reason": "restart 'which is, which has goal'",
+   "soft": true,
+   "matched": "which is,"
+  },
+  {
+   "id": "c79",
+   "cat": "stumble",
+   "from": "2296.482",
+   "to": "2298.282",
+   "reason": "restart 'what I'm talking here about is, uh,'; keep 'So since last year'",
+   "soft": true,
+   "matched": "what I'm talking here about is, uh,"
+  },
+  {
+   "id": "c80",
+   "cat": "stumble",
+   "from": "2317.422",
+   "to": "2317.442",
+   "reason": "cut-off 'c- control'",
+   "soft": true,
+   "matched": "c-"
+  },
+  {
+   "id": "c81",
+   "cat": "stumble",
+   "from": "2333.402",
+   "to": "2333.462",
+   "reason": "cut-off 'b- with'",
+   "soft": true,
+   "matched": "b-"
+  },
+  {
+   "id": "c83",
+   "cat": "stumble",
+   "from": "2397.322",
+   "to": "2397.722",
+   "reason": "filler 'The, like, this step'",
+   "soft": true,
+   "matched": "The, like,"
+  },
+  {
+   "id": "c84",
+   "cat": "stumble",
+   "from": "2411.442",
+   "to": "2411.662",
+   "reason": "restart 'should step, go back'",
+   "soft": true,
+   "matched": "step,"
+  },
+  {
+   "id": "c85",
+   "cat": "stumble",
+   "from": "2501.322",
+   "to": "2501.642",
+   "reason": "abandoned start 'in the... which'",
+   "soft": true,
+   "matched": "in the..."
+  },
+  {
+   "id": "c86",
+   "cat": "stumble",
+   "from": "2521.962",
+   "to": "2523.082",
+   "reason": "abandoned start 'And, uh, when actor...'",
+   "soft": true,
+   "matched": "And, uh, when actor..."
+  },
+  {
+   "id": "c87",
+   "cat": "stumble",
+   "from": "2535.702",
+   "to": "2536.642",
+   "reason": "restart 'access, a- as- assess'; keep 'can assess'",
+   "soft": true,
+   "matched": "access, a- as-"
+  },
+  {
+   "id": "c88",
+   "cat": "stumble",
+   "from": "2540.822",
+   "to": "2544.182",
+   "reason": "abandoned start 'even if it's not, uh, uh, if it's, if it... Like,'",
+   "soft": true,
+   "matched": "even if it's not, uh, uh, if it's, if it... Like,"
+  },
+  {
+   "id": "c89",
+   "cat": "stumble",
+   "from": "2588.342",
+   "to": "2589.962",
+   "reason": "abandoned start 'And mistakes make, make... Like,'",
+   "soft": true,
+   "matched": "And mistakes make, make... Like,"
+  },
+  {
+   "id": "c90",
+   "cat": "stumble",
+   "from": "2590.042",
+   "to": "2590.622",
+   "reason": "restart 'this is differ- this is very different'",
+   "soft": true,
+   "matched": "this is differ-"
+  },
+  {
+   "id": "c91",
+   "cat": "stumble",
+   "from": "2599.602",
+   "to": "2600.302",
+   "reason": "repeat 'we, we, uh, think'",
+   "soft": true,
+   "matched": "we, uh,"
+  },
+  {
+   "id": "c92",
+   "cat": "stumble",
+   "from": "2614.842",
+   "to": "2615.462",
+   "reason": "restart 'what's... Like, is it good'",
+   "soft": true,
+   "matched": "what's... Like,"
+  },
+  {
+   "id": "c94",
+   "cat": "stumble",
+   "from": "2701.302",
+   "to": "2702.142",
+   "reason": "cut-off 'ex- uh, ex- Access Exclusive'",
+   "soft": true,
+   "matched": "ex- uh, ex-"
+  },
+  {
+   "id": "c95",
+   "cat": "stumble",
+   "from": "2725.562",
+   "to": "2727.102",
+   "reason": "abandoned start 'Like, there are many layers of...'",
+   "soft": true,
+   "matched": "Like, there are many layers of..."
+  },
+  {
+   "id": "c96",
+   "cat": "stumble",
+   "from": "2767.722",
+   "to": "2768.622",
+   "reason": "abandoned start 'Like, uh, we...'",
+   "soft": true,
+   "matched": "Like, uh, we..."
+  },
+  {
+   "id": "c97",
+   "cat": "stumble",
+   "from": "2781.842",
+   "to": "2782.342",
+   "reason": "abandoned start 'This is like...'",
+   "soft": true,
+   "matched": "This is like..."
+  },
+  {
+   "id": "c98",
+   "cat": "stumble",
+   "from": "2859.702",
+   "to": "2859.742",
+   "reason": "cut-off 'a- and'",
+   "soft": true,
+   "matched": "a-"
+  },
+  {
+   "id": "c99",
+   "cat": "stumble",
+   "from": "2910.302",
+   "to": "2911.622",
+   "reason": "abandoned start 'uh, it's just better...'",
+   "soft": true,
+   "matched": "uh, it's just better..."
+  },
+  {
+   "id": "c100",
+   "cat": "stumble",
+   "from": "2922.502",
+   "to": "2922.782",
+   "reason": "repeat 'at this, at the stage'",
+   "soft": true,
+   "matched": "at this,"
+  },
+  {
+   "id": "c101",
+   "cat": "stumble",
+   "from": "3199.362",
+   "to": "3199.442",
+   "reason": "filler 'Like of, of course'",
+   "soft": true,
+   "matched": "of,"
+  },
+  {
+   "id": "c102",
+   "cat": "stumble",
+   "from": "3200.382",
+   "to": "3200.562",
+   "reason": "filler 'it's like green light'",
+   "soft": true,
+   "matched": "like"
+  },
+  {
+   "id": "c103",
+   "cat": "stumble",
+   "from": "3233.082",
+   "to": "3234.162",
+   "reason": "restart 'two fail- like, not two'",
+   "soft": true,
+   "matched": "two fail- like, not"
+  },
+  {
+   "id": "c104",
+   "cat": "stumble",
+   "from": "3235.862",
+   "to": "3236.802",
+   "reason": "restart 'in, in weak mo- in, in weak models'",
+   "soft": true,
+   "matched": "in, in weak mo- in,"
+  },
+  {
+   "id": "c105",
+   "cat": "stumble",
+   "from": "3311.612",
+   "to": "3312.332",
+   "reason": "filler 'It's like, uh, everyone'",
+   "soft": true,
+   "matched": "It's like, uh,"
+  },
+  {
+   "id": "c106",
+   "cat": "stumble",
+   "from": "3314.432",
+   "to": "3314.752",
+   "reason": "restart 'should be... should go'",
+   "soft": true,
+   "matched": "should be..."
+  },
+  {
+   "id": "c107",
+   "cat": "stumble",
+   "from": "3331.312",
+   "to": "3332.152",
+   "reason": "abandoned start 'there should be some- all changes'",
+   "soft": true,
+   "matched": "there should be some-"
+  },
+  {
+   "id": "c108",
+   "cat": "stumble",
+   "from": "3339.892",
+   "to": "3340.532",
+   "reason": "restart 'Just what, what the code'",
+   "soft": true,
+   "matched": "Just what,"
+  },
+  {
+   "id": "c109",
+   "cat": "stumble",
+   "from": "3349.612",
+   "to": "3350.272",
+   "reason": "restart 'it can be like you can use'",
+   "soft": true,
+   "matched": "it can be like"
+  },
+  {
+   "id": "c110",
+   "cat": "stumble",
+   "from": "3360.372",
+   "to": "3361.092",
+   "reason": "restart 'have, um, have this data'",
+   "soft": true,
+   "matched": "have, um,"
+  },
+  {
+   "id": "c111",
+   "cat": "stumble",
+   "from": "3393.132",
+   "to": "3394.592",
+   "reason": "filler 'very, um, very helpful'",
+   "soft": true,
+   "matched": "very, um,"
+  },
+  {
+   "id": "c112",
+   "cat": "stumble",
+   "from": "3398.932",
+   "to": "3399.752",
+   "reason": "restart 'first, first, like, take'",
+   "soft": true,
+   "matched": "first, like,"
+  },
+  {
+   "id": "c113",
+   "cat": "stumble",
+   "from": "3409.432",
+   "to": "3409.472",
+   "reason": "cut-off 'S- SWE bench'",
+   "soft": true,
+   "matched": "S-"
+  },
+  {
+   "id": "c114",
+   "cat": "stumble",
+   "from": "3541.472",
+   "to": "3542.092",
+   "reason": "abandoned start 'like how... like human budget'",
+   "soft": true,
+   "matched": "like how..."
+  }
+ ],
+ "keep": [],
+ "fillers": [],
+ "beats": [
+  {
+   "near": "06:31",
+   "phrase": "I dropped the production database.",
+   "reason": "joke",
+   "side": "after"
+  },
+  {
+   "near": "09:34",
+   "phrase": "you're perfectly safe, right?",
+   "reason": "sarcasm joke",
+   "side": "after"
+  },
+  {
+   "near": "31:01",
+   "phrase": "The production environment is not.",
+   "reason": "soundbite",
+   "side": "after"
+  },
+  {
+   "near": "58:25",
+   "phrase": "I don't want AI to automate my ability to make mistakes at scale.",
+   "reason": "soundbite",
+   "side": "after"
+  }
+ ],
+ "gains": [],
+ "candidates": [
+  {
+   "near": "11:31",
+   "phrase": "everyone in my team refused to do it",
+   "note": "kept: why there is no human baseline yet (content)"
+  },
+  {
+   "near": "17:04",
+   "phrase": "Gemini 4 Neon is not in the results",
+   "note": "kept: scope of the results; veto to cut the aside (16:59-17:18)"
+  },
+  {
+   "near": "14:15",
+   "phrase": "it was GitLab, I think",
+   "note": "kept: the multi-installation index case"
+  },
+  {
+   "near": "22:17",
+   "phrase": "you see the graphs right now",
+   "note": "kept: on-air cue for the Track 1 chart; needs a card at this moment"
+  },
+  {
+   "near": "22:34",
+   "phrase": "if you hear the sound you just heard",
+   "note": "kept: explains the overlay sound cue; a card with a sound cue must enter just before it"
+  },
+  {
+   "near": "39:07",
+   "phrase": "right now you see on the, on, in the center of the screen",
+   "note": "kept: on-air cue for the AAA diagram"
+  },
+  {
+   "near": "20:48",
+   "phrase": "escalation almost, right?",
+   "note": "kept: Kirk's estimate, not a post number (see fact check)"
+  },
+  {
+   "near": "47:09",
+   "phrase": "I don't remember which one.",
+   "note": "hedge kept: no clean pause before Kirk's 'Hold up'"
+  },
+  {
+   "near": "50:01",
+   "phrase": "I don't remember exactly which error.",
+   "note": "hedge kept: no clean pause before it"
+  },
+  {
+   "near": "54:07",
+   "phrase": "Actor is already used word here, right?",
+   "note": "on-air word fix kept: the cut was heard as a jump"
+  },
+  {
+   "near": "54:28",
+   "phrase": "we talked about it before the recording actually",
+   "note": "pre-show reference kept: no clean pause before it"
+  },
+  {
+   "near": "38:39",
+   "phrase": "Like, how to say it properly?",
+   "note": "kept: Kirk's 'responsibility' correction is part of the exchange"
+  },
+  {
+   "near": "50:00",
+   "phrase": "I don't remember exactly which error.",
+   "note": "hedge kept: no pause before 'some harm left' (0.2 s); cuts from 2998.1 and 3000.9 both failed the join check"
+  }
+ ],
+ "notes": [
+  {
+   "at": "14:56",
+   "note": "'Max slots per transaction' = max_locks_per_transaction (caption fix)"
+  },
+  {
+   "at": "29:22",
+   "note": "'PG bench AI version 0.2' = PGAIBench v0.2 (caption fix)"
+  },
+  {
+   "at": "31:55",
+   "note": "'PGDoc, PGCat' = PgDog, PgCat (caption fix)"
+  },
+  {
+   "at": "40:42",
+   "note": "'Jeff' = Jev? check by ear before captions"
+  },
+  {
+   "at": "43:49",
+   "note": "slip: 'neither analyst nor actor have access to production'; in AAA only the Actor writes to production. Editor's note candidate"
+  },
+  {
+   "at": "56:25",
+   "note": "'DBLup4' = DBLab Forge; 'PGI bench' = PGAIBench; 'DBAbench' = DBA-Bench (caption fixes)"
+  },
+  {
+   "at": "24:35",
+   "note": "swear (fly), inside cut c12"
+  },
+  {
+   "at": "59:17",
+   "note": "'David Vintemiya from Supabase': spell the name from the blog acknowledgments"
+  }
+ ]
+}
