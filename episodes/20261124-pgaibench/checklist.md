@@ -16,9 +16,9 @@ The ordered list is [`RELEASE_CHECKLIST.md`](../../RELEASE_CHECKLIST.md). Status
 | 8 | Illustrations, made and placed | Done. 23 placed (9 real screenshots, 14 strips); review list `10-illustrations.md` |
 | 9 | Cold-open variants | Done. 3 montage variants in the published form (the strip drafts were rejected); waiting for Nik's pick, final uses A |
 | 10 | Outro | Done. No Forge frame |
-| 11 | Compose | In progress: v3 (edit v2, 23 overlays, new tile order) |
-| 12 | Level the voices | Done for the podcast; video after the compose |
-| 13 | QA | After the compose |
+| 11 | Compose | Done: edit v2, 23 overlays, Kirk left and Nik right, cold open A; 54:22.9 |
+| 12 | Level the voices | Done (video and podcast): spread 0.0 dB |
+| 13 | QA | Done: qa.ts passed (audio, eyes, strips with 42 crops, sfx 36 sounds); frames checked |
 | 14 | Package | Done: 3 title options, 3 thumbnails and the square cover (new tile order), podcast MP3 (54:04), notes and chapters with v2 times |
 | 15 | Report | Waiting for Nik: cold-open pick, title and thumbnail, Editor's note (veto or keep), "Jeff/Jev" name as spoken, approval of the edit |
 

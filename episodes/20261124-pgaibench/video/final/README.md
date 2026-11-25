@@ -4,7 +4,7 @@ Media stay outside git, in the recording's `review/` folder (`<review>` below).
 
 | File | Length |
 | --- | --- |
-| `<review>/final/episode-198-final.mp4` | cold open A 20.12 s + title card 13 s + show 53:27.84 + outro 22.72 s |
+| `<review>/final/episode-198-final.mp4` | 54:22.93: cold open A 20.14 s + title card 13 s + show 53:27.84 + outro 22.72 s |
 | `<review>/podcast/postgres-fm-198-final.mp3` | 54:03.56 (intro 13 s + show + outro; no cold open, no overlay sounds) |
 | `<review>/covers/thumb-{a,b,c}.png`, `square-3000.png` | 1280x720, 3000x3000 |
 

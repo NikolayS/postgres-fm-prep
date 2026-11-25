@@ -12,9 +12,9 @@
  "eyes": {
   "frames": [
    {
-    "label": "cold open v4: last frame before the fade (Nik 'Often.')",
+    "label": "cold open A: last frame (button, after Kirk's 'mistakes at scale')",
     "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
-    "t": 15.6,
+    "t": 19.6,
     "expectFaces": 2
    },
    {
@@ -26,7 +26,7 @@
    {
     "label": "body: first frames after the title card",
     "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
-    "t": 30.6,
+    "t": 34.4,
     "expectFaces": 2
    },
    {
@@ -288,7 +288,7 @@
   "items": [
    {
     "id": "s00-goal",
-    "at": 198.56,
+    "at": 202.42,
     "box": [
      100,
      720,
@@ -296,14 +296,14 @@
      190
     ],
     "times": [
-     198.86,
-     200.06,
-     202.56
+     202.72,
+     203.92,
+     206.42
     ]
    },
    {
     "id": "q00-kirk",
-    "at": 301.82,
+    "at": 305.68,
     "box": [
      100,
      720,
@@ -311,14 +311,14 @@
      190
     ],
     "times": [
-     302.12,
-     303.32,
-     305.82
+     305.98,
+     307.18,
+     309.68
     ]
    },
    {
     "id": "c00-pgaibench",
-    "at": 511.28,
+    "at": 515.14,
     "box": [
      100,
      720,
@@ -326,14 +326,14 @@
      190
     ],
     "times": [
-     511.58,
-     512.78,
-     515.28
+     515.44,
+     516.64,
+     519.14
     ]
    },
    {
     "id": "s04-scenarios",
-    "at": 705.78,
+    "at": 709.64,
     "box": [
      100,
      720,
@@ -341,14 +341,14 @@
      190
     ],
     "times": [
-     706.08,
-     707.28,
-     709.78
+     709.94,
+     711.14,
+     713.64
     ]
    },
    {
     "id": "s01-restart",
-    "at": 1005.12,
+    "at": 1008.98,
     "box": [
      100,
      720,
@@ -356,14 +356,14 @@
      190
     ],
     "times": [
-     1005.42,
-     1006.62,
-     1009.12
+     1009.28,
+     1010.48,
+     1012.98
     ]
    },
    {
     "id": "s05-downtime",
-    "at": 1041.64,
+    "at": 1045.5,
     "box": [
      100,
      720,
@@ -371,14 +371,14 @@
      190
     ],
     "times": [
-     1041.94,
-     1043.14,
-     1045.64
+     1045.8,
+     1047.0,
+     1049.5
     ]
    },
    {
     "id": "s02-gate",
-    "at": 1584.38,
+    "at": 1588.24,
     "box": [
      100,
      720,
@@ -386,14 +386,14 @@
      190
     ],
     "times": [
-     1584.68,
-     1585.88,
-     1588.38
+     1588.54,
+     1589.74,
+     1592.24
     ]
    },
    {
     "id": "q01-kirk",
-    "at": 1676.38,
+    "at": 1680.24,
     "box": [
      100,
      720,
@@ -401,14 +401,14 @@
      190
     ],
     "times": [
-     1676.68,
-     1677.88,
-     1680.38
+     1680.54,
+     1681.74,
+     1684.24
     ]
    },
    {
     "id": "q02-kirk",
-    "at": 1801.98,
+    "at": 1805.84,
     "box": [
      100,
      720,
@@ -416,14 +416,14 @@
      190
     ],
     "times": [
-     1802.28,
-     1803.48,
-     1805.98
+     1806.14,
+     1807.34,
+     1809.84
     ]
    },
    {
     "id": "q03-kirk",
-    "at": 1917.4,
+    "at": 1921.26,
     "box": [
      100,
      720,
@@ -431,14 +431,14 @@
      190
     ],
     "times": [
-     1917.7,
-     1918.9,
-     1921.4
+     1921.56,
+     1922.76,
+     1925.26
     ]
    },
    {
     "id": "n01-editor",
-    "at": 2286.28,
+    "at": 2290.14,
     "box": [
      100,
      720,
@@ -446,14 +446,14 @@
      190
     ],
     "times": [
-     2286.58,
-     2287.78,
-     2290.28
+     2290.44,
+     2291.64,
+     2294.14
     ]
    },
    {
     "id": "s03-safe",
-    "at": 2802.58,
+    "at": 2806.44,
     "box": [
      100,
      720,
@@ -461,14 +461,14 @@
      190
     ],
     "times": [
-     2802.88,
-     2804.08,
-     2806.58
+     2806.74,
+     2807.94,
+     2810.44
     ]
    },
    {
     "id": "q04-kirk",
-    "at": 3066.96,
+    "at": 3070.82,
     "box": [
      100,
      720,
@@ -476,14 +476,14 @@
      190
     ],
     "times": [
-     3067.26,
-     3068.46,
-     3070.96
+     3071.12,
+     3072.32,
+     3074.82
     ]
    },
    {
     "id": "q05-kirk",
-    "at": 3149.42,
+    "at": 3153.28,
     "box": [
      100,
      720,
@@ -491,9 +491,9 @@
      190
     ],
     "times": [
-     3149.72,
-     3150.92,
-     3153.42
+     3153.58,
+     3154.78,
+     3157.28
     ]
    }
   ]
@@ -503,6 +503,6 @@
  },
  "skip": {
   "captions": "no burned-in captions or punch-ins in episode 198: text is only in band strips and center cards (checked by strips)",
-  "cards": "no data cards (cards/*.card.json): the three center cards are screenshots of the published post's figures, URL printed below; numbers are the post's own"
+  "cards": "no data cards (cards/*.card.json): the 9 center cards are real screenshots (the post, pgaibench.dev, PostgreSQL docs, DBLab pages, arXiv) with the URL printed; numbers are the sources' own"
  }
 }
