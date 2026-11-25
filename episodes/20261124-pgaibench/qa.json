@@ -504,5 +504,9 @@
  "skip": {
   "captions": "no burned-in captions or punch-ins in episode 198: text is only in band strips and center cards (checked by strips)",
   "cards": "no data cards (cards/*.card.json): the 9 center cards are real screenshots (the post, pgaibench.dev, PostgreSQL docs, DBLab pages, arXiv) with the URL printed; numbers are the sources' own"
+ },
+ "facing": {
+  "layout": "${EP198_REVIEW}/layout.json",
+  "record": "video/final/facing.json"
  }
 }

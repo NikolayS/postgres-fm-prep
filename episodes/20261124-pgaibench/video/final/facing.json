@@ -1,0 +1,29 @@
+{
+ "hosts": {
+  "kirk": {
+   "facing": "right",
+   "evidence": [
+    "source 151 s (facing/facing-sheet.jpg, top row; full crops in the review folder facing/)",
+    "source 754 s (facing/facing-sheet.jpg, top row; full crops in the review folder facing/)",
+    "source 1356 s (facing/facing-sheet.jpg, top row; full crops in the review folder facing/)",
+    "source 1959 s (facing/facing-sheet.jpg, top row; full crops in the review folder facing/)",
+    "source 2562 s (facing/facing-sheet.jpg, top row; full crops in the review folder facing/)",
+    "source 3165 s (facing/facing-sheet.jpg, top row; full crops in the review folder facing/)"
+   ],
+   "note": "Head turned to screen-right in 11 of 12 frames (nose offset median +0.114); leans right. Confirmed on facing/facing-sheet.png."
+  },
+  "nik": {
+   "facing": "left",
+   "evidence": [
+    "source 151 s (facing/facing-sheet.jpg, bottom row; full crops in the review folder facing/)",
+    "source 754 s (facing/facing-sheet.jpg, bottom row; full crops in the review folder facing/)",
+    "source 1356 s (facing/facing-sheet.jpg, bottom row; full crops in the review folder facing/)",
+    "source 1959 s (facing/facing-sheet.jpg, bottom row; full crops in the review folder facing/)",
+    "source 2562 s (facing/facing-sheet.jpg, bottom row; full crops in the review folder facing/)",
+    "source 3165 s (facing/facing-sheet.jpg, bottom row; full crops in the review folder facing/)"
+   ],
+   "note": "Head turned to screen-left (nose offset median -0.052); empty wall on his left. Confirmed on facing/facing-sheet.png and by Nik (2026-11-24: \"I should be on the right, Kirk on the left\")."
+  }
+ },
+ "how": "bun tools/podcast-edit/qa/facing.ts estimate <review>/tiles-manual.json <review>/facing --samples 12 --hosts kirk,nik"
+}
