@@ -1,6 +1,8 @@
 // Detect faces, pupils and eye opening with Apple Vision, largest face first.
 // Usage: swiftc -O faces.swift -o /tmp/faces; printf '%s\n' image.jpg | /tmp/faces
-// Outputs JSON lines with top-left pixel boxes, pupils (-1 if missing), and eye height/width ratios.
+// Outputs JSON lines with top-left pixel boxes, pupils (-1 if missing), eye height/width ratios,
+// yaw (Vision, degrees, coarse: 0 or +-45) and nose: the nose-line offset from the face-box center,
+// a fraction of the box width (+ = nose right of center = head turned to image-right; qa/facing.ts).
 import Foundation
 import Vision
 import AppKit
@@ -9,6 +11,8 @@ struct Face: Encodable {
     let box: [Int]
     let pupils: [Int]
     let eyes: [Double]
+    let yaw: Double?
+    let nose: Double?
 }
 struct Result: Encodable {
     let f: String
@@ -24,6 +28,12 @@ func opening(_ region: VNFaceLandmarkRegion2D?, size: CGSize) -> Double {
     let width = xs.max()! - xs.min()!
     guard width > 0 else { return -1 }
     return ((ys.max()! - ys.min()!) / width * 1000).rounded() / 1000
+}
+func noseOffset(_ region: VNFaceLandmarkRegion2D?, box: CGRect, size: CGSize) -> Double? {
+    guard let points = region?.pointsInImage(imageSize: size), !points.isEmpty, box.width > 0 else { return nil }
+    let x = points.map { Double($0.x) }.reduce(0, +) / Double(points.count)
+    let cx = Double(box.midX) * Double(size.width)
+    return ((x - cx) / (Double(box.width) * Double(size.width)) * 1000).rounded() / 1000
 }
 let encoder = JSONEncoder()
 while let path = readLine() {
@@ -45,7 +55,9 @@ while let path = readLine() {
                 return Face(
                     box: [Int(b.minX * w), Int((1 - b.maxY) * h), Int(b.width * w), Int(b.height * h)],
                     pupils: pupil(landmarks?.leftPupil, size: size) + pupil(landmarks?.rightPupil, size: size),
-                    eyes: [opening(landmarks?.leftEye, size: size), opening(landmarks?.rightEye, size: size)]
+                    eyes: [opening(landmarks?.leftEye, size: size), opening(landmarks?.rightEye, size: size)],
+                    yaw: face.yaw.map { ($0.doubleValue * 180 / Double.pi * 10).rounded() / 10 },
+                    nose: noseOffset(landmarks?.noseCrest ?? landmarks?.nose, box: b, size: size)
                 )
             }
         }
