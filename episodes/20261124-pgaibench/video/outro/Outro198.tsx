@@ -6,7 +6,8 @@ import {AbsoluteFill, continueRender, delayRender, Img, interpolate, OffthreadVi
 // ep 196 (fitted to the wordmark width), so the frame keeps the calm ep 196/197 look.
 // No DBLab Forge frame (no Forge experiment in this episode).
 // Timing (unchanged from ep 196/197):
-//  1. 0 .. 13.76 s: "In this episode:" + the title + "All links are in the description below".
+//  1. 0 .. 13.76 s: "In this episode:" + PGAIBench v0.2 + pgaibench.dev (both fitted to the
+//     wordmark width), then the post and the repo, then "All links are in the description below".
 //  2. 13.76 s .. end: "Prepared by:" + the v1 Postgres.AI wordmark animation.
 // The change is on beat 26 (13.78 s). Frame 1 dissolves back into grain over the last 0.3 s,
 // then a clean cut to frame 2. Music: a-shades-outro.wav, aligned by compose exactly as in
@@ -39,9 +40,13 @@ const KICK_STYLE: React.CSSProperties = {...MONO, color: GREY, fontSize: KICK, l
 // gap: space above the line, in units of its own font size.
 type Line = {key: string; text: React.ReactNode; style: React.CSSProperties; fit?: boolean; fitRef?: string; size?: number; gap: number; at: number};
 const LINES: Line[] = [
-  {key: 'name', at: B(2), fit: true, gap: 0, style: archivo(800, 112, INK), fitRef: 'DBLab Forge experiment', text: 'Can AI safely change'},
-  {key: 'name2', at: B(3), fit: true, gap: 0.12, style: archivo(800, 112, INK), fitRef: 'DBLab Forge experiment', text: 'production Postgres?'},
-  {key: 'note', at: B(6), size: 34, gap: 1.1, style: {...MONO, color: GREY}, text: 'All links are in the description below'},
+  // The episode's main artifact first, with its URL (Nik, 2026-11-24: "PGAIBench v0.2 --
+  // https://pgaibench.dev first of all!"), the way ep 196 gave DBLab Forge its own frame.
+  {key: 'name', at: B(2), fit: true, gap: 0, style: archivo(800, 112, INK), text: 'PGAIBench v0.2'},
+  {key: 'url', at: B(3), fit: true, gap: 0.16, style: {...MONO, color: DOT}, text: 'pgaibench.dev'},
+  {key: 'post', at: B(5), size: 40, gap: 1.3, style: {...MONO, color: INK}, text: 'postgres.ai/blog/20261123-pgaibench'},
+  {key: 'repo', at: B(6), size: 40, gap: 0.5, style: {...MONO, color: INK}, text: 'github.com/NikolayS/pgaibench'},
+  {key: 'note', at: B(8), size: 32, gap: 1.2, style: {...MONO, color: GREY}, text: 'All links are in the description below'},
 ];
 const SAME: string[] = [];
 

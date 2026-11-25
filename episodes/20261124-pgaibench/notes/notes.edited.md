@@ -14,14 +14,13 @@ Nik and Kirk discuss whether AI can safely change production Postgres. Nik built
 
 Here are some links to things they mentioned:
 
-### Main link
+### Main links
 
+- [08:01] PGAIBench v0.2 (results, method, replays): https://pgaibench.dev
 - [08:01] PGAIBench and AAA: can AI safely change production Postgres? (blog post, 2026-11-23): https://postgres.ai/blog/20261123-pgaibench
+- [08:01] PGAIBench source, data and prompts (Apache 2.0): https://github.com/NikolayS/pgaibench
 
 ### PGAIBench
-
-- [08:01] PGAIBench (results, method, replays): https://pgaibench.dev/
-- [08:01] PGAIBench source, data and prompts (Apache 2.0): https://github.com/NikolayS/pgaibench
 - [11:11] The tasks (public catalog): https://pgaibench.dev/scenarios/
 - [32:54] AAA and Track 2 (AI Control) results: https://pgaibench.dev/control/
 - [50:04] Related work map (DBA-Bench, SWE-bench and others): https://pgaibench.dev/related-work/

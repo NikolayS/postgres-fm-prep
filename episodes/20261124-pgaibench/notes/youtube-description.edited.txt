@@ -1,10 +1,11 @@
-Postgres changes made by AI, measured: acting alone, 10 models caused 13 harmful changes in 408 live primary changes. Replayed through AAA (Analyst, Auditor, Actor), 12 of the 13 were blocked and 377 of 378 safe changes were still approved.
-PGAIBench v0.2: 19 tasks, live two-node Postgres 18.7 clusters under load, 5 repeats per task.
+PGAIBench v0.2: https://pgaibench.dev
+Blog post: https://postgres.ai/blog/20261123-pgaibench
+Source, data and prompts: https://github.com/NikolayS/pgaibench
+
+Postgres changes made by AI, measured: acting alone, 10 models caused 13 harmful changes in 408 live primary changes. Replayed through AAA (Analyst, Auditor, Actor), 12 of the 13 would have been blocked, and 377 of 378 safe or unclassified changes still approved.
+PGAIBench v0.2: 19 live scenarios, live two-node Postgres 18.7 clusters under load, 5 repeats per task.
 
 Postgres.FM episode 198. Nik and Kirk discuss whether AI can safely change production Postgres. Nik built PGAIBench to measure it, with tasks taken mostly from real production failures. Even a top model, acting alone, restarted nodes against an explicit rule in 5 of 5 runs. Then we talk about AAA: an Analyst that proposes, a deterministic Actor that rehearses on a live clone and applies only approved steps, and an independent Auditor in between.
-
-Main link:
-https://postgres.ai/blog/20261123-pgaibench
 
 Chapters:
 00:00 One engineer, 1,000 Postgres clusters
