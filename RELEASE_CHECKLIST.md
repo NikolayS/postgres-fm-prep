@@ -33,7 +33,7 @@ Do these in order. The first thing the host sees is the **full composed episode*
 10. [ ] **Outro** fits the episode: no Forge frame without an experiment.
 11. [ ] **Compose** under `watchdog.ts`: `--music-lufs -20.5 --duck -21 --duck-ramp 3 --intro-fade 8`. Then the cold open in front, by stream copy.
 12. [ ] **Level the voices**: each voice 10 dB or more over the music, voices within 3 dB (`qa.ts` audio), Michael boosted.
-13. [ ] **QA**: `qa.ts` with every check that applies; a skip needs a written reason. Look at extracted frames: cold open, title card, several body points, every overlay, the outro.
+13. [ ] **QA**: `qa.ts` with every check that applies; a skip needs a written reason. The check `length` compares the final with its parts (cold open + body time map) and its tail with the outro: a render that stopped early fails it (episode 198: 21.5 s short, no outro, all other checks passed). Look at extracted frames: cold open, title card, several body points, every overlay, the outro.
 14. [ ] **Package up to publishing**:
     - title options;
     - then 2-3 thumbnails and the square cover, with everyone on the episode, eyes open, heads balanced and facing inward (the video's tile order);
