@@ -425,7 +425,7 @@ export const L9Setup198: React.FC<{durationSec: number; beats: {standby: At}}> =
   return (
     <BandShell>
       <div style={{lineHeight: 1.05}}>
-        <div style={{fontSize: 40, fontWeight: 800, color: GREEN}}>PRIMARY</div>
+        <div style={{fontSize: 40, fontWeight: 800, color: GREEN, whiteSpace: 'nowrap'}}>PRIMARY <span style={{color: DIM}}>·</span> <span style={{fontFamily: MONO, fontWeight: 600, color: '#fff'}}>secret_lookup</span></div>
         <div style={{fontFamily: MONO, fontSize: 60, color: AMBER, whiteSpace: 'nowrap', opacity: ease(t, 0.4, 0.3)}}>idx_scan = 0</div>
       </div>
       <div style={{width: 5, height: 110, background: 'rgba(255,255,255,0.35)', opacity: s}} />

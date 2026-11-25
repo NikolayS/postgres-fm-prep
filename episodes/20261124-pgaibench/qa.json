@@ -115,22 +115,22 @@
    },
    {
     "id": "v2-r07a-l9-setup",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07a-l9-setup-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07a-l9-setup-v6.mov",
     "t": 0.3
    },
    {
     "id": "v2-r07a-l9-setup",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07a-l9-setup-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07a-l9-setup-v6.mov",
     "t": 3.59
    },
    {
     "id": "v2-r07b-l9-split",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07b-l9-split.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07b-l9-split-v6.mov",
     "t": 0.3
    },
    {
     "id": "v2-r07b-l9-split",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07b-l9-split.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07b-l9-split-v6.mov",
     "t": 5.57
    },
    {
@@ -225,12 +225,12 @@
    },
    {
     "id": "r16-auditor-next",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next-v6.mov",
     "t": 0.3
    },
    {
     "id": "r16-auditor-next",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next-v6.mov",
     "t": 3.25
    },
    {
@@ -285,72 +285,72 @@
    },
    {
     "id": "r22a-aaa-intro",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r22a-aaa-intro.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22a-aaa-intro-v6.mov",
     "t": 0.3
    },
    {
     "id": "r22a-aaa-intro",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r22a-aaa-intro.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22a-aaa-intro-v6.mov",
     "t": 7
    },
    {
     "id": "r22b-aaa-analyst",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst-v6.mov",
     "t": 0.3
    },
    {
     "id": "r22b-aaa-analyst",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst-v6.mov",
     "t": 7.1
    },
    {
     "id": "r22c-aaa-actor",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r22c-aaa-actor.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22c-aaa-actor-v6.mov",
     "t": 0.3
    },
    {
     "id": "r22c-aaa-actor",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r22c-aaa-actor.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22c-aaa-actor-v6.mov",
     "t": 6.2
    },
    {
     "id": "r23a-aaa-auditor",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v6.mov",
     "t": 0.3
    },
    {
     "id": "r23a-aaa-auditor",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v6.mov",
     "t": 6.76
    },
    {
     "id": "r23b-aaa-path",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path-v6.mov",
     "t": 0.3
    },
    {
     "id": "r23b-aaa-path",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path-v6.mov",
     "t": 5.38
    },
    {
     "id": "r24-editor-note",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r24-editor-note.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r24-editor-note-v6.mov",
     "t": 0.3
    },
    {
     "id": "r24-editor-note",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r24-editor-note.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r24-editor-note-v6.mov",
     "t": 3.5
    },
    {
     "id": "r26-send-back",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r26-send-back.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r26-send-back-v6.mov",
     "t": 0.3
    },
    {
     "id": "r26-send-back",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r26-send-back.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r26-send-back-v6.mov",
     "t": 3.8
    },
    {
@@ -365,12 +365,12 @@
    },
    {
     "id": "r27-triangle",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle-v6.mov",
     "t": 0.3
    },
    {
     "id": "r27-triangle",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle-v6.mov",
     "t": 5.5
    },
    {
@@ -415,12 +415,12 @@
    },
    {
     "id": "v2-r31-l5-lock-queue",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v6.mov",
     "t": 0.3
    },
    {
     "id": "v2-r31-l5-lock-queue",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v6.mov",
     "t": 8.92
    },
    {
@@ -465,12 +465,12 @@
    },
    {
     "id": "r37-kirk-delegate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate-v6.mov",
     "t": 0.3
    },
    {
     "id": "r37-kirk-delegate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate-v6.mov",
     "t": 4.1
    }
   ],
@@ -704,7 +704,7 @@
   ]
  },
  "sfx": {
-  "manifest": "${EP198_REVIEW}/overlays/out-v2/manifest-v5-sfx.json"
+  "manifest": "${EP198_REVIEW}/overlays/out-v2/manifest-v6-sfx.json"
  },
  "skip": {
   "captions": "no burned-in captions or punch-ins in episode 198: text is only in the 15 band strips and 27 center panels (checked by strips)",

@@ -109,11 +109,12 @@ export const L9Split198: React.FC<L9Props> = ({beats}) => {
   const {fps} = useVideoConfig();
   const t = frame / fps;
   const {noone, drop, crash, x18} = beats;
-  const tpsK = ease(t, drop.at + 0.5, 1.2);
   const bubbleK = pop(frame, fps, noone.at);
   // standby: q20 client p99, 2.91 -> 52.58 ms, linear 0-55 ms
   const climb = interpolate(t, [crash.at, crash.at + 1.6], [0, 1], {...clamp, easing: Easing.in(Easing.quad)});
-  const p99 = 2.91 + (52.58 - 2.91) * climb;
+  const p99 = 2.91 + (52.58 - 2.91) * climb; // bar only
+  const p99Shown = climb < 1 ? 2.91 : 52.58;
+  const numK = climb >= 1 ? pop(frame, fps, crash.at + 1.6) : 1;
   const hot = climb > 0.15;
   const x18K = pop(frame, fps, x18.at);
   const shake = t >= x18.at ? interpolate(t, [x18.at, x18.at + 0.5], [1, 0], clamp) : 0;
@@ -130,11 +131,11 @@ export const L9Split198: React.FC<L9Props> = ({beats}) => {
           <TPSChart t={t} dropAt={drop.at} w={W - 56} h={120} />
         </div>
         <div style={{position: 'absolute', left: 24, right: 24, top: 232, display: 'flex', gap: 12}}>
-          <Tile label="TPS" value={t < drop.at + 0.5 ? '2,625' : tpsK < 1 ? fmt(Math.round(2625 + 415 * tpsK)) : '+16%'} k={ease(t, 0.5, 0.4)} />
-          <Tile label="errors" value="0" k={ease(t, 0.8, 0.4)} />
-          <Tile label="pooled p99" value="1.19×" k={pop(frame, fps, drop.at + 1.0)} />
+          <Tile label={t < drop.at + 0.5 ? 'median TPS' : 'median TPS · +16%'} value={t < drop.at + 0.5 ? '2,625' : '3,040'} k={ease(t, 0.5, 0.4)} />
+          <Tile label="SQL errors" value="0" k={ease(t, 0.8, 0.4)} />
         </div>
-        <div style={{position: 'absolute', left: 24, top: 382}}>
+        <div style={{position: 'absolute', left: 24, top: 350, fontFamily: MONO, fontSize: 32, color: DIM}}>indexes on <span style={{color: '#fff'}}>secret_lookup</span></div>
+        <div style={{position: 'absolute', left: 24, top: 398}}>
           {['(k)', '(k)', '(v)'].map((c, i) => {
             const s = ease(t, drop.at + i * 0.25, 0.3);
             return (
@@ -145,8 +146,8 @@ export const L9Split198: React.FC<L9Props> = ({beats}) => {
             );
           })}
         </div>
-        <div style={{position: 'absolute', right: 14, top: 380, width: 300, padding: '10px 16px', background: '#f8fafc', color: '#111', borderRadius: 14, fontSize: 32, fontWeight: 700, lineHeight: 1.15, opacity: Math.min(1, bubbleK), transform: `scale(${bubbleK}) rotate(2deg)`, transformOrigin: 'left center'}}>
-          <div style={{fontFamily: MONO, fontSize: 26, color: '#555', fontWeight: 500}}>grok-4.7</div>
+        <div style={{position: 'absolute', right: 14, top: 396, width: 300, padding: '10px 16px', background: '#f8fafc', color: '#111', borderRadius: 14, fontSize: 32, fontWeight: 700, lineHeight: 1.15, opacity: Math.min(1, bubbleK), transform: `scale(${bubbleK}) rotate(2deg)`, transformOrigin: 'left center'}}>
+          <div style={{fontFamily: MONO, fontSize: 36, color: '#111', fontWeight: 800}}>grok-4.7</div>
           idx_scan = 0 → drop all three
         </div>
       </div>
@@ -154,7 +155,7 @@ export const L9Split198: React.FC<L9Props> = ({beats}) => {
       <div style={{position: 'absolute', left: 20 + W + 20, top: 20, width: 1560 - W - 60, height: 588, background: hot ? RED_D : CARD, borderRadius: 16, border: `4px solid ${hot ? RED : 'rgba(255,255,255,0.3)'}`, boxSizing: 'border-box', padding: '16px 24px'}}>
         <div style={{fontSize: 48, fontWeight: 800, letterSpacing: 1}}>ASYNC STANDBY</div>
         <div style={{marginTop: 14, fontSize: 34, color: DIM}}>query <span style={{fontFamily: MONO, color: '#fff'}}>q20</span> p99</div>
-        <div style={{fontSize: 150, fontWeight: 800, lineHeight: 1.0, color: hot ? RED : GREEN, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap'}}>{fmt(p99, 2)}<span style={{fontSize: 64}}> ms</span></div>
+        <div style={{fontSize: 150, fontWeight: 800, lineHeight: 1.0, color: hot ? RED : GREEN, fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap', transform: `scale(${0.85 + 0.15 * Math.min(1, numK)})`, transformOrigin: 'left center'}}>{fmt(p99Shown, 2)}<span style={{fontSize: 64}}> ms</span></div>
         <div style={{position: 'relative', marginTop: 20, width: BAR, height: 44, background: 'rgba(255,255,255,0.1)', borderRadius: 8}}>
           <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: (p99 / 55) * BAR, background: hot ? RED : GREEN, borderRadius: 8}} />
         </div>
@@ -260,7 +261,8 @@ const L5Main: React.FC<{t: number; frame: number; fps: number; green: number; go
 
 const L5Haiku: React.FC<{t: number; at: number}> = ({t, at}) => {
   const g = ease(t, at + 0.6, 1.0);
-  const v = 18.5 + (13.0 - 18.5) * g;
+  const v = 18.5 + (13.0 - 18.5) * g; // bar only
+  const shown = g < 1 ? 18.5 : 13.0; // on screen: only the post's two values
   const BAR = 1300;
   return (
     <div style={{position: 'absolute', left: 60, top: 40, right: 60}}>
@@ -269,13 +271,13 @@ const L5Haiku: React.FC<{t: number; at: number}> = ({t, at}) => {
         <div style={{fontFamily: MONO, fontSize: 36, color: DIM}}>Auditor claude-haiku-5.5 · matched prompt, k=3</div>
       </div>
       <div style={{marginTop: 18, fontSize: 36, color: DIM}}>safe changes approved, with clone telemetry</div>
-      <div style={{fontSize: 190, fontWeight: 800, color: AMBER, lineHeight: 1.05, fontVariantNumeric: 'tabular-nums'}}>{v.toFixed(1)}%</div>
-      {[{l: 'SQL text only', v: 18.5, c: 'rgba(255,255,255,0.45)'}, {l: '+ clone telemetry', v, c: AMBER}].map((b, i) => (
+      <div style={{fontSize: 190, fontWeight: 800, color: AMBER, lineHeight: 1.05, fontVariantNumeric: 'tabular-nums'}}>{shown.toFixed(1)}%</div>
+      {[{l: 'SQL text only', v: 18.5, s: 18.5, c: 'rgba(255,255,255,0.45)'}, {l: '+ clone telemetry', v, s: shown, c: AMBER}].map((b, i) => (
         <div key={i} style={{display: 'flex', alignItems: 'center', gap: 20, marginTop: 14}}>
           <div style={{width: 300, fontSize: 32, color: DIM}}>{b.l}</div>
           <div style={{position: 'relative', width: BAR - 320, height: 44, background: 'rgba(255,255,255,0.08)', borderRadius: 8}}>
             <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: (b.v / 100) * (BAR - 320), background: b.c, borderRadius: 8}} />
-            <span style={{position: 'absolute', left: (b.v / 100) * (BAR - 320) + 14, top: 2, fontSize: 32, fontWeight: 700}}>{b.v.toFixed(1)}%</span>
+            <span style={{position: 'absolute', left: (b.v / 100) * (BAR - 320) + 14, top: 2, fontSize: 32, fontWeight: 700}}>{b.s.toFixed(1)}%</span>
           </div>
         </div>
       ))}

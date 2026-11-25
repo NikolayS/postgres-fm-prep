@@ -137,3 +137,15 @@ export const ROWS_V5: Row[] = [
     words: 'v5: Nik: "I learned from other benchmarks" (2913.67) "DBAbench" (2915.29) ... "SWE bench"',
     source: 'https://arxiv.org/abs/2607.22165 (title; abstract: "Success requires satisfying scenario-specific operational objectives without violating safety constraints.")'},
 ];
+
+// v6 (review 81 S18 + S31), on the edit v5 timeline. Same durations and sounds as manifest-v5.
+export const ROWS_V6: Row[] = [
+  {...v2('v2-r07a-l9-setup'), id: 'v2-r07a-l9-setup-v6', part: 'v2-r07a-l9-setup.v6.json', outStart: 712.36, end: 719.54, beats: {standby: 714.88},
+    words: 'v5 times (as manifest-v5). Kirk: "the indexes that are involved in the read replicas" "aren\'t really used"; the table is named: secret_lookup'},
+  {...v2('v2-r07b-l9-split'), id: 'v2-r07b-l9-split-v6', part: 'v2-r07b-l9-split.v6.json', outStart: 722.74, end: 733.88,
+    beats: {noone: 723.78, drop: 725.82, crash: 727.54, x18: 729.46}, accents: [725.82, 729.46],
+    words: 'v5 times (as manifest-v5). Kirk: "you turn around" "Oh, no one\'s using this" "Drop all these indexes" "now your read replica crashes" "nothing\'s finishing"'},
+  {...v2('v2-r31-l5-lock-queue'), id: 'v2-r31-l5-lock-queue-v6', part: 'v2-r31-l5-lock-queue.v6.json', outStart: 2755.26, end: 2773.1,
+    beats: {green: 2761.0, go: 2763.38, haiku: 2766.46}, accents: [2761.0, 2763.38],
+    words: 'v5 times (as manifest-v5); Haiku beat at 2766.46 (rel 11.20, was 10.72) so APPROVE 4 of 5 holds about 2.8 s fully drawn'},
+];

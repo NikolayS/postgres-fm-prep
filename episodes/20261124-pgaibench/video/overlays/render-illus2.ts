@@ -4,14 +4,14 @@
 //   bun scripts/render-illus2.ts [id ...]      STILLS=<dir> renders mid-beat PNG stills only
 import {mkdirSync, writeFileSync, existsSync} from 'node:fs';
 import {join, resolve} from 'node:path';
-import {ROWS as ROWS_V2, ROWS_V3, ROWS_V4, ROWS_V5} from './items-illus2';
+import {ROWS as ROWS_V2, ROWS_V3, ROWS_V4, ROWS_V5, ROWS_V6} from './items-illus2';
 
 const ROOT = resolve(import.meta.dir, '..');
 const OUT = resolve(process.env.OUT ?? resolve(ROOT, '../out-v2'));
 mkdirSync(join(OUT, 'parts'), {recursive: true});
 const r2 = (x: number) => Math.round(x * 100) / 100;
 const V3 = process.argv.includes('--v3');
-const ROWS = process.argv.includes('--v5') ? ROWS_V5 : process.argv.includes('--v4') ? ROWS_V4 : V3 ? ROWS_V3 : ROWS_V2;
+const ROWS = process.argv.includes('--v6') ? ROWS_V6 : process.argv.includes('--v5') ? ROWS_V5 : process.argv.includes('--v4') ? ROWS_V4 : V3 ? ROWS_V3 : ROWS_V2;
 const only = new Set(process.argv.slice(2).filter((a) => !a.startsWith('--v')));
 const todo = ROWS.filter((r) => only.size === 0 || only.has(r.id));
 
