@@ -16,7 +16,7 @@ Do these in order. The first thing the host sees is the **full composed episode*
    - complaints about insects, coffee, the room, tech problems, screen sharing, "are we recording", remarks about bots or the setup, references to talk before the recording;
    - anything else off-topic, embarrassing or unprofessional. When in doubt, cut it and list it as restorable.
    A cut with no clean join gets a wider cut (the whole sentence), not a pass. Check by grepping the aligned transcript of the render. List every removed moment for the host: source time, what it was, cut id. List what you kept on purpose, and why.
-6. [ ] **Layout and framing**: heads in framed tiles, Nik left, Michael center, Kirk right. Use the absent-host layout when a host is away (episode 196). Header "postgres.fm <topic>" on one line at 104 px. The meeting-bot tile is small, and note-taker tiles are never shown. Check a still.
+6. [ ] **Layout and framing**: heads in framed tiles, facing each other (CLAUDE.md: with three, Nik left, Michael center, Kirk right; Nik and Kirk only, Kirk left and Nik right). Use the absent-host layout when a host is away (episode 196). Header "postgres.fm <topic>" on one line at 104 px. The meeting-bot tile is small, and note-taker tiles are never shown. Check a still.
 7. [ ] **Title card**: a Remotion card on the shades intro cue, crazier than the last one (not longer). Have fun with the elephant, never with the heads. If a host is absent, make one friendly joke about it. The numbers on the card match the source.
 8. [ ] **Illustrations, made and placed** (not only planned). Match the density of the last episodes (about 15-20 in an hour). Each one matches what is said at that moment, and every number matches the source:
    - real screenshots of quoted pages, with the URL printed;
@@ -24,7 +24,12 @@ Do these in order. The first thing the host sees is the **full composed episode*
    - band strips with one fact each;
    - an Editor's note only as a vetoable default.
    Text goes under the heads, never over faces, and nothing in the bottom 180 px. Every overlay enters with a sound cue (`manifest-sfx.json`). Make a review list for the host: number, timecode, quote, what it shows, source, and one preview image each.
-9. [ ] **Cold-open variants**: 3-4 separate clips of 10-25 s, in the episode layout with marker strips and a sound stroke (episode 197 `coldopen-v2`). Give one line each (source time, quote, why it hooks) and a recommendation. The final video uses the recommended variant until the host picks.
+9. [ ] **Cold-open variants** in the form of the PUBLISHED cold opens (episode 196 `video/montage.sh`, episode 197 `video/coldopen-v9`), never an early draft:
+   - a montage of 4-7 short lines (1.5-6.5 s each, about 20 s), alternating voices, hard cuts;
+   - jokes, images, blunt opinions, one number; it ends on a punchline;
+   - clean screen (the episode layout, no strips);
+   - opening music under it (episode 197 funk cue, 0.2 under the voices, full on the button).
+   Build a shortlist from the whole transcript first (episode 197 `notes/cold-open-shortlist.md`). Then make 3 variants as separate clips, each with its lines, source times and a recommendation. The final video uses the recommended variant until the host picks. One topic explained with summary strips is not a cold open (Nik, 2026-11-24: "These Coldopen drafts are total BS").
 10. [ ] **Outro** fits the episode: no Forge frame without an experiment.
 11. [ ] **Compose** under `watchdog.ts`: `--music-lufs -20.5 --duck -21 --duck-ramp 3 --intro-fade 8`. Then the cold open in front, by stream copy.
 12. [ ] **Level the voices**: each voice 10 dB or more over the music, voices within 3 dB (`qa.ts` audio), Michael boosted.
@@ -49,7 +54,7 @@ Do these in order. The first thing the host sees is the **full composed episode*
 
 - [ ] Intro and outro in place.
 - [ ] Illustrations: band cards, centre cards, charts and figures from the episode's research, each at the moment it is discussed. Data cards are chart-first `cards/*.card.json` with every number recomputed (`cards/cards.ts check`); cards that need explaining are in `notes/blog-candidates.md`.
-- [ ] Header "postgres.fm <topic>" on one 104 px line; Nik left, Michael center, Kirk right; Kirk is a co-host, never a guest; no announcer voice; voices clearly above the music.
+- [ ] Header "postgres.fm <topic>" on one 104 px line; hosts face each other (order in CLAUDE.md); Kirk is a co-host, never a guest; no announcer voice; voices clearly above the music.
 - [ ] Every overlay (card, photo, strip) enters with a sound cue, following the convention in `tools/podcast-edit/sfx/`: band cards get a typing reveal; centre cards get the sand strokes in and out, plus a punch on key reveals. Nothing bright, nothing sub-only. The render used `manifest-sfx.json` from `sfx-manifest.ts`, and the `qa.ts` check `sfx` passed.
 - [ ] Loudness about -16 LUFS integrated; no clipping.
 - [ ] Full decode check: no dropped or duplicated frames, A/V in sync at start, middle and end.

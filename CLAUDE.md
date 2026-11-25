@@ -2,7 +2,7 @@
 
 ## The show: three co-hosts
 
-postgres.fm has three co-hosts: Nik, Michael Christofides and Kirk Wolak. Kirk is never called a guest (cards, notes, descriptions, social posts). On-screen order: Nik left, Michael center, Kirk right.
+postgres.fm has three co-hosts: Nik, Michael Christofides and Kirk Wolak. Kirk is never called a guest (cards, notes, descriptions, social posts). On-screen order: the hosts face each other, never outward: check where each one looks in the camera before you place the tiles. With all three: Nik left, Michael center, Kirk right. Nik and Kirk only (episode 198): Kirk left, Nik right (Nik, 2026-11-24: "I should be on the right, Kirk on the left"). The same order goes on the title card and the covers.
 
 ## Edit: cut hard
 

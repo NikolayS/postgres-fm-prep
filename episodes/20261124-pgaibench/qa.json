@@ -12,9 +12,9 @@
  "eyes": {
   "frames": [
    {
-    "label": "cold open: last frame before the fade (Nik 'Often.')",
+    "label": "cold open v4: last frame before the fade (Nik 'Often.')",
     "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
-    "t": 16.4,
+    "t": 15.6,
     "expectFaces": 2
    },
    {
@@ -26,7 +26,7 @@
    {
     "label": "body: first frames after the title card",
     "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
-    "t": 31.2,
+    "t": 30.6,
     "expectFaces": 2
    },
    {
@@ -54,6 +54,66 @@
  "strips": {
   "layers": [
    {
+    "id": "s00-goal",
+    "file": "${EP198_REVIEW}/overlays/out/s00-goal-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "s00-goal",
+    "file": "${EP198_REVIEW}/overlays/out/s00-goal-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "q00-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q00-kirk-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "q00-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q00-kirk-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "c00-pgaibench",
+    "file": "${EP198_REVIEW}/overlays/out/c00-pgaibench-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "c00-pgaibench",
+    "file": "${EP198_REVIEW}/overlays/out/c00-pgaibench-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "s04-scenarios",
+    "file": "${EP198_REVIEW}/overlays/out/s04-scenarios-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "s04-scenarios",
+    "file": "${EP198_REVIEW}/overlays/out/s04-scenarios-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f00-l9",
+    "file": "${EP198_REVIEW}/overlays/out/f00-l9.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f00-l9",
+    "file": "${EP198_REVIEW}/overlays/out/f00-l9.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f04-site",
+    "file": "${EP198_REVIEW}/overlays/out/f04-site.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f04-site",
+    "file": "${EP198_REVIEW}/overlays/out/f04-site.mov",
+    "t": 3.0
+   },
+   {
     "id": "s01-restart",
     "file": "${EP198_REVIEW}/overlays/out/s01-restart-typing.mov",
     "t": 0.3
@@ -61,6 +121,46 @@
    {
     "id": "s01-restart",
     "file": "${EP198_REVIEW}/overlays/out/s01-restart-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "s05-downtime",
+    "file": "${EP198_REVIEW}/overlays/out/s05-downtime-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "s05-downtime",
+    "file": "${EP198_REVIEW}/overlays/out/s05-downtime-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f05-maxlocks",
+    "file": "${EP198_REVIEW}/overlays/out/f05-maxlocks.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f05-maxlocks",
+    "file": "${EP198_REVIEW}/overlays/out/f05-maxlocks.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f01-track1",
+    "file": "${EP198_REVIEW}/overlays/out/f01-track1.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f01-track1",
+    "file": "${EP198_REVIEW}/overlays/out/f01-track1.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f06-dblab",
+    "file": "${EP198_REVIEW}/overlays/out/f06-dblab.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f06-dblab",
+    "file": "${EP198_REVIEW}/overlays/out/f06-dblab.mov",
     "t": 3.0
    },
    {
@@ -84,33 +184,23 @@
     "t": 3.0
    },
    {
-    "id": "n01-editor",
-    "file": "${EP198_REVIEW}/overlays/out/n01-editor-typing.mov",
+    "id": "q02-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q02-kirk-typing.mov",
     "t": 0.3
    },
    {
-    "id": "n01-editor",
-    "file": "${EP198_REVIEW}/overlays/out/n01-editor-typing.mov",
+    "id": "q02-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q02-kirk-typing.mov",
     "t": 3.0
    },
    {
-    "id": "s03-safe",
-    "file": "${EP198_REVIEW}/overlays/out/s03-safe-typing.mov",
+    "id": "q03-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q03-kirk-typing.mov",
     "t": 0.3
    },
    {
-    "id": "s03-safe",
-    "file": "${EP198_REVIEW}/overlays/out/s03-safe-typing.mov",
-    "t": 3.0
-   },
-   {
-    "id": "f01-track1",
-    "file": "${EP198_REVIEW}/overlays/out/f01-track1.mov",
-    "t": 0.3
-   },
-   {
-    "id": "f01-track1",
-    "file": "${EP198_REVIEW}/overlays/out/f01-track1.mov",
+    "id": "q03-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q03-kirk-typing.mov",
     "t": 3.0
    },
    {
@@ -124,6 +214,16 @@
     "t": 3.0
    },
    {
+    "id": "n01-editor",
+    "file": "${EP198_REVIEW}/overlays/out/n01-editor-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "n01-editor",
+    "file": "${EP198_REVIEW}/overlays/out/n01-editor-typing.mov",
+    "t": 3.0
+   },
+   {
     "id": "f03-waterfall",
     "file": "${EP198_REVIEW}/overlays/out/f03-waterfall.mov",
     "t": 0.3
@@ -131,14 +231,64 @@
    {
     "id": "f03-waterfall",
     "file": "${EP198_REVIEW}/overlays/out/f03-waterfall.mov",
+    "t": 3.0
+   },
+   {
+    "id": "s03-safe",
+    "file": "${EP198_REVIEW}/overlays/out/s03-safe-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "s03-safe",
+    "file": "${EP198_REVIEW}/overlays/out/s03-safe-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f07-l5",
+    "file": "${EP198_REVIEW}/overlays/out/f07-l5.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f07-l5",
+    "file": "${EP198_REVIEW}/overlays/out/f07-l5.mov",
+    "t": 3.0
+   },
+   {
+    "id": "f08-dbabench",
+    "file": "${EP198_REVIEW}/overlays/out/f08-dbabench.mov",
+    "t": 0.3
+   },
+   {
+    "id": "f08-dbabench",
+    "file": "${EP198_REVIEW}/overlays/out/f08-dbabench.mov",
+    "t": 3.0
+   },
+   {
+    "id": "q04-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q04-kirk-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "q04-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q04-kirk-typing.mov",
+    "t": 3.0
+   },
+   {
+    "id": "q05-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q05-kirk-typing.mov",
+    "t": 0.3
+   },
+   {
+    "id": "q05-kirk",
+    "file": "${EP198_REVIEW}/overlays/out/q05-kirk-typing.mov",
     "t": 3.0
    }
   ],
   "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
   "items": [
    {
-    "id": "s01-restart",
-    "at": 1005.96,
+    "id": "s00-goal",
+    "at": 198.56,
     "box": [
      100,
      720,
@@ -146,14 +296,89 @@
      190
     ],
     "times": [
-     1006.26,
-     1007.46,
-     1009.96
+     198.86,
+     200.06,
+     202.56
+    ]
+   },
+   {
+    "id": "q00-kirk",
+    "at": 301.82,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     302.12,
+     303.32,
+     305.82
+    ]
+   },
+   {
+    "id": "c00-pgaibench",
+    "at": 511.28,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     511.58,
+     512.78,
+     515.28
+    ]
+   },
+   {
+    "id": "s04-scenarios",
+    "at": 705.78,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     706.08,
+     707.28,
+     709.78
+    ]
+   },
+   {
+    "id": "s01-restart",
+    "at": 1005.12,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     1005.42,
+     1006.62,
+     1009.12
+    ]
+   },
+   {
+    "id": "s05-downtime",
+    "at": 1041.64,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     1041.94,
+     1043.14,
+     1045.64
     ]
    },
    {
     "id": "s02-gate",
-    "at": 1585.22,
+    "at": 1584.38,
     "box": [
      100,
      720,
@@ -161,14 +386,14 @@
      190
     ],
     "times": [
-     1585.52,
-     1586.72,
-     1589.22
+     1584.68,
+     1585.88,
+     1588.38
     ]
    },
    {
     "id": "q01-kirk",
-    "at": 1677.22,
+    "at": 1676.38,
     "box": [
      100,
      720,
@@ -176,14 +401,44 @@
      190
     ],
     "times": [
-     1677.52,
-     1678.72,
-     1681.22
+     1676.68,
+     1677.88,
+     1680.38
+    ]
+   },
+   {
+    "id": "q02-kirk",
+    "at": 1801.98,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     1802.28,
+     1803.48,
+     1805.98
+    ]
+   },
+   {
+    "id": "q03-kirk",
+    "at": 1917.4,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     1917.7,
+     1918.9,
+     1921.4
     ]
    },
    {
     "id": "n01-editor",
-    "at": 2311.88,
+    "at": 2286.28,
     "box": [
      100,
      720,
@@ -191,14 +446,14 @@
      190
     ],
     "times": [
-     2312.18,
-     2313.38,
-     2315.88
+     2286.58,
+     2287.78,
+     2290.28
     ]
    },
    {
     "id": "s03-safe",
-    "at": 2830.3,
+    "at": 2802.58,
     "box": [
      100,
      720,
@@ -206,9 +461,39 @@
      190
     ],
     "times": [
-     2830.6,
-     2831.8,
-     2834.3
+     2802.88,
+     2804.08,
+     2806.58
+    ]
+   },
+   {
+    "id": "q04-kirk",
+    "at": 3066.96,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     3067.26,
+     3068.46,
+     3070.96
+    ]
+   },
+   {
+    "id": "q05-kirk",
+    "at": 3149.42,
+    "box": [
+     100,
+     720,
+     1520,
+     190
+    ],
+    "times": [
+     3149.72,
+     3150.92,
+     3153.42
     ]
    }
   ]

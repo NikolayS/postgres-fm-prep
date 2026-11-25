@@ -1,6 +1,6 @@
 # Episode 198 covers in the channel style (episode 196/197 template: ../../20261117-postgres-19/thumbs/src-v2/yt.py,
 # ../../20261110-temporary-tables/thumbs/src/mk.py): #111013 background, Impact 2-line headline (line 1 white,
-# line 2 #ff7a1a), real rectangular video tiles with a 6 px light border. Two people: Nik left, Kirk right.
+# line 2 #ff7a1a), real rectangular video tiles with a 6 px light border. Two people: Kirk left, Nik right (host order for this episode: they face each other).
 # Heads: raw Zoom recording 2026-11-24 (Kirk tile 0,0,640,360; Nik tile 640,0,640,360), picked by Apple Vision
 # scores (facescore.swift: eyes open, smile, no hand, sharpness) over 60-3600 s at 0.5 fps, then 5 fps around the best.
 #   Nik  385.6 s   Kirk 1991.4 s
@@ -27,7 +27,7 @@ def detect(paths):
     o = subprocess.run([faces], input='\n'.join(paths) + '\n', capture_output=True, text=True).stdout
     return [json.loads(l) for l in o.splitlines() if l.startswith('{')]
 
-# Source sec, tone, x shift of the face in its tile (Kirk left of centre: duration badge bottom-right).
+# Source sec, tone, x shift of the face in its tile (Nik, right tile, is checked against the duration badge below).
 P = {'nik':  dict(t=385.6, dx=0, k=1.0, tone=dict(gamma=0.88, contrast=1.08, sat=1.04)),
      'kirk': dict(t=1991.4, dx=-40, k=0.86, tone=dict(gamma=1.12, contrast=1.10, sat=0.82, rmul=0.98, shoulder=(0.80, 0.55)))}
 geo = {r['f'].split('/')[-1].split('-')[0]: r['faces'][0] for r in detect([f'{work}/{p}-x4.png' for p in P])}
@@ -66,7 +66,7 @@ def shot(html, png, w, h, scale):
 for k, (a, b) in V.items():
     h = f'{work}/thumb-{k}.html'
     open(h, 'w').write(f'<!doctype html><html><head><meta charset="utf-8"><style>{css}</style></head><body><div class="l l1">{a}</div><div class="l l2">{b}</div>'
-                       f'<div class="tile t1"><img src="t-nik.png"></div><div class="tile t2"><img src="t-kirk.png"></div>{fit}</body></html>')
+                       f'<div class="tile t1"><img src="t-kirk.png"></div><div class="tile t2"><img src="t-nik.png"></div>{fit}</body></html>')
     shot(h, f'{out}/thumb-{k}.png', 1280, 720, 1)
     Image.open(f'{out}/thumb-{k}.png').convert('RGB').save(f'{out}/thumb-{k}.png')
 
@@ -87,7 +87,7 @@ html,body{margin:0;width:1000px;height:1000px;background:#111013;overflow:hidden
 h = f'{work}/square.html'
 open(h, 'w').write(f'<!doctype html><html><head><meta charset="utf-8"><style>{sqcss}</style></head><body><div class="mark"><i></i>Postgres.FM</div>'
     '<div class="h"><div class="w">CAN AI SAFELY</div><div class="w">CHANGE</div><div class="o">PRODUCTION</div><div class="o">POSTGRES?</div></div>'
-    '<div class="tile t1"><img src="t-nik-sq.png"></div><div class="tile t2"><img src="t-kirk-sq.png"></div>'
+    '<div class="tile t1"><img src="t-kirk-sq.png"></div><div class="tile t2"><img src="t-nik-sq.png"></div>'
     '<script>document.fonts.load("116px Imp").then(()=>{const e=document.querySelector(".h");let z=116;while(e.offsetWidth>916&&z>60){z-=2;e.style.fontSize=z+"px"}})</script></body></html>')
 shot(h, f'{out}/square-3000.png', 1000, 1000, 3)
 Image.open(f'{out}/square-3000.png').convert('RGB').save(f'{out}/square-3000.png')

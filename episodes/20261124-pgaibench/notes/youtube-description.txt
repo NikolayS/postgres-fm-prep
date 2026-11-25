@@ -8,34 +8,34 @@ https://postgres.ai/blog/20261123-pgaibench
 
 Chapters:
 00:00 Cold open
-00:29 One engineer, 1,000 Postgres clusters
-05:01 Would you let AI run DDL on production?
-08:30 PGAIBench: tasks from real Postgres incidents
-10:52 Step one: AI acting alone
-12:36 The trap: indexes used only on replicas
-14:31 How the benchmark runs
-16:44 A top model restarted nodes in 5 of 5 runs
-18:59 Two axes: safety and usefulness
-21:05 Why the best models still fail: overconfidence
-24:04 Test on a clone: half the harms gone at zero AI cost
-27:53 "The actor is deterministic. The production environment is not."
-30:22 Separation of roles: builder and reviewer
-33:23 AAA: Analyst, Auditor, Actor
-37:38 The Auditor between Analyst and Actor
-41:20 What happens after the Auditor approves
-44:23 13 harms down to 1
-44:43 A DBA on top: AI as the mentee
-47:39 Findings and limits
-48:44 Everything in Git: GitOps for database changes
-50:45 Kirk's rules for safe automation
+00:33 One engineer, 1,000 Postgres clusters
+05:05 Would you let AI run DDL on production?
+08:34 PGAIBench: tasks from real Postgres incidents
+10:56 Step one: AI acting alone
+12:40 The trap: indexes used only on replicas
+14:35 How the benchmark runs
+16:48 A top model restarted nodes in 5 of 5 runs
+19:03 Two axes: safety and usefulness
+21:09 Why the best models still fail: overconfidence
+24:08 Test on a clone: half the harms gone at zero AI cost
+27:57 "The actor is deterministic. The production environment is not."
+30:26 Separation of roles: builder and reviewer
+33:27 AAA: Analyst, Auditor, Actor
+37:42 The Auditor between Analyst and Actor
+41:24 What happens after the Auditor approves
+44:27 13 harms down to 1
+44:47 A DBA on top: AI as the mentee
+47:43 Findings and limits
+48:48 Everything in Git: GitOps for database changes
+50:49 Kirk's rules for safe automation
 
 Key links (time of the first mention):
-* PGAIBench (08:30) https://pgaibench.dev/
-* PGAIBench on GitHub (08:30) https://github.com/NikolayS/pgaibench
-* AAA and AI Control results (33:23) https://pgaibench.dev/control/
-* DBLab Engine (25:58) https://github.com/postgres-ai/database-lab-engine
-* DBLab Forge (26:06) https://postgres.ai/products/dblab-forge
-* DBA-Bench (50:33) https://arxiv.org/abs/2607.22165
+* PGAIBench (08:34) https://pgaibench.dev/
+* PGAIBench on GitHub (08:34) https://github.com/NikolayS/pgaibench
+* AAA and AI Control results (33:27) https://pgaibench.dev/control/
+* DBLab Engine (26:02) https://github.com/postgres-ai/database-lab-engine
+* DBLab Forge (26:10) https://postgres.ai/products/dblab-forge
+* DBA-Bench (50:37) https://arxiv.org/abs/2607.22165
 
 Related episodes:
 * BUFFERS by default https://postgres.fm/episodes/buffers-by-default

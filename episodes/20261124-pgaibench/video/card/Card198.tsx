@@ -11,7 +11,7 @@ import {ELE, FPS, Grain, H, HOSTS, Levels, Sparkle, TITLE, useFonts, useLevels, 
 // Beats:
 //  0      the plum band "production Postgres?" slams in (Michael's chair + sign already there)
 //  1      "Can AI safely change" drops on
-//  2-2.5  Nik, Kirk boom in; a robot arm swings in over a big red RESTART button ("DO NOT RESTART")
+//  2-2.5  Kirk (left), Nik (right) boom in; a robot arm swings in over a big red RESTART button ("DO NOT RESTART")
 //  3-7    the arm presses the button on every beat, the lights blink, the elephant power-cycles
 //         (spins); label "Restarted anyway in 5 of 5 runs", one pip lights per press
 //  7      RESTART! the elephant is launched
@@ -170,7 +170,7 @@ const extTip = (from: {x: number; y: number}, tip: {x: number; y: number}, e: nu
 const CATCH = [9, 10, 11, 12, 13, 14]; // 6 stopped on the clone
 const PASS = [9.5, 10.5, 11.5, 12.5, 13.5, 14.25, 14.75]; // 7 reach the live elephant
 const BOMBS = [...CATCH.map((b, i) => ({b, clone: true, x: CLONE.x - 40 + 120 * rnd(i + 40), y: 610 + 40 * rnd(i + 60)})),
-  ...PASS.map((b, i) => ({b, clone: false, x: PROD.x - 20 + 80 * rnd(i + 80), y: 640 + 40 * rnd(i + 90)}))]; // puffs stay clear of Kirk's face
+  ...PASS.map((b, i) => ({b, clone: false, x: PROD.x - 20 + 80 * rnd(i + 80), y: 640 + 40 * rnd(i + 90)}))]; // puffs stay clear of the right tile's face (Nik)
 const FALL = 0.5;
 const Bomb: React.FC<{x: number; y: number; r: number; t: number}> = ({x, y, r, t}) => (
   <svg width={160} height={180} viewBox="-80 -100 160 180" style={{position: 'absolute', left: x - 80, top: y - 100, transform: `rotate(${r}deg)`, overflow: 'visible'}}>

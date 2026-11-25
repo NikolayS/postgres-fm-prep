@@ -7,10 +7,11 @@ export const TITLE = ['Can AI safely change', 'production Postgres?'];
 // Photos: crops of the ep 198 recording (2026-11-24), 640x480 like the ep 196/197 ones.
 // Nik: source 585.7 s (Nik tile, crop 400x300 at 90,40); Kirk: source 1558.35 s (Kirk tile,
 // crop 330x248 at 170,0, eq gamma 0.9 contrast 1.06 saturation 1.12: his room is bright).
-// Michael was away: Nik left, Kirk right, Michael's chair and sign on the far right.
+// Michael was away: Kirk left, Nik right (they face each other: Kirk looks to his left, Nik to
+// his right), Michael's chair and sign on the far right.
 export const HOSTS: {name: string; company?: string; photo?: string}[] = [
-  {name: 'Nik Samokhvalov', photo: 'photo-nik.png'},
   {name: 'Kirk Wolak', photo: 'photo-kirk.png'},
+  {name: 'Nik Samokhvalov', photo: 'photo-nik.png'},
 ];
 
 // Lato (OFL), the type family of the old postgres.fm covers, in heavy weights.
