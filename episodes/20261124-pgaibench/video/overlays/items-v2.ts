@@ -25,11 +25,18 @@ const BASE = segsOf(BASE_CUTS), NOW = segsOf(process.env.CUTS ?? BASE_CUTS);
 const toSrc = (t: number) => { for (const s of BASE) if (t >= s.outStart && t <= s.outEnd) return s.srcStart + (t - s.outStart); throw new Error(`no source for ${t}`); };
 const toOut = (t: number) => { for (const s of NOW) { if (t < s.srcStart) return s.outStart; if (t <= s.srcEnd) return s.outStart + (t - s.srcStart); } return NOW[NOW.length - 1].outEnd; };
 const E = (t: number) => r2(toOut(toSrc(t)));
+// v3 edited time -> $CUTS edited time (for fragments made for edit v3)
+// edit <tag> time -> $CUTS edited time (for fragments made for an earlier re-cut)
+const TAG_CUTS: Record<string, string> = {v3: resolve(ROOT, '../../pgfm198-edited.cuts.json'), v4: resolve(ROOT, '../../v4/pgfm198-edited.cuts.json'), v5: resolve(ROOT, '../../v5/pgfm198-edited.cuts.json')};
+const EVX = (tag: string, t: number) => { for (const s of segsOf(TAG_CUTS[tag])) if (t >= s.outStart - 1e-6 && t <= s.outEnd + 1e-6) return r2(toOut(s.srcStart + (t - s.outStart))); throw new Error(`no ${tag} source for ${t}`); };
 const relE = (start: number, o: Record<string, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, r2(E(v) - E(start))]));
-// a re-cut that changes beats inside an overlay needs its own render: <id>-v3.mov
+// A re-cut: CUTS=<cuts.json> TAG=v3|v4 VIDEO=<mp4 relative to review/>. An overlay whose beats change inside
+// its window needs its own render, <id>-<TAG>.mov; illus-2 fragments re-timed for it are parts/<id>.<TAG>.json.
 const V3 = !!process.env.CUTS && resolve(process.env.CUTS) !== BASE_CUTS;
-const V3_RENDER = new Set(['r18-clone-gate']);
-const fileOf = (id: string) => `${id}${V3 && V3_RENDER.has(id) ? '-v3' : ''}.mov`;
+const TAG = process.env.TAG ?? 'v3';
+const V3_RENDER = new Set(['r18-clone-gate', ...(TAG === 'v5' ? ['r29-377-of-378'] : [])]);
+// note: rows 06, 18, 28a, 28b and the new 28c changed in the v4 review round; their v2 files are re-rendered too
+const fileOf = (id: string) => `${id}${V3 && (V3_RENDER.has(id) || EXTENDED.has(id)) ? `-${TAG}` : ''}.mov`;
 const rel = (start: number, o: Record<string, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, r2(v - start)]));
 
 // AAA token paths over the post's Figure 2 (panel coordinates, see AaaFig in src/Ep198v2.tsx)
@@ -107,15 +114,16 @@ export const ITEMS: It[] = [
     accents: [4.0],
     words: 'Nik: "obviously auditor, main auditor role" (2244.38) "is between analyst and actor" (2245.72) "review the change proposed by analyst" (2250.42)',
     source: `${POST} (hero: AaaPipeline3D; AAA: the Auditor reviews the change request and the clone evidence: approve, send back or reject; only an approved change goes through the Actor to production)`},
-  {id: 'r24-editor-note', row: 24, comp: 'aaa3d198', outStart: E(2253.4), dur: 7.0, placement: 'center',
-    props: {caption: {lines: ["Editor's note: in AAA, only the Actor writes to production."], prefixLen: 14, size: 42, hi: [{word: 'only the Actor', at: relE(2253.4, {a: 2255.9}).a}]},
+  {id: 'r24-editor-note', row: 24, comp: 'aaa3d198', outStart: E(2258.08), dur: 7.0, placement: 'center',
+    // v5 cuts the slip "and neither analyst nor actor have access to production, right?" (src 2628.3-2632.8):
+    // the panel states the fact plainly, on the next AAA words that remain
+    props: {caption: {lines: ['In AAA: only the Actor writes to production.'], prefixLen: 7, size: 42, hi: [{word: 'only the Actor', at: 1.4}]},
       cam: [{at: 0, ...W1}, {at: 0.3, move: 1.6, yaw: 6, pitch: 12, dist: 10.4, focal: 0.95, tx: 0.35, ty: 1.75, ox: 0.5, oy: 0.52}],
-      focus: [{flows: ['apply'], at: 0.3}], glow: [{key: 'actor', at: 0.4}, {key: 'prod', at: relE(2253.4, {a: 2255.9}).a}],
+      focus: [{flows: ['apply'], at: 0.3}], glow: [{key: 'actor', at: 0.4}, {key: 'prod', at: 1.4}],
       labels: {analyst: 0, auditor: 0, actor: 0, clones: 0, prod: 0, apply: 0, nowriteAn: 0.9, nowriteAu: 1.2},
-      hot: [{id: 'nowriteAn', at: 0.9}, {id: 'nowriteAu', at: 1.2}, {id: 'actor', at: relE(2253.4, {a: 2255.9}).a}],
-      events: [{kind: 'apply', at: 0.8}, {kind: 'apply', at: relE(2253.4, {a: 2255.9}).a}]},
-    vetoable: 'Editor\'s note: on air "neither analyst nor actor have access to production" (he means the Analyst and the Auditor)',
-    words: 'Nik: "neither analyst nor actor" (2253.40) "access to production" (2255.90)', source: `${POST} (hero: AaaPipeline3D, "no write access" on Analyst and Auditor, "Actor deterministic · sole write path")`},
+      hot: [{id: 'nowriteAn', at: 0.9}, {id: 'nowriteAu', at: 1.2}, {id: 'actor', at: 1.4}],
+      events: [{kind: 'apply', at: 0.8}, {kind: 'apply', at: 1.4}]},
+    words: 'Nik: "But all of them have access to, of course, proposed CR" (2258.08)', source: `${POST} (hero: AaaPipeline3D, "no write access" on Analyst and Auditor, "Actor deterministic · sole write path")`},
   {id: 'r26-send-back', row: 26, comp: 'aaa3d198', outStart: E(2398.3), dur: 7.6, placement: 'center',
     props: {caption: {lines: ['Auditor: send back · reject · approve'], prefixLen: 8, hi: Object.entries(relE(2398.3, {'send back': 2398.54, reject: 2400.6, approve: 2403.22})).map(([word, at]) => ({word, at}))},
       cam: [{at: 0, ...W1}, {at: 0.2, move: 1.4, yaw: 6, pitch: 13, dist: 10.4, focal: 1.25, tx: 0.75, ty: 2.35, ox: 0.5, oy: 0.5}],
@@ -132,15 +140,21 @@ export const ITEMS: It[] = [
     words: 'Nik: "triangle works really well" (2571.32) "equipped with proper" (2573.32) "branching" (2575.72) "dedicated" (2577.86) "all the telemetry" (2580.28)',
     source: `on air (Nik); ${POST} (hero: AaaPipeline3D; Practical rules: DBLab Engine branching, DBLab Forge dedicated environments, postgres_ai monitoring)`},
   {id: 'r28a-dots', row: 28, comp: 'dots198', outStart: E(2602.6), dur: 19.4, placement: 'center',
-    props: {mode: 'full', b: relE(2602.6, {gate: 2605.8, auditor: 2610.78, stamp: 2614.14, no: 2617.3, left: 2618.2})}, accents: [3.2],
-    words: 'Kirk: "So now that we used AAA as our process" (2602.82) "gave it over to the actor again to run it in production" (2610.78) "got rid of 100% of the errors" (2614.14); Nik: "Uh, no. One harm left in Opus 5.5" (2617.30)',
+    props: {mode: 'full', b: relE(2602.6, {gate: 2605.8, auditor: 2610.78, stamp: 2614.86, no: 2617.5, left: 2618.2})}, accents: [3.2],
+    words: 'Kirk: "So now that we used AAA as our process" (2602.82) "gave it over to the actor again to run it in production" (2610.78) "got rid of 100% of the errors" (2614.14; "100%" 2614.86 = stamp); Nik: "Uh, no. One harm left in Opus 5.5" (2617.30; "no." 2617.50 = count 1)',
     source: `${POST} (Figure 3; replay finding 1: gate 6 of 13, Auditor 6 of 7 remaining, 1 held-out claude-opus-5.5 miss)`},
   {id: 'r28b-13-to-1', row: 28, comp: 'dots198', outStart: E(2633.6), dur: 6.6, placement: 'center',
     props: {mode: 'hero', b: {hero: 0.2, pct: 2.2}},
     words: 'Kirk: "13 harms down to one" (2634.28) "by structuring this a little better" (2637.98)', source: `${POST} (Figure 3: 13 -> 7 -> 1, -92.3%)`},
+  {id: 'r28c-replay-note', row: 28, comp: 'motif198', outStart: E(2508.52), dur: 7.0, placement: 'band',
+    props: {lines: ["Editor's note: 13 → 1 is an offline replay of the 408 recorded", 'changes through AAA (in-sample), not a second live run.'], lit: 'none', prefixLen: 14},
+    typed: {lines: ["Editor's note: 13 → 1 is an offline replay of the 408 recorded", 'changes through AAA (in-sample), not a second live run.']},
+    vetoable: 'Editor\'s note: on air Kirk asks "Did it then tell a different actor to run it in production?" and Nik says "Yes."; the post: "We replayed all 408 scored Track 1 primary CRs offline through both AAA gates" (retrospective and in-sample)',
+    words: 'Kirk: "different actor to run it in production" (2506.82); Nik: "Yes." (2508.52)',
+    source: `${POST} (replay finding 1: "When we replayed the models' primary changes through AAA (retrospective and in-sample) ... blocked 12 of 13 measured harms (-92.3%)"; "We replayed all 408 scored Track 1 primary CRs offline through both AAA gates using their recorded rehearsal telemetry")`},
   {id: 'r29-377-of-378', row: 29, comp: 'safe198', outStart: E(2771.9), dur: 10.0, placement: 'center',
-    props: {b: relE(2771.9, {one: 2773.44, hero: 2774.5, note: 2777.7})}, accents: [2.6],
-    words: 'Nik: "almost 400" (2772.06) "only one was blocked by mistake" (2773.44) "should talk about false positive" (2777.70)',
+    props: {b: relE(2771.9, {one: 2773.44, hero: 2774.5, note: 2777.7})}, accents: [relE(2771.9, {h: 2774.5}).h],
+    words: 'Nik: "almost 400" (2772.06) "only one was blocked" (2773.44; v5 cuts "by mistake") "should talk about false positive" (2777.70)',
     source: `${POST} (replay finding 2: 377 of 378 safe or unclassified approved, 99.7%; the one block: L5, grok-4.7, one DO block over the 10M-row scan)`},
   {id: 'r34-kirk-evidence', row: 34, comp: 'motif198', outStart: E(3037.7), dur: 9.6, placement: 'band',
     props: {lines: ['“A successful experiment is evidence, not a guarantee.', 'Rollback is a procedure, not a promise.”'], lineAt: [4.93], lit: 'none', hiWords: ['evidence', 'procedure'], strike: [{word: 'guarantee', at: 2.6}, {word: 'promise', at: 6.6}]},
@@ -152,6 +166,16 @@ export const ITEMS: It[] = [
       events: [{kind: 'rehearse', at: 0.3}, {kind: 'review', at: 2.6}, {kind: 'apply', at: 4.2}]},
     words: 'Kirk: "responsibility we can safely delegate" (3120.87) "not simply how intelligent the AI is" (3123.53)', source: `on air (Kirk), his exact words; scene: ${POST} hero (AaaPipeline3D)`},
 ];
+// Back-to-back center cards (S28): when the gap between two center cards is under 2 s on this cut, the first
+// card holds until the next one starts, so the hosts stay in the right column. Such a card gets its own render.
+const EXTENDED = new Set<string>();
+{
+  const cen = ITEMS.filter((it) => it.placement === 'center').sort((a, b) => a.outStart - b.outStart);
+  for (let i = 0; i + 1 < cen.length; i++) {
+    const gap = cen[i + 1].outStart - (cen[i].outStart + cen[i].dur);
+    if (V3 && gap > 0.001 && gap < 2) { cen[i].dur = r2(cen[i + 1].outStart - cen[i].outStart); EXTENDED.add(cen[i].id); }
+  }
+}
 
 const mode = process.argv[2];
 const only = new Set(process.argv.slice(3));
@@ -168,7 +192,7 @@ if (mode === 'render') {
       console.log(code === 0 && existsSync(file) ? `ok ${it.id}` : `FAIL ${it.id} ${(await new Response(p.stderr).text()).slice(-1200)}`);
     }
   };
-  await Promise.all([worker(), worker(), worker()]);
+  await Promise.all(Array.from({length: Number(process.env.RW ?? 3)}, worker));
 }
 if (mode === 'manifest' || mode === 'render') {
   // typing bursts for band items (sfx-manifest.ts reads <id>-typing-bursts.json next to the manifest)
@@ -180,22 +204,34 @@ if (mode === 'manifest' || mode === 'render') {
   const mine = ITEMS.map((it) => ({id: it.id, row: it.row, outStart: it.outStart, duration: it.dur, dur: it.dur, file: fileOf(it.id), placement: it.placement, freezeSec: 0, sfx: [], ...(it.accents ? {accents: it.accents.map(r2)} : {}), source: it.source, words: it.words, builder: 'illus-1', ...(it.vetoable ? {vetoable: it.vetoable} : {})}));
   // illus-2 fragments
   const partsDir = join(OUT, 'parts');
-  const parts = existsSync(partsDir) ? readdirSync(partsDir).filter((f) => f.endsWith('.json') && !f.endsWith('.v3.json')).map((f) => ({id: f.replace(/\.json$/, ''), builder: 'illus-2', freezeSec: 0, ...JSON.parse(readFileSync(join(partsDir, f), 'utf8'))})).map((p: any) => ({...p, row: Number(p.row), duration: p.dur ?? p.duration, dur: p.dur ?? p.duration, accents: p.accents ?? (p.sfx ?? []).filter((x: any) => /accent/.test(x.file)).map((x: any) => x.at)})) : [];
+  const parts = existsSync(partsDir) ? readdirSync(partsDir).filter((f) => f.endsWith('.json') && !/\.v\d+\.json$/.test(f)).map((f) => ({id: f.replace(/\.json$/, ''), builder: 'illus-2', freezeSec: 0, ...JSON.parse(readFileSync(join(partsDir, f), 'utf8'))})).map((p: any) => ({...p, row: parseInt(String(p.row), 10), duration: p.dur ?? p.duration, dur: p.dur ?? p.duration, accents: p.accents ?? (p.sfx ?? []).filter((x: any) => /accent/.test(x.file)).map((x: any) => x.at)})) : [];
   // on a re-cut: a fragment with its own <id>.v3.json (re-timed and re-rendered for v3) replaces the v2 one;
   // the others keep their render and move through the source timeline (E)
   if (V3) for (let i = 0; i < parts.length; i++) {
-    const f3 = join(partsDir, `${parts[i].id}.v3.json`);
+    const f3 = join(partsDir, `${parts[i].id}.${TAG}.json`);
+    // no fragment for this TAG: an earlier re-cut's fragment (v3) moves through source time when the new
+    // cut changes nothing inside its window (checked by verify-<TAG>.tsv)
+    const prevTag = ['v4', 'v3'].filter((g) => +g.slice(1) < +TAG.slice(1)).find((g) => existsSync(join(partsDir, `${parts[i].id}.${g}.json`)));
+    const fPrev = prevTag ? join(partsDir, `${parts[i].id}.${prevTag}.json`) : '';
+    if (!existsSync(f3) && prevTag) {
+      const q = JSON.parse(readFileSync(fPrev, 'utf8'));
+      parts[i] = {...parts[i], ...q, id: parts[i].id, row: parts[i].row, outStart: EVX(prevTag, q.outStart), duration: q.dur ?? q.duration, dur: q.dur ?? q.duration, accents: q.accents ?? (q.sfx ?? []).filter((x: any) => /accent/.test(x.file)).map((x: any) => x.at), from: fPrev};
+      continue;
+    }
     if (existsSync(f3)) { const q = JSON.parse(readFileSync(f3, 'utf8')); parts[i] = {...parts[i], ...q, id: parts[i].id, row: parts[i].row, duration: q.dur ?? q.duration, dur: q.dur ?? q.duration, accents: q.accents ?? (q.sfx ?? []).filter((x: any) => /accent/.test(x.file)).map((x: any) => x.at), v3: f3}; }
     else parts[i] = {...parts[i], outStart: E(parts[i].outStart)};
   }
   // kept v1 captures: rows 11 (max_locks_per_transaction docs) and 33 (arXiv DBA-Bench)
   // row 11: illus-2's animated v2-r11-maxlocks replaces the v1 docs capture when it exists
-  const keepV1 = ['f08-dbabench', ...(parts.some((p: any) => p.row === 11) ? [] : ['f05-maxlocks'])];
+  // a fragment that exists only for this cut (e.g. f08-dbabench.v5.json: illus-2 took over the v1 capture)
+  const tagOnly = V3 && existsSync(partsDir) ? readdirSync(partsDir).filter((f) => f.endsWith(`.${TAG}.json`) && !existsSync(join(partsDir, f.replace(`.${TAG}.json`, '.json')))).map((f) => ({builder: 'illus-2', freezeSec: 0, ...JSON.parse(readFileSync(join(partsDir, f), 'utf8')), v3: join(partsDir, f)})) : [];
+  for (const q of tagOnly) parts.push({...q, row: Number.isNaN(parseInt(String(q.row), 10)) ? q.row : parseInt(String(q.row), 10)});
+  const keepV1 = [...(tagOnly.some((q: any) => q.id.startsWith('f08-dbabench')) ? [] : ['f08-dbabench']), ...(parts.some((p: any) => p.row === 11) ? [] : ['f05-maxlocks'])];
   const v1 = JSON.parse(readFileSync(resolve(OUT, '../out/manifest-sfx.json'), 'utf8')).overlays.filter((o: any) => keepV1.includes(o.id)).map((o: any) => ({...o, row: o.id === 'f05-maxlocks' ? 11 : 33, file: `../out/${o.file}`, sfx: [], builder: 'v1 capture'}));
   if (V3) for (const o of v1) o.outStart = E(o.outStart);
   const all = [...mine, ...parts.filter((p: any) => !mine.some((m) => m.id === p.id)), ...v1].sort((a: any, b: any) => a.outStart - b.outStart);
-  const head = {video: V3 ? 'pgfm198-edited.mp4' : 'v2-edit/pgfm198-edited.mp4', cuts: process.env.CUTS ?? BASE_CUTS, fps: 25, width: 1920, height: 1080, timeBase: 'edited.mp4 seconds, before intro and freeze shifts', band: {x: 120, y: 744, w: 1480, h: 144}, layout: 'center placement: hosts move to place.<host>.center (right column, x 1630) in layout.json'};
-  const MNAME = V3 ? 'manifest-v3.json' : 'manifest-v2.json';
+  const head = {video: V3 ? process.env.VIDEO ?? 'pgfm198-edited.mp4' : 'v2-edit/pgfm198-edited.mp4', cuts: process.env.CUTS ?? BASE_CUTS, fps: 25, width: 1920, height: 1080, timeBase: 'edited.mp4 seconds, before intro and freeze shifts', band: {x: 120, y: 744, w: 1480, h: 144}, layout: 'center placement: hosts move to place.<host>.center (right column, x 1630) in layout.json'};
+  const MNAME = V3 ? `manifest-${TAG}.json` : 'manifest-v2.json';
   writeFileSync(join(OUT, MNAME), JSON.stringify({...head, overlays: all}, null, 2));
   // checks: overlaps on the same layer, center spacing
   const probs: string[] = [];
@@ -206,7 +242,7 @@ if (mode === 'manifest' || mode === 'render') {
   const cen = all.filter((o: any) => o.placement === 'center');
   for (let i = 1; i < cen.length; i++) {
     const gap = r2(cen[i].outStart - (cen[i - 1].outStart + cen[i - 1].dur));
-    if (gap > 1.7 && gap < 4) probs.push(`center gap ${gap} s: ${cen[i - 1].id} -> ${cen[i].id} (hosts would bounce)`);
+    if (gap > 0 && gap < 4) probs.push(`center gap ${gap} s: ${cen[i - 1].id} -> ${cen[i].id} (hosts would bounce)`);
   }
   console.log(`${MNAME}: ${all.length} overlays (${mine.length} illus-1, ${parts.length} illus-2, ${v1.length} v1)`);
   console.log(probs.length ? probs.join('\n') : 'no overlaps, center spacing ok');

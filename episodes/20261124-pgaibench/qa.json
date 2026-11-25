@@ -20,13 +20,13 @@
    {
     "label": "cold open: last frame before the title card",
     "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
-    "t": 22.64,
+    "t": 24.05,
     "expectFaces": 2
    },
    {
     "label": "body: first frames after the title card",
     "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
-    "t": 37.44,
+    "t": 43.81,
     "expectFaces": 2
    },
    {
@@ -95,12 +95,12 @@
    },
    {
     "id": "v2-r05-baseline",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r05-baseline-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r05-baseline-v4.mov",
     "t": 0.3
    },
    {
     "id": "v2-r05-baseline",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r05-baseline-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r05-baseline-v4.mov",
     "t": 3.52
    },
    {
@@ -155,12 +155,12 @@
    },
    {
     "id": "v2-r10-runs",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v5.mov",
     "t": 0.3
    },
    {
     "id": "v2-r10-runs",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v5.mov",
     "t": 4.27
    },
    {
@@ -175,13 +175,13 @@
    },
    {
     "id": "v2-r12-escalate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v4.mov",
     "t": 0.3
    },
    {
     "id": "v2-r12-escalate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v3.mov",
-    "t": 3.52
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v4.mov",
+    "t": 6.36
    },
    {
     "id": "v2-r13a-safety",
@@ -195,12 +195,12 @@
    },
    {
     "id": "v2-r13b14a-axes-track1",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v5.mov",
     "t": 0.3
    },
    {
     "id": "v2-r13b14a-axes-track1",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v5.mov",
     "t": 14.23
    },
    {
@@ -245,12 +245,12 @@
    },
    {
     "id": "r18-clone-gate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r18-clone-gate-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r18-clone-gate-v5.mov",
     "t": 0.3
    },
    {
     "id": "r18-clone-gate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r18-clone-gate-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r18-clone-gate-v5.mov",
     "t": 6
    },
    {
@@ -295,13 +295,13 @@
    },
    {
     "id": "r22b-aaa-analyst",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst-v5.mov",
     "t": 0.3
    },
    {
     "id": "r22b-aaa-analyst",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst.mov",
-    "t": 6.3
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst-v5.mov",
+    "t": 7.1
    },
    {
     "id": "r22c-aaa-actor",
@@ -315,23 +315,23 @@
    },
    {
     "id": "r23a-aaa-auditor",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v5.mov",
     "t": 0.3
    },
    {
     "id": "r23a-aaa-auditor",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor.mov",
-    "t": 6.25
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v5.mov",
+    "t": 6.76
    },
    {
     "id": "r23b-aaa-path",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path-v5.mov",
     "t": 0.3
    },
    {
     "id": "r23b-aaa-path",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path.mov",
-    "t": 5.3
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path-v5.mov",
+    "t": 5.38
    },
    {
     "id": "r24-editor-note",
@@ -352,6 +352,16 @@
     "id": "r26-send-back",
     "file": "${EP198_REVIEW}/overlays/out-v2/r26-send-back.mov",
     "t": 3.8
+   },
+   {
+    "id": "r28c-replay-note",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28c-replay-note.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r28c-replay-note",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28c-replay-note.mov",
+    "t": 3.5
    },
    {
     "id": "r27-triangle",
@@ -385,42 +395,42 @@
    },
    {
     "id": "r29-377-of-378",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r29-377-of-378.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r29-377-of-378-v5.mov",
     "t": 0.3
    },
    {
     "id": "r29-377-of-378",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r29-377-of-378.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r29-377-of-378-v5.mov",
     "t": 5
    },
    {
     "id": "v2-r30-real",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r30-real-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r30-real-v5.mov",
     "t": 0.3
    },
    {
     "id": "v2-r30-real",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r30-real-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r30-real-v5.mov",
     "t": 4.69
    },
    {
     "id": "v2-r31-l5-lock-queue",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v3.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v5.mov",
     "t": 0.3
    },
    {
     "id": "v2-r31-l5-lock-queue",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v3.mov",
-    "t": 8.19
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v5.mov",
+    "t": 8.92
    },
    {
-    "id": "f08-dbabench",
-    "file": "${EP198_REVIEW}/overlays/out-v2/../out/f08-dbabench.mov",
+    "id": "f08-dbabench-v5",
+    "file": "${EP198_REVIEW}/overlays/out-v2/f08-dbabench-v5.mov",
     "t": 0.3
    },
    {
-    "id": "f08-dbabench",
-    "file": "${EP198_REVIEW}/overlays/out-v2/../out/f08-dbabench.mov",
+    "id": "f08-dbabench-v5",
+    "file": "${EP198_REVIEW}/overlays/out-v2/f08-dbabench-v5.mov",
     "t": 5.55
    },
    {
@@ -468,7 +478,7 @@
   "items": [
    {
     "id": "v2-r02-ddl",
-    "at": 295.66,
+    "at": 301.35,
     "box": [
      100,
      720,
@@ -476,14 +486,14 @@
      184
     ],
     "times": [
-     295.96,
-     296.86,
-     299.36
+     301.65,
+     302.55,
+     305.05
     ]
    },
    {
     "id": "r03-backup-chat",
-    "at": 348.48,
+    "at": 354.61,
     "box": [
      100,
      720,
@@ -491,14 +501,14 @@
      184
     ],
     "times": [
-     348.78,
-     349.68,
-     352.18
+     354.91,
+     355.81,
+     358.31
     ]
    },
    {
     "id": "v2-r04-pgaibench",
-    "at": 499.93,
+    "at": 506.06,
     "box": [
      100,
      720,
@@ -506,14 +516,14 @@
      184
     ],
     "times": [
-     500.23,
-     501.13,
-     503.63
+     506.36,
+     507.26,
+     509.76
     ]
    },
    {
     "id": "v2-r05-baseline",
-    "at": 614.33,
+    "at": 620.42,
     "box": [
      100,
      720,
@@ -521,14 +531,14 @@
      184
     ],
     "times": [
-     614.63,
-     615.53,
-     618.03
+     620.72,
+     621.62,
+     624.12
     ]
    },
    {
     "id": "v2-r07a-l9-setup",
-    "at": 748.68,
+    "at": 754.77,
     "box": [
      100,
      720,
@@ -536,14 +546,14 @@
      184
     ],
     "times": [
-     748.98,
-     749.88,
-     752.38
+     755.07,
+     755.97,
+     758.47
     ]
    },
    {
     "id": "v2-r10-runs",
-    "at": 1021.54,
+    "at": 1026.41,
     "box": [
      100,
      720,
@@ -551,14 +561,14 @@
      184
     ],
     "times": [
-     1021.84,
-     1022.74,
-     1025.24
+     1026.71,
+     1027.61,
+     1030.11
     ]
    },
    {
     "id": "v2-r12-escalate",
-    "at": 1088.28,
+    "at": 1097.49,
     "box": [
      100,
      720,
@@ -566,14 +576,14 @@
      184
     ],
     "times": [
-     1088.58,
-     1089.48,
-     1091.98
+     1097.79,
+     1098.69,
+     1101.19
     ]
    },
    {
     "id": "v2-r13a-safety",
-    "at": 1118.86,
+    "at": 1128.11,
     "box": [
      100,
      720,
@@ -581,14 +591,14 @@
      184
     ],
     "times": [
-     1119.16,
-     1120.06,
-     1122.56
+     1128.41,
+     1129.31,
+     1131.81
     ]
    },
    {
     "id": "v2-r20-replicas",
-    "at": 1755.43,
+    "at": 1763.84,
     "box": [
      100,
      720,
@@ -596,14 +606,14 @@
      184
     ],
     "times": [
-     1755.73,
-     1756.63,
-     1759.13
+     1764.14,
+     1765.04,
+     1767.54
     ]
    },
    {
     "id": "r21-tom-lane",
-    "at": 1869.46,
+    "at": 1877.39,
     "box": [
      100,
      720,
@@ -611,14 +621,29 @@
      184
     ],
     "times": [
-     1869.76,
-     1870.66,
-     1873.16
+     1877.69,
+     1878.59,
+     1881.09
+    ]
+   },
+   {
+    "id": "r28c-replay-note",
+    "at": 2473.61,
+    "box": [
+     100,
+     720,
+     1520,
+     184
+    ],
+    "times": [
+     2473.91,
+     2474.81,
+     2477.31
     ]
    },
    {
     "id": "v2-r30-real",
-    "at": 2756.86,
+    "at": 2759.11,
     "box": [
      100,
      720,
@@ -626,14 +651,14 @@
      184
     ],
     "times": [
-     2757.16,
-     2758.06,
-     2760.56
+     2759.41,
+     2760.31,
+     2762.81
     ]
    },
    {
     "id": "r34-kirk-evidence",
-    "at": 2987.74,
+    "at": 2990.71,
     "box": [
      100,
      720,
@@ -641,14 +666,14 @@
      184
     ],
     "times": [
-     2988.04,
-     2988.94,
-     2991.44
+     2991.01,
+     2991.91,
+     2994.41
     ]
    },
    {
     "id": "v2-r35-agree",
-    "at": 3019.45,
+    "at": 3022.42,
     "box": [
      100,
      720,
@@ -656,14 +681,14 @@
      184
     ],
     "times": [
-     3019.75,
-     3020.65,
-     3023.15
+     3022.72,
+     3023.62,
+     3026.12
     ]
    },
    {
     "id": "v2-r36-analyze",
-    "at": 3038.87,
+    "at": 3041.84,
     "box": [
      100,
      720,
@@ -671,19 +696,19 @@
      184
     ],
     "times": [
-     3039.17,
-     3040.07,
-     3042.57
+     3042.14,
+     3043.04,
+     3045.54
     ]
    }
   ]
  },
  "sfx": {
-  "manifest": "${EP198_REVIEW}/overlays/out-v2/manifest-v3-sfx.json"
+  "manifest": "${EP198_REVIEW}/overlays/out-v2/manifest-v5-sfx.json"
  },
  "skip": {
-  "captions": "no burned-in captions or punch-ins in episode 198: text is only in the 14 band strips and 27 center panels (checked by strips)",
-  "cards": "no data cards (cards/*.card.json): the 27 center panels are Remotion pieces built from the post's and the site's own figures and data (3D AAA hero, Track 1 bars, funnel, L5/L9 panels) plus 1 capture (the DBA-Bench arXiv page); every number is the source's own and was checked per row (overlays/verify-v3.tsv)"
+  "captions": "no burned-in captions or punch-ins in episode 198: text is only in the 15 band strips and 27 center panels (checked by strips)",
+  "cards": "no data cards (cards/*.card.json), so the automatic number check has nothing to run on: the 27 center panels are Remotion pieces built from the post's and the site's own figures and data (the DBA-Bench card carries only a small capture thumbnail). The number check was done by hand: every number on every overlay against the post and pgaibench.dev by two independent reviews on 2026-11-25 (review/for-nik/80-review-fable-ep198.md 'Checked and correct', 81-review-gemini-ep198.md 'Checked and fine'); rows changed after them were checked against the post by their builders; each row's words are checked against the edit in video/overlays/verify-v5.tsv"
  },
  "facing": {
   "layout": "${EP198_REVIEW}/layout.json",

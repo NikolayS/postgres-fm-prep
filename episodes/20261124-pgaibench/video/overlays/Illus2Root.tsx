@@ -7,7 +7,7 @@ const FPS = 25;
 const meta = ({props}: {props: {durationSec?: number}}) => ({durationInFrames: Math.round((props.durationSec ?? 5) * FPS)});
 const C: [string, React.FC<any>][] = [
   ['r01clusters', R.R01Clusters], ['r02ddl', R.R02Ddl], ['r04bench', R.R04Bench], ['r05baseline', R.R05Baseline],
-  ['r09restart', R.R09Restart], ['r10runs', R.R10Runs], ['r11locks', R.R11Locks], ['r12esc', R.R12Esc],
+  ['r09restart', R.R09Restart], ['r10runs', R.R10Runs], ['r11locks', R.R11Locks], ['r12esc', R.R12Esc], ['f08dbabench198', R.F08DbaBench],
   ['r13safety', R.R13Safety], ['r13axes14', R.R13Axes14], ['r14sound', R.R14Sound], ['r17dblab', R.R17Dblab],
   ['r20replicas', R.R20Replicas], ['r30real', R.R30Real], ['r35agree', R.R35Agree], ['r36analyze', R.R36Analyze],
   ['l9setup198', R.L9Setup198],

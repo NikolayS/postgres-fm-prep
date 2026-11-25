@@ -4,7 +4,7 @@
 #   bash sheet.sh <out.png> <bold.mp4> <medium.mp4> <restrained.mp4>
 set -euo pipefail
 OUT=$1; shift
-F="6 102 141 146 150 188 214 258 275 325 340 348 355 380 407 430 452 520 538 550 575"
+F="6 102 141 150 188 240 249 293 310 360 378 383 390 415 442 465 487 555 573 585 610"
 sel=$(for f in $F; do printf "eq(n\\,%s)+" "$f"; done); sel=${sel%+}
 in=(); fc=""; k=0
 for v in "$@"; do in+=(-i "$v"); fc+="[$k:v]select='$sel',scale=384:-1,pad=iw+6:ih+6:3:3:black,tile=7x3[t$k];"; k=$((k+1)); done

@@ -1,0 +1,43 @@
+id	v5_start	anchor_words	found_v5	delta_s	ok
+v2-r01-clusters	160.3	1,000 clusters	160.3	0	ok
+v2-r02-ddl	258.94	would you let an AI run DDL	258.94	0	ok
+r03-backup-chat	312.2	I dropped the production database.	312.33	0	ok
+v2-r04-pgaibench	463.65	this benchmark called PG, PG AI Bench	463.65	0	ok
+v2-r05-baseline	578.01	I still don't have human baseline	578.01	0	ok
+r06-scenarios	655.08	It was originally, I think, 20	652.24	0	ok
+v2-r07a-l9-setup	712.36	the indexes that are involved in the read replicas	712.36	0	ok
+v2-r07b-l9-split	722.74	you turn around	722.74	0	ok
+r08-leaderboard	893.28	first thing what I was, um, surprised to see	893.44	0	ok
+v2-r09-restart	949.04	five out of five cases	949.04	0	ok
+v2-r10-runs	984	two cases out of five	984.18	0.18	ok
+v2-r11-maxlocks	1028.76	Max slots per transaction is one of them	1028.76	0	ok
+v2-r12-escalate	1055.08	they often decide to escalate to human	1055.08	0	ok
+v2-r13a-safety	1085.7	two metrics. One is, uh, safety	1085.7	0	ok
+v2-r13b14a-axes-track1	1126.5	usefulness	1126.5	0	ok
+v2-r14b-sound	1164.5	if you hear the sound you just heard	1164.76	0	ok
+r15-funnel	1187.86	it's, it's not safe	1188.14	0	ok
+r16-auditor-next	1298	another agent or something	1298.2	0	ok
+v2-r17-dblab	1488.84	branching DB lab, uh, engine, it's a shared environment	1488.84	0	ok
+r18-clone-gate	1510.08	it removed half of harm- harmful actions	1510.34	0	ok
+r19-deterministic	1599.64	The actor is deterministic	1599.87	0	ok
+v2-r20-replicas	1721.43	If you have read replicas, you must have them in your test environment.	1721.43	0	ok
+r21-tom-lane	1834.98	Pretend you're Tom Lane	1835.16	0	ok
+r22a-aaa-intro	1918.04	three As, triple A, AAA	1918.3	0	ok
+r22b-aaa-analyst	1938.52	First is analyst	1938.96	0	ok
+r22c-aaa-actor	1952.72	actor, which will execute this change	1953.06	0	ok
+r23a-aaa-auditor	2161.16	And then there is a third A, which is auditor	2161.4	0	ok
+r23b-aaa-path	2174.68	obviously auditor, main auditor role	2176.46	0	ok
+r24-editor-note	2185.44	But all of them have access to, of course, proposed CR	2185.44	0	ok
+r26-send-back	2322.1	send back for improvements	2322.34	0	ok
+r28c-replay-note	2431.2	different actor to run it in production	2429.5	0	ok
+r27-triangle	2490.9	triangle works really well	2491.92	0	ok
+r28a-dots	2523.24	So now that we used AAA as our process	2523.46	0	ok
+r28b-13-to-1	2554.2	13 harms down to one	2554.88	0	ok
+r29-377-of-378	2692.5	almost 400	2692.66	0	ok
+v2-r30-real	2716.7	Not only were these 18 tests, they were hand-selected from real life examples	2716.7	0	ok
+v2-r31-l5-lock-queue	2755.26	being overconfident	2755.26	0	ok
+f08-dbabench-v5	2913.06	I learned from other benchmarks	2913.15	0.09	ok (words begin 0.09 s after the start; the fragment note says 2913.67)
+r34-kirk-evidence	2948.3	A successful experiment is evidence	2948.49	0	ok
+v2-r35-agree	2980.01	two AIs agreeing does not make either one correct	2980.01	0	ok
+v2-r36-analyze	2999.43	major upgrade and forgets analyze on weekend	2999.43	0	ok
+r37-kirk-delegate	3030.8	responsibility we can safely delegate	3031.47	0	ok

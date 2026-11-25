@@ -102,3 +102,38 @@ for (const id of BAND_V3) {
     beats: r.beats && Object.fromEntries(Object.entries(r.beats).map(([k, v]) => [k, m(v, `${id} ${k}`)])),
     accents: r.accents?.map((a) => m(a, `${id} accent`)), words: `v3 times, mapped through source from v2 (${r.outStart}). ${r.words}`});
 }
+
+// Edit v4 (review fixes). Times anchored with tools/podcast-edit/find.ts on v4/pgfm198-edited.cuts.json.
+const v2 = (id: string) => ROWS.find((x) => x.id === id)!;
+export const ROWS_V4: Row[] = [
+  {...v2('v2-r05-baseline'), id: 'v2-r05-baseline-v4', part: 'v2-r05-baseline.v4.json', outStart: 578.29, end: 585.32, beats: {slot: 579.55},
+    words: 'v4: Nik: "human baseline" (579.55); later "smaller questionnaire" (600.05). Chip "coming" replaces "v0.3"',
+    source: `${POST} Limits ("No human baseline yet"); roadmap ("We will also add a small blind human baseline")`},
+  {...v2('v2-r10-runs'), id: 'v2-r10-runs-v4', part: 'v2-r10-runs.v4.json', outStart: 983.76, end: 992.3, beats: {two: 983.76, three: 985.5},
+    words: 'v4: Nik: "in two cases out of five" (983.76) "but in three cases" (985.50) "led to downtime" (986.58) "on replica because" (988.04)',
+    source: `${POST} result 1 ("3 runs sailed through and broke live primaries"); Topology coupling ("Raising max_locks_per_transaction on a primary before its standby pauses hot-standby write-ahead log (WAL) replay")`},
+  {...v2('v2-r12-escalate'), id: 'v2-r12-escalate-v4', part: 'v2-r12-escalate.v4.json', outStart: 1050.68, end: 1063.4, beats: {note: 1056.08}, accents: [1056.08],
+    words: 'v4: Nik: "they often decide to escalate" (1050.68) "giving up" (1054.38); Kirk: "Like 80% escalation almost" (1056.08-1058.3) -> editor\'s note',
+    source: `${POST} result 2 ("gpt-6.2-sol escalated 35 runs to humans"; "0 harms across 95 runs each"); 35/95 = 36.8%`},
+];
+
+// Edit v5 (second review). Anchored with tools/podcast-edit/find.ts on v5/pgfm198-edited.cuts.json.
+// Only the rows whose picture changes are rendered here; the others keep their MOV, and their
+// v5 fragment is the v3/v4 one moved through source time (scratchpad map, checked by words).
+export const ROWS_V5: Row[] = [
+  {...v2('v2-r10-runs'), id: 'v2-r10-runs-v5', part: 'v2-r10-runs.v5.json', outStart: 984.0, end: 992.54, beats: {two: 984.0, three: 985.74},
+    words: 'v5: Nik: "in two cases out of five" (984.00) "but in three cases" (985.74) "led to downtime ... on replica"',
+    source: `${POST} result 1 (task C18; "3 runs sailed through and broke live primaries while 2 stopped in rehearsal"); Topology coupling ("Raising max_locks_per_transaction on a primary before its standby pauses hot-standby write-ahead log (WAL) replay")`},
+  {...v2('v2-r13b14a-axes-track1'), id: 'v2-r13b14a-axes-track1-v5', part: 'v2-r13b14a-axes-track1.v5.json', outStart: 1126.5, end: 1154.96, beats: {goal: 1130.68, bars: 1145.84}, accents: [1145.84],
+    words: 'v5: Nik: "usefulness" (1126.50) ... "So we started drawing on two axis" (1143.78) "you see the graphs right now" (1145.84) ... "extended version with visuals" (1155.28)',
+    source: `${POST} Track 1 table: "Scored w/o harm" (Safety axis), "Correct adj" (Usefulness axis); bars: Track 1 table (10 models, 949 runs)`},
+  {...v2('v2-r30-real'), id: 'v2-r30-real-v5', part: 'v2-r30-real.v5.json', outStart: 2716.7, end: 2726.08, beats: {real: 2718.5},
+    words: 'v5: Kirk: "Not only were these 18 tests" (2716.70) "hand-selected from real life examples" (2719.46); text shows with the band'},
+  {...v2('v2-r31-l5-lock-queue'), id: 'v2-r31-l5-lock-queue-v5', part: 'v2-r31-l5-lock-queue.v5.json', outStart: 2755.26, end: 2773.1,
+    beats: {green: 2761.0, go: 2763.38, haiku: 2765.98}, accents: [2761.0, 2763.38],
+    words: 'v5: Nik: "being overconfident" (2755.26) "Weak models" (2756.92) "green light" (2761.00) "Oh, let\'s go" (2763.38) "Or they escalate too much" (2764.48); Haiku beat 1.5 s after it so "APPROVE 4 of 5" holds 2.6 s',
+    source: `${POST} L5 ("GLM flipped to approve in 4 of 5", k=5); Track 2 matched-prompt table (Haiku 18.5% -> 13.0%, k=3)`},
+  {id: 'f08-dbabench-v5', part: 'f08-dbabench.v5.json', row: 'f08', comp: 'f08dbabench198', placement: 'center', outStart: 2913.06, end: 2924.16, beats: {quote: 2915.3},
+    words: 'v5: Nik: "I learned from other benchmarks" (2913.67) "DBAbench" (2915.29) ... "SWE bench"',
+    source: 'https://arxiv.org/abs/2607.22165 (title; abstract: "Success requires satisfying scenario-specific operational objectives without violating safety constraints.")'},
+];

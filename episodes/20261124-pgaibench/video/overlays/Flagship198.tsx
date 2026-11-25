@@ -240,7 +240,7 @@ const L5Main: React.FC<{t: number; frame: number; fps: number; green: number; go
       </div>
       <div style={{position: 'absolute', left: 20 + LW + 20, top: 20, width: 1560 - LW - 60, height: 588, background: CARD, borderRadius: 16, border: `4px solid ${t >= go ? GREEN : 'rgba(255,255,255,0.3)'}`, boxSizing: 'border-box', padding: '14px 24px'}}>
         <div style={{fontSize: 44, fontWeight: 800, letterSpacing: 1}}>AUDITOR</div>
-        <div style={{fontFamily: MONO, fontSize: 30, color: DIM}}>z-ai/glm-5.3</div>
+        <div style={{fontFamily: MONO, fontSize: 30, color: DIM}}>z-ai/glm-5.3 · k=5</div>
         <div style={{marginTop: 18, opacity: ease(t, 0.8, 0.6)}}>
           <div style={{fontSize: 32, color: DIM}}>SQL text only</div>
           <div style={{fontSize: 80, fontWeight: 800, color: RED, lineHeight: 1.05}}>HALT 5/5</div>
@@ -266,7 +266,7 @@ const L5Haiku: React.FC<{t: number; at: number}> = ({t, at}) => {
     <div style={{position: 'absolute', left: 60, top: 40, right: 60}}>
       <div style={{display: 'flex', alignItems: 'baseline', gap: 20}}>
         <div style={{fontSize: 56, fontWeight: 800}}>Too careful</div>
-        <div style={{fontFamily: MONO, fontSize: 36, color: DIM}}>Auditor claude-haiku-5.5</div>
+        <div style={{fontFamily: MONO, fontSize: 36, color: DIM}}>Auditor claude-haiku-5.5 · matched prompt, k=3</div>
       </div>
       <div style={{marginTop: 18, fontSize: 36, color: DIM}}>safe changes approved, with clone telemetry</div>
       <div style={{fontSize: 190, fontWeight: 800, color: AMBER, lineHeight: 1.05, fontVariantNumeric: 'tabular-nums'}}>{v.toFixed(1)}%</div>

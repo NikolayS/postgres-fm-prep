@@ -3,10 +3,11 @@
 // down about its top edge over the layout background (bg.png: gradient + header), which frees the whole
 // lower area and the side margins for big graphics. Faces are never covered: graphics live only in
 // the freed areas, and the graphics layer is clipped at y 900 (nothing in the bottom 180 px).
-// Reboot after "restart server": dark blackout with a terminal line and a blinking cursor.
+// Reboot after "restart server": dark blackout with one large terminal line and a blinking cursor.
+// Whips pan a wrapped copy of the picture, so no black shows at the frame edge.
 import React, {useEffect, useState} from 'react';
 import {AbsoluteFill, Freeze, Img, OffthreadVideo, continueRender, delayRender, interpolate, spring, staticFile, useCurrentFrame} from 'remotion';
-import {BTN, FIVE_OF_FIVE, FPS, HANDLE, PRESS, S, SPEECH, STAMPS, Variant, W} from '../spec';
+import {BTN, FIVE_OF_FIVE, FPS, HANDLE, OFF, PRESS, S, STAMPS, Variant, W} from '../spec';
 import {Clips, DynSmall, Glitch, camera, shake} from './Dyn';
 
 const clamp = {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'} as const;
@@ -28,8 +29,9 @@ const useFonts = () => {
 
 // Geometry of the pull-back
 const CROP = {x: 90, y: 205, w: 1740, h: 540};
-const OFF = S[2] + SPEECH[2]; // reboot starts after "server"
-const WINDOWS: [number, number][] = [[W.perfectly - 2, S[1]], [S[2], OFF], [W.doNot - 2, S[4]], [W.mistakes - 2, BTN]];
+// stamps: the pull-back holds through the power-down (OFF..OFF+3), so no punch-in frame shows there;
+// errors: the pull-back starts 8 frames before the first icon, so the labels are up before icons land
+const WINDOWS: [number, number][] = [[W.perfectly - 2, S[1]], [S[2], OFF + 3], [W.doNot - 2, S[4]], [W.mistakes - 8, BTN]];
 type G = {z: number; P: number; FT: number; H: number; side: number};
 const geo = (v: Variant): G => {
   const z = v === 'bold' ? 1 : 0.7, P = v === 'bold' ? 0.78 : 0.86;
@@ -66,7 +68,7 @@ const Safe: React.FC<{f: number; g: G; bold: boolean}> = ({f, g, bold}) => {
 const Stamps: React.FC<{f: number; g: G; bold: boolean}> = ({f, g, bold}) => {
   if (f < STAMPS[0] || f >= OFF) return null;
   const {z, FT, H} = g, w = 280 * z, h = 128 * z, step = 296 * z, fw = 330 * z;
-  const x0 = (1920 - (4 * step + w + 40 * z + fw)) / 2, top = FT + (H - h) / 2;
+  const x0 = (1920 - (4 * step + w + 40 * z + fw)) / 2, top = FT + (H - h) / 2 - LIFT;
   const q = f >= FIVE_OF_FIVE ? pop(f, FIVE_OF_FIVE, 7, 260) : 0;
   return (
     <>
@@ -75,8 +77,23 @@ const Stamps: React.FC<{f: number; g: G; bold: boolean}> = ({f, g, bold}) => {
         const p = lerp(f, at, at + 3, 0, 1);
         return <div key={k} style={{position: 'absolute', left: x0 + k * step, top, width: w, height: h, transform: `rotate(${(rnd(k + 3) - 0.5) * 18}deg) scale(${(bold ? 3 : 2.2) - (bold ? 2 : 1.2) * p})`, opacity: Math.min(1, p * 2), border: `${11 * z}px solid ${RED}`, borderRadius: 16 * z, color: RED, fontFamily: font, fontWeight: 900, fontSize: 54 * z, letterSpacing: 2 * z, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,.8)', boxShadow: `0 ${8 * z}px 24px rgba(0,0,0,.18)`}}>RESTART</div>;
       })}
-      {q > 0 ? <div style={{position: 'absolute', left: x0 + 4 * step + w + 40 * z, top: FT - 6, width: fw, height: H, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `scale(${0.3 + 0.7 * q}) rotate(${-6 * (1 - q)}deg)`, opacity: Math.min(1, q * 2), fontFamily: font, fontWeight: 900, fontSize: 210 * z, color: RED, textShadow: `0 ${8 * z}px 0 #fff, 0 ${14 * z}px 24px rgba(0,0,0,.25)`}}>5/5</div> : null}
+      {q > 0 ? <div style={{position: 'absolute', left: x0 + 4 * step + w + 40 * z, top: FT - 6 - LIFT, width: fw, height: H, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `scale(${0.3 + 0.7 * q}) rotate(${-6 * (1 - q)}deg)`, opacity: Math.min(1, q * 2), fontFamily: font, fontWeight: 900, fontSize: 210 * z, color: RED, textShadow: `0 ${8 * z}px 0 #fff, 0 ${14 * z}px 24px rgba(0,0,0,.25)`}}>5/5</div> : null}
     </>
+  );
+};
+
+// Scope tag: what Nik says, "in one task" (task C18 in the post). It slams into the free lower area
+// on "task", then shrinks to a caption row under the stamps on the first stamp, and stays with them.
+const LIFT = 12, CAP_Y = 869; // stamps row lifted by LIFT; caption row centre (text ends by y 892)
+const ScopeTag: React.FC<{f: number; g: G; bold: boolean}> = ({f, g, bold}) => {
+  if (f < W.task || f >= OFF) return null;
+  const {FT, H} = g, cap = bold ? 40 : 36, big = bold ? 2.4 : 2;
+  const p = pop(f, W.task, 8, 240), m = lerp(f, STAMPS[0] - 2, STAMPS[0] + 3, 0, 1), e = 1 - Math.pow(1 - m, 3);
+  const cy = FT + H / 2 + (CAP_Y - (FT + H / 2)) * e, sc = (big + (1 - big) * e) * (m > 0 ? 1 : (bold ? 1.6 - 0.6 * p : 0.3 + 0.7 * p));
+  return (
+    <div style={{position: 'absolute', left: 0, width: 1920, top: cy - cap * 0.7, height: cap * 1.4, display: 'flex', justifyContent: 'center', alignItems: 'center', opacity: Math.min(1, p * 2)}}>
+      <div style={{transform: `scale(${sc})`, padding: `${cap * 0.12}px ${cap * 0.45}px`, borderRadius: cap * 0.3, background: '#3b0f3f', color: '#fff', fontFamily: font, fontWeight: 900, fontSize: cap, lineHeight: `${cap * 1.1}px`, letterSpacing: 2, whiteSpace: 'nowrap'}}>ONE TASK (C18)</div>
+    </div>
   );
 };
 
@@ -106,6 +123,11 @@ const Errors: React.FC<{f: number; g: G; bold: boolean}> = ({f, g, bold}) => {
   add(8, side, 225, FT, bold ? 16 : 9, 300, 60, 100);
   add(1920 - side, 1912, 225, FT, bold ? 16 : 9, 400, 60, 100);
   const gap = 2 * 40 * P - 10; if (bold) add(960 - gap / 2, 960 + gap / 2, 230, FT - 60, 5, 600, 44 / z, 44 / z);
+  // name labels in the pulled-back picture (layout: Kirk x 123-275, Nik x 1002-1239, y 700-722); an icon
+  // (with room for its rotation and pop) stays 24 px clear of them
+  const lab = [[123, 275], [1002, 1239]].map(([a, b]) => ({x0: 960 + (a - 960) * P - 24, x1: 960 + (b - 960) * P + 24, y0: CROP.y + (700 - CROP.y) * P - 24, y1: CROP.y + (722 - CROP.y) * P + 24}));
+  const clear = (s: {x: number; y: number; s: number}) => { const r = s.s * 0.25; return lab.every((l) => s.x + s.s + r < l.x0 || s.x - r > l.x1 || s.y + s.s + r < l.y0 || s.y - r > l.y1); };
+  for (let k = slots.length - 1; k >= 0; k--) if (!clear(slots[k])) slots.splice(k, 1);
   const n = f < W.at - 2 ? 0 : Math.min(slots.length, Math.pow(2, Math.floor((f - (W.at - 2)) / 2) + 1));
   const first = pop(f, W.mistakes, 7, 260), fs = 170 * z;
   const icon = (x: number, y: number, s: number, sc: number, rot: number, key: number) => (
@@ -119,18 +141,15 @@ const Errors: React.FC<{f: number; g: G; bold: boolean}> = ({f, g, bold}) => {
   );
 };
 
-// Terminal on black during the reboot: "$ pg_ctl restart" typed, then the server lines, blinking cursor
-const Terminal: React.FC<{f: number; z: number}> = ({f, z}) => {
-  const t0 = OFF + 3, cmd = '$ pg_ctl restart', n = Math.min(cmd.length, Math.floor((f - t0 + 1) * 3.5));
-  const lines = [cmd.slice(0, n)];
-  if (f >= t0 + 6) lines.push('waiting for server to shut down.... done');
-  if (f >= t0 + 9) lines.push('server starting');
-  const cursor = Math.floor(f / 3) % 2 === 0;
-  const fs = 64;
+// Terminal on black during the reboot: one large line (readable on a phone in the 0.5 s it shows),
+// "$ pg_ctl restart" typed in 3 frames, blinking cursor.
+const Terminal: React.FC<{f: number}> = ({f}) => {
+  const t0 = OFF + 3, cmd = '$ pg_ctl restart', n = Math.min(cmd.length, Math.floor((f - t0 + 1) * 6));
+  const cursor = Math.floor(f / 3) % 2 === 0, fs = 120;
   return (
-    <AbsoluteFill style={{background: '#050505'}}>
-      <div style={{position: 'absolute', left: 140, top: 300, fontFamily: mono, fontSize: fs, lineHeight: `${fs * 1.45}px`, color: '#d8f5d0', whiteSpace: 'pre'}}>
-        {lines.map((l, i) => <div key={i}>{l}{i === lines.length - 1 && cursor ? <span style={{background: '#d8f5d0', color: '#050505'}}>{' '}</span> : null}</div>)}
+    <AbsoluteFill style={{background: '#050505', alignItems: 'center', justifyContent: 'center'}}>
+      <div style={{width: 17 * fs * 0.6, marginTop: -60, fontFamily: mono, fontSize: fs, lineHeight: `${fs * 1.2}px`, color: '#d8f5d0', whiteSpace: 'pre'}}>
+        {cmd.slice(0, n)}{cursor ? <span style={{background: '#d8f5d0', color: '#050505'}}>{'\u00a0'}</span> : null}
       </div>
     </AbsoluteFill>
   );
@@ -162,22 +181,29 @@ export const Dyn: React.FC<{variant: Variant}> = ({variant: v}) => {
   ) : (<><Clips /><Glitch f={f} amt={gl} />{bot !== 0 ? <div style={{position: 'absolute', left: 1656, top: 880, width: 240, height: 135, overflow: 'hidden', borderRadius: 10, transformOrigin: '50% 100%', transform: `rotate(${bot * 9}deg) scale(${1 + Math.abs(bot) * 0.12})`}}>
       <div style={{position: 'absolute', left: -1656, top: -880, width: 1920, height: 1080}}><Freeze frame={W.agents - S[1] + HANDLE}><OffthreadVideo src={staticFile('L2.mp4')} muted style={{width: 1920, height: 1080}} /></Freeze></div>
     </div> : null}</>);
+  const scene = (
+    <AbsoluteFill style={{transformOrigin: `${c.o.x}px ${c.o.y}px`, transform: `scale(${c.s})`}}>
+      {k > 0 ? <Img src={staticFile('bg.png')} style={{position: 'absolute', width: 1920, height: 1080}} /> : null}
+      {pic}
+    </AbsoluteFill>
+  );
+  // during a whip the picture moves sideways; a copy one frame-width away fills the side it uncovers
+  const wrap = c.tx !== 0 ? c.tx - Math.sign(c.tx) * 1920 : 0;
   return (
     <AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
-      {term ? <Terminal f={f} z={g.z} /> : (
+      {term ? <Terminal f={f} /> : (<AbsoluteFill style={{filter: c.blur > 0.5 ? `blur(${c.blur}px)` : undefined}}>
+        {wrap !== 0 ? <AbsoluteFill style={{transform: `translate(${wrap + sh.x}px, ${sh.y}px) scale(1, ${sy})`, filter: `brightness(${bright})`}}>{scene}</AbsoluteFill> : null}
         <AbsoluteFill style={{transform: `translate(${c.tx + sh.x}px, ${sh.y}px) scale(1, ${sy})`, filter: `brightness(${bright})`}}>
-          <AbsoluteFill style={{transformOrigin: `${c.o.x}px ${c.o.y}px`, transform: `scale(${c.s})`, filter: c.blur > 0.5 ? `blur(${c.blur}px)` : undefined}}>
-            {k > 0 ? <Img src={staticFile('bg.png')} style={{position: 'absolute', width: 1920, height: 1080}} /> : null}
-            {pic}
-          </AbsoluteFill>
+          {scene}
           <div style={{position: 'absolute', left: 0, top: 0, width: 1920, height: 900, overflow: 'hidden'}}>
             <Safe f={f} g={g} bold={bold} />
             <Stamps f={f} g={g} bold={bold} />
+            <ScopeTag f={f} g={g} bold={bold} />
             <Button f={f} g={g} bold={bold} />
             <Errors f={f} g={g} bold={bold} />
           </div>
         </AbsoluteFill>
-      )}
+      </AbsoluteFill>)}
       {stop > 0 ? <AbsoluteFill style={{background: '#fff', opacity: 0.45 * stop}} /> : null}
       {f < 3 ? <AbsoluteFill style={{background: '#000', opacity: 1 - f / 3}} /> : null}
     </AbsoluteFill>

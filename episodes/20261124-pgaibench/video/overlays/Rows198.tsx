@@ -1,4 +1,4 @@
-import {interpolate, useCurrentFrame, useVideoConfig, Easing} from 'remotion';
+import {interpolate, useCurrentFrame, useVideoConfig, Easing, Img, staticFile} from 'remotion';
 import {AMBER, At, BandShell, CARD, Chip, DIM, Dots, GREEN, GREEN_D, MONO, RED, RED_D, Shell, SourceLine, Stamp, clamp, ease, fmt, pop} from './Flagship198';
 
 // Episode 198 storyboard rows built by illus-2 (R/for-nik/10-storyboard.md). One idea per card.
@@ -90,7 +90,7 @@ export const R05Baseline: React.FC<{durationSec: number; beats: {slot: At}}> = (
     <BandShell>
       <div style={{width: 120, height: 120, border: '6px dashed rgba(255,255,255,0.85)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 96, fontWeight: 800, opacity: Math.min(1, slotK), transform: `scale(${slotK})`}}>?</div>
       <div style={{fontSize: 72, fontWeight: 800, whiteSpace: 'nowrap', opacity: ease(t, 0.3, 0.4)}}>No human baseline yet</div>
-      <div style={{marginLeft: 'auto', opacity: ease(t, beats.slot.at + 1.2, 0.4)}}><Chip text="v0.3" color="#111" bg={AMBER} size={52} /></div>
+      <div style={{marginLeft: 'auto', opacity: ease(t, beats.slot.at + 1.2, 0.4)}}><Chip text="coming" color="#111" bg={AMBER} size={52} /></div>
     </BandShell>
   );
 };
@@ -122,20 +122,20 @@ export const R09Restart: React.FC<{durationSec: number; beats: {kirk: At}}> = ({
   );
 };
 
-// ---------- row 10: 2 stopped in rehearsal, 3 broke live primaries (band)
+// ---------- row 10: 2 stopped in rehearsal, 3 hit the live cluster (band)
 export const R10Runs: React.FC<{durationSec: number; beats: {two: At; three: At}}> = ({beats}) => {
   const {t} = useT();
   const tile = (i: number) => {
     const amber = i < 2;
     const k = ease(t, amber ? beats.two.at + i * 0.2 : beats.three.at + (i - 2) * 0.2, 0.3);
-    return <div key={i} style={{width: 118, height: 118, borderRadius: 14, background: k > 0 ? (amber ? AMBER : RED) : 'rgba(255,255,255,0.12)', opacity: 0.35 + 0.65 * k, transform: `scale(${0.85 + 0.15 * k})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 80, fontWeight: 900, color: '#111'}}>{k > 0 ? (amber ? '■' : '✕') : ''}</div>;
+    return <div key={i} style={{width: 96, height: 96, borderRadius: 12, background: k > 0 ? (amber ? AMBER : RED) : 'rgba(255,255,255,0.12)', opacity: 0.35 + 0.65 * k, transform: `scale(${0.85 + 0.15 * k})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 66, fontWeight: 900, color: '#111'}}>{k > 0 ? (amber ? '■' : '✕') : ''}</div>;
   };
   return (
     <BandShell>
       <div style={{display: 'flex', gap: 12}}>{[0, 1, 2, 3, 4].map(tile)}</div>
       <div>
-        <div style={{fontSize: 54, fontWeight: 800, color: AMBER, opacity: ease(t, beats.two.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.1}}>2 stopped in rehearsal</div>
-        <div style={{fontSize: 54, fontWeight: 800, color: RED, opacity: ease(t, beats.three.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.1}}>3 broke live primaries</div>
+        <div style={{fontSize: 50, fontWeight: 800, color: AMBER, opacity: ease(t, beats.two.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.1}}><span style={{fontFamily: MONO, fontSize: 40, color: DIM}}>task C18 · </span>2 stopped in rehearsal</div>
+        <div style={{fontSize: 50, fontWeight: 800, color: RED, opacity: ease(t, beats.three.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.1}}>3 hit live: standby replay paused</div>
       </div>
     </BandShell>
   );
@@ -167,16 +167,24 @@ export const R11Locks: React.FC<{durationSec: number; beats: {replicas: At; prim
   );
 };
 
-// ---------- row 12: escalated to a human, 35 of 95 (band)
-export const R12Esc: React.FC<{durationSec: number}> = () => {
+// ---------- row 12: escalated to a human, 35 of 95; editor's note on the on-air "80%" (band)
+export const R12Esc: React.FC<{durationSec: number; beats?: {note?: At}}> = ({beats}) => {
   const {t} = useT();
   const lit = Math.round(interpolate(t, [0.4, 1.6], [0, 35], clamp));
+  const noteAt = beats?.note?.at ?? 1e9;
+  const n = ease(t, noteAt, 0.35);
   return (
     <BandShell>
-      <div style={{fontSize: 124, fontWeight: 800, color: AMBER, lineHeight: 1, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums'}}>{lit}<span style={{fontSize: 64, color: DIM}}> of 95</span></div>
-      <div>
-        <div style={{fontSize: 56, fontWeight: 800, whiteSpace: 'nowrap', lineHeight: 1.1}}>runs escalated to a human</div>
-        <div style={{fontFamily: MONO, fontSize: 44, color: DIM}}>gpt-6.2-sol</div>
+      <div style={{position: 'absolute', left: 28, right: 28, top: 0, bottom: 0, display: 'flex', alignItems: 'center', gap: 28, opacity: 1 - n}}>
+        <div style={{fontSize: 124, fontWeight: 800, color: AMBER, lineHeight: 1, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums'}}>{lit}<span style={{fontSize: 64, color: DIM}}> of 95</span></div>
+        <div>
+          <div style={{fontSize: 56, fontWeight: 800, whiteSpace: 'nowrap', lineHeight: 1.1}}>runs escalated to a human</div>
+          <div style={{fontFamily: MONO, fontSize: 44, color: DIM}}>gpt-6.2-sol</div>
+        </div>
+      </div>
+      <div style={{position: 'absolute', left: 28, right: 28, top: 0, bottom: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', opacity: n, transform: `translateY(${(1 - n) * 20}px)`}}>
+        <div style={{fontSize: 52, fontWeight: 800, color: AMBER, whiteSpace: 'nowrap', lineHeight: 1.15}}>Editor's note: not 80%</div>
+        <div style={{fontSize: 46, fontWeight: 700, whiteSpace: 'nowrap', lineHeight: 1.15}}><span style={{fontFamily: MONO}}>gpt-6.2-sol</span> escalated 35 of 95 runs (37%)</div>
       </div>
     </BandShell>
   );
@@ -258,13 +266,13 @@ export const R13Axes14: React.FC<{durationSec: number; beats: {goal: At; bars: A
           <line x1={O.x} y1={O.y} x2={O.x + L * ax} y2={O.y} stroke="#fff" strokeWidth={6} markerEnd="url(#ah)" />
           <line x1={O.x} y1={O.y} x2={O.x} y2={O.y - H * ay} stroke="#fff" strokeWidth={6} markerEnd="url(#ah)" />
         </svg>
-        <div style={{position: 'absolute', left: 40, top: 70, width: 240, textAlign: 'right', opacity: ay}}>
+        <div style={{position: 'absolute', left: 15, top: 70, width: 240, textAlign: 'right', opacity: ay}}>
           <div style={{fontSize: 52, fontWeight: 800, color: RED}}>SAFETY</div>
-          <div style={{fontSize: 30, color: DIM}}>hazards halted</div>
+          <div style={{fontSize: 30, color: DIM}}>runs scored without harm</div>
         </div>
         <div style={{position: 'absolute', left: O.x + L - 460, top: O.y + 16, width: 460, textAlign: 'right', opacity: ax}}>
           <div style={{fontSize: 52, fontWeight: 800, color: '#60a5fa'}}>USEFULNESS</div>
-          <div style={{fontSize: 30, color: DIM}}>tasks done, not escalated</div>
+          <div style={{fontSize: 30, color: DIM}}>adjudicated correct runs</div>
         </div>
         <div style={{position: 'absolute', left: O.x + L - 300, top: O.y - H - 10, opacity: Math.min(1, goalK), transform: `scale(${goalK})`, display: 'flex', alignItems: 'center', gap: 16}}>
           <div style={{width: 60, height: 60, borderRadius: 30, background: GREEN, boxShadow: `0 0 40px ${GREEN}`}} />
@@ -359,7 +367,7 @@ export const R30Real: React.FC<{durationSec: number; beats: {real: At}}> = ({bea
       <div style={{position: 'relative', width: 300, height: 116}}>
         <Stamp text="REAL" color={RED} k={k} size={88} rot={-6} style={{left: 10, top: 2}} />
       </div>
-      <div style={{opacity: ease(t, beats.real.at + 0.3, 0.4)}}>
+      <div style={{opacity: ease(t, 0.2, 0.4)}}>
         <div style={{fontSize: 56, fontWeight: 800, whiteSpace: 'nowrap', lineHeight: 1.1}}>Most cases: real failures</div>
         <div style={{fontSize: 44, color: DIM, whiteSpace: 'nowrap'}}>that had passed human review</div>
       </div>
@@ -429,3 +437,28 @@ export const L9Setup198: React.FC<{durationSec: number; beats: {standby: At}}> =
   );
 };
 
+
+// ---------- f08: DBA-Bench, a native card (replaces the raw arXiv capture) (center)
+export const F08DbaBench: React.FC<{durationSec: number; beats: {quote: At}}> = ({beats}) => {
+  const {t, frame, fps} = useT();
+  const k = pop(frame, fps, 0.2);
+  return (
+    <Shell>
+      <div style={{position: 'absolute', left: 60, top: 36, right: 60}}>
+        <div style={{display: 'flex', alignItems: 'baseline', gap: 28}}>
+          <div style={{fontSize: 124, fontWeight: 900, lineHeight: 1, transform: `scale(${k})`, transformOrigin: '0 80%'}}>DBA-Bench</div>
+          <div style={{fontFamily: MONO, fontSize: 40, color: '#60a5fa', opacity: ease(t, 0.6, 0.4)}}>arXiv 2607.22165</div>
+        </div>
+        <div style={{marginTop: 14, fontSize: 40, fontWeight: 600, color: DIM, width: 900, lineHeight: 1.2, opacity: ease(t, 0.8, 0.4)}}>A Production-Fidelity Benchmark for LLM-Based Database Operations Agents</div>
+        <div style={{marginTop: 28, fontSize: 54, fontWeight: 800, width: 1000, lineHeight: 1.18, opacity: ease(t, beats.quote.at, 0.5), transform: `translateY(${(1 - ease(t, beats.quote.at, 0.5)) * 20}px)`}}>
+          <span style={{color: AMBER}}>“</span>Success requires satisfying scenario-specific operational objectives <span style={{color: GREEN}}>without violating safety constraints.</span><span style={{color: AMBER}}>”</span>
+        </div>
+      </div>
+      <div style={{position: 'absolute', right: 50, top: 170, width: 400, opacity: ease(t, 1.2, 0.5), transform: 'rotate(2deg)'}}>
+        <Img src={staticFile('ep198/arxiv-dbabench.png')} style={{width: 400, borderRadius: 8, border: '4px solid rgba(255,255,255,0.8)', display: 'block'}} />
+        <div style={{fontFamily: MONO, fontSize: 24, color: DIM, marginTop: 8, textAlign: 'center'}}>source: arxiv.org/abs/2607.22165</div>
+      </div>
+      <SourceLine text="arxiv.org/abs/2607.22165 · abstract" />
+    </Shell>
+  );
+};

@@ -13,6 +13,10 @@ const lerp = (f: number, a: number, b: number, v0: number, v1: number) => interp
 const pop = (f: number, at: number, damping = 9, stiffness = 220) => spring({frame: f - at, fps: FPS, config: {damping, stiffness, mass: 0.6}});
 const rnd = (k: number) => { const x = Math.sin(k * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
 const KIRK = {x: 520, y: 690}, NIK = {x: 1400, y: 690}, MID = {x: 960, y: 540};
+// Punch-in origins that keep the header (layout: x 184-1737, y 72-168) and the name labels (y 700-722,
+// Kirk x 123-275) either fully in frame or fully out, never cut half-way:
+// bold on Nik (1.2-1.4): header and Kirk's label fully out; medium on Nik (1.1) and bold on Kirk (1.15): all in.
+const NIK_BOLD = {x: 1680, y: 1040}, NIK_MED = {x: 1180, y: 600}, KIRK_BOLD = {x: 640, y: 490};
 const RED = '#e0262b', INK = '#3b0f3f';
 const font = 'Lato, "Helvetica Neue", Arial, sans-serif';
 
@@ -31,10 +35,10 @@ export const camera = (v: Variant, f: number): Cam => {
   const big = v === 'bold';
   if (f < S[0]) { if (big) { const k = ease(lerp(f, 0, 10, 0, 1)); c.s = 1.35 - 0.35 * k; c.blur = 8 * (1 - k); } return c; }
   if (L === 0) { c.o = KIRK; c.s = f < W.right ? lerp(f, S[0], W.right, 1, big ? 1.12 : 1.08) : (big ? 1.26 : 1.15); }
-  if (L === 1) { c.o = NIK; c.s = big ? 1.2 : 1.1; }
-  if (L === 2) { c.o = NIK; c.s = big ? 1.1 + 0.3 * (1 - ease(lerp(f, S[2], S[2] + 5, 0, 1))) : lerp(f, S[2], S[2] + SPEECH[2], 1, 1.06); }
+  if (L === 1) { c.o = big ? NIK_BOLD : NIK_MED; c.s = big ? 1.2 : 1.1; }
+  if (L === 2) { c.o = big ? NIK_BOLD : NIK; c.s = big ? 1.1 + 0.3 * (1 - ease(lerp(f, S[2], S[2] + 5, 0, 1))) : lerp(f, S[2], S[2] + SPEECH[2], 1, 1.06); }
   if (L === 3) {
-    if (f < W.yeah) { c.o = KIRK; c.s = big ? 1.15 : 1; }
+    if (f < W.yeah) { c.o = big ? KIRK_BOLD : KIRK; c.s = big ? 1.15 : 1; }
     else { c.o = NIK; c.s = big ? lerp(f, W.yeah, S[4] - 4, 1.2, 1.3) : 1.15; }
   }
   if (L === 4) { c.o = MID; c.s = 1; }
@@ -119,18 +123,24 @@ const Safe: React.FC<{v: Variant; f: number}> = ({v, f}) => {
 // Five RESTART stamps slam into the band on beats, then "5/5" (what Nik says: five out of five).
 const Stamps: React.FC<{v: Variant; f: number}> = ({v, f}) => {
   const end = v === 'bold' ? W.serverEnd : S[3];
-  if (f < STAMPS[0] || f >= end) return null;
+  if (f < Math.min(W.task, STAMPS[0]) || f >= end) return null;
   const items = STAMPS.map((at, k) => {
     if (f < at) return null;
     const p = lerp(f, at, at + (v === 'restrained' ? 4 : 3), 0, 1);
     const s = v === 'restrained' ? 0.85 + 0.15 * p : 2.4 - 1.4 * p;
     return (
-      <div key={k} style={{position: 'absolute', left: 130 + k * 255, top: 768, width: 240, height: 92, transform: `rotate(${(rnd(k + 3) - 0.5) * 16}deg) scale(${s})`, opacity: Math.min(1, p * 1.5), border: `7px solid ${RED}`, borderRadius: 12, color: RED, fontFamily: font, fontWeight: 900, fontSize: 40, letterSpacing: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,.55)'}}>RESTART</div>
+      <div key={k} style={{position: 'absolute', left: 130 + k * 255, top: 752, width: 240, height: 86, transform: `rotate(${(rnd(k + 3) - 0.5) * 16}deg) scale(${s})`, opacity: Math.min(1, p * 1.5), border: `7px solid ${RED}`, borderRadius: 12, color: RED, fontFamily: font, fontWeight: 900, fontSize: 40, letterSpacing: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,.55)'}}>RESTART</div>
     );
   });
   const q = f >= FIVE_OF_FIVE ? (v === 'restrained' ? lerp(f, FIVE_OF_FIVE, FIVE_OF_FIVE + 5, 0, 1) : pop(f, FIVE_OF_FIVE, 8, 260)) : 0;
+  // scope tag: "in one task" (task C18 in the post), a caption row under the stamps from "task"
+  const t = v === 'restrained' && f >= W.task ? lerp(f, W.task, W.task + 5, 0, 1) : 0;
+  const tag = t > 0 ? <div style={{position: 'absolute', left: 130, width: 4 * 255 + 240, top: 858, height: 38, display: 'flex', justifyContent: 'center', opacity: t}}>
+    <div style={{padding: '0 14px', borderRadius: 10, background: INK, color: '#fff', fontFamily: font, fontWeight: 900, fontSize: 32, lineHeight: '38px', letterSpacing: 2}}>ONE TASK (C18)</div>
+  </div> : null;
   return (
     <>
+      {tag}
       {items}
       {q > 0 ? <div style={{position: 'absolute', left: 1430, top: 742, width: 330, height: 146, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `scale(${v === 'restrained' ? 1 : 0.4 + 0.6 * q})`, opacity: Math.min(1, q * 1.4), fontFamily: font, fontWeight: 900, fontSize: 132, color: RED, textShadow: '0 4px 0 #fff'}}>5/5</div> : null}
     </>

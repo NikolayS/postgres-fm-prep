@@ -64,7 +64,8 @@ const Title: React.FC<{text: string}> = ({text}) => {
 type Key = 'phase1' | 'phase2' | 'analyst' | 'auditor' | 'actor' | 'clones' | 'prod' | 'cr' | 'back' | 'draft' | 'results' | 'approve' | 'reject' | 'rehearse' | 'apply';
 const BOX = {
   analyst: {x: 30, y: 70, w: 588, h: 221, title: 'Analyst', sub: 'most capable model, not trusted', main: 'writes and tests change requests', stroke: F.line},
-  auditor: {x: 941, y: 70, w: 589, h: 221, title: 'Auditor', sub: 'small model tuned to detect harm', main: 'reviews change requests', stroke: F.hi},
+  // the post: v0.2 tested untuned frontier models as Auditors; a small tuned model is the design goal
+  auditor: {x: 941, y: 70, w: 589, h: 221, title: 'Auditor', sub: 'small model tuned to detect harm', main: 'reviews change requests', note: 'v0.2 tested untuned frontier Auditors', stroke: F.hi},
   actor: {x: 30, y: 368, w: 1500, h: 112, title: 'Actor', sub: 'almost no AI: rehearses on a clone, applies in production', main: '', stroke: F.line},
   clones: {x: 30, y: 550, w: 588, h: 110, title: 'Clones of production', sub: 'experiments and rehearsals', main: '', stroke: F.line},
   prod: {x: 941, y: 550, w: 589, h: 110, title: 'Production Postgres', sub: 'only the Actor changes it', main: '', stroke: F.hi},
@@ -130,6 +131,7 @@ export const AaaFig: React.FC<AaaFigProps> = ({appear, focus, glow = [], tokens 
             <div style={{fontSize: small ? 36 : 46, fontWeight: 700, color: F.hi}}>{B.title}</div>
             <div style={{fontSize: 31, color: F.grey, marginTop: small ? 2 : 8}}>{B.sub}</div>
             {B.main ? <div style={{fontSize: 31, color: F.hi, marginTop: 4}}>{B.main}</div> : null}
+            {'note' in B && B.note ? <div style={{fontSize: 30, fontWeight: 700, color: AMBER, marginTop: 4}}>{B.note}</div> : null}
           </div>
         );
       })}
@@ -314,6 +316,9 @@ export const Prompt198: React.FC<PromptProps> = ({text, stampAt, stamp}) => {
 // gpt-6-astra 1 (C18), opus-5.5 1 (held-out). Clone gate: -6 (3 Fable restart harms + 3 Grok
 // held-out). Auditor (claude-fable-5.2:medium): -6 (5 standby-index drops + gpt-6-astra). Left: 1.
 export type DotsProps = {mode: 'gate' | 'full' | 'hero'; b: Record<string, number>; durationSec: number};
+// the post: "We replayed all 408 scored Track 1 primary CRs offline through both AAA gates" (retrospective, in-sample)
+const REPLAY = 'offline replay of the 408 recorded changes (in-sample)';
+const REPLAY_C = '#d6dae2';
 const HARMS: ('gate' | 'auditor' | 'none')[] = ['auditor', 'auditor', 'auditor', 'auditor', 'gate', 'gate', 'gate', 'gate', 'gate', 'gate', 'auditor', 'auditor', 'none'];
 export const Dots198: React.FC<DotsProps> = ({mode, b}) => {
   const frame = useCurrentFrame();
@@ -328,7 +333,8 @@ export const Dots198: React.FC<DotsProps> = ({mode, b}) => {
   const gateIdx = HARMS.map((h, i) => (h === 'gate' ? i : -1)).filter((i) => i >= 0);
   const audIdx = HARMS.map((h, i) => (h === 'auditor' ? i : -1)).filter((i) => i >= 0);
   const gateAt = b.gate ?? 1e9, audAt = mode === 'full' ? b.auditor : 1e9;
-  const count = 13 - (t >= gateAt + 1.2 ? 6 : 0) - (t >= audAt + 1.2 ? 6 : 0);
+  // the Auditor's 6 leave the count on Nik's "no. One harm left" (b.no), after Kirk's "100%"
+  const count = 13 - (t >= gateAt + 1.2 ? 6 : 0) - (mode === 'full' && t >= b.no ? 6 : 0);
   const spot = mode === 'full' ? ease(frame, b.left, b.left + 0.8, fps) : 0;
   const stampIn = mode === 'full' ? pop(frame, b.stamp, fps) : 0;
   const crack = mode === 'full' ? ease(frame, b.no, b.no + 0.7, fps) : 0;
@@ -341,17 +347,20 @@ export const Dots198: React.FC<DotsProps> = ({mode, b}) => {
       <Panel>
         <Tag text="pgaibench.dev" />
         <div style={{position: 'absolute', left: 0, top: 70, width: W, textAlign: 'center', transform: `scale(${0.6 + 0.4 * Math.min(h, 1.08)})`, opacity: Math.min(1, h * 1.4)}}>
-          <div style={{fontSize: 44, fontWeight: 700, color: DIM}}>live harms, acting alone → with AAA</div>
+          <div style={{fontSize: 44, fontWeight: 700, color: DIM}}>measured harms → after the AAA replay</div>
           <div style={{fontSize: 260, fontWeight: 900, color: '#fff', lineHeight: 1.05}}><span style={{color: RED}}>13</span> → <span style={{color: GREEN}}>1</span></div>
         </div>
         <div style={{position: 'absolute', left: 0, top: 440, width: W, textAlign: 'center', fontSize: 130, fontWeight: 900, color: GREEN, opacity: p, transform: `translateY(${(1 - p) * 30}px)`}}>−92.3%</div>
+        <div style={{position: 'absolute', left: 0, top: 598, width: W, textAlign: 'center', fontSize: 36, fontWeight: 700, color: REPLAY_C, opacity: Math.min(1, h * 1.4)}}>{REPLAY}</div>
       </Panel>
     );
   }
   return (
     <Panel>
-      <Title text={mode === 'gate' ? '13 live harms meet the clone gate' : '13 live harms through AAA'} />
-      <div style={{position: 'absolute', right: 50, top: 6, fontSize: 130, fontWeight: 900, color: count === 1 ? GREEN : RED, fontVariantNumeric: 'tabular-nums', opacity: ease(frame, 0.4, 1, fps) * (1 - gateHero)}}>{count}</div>
+      <Title text={mode === 'gate' ? '13 measured harms meet the clone gate' : '13 measured harms, replayed through AAA'} />
+      <div style={{position: 'absolute', right: 34, bottom: 20, fontFamily: MONO, fontSize: 30, color: 'rgba(255,255,255,0.55)', opacity: ease(frame, 0.8, 1.4, fps)}}>pgaibench.dev</div>
+      <div style={{position: 'absolute', left: 40, top: 76, fontSize: 34, fontWeight: 700, color: REPLAY_C, opacity: ease(frame, 0.3, 0.9, fps)}}>{REPLAY}</div>
+      <div style={{position: 'absolute', right: 50, top: 6, fontSize: 130, fontWeight: 900, color: RED, fontVariantNumeric: 'tabular-nums', opacity: ease(frame, 0.4, 1, fps) * (1 - gateHero)}}>{count}</div>
       {[{k: 'gate' as const, at: gateAt, title: 'Clone gate  −6', sub: '$0 LLM', c: '#38C6D9'}, ...(mode === 'full' ? [{k: 'auditor' as const, at: audAt, title: 'Auditor  −6', sub: 'an independent model', c: AMBER}] : [])].map((x) => (
         <div key={x.k} style={{position: 'absolute', left: bins[x.k].x - 290, top: bins[x.k].y - 80, width: 580, height: 190, boxSizing: 'border-box', borderRadius: 14, border: `4px solid ${x.c}`, background: 'rgba(255,255,255,0.03)', opacity: binO(x.at) * (1 - spot) * (1 - gateHero), display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'flex-end', paddingBottom: 12}}>
           <div style={{fontSize: 46, fontWeight: 800, color: x.c, whiteSpace: 'pre'}}>{x.title}</div>
@@ -386,8 +395,8 @@ export const Dots198: React.FC<DotsProps> = ({mode, b}) => {
           <div style={{fontSize: 36, color: DIM, marginTop: 6}}>held-out task · passed both gates</div>
         </div>
       ) : null}
-      {stampIn > 0 && t < b.no + 1.6 ? (
-        <div style={{position: 'absolute', left: W / 2 - 250, top: 260, width: 500, height: 200, border: `10px solid ${GREEN}`, borderRadius: 20, color: GREEN, fontSize: 130, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `rotate(${-8 + 30 * crack}deg) scale(${(1.4 - 0.4 * Math.min(stampIn, 1)) * (1 - 0.2 * crack)}) translateY(${crack * 260}px)`, opacity: Math.min(1, stampIn) * (1 - interpolate(t, [b.no + 0.8, b.no + 1.5], [0, 1], clamp)), background: 'rgba(22,22,28,0.9)'}}>
+      {stampIn > 0 && t < b.no + 0.7 ? (
+        <div style={{position: 'absolute', left: W / 2 - 220, top: 178, width: 440, height: 170, border: `10px solid ${GREEN}`, borderRadius: 20, color: GREEN, fontSize: 112, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center', transform: `rotate(${-8 + 10 * crack}deg) scale(${(1.25 - 0.25 * Math.min(stampIn, 1)) * (1 - 0.15 * crack)})`, opacity: Math.min(1, stampIn) * (1 - interpolate(t, [b.no, b.no + 0.6], [0, 1], clamp)), background: 'rgba(22,22,28,0.9)'}}>
           100%<span style={{fontSize: 80}}>?</span>
         </div>
       ) : null}
@@ -446,11 +455,12 @@ export const Cards198: React.FC<CardsProps> = ({b}) => {
   const groups = [
     ...Array.from({length: 14}, () => ({c: '#4C8DFF', l: ''})),
     {c: AMBER, l: 'O3'}, {c: AMBER, l: 'S1'},
-    ...Array.from({length: 3}, () => ({c: '#555a66', l: '?'})),
+    ...Array.from({length: 3}, () => ({c: '#8a90a0', l: '?'})),
   ];
   const CW = 100, CH = 140, GAP = 14;
   const hero = pop(frame, b.hero, fps);
   const legend = ease(frame, b.legend, b.legend + 0.5, fps);
+  const note = ease(frame, b.note ?? b.hero + 0.8, (b.note ?? b.hero + 0.8) + 0.5, fps);
   return (
     <Panel>
       <Title text="PGAIBench v0.2: live scenarios" />
@@ -463,7 +473,7 @@ export const Cards198: React.FC<CardsProps> = ({b}) => {
         const s = pop(frame, 0.5 + i * 0.16, fps);
         if (s <= 0) return null;
         return (
-          <div key={i} style={{position: 'absolute', left: x, top: y, width: CW, height: CH, borderRadius: 12, background: g.c, border: '3px solid rgba(255,255,255,0.8)', transform: `translateY(${(1 - Math.min(1, s)) * -300}px) rotate(${(1 - Math.min(1, s)) * 25 + ((i * 37) % 7) - 3}deg)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40, fontWeight: 900, color: '#111', fontFamily: MONO, backgroundImage: g.l === '?' ? 'repeating-linear-gradient(45deg, #555a66 0 10px, #4a4e58 10px 20px)' : undefined}}>{g.l}</div>
+          <div key={i} style={{position: 'absolute', left: x, top: y, width: CW, height: CH, borderRadius: 12, background: g.c, border: '3px solid rgba(255,255,255,0.8)', transform: `translateY(${(1 - Math.min(1, s)) * -300}px) rotate(${(1 - Math.min(1, s)) * 25 + ((i * 37) % 7) - 3}deg)`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 40, fontWeight: 900, fontFamily: 'Inter, sans-serif', color: g.l === '?' ? '#f2f4f8' : '#111', backgroundImage: g.l === '?' ? 'repeating-linear-gradient(45deg, #8a90a0 0 10px, #7c8292 10px 20px)' : undefined}}>{g.l}</div>
         );
       })}
       <div style={{position: 'absolute', left: 1240, top: 90, width: 300, textAlign: 'center', opacity: Math.min(1, hero), transform: `scale(${0.6 + 0.4 * Math.min(hero, 1.08)})`}}>
@@ -473,7 +483,8 @@ export const Cards198: React.FC<CardsProps> = ({b}) => {
       <div style={{position: 'absolute', left: 60, top: 470, display: 'flex', gap: 50, fontSize: 36, fontWeight: 700, opacity: legend}}>
         <span style={{color: '#7fb0ff'}}>14 core</span><span style={{color: AMBER}}>2 exploratory</span><span style={{color: '#9aa0ad'}}>3 held-out</span>
       </div>
-      <div style={{position: 'absolute', left: 60, top: 560, fontSize: 32, color: DIM, opacity: legend}}>{'10 models · 949 live runs'}</div>
+      <div style={{position: 'absolute', left: 60, top: 540, fontSize: 32, color: DIM, opacity: legend}}>{'10 models · 949 scored runs'}</div>
+      <div style={{position: 'absolute', left: 60, top: 600, fontSize: 36, fontWeight: 700, color: '#fff', opacity: note}}><span style={{color: YEL}}>Editor's note:</span> v0.2 has 19 live scenarios</div>
     </Panel>
   );
 };
@@ -590,7 +601,7 @@ export const Board198: React.FC<Board198Props> = ({b}) => {
   const verdict = pop(frame, b.harm + 1.6, fps);
   return (
     <Panel>
-      <div style={{position: 'absolute', left: L, top: 14, fontSize: 44, fontWeight: 800, color: '#fff'}}>Models acting alone: correct runs</div>
+      <div style={{position: 'absolute', left: L, top: 14, fontSize: 44, fontWeight: 800, color: '#fff'}}>Models acting alone: correct runs<span style={{fontSize: 34, fontWeight: 700, color: DIM}}> of 95 (Fable: of 94)</span></div>
       <Tag text="pgaibench.dev" />
       <div style={{position: 'absolute', left: HX, top: 62, fontSize: 34, fontWeight: 800, color: RED, opacity: harmCol}}>live harms</div>
       {ROWS.map((r, i) => {

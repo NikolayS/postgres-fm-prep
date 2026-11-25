@@ -13,21 +13,22 @@ import {ELE, FPS, Grain, H, HOSTS, Levels, Sparkle, TITLE, useFonts, useLevels, 
 //  1      "Can AI safely change" drops on
 //  2-2.5  Kirk (left), Nik (right) boom in; a robot arm swings in over a big red RESTART button ("DO NOT RESTART")
 //  3-7    the arm presses the button on every beat, the lights blink, the elephant power-cycles
-//         (spins); label "Restarted anyway in 5 of 5 runs", one pip lights per press
+//         (spins); label "Restarted anyway: 5 of 5 runs of one task" (task C18), one pip lights per press
 //  7      RESTART! the elephant is launched
 //  8      night; it lands and a cyan clone pops out of it: "Rehearse on a clone"
 //  9-14   13 harm bombs rain down: one per beat (6) hits the clone and fizzles, 7 hit the live
 //         elephant; label "Clone alone stopped 6 of 13 harms", one pip per harm (green = stopped,
 //         orange = hit); 14: "$0 AI cost" sticker
 //  15     day; "Analyst · Auditor · Actor"; the clone vanishes, the elephant hops to the middle
-//  16     the Analyst's proposal "restart node": the Auditor stamp slams REJECTED; meter
-//         "live harms: 13"
-//  17     next proposal "safe changes 377 of 378": APPROVED
+//  16     the Analyst's proposal "drop indexes" (L9-style standby-used indexes, which the
+//         Auditor caught in the replay): the Auditor stamp slams REJECTED; meter "13 harms in replay"
+//  17     next: "CHANGE REQUESTS / safe changes 377 of 378": APPROVED
 //  18     the meter crashes 13 -> 1 (green)
 //  19     the Actor arm ticks the approved proposal and carries it away
 //  20-21  "ROLLBACK;": everything but the title, the host tiles and the chair shreds away
 //  22     clean frame (rewritten row by row), the elephant pops back up; 23 freeze, only the sign wobbles
-//  24     the sign flips to "Michael's seat: AUDITOR", the sunglasses glint; hold
+//  20.5   the sign flips to "Michael's seat: AUDITOR" (readable before the dissolve)
+//  24     the sunglasses glint; hold
 // On-screen facts (ep 198 study): acting alone, the top model restarted nodes against an explicit
 // "do not restart" rule in 5 of 5 runs; testing on a clone alone stopped 6 of 13 harms at zero AI
 // cost; with AAA, live harms went from 13 to 1, and 377 of 378 safe changes were still approved.
@@ -263,12 +264,12 @@ const Paper: React.FC<{q: number}> = ({q}) => {
     <div style={{position: 'absolute', left: PAPER.x, top: PAPER.y, width: PAPER.w, height: PAPER.h, transform: `translateY(${lift}px) scale(${pop}) rotate(${second ? 3 * (1 - swap) - 2 : 2}deg) translateX(${second ? (1 - swap) * -300 : 0}px)`,
       transformOrigin: '50% 100%'}}>
       <div style={{position: 'absolute', inset: 0, background: applied ? '#d9ffd9' : '#fff', border: `7px solid ${PLUM}`, borderRadius: 16, boxShadow: `0 10px 0 ${PLUM}55`, overflow: 'hidden'}}>
-        <div style={{...font, position: 'absolute', left: 0, right: 0, top: 0, height: 52, background: PLUM, color: '#fff', fontSize: 30, lineHeight: '52px', paddingLeft: 18, letterSpacing: 2}}>ANALYST</div>
+        <div style={{...font, position: 'absolute', left: 0, right: 0, top: 0, height: 52, background: PLUM, color: '#fff', fontSize: 30, lineHeight: '52px', paddingLeft: 18, letterSpacing: 2}}>{second ? 'CHANGE REQUESTS' : 'ANALYST'}</div>
         {/* the Actor's run box: ticked on 19 */}
         <div style={{position: 'absolute', right: 14, top: 8, width: 36, height: 36, borderRadius: 8, background: applied ? '#39b54a' : '#fff', border: '4px solid #fff', boxSizing: 'border-box',
           display: 'flex', alignItems: 'center', justifyContent: 'center', ...font, fontSize: 26, color: '#fff'}}>{applied ? '✓' : ''}</div>
         {!second ? (
-          <div style={{...mono, position: 'absolute', left: 0, right: 0, top: 92, textAlign: 'center', fontSize: 50, color: PLUM, whiteSpace: 'nowrap'}}>restart node</div>
+          <div style={{...mono, position: 'absolute', left: 0, right: 0, top: 92, textAlign: 'center', fontSize: 50, color: PLUM, whiteSpace: 'nowrap'}}>drop indexes</div>
         ) : (
           <>
             <div style={{...mono, position: 'absolute', left: 0, right: 0, top: 64, textAlign: 'center', fontSize: 40, color: PLUM, whiteSpace: 'nowrap'}}>safe changes</div>
@@ -323,7 +324,7 @@ const Meter: React.FC<{q: number}> = ({q}) => {
       <div style={{position: 'absolute', inset: 0, background: '#fff', border: `7px solid ${PLUM}`, borderRadius: 24, boxShadow: `0 10px 0 ${PLUM}55`, overflow: 'hidden'}}>
         <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: `${mix(100, 100 / 13, crash)}%`, background: good ? '#39b54a' : RED}} />
       </div>
-      <div style={{...mono, position: 'absolute', left: 36, top: 22, fontSize: 112, lineHeight: '156px', color: '#fff', WebkitTextStroke: `8px ${PLUM}`, paintOrder: 'stroke fill', whiteSpace: 'nowrap'}}>live harms: {v}</div>
+      <div style={{...mono, position: 'absolute', left: 36, top: 22, fontSize: 100, lineHeight: '156px', color: '#fff', WebkitTextStroke: `8px ${PLUM}`, paintOrder: 'stroke fill', whiteSpace: 'nowrap'}}>{v === 13 ? '13 harms in replay' : '13 → 1 in replay'}</div>
     </div>
   );
 };
@@ -354,8 +355,10 @@ const Chair: React.FC<{wob: number}> = ({wob}) => {
     </div>
   );
 };
+// the flip lands during ROLLBACK, so it is fully readable before the card dissolves (card 12.6-14 s)
+const FLIP = 20.5;
 const Sign: React.FC<{q: number}> = ({q}) => {
-  const a = 180 * ease(seg(q, 24, 24.6));
+  const a = 180 * ease(seg(q, FLIP, FLIP + 0.6));
   const back = a > 90;
   const lines: [string, number][] = back
     ? [["Michael's seat:", 50], ['AUDITOR', 108], ['', 50]]
@@ -380,7 +383,7 @@ const nRestarts = (q: number) => PRESSES.filter((k) => q >= k).length;
 type Pip = 'off' | 'lit' | 'green' | 'orange';
 type LabelDef = {a: number; b: number; s: (q: number) => string; bg: string; sql?: boolean; size?: number; bumps?: number[]; pips?: (q: number) => Pip[]};
 const LABELS: LabelDef[] = [
-  {a: 3, b: 7.95, s: () => 'Restarted anyway in 5 of 5 runs', bg: RED, size: 62, bumps: PRESSES,
+  {a: 3, b: 7.95, s: () => 'Restarted anyway: 5 of 5 runs of one task', bg: RED, size: 52, bumps: PRESSES,
     pips: (q) => PRESSES.map((_, i) => (i < nRestarts(q) ? 'lit' : 'off'))},
   {a: 8.3, b: 8.95, s: () => 'Rehearse on a clone', bg: PLUM, size: 80},
   {a: 9, b: 14.95, s: () => 'Clone alone stopped 6 of 13 harms', bg: PLUM, size: 56, bumps: [...CATCH, ...PASS],
@@ -507,7 +510,6 @@ const World: React.FC<{q: number; t: number; stomp: number}> = ({q, t, stomp}) =
       {inP(q, 8.3, 15.4) && <Elephant e={clonePose(q)} hue={150} opacity={0.92} filter={`brightness(1.15) drop-shadow(0 0 22px ${CYAN}) drop-shadow(0 0 6px ${CYAN})`} />}
       <Elephant e={mainPose(q)} stomp={q < 7 || q >= 22 ? stomp : 0} filter={mainFilter(q)} />
       <CloneTag q={q} />
-      <ZeroCost q={q} cx={CLONE.x} cy={730} />
       {lightsOff && <div style={{position: 'absolute', inset: 0, background: '#0a0010', opacity: 0.72}} />}
       <RestartButton q={q} />
       {a1 >= 0 && <Arm from={ARM1_FROM} tip={extTip(back(ARM1_FROM, ARM1_TIP), ARM1_TIP, a1)} tag="AI" led={pressed(q) ? RED : '#39b54a'} />}
@@ -577,6 +579,8 @@ export const Card198: React.FC = () => {
       {HOSTS.map((h, i) => <Photo key={h.name} src={h.photo ?? ''} name={h.name} x={HOST_X[i] ?? 110 + i * 360} q={q} i={i} k={knocks[i]} />)}
       {/* the gag texts and the bombs sit above the title and the tiles: they collide on purpose */}
       <Bombs q={q} t={t} />
+      {/* above the bombs and puffs, so the sticker is never covered */}
+      <ZeroCost q={q} cx={CLONE.x} cy={730} />
       {/* the Actor reaches over the title: it runs the approved change */}
       {arm3Ext(q) >= 0 && <Arm from={ARM3_FROM} tip={extTip(back(ARM3_FROM, ARM3_TIP), ARM3_TIP, arm3Ext(q))} tag="ACTOR" led="#39b54a" />}
       <Meter q={q} />

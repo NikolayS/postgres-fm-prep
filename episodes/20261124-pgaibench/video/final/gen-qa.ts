@@ -1,9 +1,9 @@
 // Rewrite qa.json eyes/strips/sfx for a manifest and cold-open length.
-// Usage: bun gen-qa.ts <qa.json> <manifest-sfx.json (absolute, under $EP198_REVIEW)> <coldOpenSec>
-const [qaPath, manPath, coArg] = process.argv.slice(2);
+// Usage: bun gen-qa.ts <qa.json> <manifest-sfx.json (absolute, under $EP198_REVIEW)> <coldOpenSec> [cardSec=13]
+const [qaPath, manPath, coArg, cardArg] = process.argv.slice(2);
 const R = process.env.EP198_REVIEW!;
 if (!R || !manPath.startsWith(R)) throw new Error("EP198_REVIEW unset or manifest outside it");
-const co = Number(coArg), CARD = 13;
+const co = Number(coArg), CARD = Number(cardArg ?? 13);
 const qa = await Bun.file(qaPath).json();
 const m = await Bun.file(manPath).json();
 const rel = (p: string) => "${EP198_REVIEW}" + p.slice(R.length);

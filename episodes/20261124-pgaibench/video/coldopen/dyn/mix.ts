@@ -1,9 +1,11 @@
 // Episode 198 dynamic cold opens, step 3: sound and final file.
 // Voices: each line's speech (L<i>.src.mov) at its start frame, leveled together to -16 LUFS.
-// Music: the ep 197 funk cue (128 BPM) from 0 s up to the button, then its closing brass hit (cue 43.125 s)
-// spliced in on the button beat. Level: 0.18 under speech (-15 dB), 0.4 in the gaps between lines,
+// Music: the ep 197 funk cue (b-funk.wav) from 0 s up to the button, then its closing brass hit (cue 45.99 s,
+// the last hit of the cue, which decays by itself) spliced in on the button, with a short synthetic room
+// (4 s noise tail; afir normalizes the IR, so the wet gain is +33 dB) so the music rings at full level to the last sample: no end fade, because the
+// final joins the next clip (a loud riser) straight after it. Level: 0.18 under speech (-15 dB), 0.4 in the gaps between lines,
 // full on the button. SFX: spec.ts, each file peak-normalized to -6 dBFS, then its gain.
-// Master: -16 LUFS integrated, limiter. Muxes the Remotion picture (rem/out/<variant>.mp4).
+// Master: -16 LUFS integrated, limiter at -2.5 dBFS (true peak at most -1.5 dBTP after AAC). Muxes the Remotion picture (rem/out/<variant>.mp4).
 //   bun ../../../../20261117-postgres-19/video/coldopen-v8/fx.ts <work dir>/fx   (once: whoosh, slam, impact, glitch)
 //   bun mix.ts <work dir> <music wav> <variant> <out.mp4>
 import { $ } from "bun";
@@ -41,9 +43,10 @@ const mI = await lufs(["-t", "23", "-i", MUSIC]);
 const trap = S.map((s, i) => { const a = s / FPS, b = (s + SPEECH[i]) / FPS; return `clip((t-${(a - 0.08).toFixed(3)})/0.08,0,1)*clip((${(b + 0.1).toFixed(3)}-t)/0.1,0,1)`; }).join("+");
 const env = `(0.4-0.22*(${trap}))+0.6*clip((t-${(btn - 0.12).toFixed(3)})/0.1,0,1)`;
 fc = `[0:a]atrim=0:${btn},asetpts=PTS-STARTPTS,aresample=48000,afade=t=out:st=${(btn - 0.03).toFixed(3)}:d=0.03[m1];` +
-  `[1:a]atrim=43.125,asetpts=PTS-STARTPTS,aresample=48000,adelay=${Math.round(btn * 1000)}:all=1[m2];` +
-  `[m1][m2]amix=inputs=2:normalize=0,volume=${(-16 - mI).toFixed(2)}dB,volume='${env}':eval=frame,afade=t=out:st=${(dur - 0.12).toFixed(3)}:d=0.12[m]`;
-await $`ffmpeg -v error -y -i ${MUSIC} -i ${MUSIC} -filter_complex ${fc} -map [m] -t ${dur} -c:a pcm_s24le ${W}/mix-${V}-music.wav`;
+  `[1:a]atrim=45.99,asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,asplit[hd][hx];` +
+  `[2:a]aformat=channel_layouts=stereo[ir];[hx][ir]afir,volume=33dB[hw];[hd][hw]amix=inputs=2:normalize=0:duration=longest,adelay=${Math.round(btn * 1000)}:all=1[m2];` +
+  `[m1][m2]amix=inputs=2:normalize=0,volume=${(-16 - mI).toFixed(2)}dB,volume='${env}':eval=frame[m]`;
+await $`ffmpeg -v error -y -i ${MUSIC} -i ${MUSIC} -f lavfi -i ${"aevalsrc='(2*random(0)-1)*exp(-0.8*t)|(2*random(1)-1)*exp(-0.8*t)':s=48000:d=4,lowpass=f=5000"} -filter_complex ${fc} -map [m] -t ${dur} -c:a pcm_s24le ${W}/mix-${V}-music.wav`;
 
 // 3) sfx
 const ev = SFX[V]; const sin: string[] = []; fc = "";
@@ -57,7 +60,7 @@ await $`ffmpeg -v error -y ${sin} -filter_complex ${fc} -map [s] -t ${dur} -c:a 
 
 // 4) master: voices to -16 first (bed and SFX are relative to them), sum, -16 LUFS, limiter
 const mixOnce = async (gain: number, out: string) => {
-  const f = `[0:a]volume=${(-16 - vI).toFixed(2)}dB[v];[v][1:a][2:a]amix=inputs=3:normalize=0,afade=t=in:d=0.03,volume=${gain.toFixed(2)}dB,alimiter=limit=0.85:level=false[a]`;
+  const f = `[0:a]volume=${(-16 - vI).toFixed(2)}dB[v];[v][1:a][2:a]amix=inputs=3:normalize=0,afade=t=in:d=0.03,volume=${gain.toFixed(2)}dB,alimiter=limit=0.75:level=false[a]`;
   await $`ffmpeg -v error -y -i ${W}/mix-${V}-voice.wav -i ${W}/mix-${V}-music.wav -i ${W}/mix-${V}-sfx.wav -filter_complex ${f} -map [a] -t ${dur} -c:a pcm_s24le ${out}`;
   return lufs(["-i", out]);
 };
@@ -65,4 +68,5 @@ let g = 0, I = await mixOnce(g, `${W}/mix-${V}.wav`);
 for (let k = 0; k < 3 && Math.abs(I + 16) > 0.2; k++) { g += -16 - I; I = await mixOnce(g, `${W}/mix-${V}.wav`); }
 
 await $`ffmpeg -v error -y -i ${W}/rem/out/${V}.mp4 -i ${W}/mix-${V}.wav -map 0:v -map 1:a -t ${dur} -c:v libx264 -profile:v high -pix_fmt yuv420p -r 25 -crf 17 -preset medium -c:a aac -b:a 192k -ar 48000 -ac 2 -movflags +faststart ${OUT}`;
-console.log(`${OUT}: ${dur} s, voices ${vI.toFixed(1)} -> -16, master ${I.toFixed(2)} LUFS (gain ${g.toFixed(2)} dB)`);
+const tp = (await $`ffmpeg -hide_banner -i ${OUT} -af ebur128=peak=true -f null -`.quiet().nothrow()).stderr.toString().match(/True peak:\s+Peak:\s+(-?[\d.]+)/)?.[1];
+console.log(`${OUT}: ${dur} s, true peak ${tp} dBTP, voices ${vI.toFixed(1)} -> -16, master ${I.toFixed(2)} LUFS (gain ${g.toFixed(2)} dB)`);
