@@ -9,6 +9,7 @@ import {CenterChart} from './CenterChart';
 import {ChartCard} from './ChartCard';
 import {Band198, ShotCard198} from './Ep198';
 import {AaaFig, Motif198, Chat198, Prompt198, Dots198, Safe198, Cards198, Funnel198, Det198, Board198} from './Ep198v2';
+import {Aaa3D198, Motif3D198} from './Aaa3D';
 import {L9Split198, L5Queue198} from './Flagship198';
 import {Illus2Compositions} from './Illus2Root';
 import {BioBlock, HackBlock, CompareBlock, SimpleBlock, TrapBlock, DuelBlock, ScaleBlock} from './Blocks';
@@ -124,6 +125,8 @@ export const Root = () => (
     <Composition id="band198" component={Band198 as any} fps={FPS} width={W} height={H} durationInFrames={7 * FPS} calculateMetadata={meta} defaultProps={{lines: ['Told not to restart: restarted in 5 of 5 runs'], durationSec: 7} as any} />
     <Composition id="aaafig198" component={AaaFig as any} fps={FPS} width={W} height={H} durationInFrames={8 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 8} as any} />
     <Composition id="motif198" component={Motif198 as any} fps={FPS} width={W} height={H} durationInFrames={8 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 8} as any} />
+    <Composition id="aaa3d198" component={Aaa3D198 as any} fps={FPS} width={W} height={H} durationInFrames={8 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 8, cam: [{at: 0, yaw: -8, pitch: 13, dist: 10.4, focal: 0.93, tx: 0.05, ty: 1.84, ox: 0.5, oy: 0.53}], events: [{kind: "rehearse", at: 0.2}, {kind: "review", at: 3.5}, {kind: "apply", at: 5.35}]} as any} />
+    <Composition id="motif3d198" component={Motif3D198 as any} fps={FPS} width={W} height={H} durationInFrames={8 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 8, lines: ["test line"], lit: "all"} as any} />
     <Composition id="chat198" component={Chat198 as any} fps={FPS} width={W} height={H} durationInFrames={8 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 8} as any} />
     <Composition id="prompt198" component={Prompt198 as any} fps={FPS} width={W} height={H} durationInFrames={8 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 8} as any} />
     <Composition id="dots198" component={Dots198 as any} fps={FPS} width={W} height={H} durationInFrames={8 * FPS} calculateMetadata={meta} defaultProps={{durationSec: 8} as any} />

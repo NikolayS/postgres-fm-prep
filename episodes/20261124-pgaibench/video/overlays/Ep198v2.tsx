@@ -77,7 +77,7 @@ const ARR: Record<Exclude<Key, BoxKey | 'phase1' | 'phase2'>, {a: P; c: P; label
   draft: {a: {x: 105, y: 291}, c: {x: 105, y: 364}, label: ['draft change'], at: {x: 122, y: 310}},
   results: {a: {x: 394, y: 368}, c: {x: 394, y: 295}, label: ['test results'], at: {x: 411, y: 310}},
   approve: {a: {x: 1015, y: 291}, c: {x: 1015, y: 364}, label: ['approve'], at: {x: 1032, y: 310}, bold: true, hi: true},
-  reject: {a: {x: 1446, y: 291}, c: {x: 1446, y: 316}, label: ['reject'], at: {x: 1424, y: 300}, bold: true, hi: true, anchor: 'end'},
+  reject: {a: {x: 1446, y: 291}, c: {x: 1446, y: 316}, label: ['reject'], at: {x: 1404, y: 300}, bold: true, hi: true, anchor: 'end'},
   rehearse: {a: {x: 105, y: 480}, c: {x: 105, y: 546}, label: ['rehearse'], at: {x: 122, y: 482}},
   apply: {a: {x: 1015, y: 480}, c: {x: 1015, y: 546}, label: ['apply'], at: {x: 1032, y: 482}},
 };

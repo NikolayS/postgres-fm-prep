@@ -1,0 +1,42 @@
+id	v3_start	anchor_words	found_v3	delta_s	ok
+v2-r01-clusters	161.02	1,000 clusters	161.02	0	ok
+v2-r02-ddl	259.62	would you let an AI run DDL	259.62	0	ok
+r03-backup-chat	312.44	I dropped the production database.	312.57	0	ok
+v2-r04-pgaibench	463.89	this benchmark called PG, PG AI Bench	463.89	0	ok
+v2-r05-baseline	578.29	I still don't have human baseline	578.29	0	ok
+r06-scenarios	655.32	It was originally, I think, 20	652.48	0	ok
+v2-r07a-l9-setup	712.64	the indexes that are involved in the read replicas	712.64	0	ok
+v2-r07b-l9-split	724.58	you turn around	724.58	0	ok
+r08-leaderboard	894.6	first thing what I was, um, surprised to see	894.76	0	ok
+v2-r09-restart	950.36	five out of five cases	950.36	0	ok
+v2-r10-runs	985.5	two cases out of five	985.5	0	ok
+v2-r11-maxlocks	1025.92	Max slots per transaction is one of them	1025.92	0	ok
+v2-r12-escalate	1052.24	they often decide to escalate to human	1052.24	0	ok
+v2-r13a-safety	1082.82	two metrics. One is, uh, safety	1082.82	0	ok
+v2-r13b14a-axes-track1	1123.62	usefulness	1123.62	0	ok
+v2-r14b-sound	1161.62	if you hear the sound you just heard	1161.88	0	ok
+r15-funnel	1184.98	it's, it's not safe	1185.26	0	ok
+r16-auditor-next	1295.16	another agent or something	1295.36	0	ok
+v2-r17-dblab	1485.96	branching DB lab, uh, engine, it's a shared environment	1485.96	0	ok
+r18-clone-gate	1507.24	it removed half of harm- harmful actions	1507.5	0	ok
+r19-deterministic	1597.6	The actor is deterministic	1597.83	0	ok
+v2-r20-replicas	1719.39	If you have read replicas, you must have them in your test environment.	1719.39	0	ok
+r21-tom-lane	1833.42	Pretend you're Tom Lane	1833.64	0.04	ok
+r22a-aaa-intro	1916.52	three As, triple A, AAA	1916.78	0	ok
+r22b-aaa-analyst	1936.96	First is analyst	1937.4	0	ok
+r22c-aaa-actor	1951.16	actor, which will execute this change	1951.5	0	ok
+r23a-aaa-auditor	2159.6	And then there is a third A, which is auditor	2159.84	0	ok
+r23b-aaa-path	2173.16	obviously auditor, main auditor role	2174.94	0	ok
+r24-editor-note	2183.96	neither analyst nor actor	2183.96	0	ok
+r26-send-back	2325.3	send back for improvements	2325.54	0	ok
+r27-triangle	2494.1	triangle works really well	2495.12	0	ok
+r28a-dots	2526.4	So now that we used AAA as our process	2526.62	0	ok
+r28b-13-to-1	2557.4	13 harms down to one	2558.08	0	ok
+r29-377-of-378	2695.7	almost 400	2695.86	0	ok
+v2-r30-real	2720.82	Not only were these 18 tests, they were hand-selected from real life examples	2720.82	0	ok
+v2-r31-l5-lock-queue	2759.3	being overconfident	2759.3	0	ok
+f08-dbabench	2916.46	I learned from other benchmarks, uh, like D- DBAbench, for example, and others, S- SWE bench	2916.55	0	ok
+r34-kirk-evidence	2951.7	A successful experiment is evidence	2951.89	0	ok
+v2-r35-agree	2983.41	two AIs agreeing does not make either one correct	2983.41	0	ok
+v2-r36-analyze	3002.83	major upgrade and forgets analyze on weekend	3002.83	0	ok
+r37-kirk-delegate	3034.2	responsibility we can safely delegate	3034.87	0	ok

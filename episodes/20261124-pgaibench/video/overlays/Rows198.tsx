@@ -55,12 +55,11 @@ export const R02Ddl: React.FC<{durationSec: number; beats: {ask: At}}> = ({beats
   const askK = ease(t, beats.ask.at, 0.25);
   return (
     <BandShell>
-      <Chip text="AI agent" color="#111" bg="#a78bfa" size={32} />
-      <div style={{fontFamily: MONO, fontSize: 52, whiteSpace: 'pre'}}>
+      <div style={{fontFamily: MONO, fontSize: 66, whiteSpace: 'pre'}}>
         <span style={{color: GREEN}}>prod=# </span>{cmd.slice(0, n)}<span style={{opacity: t < beats.ask.at && blink ? 1 : 0, background: '#fff'}}> </span>
       </div>
-      <div style={{marginLeft: 'auto', fontFamily: MONO, fontSize: 64, fontWeight: 700, color: AMBER, opacity: askK, transform: `scale(${0.7 + 0.3 * askK})`, whiteSpace: 'nowrap'}}>
-        Allow? [y/N]<span style={{opacity: blink ? 1 : 0}}>▌</span>
+      <div style={{marginLeft: 'auto', fontFamily: MONO, fontSize: 80, fontWeight: 700, color: AMBER, opacity: askK, transform: `scale(${0.7 + 0.3 * askK})`, whiteSpace: 'nowrap'}}>
+        Allow? [y/N]
       </div>
     </BandShell>
   );
@@ -72,33 +71,26 @@ export const R04Bench: React.FC<{durationSec: number}> = () => {
   const k = pop(frame, fps, 0.35);
   return (
     <BandShell>
-      <div style={{position: 'relative', width: 660, height: 120}}>
-        <Stamp text="PGAIBench v0.2" color="#fff" k={k} size={70} rot={-3} style={{left: 0, top: 10}} />
+      <div style={{position: 'relative', width: 680, height: 124}}>
+        <Stamp text="PGAIBench v0.2" color="#fff" k={k} size={76} rot={-3} style={{left: 0, top: 8}} />
       </div>
       <div style={{opacity: ease(t, 0.9, 0.5)}}>
-        <div style={{fontSize: 36, fontWeight: 700, whiteSpace: 'nowrap'}}>live two-node Postgres 18.7, under load</div>
-        <div style={{fontFamily: MONO, fontSize: 40, color: '#60a5fa', marginTop: 6}}>pgaibench.dev</div>
+        <div style={{fontSize: 46, fontWeight: 700, whiteSpace: 'nowrap'}}>live two-node Postgres 18.7</div>
+        <div style={{fontFamily: MONO, fontSize: 50, color: '#60a5fa', fontWeight: 600}}>pgaibench.dev</div>
       </div>
     </BandShell>
   );
 };
 
 // ---------- row 5: no human baseline yet (band)
-const CORRECT = [65, 65, 58, 55, 50, 50, 46, 37, 36, 7]; // post Track 1 table, "Correct adj"
 export const R05Baseline: React.FC<{durationSec: number; beats: {slot: At}}> = ({beats}) => {
   const {t, frame, fps} = useT();
   const slotK = pop(frame, fps, beats.slot.at);
   return (
     <BandShell>
-      <div style={{display: 'flex', alignItems: 'flex-end', gap: 8, height: 110}}>
-        {CORRECT.map((v, i) => <div key={i} style={{width: 30, height: (v / 65) * 104 * ease(t, 0.3 + i * 0.06, 0.4), background: '#60a5fa', borderRadius: 4}} />)}
-        <div style={{width: 110, height: 104, border: '4px dashed rgba(255,255,255,0.75)', borderRadius: 8, marginLeft: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 72, fontWeight: 800, opacity: Math.min(1, slotK), transform: `scale(${slotK})`}}>?</div>
-      </div>
-      <div style={{opacity: Math.min(1, slotK)}}>
-        <div style={{fontSize: 30, color: DIM}}>10 models: correct runs</div>
-        <div style={{fontSize: 52, fontWeight: 800, whiteSpace: 'nowrap'}}>No human baseline yet</div>
-      </div>
-      <div style={{marginLeft: 'auto', opacity: ease(t, beats.slot.at + 1.2, 0.4)}}><Chip text="planned for v0.3" color="#111" bg={AMBER} size={34} /></div>
+      <div style={{width: 120, height: 120, border: '6px dashed rgba(255,255,255,0.85)', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 96, fontWeight: 800, opacity: Math.min(1, slotK), transform: `scale(${slotK})`}}>?</div>
+      <div style={{fontSize: 72, fontWeight: 800, whiteSpace: 'nowrap', opacity: ease(t, 0.3, 0.4)}}>No human baseline yet</div>
+      <div style={{marginLeft: 'auto', opacity: ease(t, beats.slot.at + 1.2, 0.4)}}><Chip text="v0.3" color="#111" bg={AMBER} size={52} /></div>
     </BandShell>
   );
 };
@@ -136,16 +128,15 @@ export const R10Runs: React.FC<{durationSec: number; beats: {two: At; three: At}
   const tile = (i: number) => {
     const amber = i < 2;
     const k = ease(t, amber ? beats.two.at + i * 0.2 : beats.three.at + (i - 2) * 0.2, 0.3);
-    return <div key={i} style={{width: 96, height: 104, borderRadius: 12, background: k > 0 ? (amber ? AMBER : RED) : 'rgba(255,255,255,0.1)', opacity: 0.35 + 0.65 * k, transform: `scale(${0.85 + 0.15 * k})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 60, fontWeight: 900, color: '#111'}}>{k > 0 ? (amber ? '■' : '✕') : ''}</div>;
+    return <div key={i} style={{width: 118, height: 118, borderRadius: 14, background: k > 0 ? (amber ? AMBER : RED) : 'rgba(255,255,255,0.12)', opacity: 0.35 + 0.65 * k, transform: `scale(${0.85 + 0.15 * k})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 80, fontWeight: 900, color: '#111'}}>{k > 0 ? (amber ? '■' : '✕') : ''}</div>;
   };
   return (
     <BandShell>
-      <div style={{display: 'flex', gap: 10}}>{[0, 1, 2, 3, 4].map(tile)}</div>
+      <div style={{display: 'flex', gap: 12}}>{[0, 1, 2, 3, 4].map(tile)}</div>
       <div>
-        <div style={{fontSize: 40, fontWeight: 800, color: AMBER, opacity: ease(t, beats.two.at, 0.3), whiteSpace: 'nowrap'}}>2 stopped in rehearsal</div>
-        <div style={{fontSize: 40, fontWeight: 800, color: RED, opacity: ease(t, beats.three.at, 0.3), whiteSpace: 'nowrap'}}>3 broke live primaries</div>
+        <div style={{fontSize: 54, fontWeight: 800, color: AMBER, opacity: ease(t, beats.two.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.1}}>2 stopped in rehearsal</div>
+        <div style={{fontSize: 54, fontWeight: 800, color: RED, opacity: ease(t, beats.three.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.1}}>3 broke live primaries</div>
       </div>
-      <div style={{marginLeft: 'auto', fontFamily: MONO, fontSize: 30, color: DIM, textAlign: 'right'}}>fable-5.2<br />task C18</div>
     </BandShell>
   );
 };
@@ -179,16 +170,13 @@ export const R11Locks: React.FC<{durationSec: number; beats: {replicas: At; prim
 // ---------- row 12: escalated to a human, 35 of 95 (band)
 export const R12Esc: React.FC<{durationSec: number}> = () => {
   const {t} = useT();
-  const lit = Math.floor(interpolate(t, [0.4, 2.2], [0, 35], clamp));
+  const lit = Math.round(interpolate(t, [0.4, 1.6], [0, 35], clamp));
   return (
     <BandShell>
-      <div style={{display: 'flex', flexWrap: 'wrap', gap: 4, width: 19 * 24}}>
-        {Array.from({length: 95}, (_, i) => <div key={i} style={{width: 20, height: 20, borderRadius: 4, background: i < lit ? AMBER : 'rgba(255,255,255,0.12)'}} />)}
-      </div>
-      <div style={{fontSize: 110, fontWeight: 800, color: AMBER, lineHeight: 1, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums'}}>{lit} <span style={{fontSize: 50, color: DIM}}>of 95</span></div>
+      <div style={{fontSize: 124, fontWeight: 800, color: AMBER, lineHeight: 1, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums'}}>{lit}<span style={{fontSize: 64, color: DIM}}> of 95</span></div>
       <div>
-        <div style={{fontSize: 40, fontWeight: 700, whiteSpace: 'nowrap'}}>escalated to a human</div>
-        <div style={{fontFamily: MONO, fontSize: 32, color: DIM}}>gpt-6.2-sol, Track 1</div>
+        <div style={{fontSize: 56, fontWeight: 800, whiteSpace: 'nowrap', lineHeight: 1.1}}>runs escalated to a human</div>
+        <div style={{fontFamily: MONO, fontSize: 44, color: DIM}}>gpt-6.2-sol</div>
       </div>
     </BandShell>
   );
@@ -199,12 +187,11 @@ export const R13Safety: React.FC<{durationSec: number; beats: {down: At; loss: A
   const {frame, fps} = useT();
   const chip = (text: string, at: number) => {
     const k = pop(frame, fps, at);
-    return <div key={text} style={{opacity: Math.min(1, k), transform: `scale(${k})`}}><Chip text={`✕ ${text}`} color="#fff" bg={RED} size={46} /></div>;
+    return <div key={text} style={{opacity: Math.min(1, k), transform: `scale(${k})`}}><Chip text={text} color="#fff" bg={RED} size={54} /></div>;
   };
   return (
     <BandShell>
-      <div style={{fontSize: 30, color: DIM, lineHeight: 1.1}}>metric 1<div style={{fontSize: 64, fontWeight: 800, color: '#fff'}}>SAFETY</div></div>
-      <div style={{fontSize: 40, color: DIM, whiteSpace: 'nowrap'}}>harm =</div>
+      <div style={{fontSize: 72, fontWeight: 800}}>SAFETY</div>
       {chip('downtime', beats.down.at)}
       {chip('data loss', beats.loss.at)}
       {chip('overspending', beats.over.at)}
@@ -351,15 +338,13 @@ export const R17Dblab: React.FC<{durationSec: number; beats: {forge: At}}> = ({b
 export const R20Replicas: React.FC<{durationSec: number; beats: {test: At}}> = ({beats}) => {
   const {t, frame, fps} = useT();
   const k = pop(frame, fps, beats.test.at);
-  const box = (label: string, color: string, extra: React.CSSProperties = {}) => <div style={{width: 160, height: 92, borderRadius: 12, border: `4px solid ${color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30, fontWeight: 800, ...extra}}>{label}</div>;
+  const box = (label: string, color: string) => <div style={{width: 250, height: 112, borderRadius: 14, border: `6px solid ${color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 46, fontWeight: 800, whiteSpace: 'nowrap'}}>{label}</div>;
   return (
     <BandShell>
-      <div style={{display: 'flex', alignItems: 'center', gap: 12, padding: '6px 10px', border: '3px dashed rgba(255,255,255,0.4)', borderRadius: 14}}>
-        {box('primary', GREEN)}
-        <div style={{opacity: Math.min(1, k), transform: `translateX(${(1 - k) * 60}px) scale(${0.7 + 0.3 * k})`}}>{box('standby', '#60a5fa')}</div>
-      </div>
-      <div style={{fontSize: 40, fontWeight: 700, lineHeight: 1.2, opacity: ease(t, 0.4, 0.4)}}>
-        Read replicas in production?<br /><span style={{color: '#60a5fa'}}>Then in the test environment too.</span>
+      {box('primary', GREEN)}
+      <div style={{opacity: Math.min(1, k), transform: `translateX(${(1 - k) * 60}px) scale(${0.7 + 0.3 * k})`}}>{box('standby', '#60a5fa')}</div>
+      <div style={{fontSize: 54, fontWeight: 800, lineHeight: 1.1, opacity: ease(t, 0.4, 0.4), whiteSpace: 'nowrap'}}>
+        Replicas in prod?<br /><span style={{color: '#60a5fa'}}>Test with them too.</span>
       </div>
     </BandShell>
   );
@@ -371,12 +356,12 @@ export const R30Real: React.FC<{durationSec: number; beats: {real: At}}> = ({bea
   const k = pop(frame, fps, beats.real.at);
   return (
     <BandShell>
-      <div style={{position: 'relative', width: 300, height: 110}}>
-        <Stamp text="REAL" color={RED} k={k} size={84} rot={-6} style={{left: 10, top: 4}} />
+      <div style={{position: 'relative', width: 300, height: 116}}>
+        <Stamp text="REAL" color={RED} k={k} size={88} rot={-6} style={{left: 10, top: 2}} />
       </div>
       <div style={{opacity: ease(t, beats.real.at + 0.3, 0.4)}}>
-        <div style={{fontSize: 46, fontWeight: 800, whiteSpace: 'nowrap'}}>Most cases: real production failures</div>
-        <div style={{fontSize: 34, color: DIM, whiteSpace: 'nowrap'}}>whose changes had already passed human review</div>
+        <div style={{fontSize: 56, fontWeight: 800, whiteSpace: 'nowrap', lineHeight: 1.1}}>Most cases: real failures</div>
+        <div style={{fontSize: 44, color: DIM, whiteSpace: 'nowrap'}}>that had passed human review</div>
       </div>
     </BandShell>
   );
@@ -384,7 +369,7 @@ export const R30Real: React.FC<{durationSec: number; beats: {real: At}}> = ({bea
 
 // ---------- row 35: two AIs agreeing (band)
 const Bot: React.FC<{nod: number}> = ({nod}) => (
-  <svg width={96} height={110} viewBox="0 0 96 110" style={{transform: `translateY(${nod * 8}px)`}}>
+  <svg width={112} height={124} viewBox="0 0 96 110" style={{transform: `translateY(${nod * 6}px)`}}>
     <line x1={48} y1={4} x2={48} y2={20} stroke="#cbd5e1" strokeWidth={5} /><circle cx={48} cy={6} r={6} fill="#cbd5e1" />
     <rect x={8} y={20} width={80} height={66} rx={16} fill="#cbd5e1" />
     <circle cx={32} cy={52} r={8} fill="#111" /><circle cx={64} cy={52} r={8} fill="#111" />
@@ -397,10 +382,10 @@ export const R35Agree: React.FC<{durationSec: number; beats: {wrong: At}}> = ({b
   return (
     <BandShell>
       <Bot nod={nod} />
-      <div style={{width: 110, textAlign: 'center', fontSize: 96, fontWeight: 900, color: q > 0.5 ? AMBER : GREEN, lineHeight: 1}}>{q > 0.5 ? '?' : '✓'}</div>
+      <div style={{width: 110, textAlign: 'center', fontSize: 110, fontWeight: 900, color: q > 0.5 ? AMBER : GREEN, lineHeight: 1}}>{q > 0.5 ? '?' : '✓'}</div>
       <Bot nod={nod} />
-      <div style={{fontSize: 44, fontWeight: 700, lineHeight: 1.2, marginLeft: 16}}>
-        “Two AIs agreeing does not make<br />either one correct.”
+      <div style={{fontSize: 52, fontWeight: 800, lineHeight: 1.1, marginLeft: 12, whiteSpace: 'nowrap'}}>
+        “Two AIs agreeing does not<br />make either one correct.”
       </div>
     </BandShell>
   );
@@ -411,17 +396,16 @@ export const R36Analyze: React.FC<{durationSec: number; beats: {wk: At; mon: At;
   const {t, frame, fps} = useT();
   const day = (d: string, ok: boolean, at: number) => {
     const k = ease(t, at, 0.3);
-    return <div key={d} style={{width: 128, height: 110, borderRadius: 12, background: k > 0 ? (ok ? GREEN_D : RED_D) : CARD, border: `4px solid ${k > 0 ? (ok ? GREEN : RED) : 'rgba(255,255,255,0.2)'}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: 38, fontWeight: 800}}>{d}<span style={{fontSize: 40, color: ok ? GREEN : RED, opacity: k}}>{ok ? '✓' : '✕'}</span></div>;
+    return <div key={d} style={{width: 150, height: 120, borderRadius: 14, background: k > 0 ? (ok ? GREEN_D : RED_D) : CARD, border: `5px solid ${k > 0 ? (ok ? GREEN : RED) : 'rgba(255,255,255,0.2)'}`, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: 46, fontWeight: 800, lineHeight: 1.05}}>{d}<span style={{fontSize: 50, color: ok ? GREEN : RED, opacity: k}}>{ok ? '✓' : '✕'}</span></div>;
   };
   const sK = pop(frame, fps, beats.stats.at);
   return (
     <BandShell>
-      <div style={{fontSize: 36, fontWeight: 700, lineHeight: 1.2, whiteSpace: 'nowrap'}}>major upgrade<br /><span style={{color: AMBER}}>no ANALYZE</span></div>
+      <div style={{fontSize: 46, fontWeight: 800, lineHeight: 1.1, whiteSpace: 'nowrap'}}>upgrade,<br /><span style={{color: AMBER}}>no ANALYZE</span></div>
       {day('Sat', true, beats.wk.at)}
       {day('Sun', true, beats.wk.at + 0.25)}
       {day('Mon', false, beats.mon.at)}
-      <div style={{fontSize: 40, fontWeight: 700, color: RED, whiteSpace: 'nowrap', opacity: ease(t, beats.mon.at, 0.3)}}>more traffic</div>
-      <div style={{position: 'relative', width: 330, height: 100}}><Stamp text="no statistics" color={RED} k={sK} size={44} rot={-5} style={{left: 0, top: 14}} /></div>
+      <div style={{position: 'relative', width: 420, height: 110}}><Stamp text="no statistics" color={RED} k={sK} size={56} rot={-5} style={{left: 0, top: 10}} /></div>
     </BandShell>
   );
 };
@@ -432,13 +416,16 @@ export const L9Setup198: React.FC<{durationSec: number; beats: {standby: At}}> =
   const s = ease(t, beats.standby.at, 0.35);
   return (
     <BandShell>
-      <Chip text="PRIMARY" color="#111" bg={GREEN} size={34} />
-      <div style={{fontFamily: MONO, fontSize: 48, color: AMBER, whiteSpace: 'nowrap', opacity: ease(t, 0.4, 0.3)}}>idx_scan = 0</div>
-      <div style={{width: 4, height: 90, background: 'rgba(255,255,255,0.3)', opacity: s}} />
-      <div style={{opacity: s, display: 'flex', alignItems: 'center', gap: 24, transform: `translateX(${(1 - s) * 40}px)`}}>
-        <Chip text="STANDBY" color="#111" bg="#60a5fa" size={34} />
-        <div style={{fontSize: 40, fontWeight: 700, whiteSpace: 'nowrap'}}>reads use the <span style={{fontFamily: MONO}}>(k)</span> indexes</div>
+      <div style={{lineHeight: 1.05}}>
+        <div style={{fontSize: 40, fontWeight: 800, color: GREEN}}>PRIMARY</div>
+        <div style={{fontFamily: MONO, fontSize: 60, color: AMBER, whiteSpace: 'nowrap', opacity: ease(t, 0.4, 0.3)}}>idx_scan = 0</div>
+      </div>
+      <div style={{width: 5, height: 110, background: 'rgba(255,255,255,0.35)', opacity: s}} />
+      <div style={{opacity: s, lineHeight: 1.05, transform: `translateX(${(1 - s) * 40}px)`}}>
+        <div style={{fontSize: 40, fontWeight: 800, color: '#60a5fa'}}>STANDBY</div>
+        <div style={{fontSize: 54, fontWeight: 800, whiteSpace: 'nowrap'}}>reads need the <span style={{fontFamily: MONO}}>(k)</span> indexes</div>
       </div>
     </BandShell>
   );
 };
+

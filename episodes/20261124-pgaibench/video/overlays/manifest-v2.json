@@ -497,11 +497,11 @@
       "duration": 6.5,
       "dur": 6.5,
       "file": "r16-auditor-next.mov",
-      "placement": "band",
+      "placement": "center",
       "freezeSec": 0,
       "sfx": [],
-      "source": "https://postgres.ai/blog/20261123-pgaibench (AAA: \"Auditor (review). An independent model ...\")",
-      "words": "Kirk: \"another agent or something, like, auditing it\" (1331.60)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D; AAA: \"Auditor (review). An independent model ...\")",
+      "words": "Kirk: \"another agent or something\" (1331.60) \"like, auditing it\" (1333.86)",
       "builder": "illus-1"
     },
     {
@@ -625,7 +625,7 @@
       "placement": "center",
       "freezeSec": 0,
       "sfx": [],
-      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2, 20261113-pgaibench-fig-aaa-roles-dark.svg: same boxes, arrows and labels, labels cut to fit)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench (hero: the AaaPipeline3D scene, same geometry, colors, camera and labels)",
       "words": "Nik: \"three As, triple A, AAA\" (1974.26) ... \"already evolved architecture\" (1983.70) \"third version maybe\" (1987.34)",
       "builder": "illus-1"
     },
@@ -639,7 +639,7 @@
       "placement": "center",
       "freezeSec": 0,
       "sfx": [],
-      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2; AAA: \"Analyst (propose) ... holds zero production write access\")",
+      "source": "https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D; AAA: \"Analyst (propose) ... holds zero production write access\")",
       "words": "Nik: \"First is analyst\" (1994.84) \"whose role is to analyze metrics\" (1996.54) \"propose some solution, the change\" (2004.46)",
       "builder": "illus-1"
     },
@@ -653,7 +653,7 @@
       "placement": "center",
       "freezeSec": 0,
       "sfx": [],
-      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2; AAA: \"Actor (execute). A deterministic engine ... rehearses the exact CR on a live two-node clone ... applies the approved steps verbatim\")",
+      "source": "https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D, \"Actor deterministic · sole write path\"; AAA: \"Actor (execute). A deterministic engine ...\")",
       "words": "Nik: \"actor, which will execute this change\" (2008.94) \"actor is almost, like, ideally should be super deterministic\" (2013.74) \"the script, uh, a- analyst proposed\" (2020.80)",
       "builder": "illus-1"
     },
@@ -684,7 +684,7 @@
       "accents": [
         4
       ],
-      "source": "https://postgres.ai/blog/20261123-pgaibench (AAA: the Actor rehearses on a live clone and halts mechanical failures; P2 halts on lock wait >= 5 s; the Auditor reviews the clone evidence; the Actor applies approved steps)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D; AAA: the Auditor reviews the change request and the clone evidence: approve, send back or reject; only an approved change goes through the Actor to production)",
       "words": "Nik: \"obviously auditor, main auditor role\" (2244.38) \"is between analyst and actor\" (2245.72) \"review the change proposed by analyst\" (2250.42)",
       "builder": "illus-1"
     },
@@ -695,11 +695,11 @@
       "duration": 7,
       "dur": 7,
       "file": "r24-editor-note.mov",
-      "placement": "band",
+      "placement": "center",
       "freezeSec": 0,
       "sfx": [],
-      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2: \"Production Postgres: only the Actor changes it\")",
-      "words": "Nik: \"neither analyst nor actor have access to production\" (2253.40)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D, \"no write access\" on Analyst and Auditor, \"Actor deterministic · sole write path\")",
+      "words": "Nik: \"neither analyst nor actor\" (2253.40) \"access to production\" (2255.90)",
       "builder": "illus-1",
       "vetoable": "Editor's note: on air \"neither analyst nor actor have access to production\" (he means the Analyst and the Auditor)"
     },
@@ -707,28 +707,28 @@
       "id": "r26-send-back",
       "row": 26,
       "outStart": 2398.3,
-      "duration": 6.5,
-      "dur": 6.5,
+      "duration": 7.6,
+      "dur": 7.6,
       "file": "r26-send-back.mov",
-      "placement": "band",
+      "placement": "center",
       "freezeSec": 0,
       "sfx": [],
-      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2 arrows: approve, send back, reject)",
-      "words": "Nik: \"auditor can send back for improvements, completely reject\" (2398.54)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D pills \"send back\", \"reject\", \"approve → apply\")",
+      "words": "Nik: \"send back for improvements\" (2398.54) \"completely reject\" (2400.60) \"approve\" (2403.22)",
       "builder": "illus-1"
     },
     {
       "id": "r27-triangle",
       "row": 27,
       "outStart": 2570.3,
-      "duration": 9,
-      "dur": 9,
+      "duration": 11,
+      "dur": 11,
       "file": "r27-triangle.mov",
-      "placement": "band",
+      "placement": "center",
       "freezeSec": 0,
       "sfx": [],
-      "source": "on air (Nik); https://postgres.ai/blog/20261123-pgaibench (Practical rules: DBLab Engine branching, DBLab Forge dedicated environments, postgres_ai monitoring)",
-      "words": "Nik: \"Not be alone, right? So this triangle works really well\" (2570.50) \"equipped with proper\" (2573.32) testing, like database branching, ... dedicated ... All the telemetry",
+      "source": "on air (Nik); https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D; Practical rules: DBLab Engine branching, DBLab Forge dedicated environments, postgres_ai monitoring)",
+      "words": "Nik: \"triangle works really well\" (2571.32) \"equipped with proper\" (2573.32) \"branching\" (2575.72) \"dedicated\" (2577.86) \"all the telemetry\" (2580.28)",
       "builder": "illus-1"
     },
     {
@@ -946,11 +946,11 @@
       "duration": 8.2,
       "dur": 8.2,
       "file": "r37-kirk-delegate.mov",
-      "placement": "band",
+      "placement": "center",
       "freezeSec": 0,
       "sfx": [],
-      "source": "on air (Kirk), his exact words",
-      "words": "Kirk: \"how much responsibility we can safely delegate\" (3120.39) \"not simply how intelligent the AI is\" (3123.53)",
+      "source": "on air (Kirk), his exact words; scene: https://postgres.ai/blog/20261123-pgaibench hero (AaaPipeline3D)",
+      "words": "Kirk: \"responsibility we can safely delegate\" (3120.87) \"not simply how intelligent the AI is\" (3123.53)",
       "builder": "illus-1"
     }
   ]

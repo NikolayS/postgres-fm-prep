@@ -4,13 +4,15 @@
 //   bun scripts/render-illus2.ts [id ...]      STILLS=<dir> renders mid-beat PNG stills only
 import {mkdirSync, writeFileSync, existsSync} from 'node:fs';
 import {join, resolve} from 'node:path';
-import {ROWS} from './items-illus2';
+import {ROWS as ROWS_V2, ROWS_V3} from './items-illus2';
 
 const ROOT = resolve(import.meta.dir, '..');
 const OUT = resolve(process.env.OUT ?? resolve(ROOT, '../out-v2'));
 mkdirSync(join(OUT, 'parts'), {recursive: true});
 const r2 = (x: number) => Math.round(x * 100) / 100;
-const only = new Set(process.argv.slice(2));
+const V3 = process.argv.includes('--v3');
+const ROWS = V3 ? ROWS_V3 : ROWS_V2;
+const only = new Set(process.argv.slice(2).filter((a) => a !== '--v3'));
 const todo = ROWS.filter((r) => only.size === 0 || only.has(r.id));
 
 const propsOf = (r: (typeof ROWS)[number]) => {
@@ -39,7 +41,7 @@ async function worker() {
       ...(r.accents ?? []).map((a) => ({file: 'sfx/accent.wav', at: r2(a - r.outStart), gain: 1})),
       {file: 'sfx/center-out.wav', at: r2(dur - 0.38), gain: 0.7},
     ];
-    writeFileSync(join(OUT, 'parts', `${r.id}.json`), JSON.stringify({id: r.id, row: r.row, file: `${r.id}.mov`, outStart: r.outStart, dur, duration: dur, placement: r.placement, freezeSec: 0, sfx, words: r.words, source: r.source}, null, 2));
+    writeFileSync(join(OUT, 'parts', r.part ?? `${r.id}.json`), JSON.stringify({id: r.id, row: r.row, file: `${r.id}.mov`, outStart: r.outStart, dur, duration: dur, placement: r.placement, freezeSec: 0, sfx, words: r.words, source: r.source}, null, 2));
     console.log(`ok ${r.id} ${r.outStart} ${dur}`);
   }
 }

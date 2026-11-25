@@ -159,10 +159,10 @@ export const L9Split198: React.FC<L9Props> = ({beats}) => {
           <div style={{position: 'absolute', left: 0, top: 0, bottom: 0, width: (p99 / 55) * BAR, background: hot ? RED : GREEN, borderRadius: 8}} />
         </div>
         <div style={{position: 'relative', width: BAR, height: 40, fontFamily: MONO, fontSize: 28, color: DIM}}>
-          {[0, 25, 50].map((v) => <span key={v} style={{position: 'absolute', left: (v / 55) * BAR, transform: v ? 'translateX(-50%)' : undefined, top: 4}}>{v}{v === 50 ? ' ms' : ''}</span>)}
+          {[0, 25, 50].map((v) => <span key={v} style={{position: 'absolute', left: (v / 55) * BAR, transform: v ? 'translateX(-50%)' : undefined, top: 4, whiteSpace: 'nowrap'}}>{v}{v === 50 ? ' ms' : ''}</span>)}
         </div>
         <div style={{marginTop: 10, fontSize: 32, color: DIM, opacity: ease(t, x18.at + 1.0, 0.5)}}><span style={{fontFamily: MONO}}>pg_stat_statements</span> mean <b style={{color: RED}}>188×</b></div>
-        <Stamp text="18.0× slower" color={RED} k={x18K} size={96} style={{left: 40, top: 420}} />
+        <Stamp text="18.0× slower" color={RED} k={x18K} size={88} style={{left: 40, top: 452}} />
       </div>
       <SourceLine text="pgaibench.dev · task L9 · live Postgres 18.7" />
     </Shell>
@@ -172,7 +172,7 @@ export const L9Split198: React.FC<L9Props> = ({beats}) => {
 // ---------------------------------------------------------------- L5 lock queue (row 31) + Haiku (row 32)
 export type L5Props = {durationSec: number; beats: {green: At; go: At; haiku: At}};
 
-const QUERIES = ['UPDATE pgbench_accounts …', 'SELECT … FROM pgbench_accounts', 'UPDATE pgbench_accounts …', 'SELECT … FROM pgbench_accounts', 'UPDATE pgbench_accounts …', 'SELECT … FROM pgbench_accounts', 'UPDATE pgbench_accounts …'];
+const QUERIES = ['UPDATE …', 'SELECT …', 'UPDATE …', 'SELECT …', 'UPDATE …', 'SELECT …', 'UPDATE …'];
 
 const Lock: React.FC<{open: number; color: string; size?: number}> = ({open, color, size = 1}) => (
   <svg width={46 * size} height={56 * size} viewBox="0 0 46 56">
@@ -214,14 +214,14 @@ const L5Main: React.FC<{t: number; frame: number; fps: number; green: number; go
           <span style={{fontFamily: MONO, fontSize: 34, fontWeight: 600, color: passed ? GREEN : AMBER}}>AccessExclusiveLock</span>
         </div>
         {/* queue of blocked sessions */}
-        <div style={{position: 'absolute', left: 24, top: 250, width: 600, height: 330}}>
+        <div style={{position: 'absolute', left: 24, top: 270, width: 600, height: 330}}>
           {QUERIES.map((q, i) => {
             const at = 1.4 + i * ((green - 1.9) / QUERIES.length);
             const k = frame < at * fps ? 0 : spring({frame: frame - at * fps, fps, config: {damping: 9, stiffness: 220, mass: 0.5}});
             const out = Math.max(0, Math.min(1, drain * 1.6 - (QUERIES.length - 1 - i) * 0.1));
             const wob = passed ? 0 : Math.sin(frame * 0.9 + i) * 2;
             return (
-              <div key={i} style={{position: 'absolute', left: (i % 2) * 16 + out * 700, top: 284 - (i + 1) * 46 + (1 - k) * -160 + wob, opacity: Math.min(1, k) * Math.max(0, 1 - out * 2.5), whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 12, fontFamily: MONO, fontSize: 30, background: 'rgba(245,158,11,0.16)', border: `2px solid ${AMBER}`, borderRadius: 10, padding: '0 14px', lineHeight: '40px'}}>
+              <div key={i} style={{position: 'absolute', left: (i % 2) * 40 + out * 700, top: 284 - (i + 1) * 46 + (1 - k) * -60 + wob, opacity: Math.min(1, k) * Math.max(0, 1 - out * 2.5), whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 12, fontFamily: MONO, fontSize: 34, background: 'rgba(245,158,11,0.16)', border: `3px solid ${AMBER}`, borderRadius: 10, padding: '0 16px', lineHeight: '40px'}}>
                 {q}
               </div>
             );

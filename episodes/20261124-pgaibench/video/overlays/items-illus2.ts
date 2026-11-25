@@ -8,6 +8,7 @@ export type Row = {
   id: string; row: string; comp: string; placement: 'band' | 'center';
   outStart: number; end: number; beats?: Record<string, number>; accents?: number[];
   words: string; source: string;
+  part?: string; // fragment file name in out-v2/parts (default <id>.json)
 };
 export const ROWS: Row[] = [
   {id: 'v2-r01-clusters', row: '1', comp: 'r01clusters', placement: 'center', outStart: 169.42, end: 176.4, beats: {eng: 170.70},
@@ -70,3 +71,34 @@ export const ROWS: Row[] = [
     words: 'Nik: "major upgrade and forgets analyze on weekend" (3088.83-3091.6) "Saturday, Sunday it works very well" (3092.39) "on Monday we have higher traffic" (3094.33) "without statistics" (3096.81)',
     source: 'on air (Nik), only what is said'},
 ];
+
+// Edit v3 (R/pgfm198-edited.mp4 after 2026-11-24 20:40 PT, 3120.84 s; cuts R/pgfm198-edited.cuts.json):
+// stumble cuts c59/c60 and c103/c104 fall inside these two windows, so they are re-anchored on v3.
+// Render: bun scripts/render-illus2.ts --v3
+export const ROWS_V3: Row[] = [
+  {...ROWS.find((r) => r.id === 'v2-r13a-safety')!, id: 'v2-r13a-safety-v3', part: 'v2-r13a-safety.v3.json',
+    outStart: 1082.82, end: 1104.0, beats: {down: 1088.38, loss: 1094.50, over: 1101.14}, accents: [1088.38, 1094.50, 1101.14],
+    words: 'v3 times. Nik: "two metrics. One is, uh, safety" (1082.82) "downtime of replica" (1088.38) "data loss" (1094.50) "overspending" (1101.14)'},
+  {...ROWS.find((r) => r.id === 'v2-r31-l5-lock-queue')!, id: 'v2-r31-l5-lock-queue-v3', part: 'v2-r31-l5-lock-queue.v3.json',
+    outStart: 2759.30, end: 2775.68, beats: {green: 2763.82, go: 2767.22, haiku: 2768.52}, accents: [2763.82, 2767.22],
+    words: 'v3 times. Nik: "being overconfident" (2759.30) "Weak models" (2760.96) "green light" (2763.82) "Oh, let\'s go" (2767.22) "Or they escalate too much" (2768.52)'},
+];
+
+// Band rows on edit v3 (360p pass): every time maps edit v2 -> source -> edit v3 through the two
+// cuts files; a time inside a v3 cut throws.
+import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+type Seg = {srcStart: number; srcEnd: number; outStart: number; outEnd: number};
+const REVIEW = resolve(import.meta.dir, '../../..');
+const segs = (f: string): Seg[] => JSON.parse(readFileSync(f, 'utf8')).segmentTimes;
+const V2 = segs(`${REVIEW}/v2-edit/pgfm198-edited.cuts.json`), V3 = segs(`${REVIEW}/pgfm198-edited.cuts.json`);
+const toSrc = (e: number) => { const s = V2.find((x) => e >= x.outStart - 1e-6 && e <= x.outEnd + 1e-6); if (!s) throw new Error(`v2 ${e}`); return s.srcStart + e - s.outStart; };
+const toV3 = (src: number, what: string) => { const s = V3.find((x) => src >= x.srcStart - 0.05 && src <= x.srcEnd + 0.05); if (!s) throw new Error(`${what}: source ${src.toFixed(2)} is cut in v3`); return Math.round((s.outStart + Math.min(Math.max(src, s.srcStart), s.srcEnd) - s.srcStart) * 100) / 100; };
+const m = (e: number, what: string) => toV3(toSrc(e), what);
+const BAND_V3 = ['v2-r02-ddl', 'v2-r04-pgaibench', 'v2-r05-baseline', 'v2-r07a-l9-setup', 'v2-r10-runs', 'v2-r12-escalate', 'v2-r20-replicas', 'v2-r30-real', 'v2-r35-agree', 'v2-r36-analyze'];
+for (const id of BAND_V3) {
+  const r = ROWS.find((x) => x.id === id)!;
+  ROWS_V3.push({...r, id: `${id}-v3`, part: `${id}.v3.json`, outStart: m(r.outStart, `${id} start`), end: m(r.end, `${id} end`),
+    beats: r.beats && Object.fromEntries(Object.entries(r.beats).map(([k, v]) => [k, m(v, `${id} ${k}`)])),
+    accents: r.accents?.map((a) => m(a, `${id} accent`)), words: `v3 times, mapped through source from v2 (${r.outStart}). ${r.words}`});
+}

@@ -26,6 +26,10 @@ const toSrc = (t: number) => { for (const s of BASE) if (t >= s.outStart && t <=
 const toOut = (t: number) => { for (const s of NOW) { if (t < s.srcStart) return s.outStart; if (t <= s.srcEnd) return s.outStart + (t - s.srcStart); } return NOW[NOW.length - 1].outEnd; };
 const E = (t: number) => r2(toOut(toSrc(t)));
 const relE = (start: number, o: Record<string, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, r2(E(v) - E(start))]));
+// a re-cut that changes beats inside an overlay needs its own render: <id>-v3.mov
+const V3 = !!process.env.CUTS && resolve(process.env.CUTS) !== BASE_CUTS;
+const V3_RENDER = new Set(['r18-clone-gate']);
+const fileOf = (id: string) => `${id}${V3 && V3_RENDER.has(id) ? '-v3' : ''}.mov`;
 const rel = (start: number, o: Record<string, number>) => Object.fromEntries(Object.entries(o).map(([k, v]) => [k, r2(v - start)]));
 
 // AAA token paths over the post's Figure 2 (panel coordinates, see AaaFig in src/Ep198v2.tsx)
@@ -33,6 +37,9 @@ const CR1 = [{x: 105, y: 291}, {x: 105, y: 600}, {x: 394, y: 600}, {x: 394, y: 2
 const CR2 = [{x: 105, y: 291}, {x: 105, y: 600}, {x: 575, y: 605}];
 const ALL = {phase1: 0, phase2: 0, analyst: 0, auditor: 0, actor: 0, clones: 0, prod: 0, cr: 0, back: 0, draft: 0, results: 0, approve: 0, reject: 0, rehearse: 0, apply: 0};
 
+const W1 = {yaw: -8, pitch: 13, dist: 10.4, focal: 0.81, tx: 0.05, ty: 1.84, ox: 0.5, oy: 0.52}; // one caption line
+const W2 = {yaw: -8, pitch: 13, dist: 10.4, focal: 1.42, tx: 0.05, ty: 1.84, ox: 0.5, oy: 0.52}; // caption in a 560 px side column
+const W3D = {yaw: -8, pitch: 13, dist: 10.4, focal: 0.94, tx: 0.05, ty: 1.84, ox: 0.5, oy: 0.52};
 export const ITEMS: It[] = [
   {id: 'r03-backup-chat', row: 3, comp: 'chat198', outStart: E(326.2), dur: 6.6, placement: 'band',
     props: {lines: ['I dropped the production database.', "Do you have a backup? I'll make a note not to do that again."], lineAt: [2.27]},
@@ -49,11 +56,14 @@ export const ITEMS: It[] = [
     props: {b: {step: 0.8, hero: 4.0}}, accents: [4.0],
     words: 'Nik: "it\'s, it\'s not safe" (1216.58); Kirk: "It\'s being overly cautious" (1224.46) ends it',
     source: `${POST} (execution funnel: 949 episodes, 552 entered rehearsal, 408 on the live primary, 13 harmful = 3.2%)`},
-  {id: 'r16-auditor-next', row: 16, comp: 'motif198', outStart: E(1331.4), dur: 6.5, placement: 'band',
-    props: {lines: ['In AAA: an independent Auditor'], lit: 'auditor-q', prefixLen: 7}, typed: {lines: ['In AAA: an independent Auditor']},
-    words: 'Kirk: "another agent or something, like, auditing it" (1331.60)', source: `${POST} (AAA: "Auditor (review). An independent model ...")`},
+  {id: 'r16-auditor-next', row: 16, comp: 'aaa3d198', outStart: E(1331.4), dur: 6.5, placement: 'center',
+    props: {caption: {lines: ['In AAA: an independent Auditor'], prefixLen: 7, hi: [{word: 'Auditor', at: relE(1331.4, {a: 1333.86}).a}]},
+      cam: [{at: 0, ...W1}, {at: 0.3, move: 1.6, yaw: 12, pitch: 16, dist: 10.4, focal: 1.45, tx: 1.3, ty: 2.75, ox: 0.5, oy: 0.5}],
+      focus: [{flows: ['review'], at: 0.4}], glow: [{key: 'auditor', at: 0.6}], hot: [{id: 'auditor', at: relE(1331.4, {a: 1333.86}).a}],
+      events: [{kind: 'review', at: 0.8}, {kind: 'review', at: 3.4}]},
+    words: 'Kirk: "another agent or something" (1331.60) "like, auditing it" (1333.86)', source: `${POST} (hero: AaaPipeline3D; AAA: "Auditor (review). An independent model ...")`},
   {id: 'r18-clone-gate', row: 18, comp: 'dots198', outStart: E(1555.0), dur: 12.0, placement: 'center',
-    props: {mode: 'gate', b: {gate: 1.0, hero: 7.6}}, accents: [7.6],
+    props: {mode: 'gate', b: relE(1555.0, {gate: 1556.0, hero: 1562.6})}, accents: [relE(1555.0, {h: 1562.6}).h],
     words: 'Nik: "it removed half of harm- harmful actions" (1555.26) "dropped twice" (1560.56) "Without any additional AI tokens spent" (1562.66)',
     source: `${POST} (replay finding 1: "Clone gate ($0 LLM): stopped 6 of 13 harms (46.2%)")`},
   {id: 'r19-deterministic', row: 19, comp: 'det198', outStart: E(1647.0), dur: 16.5, placement: 'center',
@@ -63,38 +73,64 @@ export const ITEMS: It[] = [
   {id: 'r21-tom-lane', row: 21, comp: 'prompt198', outStart: E(1888.1), dur: 8.5, placement: 'band',
     props: {text: "Pretend you're Tom Lane, and cover this critically.", stampAt: 3.4, stamp: 'CRITICAL\nREVIEW'}, typed: {lines: ["Pretend you're Tom Lane, and cover this critically."]},
     words: 'Kirk: "Pretend you\'re Tom Lane" (1888.28) "cover this critically" (1890.90)', source: 'on air (Kirk), his exact words'},
-  {id: 'r22a-aaa-intro', row: 22, comp: 'aaafig198', outStart: E(1974.0), dur: 14.0, placement: 'center',
-    props: {appear: {analyst: 0.4, auditor: 1.0, actor: 1.6, phase1: 2.6, phase2: 2.6, clones: 3.0, prod: 3.3, cr: 4.0, back: 4.4, draft: 4.8, results: 5.1, approve: 5.4, reject: 5.7, rehearse: 6.0, apply: 6.3}},
+  {id: 'r22a-aaa-intro', row: 22, comp: 'aaa3d198', outStart: E(1974.0), dur: 14.0, placement: 'center',
+    props: {cam: [{at: 0, yaw: -34, pitch: 34, dist: 12.5, focal: 0.94, tx: 0.05, ty: 1.84, ox: 0.5, oy: 0.52}, {at: 0.2, move: 3.4, ...W3D}],
+      build: {grid: 0, clones: 0.3, prod: 0.5, tel: 0.7, slab: 1.0, analyst: 1.4, auditor: 1.8, lanes: 2.2, feedback: 2.6},
+      labels: {clones: 0.4, prod: 0.6, telemetry: 0.8, actor: 1.1, analyst: 1.5, auditor: 1.9, rehearse: 2.3, review: 2.3, sendback: 2.4, apply: 2.4, reject: 2.5, feedback: 2.7},
+      hot: [{id: 'analyst', at: 1.5}, {id: 'auditor', at: 1.9}, {id: 'actor', at: 1.1}],
+      events: [{kind: 'rehearse', at: 4.0}, {kind: 'review', at: 7.3}, {kind: 'apply', at: 9.15}],
+      title: [{text: 'AAA', at: 0.3}]},
     words: 'Nik: "three As, triple A, AAA" (1974.26) ... "already evolved architecture" (1983.70) "third version maybe" (1987.34)',
-    source: `${POST} (Figure 2, 20261113-pgaibench-fig-aaa-roles-dark.svg: same boxes, arrows and labels, labels cut to fit)`},
-  {id: 'r22b-aaa-analyst', row: 22, comp: 'aaafig198', outStart: E(1994.4), dur: 12.6, placement: 'center',
-    props: {appear: ALL, focus: {keys: ['phase1', 'analyst', 'draft'], at: 0.44}, glow: [{key: 'analyst', at: 0.44}], tokens: [{label: 'CR', t0: 10.0, t1: 11.4, path: [{x: 105, y: 291}, {x: 105, y: 424}]}]},
+    source: `${POST} (hero: the AaaPipeline3D scene, same geometry, colors, camera and labels)`},
+  {id: 'r22b-aaa-analyst', row: 22, comp: 'aaa3d198', outStart: E(1994.4), dur: 12.6, placement: 'center',
+    props: {cam: [{at: 0, ...W3D}, {at: 0.44, move: 1.4, yaw: -17, pitch: 14, dist: 10.4, focal: 1.06, tx: -0.8, ty: 1.72, ox: 0.45, oy: 0.53}, {at: 8.2, move: 1.4, ...W3D}],
+      focus: [{flows: ['rehearse', 'telemetry', 'feedback', 'review'], at: 0.44}], glow: [{key: 'analyst', at: 0.44}],
+      hot: [{id: 'analyst', at: 0.44}, {id: 'review', at: 10.0}], labels: {analyst: 0, auditor: 0, actor: 0, clones: 0, prod: 0, telemetry: 0, feedback: 0, rehearse: 0, review: 0, sendback: 0, apply: 0, reject: 0, nowriteAn: 3.6}, labelsUntil: {nowriteAn: 7.9},
+      events: [{kind: 'feedback', at: 2.1}, {kind: 'rehearse', at: 5.0}, {kind: 'review', at: 8.6}]},
     words: 'Nik: "First is analyst" (1994.84) "whose role is to analyze metrics" (1996.54) "propose some solution, the change" (2004.46)',
-    source: `${POST} (Figure 2; AAA: "Analyst (propose) ... holds zero production write access")`},
-  {id: 'r22c-aaa-actor', row: 22, comp: 'aaafig198', outStart: E(2008.6), dur: 12.4, placement: 'center',
-    props: {appear: ALL, focus: {keys: ['actor', 'rehearse', 'apply', 'clones', 'prod'], at: 0.34}, glow: [{key: 'actor', at: 0.34}], tokens: [{label: 'CR', t0: 5.2, t1: 6.6, path: [{x: 105, y: 424}, {x: 105, y: 515}]}, {label: 'CR', t0: 7.4, t1: 8.8, path: [{x: 1015, y: 424}, {x: 1015, y: 515}]}]},
+    source: `${POST} (hero: AaaPipeline3D; AAA: "Analyst (propose) ... holds zero production write access")`},
+  {id: 'r22c-aaa-actor', row: 22, comp: 'aaa3d198', outStart: E(2008.6), dur: 12.4, placement: 'center',
+    props: {cam: [{at: 0, ...W3D}, {at: 0.34, move: 1.4, yaw: -4, pitch: 10, dist: 10.4, focal: 1.02, tx: 0.0, ty: 1.8, ox: 0.5, oy: 0.53}],
+      focus: [{flows: ['rehearse', 'apply'], at: 0.34}], glow: [{key: 'actor', at: 0.34}],
+      hot: [{id: 'actor', at: 0.34}, {id: 'actor', at: 5.1}],
+      events: [{kind: 'rehearse', at: 5.2}, {kind: 'apply', at: 7.4}]},
     words: 'Nik: "actor, which will execute this change" (2008.94) "actor is almost, like, ideally should be super deterministic" (2013.74) "the script, uh, a- analyst proposed" (2020.80)',
-    source: `${POST} (Figure 2; AAA: "Actor (execute). A deterministic engine ... rehearses the exact CR on a live two-node clone ... applies the approved steps verbatim")`},
+    source: `${POST} (hero: AaaPipeline3D, "Actor deterministic · sole write path"; AAA: "Actor (execute). A deterministic engine ...")`},
   {id: 'r23a-aaa-auditor', row: 23, comp: 'aaafig198', outStart: E(2228.4), dur: 12.5, placement: 'center',
     props: {appear: ALL, focus: {keys: ['phase2', 'auditor', 'cr', 'back', 'approve', 'reject'], at: 2.5}, glow: [{key: 'auditor', at: 2.5}]},
     words: 'Nik: "And then there is a third A, which is auditor" (2228.64) "Originally, auditor role" (2232.08)',
     source: `${POST} (Figure 2; AAA: "Auditor (review) ... returns a verdict (approve, request_changes, or reject)")`},
-  {id: 'r23b-aaa-path', row: 23, comp: 'aaafig198', outStart: E(2242.6), dur: 10.6, placement: 'center',
-    props: {appear: ALL, glow: [{key: 'prod', at: 8.6}], tokens: [{label: 'CR 1', t0: 0.6, t1: 8.6, path: CR1}, {label: 'CR 2', t0: 1.2, t1: 4.0, path: CR2, halt: ['HALTED', 'lock wait ≥ 5 s']}]},
+  {id: 'r23b-aaa-path', row: 23, comp: 'aaa3d198', outStart: E(2242.6), dur: 10.6, placement: 'center',
+    props: {cam: [{at: 0, ...W3D}, {at: 0.3, move: 9.5, yaw: 5, pitch: 15, dist: 10.4, focal: 0.94, tx: 0.05, ty: 1.84, ox: 0.5, oy: 0.52}],
+      glow: [{key: 'auditor', at: 2.8}], hot: [{id: 'auditor', at: 2.8}, {id: 'reject', at: 4.0}, {id: 'apply', at: 6.2}],
+      events: [{kind: 'rehearse', at: 0.4}, {kind: 'review', at: 2.0}, {kind: 'reject', at: 3.5}, {kind: 'review', at: 4.6}, {kind: 'apply', at: 6.2}]},
     accents: [4.0],
     words: 'Nik: "obviously auditor, main auditor role" (2244.38) "is between analyst and actor" (2245.72) "review the change proposed by analyst" (2250.42)',
-    source: `${POST} (AAA: the Actor rehearses on a live clone and halts mechanical failures; P2 halts on lock wait >= 5 s; the Auditor reviews the clone evidence; the Actor applies approved steps)`},
-  {id: 'r24-editor-note', row: 24, comp: 'motif198', outStart: E(2253.4), dur: 7.0, placement: 'band',
-    props: {lines: ["Editor's note: in AAA, only the Actor writes to production."], lit: 'actor-prod', prefixLen: 14}, typed: {lines: ["Editor's note: in AAA, only the Actor writes to production."]},
+    source: `${POST} (hero: AaaPipeline3D; AAA: the Auditor reviews the change request and the clone evidence: approve, send back or reject; only an approved change goes through the Actor to production)`},
+  {id: 'r24-editor-note', row: 24, comp: 'aaa3d198', outStart: E(2253.4), dur: 7.0, placement: 'center',
+    props: {caption: {lines: ["Editor's note: in AAA, only the Actor writes to production."], prefixLen: 14, size: 42, hi: [{word: 'only the Actor', at: relE(2253.4, {a: 2255.9}).a}]},
+      cam: [{at: 0, ...W1}, {at: 0.3, move: 1.6, yaw: 6, pitch: 12, dist: 10.4, focal: 0.95, tx: 0.35, ty: 1.75, ox: 0.5, oy: 0.52}],
+      focus: [{flows: ['apply'], at: 0.3}], glow: [{key: 'actor', at: 0.4}, {key: 'prod', at: relE(2253.4, {a: 2255.9}).a}],
+      labels: {analyst: 0, auditor: 0, actor: 0, clones: 0, prod: 0, apply: 0, nowriteAn: 0.9, nowriteAu: 1.2},
+      hot: [{id: 'nowriteAn', at: 0.9}, {id: 'nowriteAu', at: 1.2}, {id: 'actor', at: relE(2253.4, {a: 2255.9}).a}],
+      events: [{kind: 'apply', at: 0.8}, {kind: 'apply', at: relE(2253.4, {a: 2255.9}).a}]},
     vetoable: 'Editor\'s note: on air "neither analyst nor actor have access to production" (he means the Analyst and the Auditor)',
-    words: 'Nik: "neither analyst nor actor have access to production" (2253.40)', source: `${POST} (Figure 2: "Production Postgres: only the Actor changes it")`},
-  {id: 'r26-send-back', row: 26, comp: 'motif198', outStart: E(2398.3), dur: 6.5, placement: 'band',
-    props: {lines: ['Auditor: approve · send back · reject'], lit: 'back', prefixLen: 8}, typed: {lines: ['Auditor: approve · send back · reject']},
-    words: 'Nik: "auditor can send back for improvements, completely reject" (2398.54)', source: `${POST} (Figure 2 arrows: approve, send back, reject)`},
-  {id: 'r27-triangle', row: 27, comp: 'motif198', outStart: E(2570.3), dur: 9.0, placement: 'band',
-    props: {lines: ['Not alone: three roles, plus', 'branching · dedicated clones · telemetry'], lineAt: [3.0], lit: 'all', prefixLen: 10}, typed: {lines: ['Not alone: three roles, plus', 'branching · dedicated clones · telemetry'], lineAt: [3.0]},
-    words: 'Nik: "Not be alone, right? So this triangle works really well" (2570.50) "equipped with proper" (2573.32) testing, like database branching, ... dedicated ... All the telemetry',
-    source: `on air (Nik); ${POST} (Practical rules: DBLab Engine branching, DBLab Forge dedicated environments, postgres_ai monitoring)`},
+    words: 'Nik: "neither analyst nor actor" (2253.40) "access to production" (2255.90)', source: `${POST} (hero: AaaPipeline3D, "no write access" on Analyst and Auditor, "Actor deterministic · sole write path")`},
+  {id: 'r26-send-back', row: 26, comp: 'aaa3d198', outStart: E(2398.3), dur: 7.6, placement: 'center',
+    props: {caption: {lines: ['Auditor: send back · reject · approve'], prefixLen: 8, hi: Object.entries(relE(2398.3, {'send back': 2398.54, reject: 2400.6, approve: 2403.22})).map(([word, at]) => ({word, at}))},
+      cam: [{at: 0, ...W1}, {at: 0.2, move: 1.4, yaw: 6, pitch: 13, dist: 10.4, focal: 1.25, tx: 0.75, ty: 2.35, ox: 0.5, oy: 0.5}],
+      focus: [{flows: ['review', 'apply'], at: 0.3}], glow: [{key: 'auditor', at: 0.3}],
+      hot: Object.entries(relE(2398.3, {sendback: 2398.54, reject: 2400.6, apply: 2403.22})).map(([id, at]) => ({id, at})),
+      events: [{kind: 'back', at: relE(2398.3, {a: 2398.54}).a}, {kind: 'reject', at: relE(2398.3, {a: 2400.6}).a}, {kind: 'apply', at: relE(2398.3, {a: 2403.22}).a}]},
+    words: 'Nik: "send back for improvements" (2398.54) "completely reject" (2400.60) "approve" (2403.22)', source: `${POST} (hero: AaaPipeline3D pills "send back", "reject", "approve → apply")`},
+  {id: 'r27-triangle', row: 27, comp: 'aaa3d198', outStart: E(2570.3), dur: 11.0, placement: 'center',
+    props: {caption: {lines: ['Not alone: three roles, plus', 'branching · dedicated clones · telemetry'], lineAt: [3.0], prefixLen: 10, size: 50, side: 560, hi: Object.entries(relE(2570.3, {branching: 2575.72, 'dedicated clones': 2577.86, telemetry: 2580.28})).map(([word, at]) => ({word, at}))},
+      cam: [{at: 0, ...W2}],
+      events: [{kind: 'rehearse', at: 0.4}, {kind: 'review', at: 2.4}, {kind: 'apply', at: 3.8}, {kind: 'rehearse', at: relE(2570.3, {a: 2575.72}).a}, {kind: 'feedback', at: relE(2570.3, {a: 2580.28}).a}],
+      glow: [{key: 'clones', at: relE(2570.3, {a: 2575.72}).a, until: relE(2570.3, {a: 2580.0}).a}],
+      hot: Object.entries(relE(2570.3, {rehearse: 2575.72, clones: 2577.86, telemetry: 2580.28})).map(([id, at]) => ({id, at}))},
+    words: 'Nik: "triangle works really well" (2571.32) "equipped with proper" (2573.32) "branching" (2575.72) "dedicated" (2577.86) "all the telemetry" (2580.28)',
+    source: `on air (Nik); ${POST} (hero: AaaPipeline3D; Practical rules: DBLab Engine branching, DBLab Forge dedicated environments, postgres_ai monitoring)`},
   {id: 'r28a-dots', row: 28, comp: 'dots198', outStart: E(2602.6), dur: 19.4, placement: 'center',
     props: {mode: 'full', b: relE(2602.6, {gate: 2605.8, auditor: 2610.78, stamp: 2614.14, no: 2617.3, left: 2618.2})}, accents: [3.2],
     words: 'Kirk: "So now that we used AAA as our process" (2602.82) "gave it over to the actor again to run it in production" (2610.78) "got rid of 100% of the errors" (2614.14); Nik: "Uh, no. One harm left in Opus 5.5" (2617.30)',
@@ -110,10 +146,11 @@ export const ITEMS: It[] = [
     props: {lines: ['“A successful experiment is evidence, not a guarantee.', 'Rollback is a procedure, not a promise.”'], lineAt: [4.93], lit: 'none', hiWords: ['evidence', 'procedure'], strike: [{word: 'guarantee', at: 2.6}, {word: 'promise', at: 6.6}]},
     typed: {lines: ['“A successful experiment is evidence, not a guarantee.', 'Rollback is a procedure, not a promise.”'], lineAt: [4.93]},
     words: 'Kirk: "A successful experiment is evidence" (3037.89) "rollback is a procedure, not a promise" (3042.63)', source: 'on air (Kirk), his exact words'},
-  {id: 'r37-kirk-delegate', row: 37, comp: 'motif198', outStart: E(3120.2), dur: 8.2, placement: 'band',
-    props: {lines: ['“…how much responsibility we can safely delegate,', 'not simply how intelligent the AI is.”'], lineAt: [3.33], lit: 'all', hiWords: ['responsibility']},
-    typed: {lines: ['“…how much responsibility we can safely delegate,', 'not simply how intelligent the AI is.”'], lineAt: [3.33]},
-    words: 'Kirk: "how much responsibility we can safely delegate" (3120.39) "not simply how intelligent the AI is" (3123.53)', source: 'on air (Kirk), his exact words'},
+  {id: 'r37-kirk-delegate', row: 37, comp: 'aaa3d198', outStart: E(3120.2), dur: 8.2, placement: 'center',
+    props: {caption: {lines: ['“…how much responsibility we can safely delegate,', 'not simply how intelligent the AI is.”'], lineAt: [relE(3120.2, {a: 3123.53}).a], size: 50, side: 560, hi: [{word: 'responsibility', at: relE(3120.2, {a: 3120.87}).a}]},
+      cam: [{at: 0, ...W2}],
+      events: [{kind: 'rehearse', at: 0.3}, {kind: 'review', at: 2.6}, {kind: 'apply', at: 4.2}]},
+    words: 'Kirk: "responsibility we can safely delegate" (3120.87) "not simply how intelligent the AI is" (3123.53)', source: `on air (Kirk), his exact words; scene: ${POST} hero (AaaPipeline3D)`},
 ];
 
 const mode = process.argv[2];
@@ -125,7 +162,7 @@ if (mode === 'render') {
   const worker = async () => {
     while (next < todo.length) {
       const it = todo[next++];
-      const file = join(OUT, `${it.id}.mov`);
+      const file = join(OUT, fileOf(it.id));
       const p = Bun.spawn(['bunx', 'remotion', 'render', 'src/index.ts', it.comp, file, '--codec', 'prores', '--prores-profile', '4444', '--image-format', 'png', '--pixel-format', 'yuva444p10le', '--log', 'error', '--concurrency', '3', `--props=${JSON.stringify({...it.props, durationSec: it.dur})}`], {cwd: ROOT, stdout: 'pipe', stderr: 'pipe'});
       const code = await p.exited;
       console.log(code === 0 && existsSync(file) ? `ok ${it.id}` : `FAIL ${it.id} ${(await new Response(p.stderr).text()).slice(-1200)}`);
@@ -140,17 +177,26 @@ if (mode === 'manifest' || mode === 'render') {
     const pl = motifPlan(lines, it.typed?.lineAt ?? it.props.lineAt);
     writeFileSync(join(OUT, `${it.id}-typing-bursts.json`), JSON.stringify({overlay: `${it.id}.mov`, timeBase: 'seconds from the overlay start', bursts: pl.map((p, i) => ({start: r3(p.at), end: r3(p.end), chars: p.text.length, line: i}))}, null, 2));
   }
-  const mine = ITEMS.map((it) => ({id: it.id, row: it.row, outStart: it.outStart, duration: it.dur, dur: it.dur, file: `${it.id}.mov`, placement: it.placement, freezeSec: 0, sfx: [], ...(it.accents ? {accents: it.accents.map(r2)} : {}), source: it.source, words: it.words, builder: 'illus-1', ...(it.vetoable ? {vetoable: it.vetoable} : {})}));
+  const mine = ITEMS.map((it) => ({id: it.id, row: it.row, outStart: it.outStart, duration: it.dur, dur: it.dur, file: fileOf(it.id), placement: it.placement, freezeSec: 0, sfx: [], ...(it.accents ? {accents: it.accents.map(r2)} : {}), source: it.source, words: it.words, builder: 'illus-1', ...(it.vetoable ? {vetoable: it.vetoable} : {})}));
   // illus-2 fragments
   const partsDir = join(OUT, 'parts');
-  const parts = existsSync(partsDir) ? readdirSync(partsDir).filter((f) => f.endsWith('.json')).map((f) => ({id: f.replace(/\.json$/, ''), builder: 'illus-2', freezeSec: 0, ...JSON.parse(readFileSync(join(partsDir, f), 'utf8'))})).map((p: any) => ({...p, row: Number(p.row), duration: p.dur ?? p.duration, dur: p.dur ?? p.duration, accents: p.accents ?? (p.sfx ?? []).filter((x: any) => /accent/.test(x.file)).map((x: any) => x.at)})) : [];
+  const parts = existsSync(partsDir) ? readdirSync(partsDir).filter((f) => f.endsWith('.json') && !f.endsWith('.v3.json')).map((f) => ({id: f.replace(/\.json$/, ''), builder: 'illus-2', freezeSec: 0, ...JSON.parse(readFileSync(join(partsDir, f), 'utf8'))})).map((p: any) => ({...p, row: Number(p.row), duration: p.dur ?? p.duration, dur: p.dur ?? p.duration, accents: p.accents ?? (p.sfx ?? []).filter((x: any) => /accent/.test(x.file)).map((x: any) => x.at)})) : [];
+  // on a re-cut: a fragment with its own <id>.v3.json (re-timed and re-rendered for v3) replaces the v2 one;
+  // the others keep their render and move through the source timeline (E)
+  if (V3) for (let i = 0; i < parts.length; i++) {
+    const f3 = join(partsDir, `${parts[i].id}.v3.json`);
+    if (existsSync(f3)) { const q = JSON.parse(readFileSync(f3, 'utf8')); parts[i] = {...parts[i], ...q, id: parts[i].id, row: parts[i].row, duration: q.dur ?? q.duration, dur: q.dur ?? q.duration, accents: q.accents ?? (q.sfx ?? []).filter((x: any) => /accent/.test(x.file)).map((x: any) => x.at), v3: f3}; }
+    else parts[i] = {...parts[i], outStart: E(parts[i].outStart)};
+  }
   // kept v1 captures: rows 11 (max_locks_per_transaction docs) and 33 (arXiv DBA-Bench)
   // row 11: illus-2's animated v2-r11-maxlocks replaces the v1 docs capture when it exists
   const keepV1 = ['f08-dbabench', ...(parts.some((p: any) => p.row === 11) ? [] : ['f05-maxlocks'])];
   const v1 = JSON.parse(readFileSync(resolve(OUT, '../out/manifest-sfx.json'), 'utf8')).overlays.filter((o: any) => keepV1.includes(o.id)).map((o: any) => ({...o, row: o.id === 'f05-maxlocks' ? 11 : 33, file: `../out/${o.file}`, sfx: [], builder: 'v1 capture'}));
+  if (V3) for (const o of v1) o.outStart = E(o.outStart);
   const all = [...mine, ...parts.filter((p: any) => !mine.some((m) => m.id === p.id)), ...v1].sort((a: any, b: any) => a.outStart - b.outStart);
-  const head = {video: 'v2-edit/pgfm198-edited.mp4', cuts: process.env.CUTS ?? BASE_CUTS, fps: 25, width: 1920, height: 1080, timeBase: 'edited.mp4 seconds, before intro and freeze shifts', band: {x: 120, y: 744, w: 1480, h: 144}, layout: 'center placement: hosts move to place.<host>.center (right column, x 1630) in layout.json'};
-  writeFileSync(join(OUT, 'manifest-v2.json'), JSON.stringify({...head, overlays: all}, null, 2));
+  const head = {video: V3 ? 'pgfm198-edited.mp4' : 'v2-edit/pgfm198-edited.mp4', cuts: process.env.CUTS ?? BASE_CUTS, fps: 25, width: 1920, height: 1080, timeBase: 'edited.mp4 seconds, before intro and freeze shifts', band: {x: 120, y: 744, w: 1480, h: 144}, layout: 'center placement: hosts move to place.<host>.center (right column, x 1630) in layout.json'};
+  const MNAME = V3 ? 'manifest-v3.json' : 'manifest-v2.json';
+  writeFileSync(join(OUT, MNAME), JSON.stringify({...head, overlays: all}, null, 2));
   // checks: overlaps on the same layer, center spacing
   const probs: string[] = [];
   for (let i = 0; i < all.length; i++) for (let j = i + 1; j < all.length; j++) {
@@ -162,6 +208,6 @@ if (mode === 'manifest' || mode === 'render') {
     const gap = r2(cen[i].outStart - (cen[i - 1].outStart + cen[i - 1].dur));
     if (gap > 1.7 && gap < 4) probs.push(`center gap ${gap} s: ${cen[i - 1].id} -> ${cen[i].id} (hosts would bounce)`);
   }
-  console.log(`manifest-v2.json: ${all.length} overlays (${mine.length} illus-1, ${parts.length} illus-2, ${v1.length} v1)`);
+  console.log(`${MNAME}: ${all.length} overlays (${mine.length} illus-1, ${parts.length} illus-2, ${v1.length} v1)`);
   console.log(probs.length ? probs.join('\n') : 'no overlaps, center spacing ok');
 }

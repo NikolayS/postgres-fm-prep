@@ -12,21 +12,21 @@
  "eyes": {
   "frames": [
    {
-    "label": "cold open A: last frame (button, after Kirk's 'mistakes at scale')",
-    "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
-    "t": 19.6,
-    "expectFaces": 2
-   },
-   {
     "label": "cold open: first frame",
     "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
     "t": 0.1,
     "expectFaces": 2
    },
    {
+    "label": "cold open: last frame before the title card",
+    "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
+    "t": 22.64,
+    "expectFaces": 2
+   },
+   {
     "label": "body: first frames after the title card",
     "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
-    "t": 34.4,
+    "t": 37.44,
     "expectFaces": 2
    },
    {
@@ -54,456 +54,636 @@
  "strips": {
   "layers": [
    {
-    "id": "s00-goal",
-    "file": "${EP198_REVIEW}/overlays/out/s00-goal-typing.mov",
+    "id": "v2-r01-clusters",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r01-clusters.mov",
     "t": 0.3
    },
    {
-    "id": "s00-goal",
-    "file": "${EP198_REVIEW}/overlays/out/s00-goal-typing.mov",
-    "t": 3.0
+    "id": "v2-r01-clusters",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r01-clusters.mov",
+    "t": 3.49
    },
    {
-    "id": "q00-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q00-kirk-typing.mov",
+    "id": "v2-r02-ddl",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r02-ddl-v3.mov",
     "t": 0.3
    },
    {
-    "id": "q00-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q00-kirk-typing.mov",
-    "t": 3.0
+    "id": "v2-r02-ddl",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r02-ddl-v3.mov",
+    "t": 3.83
    },
    {
-    "id": "c00-pgaibench",
-    "file": "${EP198_REVIEW}/overlays/out/c00-pgaibench-typing.mov",
+    "id": "r03-backup-chat",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r03-backup-chat.mov",
     "t": 0.3
    },
    {
-    "id": "c00-pgaibench",
-    "file": "${EP198_REVIEW}/overlays/out/c00-pgaibench-typing.mov",
-    "t": 3.0
+    "id": "r03-backup-chat",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r03-backup-chat.mov",
+    "t": 3.3
    },
    {
-    "id": "s04-scenarios",
-    "file": "${EP198_REVIEW}/overlays/out/s04-scenarios-typing.mov",
+    "id": "v2-r04-pgaibench",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r04-pgaibench-v3.mov",
     "t": 0.3
    },
    {
-    "id": "s04-scenarios",
-    "file": "${EP198_REVIEW}/overlays/out/s04-scenarios-typing.mov",
-    "t": 3.0
+    "id": "v2-r04-pgaibench",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r04-pgaibench-v3.mov",
+    "t": 3.63
    },
    {
-    "id": "f00-l9",
-    "file": "${EP198_REVIEW}/overlays/out/f00-l9.mov",
+    "id": "v2-r05-baseline",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r05-baseline-v3.mov",
     "t": 0.3
    },
    {
-    "id": "f00-l9",
-    "file": "${EP198_REVIEW}/overlays/out/f00-l9.mov",
-    "t": 3.0
+    "id": "v2-r05-baseline",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r05-baseline-v3.mov",
+    "t": 3.52
    },
    {
-    "id": "f04-site",
-    "file": "${EP198_REVIEW}/overlays/out/f04-site.mov",
+    "id": "r06-scenarios",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r06-scenarios.mov",
     "t": 0.3
    },
    {
-    "id": "f04-site",
-    "file": "${EP198_REVIEW}/overlays/out/f04-site.mov",
-    "t": 3.0
+    "id": "r06-scenarios",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r06-scenarios.mov",
+    "t": 4.75
    },
    {
-    "id": "s01-restart",
-    "file": "${EP198_REVIEW}/overlays/out/s01-restart-typing.mov",
+    "id": "v2-r07a-l9-setup",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07a-l9-setup-v3.mov",
     "t": 0.3
    },
    {
-    "id": "s01-restart",
-    "file": "${EP198_REVIEW}/overlays/out/s01-restart-typing.mov",
-    "t": 3.0
+    "id": "v2-r07a-l9-setup",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07a-l9-setup-v3.mov",
+    "t": 3.59
    },
    {
-    "id": "s05-downtime",
-    "file": "${EP198_REVIEW}/overlays/out/s05-downtime-typing.mov",
+    "id": "v2-r07b-l9-split",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07b-l9-split.mov",
     "t": 0.3
    },
    {
-    "id": "s05-downtime",
-    "file": "${EP198_REVIEW}/overlays/out/s05-downtime-typing.mov",
-    "t": 3.0
+    "id": "v2-r07b-l9-split",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r07b-l9-split.mov",
+    "t": 5.57
    },
    {
-    "id": "f05-maxlocks",
-    "file": "${EP198_REVIEW}/overlays/out/f05-maxlocks.mov",
+    "id": "r08-leaderboard",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r08-leaderboard.mov",
     "t": 0.3
    },
    {
-    "id": "f05-maxlocks",
-    "file": "${EP198_REVIEW}/overlays/out/f05-maxlocks.mov",
-    "t": 3.0
+    "id": "r08-leaderboard",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r08-leaderboard.mov",
+    "t": 10.65
    },
    {
-    "id": "f01-track1",
-    "file": "${EP198_REVIEW}/overlays/out/f01-track1.mov",
+    "id": "v2-r09-restart",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r09-restart.mov",
     "t": 0.3
    },
    {
-    "id": "f01-track1",
-    "file": "${EP198_REVIEW}/overlays/out/f01-track1.mov",
-    "t": 3.0
+    "id": "v2-r09-restart",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r09-restart.mov",
+    "t": 5.72
    },
    {
-    "id": "f06-dblab",
-    "file": "${EP198_REVIEW}/overlays/out/f06-dblab.mov",
+    "id": "v2-r10-runs",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v3.mov",
     "t": 0.3
    },
    {
-    "id": "f06-dblab",
-    "file": "${EP198_REVIEW}/overlays/out/f06-dblab.mov",
-    "t": 3.0
+    "id": "v2-r10-runs",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v3.mov",
+    "t": 4.27
    },
    {
-    "id": "s02-gate",
-    "file": "${EP198_REVIEW}/overlays/out/s02-gate-typing.mov",
+    "id": "v2-r11-maxlocks",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r11-maxlocks.mov",
     "t": 0.3
    },
    {
-    "id": "s02-gate",
-    "file": "${EP198_REVIEW}/overlays/out/s02-gate-typing.mov",
-    "t": 3.0
+    "id": "v2-r11-maxlocks",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r11-maxlocks.mov",
+    "t": 4.82
    },
    {
-    "id": "q01-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q01-kirk-typing.mov",
+    "id": "v2-r12-escalate",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v3.mov",
     "t": 0.3
    },
    {
-    "id": "q01-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q01-kirk-typing.mov",
-    "t": 3.0
+    "id": "v2-r12-escalate",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v3.mov",
+    "t": 3.52
    },
    {
-    "id": "q02-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q02-kirk-typing.mov",
+    "id": "v2-r13a-safety",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13a-safety-v3.mov",
     "t": 0.3
    },
    {
-    "id": "q02-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q02-kirk-typing.mov",
-    "t": 3.0
+    "id": "v2-r13a-safety",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13a-safety-v3.mov",
+    "t": 10.59
    },
    {
-    "id": "q03-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q03-kirk-typing.mov",
+    "id": "v2-r13b14a-axes-track1",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v3.mov",
     "t": 0.3
    },
    {
-    "id": "q03-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q03-kirk-typing.mov",
-    "t": 3.0
+    "id": "v2-r13b14a-axes-track1",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v3.mov",
+    "t": 14.23
    },
    {
-    "id": "f02-aaa",
-    "file": "${EP198_REVIEW}/overlays/out/f02-aaa.mov",
+    "id": "v2-r14b-sound",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r14b-sound.mov",
     "t": 0.3
    },
    {
-    "id": "f02-aaa",
-    "file": "${EP198_REVIEW}/overlays/out/f02-aaa.mov",
-    "t": 3.0
+    "id": "v2-r14b-sound",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r14b-sound.mov",
+    "t": 8.45
    },
    {
-    "id": "n01-editor",
-    "file": "${EP198_REVIEW}/overlays/out/n01-editor-typing.mov",
+    "id": "r15-funnel",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r15-funnel.mov",
     "t": 0.3
    },
    {
-    "id": "n01-editor",
-    "file": "${EP198_REVIEW}/overlays/out/n01-editor-typing.mov",
-    "t": 3.0
+    "id": "r15-funnel",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r15-funnel.mov",
+    "t": 4
    },
    {
-    "id": "f03-waterfall",
-    "file": "${EP198_REVIEW}/overlays/out/f03-waterfall.mov",
+    "id": "r16-auditor-next",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next.mov",
     "t": 0.3
    },
    {
-    "id": "f03-waterfall",
-    "file": "${EP198_REVIEW}/overlays/out/f03-waterfall.mov",
-    "t": 3.0
+    "id": "r16-auditor-next",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next.mov",
+    "t": 3.25
    },
    {
-    "id": "s03-safe",
-    "file": "${EP198_REVIEW}/overlays/out/s03-safe-typing.mov",
+    "id": "v2-r17-dblab",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r17-dblab.mov",
     "t": 0.3
    },
    {
-    "id": "s03-safe",
-    "file": "${EP198_REVIEW}/overlays/out/s03-safe-typing.mov",
-    "t": 3.0
+    "id": "v2-r17-dblab",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r17-dblab.mov",
+    "t": 7.74
    },
    {
-    "id": "f07-l5",
-    "file": "${EP198_REVIEW}/overlays/out/f07-l5.mov",
+    "id": "r18-clone-gate",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r18-clone-gate-v3.mov",
     "t": 0.3
    },
    {
-    "id": "f07-l5",
-    "file": "${EP198_REVIEW}/overlays/out/f07-l5.mov",
-    "t": 3.0
+    "id": "r18-clone-gate",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r18-clone-gate-v3.mov",
+    "t": 6
+   },
+   {
+    "id": "r19-deterministic",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r19-deterministic.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r19-deterministic",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r19-deterministic.mov",
+    "t": 8.25
+   },
+   {
+    "id": "v2-r20-replicas",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r20-replicas-v3.mov",
+    "t": 0.3
+   },
+   {
+    "id": "v2-r20-replicas",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r20-replicas-v3.mov",
+    "t": 3.87
+   },
+   {
+    "id": "r21-tom-lane",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r21-tom-lane.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r21-tom-lane",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r21-tom-lane.mov",
+    "t": 4.25
+   },
+   {
+    "id": "r22a-aaa-intro",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22a-aaa-intro.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r22a-aaa-intro",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22a-aaa-intro.mov",
+    "t": 7
+   },
+   {
+    "id": "r22b-aaa-analyst",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r22b-aaa-analyst",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22b-aaa-analyst.mov",
+    "t": 6.3
+   },
+   {
+    "id": "r22c-aaa-actor",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22c-aaa-actor.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r22c-aaa-actor",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r22c-aaa-actor.mov",
+    "t": 6.2
+   },
+   {
+    "id": "r23a-aaa-auditor",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r23a-aaa-auditor",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor.mov",
+    "t": 6.25
+   },
+   {
+    "id": "r23b-aaa-path",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r23b-aaa-path",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23b-aaa-path.mov",
+    "t": 5.3
+   },
+   {
+    "id": "r24-editor-note",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r24-editor-note.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r24-editor-note",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r24-editor-note.mov",
+    "t": 3.5
+   },
+   {
+    "id": "r26-send-back",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r26-send-back.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r26-send-back",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r26-send-back.mov",
+    "t": 3.8
+   },
+   {
+    "id": "r27-triangle",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r27-triangle",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle.mov",
+    "t": 5.5
+   },
+   {
+    "id": "r28a-dots",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28a-dots.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r28a-dots",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28a-dots.mov",
+    "t": 9.7
+   },
+   {
+    "id": "r28b-13-to-1",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28b-13-to-1.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r28b-13-to-1",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28b-13-to-1.mov",
+    "t": 3.3
+   },
+   {
+    "id": "r29-377-of-378",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r29-377-of-378.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r29-377-of-378",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r29-377-of-378.mov",
+    "t": 5
+   },
+   {
+    "id": "v2-r30-real",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r30-real-v3.mov",
+    "t": 0.3
+   },
+   {
+    "id": "v2-r30-real",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r30-real-v3.mov",
+    "t": 4.69
+   },
+   {
+    "id": "v2-r31-l5-lock-queue",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v3.mov",
+    "t": 0.3
+   },
+   {
+    "id": "v2-r31-l5-lock-queue",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v3.mov",
+    "t": 8.19
    },
    {
     "id": "f08-dbabench",
-    "file": "${EP198_REVIEW}/overlays/out/f08-dbabench.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/../out/f08-dbabench.mov",
     "t": 0.3
    },
    {
     "id": "f08-dbabench",
-    "file": "${EP198_REVIEW}/overlays/out/f08-dbabench.mov",
-    "t": 3.0
+    "file": "${EP198_REVIEW}/overlays/out-v2/../out/f08-dbabench.mov",
+    "t": 5.55
    },
    {
-    "id": "q04-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q04-kirk-typing.mov",
+    "id": "r34-kirk-evidence",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r34-kirk-evidence.mov",
     "t": 0.3
    },
    {
-    "id": "q04-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q04-kirk-typing.mov",
-    "t": 3.0
+    "id": "r34-kirk-evidence",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r34-kirk-evidence.mov",
+    "t": 4.8
    },
    {
-    "id": "q05-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q05-kirk-typing.mov",
+    "id": "v2-r35-agree",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r35-agree-v3.mov",
     "t": 0.3
    },
    {
-    "id": "q05-kirk",
-    "file": "${EP198_REVIEW}/overlays/out/q05-kirk-typing.mov",
-    "t": 3.0
+    "id": "v2-r35-agree",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r35-agree-v3.mov",
+    "t": 3.6
+   },
+   {
+    "id": "v2-r36-analyze",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r36-analyze-v3.mov",
+    "t": 0.3
+   },
+   {
+    "id": "v2-r36-analyze",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r36-analyze-v3.mov",
+    "t": 5.29
+   },
+   {
+    "id": "r37-kirk-delegate",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate.mov",
+    "t": 0.3
+   },
+   {
+    "id": "r37-kirk-delegate",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate.mov",
+    "t": 4.1
    }
   ],
   "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
   "items": [
    {
-    "id": "s00-goal",
-    "at": 202.42,
+    "id": "v2-r02-ddl",
+    "at": 295.66,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     202.72,
-     203.92,
-     206.42
+     295.96,
+     296.86,
+     299.36
     ]
    },
    {
-    "id": "q00-kirk",
-    "at": 305.68,
+    "id": "r03-backup-chat",
+    "at": 348.48,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     305.98,
-     307.18,
-     309.68
+     348.78,
+     349.68,
+     352.18
     ]
    },
    {
-    "id": "c00-pgaibench",
-    "at": 515.14,
+    "id": "v2-r04-pgaibench",
+    "at": 499.93,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     515.44,
-     516.64,
-     519.14
+     500.23,
+     501.13,
+     503.63
     ]
    },
    {
-    "id": "s04-scenarios",
-    "at": 709.64,
+    "id": "v2-r05-baseline",
+    "at": 614.33,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     709.94,
-     711.14,
-     713.64
+     614.63,
+     615.53,
+     618.03
     ]
    },
    {
-    "id": "s01-restart",
-    "at": 1008.98,
+    "id": "v2-r07a-l9-setup",
+    "at": 748.68,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     1009.28,
-     1010.48,
-     1012.98
+     748.98,
+     749.88,
+     752.38
     ]
    },
    {
-    "id": "s05-downtime",
-    "at": 1045.5,
+    "id": "v2-r10-runs",
+    "at": 1021.54,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     1045.8,
-     1047.0,
-     1049.5
+     1021.84,
+     1022.74,
+     1025.24
     ]
    },
    {
-    "id": "s02-gate",
-    "at": 1588.24,
+    "id": "v2-r12-escalate",
+    "at": 1088.28,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     1588.54,
-     1589.74,
-     1592.24
+     1088.58,
+     1089.48,
+     1091.98
     ]
    },
    {
-    "id": "q01-kirk",
-    "at": 1680.24,
+    "id": "v2-r13a-safety",
+    "at": 1118.86,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     1680.54,
-     1681.74,
-     1684.24
+     1119.16,
+     1120.06,
+     1122.56
     ]
    },
    {
-    "id": "q02-kirk",
-    "at": 1805.84,
+    "id": "v2-r20-replicas",
+    "at": 1755.43,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     1806.14,
-     1807.34,
-     1809.84
+     1755.73,
+     1756.63,
+     1759.13
     ]
    },
    {
-    "id": "q03-kirk",
-    "at": 1921.26,
+    "id": "r21-tom-lane",
+    "at": 1869.46,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     1921.56,
-     1922.76,
-     1925.26
+     1869.76,
+     1870.66,
+     1873.16
     ]
    },
    {
-    "id": "n01-editor",
-    "at": 2290.14,
+    "id": "v2-r30-real",
+    "at": 2756.86,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     2290.44,
-     2291.64,
-     2294.14
+     2757.16,
+     2758.06,
+     2760.56
     ]
    },
    {
-    "id": "s03-safe",
-    "at": 2806.44,
+    "id": "r34-kirk-evidence",
+    "at": 2987.74,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     2806.74,
-     2807.94,
-     2810.44
+     2988.04,
+     2988.94,
+     2991.44
     ]
    },
    {
-    "id": "q04-kirk",
-    "at": 3070.82,
+    "id": "v2-r35-agree",
+    "at": 3019.45,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     3071.12,
-     3072.32,
-     3074.82
+     3019.75,
+     3020.65,
+     3023.15
     ]
    },
    {
-    "id": "q05-kirk",
-    "at": 3153.28,
+    "id": "v2-r36-analyze",
+    "at": 3038.87,
     "box": [
      100,
      720,
      1520,
-     190
+     184
     ],
     "times": [
-     3153.58,
-     3154.78,
-     3157.28
+     3039.17,
+     3040.07,
+     3042.57
     ]
    }
   ]
  },
  "sfx": {
-  "manifest": "${EP198_REVIEW}/overlays/out/manifest-sfx.json"
+  "manifest": "${EP198_REVIEW}/overlays/out-v2/manifest-v3-sfx.json"
  },
  "skip": {
-  "captions": "no burned-in captions or punch-ins in episode 198: text is only in band strips and center cards (checked by strips)",
-  "cards": "no data cards (cards/*.card.json): the 9 center cards are real screenshots (the post, pgaibench.dev, PostgreSQL docs, DBLab pages, arXiv) with the URL printed; numbers are the sources' own"
+  "captions": "no burned-in captions or punch-ins in episode 198: text is only in the 14 band strips and 27 center panels (checked by strips)",
+  "cards": "no data cards (cards/*.card.json): the 27 center panels are Remotion pieces built from the post's and the site's own figures and data (3D AAA hero, Track 1 bars, funnel, L5/L9 panels) plus 1 capture (the DBA-Bench arXiv page); every number is the source's own and was checked per row (overlays/verify-v3.tsv)"
  },
  "facing": {
   "layout": "${EP198_REVIEW}/layout.json",
