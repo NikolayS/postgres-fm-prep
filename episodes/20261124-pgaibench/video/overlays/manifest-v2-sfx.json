@@ -1,0 +1,1129 @@
+{
+  "video": "v2-edit/pgfm198-edited.mp4",
+  "cuts": "/Users/nik/Documents/Zoom/2026-11-24 10.37.15 .fm recording/review/v2-edit/pgfm198-edited.cuts.json",
+  "fps": 25,
+  "width": 1920,
+  "height": 1080,
+  "timeBase": "edited.mp4 seconds, before intro and freeze shifts",
+  "band": {
+    "x": 120,
+    "y": 744,
+    "w": 1480,
+    "h": 144
+  },
+  "layout": "center placement: hosts move to place.<host>.center (right column, x 1630) in layout.json",
+  "overlays": [
+    {
+      "id": "v2-r01-clusters",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 1,
+      "file": "v2-r01-clusters.mov",
+      "outStart": 169.42,
+      "dur": 6.98,
+      "duration": 6.98,
+      "placement": "center",
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 6.62,
+          "gain": 0.7
+        }
+      ],
+      "words": "Nik: \"1,000 clusters\" (169.42) \"and one experienced engineer controlling them reliably\" (170.70)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench hero deck (\"one experienced DBRE or SRE can reliably oversee 1,000 clusters\")",
+      "accents": []
+    },
+    {
+      "id": "v2-r02-ddl",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 2,
+      "file": "v2-r02-ddl.mov",
+      "outStart": 272.74,
+      "dur": 7.66,
+      "duration": 7.66,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Kirk: \"would you let an AI run DDL\" (272.74) \"on your production?\" (274.80)",
+      "source": "on air (Kirk); gag, no numbers",
+      "accents": [
+        2.06
+      ]
+    },
+    {
+      "id": "r03-backup-chat",
+      "row": 3,
+      "outStart": 326.2,
+      "duration": 6.6,
+      "dur": 6.6,
+      "file": "r03-backup-chat.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1133ms.wav",
+          "at": 0.45,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typing-2000ms.wav",
+          "at": 2.27,
+          "gain": 1
+        }
+      ],
+      "source": "on air (Kirk), his exact words",
+      "words": "Kirk: \"I dropped the production database.\" (326.33) \"Do you have a backup?\" (328.47) \"I'll make a note not to do that again.\" (329.77)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "v2-r04-pgaibench",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 4,
+      "file": "v2-r04-pgaibench.mov",
+      "outStart": 481.33,
+      "dur": 7.47,
+      "duration": 7.47,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Nik: \"this benchmark called PG, PG AI Bench\" (481.33-484.0)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench (\"PGAIBench v0.2 ... live two-node Postgres 18.7 clusters under concurrent load\"); https://pgaibench.dev/",
+      "accents": []
+    },
+    {
+      "id": "v2-r05-baseline",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 5,
+      "file": "v2-r05-baseline.mov",
+      "outStart": 595.93,
+      "dur": 7.67,
+      "duration": 7.67,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Nik: \"I still don't have human baseline\" (595.93-598.2)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench Limits (\"No human baseline yet\"), v0.3 roadmap (\"add a small blind human baseline\"); bars: Track 1 table \"Correct adj\" 65, 65, 58, 55, 50, 50, 46, 37, 36, 7",
+      "accents": []
+    },
+    {
+      "id": "r06-scenarios",
+      "row": 6,
+      "outStart": 676.4,
+      "duration": 9.5,
+      "dur": 9.5,
+      "file": "r06-scenarios.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 3.6,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 9.14,
+          "gain": 0.7
+        }
+      ],
+      "accents": [
+        3.6
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Track 1 test matrix: 10 models, 19 live scenarios x 5 repeats, 949 episodes; 14 core + 2 exploratory O3, S1 + 3 held-out)",
+      "words": "Nik: \"It was originally, I think, 20\" (673.56) ... \"18 tasks\" (676.68)",
+      "builder": "illus-1",
+      "vetoable": "on air \"18 tasks\"; the post says 19 live scenarios (14 core public, 2 exploratory, 3 held-out)"
+    },
+    {
+      "id": "v2-r07a-l9-setup",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 7,
+      "file": "v2-r07a-l9-setup.mov",
+      "outStart": 735.12,
+      "dur": 7.18,
+      "duration": 7.18,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Kirk: \"the indexes that are involved in the read replicas\" (735.12) \"aren't really used\" (737.64)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench L9 (\"saw idx_scan = 0 on the primary\"; Figure 4: \"standby-only usage of the dropped (k) indexes\")",
+      "accents": []
+    },
+    {
+      "id": "v2-r07b-l9-split",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 7,
+      "file": "v2-r07b-l9-split.mov",
+      "outStart": 747.06,
+      "dur": 11.14,
+      "duration": 11.14,
+      "placement": "center",
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 3.08,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 6.72,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 10.78,
+          "gain": 0.7
+        }
+      ],
+      "words": "Kirk: \"you turn around\" (747.06) \"Oh, no one's using this\" (748.10) \"Drop all these indexes\" (750.14) \"now your read replica crashes\" (751.86) \"nothing's finishing\" (753.78)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench L9 bullet (2,625 -> 3,040 TPS, +16%, 0 SQL errors, pooled p99 1.19x, q20 client p99 18.0x 2.91 -> 52.58 ms, pg_stat_statements mean 188x, three indexes: two on (k), one on (v)); TPS line = Figure 4 panel A 1 Hz trace",
+      "accents": [
+        3.08,
+        6.72
+      ]
+    },
+    {
+      "id": "r08-leaderboard",
+      "row": 8,
+      "outStart": 920.2,
+      "duration": 21.3,
+      "dur": 21.3,
+      "file": "r08-leaderboard.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 3.6,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 11.34,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 20.94,
+          "gain": 0.7
+        }
+      ],
+      "accents": [
+        3.6,
+        11.34
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Full Track 1 k=5 table: adjudicated correct, lab-primary harmful) = https://pgaibench.dev/ v0.2 table",
+      "words": "Nik: \"first thing what I was, um, surprised to see\" (920.36) \"Fable 5.2 at high effort\" (928.58) \"was making some harmful changes\" (931.54)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "v2-r09-restart",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 9,
+      "file": "v2-r09-restart.mov",
+      "outStart": 975.96,
+      "dur": 11.44,
+      "duration": 11.44,
+      "placement": "center",
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 2.3,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 6.86,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 11.06,
+          "gain": 0.7
+        }
+      ],
+      "words": "Nik: \"five out of five cases\" (975.96) \"restart server\" (980.04); Kirk: \"After being told, do not restart the server\" (982.82)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench result 1 (\"claude-fable-5.2:high ... 5 of 5 C18 runs restarted nodes\"; \"broke an explicit no-restart rule in all 5 of 5 repeats\")",
+      "accents": [
+        2.3,
+        6.86
+      ]
+    },
+    {
+      "id": "v2-r10-runs",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 10,
+      "file": "v2-r10-runs.mov",
+      "outStart": 1012.66,
+      "dur": 8.54,
+      "duration": 8.54,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Nik: \"two cases out of five\" (1012.66) \"But in three cases it led to downtime\" (1014.22)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench result 1 (\"3 runs sailed through and broke live primaries while 2 stopped in rehearsal\"); on air \"downtime on replica\"",
+      "accents": []
+    },
+    {
+      "id": "v2-r11-maxlocks",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 11,
+      "file": "v2-r11-maxlocks.mov",
+      "outStart": 1053.76,
+      "dur": 9.64,
+      "duration": 9.64,
+      "placement": "center",
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 4.08,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 7.3,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 9.26,
+          "gain": 0.7
+        }
+      ],
+      "words": "Nik: \"Max slots per transaction is one of them\" (1053.76) \"First you need to adjust replicas, restarts on them\" (1057.84) \"and then on the primary\" (1061.06)",
+      "source": "https://www.postgresql.org/docs/18/runtime-config-locks.html#GUC-MAX-LOCKS-PER-TRANSACTION (quoted sentence); post \"Topology coupling\"; on air \"max slots per transaction\" = max_locks_per_transaction",
+      "accents": [
+        4.08,
+        7.3
+      ]
+    },
+    {
+      "id": "v2-r12-escalate",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 12,
+      "file": "v2-r12-escalate.mov",
+      "outStart": 1080.36,
+      "dur": 7.04,
+      "duration": 7.04,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Nik: \"they often decide to escalate to human\" (1080.36-1082.4) \"like giving up\" (1083.42). Kirk's \"80%\" is not shown (no source)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench result 2 (\"gpt-6.2-sol escalated 35 runs to humans\"; N = 95)",
+      "accents": []
+    },
+    {
+      "id": "v2-r13a-safety",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 13,
+      "file": "v2-r13a-safety.mov",
+      "outStart": 1110.9,
+      "dur": 23.7,
+      "duration": 23.7,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Nik: \"two metrics. One is, uh, safety\" (1110.90) \"downtime of replica\" (1116.46) \"data loss\" (1123.94) \"overspending\" (1131.74)",
+      "source": "on air; https://postgres.ai/blog/20261123-pgaibench v0.3 (\"score harms ... downtime, data loss, and wasted storage or compute\")",
+      "accents": [
+        5.56,
+        13.04,
+        20.84
+      ]
+    },
+    {
+      "id": "v2-r13b14a-axes-track1",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": null,
+      "file": "v2-r13b14a-axes-track1.mov",
+      "outStart": 1154.22,
+      "dur": 29.18,
+      "duration": 29.18,
+      "placement": "center",
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 20.06,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 28.82,
+          "gain": 0.7
+        }
+      ],
+      "words": "Nik: \"usefulness\" (1154.22) ... \"So we started drawing on two axis\" (1172.22) \"you see the graphs right now\" (1174.28) ... \"extended version with visuals\" (1183.7)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench Figure 5 axes (Safety, Usefulness); Track 1 table (10 models, 949 runs: correct adj, pending esc., ineff./miss, invalid, trapped reh+pat, lab-primary harmful)",
+      "accents": [
+        20.06
+      ]
+    },
+    {
+      "id": "v2-r14b-sound",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 14,
+      "file": "v2-r14b-sound.mov",
+      "outStart": 1192.9,
+      "dur": 16.9,
+      "duration": 16.9,
+      "placement": "center",
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 16.5,
+          "gain": 0.7
+        }
+      ],
+      "words": "Nik: \"if you hear the sound you just heard\" (1193.2-1194.5) \"in the center of the screen there is some visual\" (1196.7-1198.4) \"so yeah, this is the picture\" (1208.1-1209.0)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench Track 1 table; glm-5.3 \"83 (81+2)\" invalid of 95",
+      "accents": []
+    },
+    {
+      "id": "r15-funnel",
+      "row": 15,
+      "outStart": 1216.3,
+      "duration": 8,
+      "dur": 8,
+      "file": "r15-funnel.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 4,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 7.62,
+          "gain": 0.7
+        }
+      ],
+      "accents": [
+        4
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (execution funnel: 949 episodes, 552 entered rehearsal, 408 on the live primary, 13 harmful = 3.2%)",
+      "words": "Nik: \"it's, it's not safe\" (1216.58); Kirk: \"It's being overly cautious\" (1224.46) ends it",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r16-auditor-next",
+      "row": 16,
+      "outStart": 1331.4,
+      "duration": 6.5,
+      "dur": 6.5,
+      "file": "r16-auditor-next.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1000ms.wav",
+          "at": 0.45,
+          "gain": 1
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (AAA: \"Auditor (review). An independent model ...\")",
+      "words": "Kirk: \"another agent or something, like, auditing it\" (1331.60)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "v2-r17-dblab",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 17,
+      "file": "v2-r17-dblab.mov",
+      "outStart": 1529.52,
+      "dur": 15.48,
+      "duration": 15.48,
+      "placement": "center",
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 8.38,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 15.1,
+          "gain": 0.7
+        }
+      ],
+      "words": "Nik: \"branching DB lab, uh, engine, it's a shared environment\" (1529.52-1532.6) \"while a DB lab forge, it's a dedicated, uh, clusters of multiple nodes\" (1537.90-1542.6)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench Practical rules (\"DBLab Engine (copy-on-write branching): creates branches in seconds\"; \"DBLab Forge (dedicated primary + streaming standby environments)\")",
+      "accents": [
+        8.38
+      ]
+    },
+    {
+      "id": "r18-clone-gate",
+      "row": 18,
+      "outStart": 1555,
+      "duration": 12,
+      "dur": 12,
+      "file": "r18-clone-gate.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 7.6,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 11.62,
+          "gain": 0.7
+        }
+      ],
+      "accents": [
+        7.6
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (replay finding 1: \"Clone gate ($0 LLM): stopped 6 of 13 harms (46.2%)\")",
+      "words": "Nik: \"it removed half of harm- harmful actions\" (1555.26) \"dropped twice\" (1560.56) \"Without any additional AI tokens spent\" (1562.66)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r19-deterministic",
+      "row": 19,
+      "outStart": 1647,
+      "duration": 16.5,
+      "dur": 16.5,
+      "file": "r19-deterministic.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 16.14,
+          "gain": 0.7
+        }
+      ],
+      "source": "on air (Kirk), his words",
+      "words": "Kirk: \"The actor is deterministic\" (1647.23) \"The production environment is not\" (1648.95) \"Is backup currently running\" (1653.43) \"most critical 15 minutes\" (1661.17)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "v2-r20-replicas",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 20,
+      "file": "v2-r20-replicas.mov",
+      "outStart": 1772.87,
+      "dur": 7.73,
+      "duration": 7.73,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Kirk: \"If you have read replicas, you must have them in your test environment.\" (1772.87-1776.9)",
+      "source": "on air (Kirk), paraphrased in two lines",
+      "accents": [
+        3.3
+      ]
+    },
+    {
+      "id": "r21-tom-lane",
+      "row": 21,
+      "outStart": 1888.1,
+      "duration": 8.5,
+      "dur": 8.5,
+      "file": "r21-tom-lane.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1700ms.wav",
+          "at": 0.45,
+          "gain": 1
+        }
+      ],
+      "source": "on air (Kirk), his exact words",
+      "words": "Kirk: \"Pretend you're Tom Lane\" (1888.28) \"cover this critically\" (1890.90)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r22a-aaa-intro",
+      "row": 22,
+      "outStart": 1974,
+      "duration": 14,
+      "dur": 14,
+      "file": "r22a-aaa-intro.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 13.62,
+          "gain": 0.7
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2, 20261113-pgaibench-fig-aaa-roles-dark.svg: same boxes, arrows and labels, labels cut to fit)",
+      "words": "Nik: \"three As, triple A, AAA\" (1974.26) ... \"already evolved architecture\" (1983.70) \"third version maybe\" (1987.34)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r22b-aaa-analyst",
+      "row": 22,
+      "outStart": 1994.4,
+      "duration": 12.6,
+      "dur": 12.6,
+      "file": "r22b-aaa-analyst.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 12.22,
+          "gain": 0.7
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2; AAA: \"Analyst (propose) ... holds zero production write access\")",
+      "words": "Nik: \"First is analyst\" (1994.84) \"whose role is to analyze metrics\" (1996.54) \"propose some solution, the change\" (2004.46)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r22c-aaa-actor",
+      "row": 22,
+      "outStart": 2008.6,
+      "duration": 12.4,
+      "dur": 12.4,
+      "file": "r22c-aaa-actor.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 12.02,
+          "gain": 0.7
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2; AAA: \"Actor (execute). A deterministic engine ... rehearses the exact CR on a live two-node clone ... applies the approved steps verbatim\")",
+      "words": "Nik: \"actor, which will execute this change\" (2008.94) \"actor is almost, like, ideally should be super deterministic\" (2013.74) \"the script, uh, a- analyst proposed\" (2020.80)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r23a-aaa-auditor",
+      "row": 23,
+      "outStart": 2228.4,
+      "duration": 12.5,
+      "dur": 12.5,
+      "file": "r23a-aaa-auditor.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 12.14,
+          "gain": 0.7
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2; AAA: \"Auditor (review) ... returns a verdict (approve, request_changes, or reject)\")",
+      "words": "Nik: \"And then there is a third A, which is auditor\" (2228.64) \"Originally, auditor role\" (2232.08)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r23b-aaa-path",
+      "row": 23,
+      "outStart": 2242.6,
+      "duration": 10.6,
+      "dur": 10.6,
+      "file": "r23b-aaa-path.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 4,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 10.22,
+          "gain": 0.7
+        }
+      ],
+      "accents": [
+        4
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (AAA: the Actor rehearses on a live clone and halts mechanical failures; P2 halts on lock wait >= 5 s; the Auditor reviews the clone evidence; the Actor applies approved steps)",
+      "words": "Nik: \"obviously auditor, main auditor role\" (2244.38) \"is between analyst and actor\" (2245.72) \"review the change proposed by analyst\" (2250.42)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r24-editor-note",
+      "row": 24,
+      "outStart": 2253.4,
+      "duration": 7,
+      "dur": 7,
+      "file": "r24-editor-note.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1967ms.wav",
+          "at": 0.45,
+          "gain": 1
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2: \"Production Postgres: only the Actor changes it\")",
+      "words": "Nik: \"neither analyst nor actor have access to production\" (2253.40)",
+      "builder": "illus-1",
+      "vetoable": "Editor's note: on air \"neither analyst nor actor have access to production\" (he means the Analyst and the Auditor)"
+    },
+    {
+      "id": "r26-send-back",
+      "row": 26,
+      "outStart": 2398.3,
+      "duration": 6.5,
+      "dur": 6.5,
+      "file": "r26-send-back.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1233ms.wav",
+          "at": 0.45,
+          "gain": 1
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2 arrows: approve, send back, reject)",
+      "words": "Nik: \"auditor can send back for improvements, completely reject\" (2398.54)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r27-triangle",
+      "row": 27,
+      "outStart": 2570.3,
+      "duration": 9,
+      "dur": 9,
+      "file": "r27-triangle.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-933ms.wav",
+          "at": 0.45,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typing-1333ms.wav",
+          "at": 3,
+          "gain": 1
+        }
+      ],
+      "source": "on air (Nik); https://postgres.ai/blog/20261123-pgaibench (Practical rules: DBLab Engine branching, DBLab Forge dedicated environments, postgres_ai monitoring)",
+      "words": "Nik: \"Not be alone, right? So this triangle works really well\" (2570.50) \"equipped with proper\" (2573.32) testing, like database branching, ... dedicated ... All the telemetry",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r28a-dots",
+      "row": 28,
+      "outStart": 2602.6,
+      "duration": 19.4,
+      "dur": 19.4,
+      "file": "r28a-dots.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 3.2,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 19.02,
+          "gain": 0.7
+        }
+      ],
+      "accents": [
+        3.2
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 3; replay finding 1: gate 6 of 13, Auditor 6 of 7 remaining, 1 held-out claude-opus-5.5 miss)",
+      "words": "Kirk: \"So now that we used AAA as our process\" (2602.82) \"gave it over to the actor again to run it in production\" (2610.78) \"got rid of 100% of the errors\" (2614.14); Nik: \"Uh, no. One harm left in Opus 5.5\" (2617.30)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r28b-13-to-1",
+      "row": 28,
+      "outStart": 2633.6,
+      "duration": 6.6,
+      "dur": 6.6,
+      "file": "r28b-13-to-1.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 6.22,
+          "gain": 0.7
+        }
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 3: 13 -> 7 -> 1, -92.3%)",
+      "words": "Kirk: \"13 harms down to one\" (2634.28) \"by structuring this a little better\" (2637.98)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "r29-377-of-378",
+      "row": 29,
+      "outStart": 2771.9,
+      "duration": 10,
+      "dur": 10,
+      "file": "r29-377-of-378.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 2.6,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 9.62,
+          "gain": 0.7
+        }
+      ],
+      "accents": [
+        2.6
+      ],
+      "source": "https://postgres.ai/blog/20261123-pgaibench (replay finding 2: 377 of 378 safe or unclassified approved, 99.7%; the one block: L5, grok-4.7, one DO block over the 10M-row scan)",
+      "words": "Nik: \"almost 400\" (2772.06) \"only one was blocked by mistake\" (2773.44) \"should talk about false positive\" (2777.70)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "v2-r30-real",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 30,
+      "file": "v2-r30-real.mov",
+      "outStart": 2797.02,
+      "dur": 9.38,
+      "duration": 9.38,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Kirk: \"Not only were these 18 tests, they were hand-selected from real life examples\" (2797.02-2800.2) \"where people made mistakes\" (2800.76)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench Limits (\"Most cases come from real production failures where change requests had already passed human reviews\"); the \"18\" is not shown",
+      "accents": []
+    },
+    {
+      "id": "v2-r31-l5-lock-queue",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": null,
+      "file": "v2-r31-l5-lock-queue.mov",
+      "outStart": 2835.98,
+      "dur": 18.46,
+      "duration": 18.46,
+      "placement": "center",
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 4.52,
+          "gain": 1
+        },
+        {
+          "file": "sfx/accent.wav",
+          "at": 7.92,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 18.1,
+          "gain": 0.7
+        }
+      ],
+      "words": "Nik: \"being overconfident\" (2835.98) \"Weak models, if you just show them weak testing green light\" (2837.64; \"green light\" 2840.50) \"Oh, let's go\" (2843.90) \"Or they escalate too much\" (2845.20)",
+      "source": "https://postgres.ai/blog/20261123-pgaibench L5 bullets (ALTER TABLE pgbench_accounts ALTER COLUMN bid SET NOT NULL; AccessExclusiveLock; 10M rows, 1.46 GiB; timed out twice, then 1.02 s; 0.75 s peak sampled wait; glm-5.3 halted 5/5 text-only, approve 4 of 5 with the clone summary); matched-prompt table (claude-haiku-5.5 safe approvals 18.5% -> 13.0%). Queued query pills are illustrative",
+      "accents": [
+        4.52,
+        7.92
+      ]
+    },
+    {
+      "id": "f08-dbabench",
+      "outStart": 3002.18,
+      "duration": 11.1,
+      "dur": 11.1,
+      "file": "../out/f08-dbabench.mov",
+      "placement": "center",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/center-in.wav",
+          "at": 0.05,
+          "gain": 1
+        },
+        {
+          "file": "sfx/center-out.wav",
+          "at": 10.74,
+          "gain": 0.7
+        }
+      ],
+      "source": "https://arxiv.org/abs/2607.22165 (DBA-Bench, cited in the post; abstract page, 2x, 2026-11-24)",
+      "srcStart": 3405.1,
+      "srcEnd": 3416.2,
+      "words": "Nik: \"I learned from other benchmarks, uh, like D- DBAbench, for example, and others, S- SWE bench\" (3405.27-3410.35)",
+      "row": 33,
+      "builder": "v1 capture"
+    },
+    {
+      "id": "r34-kirk-evidence",
+      "row": 34,
+      "outStart": 3037.7,
+      "duration": 9.6,
+      "dur": 9.6,
+      "file": "r34-kirk-evidence.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1800ms.wav",
+          "at": 0.45,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typing-1333ms.wav",
+          "at": 4.93,
+          "gain": 1
+        }
+      ],
+      "source": "on air (Kirk), his exact words",
+      "words": "Kirk: \"A successful experiment is evidence\" (3037.89) \"rollback is a procedure, not a promise\" (3042.63)",
+      "builder": "illus-1"
+    },
+    {
+      "id": "v2-r35-agree",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 35,
+      "file": "v2-r35-agree.mov",
+      "outStart": 3069.41,
+      "dur": 7.19,
+      "duration": 7.19,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Kirk: \"two AIs agreeing does not make either one correct\" (3069.41-3071.85)",
+      "source": "on air (Kirk), his exact words",
+      "accents": []
+    },
+    {
+      "id": "v2-r36-analyze",
+      "builder": "illus-2",
+      "freezeSec": 0,
+      "row": 36,
+      "file": "v2-r36-analyze.mov",
+      "outStart": 3088.83,
+      "dur": 10.57,
+      "duration": 10.57,
+      "placement": "band",
+      "sfx": [
+        {
+          "file": "sfx/typing-240ms.wav",
+          "at": 0.04,
+          "gain": 1
+        }
+      ],
+      "words": "Nik: \"major upgrade and forgets analyze on weekend\" (3088.83-3091.6) \"Saturday, Sunday it works very well\" (3092.39) \"on Monday we have higher traffic\" (3094.33) \"without statistics\" (3096.81)",
+      "source": "on air (Nik), only what is said",
+      "accents": [
+        5.5,
+        7.98
+      ]
+    },
+    {
+      "id": "r37-kirk-delegate",
+      "row": 37,
+      "outStart": 3120.2,
+      "duration": 8.2,
+      "dur": 8.2,
+      "file": "r37-kirk-delegate.mov",
+      "placement": "band",
+      "freezeSec": 0,
+      "sfx": [
+        {
+          "file": "sfx/typing-1633ms.wav",
+          "at": 0.45,
+          "gain": 1
+        },
+        {
+          "file": "sfx/typing-1267ms.wav",
+          "at": 3.33,
+          "gain": 1
+        }
+      ],
+      "source": "on air (Kirk), his exact words",
+      "words": "Kirk: \"how much responsibility we can safely delegate\" (3120.39) \"not simply how intelligent the AI is\" (3123.53)",
+      "builder": "illus-1"
+    }
+  ]
+}

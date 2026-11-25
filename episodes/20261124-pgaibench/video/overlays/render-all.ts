@@ -63,7 +63,7 @@ async function worker() {
 await Promise.all(Array.from({length: CONC}, worker));
 
 const r2 = (x: number) => Math.round(x * 100) / 100;
-const manifest = ITEMS.map((it) => ({id: it.id, outStart: it.outStart, duration: it.duration, dur: it.duration, file: `${it.id}.mov`, placement: it.placement, freezeSec: it.freezeSec, sfx: it.sfx.map((s) => ({...s, at: r2(s.at)})), source: it.source ?? null, srcStart: (it as any).srcStart, srcEnd: (it as any).srcEnd, words: (it as any).words, ...((it as any).vetoable ? {vetoable: (it as any).vetoable} : {})}));
+const manifest = ITEMS.map((it) => ({id: it.id, outStart: it.outStart, duration: it.duration, dur: it.duration, file: `${it.id}.mov`, placement: it.placement, freezeSec: it.freezeSec, sfx: it.sfx.map((s) => ({...s, at: r2(s.at)})), source: it.source ?? null, srcStart: (it as any).srcStart, srcEnd: (it as any).srcEnd, words: (it as any).words, ...((it as any).vetoable ? {vetoable: (it as any).vetoable} : {}), ...((it as any).accents ? {accents: (it as any).accents} : {})}));
 writeFileSync(join(OUT, 'manifest.json'), JSON.stringify({video: 'pgfm198-edited.mp4', fps: 25, width: 1920, height: 1080, timeBase: 'edited.mp4 seconds, before intro and freeze shifts', band: {x: 120, y: 744, w: 1480, h: 144}, layout: 'center placement: hosts move to place.<host>.center (right column, x 1630) in layout.json', overlays: manifest}, null, 2));
 console.log(`manifest: ${join(OUT, 'manifest.json')}; failed: ${failed.length ? failed.join(', ') : 'none'}`);
 if (failed.length) process.exit(1);

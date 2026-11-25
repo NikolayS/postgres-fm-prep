@@ -172,15 +172,6 @@
    "matched": "out the- out there will be... It, it's still already so. It's, it's already so. Um,"
   },
   {
-   "id": "c33",
-   "cat": "stumble",
-   "from": "132.600",
-   "to": "132.940",
-   "reason": "restart 'like, we, we, we do need'; keep 'we, we do need'",
-   "soft": true,
-   "matched": "like, we,"
-  },
-  {
    "id": "c35",
    "cat": "stumble",
    "from": "149.040",
@@ -224,15 +215,6 @@
    "reason": "restart 'or, uh, s- CLI'; keep 'or CLI'",
    "soft": true,
    "matched": "uh, s-"
-  },
-  {
-   "id": "c40",
-   "cat": "stumble",
-   "from": "373.988",
-   "to": "374.508",
-   "reason": "restart 'If, if, uh, we had'; keep 'If we had'",
-   "soft": true,
-   "matched": "if, uh,"
   },
   {
    "id": "c41",
@@ -440,15 +422,6 @@
    "reason": "cut-off 'bef- instead'",
    "soft": true,
    "matched": "bef-"
-  },
-  {
-   "id": "c66",
-   "cat": "stumble",
-   "from": "1648.756",
-   "to": "1648.816",
-   "reason": "cut-off 'h- see'",
-   "soft": true,
-   "matched": "h-"
   },
   {
    "id": "c67",
@@ -836,15 +809,6 @@
    "reason": "filler 'very, um, very helpful'",
    "soft": true,
    "matched": "very, um,"
-  },
-  {
-   "id": "c112",
-   "cat": "stumble",
-   "from": "3398.932",
-   "to": "3399.752",
-   "reason": "restart 'first, first, like, take'",
-   "soft": true,
-   "matched": "first, like,"
   },
   {
    "id": "c113",

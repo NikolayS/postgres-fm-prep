@@ -12,7 +12,7 @@ import { BTN, END, FPS, S, SFX, SPEECH, type Variant } from "./spec";
 const [W, MUSIC, V, OUT] = Bun.argv.slice(2) as [string, string, Variant, string];
 const SFXLIB = new URL("../../../../../tools/podcast-edit/sfx/", import.meta.url).pathname;
 const FILES: Record<string, string> = {
-  G10: SFXLIB + "G10-soft-start-quick-stop.wav", K: SFXLIB + "K-sand-stroke-falling.wav", L: SFXLIB + "L-punch-rough.wav",
+  G10: SFXLIB + "G10-soft-start-quick-stop.wav", U2: SFXLIB + "U2-typing-fast.wav", K: SFXLIB + "K-sand-stroke-falling.wav", L: SFXLIB + "L-punch-rough.wav",
   whoosh: `${W}/fx/whoosh.wav`, slam: `${W}/fx/slam.wav`, impact: `${W}/fx/impact.wav`, glitch: `${W}/fx/glitch.wav`,
   down: `${W}/fx/down.wav`, up: `${W}/fx/up.wav`,
 };
@@ -47,9 +47,10 @@ await $`ffmpeg -v error -y -i ${MUSIC} -i ${MUSIC} -filter_complex ${fc} -map [m
 
 // 3) sfx
 const ev = SFX[V]; const sin: string[] = []; fc = "";
-for (const [k, [f, key, g]] of ev.entries()) {
+for (const [k, [f, key, g, d]] of ev.entries()) {
   const p = await peak(FILES[key]); sin.push("-i", FILES[key]);
-  fc += `[${k}:a]aresample=48000,aformat=channel_layouts=stereo,volume=${(-6 - p + g).toFixed(2)}dB,adelay=${Math.round(f / FPS * 1000)}:all=1[s${k}];`;
+  const trim = d ? `atrim=0:${d},afade=t=out:st=${(d - 0.05).toFixed(3)}:d=0.05,` : "";
+  fc += `[${k}:a]${trim}aresample=48000,aformat=channel_layouts=stereo,volume=${(-6 - p + g).toFixed(2)}dB,adelay=${Math.round(f / FPS * 1000)}:all=1[s${k}];`;
 }
 fc += `${ev.map((_, k) => `[s${k}]`).join("")}amix=inputs=${ev.length}:normalize=0,apad=whole_dur=${dur}[s]`;
 await $`ffmpeg -v error -y ${sin} -filter_complex ${fc} -map [s] -t ${dur} -c:a pcm_s24le ${W}/mix-${V}-sfx.wav`;

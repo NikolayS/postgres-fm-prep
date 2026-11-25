@@ -1,4 +1,5 @@
-// Episode 198 dynamic cold open picture. Video only; mix.ts makes the sound and build.sh muxes.
+// Episode 198 dynamic cold open picture, restrained variant (small graphics in the band under the labels)
+// and shared parts; bold and medium are in Big.tsx. Video only; mix.ts makes the sound and build.sh muxes.
 // Layers: the laid-out line clips (moved by punch-ins, whips, glitch, CRT off/on), then graphics in
 // free areas only: the band under the name labels (y 740-895), the side margins and the gap between
 // tiles. Nothing is drawn on a tile (no marks on faces or heads) and nothing below y 900, except the
@@ -18,7 +19,7 @@ const font = 'Lato, "Helvetica Neue", Arial, sans-serif';
 type Cam = {s: number; o: {x: number; y: number}; tx: number; blur: number};
 // Camera per variant: punch-in scale and origin (the speaking tile, origin at its label line so the tile
 // grows upward and the band under it stays free), whips (fast x move with blur) around some cuts.
-const camera = (v: Variant, f: number): Cam => {
+export const camera = (v: Variant, f: number): Cam => {
   const c: Cam = {s: 1, o: MID, tx: 0, blur: 0};
   const L = S.findIndex((s, i) => f >= s && (i === S.length - 1 || f < S[i + 1]));
   const ease = (x: number) => 1 - Math.pow(1 - x, 3);
@@ -49,7 +50,7 @@ const camera = (v: Variant, f: number): Cam => {
 };
 
 // shake for bold hits (stamps, button press, final stop)
-const shake = (v: Variant, f: number) => {
+export const shake = (v: Variant, f: number) => {
   if (v !== 'bold') return {x: 0, y: 0};
   const hits = [...STAMPS, PRESS, BTN, W.rightEnd + 2];
   let a = 0; for (const h of hits) if (f >= h && f < h + 6) a = Math.max(a, (1 - (f - h) / 6) * 10);
@@ -63,7 +64,7 @@ const LineClip: React.FC<{i: number; from: number; to: number}> = ({i, from, to}
   </Sequence>
 );
 
-const Clips: React.FC = () => (
+export const Clips: React.FC = () => (
   <>
     <LineClip i={0} from={0} to={S[1]} />
     <LineClip i={1} from={S[1]} to={S[2]} />
@@ -77,7 +78,7 @@ const Clips: React.FC = () => (
 );
 
 // Glitch: horizontal slices of the picture slid sideways, with a red/cyan split (bold, medium).
-const Glitch: React.FC<{f: number; amt: number}> = ({f, amt}) => {
+export const Glitch: React.FC<{f: number; amt: number}> = ({f, amt}) => {
   if (amt <= 0) return null;
   const slices = Array.from({length: 7}, (_, k) => {
     const y = Math.floor(rnd(f * 7 + k) * 1000), h = 20 + Math.floor(rnd(f * 13 + k) * 90), dx = (rnd(f * 3 + k) - 0.5) * 160 * amt;
@@ -175,7 +176,7 @@ const Errors: React.FC<{v: Variant; f: number}> = ({v, f}) => {
   );
 };
 
-export const Dyn: React.FC<{variant: Variant}> = ({variant: v}) => {
+export const DynSmall: React.FC<{variant: Variant}> = ({variant: v}) => {
   const f = useCurrentFrame();
   const c = camera(v, f), sh = shake(v, f);
   // glitch on "restart server", CRT off after it, black, CRT on at the next line (bold); shorter in medium

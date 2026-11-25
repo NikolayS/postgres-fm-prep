@@ -1,6 +1,6 @@
 import React from 'react';
 import {Composition, registerRoot} from 'remotion';
-import {Dyn} from './Dyn';
+import {Dyn} from './Big';
 import {END, FPS} from '../spec';
 
 const Root: React.FC = () => (
