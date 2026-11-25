@@ -359,7 +359,7 @@ const Sign: React.FC<{q: number}> = ({q}) => {
   const back = a > 90;
   const lines: [string, number][] = back
     ? [["Michael's seat:", 50], ['AUDITOR', 108], ['', 50]]
-    : [['RESERVED', 46], ['Michael', 108], ['on vacation', 50]];
+    : [['RESERVED', 46], ['Michael', 108], ['seat kept warm', 50]];
   const wob = inP(q, 23, 24) ? 5 * Math.sin((q - 23) * 2 * Math.PI * 2) * (1 - seg(q, 23.6, 24)) : 0;
   return (
     <>
