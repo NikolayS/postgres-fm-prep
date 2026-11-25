@@ -20,8 +20,9 @@ async function gray(file: string, t: number): Promise<Uint8Array> {
 }
 const mad = (a: Uint8Array, b: Uint8Array) => { if (!a.length || a.length !== b.length) return 255; let s = 0; for (let i = 0; i < a.length; i++) s += Math.abs(a[i] - b[i]); return s / a.length; };
 
-// Frames of the final's tail against the outro at 3 points after its crossfade in.
-export async function checkLength(cfg: { video: string; coldOpen?: string; timeMap: string; outro?: string; tolerance?: number; maxDiff?: number }) {
+// Frames of the final's tail against the outro at 3 points after its crossfade in and before the
+// compose fade to black (fadeOut s, default 2: compose.ts FADE_OUT; episode 198 body render).
+export async function checkLength(cfg: { video: string; coldOpen?: string; timeMap: string; outro?: string; tolerance?: number; maxDiff?: number; fadeOut?: number }) {
   const problems: string[] = [];
   const tm = await Bun.file(cfg.timeMap).json();
   const final = await dur(cfg.video), coldOpen = cfg.coldOpen ? await dur(cfg.coldOpen) : 0;
@@ -32,7 +33,7 @@ export async function checkLength(cfg: { video: string; coldOpen?: string; timeM
     const len = await dur(cfg.outro);
     const xfade = Math.min(1.5, len / 3);
     for (const f of [0.45, 0.75, 0.95]) {
-      const t = xfade + f * (len - xfade - 0.2);
+      const t = xfade + f * (len - xfade - (cfg.fadeOut ?? 2) - 0.2);
       diffs.push(mad(await gray(cfg.outro, t), await gray(cfg.video, final - len + t)));
     }
     if (diffs.some((d) => d > (cfg.maxDiff ?? 12))) problems.push(`final does not end on the outro (${cfg.outro}): frame differences ${diffs.map((d) => d.toFixed(1)).join(", ")} (max ${cfg.maxDiff ?? 12})`);

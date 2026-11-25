@@ -44,4 +44,15 @@ describe("length: final = cold open + body (time map), ending on the outro", () 
     const w = await checkLength({ ...cfg, video: wrong });
     expect(w.problems.join("\n")).toContain("does not end on the outro");
   });
+  test("the compose fade to black over the last 2 s does not count as a wrong ending (episode 198 body render)", async () => {
+    const co = join(dir, "co2.mp4"), show = join(dir, "show2.mp4"), outro = join(dir, "outro6.mp4");
+    clip(co, "color=c=blue", 2); clip(show, "testsrc2", 4); clip(outro, "mandelbrot", 6);
+    const raw = join(dir, "body2raw.mp4"); cat(raw, show, outro);
+    const body = join(dir, "body2.mp4");
+    ff("-i", raw, "-vf", "fade=t=out:st=8:d=2", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-c:a", "copy", body);
+    const tm = join(dir, "body2.time-map.json"); writeFileSync(tm, JSON.stringify({ total: 10, logo: { start: 4, sec: 6 } }));
+    const fin = join(dir, "faded.mp4"); cat(fin, co, body);
+    const r = await checkLength({ video: fin, coldOpen: co, timeMap: tm, outro });
+    expect(r.problems).toEqual([]);
+  });
 });

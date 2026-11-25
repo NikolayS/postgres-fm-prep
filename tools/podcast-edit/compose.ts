@@ -91,6 +91,24 @@ type Overlay = { file: string; outStart: number; dur: number; placement?: string
 type Freeze = { at: number; sec: number };
 
 // Edited time -> final time: the title card first, then every freeze that starts before t.
+// Fades at the ends of the final: from black at the title card (picture fadeIn s, sound fadeIn/2 s)
+// and to black at the end. fadeIn 0 turns the fade-in off (an intro joined to a cold open).
+export function fadeFilters(o: { card: number; fadeIn: number; fadeOut: number; total: number; withOutro: boolean }): { vf: string[]; af: string } {
+  if (!Number.isFinite(o.fadeIn) || o.fadeIn < 0) throw new Error(`--fade-in must be a number >= 0, got ${o.fadeIn}`);
+  const fin = o.card > 0 && o.fadeIn > 0, end = (o.total - o.fadeOut).toFixed(3);
+  return {
+    vf: [...(fin ? [`fade=t=in:st=0:d=${o.fadeIn}`] : []), ...(o.withOutro ? [`fade=t=out:st=${end}:d=${o.fadeOut}`] : [])],
+    af: `${fin ? `,afade=t=in:d=${o.fadeIn / 2}` : ""}${o.withOutro ? `,afade=t=out:st=${end}:d=${o.fadeOut}` : ""}`,
+  };
+}
+
+// Gain (dB) for the intro bed: to --intro-lufs if given, else to --music-lufs.
+export function introGain(o: { musicLufs: number; introLufs?: number; measured: number }): number {
+  const target = o.introLufs ?? o.musicLufs;
+  if (!Number.isFinite(target)) throw new Error(`--intro-lufs must be a number, got ${o.introLufs}`);
+  return target - o.measured;
+}
+
 export function toFinal(t: number, C: number, freezes: Freeze[]): number {
   return C + t + freezes.filter((f) => f.at < t).reduce((a, f) => a + f.sec, 0);
 }
@@ -115,7 +133,7 @@ if (import.meta.main) {
   const from = flag("--tail") ? full - Number(flag("--tail")) : Number(flag("--from") ?? 0);
   const C = from > 0 ? 0 : Number(flag("--card") ?? 5), E = Number(flag("--end") ?? 8), DUCK = Number(flag("--duck") ?? -15);
   const X1 = 0.8, X2 = 0.8, MUSIC_LUFS = -18, SFX_M = Number(flag("--sfx-lufs") ?? -20);
-  const FADE_IN = 1.0, FADE_OUT = 2.0; // from black / to black, picture and sound
+  const FADE_IN = Number(flag("--fade-in") ?? 1.0), FADE_OUT = 2.0; // from black / to black, picture and sound; --fade-in 0: none
   const BED_LEAD = Number(flag("--bed-lead") ?? 30); // longest outro-bed lead under the closing talk
 
   // logo: a video played after the end card (path relative to the config); credit: a light
@@ -253,7 +271,8 @@ if (import.meta.main) {
   }
 
   // Fade from black at the start (full episode only) and to black at the end.
-  const vf = [...(C > 0 ? [`fade=t=in:st=0:d=${FADE_IN}`] : []), ...(withOutro ? [`fade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}`] : [])];
+  const fades = fadeFilters({ card: C, fadeIn: FADE_IN, fadeOut: FADE_OUT, total, withOutro });
+  const vf = fades.vf;
   if (vf.length) {
     g.push(`[${vout}]${vf.join(",")}[vfade]`);
     vout = "vfade";
@@ -265,7 +284,8 @@ if (import.meta.main) {
   ga.push(`[talk]asetpts=PTS-STARTPTS,adelay=${Math.round(C * 1000)}:all=1,apad=whole_dur=${total.toFixed(3)}[voice]`);
   const mix = ["[voice]"];
   if (intro && C > 0) {
-    const gi = MUSIC_LUFS - (await lufs(intro));
+    // --intro-lufs L: the intro bed's own level (default: the music level), e.g. a louder particle intro
+    const gi = introGain({ musicLufs: MUSIC_LUFS, introLufs: flag("--intro-lufs") === undefined ? undefined : Number(flag("--intro-lufs")), measured: await lufs(intro) });
     const ii = add(["-i", intro]);
     const introLen = await duration(intro);
     const duckAt = C + 0.1; // the edit keeps 0.3 s of room tone before the first word
@@ -314,7 +334,7 @@ if (import.meta.main) {
     const m = ga[i].match(/\[(\w+)\]$/);
     if (m && mix.includes(`[${m[1]}]`)) ga[i] = ga[i].replace(/\[(\w+)\]$/, ",asetpts=N/SR/TB[$1]");
   }
-  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB${C > 0 ? `,afade=t=in:d=${FADE_IN / 2}` : ""}${withOutro ? `,afade=t=out:st=${(total - FADE_OUT).toFixed(3)}:d=${FADE_OUT}` : ""},aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`);
+  ga.push(`${mix.join("")}amix=inputs=${mix.length}:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB${fades.af},aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`);
   // The pre-limit keeps true peaks low enough for loudnorm's linear mode: its dynamic mode
   // (used when peaks are too high) lost the first seconds of the mix in a full-length run.
 
