@@ -16,7 +16,7 @@ Do these in order. The first thing the host sees is the **full composed episode*
    - complaints about insects, coffee, the room, tech problems, screen sharing, "are we recording", remarks about bots or the setup, references to talk before the recording;
    - anything else off-topic, embarrassing or unprofessional. When in doubt, cut it and list it as restorable.
    A cut with no clean join gets a wider cut (the whole sentence), not a pass. Check by grepping the aligned transcript of the render. List every removed moment for the host: source time, what it was, cut id. List what you kept on purpose, and why.
-6. [ ] **Layout and framing**: heads in framed tiles, facing each other (CLAUDE.md: with three, Nik left, Michael center, Kirk right; Nik and Kirk only, Kirk left and Nik right). Use the absent-host layout when a host is away (episode 196). Header "postgres.fm <topic>" on one line at 104 px. The meeting-bot tile is small, and note-taker tiles are never shown. Check a still.
+6. [ ] **Layout and framing**: heads in framed tiles, in an order chosen so that every host faces inward (they look at each other, never out of the picture). To decide: decide on real frames, never by a fixed name order. Run `bun tools/podcast-edit/qa/facing.ts estimate <tiles.json> <out> --samples 12` on the source recording: it crops each host tile at 12 points over the episode and estimates the head turn from Apple Vision landmarks (nose line vs the face-box center; the face position in the tile as a fallback), and writes a contact sheet and a draft record. Look at the sheet and write `<episode>/video/final/facing.json`: per host `left`, `right` or `neutral` (straight at the camera), evidence frames, a note. Order: right-facing hosts on the left, neutral in the middle, left-facing on the right (`proposeOrder`). With three hosts the center tile can face either way, so put there the host who faces the camera most straight, or whoever is left; a neutral host may sit on any edge. `qa.ts` check `facing` fails when there is no record or a host looks out of the picture from an edge tile; only a written `override` (`by`, `reason`) from the host passes it. Example: episode 198, Nik and Kirk, Kirk left and Nik right. Use the absent-host layout when a host is away (episode 196). Header "postgres.fm <topic>" on one line at 104 px. The meeting-bot tile is small, and note-taker tiles are never shown. Check a still.
 7. [ ] **Title card**: a Remotion card on the shades intro cue, crazier than the last one (not longer). Have fun with the elephant, never with the heads. If a host is absent, make one friendly joke about it. The numbers on the card match the source.
 8. [ ] **Illustrations, made and placed** (not only planned). Match the density of the last episodes (about 15-20 in an hour). Each one matches what is said at that moment, and every number matches the source:
    - real screenshots of quoted pages, with the URL printed;
@@ -36,7 +36,7 @@ Do these in order. The first thing the host sees is the **full composed episode*
 13. [ ] **QA**: `qa.ts` with every check that applies; a skip needs a written reason. Look at extracted frames: cold open, title card, several body points, every overlay, the outro.
 14. [ ] **Package up to publishing**:
     - title options;
-    - then 2-3 thumbnails and the square cover, with everyone on the episode, eyes open and heads balanced;
+    - then 2-3 thumbnails and the square cover, with everyone on the episode, eyes open, heads balanced and facing inward (the video's tile order);
     - podcast MP3 (no overlay sounds; no cold open unless the host wants it);
     - notes and description with final times (video times and podcast times differ);
     - chapters.
@@ -71,7 +71,8 @@ Do these in order. The first thing the host sees is the **full composed episode*
 - [ ] **Thumbnail(s)**, 1280×720:
   - dark background;
   - heavy condensed headline of 2–4 words;
-  - host and guest heads in framed tiles, balanced (equal head size and eye level), each lit well enough; brighten a dark camera.
+  - host and guest heads in framed tiles, balanced (equal head size and eye level), each lit well enough; brighten a dark camera;
+  - tile order as in the video: every head faces inward (`facing.json`, checklist section 0 item 6). The title card and the square cover follow the same order.
   - Make 2–3 options when unsure.
 - [ ] **A/B test** (Test & Compare), thumbnail only with one fixed title (see Growth rules). It starts once the video is public; check the next day that it is running.
 - [ ] **Description**:

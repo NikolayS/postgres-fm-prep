@@ -401,7 +401,10 @@ ffmpeg has no drawtext) and, for music, `ELEVENLABS_API_KEY`.
 S=~/.claude/skills/podcast-edit
 # 1. Tiles and layout changes in the SOURCE (Zoom gallery; names in reading order)
 bun $S/detect-tiles.ts in.mp4 --out work/tiles.json --names robot,nik,kirk
-# 2. Copy layout.example.json, set tiles/cuts paths, names, labels, highlight times
+# 2. Host order: every host faces inward. Estimate on 12 source frames, look at the sheet,
+#    write <episode>/video/final/facing.json, then place tiles in the proposed order
+bun $S/qa/facing.ts estimate work/tiles.json <episode>/video/final/facing --samples 12
+#    Copy layout.example.json, set tiles/cuts paths, names, labels, highlight times
 bun $S/layout.ts layout.json out-edited.mp4 still.png --still 200
 bun $S/layout.ts layout.json out-edited.mp4 layout-preview.mp4 --from 110 --dur 60 --preset fast
 # 3. Music options (3 intro + outro pairs, prompts in music.ts or --options file)
@@ -411,6 +414,15 @@ bun $S/compose.ts layout.json out-edited.mp4 intro-demo.mp4 --intro work/music/a
 bun $S/compose.ts layout.json out-edited.mp4 final.mp4 --intro a-intro.mp3 --outro a-outro.mp3
 ```
 
+- `qa/facing.ts`: hosts face each other, never out of the picture (Nik, episode 198). `estimate`
+  crops each host tile at N points of the source, reads the head turn from Apple Vision (nose
+  line vs face-box center, `faces.swift` field `nose`; face position in the tile as fallback),
+  writes a contact sheet and a draft record, and proposes the order: right-facing hosts left,
+  neutral middle, left-facing right. The record (`facing.json`: per host `facing`
+  left/right/neutral, `evidence` frames, `note`; optional `override` with `by` and `reason`)
+  is written by a person after looking at the sheet. `qa.ts` check `facing` (`layout`, `record`
+  relative to the episode folder) fails without a record or when an edge host looks outward.
+  Thumbnails, the title card and the square cover use the same order.
 - `detect-tiles.ts`: one sample every 10 s finds stable layouts (2+ equal
   samples); between them every frame (25 fps) goes to the nearest layout, so
   Zoom resizes and flips are found to the frame. Tile rects: non-black mask
