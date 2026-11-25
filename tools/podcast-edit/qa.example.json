@@ -19,6 +19,7 @@
     "items": [{"id": "s01-notify", "at": 1297.3, "box": [24, 724, 1576, 140]}]
   },
   "sfx": {"manifest": "${REVIEW}/overlays/manifest-sfx.json"},
+  "length": {"video": "${REVIEW}/final/final.mp4", "coldOpen": "${REVIEW}/final/coldopen.mp4", "timeMap": "${REVIEW}/final/body.time-map.json", "outro": "${REVIEW}/outro/out/outro.mp4"},
   "facing": {"layout": "${REVIEW}/layout.json", "record": "video/final/facing.json"},
   "skip": {}
 }

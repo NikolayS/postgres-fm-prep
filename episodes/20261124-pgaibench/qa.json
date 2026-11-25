@@ -508,5 +508,11 @@
  "facing": {
   "layout": "${EP198_REVIEW}/layout.json",
   "record": "video/final/facing.json"
+ },
+ "length": {
+  "video": "${EP198_REVIEW}/final/episode-198-final.mp4",
+  "coldOpen": "${EP198_REVIEW}/final/coldopen-198.mp4",
+  "timeMap": "${EP198_REVIEW}/final/episode-198-body.time-map.json",
+  "outro": "${EP198_REVIEW}/outro/out/outro-198.mp4"
  }
 }

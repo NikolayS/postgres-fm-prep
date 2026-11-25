@@ -8,6 +8,7 @@
 //   captions  no caption over a face, none in the bottom 180 px (qa/caps.ts)
 //   strips    overlay layers not clipped, above y 900; zoomed crops of every strip (qa/strips.ts)
 //   cards     card lint + provenance recompute + blog-candidates rule + contact sheet (cards/)
+//   length    final = cold open + body (time map) and ends on the outro (qa/length.ts)
 //   facing    hosts face each other: no host looks out of the picture from an edge tile
 //             ("facing": {"layout": "<layout.json>", "record": "<facing.json>"}; qa/facing.ts)
 //   sfx       every overlay in the rendered manifest enters with a sound, and the files exist
@@ -22,10 +23,11 @@ import { checkAudio } from "./qa/audio";
 import { checkCaptions } from "./qa/caps";
 import { checkEyes } from "./qa/eyes";
 import { facingVerdict } from "./qa/facing";
+import { checkLength } from "./qa/length";
 import { checkStripLayers, zoomCrops } from "./qa/strips";
 import { ENTRY_MAX, missingSfx, type Overlay } from "./sfx-manifest";
 
-export const CHECKS = ["audio", "eyes", "captions", "strips", "cards", "sfx", "facing"] as const;
+export const CHECKS = ["audio", "eyes", "captions", "strips", "cards", "sfx", "facing", "length"] as const;
 type Check = (typeof CHECKS)[number];
 export type Row = { check: Check; status: "PASS" | "FAIL" | "SKIP"; detail: string; problems: string[] };
 
@@ -75,6 +77,10 @@ async function run(check: Check, cfg: any, ep: string, out: string): Promise<Omi
     if (!layers && !crops.length) problems.push('strips: give "layers" (overlay files) and/or "video" + "items" (crop boxes)');
     return { status: problems.length ? "FAIL" : "PASS", detail: `${layers} layers checked; ${crops.length} zoomed crops in ${join(out, "strip-crops")} (look at every one)`, problems };
   }
+  if (check === "length") {
+    const r = await checkLength(cfg);
+    return { status: r.problems.length ? "FAIL" : "PASS", detail: `final ${r.final.toFixed(2)} s, expected ${r.expected.toFixed(2)} s; tail vs outro ${r.diffs.map((d) => d.toFixed(1)).join(", ")}`, problems: r.problems };
+  }
   if (check === "facing") {
     if (!cfg.layout) return { status: "FAIL", detail: 'give "layout" (layout.json) and "record" (facing.json from qa/facing.ts estimate, confirmed on frames)', problems: [] };
     const layout = JSON.parse(readFileSync(cfg.layout, "utf8"));
@@ -98,7 +104,7 @@ async function run(check: Check, cfg: any, ep: string, out: string): Promise<Omi
 if (import.meta.main) {
   const args = Bun.argv.slice(2);
   const ep = args.find((a, i) => !a.startsWith("--") && !["--config", "--only"].includes(args[i - 1]));
-  if (!ep) { console.error("Usage: bun qa.ts <episode-dir> [--config <file>] [--only audio,eyes,captions,strips,cards,sfx,facing]"); process.exit(2); }
+  if (!ep) { console.error("Usage: bun qa.ts <episode-dir> [--config <file>] [--only audio,eyes,captions,strips,cards,sfx,facing,length]"); process.exit(2); }
   const ci = args.indexOf("--config"), oi = args.indexOf("--only");
   const file = ci >= 0 ? args[ci + 1] : join(ep, "qa.json");
   const raw = existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : {};
