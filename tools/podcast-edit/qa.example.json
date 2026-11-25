@@ -19,5 +19,6 @@
     "items": [{"id": "s01-notify", "at": 1297.3, "box": [24, 724, 1576, 140]}]
   },
   "sfx": {"manifest": "${REVIEW}/overlays/manifest-sfx.json"},
+  "facing": {"layout": "${REVIEW}/layout.json", "record": "video/final/facing.json"},
   "skip": {}
 }
