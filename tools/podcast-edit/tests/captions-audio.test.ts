@@ -1,6 +1,6 @@
 // Tests for qa/captions-audio.ts. Run: bun test tests/captions-audio.test.ts
 import { describe, expect, test } from "bun:test";
-import { align, compare, heardWords, loadTerms, type Cue } from "../qa/captions-audio";
+import { align, compare, DEFAULT_MODEL, heardWords, loadTerms, whisperPrompt, type Cue } from "../qa/captions-audio";
 
 // whisper JSON with one word per segment, words 0.5 s apart from t0
 const whisper = (text: string, t0 = 0) => ({
@@ -36,6 +36,12 @@ describe("captions vs audio", () => {
     expect(compare(cues([[42.4, 45, "Hello, this is Postgres FM"]]), h)).toEqual([]);
   });
 
+  test("whisper repeats with near-zero length and music-stretched words are not lost words (ep198 52:38)", () => {
+    const rows: [number, number, string][] = [[0, 0.4, "Thank"], [0.4, 0.8, "you,"], [0.8, 1.3, "Nik."], [1.31, 1.32, "Thank"], [1.32, 1.33, "you,"], [1.33, 1.36, "Nik."], [3, 11, "Thank"], [11, 20, "you."]];
+    const h = heardWords({ transcription: rows.map(([a, b, w]) => ({ text: ` ${w}`, offsets: { from: a * 1000, to: b * 1000 } })) });
+    expect(compare(cues([[0, 1.4, "Thank you, Nik."]]), h)).toEqual([]);
+  });
+
   test("words heard inside cue time but not captioned are unheard (lost words, wrong neighbours)", () => {
     const h = heardWords(whisper("yeah as long as you use the latest and the best you know agents"));
     const c = cues([[0, 6.5, "yeah you know agents"]]);
@@ -66,5 +72,13 @@ describe("captions vs audio", () => {
     expect(t.wrong).not.toContain("DB Lab forge"); // same letters as the right form: not a mishearing to flag
     const f = compare(cues([[0, 2, "with AI Lab Forge"]]), heardWords(whisper("with AI Lab Forge")), t);
     expect(f.map((x) => x.kind)).toEqual(["term"]);
+  });
+
+  test("whisper runs large-v3-turbo with the episode terms first in the prompt", () => {
+    expect(DEFAULT_MODEL).toEndWith("ggml-large-v3-turbo-q5_0.bin");
+    const fixes: [string, string][] = [["PG AI Bench", "PGAIBench"], ["Max slots per transaction", "max_locks_per_transaction"], ["Nick", "Nik"]];
+    const p = whisperPrompt(fixes, loadTerms(fixes, "DBLab Forge (instead of DB lab forge)\n"), 60);
+    expect(p).toBe("PGAIBench, max_locks_per_transaction, Nik, DBLab Forge");
+    expect(whisperPrompt(fixes, loadTerms(fixes), 30).length).toBeLessThanOrEqual(30);
   });
 });

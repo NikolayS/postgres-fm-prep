@@ -2,7 +2,9 @@
 // Usage:
 //   bun qa/captions-audio.ts <base.cues.json> (--whisper <whisper.json> | --media <final.mp4>)
 //        [--fixes subtitle-fixes.json] [--glossary prompt.txt] [--min 3] [--out <report.json>]
-// --media runs whisper-cli (ggml-small, one word per segment) on the whole audio first.
+//        [--model ggml.bin]
+// --media runs whisper-cli on the whole audio first (one word per segment), with large-v3-turbo
+// (--model to change; ggml-small misheard this show's terms) and the glossary terms as --prompt.
 // Reports, with video times:
 //   missing  speech whisper heard that no cue covers (a gap of 3+ words: a lost cue);
 //   unheard  3+ heard words in a row that the captions do not have, inside cue time (lost words);
@@ -12,7 +14,7 @@
 //            mishearing (the left side of a fix, a glossary "instead of" form) left in a caption.
 // Whisper drops crosstalk and mishears names, so "extra" needs a listen; "missing", "unheard"
 // and "term" are rarely false. Episode 198: 3 lost spots (cold open reused body audio) and a
-// transcription error ("max slots" for max_locks_per_transaction) reached YouTube.
+// "max slots" caption for max_locks_per_transaction reached YouTube.
 
 export type Word = { t: number; w: string; raw: string; cue?: number; dur?: number };
 export type Cue = { start: number; end: number; toks?: { text: string; start: number }[] };
@@ -137,12 +139,15 @@ export function compare(cues: Cue[], heard: Word[], terms: Terms = { right: [], 
       const s = squash(term);
       if (squash(said).includes(s) && !squash(caption).includes(s)) out.push({ kind: "term", t, cues: cueIds, caption, heard: said, note: `heard "${term}"` });
     }
-    if (h.length >= min) {
-      // whisper stretches words over music (2-4 s a word): their times are not reliable for a gap
-      const gap = h.filter((x) => !covered(x.t) && !((x.dur ?? 0) > 1.5));
+    // whisper repeats words with near-zero length and stretches words over music (2-4 s a word):
+    // only words of a plausible length count towards a lost stretch
+    const real = (x: Word) => x.dur === undefined || (x.dur > 0.05 && x.dur <= 1.5);
+    const hr = h.filter(real);
+    if (hr.length >= min) {
+      const gap = hr.filter((x) => !covered(x.t));
       if (gap.length >= min) out.push({ kind: "missing", t: gap[0].t, cues: cueIds, caption, heard: gap.map((x) => x.raw).join(" ") });
-      else if (h.length - gap.length >= min && c.length === 0) out.push({ kind: "unheard", t, cues: cueIds, caption, heard: said });
-      else if (c.length > 0 && h.length >= min && c.length < min && h.length - c.length >= min) out.push({ kind: "unheard", t, cues: cueIds, caption, heard: said });
+      else if (hr.length - gap.length >= min && c.length === 0) out.push({ kind: "unheard", t, cues: cueIds, caption, heard: said });
+      else if (c.length > 0 && c.length < min && hr.length - c.length >= min) out.push({ kind: "unheard", t, cues: cueIds, caption, heard: said });
     }
     if (c.length >= min && h.length < min) out.push({ kind: "extra", t, cues: cueIds, caption, heard: said });
     else if (c.length >= min && h.length >= min && !out.some((f) => f.t === t && f.kind !== "term")) out.push({ kind: "extra", t, cues: cueIds, caption, heard: said, note: "heard differently" });
@@ -158,6 +163,21 @@ export function compare(cues: Cue[], heard: Word[], terms: Terms = { right: [], 
   return out.sort((a, b) => a.t - b.t);
 }
 
+export const DEFAULT_MODEL = `${process.env.HOME}/.cache/whisper-cpp/ggml-large-v3-turbo-q5_0.bin`;
+
+// Whisper initial prompt: the episode's fixed terms first, then glossary terms, up to `max` characters
+// (whisper keeps only about 224 prompt tokens).
+export function whisperPrompt(fixes: [string, string][], terms: Terms, max = 600): string {
+  const seen = new Set<string>(), out: string[] = [];
+  for (const t of [...fixes.map(([, r]) => r), ...terms.right]) {
+    const k = t.toLowerCase();
+    if (seen.has(k) || !/[A-Z_.]|\d/.test(t)) continue;
+    if (out.join(", ").length + t.length + 2 > max) break;
+    seen.add(k); out.push(t);
+  }
+  return out.join(", ");
+}
+
 export const clock = (s: number) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${(s % 60).toFixed(2).padStart(5, "0")}`;
 
 if (import.meta.main) {
@@ -168,17 +188,19 @@ if (import.meta.main) {
     console.error("usage: bun qa/captions-audio.ts <base.cues.json> (--whisper <w.json> | --media <final.mp4>) [--fixes f.json] [--glossary prompt.txt] [--min 3] [--out r.json]");
     process.exit(2);
   }
+  const fixes: [string, string][] = opt("fixes") ? await Bun.file(opt("fixes")!).json() : [];
+  const gloss = opt("glossary") ? await Bun.file(opt("glossary")!).text() : "";
+  const terms = loadTerms(fixes, gloss);
   let wj = opt("whisper");
   if (!wj) {
     const base = `${cuesFile}.whisper`;
     const wav = `${base}.wav`;
-    await Bun.$`ffmpeg -nostdin -v error -y -i ${opt("media")!} -vn -ac 1 -ar 16000 ${wav}`.stdin("ignore");
-    await Bun.$`whisper-cli -m ${process.env.HOME}/.whisper-models/ggml-small.bin -f ${wav} -l en -ojf -ml 1 -sow -of ${base}`.stdin("ignore").quiet();
+    const model = opt("model") ?? DEFAULT_MODEL;
+    await Bun.$`ffmpeg -nostdin -v error -y -i ${opt("media")!} -vn -ac 1 -ar 16000 ${wav}`;
+    await Bun.$`whisper-cli -m ${model} -f ${wav} -l en -ojf -ml 1 -sow --prompt ${whisperPrompt(fixes, terms)} -of ${base}`.quiet();
     wj = `${base}.json`;
   }
-  const fixes = opt("fixes") ? await Bun.file(opt("fixes")!).json() : [];
-  const gloss = opt("glossary") ? await Bun.file(opt("glossary")!).text() : "";
-  const found = compare(await Bun.file(cuesFile).json(), heardWords(await Bun.file(wj).json()), loadTerms(fixes, gloss), Number(opt("min") ?? 3));
+  const found = compare(await Bun.file(cuesFile).json(), heardWords(await Bun.file(wj).json()), terms, Number(opt("min") ?? 3));
   if (opt("out")) await Bun.write(opt("out")!, JSON.stringify(found, null, 1));
   const by = (k: string) => found.filter((f) => f.kind === k);
   for (const k of ["missing", "unheard", "term", "extra"]) {
