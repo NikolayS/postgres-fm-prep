@@ -6,9 +6,9 @@
 
 - **Question:** Can AI safely change production Postgres, and what does it take: PGAIBench results with models acting alone, and the AAA protocol (Analyst, Auditor, Actor).
 - **Hosts:** Nikolay Samokhvalov and Kirk Wolak (co-hosts). Michael Christofides did not take part in this recording.
-- **Status:** Recorded 2026-11-24 (Zoom, 60:17 raw). Full composed final (55:02) and podcast MP3 (54:46) ready for the host's review; QA passed. Nothing published.
+- **Status:** Recorded 2026-11-24 (Zoom, 60:17 raw). Final = v8-lite (53:01.83; 16 overlays, `video/overlays/manifest-v8lite-sfx.json`, `qa-v8lite.json` all PASS), picked by Nik on 2026-11-27; Nik uploads it to YouTube. v7b (49 overlays) is rejected. Podcast MP3 52:38.12. Captions in `captions/`, social drafts in `social/`.
 - **Recording date:** 2026-11-24, 10:37 PT (18:37 UTC); the show starts at 00:53 of the recording.
-- **Episode number:** 198 (to confirm).
+- **Episode number:** 198.
 
 ## Materials
 
