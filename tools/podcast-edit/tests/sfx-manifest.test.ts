@@ -6,7 +6,7 @@ import { $ } from "bun";
 import { mkdtempSync, rmSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
-import { ENTRY_MAX, exitFrom, LIB, measureExit, missingSfx, plan, revealBursts, trimTyping, typedLines, typingName, type Overlay } from "../sfx-manifest";
+import { ENTRY_MAX, entryInSequence, exitFrom, LIB, measureExit, missingSfx, plan, sequenceSfx, sequences, SEQ_GAP, revealBursts, trimTyping, typedLines, typingName, type Overlay } from "../sfx-manifest";
 
 const dir = mkdtempSync(join(tmpdir(), "sfx-manifest-"));
 afterAll(() => rmSync(dir, { recursive: true, force: true }));
@@ -117,5 +117,45 @@ describe("revealBursts: line reveal times of a wipe strip from its alpha", () =>
       frames.push(a);
     }
     expect(revealBursts(frames, W, H, 10)).toEqual([{ start: 0.1, end: 0.4, line: 0 }, { start: 0.5, end: 0.6, line: 1 }]);
+  });
+});
+
+// Nik, 2026-11-27 (episode 198): overlays that follow one another as one sequence get one entry
+// sound, on the first; the rest change silently ("user already attracted").
+describe("sequences: one entry sound per run of overlays", () => {
+  const IN = { file: "sfx/center-in.wav", at: 0.05, gain: 1 }, OUT = (at: number) => ({ file: "sfx/center-out.wav", at, gain: 0.7 });
+  const T = (at: number) => ({ file: "sfx/typing-400ms.wav", at, gain: 1 }), ACC = { file: "sfx/accent.wav", at: 2, gain: 1 };
+  const c = (id: string, outStart: number, dur: number, extra: Partial<Overlay> = {}): Overlay =>
+    ({ id, file: `${id}.mov`, placement: "center", outStart, dur, sfx: [IN, ACC, OUT(dur - 0.4)], ...extra });
+  const b = (id: string, outStart: number, dur: number): Overlay => ({ id, file: `${id}.mov`, placement: "band", outStart, dur, sfx: [T(0.04), T(2)] });
+
+  test("a start within SEQ_GAP of the previous end joins the sequence; a later start begins a new one", () => {
+    const ovs = [c("a", 10, 5), c("b", 15, 4), c("c", 19 + SEQ_GAP, 3), c("d", 22 + 3 + SEQ_GAP + 0.5, 3)];
+    expect(sequences(ovs).map((s) => s.map((o) => o.id))).toEqual([["a", "b", "c"], ["d"]]);
+  });
+  test("the same group id joins a sequence across a longer gap; order is by start time", () => {
+    const ovs = [c("y", 40, 2, { group: "g" }), c("x", 10, 2, { group: "g" })];
+    expect(sequences(ovs).map((s) => s.map((o) => o.id))).toEqual([["x", "y"]]);
+  });
+  test("sequenceSfx keeps only the first entry cue and the last exit cue; accents stay", () => {
+    const out = sequenceSfx([c("a", 10, 5), b("s", 15.5, 4), c("c", 20, 3)]);
+    expect(out.map((o) => o.sfx)).toEqual([
+      [IN, ACC],
+      [T(2)],
+      [ACC, OUT(2.6)],
+    ]);
+  });
+  test("a lone overlay keeps all its sounds", () => {
+    const o = c("solo", 100, 5);
+    expect(sequenceSfx([o])[0].sfx).toEqual(o.sfx);
+  });
+  test("missingSfx does not ask for an entry sound inside a sequence", () => {
+    expect(missingSfx(sequenceSfx([c("a", 10, 5), c("b", 15, 4)]))).toEqual([]);
+    expect(missingSfx([c("a", 10, 5), { ...c("b", 15, 4), sfx: [] }])).toEqual([]);
+    expect(missingSfx([{ ...c("a", 10, 5), sfx: [] }, c("b", 15, 4)])).toEqual(["a"]);
+  });
+  test("entryInSequence names overlays after the first that still enter with a sound", () => {
+    expect(entryInSequence([c("a", 10, 5), c("b", 15, 4), b("s", 30, 3)])).toEqual(["b"]);
+    expect(entryInSequence(sequenceSfx([c("a", 10, 5), c("b", 15, 4)]))).toEqual([]);
   });
 });

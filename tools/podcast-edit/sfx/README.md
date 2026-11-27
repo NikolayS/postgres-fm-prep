@@ -16,6 +16,11 @@ convention below to an overlay manifest; `compose.ts` mixes the result.
 
 ## Convention
 
+- Sequences: overlays that follow one another (start within `SEQ_GAP` = 3 s
+  of the previous end, or the same `group` id in the manifest) are one
+  sequence. Only its first overlay gets the entry sound (IN or typing); the
+  others change silently, and only the last one gets OUT (Nik, 2026-11-27:
+  "user already attracted"). Accents inside cards stay.
 - Band cards (lower third) use the typing render `<card>-typing.mov` and
   get one typing sound per typed line, from the line's first keystroke,
   trimmed to the line's typing length. No whoosh, air or wind.

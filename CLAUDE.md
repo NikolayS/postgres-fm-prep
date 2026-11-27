@@ -24,10 +24,12 @@ QA every strip with zoomed frame crops (`qa.ts` writes them) during and after it
 
 ## Video: sound cues on every illustration
 
-- Every card, photo and strip enters with a sound cue, so audio-only listeners know to pull out the phone and look. (Nik, episode 197: the final had no overlay sounds.)
+- Every card, photo and strip that starts a sequence (see the next item) enters with a sound cue, so audio-only listeners know to pull out the phone and look. (Nik, episode 197: the final had no overlay sounds.)
+- One sound per sequence: when overlays follow one another (an overlay starts within 3 s of the previous one's end, or shares its `group` id), only the first enters with a sound and only the last has an exit cue; the rest change silently. (Nik, 2026-11-27, episode 198: "user already attracted".) `sfx-manifest.ts` applies this, and `qa.ts` check `sfx` fails on an entry sound inside a sequence.
+- Every overlay must add something beyond the speech (a number, a picture, a structure, a joke). Cut a card that only restates the spoken line. The storyboard (`templates/episode/storyboard.md`) has a "what it adds" column.
 - Use the agreed library and convention in `tools/podcast-edit/sfx/README.md`: IN and OUT for center cards (and named center sets such as a photo card), typing for band strips, rare accents for a sudden reveal.
 - Always render with the `manifest-sfx.json` that `tools/podcast-edit/sfx-manifest.ts` makes, never the raw `manifest.json`.
-- `qa.ts` (check `sfx`) and `compose.ts` fail when an overlay has no sound in its first 1.5 s. Episode 197 lost every sound this way.
+- `qa.ts` (check `sfx`) and `compose.ts` fail when an overlay that starts a sequence has no sound in its first 1.5 s. Episode 197 lost every sound this way.
 
 ## Video: faces stay clean
 

@@ -52,3 +52,4 @@ Add the remaining questions and any work needed before recording.
 ## Published links
 
 Add the episode, video and companion article links when available.
+- `storyboard.md`: the storyboard of all visuals (time, words, one idea, what it adds, sequence, source).

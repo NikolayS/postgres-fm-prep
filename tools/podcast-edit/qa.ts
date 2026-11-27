@@ -11,7 +11,8 @@
 //   length    final = cold open + body (time map) and ends on the outro (qa/length.ts)
 //   facing    hosts face each other: no host looks out of the picture from an edge tile
 //             ("facing": {"layout": "<layout.json>", "record": "<facing.json>"}; qa/facing.ts)
-//   sfx       every overlay in the rendered manifest enters with a sound, and the files exist
+//   sfx       every overlay sequence in the rendered manifest enters with one sound (on its first
+//             overlay; the rest change silently), and the files exist
 //             ("sfx": {"manifest": "<overlays>/manifest-sfx.json"}; sfx-manifest.ts makes it)
 // A check missing from qa.json FAILS unless qa.json says why it does not apply:
 //   "skip": {"eyes": "no cold open in this preview"}
@@ -25,7 +26,7 @@ import { checkEyes } from "./qa/eyes";
 import { facingVerdict } from "./qa/facing";
 import { checkLength } from "./qa/length";
 import { checkStripLayers, zoomCrops } from "./qa/strips";
-import { ENTRY_MAX, missingSfx, type Overlay } from "./sfx-manifest";
+import { ENTRY_MAX, entryInSequence, missingSfx, SEQ_GAP, type Overlay } from "./sfx-manifest";
 
 export const CHECKS = ["audio", "eyes", "captions", "strips", "cards", "sfx", "facing", "length"] as const;
 type Check = (typeof CHECKS)[number];
@@ -93,6 +94,7 @@ async function run(check: Check, cfg: any, ep: string, out: string): Promise<Omi
     if (!cfg.manifest) return { status: "FAIL", detail: 'give "manifest": the overlay manifest the render used (manifest-sfx.json)', problems: [] };
     const m = JSON.parse(readFileSync(cfg.manifest, "utf8")), ovs: Overlay[] = Array.isArray(m) ? m : m.overlays ?? [];
     const problems = missingSfx(ovs).map((id) => `${id}: no entry sound in its first ${ENTRY_MAX} s`);
+    problems.push(...entryInSequence(ovs).map((id) => `${id}: entry sound inside a sequence (starts within ${SEQ_GAP} s of the previous overlay or shares its group): only the first overlay of a sequence enters with a sound; rebuild with sfx-manifest.ts`));
     for (const o of ovs) for (const x of o.sfx ?? []) if (!existsSync(resolve(dirname(cfg.manifest), x.file))) problems.push(`${o.id}: sound file ${x.file} is missing`);
     if (ovs.length && !ovs.some((o) => o.sfx?.length)) problems.unshift("no overlay has a sound: render with manifest-sfx.json from sfx-manifest.ts, never the raw manifest.json");
     return { status: problems.length ? "FAIL" : "PASS", detail: `${ovs.length} overlays, ${ovs.reduce((n, o) => n + (o.sfx?.length ?? 0), 0)} sounds`, problems };

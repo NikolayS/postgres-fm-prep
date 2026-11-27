@@ -86,4 +86,27 @@ describe("qa.ts", () => {
     expect(ok.stdout.toString()).toMatch(/PASS\s+sfx/);
     expect(ok.exitCode).toBe(0);
   });
+  test("sfx: an overlay inside a sequence that enters with a sound fails (one entry sound per sequence)", () => {
+    const ep = join(dir, "ep4");
+    mkdirSync(join(ep, "notes"), { recursive: true });
+    mkdirSync(join(ep, "ov/sfx"), { recursive: true });
+    writeFileSync(join(ep, "notes/blog-candidates.md"), "# Blog candidates\n");
+    writeFileSync(join(ep, "ov/sfx/center-in.wav"), "");
+    const IN = { file: "sfx/center-in.wav", at: 0.05 };
+    const two = (second: object[]) => ({ overlays: [
+      { id: "a", file: "a.mov", placement: "center", outStart: 10, dur: 5, sfx: [IN] },
+      { id: "b", file: "b.mov", placement: "center", outStart: 15.5, dur: 5, sfx: second },
+    ] });
+    writeFileSync(join(ep, "ov/loud.json"), JSON.stringify(two([IN])));
+    writeFileSync(join(ep, "ov/quiet.json"), JSON.stringify(two([])));
+    const cfg = (m: string) => writeFileSync(join(ep, "qa.json"), JSON.stringify({ out: "${QA_OUT}", sfx: { manifest: join(ep, "ov", m) }, skip: { audio: "t", eyes: "t", captions: "t", strips: "t", facing: "t", length: "t" } }));
+    cfg("loud.json");
+    const bad = qa(ep);
+    expect(bad.exitCode).toBe(1);
+    expect(bad.stdout.toString()).toMatch(/FAIL\s+sfx[\s\S]*b: entry sound inside a sequence/);
+    cfg("quiet.json");
+    const ok = qa(ep);
+    expect(ok.stdout.toString()).toMatch(/PASS\s+sfx/);
+    expect(ok.exitCode).toBe(0);
+  });
 });

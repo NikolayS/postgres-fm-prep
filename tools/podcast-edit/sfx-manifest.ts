@@ -12,6 +12,8 @@
 // exit measured from the overlay's alpha (the first frame of the final drop); accents (L, or K
 // with --accent-sound K) at the times given by the overlay's "accents" field or --accent (an id
 // or an id prefix, seconds from the overlay start). "full" cards are left as they are.
+// Overlays that follow one another (start within SEQ_GAP s of the previous end, or the same
+// "group") are one sequence: only the first enters with a sound, exit cues only at its end.
 // Old sounds on band and center cards are dropped except names starting with --keep (default
 // "thud"); a kept sound within 0.5 s of an accent is dropped (the accent replaces it).
 // Sounds are copied into <manifest dir>/sfx/ under role names (center-in, center-out, accent,
@@ -28,7 +30,7 @@ export const ENTRY_MAX = 1.5, MIN_LINE = 0.2;
 const ACCENT_FILES: Record<string, string> = { L: "L-punch-rough.wav", K: "K-sand-stroke-falling.wav" };
 
 export type Sfx = { file: string; at: number; gain?: number };
-export type Overlay = { id: string; file: string; placement?: "band" | "full" | "center"; dur: number; sfx?: Sfx[]; accents?: number[]; [k: string]: unknown };
+export type Overlay = { id: string; file: string; placement?: "band" | "full" | "center"; dur: number; outStart?: number; group?: string; sfx?: Sfx[]; accents?: number[]; [k: string]: unknown };
 export type Burst = { start: number; end: number; line?: string | number };
 export type Line = { at: number; dur: number };
 
@@ -83,9 +85,49 @@ export function plan(o: Overlay, x: { typed?: string; bursts?: Burst[]; exit?: n
   return { file: o.file, sfx: o.sfx ?? [] };
 }
 
-// Overlays without a sound in their first ENTRY_MAX s (audio listeners would miss them).
+// Sequences (Nik, 2026-11-27, episode 198): overlays that follow one another are one sequence, and
+// only its first overlay enters with a sound; the rest change silently ("user already
+// attracted"). An overlay joins the running sequence when it starts within SEQ_GAP s of the
+// sequence's end so far, or shares its "group" id. Exit cues play only at the sequence's end.
+export const SEQ_GAP = 3;
+const role = (s: Sfx) => basename(s.file).replace(/\.[^.]+$/, "");
+const isEntry = (s: Sfx) => s.at >= 0 && s.at <= ENTRY_MAX && (role(s) === "center-in" || role(s).startsWith("typing"));
+const isExit = (s: Sfx) => role(s) === "center-out";
+
+export function sequences(overlays: Overlay[]): Overlay[][] {
+  const timed = overlays.filter((o) => typeof o.outStart === "number").sort((a, b) => a.outStart! - b.outStart!);
+  const out: Overlay[][] = [];
+  let end = -Infinity;
+  for (const o of timed) {
+    const cur = out[out.length - 1];
+    const joins = cur && ((o.group !== undefined && cur.some((p) => p.group === o.group)) || o.outStart! - end <= SEQ_GAP);
+    if (joins) cur.push(o); else out.push([o]);
+    end = joins ? Math.max(end, o.outStart! + o.dur) : o.outStart! + o.dur;
+  }
+  return [...out, ...overlays.filter((o) => typeof o.outStart !== "number").map((o) => [o])];
+}
+
+// The ids of overlays that are not the first of their sequence.
+const followers = (overlays: Overlay[]) => new Set(sequences(overlays).flatMap((q) => q.slice(1)));
+
+// Drop entry cues after the first overlay of each sequence and exit cues before its last.
+export function sequenceSfx(overlays: Overlay[]): Overlay[] {
+  const keep = new Map<Overlay, Sfx[]>();
+  for (const q of sequences(overlays)) q.forEach((o, i) => keep.set(o, (o.sfx ?? []).filter((s) => !(i > 0 && isEntry(s)) && !(i < q.length - 1 && isExit(s)))));
+  return overlays.map((o) => ({ ...o, sfx: keep.get(o) ?? o.sfx }));
+}
+
+// Overlays after the first of a sequence that still enter with a sound (qa.ts check sfx).
+export function entryInSequence(overlays: Overlay[]): string[] {
+  const f = followers(overlays);
+  return overlays.filter((o) => f.has(o) && (o.sfx ?? []).some(isEntry)).map((o) => o.id ?? o.file);
+}
+
+// Overlays that begin a sequence (or stand alone) without a sound in their first ENTRY_MAX s
+// (audio listeners would miss them).
 export function missingSfx(overlays: Overlay[]): string[] {
-  return overlays.filter((o) => !(o.sfx ?? []).some((s) => s.at >= 0 && s.at <= ENTRY_MAX)).map((o) => o.id ?? o.file);
+  const f = followers(overlays);
+  return overlays.filter((o) => !f.has(o) && !(o.sfx ?? []).some((s) => s.at >= 0 && s.at <= ENTRY_MAX)).map((o) => o.id ?? o.file);
 }
 
 // Line reveals of a wipe strip from alpha frames (W x H, 0-255, frame i at i / fps): text lines
@@ -190,6 +232,8 @@ if (import.meta.main) {
     o.sfx = p.sfx;
     console.log(`${o.id} ${o.placement} ${o.file}${exit !== undefined ? ` exit ${exit}` : ""}: ${p.sfx.map((s) => `${basename(s.file)}@${s.at}`).join(" ")}`);
   }
+  m.overlays = sequenceSfx(m.overlays);
+  for (const q of sequences(m.overlays)) if (q.length > 1) console.log(`sequence ${q.map((o) => o.id).join(" > ")}: entry sound on ${q[0].id} only`);
   await Bun.write(out, JSON.stringify(m, null, 2) + "\n");
   if (missing.length) console.log(`band cards with no typed lines found (no sound): ${missing.join(", ")}`);
   const silent = missingSfx(m.overlays);
