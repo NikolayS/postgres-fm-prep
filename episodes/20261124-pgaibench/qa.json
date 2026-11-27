@@ -245,12 +245,12 @@
    },
    {
     "id": "r16-auditor-next",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next-v7b.mov",
     "t": 0.3
    },
    {
     "id": "r16-auditor-next",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r16-auditor-next-v7b.mov",
     "t": 3.25
    },
    {
@@ -345,12 +345,12 @@
    },
    {
     "id": "r23a-aaa-auditor",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v7b.mov",
     "t": 0.3
    },
    {
     "id": "r23a-aaa-auditor",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v7b.mov",
     "t": 6.76
    },
    {
@@ -394,6 +394,16 @@
     "t": 3.8
    },
    {
+    "id": "n08-auditor-small",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n08-auditor-small-v7b.mov",
+    "t": 0.3
+   },
+   {
+    "id": "n08-auditor-small",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n08-auditor-small-v7b.mov",
+    "t": 4.75
+   },
+   {
     "id": "n06-ed-onepass",
     "file": "${EP198_REVIEW}/overlays/out-v2/n06-ed-onepass.mov",
     "t": 0.3
@@ -425,12 +435,12 @@
    },
    {
     "id": "r28a-dots",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r28a-dots.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28a-dots-v7b.mov",
     "t": 0.3
    },
    {
     "id": "r28a-dots",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r28a-dots.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28a-dots-v7b.mov",
     "t": 9.7
    },
    {
@@ -747,6 +757,21 @@
     ]
    },
    {
+    "id": "n08-auditor-small",
+    "at": 2379.71,
+    "box": [
+     100,
+     720,
+     1520,
+     184
+    ],
+    "times": [
+     2380.01,
+     2380.91,
+     2383.41
+    ]
+   },
+   {
     "id": "n06-ed-onepass",
     "at": 2450.01,
     "box": [
@@ -854,10 +879,10 @@
   ]
  },
  "sfx": {
-  "manifest": "${EP198_REVIEW}/overlays/out-v2/manifest-v7-sfx.json"
+  "manifest": "${EP198_REVIEW}/overlays/out-v2/manifest-v7b-sfx.json"
  },
  "skip": {
-  "captions": "no burned-in captions or punch-ins in episode 198: text is only in the 21 band strips and notes and 27 center panels (checked by strips)",
+  "captions": "no burned-in captions or punch-ins in episode 198: text is only in the 22 band strips and notes and 27 center panels (checked by strips)",
   "cards": "no data cards (cards/*.card.json), so the automatic number check has nothing to run on: the 27 center panels are Remotion pieces built from the post's and the site's own figures and data (the DBA-Bench card carries only a small capture thumbnail). The number check was done by hand: every number on every overlay against the post and pgaibench.dev by two independent reviews on 2026-11-25 (review/for-nik/80-review-fable-ep198.md 'Checked and correct', 81-review-gemini-ep198.md 'Checked and fine'); rows changed after them were checked against the post by their builders; each row's words are checked against the edit in video/overlays/verify-v5.tsv"
  },
  "facing": {
