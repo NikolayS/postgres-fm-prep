@@ -135,32 +135,52 @@
    },
    {
     "id": "r08-leaderboard",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r08-leaderboard.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r08-leaderboard-v7.mov",
     "t": 0.3
    },
    {
     "id": "r08-leaderboard",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r08-leaderboard.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r08-leaderboard-v7.mov",
     "t": 10.65
    },
    {
+    "id": "n03-ed-escalate",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n03-ed-escalate.mov",
+    "t": 0.3
+   },
+   {
+    "id": "n03-ed-escalate",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n03-ed-escalate.mov",
+    "t": 4.4
+   },
+   {
     "id": "v2-r09-restart",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r09-restart.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r09-restart-v7.mov",
     "t": 0.3
    },
    {
     "id": "v2-r09-restart",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r09-restart.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r09-restart-v7.mov",
     "t": 5.72
    },
    {
+    "id": "n04-ed-c18",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n04-ed-c18.mov",
+    "t": 0.3
+   },
+   {
+    "id": "n04-ed-c18",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n04-ed-c18.mov",
+    "t": 6
+   },
+   {
     "id": "v2-r10-runs",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v7.mov",
     "t": 0.3
    },
    {
     "id": "v2-r10-runs",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r10-runs-v7.mov",
     "t": 4.27
    },
    {
@@ -175,12 +195,12 @@
    },
    {
     "id": "v2-r12-escalate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v4.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v7.mov",
     "t": 0.3
    },
    {
     "id": "v2-r12-escalate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v4.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r12-escalate-v7.mov",
     "t": 6.36
    },
    {
@@ -195,12 +215,12 @@
    },
    {
     "id": "v2-r13b14a-axes-track1",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v7.mov",
     "t": 0.3
    },
    {
     "id": "v2-r13b14a-axes-track1",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v5.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r13b14a-axes-track1-v7.mov",
     "t": 14.23
    },
    {
@@ -215,12 +235,12 @@
    },
    {
     "id": "r15-funnel",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r15-funnel.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r15-funnel-v7.mov",
     "t": 0.3
    },
    {
     "id": "r15-funnel",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r15-funnel.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r15-funnel-v7.mov",
     "t": 4
    },
    {
@@ -314,6 +334,16 @@
     "t": 6.2
    },
    {
+    "id": "n02-jev-typesafe",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n02-jev-typesafe.mov",
+    "t": 0.3
+   },
+   {
+    "id": "n02-jev-typesafe",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n02-jev-typesafe.mov",
+    "t": 1.5
+   },
+   {
     "id": "r23a-aaa-auditor",
     "file": "${EP198_REVIEW}/overlays/out-v2/r23a-aaa-auditor-v6.mov",
     "t": 0.3
@@ -344,6 +374,16 @@
     "t": 3.5
    },
    {
+    "id": "n05-ed-repack",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n05-ed-repack.mov",
+    "t": 0.3
+   },
+   {
+    "id": "n05-ed-repack",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n05-ed-repack.mov",
+    "t": 6
+   },
+   {
     "id": "r26-send-back",
     "file": "${EP198_REVIEW}/overlays/out-v2/r26-send-back-v6.mov",
     "t": 0.3
@@ -354,23 +394,33 @@
     "t": 3.8
    },
    {
+    "id": "n06-ed-onepass",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n06-ed-onepass.mov",
+    "t": 0.3
+   },
+   {
+    "id": "n06-ed-onepass",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n06-ed-onepass.mov",
+    "t": 4.76
+   },
+   {
     "id": "r28c-replay-note",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r28c-replay-note.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28c-replay-note-v7.mov",
     "t": 0.3
    },
    {
     "id": "r28c-replay-note",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r28c-replay-note.mov",
-    "t": 3.5
+    "file": "${EP198_REVIEW}/overlays/out-v2/r28c-replay-note-v7.mov",
+    "t": 5
    },
    {
     "id": "r27-triangle",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle-v7.mov",
     "t": 0.3
    },
    {
     "id": "r27-triangle",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r27-triangle-v7.mov",
     "t": 5.5
    },
    {
@@ -415,12 +465,12 @@
    },
    {
     "id": "v2-r31-l5-lock-queue",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v7.mov",
     "t": 0.3
    },
    {
     "id": "v2-r31-l5-lock-queue",
-    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/v2-r31-l5-lock-queue-v7.mov",
     "t": 8.92
    },
    {
@@ -464,13 +514,23 @@
     "t": 5.29
    },
    {
+    "id": "n07-ed-pg18stats",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n07-ed-pg18stats.mov",
+    "t": 0.3
+   },
+   {
+    "id": "n07-ed-pg18stats",
+    "file": "${EP198_REVIEW}/overlays/out-v2/n07-ed-pg18stats.mov",
+    "t": 5
+   },
+   {
     "id": "r37-kirk-delegate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate-v7.mov",
     "t": 0.3
    },
    {
     "id": "r37-kirk-delegate",
-    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate-v6.mov",
+    "file": "${EP198_REVIEW}/overlays/out-v2/r37-kirk-delegate-v7.mov",
     "t": 4.1
    }
   ],
@@ -552,6 +612,36 @@
     ]
    },
    {
+    "id": "n03-ed-escalate",
+    "at": 982.41,
+    "box": [
+     100,
+     720,
+     1520,
+     184
+    ],
+    "times": [
+     982.71,
+     983.61,
+     986.11
+    ]
+   },
+   {
+    "id": "n04-ed-c18",
+    "at": 1003.41,
+    "box": [
+     100,
+     720,
+     1520,
+     184
+    ],
+    "times": [
+     1003.71,
+     1004.61,
+     1007.11
+    ]
+   },
+   {
     "id": "v2-r10-runs",
     "at": 1026.41,
     "box": [
@@ -624,6 +714,51 @@
      1877.69,
      1878.59,
      1881.09
+    ]
+   },
+   {
+    "id": "n02-jev-typesafe",
+    "at": 2053.96,
+    "box": [
+     100,
+     720,
+     1520,
+     184
+    ],
+    "times": [
+     2054.26,
+     2055.16,
+     2056.46
+    ]
+   },
+   {
+    "id": "n05-ed-repack",
+    "at": 2305.21,
+    "box": [
+     100,
+     720,
+     1520,
+     184
+    ],
+    "times": [
+     2305.51,
+     2306.41,
+     2308.91
+    ]
+   },
+   {
+    "id": "n06-ed-onepass",
+    "at": 2450.01,
+    "box": [
+     100,
+     720,
+     1520,
+     184
+    ],
+    "times": [
+     2450.31,
+     2451.21,
+     2453.71
     ]
    },
    {
@@ -700,14 +835,29 @@
      3043.04,
      3045.54
     ]
+   },
+   {
+    "id": "n07-ed-pg18stats",
+    "at": 3052.81,
+    "box": [
+     100,
+     720,
+     1520,
+     184
+    ],
+    "times": [
+     3053.11,
+     3054.01,
+     3056.51
+    ]
    }
   ]
  },
  "sfx": {
-  "manifest": "${EP198_REVIEW}/overlays/out-v2/manifest-v6-sfx.json"
+  "manifest": "${EP198_REVIEW}/overlays/out-v2/manifest-v7-sfx.json"
  },
  "skip": {
-  "captions": "no burned-in captions or punch-ins in episode 198: text is only in the 15 band strips and 27 center panels (checked by strips)",
+  "captions": "no burned-in captions or punch-ins in episode 198: text is only in the 21 band strips and notes and 27 center panels (checked by strips)",
   "cards": "no data cards (cards/*.card.json), so the automatic number check has nothing to run on: the 27 center panels are Remotion pieces built from the post's and the site's own figures and data (the DBA-Bench card carries only a small capture thumbnail). The number check was done by hand: every number on every overlay against the post and pgaibench.dev by two independent reviews on 2026-11-25 (review/for-nik/80-review-fable-ep198.md 'Checked and correct', 81-review-gemini-ep198.md 'Checked and fine'); rows changed after them were checked against the post by their builders; each row's words are checked against the edit in video/overlays/verify-v5.tsv"
  },
  "facing": {

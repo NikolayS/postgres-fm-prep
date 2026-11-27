@@ -1,0 +1,20 @@
+{
+  "id": "n02-jev-typesafe",
+  "row": 22,
+  "outStart": 2011.55,
+  "duration": 3,
+  "dur": 3,
+  "file": "n02-jev-typesafe.mov",
+  "placement": "band",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/typing-467ms.wav",
+      "at": 0.04,
+      "gain": 1
+    }
+  ],
+  "builder": "illus-1",
+  "words": "Nik: \"Jev\" (v5 2011.60; src 2441.52)",
+  "source": "on air (Nik names the model); TypeSafe is the company, Jev its model"
+}

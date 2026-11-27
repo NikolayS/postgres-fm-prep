@@ -1,0 +1,23 @@
+{
+  "id": "n05-ed-repack",
+  "outStart": 2262.8,
+  "duration": 12,
+  "dur": 12,
+  "file": "n05-ed-repack.mov",
+  "placement": "band",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/typing-2633ms.wav",
+      "at": 0.45,
+      "gain": 1
+    },
+    {
+      "file": "sfx/typing-2834ms.wav",
+      "at": 3.433,
+      "gain": 1
+    }
+  ],
+  "builder": "illus-1",
+  "source": "for-nik/85-verify-fact-findings.md S1; Editor's note"
+}

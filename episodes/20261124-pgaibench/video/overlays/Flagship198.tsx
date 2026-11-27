@@ -199,8 +199,7 @@ const L5Main: React.FC<{t: number; frame: number; fps: number; green: number; go
   const drain = ease(t, green + 0.1, 0.8);
   const passK = pop(frame, fps, green + 0.5);
   const goK = pop(frame, fps, go);
-  // wait counter climbs to the post's 0.75 s peak sampled wait, then the lock releases
-  const wait = interpolate(t, [1.3, green - 0.2], [0, 0.75], clamp);
+  // the post's 0.75 s peak sampled wait: shown as its final digits from the first frame (no count-up)
   const LW = 930;
   return (
     <>
@@ -230,7 +229,7 @@ const L5Main: React.FC<{t: number; frame: number; fps: number; green: number; go
         </div>
         <div style={{position: 'absolute', right: 24, top: 270, textAlign: 'right', opacity: Math.min(1, lockK) * (1 - ease(t, green, 0.3))}}>
           <div style={{fontSize: 32, color: DIM}}>queued, waiting</div>
-          <div style={{fontSize: 120, fontWeight: 800, color: AMBER, lineHeight: 1, fontVariantNumeric: 'tabular-nums'}}>{wait.toFixed(2)} s</div>
+          <div style={{fontSize: 120, fontWeight: 800, color: AMBER, lineHeight: 1, fontVariantNumeric: 'tabular-nums'}}>0.75 s</div>
           <div style={{fontSize: 30, color: DIM}}>peak sampled wait</div>
         </div>
         <div style={{position: 'absolute', left: 0, right: 0, top: 268, textAlign: 'center', opacity: Math.min(1, passK), transform: `scale(${interpolate(passK, [0, 1], [0.4, 1])})`}}>
@@ -261,8 +260,8 @@ const L5Main: React.FC<{t: number; frame: number; fps: number; green: number; go
 
 const L5Haiku: React.FC<{t: number; at: number}> = ({t, at}) => {
   const g = ease(t, at + 0.6, 1.0);
-  const v = 18.5 + (13.0 - 18.5) * g; // bar only
-  const shown = g < 1 ? 18.5 : 13.0; // on screen: only the post's two values
+  const v = 13.0 * g; // the telemetry bar grows 0 -> 13.0; no 18.5 label on it at any frame
+  const shown = 13.0;
   const BAR = 1300;
   return (
     <div style={{position: 'absolute', left: 60, top: 40, right: 60}}>

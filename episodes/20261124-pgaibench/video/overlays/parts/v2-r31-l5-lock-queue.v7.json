@@ -1,0 +1,39 @@
+{
+ "id": "v2-r31-l5-lock-queue",
+ "builder": "illus-2",
+ "freezeSec": 0,
+ "row": 31,
+ "file": "v2-r31-l5-lock-queue-v7.mov",
+ "outStart": 2755.26,
+ "dur": 17.84,
+ "duration": 17.84,
+ "placement": "center",
+ "sfx": [
+  {
+   "file": "sfx/center-in.wav",
+   "at": 0.05,
+   "gain": 1
+  },
+  {
+   "file": "sfx/accent.wav",
+   "at": 5.74,
+   "gain": 1
+  },
+  {
+   "file": "sfx/accent.wav",
+   "at": 8.12,
+   "gain": 1
+  },
+  {
+   "file": "sfx/center-out.wav",
+   "at": 17.46,
+   "gain": 0.7
+  }
+ ],
+ "words": "v5: Nik: \"being overconfident\" (2755.26) \"Weak models\" (2756.92) \"green light\" (2761.00) \"Oh, let's go\" (2763.38) \"Or they escalate too much\" (2764.48); Haiku beat 1.5 s after it so \"APPROVE 4 of 5\" holds 2.6 s",
+ "source": "https://postgres.ai/blog/20261123-pgaibench L5 (\"GLM flipped to approve in 4 of 5\", k=5); Track 2 matched-prompt table (Haiku 18.5% -> 13.0%, k=3)",
+ "accents": [
+  5.74,
+  8.12
+ ]
+}

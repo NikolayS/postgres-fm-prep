@@ -1,0 +1,23 @@
+{
+  "id": "n06-ed-onepass",
+  "outStart": 2407.6,
+  "duration": 9.52,
+  "dur": 9.52,
+  "file": "n06-ed-onepass.mov",
+  "placement": "band",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/typing-2000ms.wav",
+      "at": 0.45,
+      "gain": 1
+    },
+    {
+      "file": "sfx/typing-1267ms.wav",
+      "at": 2.8,
+      "gain": 1
+    }
+  ],
+  "builder": "illus-1",
+  "source": "for-nik/85-verify-fact-findings.md S2; Editor's note"
+}

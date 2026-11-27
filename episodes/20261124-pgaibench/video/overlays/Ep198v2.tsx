@@ -160,9 +160,9 @@ export const AaaFig: React.FC<AaaFigProps> = ({appear, focus, glow = [], tokens 
 
 // ====================== band motif: the AAA figure in miniature ======================
 // lit: which part is "you are here". Text types in at 30 chars/s from 0.45 s (bursts in items-v2.ts).
-export type MotifProps = {lines: string[]; lit: 'actor-prod' | 'auditor' | 'analyst' | 'auditor-q' | 'back' | 'all' | 'none'; durationSec: number; prefixLen?: number; lineAt?: number[]; hiWords?: string[]; strike?: {word: string; at: number}[]};
-export const motifPlan = (lines: string[], lineAt?: number[]) => {
-  let next = 0.45;
+export type MotifProps = {startAt?: number; lines: string[]; lit: 'actor-prod' | 'auditor' | 'analyst' | 'auditor-q' | 'back' | 'all' | 'none'; durationSec: number; prefixLen?: number; lineAt?: number[]; hiWords?: string[]; strike?: {word: string; at: number}[]};
+export const motifPlan = (lines: string[], lineAt?: number[], startAt = 0.45) => {
+  let next = startAt; // n02: 0.04, so the strip types on the spoken word
   return lines.map((l, i) => {
     const at = i === 0 ? next : Math.max(next, lineAt?.[i - 1] ?? 0);
     const end = at + l.length / 30;
@@ -170,14 +170,14 @@ export const motifPlan = (lines: string[], lineAt?: number[]) => {
     return {text: l, at, end};
   });
 };
-export const Motif198: React.FC<MotifProps> = ({lines, lit, prefixLen = 0, lineAt, hiWords = [], strike = []}) => {
+export const Motif198: React.FC<MotifProps> = ({lines, lit, prefixLen = 0, lineAt, hiWords = [], strike = [], startAt}) => {
   const frame = useCurrentFrame();
   const {fps, durationInFrames} = useVideoConfig();
   font();
   const t = frame / fps;
   const out = interpolate(frame, [durationInFrames - 0.25 * fps, durationInFrames], [1, 0], {extrapolateLeft: 'clamp'});
   const k = spring({frame, fps, config: {damping: 14, stiffness: 170, mass: 0.6}});
-  const plan = motifPlan(lines, lineAt);
+  const plan = motifPlan(lines, lineAt, startAt);
   const pulse = 0.55 + 0.45 * Math.sin(t * 5);
   // miniature of Figure 2: Analyst / Auditor on top, Actor bar, Clones / Production at the bottom
   const box = (x: number, y: number, w: number, h: number, l: string, on: boolean, hiStroke = false) => (
@@ -516,7 +516,7 @@ export const Funnel198: React.FC<FunnelProps> = ({b}) => {
           <div key={i} style={{position: 'absolute', left: 60, top: y, opacity: Math.min(1, g * 2)}}>
             <div style={{position: 'absolute', left: 0, top: 0, width: w, height: 80, background: r.c, borderRadius: 8}} />
             <div style={{position: 'absolute', left: w + 20, top: 0, whiteSpace: 'nowrap', display: 'flex', alignItems: 'baseline', gap: 18}}>
-              <span style={{fontSize: 70, fontWeight: 900, color: i === 3 ? RED : '#fff', fontVariantNumeric: 'tabular-nums'}}>{Math.round(r.n * g).toLocaleString('en-US')}</span>
+              <span style={{fontSize: 70, fontWeight: 900, color: i === 3 ? RED : '#fff', fontVariantNumeric: 'tabular-nums'}}>{r.n.toLocaleString('en-US')}</span>
               <span style={{fontSize: 36, color: DIM}}>{r.l}</span>
             </div>
           </div>
@@ -614,7 +614,7 @@ export const Board198: React.FC<Board198Props> = ({b}) => {
           <div key={i} style={{position: 'absolute', left: 16, top: y, width: PANEL198.w - 32, height: RH - 4, background: isF ? `rgba(255,77,79,${0.22 * fableHi})` : 'transparent', borderRadius: 8, opacity: a}}>
             <div style={{position: 'absolute', left: 20, top: 4, fontFamily: MONO, fontSize: 36, color: '#fff', fontWeight: isF ? 700 : 500}}>{r.m}</div>
             <div style={{position: 'absolute', left: BARX, top: 9, height: 32, width: w, background: i < 2 ? YEL : '#7f8aa3', borderRadius: 5}} />
-            <div style={{position: 'absolute', left: BARX + w + 12, top: 2, fontSize: 38, fontWeight: 900, color: i < 2 ? YEL : '#fff', fontVariantNumeric: 'tabular-nums'}}>{Math.round(r.correct * g)}</div>
+            <div style={{position: 'absolute', left: BARX + w + 12, top: 2, fontSize: 38, fontWeight: 900, color: i < 2 ? YEL : '#fff', fontVariantNumeric: 'tabular-nums'}}>{r.correct}</div>
             <div style={{position: 'absolute', left: HX - 16, top: 9, display: 'flex', gap: 7, alignItems: 'center'}}>
               {r.harm === 0 ? <span style={{fontSize: 34, color: 'rgba(255,255,255,0.4)', opacity: harmCol, lineHeight: '32px'}}>0</span> : Array.from({length: r.harm}, (_, j) => {
                 const s = pop(frame, b.harm + (isF ? 0 : 0.5) + j * 0.12, fps);

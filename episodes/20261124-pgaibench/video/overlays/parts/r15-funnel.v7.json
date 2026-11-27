@@ -1,0 +1,33 @@
+{
+ "id": "r15-funnel",
+ "row": 15,
+ "outStart": 1187.86,
+ "duration": 8,
+ "dur": 8,
+ "file": "r15-funnel-v7.mov",
+ "placement": "center",
+ "freezeSec": 0,
+ "sfx": [
+  {
+   "file": "sfx/center-in.wav",
+   "at": 0.05,
+   "gain": 1
+  },
+  {
+   "file": "sfx/accent.wav",
+   "at": 4,
+   "gain": 1
+  },
+  {
+   "file": "sfx/center-out.wav",
+   "at": 7.62,
+   "gain": 0.7
+  }
+ ],
+ "accents": [
+  4
+ ],
+ "source": "https://postgres.ai/blog/20261123-pgaibench (execution funnel: 949 episodes, 552 entered rehearsal, 408 on the live primary, 13 harmful = 3.2%)",
+ "words": "Nik: \"it's, it's not safe\" (1216.58); Kirk: \"It's being overly cautious\" (1224.46) ends it",
+ "builder": "illus-1"
+}

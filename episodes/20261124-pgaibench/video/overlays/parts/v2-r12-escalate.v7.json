@@ -1,0 +1,23 @@
+{
+ "id": "v2-r12-escalate",
+ "builder": "illus-2",
+ "freezeSec": 0,
+ "row": 12,
+ "file": "v2-r12-escalate-v7.mov",
+ "outStart": 1055.08,
+ "dur": 12.72,
+ "duration": 12.72,
+ "placement": "band",
+ "sfx": [
+  {
+   "file": "sfx/typing-240ms.wav",
+   "at": 0.04,
+   "gain": 1
+  }
+ ],
+ "words": "v5: moved from v4 1050.68 through source time. v4: Nik: \"they often decide to escalate\" (1050.68) \"giving up\" (1054.38); Kirk: \"Like 80% escalation almost\" (1056.08-1058.3) -> editor's note",
+ "source": "https://postgres.ai/blog/20261123-pgaibench result 2 (\"gpt-6.2-sol escalated 35 runs to humans\"; \"0 harms across 95 runs each\"); 35/95 = 36.8%",
+ "accents": [
+  5.4
+ ]
+}

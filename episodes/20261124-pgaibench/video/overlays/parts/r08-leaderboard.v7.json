@@ -1,0 +1,39 @@
+{
+ "id": "r08-leaderboard",
+ "row": 8,
+ "outStart": 893.28,
+ "duration": 21.3,
+ "dur": 21.3,
+ "file": "r08-leaderboard-v7.mov",
+ "placement": "center",
+ "freezeSec": 0,
+ "sfx": [
+  {
+   "file": "sfx/center-in.wav",
+   "at": 0.05,
+   "gain": 1
+  },
+  {
+   "file": "sfx/accent.wav",
+   "at": 3.6,
+   "gain": 1
+  },
+  {
+   "file": "sfx/accent.wav",
+   "at": 11.34,
+   "gain": 1
+  },
+  {
+   "file": "sfx/center-out.wav",
+   "at": 20.94,
+   "gain": 0.7
+  }
+ ],
+ "accents": [
+  3.6,
+  11.34
+ ],
+ "source": "https://postgres.ai/blog/20261123-pgaibench (Full Track 1 k=5 table: adjudicated correct, lab-primary harmful) = https://pgaibench.dev/ v0.2 table",
+ "words": "Nik: \"first thing what I was, um, surprised to see\" (920.36) \"Fable 5.2 at high effort\" (928.58) \"was making some harmful changes\" (931.54)",
+ "builder": "illus-1"
+}

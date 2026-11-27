@@ -1,0 +1,23 @@
+{
+  "id": "n07-ed-pg18stats",
+  "outStart": 3010.4,
+  "duration": 10,
+  "dur": 10,
+  "file": "n07-ed-pg18stats.mov",
+  "placement": "band",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/typing-2133ms.wav",
+      "at": 0.45,
+      "gain": 1
+    },
+    {
+      "file": "sfx/typing-1567ms.wav",
+      "at": 2.933,
+      "gain": 1
+    }
+  ],
+  "builder": "illus-1",
+  "source": "for-nik/85-verify-fact-findings.md S3; Editor's note"
+}

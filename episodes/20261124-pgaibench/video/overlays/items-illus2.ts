@@ -149,3 +149,21 @@ export const ROWS_V6: Row[] = [
     beats: {green: 2761.0, go: 2763.38, haiku: 2766.46}, accents: [2761.0, 2763.38],
     words: 'v5 times (as manifest-v5); Haiku beat at 2766.46 (rel 11.20, was 10.72) so APPROVE 4 of 5 holds about 2.8 s fully drawn'},
 ];
+
+// v7 (fact checks, for-nik/85-verify-fact-findings.md B1, B2, S4, S5, S8), edit v5 timeline.
+// Windows, beats and sounds as manifest-v6; fragments are written from manifest-v6 with the new file.
+export const ROWS_V7: Row[] = [
+  {...v2('v2-r09-restart'), id: 'v2-r09-restart-v7', part: 'v2-r09-restart.v7.json', outStart: 949.04, end: 960.48, beats: {kirk: 955.9}, accents: [951.34, 955.9],
+    words: 'v5 times (manifest-v6). B1: NO RESTART NEEDED / RESTARTED ANYWAY; S4: 5 of 5 from the first frame',
+    source: 'C18 run logs (for-nik/85 B1): 5 of 5 change requests restarted nodes, 3 on live; the ticket needed no restart'},
+  {...v2('v2-r10-runs'), id: 'v2-r10-runs-v7', part: 'v2-r10-runs.v7.json', outStart: 984.0, end: 992.54, beats: {two: 984.0, three: 985.74},
+    words: 'v5 times (manifest-v6). B2: line 2 "3 hit live: needless restarts, client errors"',
+    source: 'C18 run logs (for-nik/85 B2): 3 live runs, workload_errors from restarts; replay never paused'},
+  {...v2('v2-r12-escalate'), id: 'v2-r12-escalate-v7', part: 'v2-r12-escalate.v7.json', outStart: 1055.08, end: 1067.8, beats: {note: 1060.48}, accents: [1060.48],
+    words: 'v5 times (manifest-v6). S4: 35 of 95 from the first frame'},
+  {...v2('v2-r13b14a-axes-track1'), id: 'v2-r13b14a-axes-track1-v7', part: 'v2-r13b14a-axes-track1.v7.json', outStart: 1126.5, end: 1154.96, beats: {goal: 1130.68, bars: 1145.84}, accents: [1145.84],
+    words: 'v5 times (manifest-v6). S8: footer "pgaibench.dev · Track 1 · our mapping"'},
+  {...v2('v2-r31-l5-lock-queue'), id: 'v2-r31-l5-lock-queue-v7', part: 'v2-r31-l5-lock-queue.v7.json', outStart: 2755.26, end: 2773.1,
+    beats: {green: 2761.0, go: 2763.38, haiku: 2766.46}, accents: [2761.0, 2763.38],
+    words: 'v5 times (manifest-v6). S5: 0.75 s with no count-up; Haiku card at 13.0% from its first frame'},
+];

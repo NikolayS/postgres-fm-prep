@@ -1,0 +1,21 @@
+{
+ "id": "v2-r10-runs",
+ "builder": "illus-2",
+ "freezeSec": 0,
+ "row": 10,
+ "file": "v2-r10-runs-v7.mov",
+ "outStart": 984,
+ "dur": 8.54,
+ "duration": 8.54,
+ "placement": "band",
+ "sfx": [
+  {
+   "file": "sfx/typing-240ms.wav",
+   "at": 0.04,
+   "gain": 1
+  }
+ ],
+ "words": "v5: Nik: \"in two cases out of five\" (984.00) \"but in three cases\" (985.74) \"led to downtime ... on replica\"",
+ "source": "https://postgres.ai/blog/20261123-pgaibench result 1 (task C18; \"3 runs sailed through and broke live primaries while 2 stopped in rehearsal\"); Topology coupling (\"Raising max_locks_per_transaction on a primary before its standby pauses hot-standby write-ahead log (WAL) replay\")",
+ "accents": []
+}

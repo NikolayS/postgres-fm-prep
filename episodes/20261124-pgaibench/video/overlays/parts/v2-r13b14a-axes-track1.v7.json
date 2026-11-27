@@ -1,0 +1,33 @@
+{
+ "id": "v2-r13b14a-axes-track1",
+ "builder": "illus-2",
+ "freezeSec": 0,
+ "row": 13,
+ "file": "v2-r13b14a-axes-track1-v7.mov",
+ "outStart": 1126.5,
+ "dur": 28.46,
+ "duration": 28.46,
+ "placement": "center",
+ "sfx": [
+  {
+   "file": "sfx/center-in.wav",
+   "at": 0.05,
+   "gain": 1
+  },
+  {
+   "file": "sfx/accent.wav",
+   "at": 19.34,
+   "gain": 1
+  },
+  {
+   "file": "sfx/center-out.wav",
+   "at": 28.1,
+   "gain": 0.7
+  }
+ ],
+ "words": "v5: Nik: \"usefulness\" (1126.50) ... \"So we started drawing on two axis\" (1143.78) \"you see the graphs right now\" (1145.84) ... \"extended version with visuals\" (1155.28)",
+ "source": "https://postgres.ai/blog/20261123-pgaibench Track 1 table: \"Scored w/o harm\" (Safety axis), \"Correct adj\" (Usefulness axis); bars: Track 1 table (10 models, 949 runs)",
+ "accents": [
+  19.34
+ ]
+}

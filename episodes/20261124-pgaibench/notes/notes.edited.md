@@ -21,7 +21,7 @@ Here are some links to things they mentioned:
 - [07:44] PGAIBench source, data and prompts (Apache 2.0): https://github.com/NikolayS/pgaibench
 
 ### PGAIBench
-- [10:52] The tasks (public catalog): https://pgaibench.dev/scenarios/
+- [10:52] v0.2 tasks and replays: https://pgaibench.dev/replay/
 - [31:59] AAA and Track 2 (AI Control) results: https://pgaibench.dev/control/
 - [48:35] Related work map (DBA-Bench, SWE-bench and others): https://pgaibench.dev/related-work/
 - [48:35] DBA-Bench (arXiv): https://arxiv.org/abs/2607.22165
@@ -59,11 +59,14 @@ Checked against the post (https://postgres.ai/blog/20261123-pgaibench) after rec
 
 - [10:55] PGAIBench v0.2 has 19 live scenarios (14 core, 2 exploratory, 3 held-out); on air we say 18.
 - [12:07] The standby did not crash: in the index-drop task its query p99 got 18.0x slower (2.91 to 52.58 ms).
+- [15:54] The C18 ticket did not say "do not restart" (also in the cold open). The rule was implicit: only a restart the task cannot be done without is excused. This task needed none.
+- [16:25, 20:34] In C18 Fable restarted the standby first, as it should. Replay never paused. The harm was the unneeded restarts: client errors on both nodes, about 3 s per restart.
 - [17:08] The setting is max_locks_per_transaction ("max slots per transaction" on air).
-- [17:40] No model escalated 80% of runs: gpt-6.2-sol escalated 35 of 95 runs to a human (37%).
+- [17:39] In v0.2, nine of ten models escalated 21 to 35 of 95 runs. The most, 35, was gpt-6.2-sol (37%); no model escalated 80%. There was no clear link to model strength.
 - [25:11] The deterministic clone gate alone stopped 6 of 13 live harms (46.2%), a bit less than half. It halts the change; it does not send test results back to the model.
-- [37:41] A session that waits for a lock is active (wait event Lock), not idle in transaction: limit lock waits with lock_timeout, or pg_repack --wait-timeout.
+- [37:41] Two limits apply. A lock wait is active: lock_timeout or pg_repack --wait-timeout limits it. During the long copy, pg_repack's second connection is idle in transaction, so a short idle_in_transaction_session_timeout can kill the run.
 - [40:28] The AAA result (13 harms down to 1) is a replay: the 408 recorded primary changes were replayed offline through the clone gate and the Auditor (in-sample). It was not a second live run. In v0.2 the Analyst and Auditor ran tool-free; revise loops are planned (Track 3).
+- [49:55] True for upgrades to Postgres 17 and older, and for dump/restore or logical replication. Since Postgres 18, pg_upgrade keeps most optimizer statistics, but not extended statistics: run vacuumdb --all --analyze-in-stages --missing-stats-only, then vacuumdb --all --analyze-only.
 
 What did you like or not like? What should we discuss next time? Let us know via a YouTube comment, on social media (https://postgres.fm/people), or by commenting on our Google doc (https://docs.google.com/document/d/1PNGSn_d0A7gTR4C0p6geQyHOTgdpitKCRvafCNnT-44/edit#heading=h.v4ncheatetql)!
 
@@ -86,7 +89,7 @@ With credit to:
 | --- | --- | --- |
 | Blog post | 07:44 "I created this benchmark called PG AI Bench" | 200, numbers below match it |
 | pgaibench.dev, GitHub | 07:44 | 200 |
-| Scenarios | 10:52 "those tasks ... very properly chosen" | 200 |
+| v0.2 tasks and replays | 10:52 "those tasks ... very properly chosen" | 200 (has the C18 v0.2 tickets) |
 | Control | 31:59 "three As, triple A, AAA" | 200 |
 | Related work, DBA-Bench, SWE-bench | 48:35 "I learned from other benchmarks, like DBA bench ... SWE bench" | 200 |
 | SRE book | 06:57 "proper change request workflow, like from Google SRE books" | 200 |

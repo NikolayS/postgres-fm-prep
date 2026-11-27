@@ -1,0 +1,25 @@
+{
+  "id": "r27-triangle",
+  "row": 27,
+  "outStart": 2490.9,
+  "duration": 11,
+  "dur": 11,
+  "file": "r27-triangle-v7.mov",
+  "placement": "center",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/center-in.wav",
+      "at": 0.05,
+      "gain": 1
+    },
+    {
+      "file": "sfx/center-out.wav",
+      "at": 10.62,
+      "gain": 0.7
+    }
+  ],
+  "source": "on air (Nik); https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D; Practical rules: DBLab Engine branching, DBLab Forge dedicated environments, postgres_ai monitoring)",
+  "words": "Nik: \"triangle works really well\" (2571.32) \"equipped with proper\" (2573.32) \"branching\" (2575.72) \"dedicated\" (2577.86) \"all the telemetry\" (2580.28)",
+  "builder": "illus-1"
+}

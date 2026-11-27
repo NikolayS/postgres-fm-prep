@@ -1,0 +1,26 @@
+{
+  "id": "r28c-replay-note",
+  "row": 28,
+  "outStart": 2431.2,
+  "duration": 10,
+  "dur": 10,
+  "file": "r28c-replay-note-v7.mov",
+  "placement": "band",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/typing-2067ms.wav",
+      "at": 0.45,
+      "gain": 1
+    },
+    {
+      "file": "sfx/typing-1833ms.wav",
+      "at": 2.867,
+      "gain": 1
+    }
+  ],
+  "source": "https://postgres.ai/blog/20261123-pgaibench (replay finding 1: \"When we replayed the models' primary changes through AAA (retrospective and in-sample) ... blocked 12 of 13 measured harms (-92.3%)\"; \"We replayed all 408 scored Track 1 primary CRs offline through both AAA gates using their recorded rehearsal telemetry\")",
+  "words": "Kirk: \"different actor to run it in production\" (2506.82); Nik: \"Yes.\" (2508.52)",
+  "builder": "illus-1",
+  "vetoable": "Editor's note: on air Kirk asks \"Did it then tell a different actor to run it in production?\" and Nik says \"Yes.\"; the post: \"We replayed all 408 scored Track 1 primary CRs offline through both AAA gates\" (retrospective and in-sample)"
+}

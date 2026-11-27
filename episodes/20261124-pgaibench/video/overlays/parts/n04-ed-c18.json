@@ -1,0 +1,23 @@
+{
+  "id": "n04-ed-c18",
+  "outStart": 961,
+  "duration": 12,
+  "dur": 12,
+  "file": "n04-ed-c18.mov",
+  "placement": "band",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/typing-2600ms.wav",
+      "at": 0.45,
+      "gain": 1
+    },
+    {
+      "file": "sfx/typing-2767ms.wav",
+      "at": 3.4,
+      "gain": 1
+    }
+  ],
+  "builder": "illus-1",
+  "source": "for-nik/85-verify-fact-findings.md B1, B2; Editor's note"
+}

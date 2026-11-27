@@ -95,7 +95,7 @@ export const R05Baseline: React.FC<{durationSec: number; beats: {slot: At}}> = (
   );
 };
 
-// ---------- row 9: told not to restart; restarted 5 of 5 (center)
+// ---------- row 9: no restart needed; restarted anyway in 5 of 5 change requests, 3 on live (center)
 export const R09Restart: React.FC<{durationSec: number; beats: {kirk: At}}> = ({beats}) => {
   const {t, frame, fps} = useT();
   const hits = Math.min(5, Math.floor(interpolate(t, [0.5, 2.3], [0, 5.01], clamp)));
@@ -106,15 +106,15 @@ export const R09Restart: React.FC<{durationSec: number; beats: {kirk: At}}> = ({
     <Shell>
       <div style={{position: 'absolute', left: 80, top: 60, width: 420, height: 500, borderRadius: 18, background: '#2a2a31', border: '4px solid rgba(255,255,255,0.25)', transform: `translateX(${Math.sin(frame * 3) * jolt * 10}px)`}}>
         {[0, 1, 2, 3, 4].map((i) => <div key={i} style={{position: 'absolute', left: 30, right: 30, top: 40 + i * 90, height: 60, borderRadius: 8, background: 'rgba(255,255,255,0.08)', display: 'flex', alignItems: 'center', paddingLeft: 20}}><div style={{width: 18, height: 18, borderRadius: 9, background: i < hits ? RED : GREEN}} /></div>)}
-        <div style={{position: 'absolute', left: 60, top: 130, width: 300, padding: '18px 10px', background: '#fde047', color: '#111', fontSize: 52, fontWeight: 900, lineHeight: 1.0, textAlign: 'center', transform: `rotate(${-5 + jolt * 4}deg)`, boxShadow: '0 8px 20px rgba(0,0,0,0.4)'}}>DO NOT RESTART</div>
-        <div style={{position: 'absolute', left: 30, top: 330}}><Stamp text="IGNORED" color={RED} k={kirkK} size={72} rot={-12} style={{position: 'relative'}} /></div>
+        <div style={{position: 'absolute', left: 60, top: 130, width: 300, padding: '18px 10px', background: '#fde047', color: '#111', fontSize: 52, fontWeight: 900, lineHeight: 1.0, textAlign: 'center', transform: `rotate(${-5 + jolt * 4}deg)`, boxShadow: '0 8px 20px rgba(0,0,0,0.4)'}}>NO RESTART NEEDED</div>
+        <div style={{position: 'absolute', left: -6, top: 340}}><Stamp text="RESTARTED ANYWAY" color={RED} k={kirkK} size={38} rot={-10} style={{position: 'relative'}} /></div>
       </div>
       <div style={{position: 'absolute', left: 580, top: 70}}>
         <div style={{display: 'flex', gap: 14}}>
           {[0, 1, 2, 3, 4].map((i) => <svg key={i} width={96} height={96} viewBox="0 0 96 96" style={{transform: `rotate(${i < hits ? Math.min(1, (t - 0.5 - i * 0.45) / 0.4) * 360 : 0}deg)`}}><path d="M78 48 A30 30 0 1 1 64 22" stroke={i < hits ? RED : 'rgba(255,255,255,0.15)'} strokeWidth={10} fill="none" strokeLinecap="round" /><path d="M54 8 L72 22 L52 32 Z" fill={i < hits ? RED : 'rgba(255,255,255,0.15)'} /></svg>)}
         </div>
-        <div style={{fontSize: 230, fontWeight: 800, color: RED, lineHeight: 1.0, marginTop: 10}}>{hits} of 5</div>
-        <div style={{fontSize: 44, fontWeight: 700, marginTop: 8}}>runs restarted the nodes</div>
+        <div style={{fontSize: 230, fontWeight: 800, color: RED, lineHeight: 1.0, marginTop: 10, opacity: ease(t, 0.3, 0.4)}}>5 of 5</div>
+        <div style={{fontSize: 34, fontWeight: 700, marginTop: 8, whiteSpace: 'nowrap'}}>5 of 5 change requests restarted nodes · 3 on live</div>
         <div style={{fontFamily: MONO, fontSize: 32, color: DIM, marginTop: 10}}>claude-fable-5.2 · task C18</div>
       </div>
       <SourceLine text="pgaibench.dev · Track 1, task C18" />
@@ -128,14 +128,14 @@ export const R10Runs: React.FC<{durationSec: number; beats: {two: At; three: At}
   const tile = (i: number) => {
     const amber = i < 2;
     const k = ease(t, amber ? beats.two.at + i * 0.2 : beats.three.at + (i - 2) * 0.2, 0.3);
-    return <div key={i} style={{width: 96, height: 96, borderRadius: 12, background: k > 0 ? (amber ? AMBER : RED) : 'rgba(255,255,255,0.12)', opacity: 0.35 + 0.65 * k, transform: `scale(${0.85 + 0.15 * k})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 66, fontWeight: 900, color: '#111'}}>{k > 0 ? (amber ? '■' : '✕') : ''}</div>;
+    return <div key={i} style={{width: 72, height: 72, borderRadius: 10, background: k > 0 ? (amber ? AMBER : RED) : 'rgba(255,255,255,0.12)', opacity: 0.35 + 0.65 * k, transform: `scale(${0.85 + 0.15 * k})`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 50, fontWeight: 900, color: '#111'}}>{k > 0 ? (amber ? '■' : '✕') : ''}</div>;
   };
   return (
     <BandShell>
-      <div style={{display: 'flex', gap: 12}}>{[0, 1, 2, 3, 4].map(tile)}</div>
+      <div style={{display: 'flex', gap: 8}}>{[0, 1, 2, 3, 4].map(tile)}</div>
       <div>
-        <div style={{fontSize: 50, fontWeight: 800, color: AMBER, opacity: ease(t, beats.two.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.1}}><span style={{fontFamily: MONO, fontSize: 40, color: DIM}}>task C18 · </span>2 stopped in rehearsal</div>
-        <div style={{fontSize: 50, fontWeight: 800, color: RED, opacity: ease(t, beats.three.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.1}}>3 hit live: standby replay paused</div>
+        <div style={{fontSize: 42, fontWeight: 800, color: AMBER, opacity: ease(t, beats.two.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.15}}><span style={{fontFamily: MONO, fontSize: 34, color: DIM}}>task C18 · </span>2 stopped in rehearsal</div>
+        <div style={{fontSize: 42, fontWeight: 800, color: RED, opacity: ease(t, beats.three.at, 0.3), whiteSpace: 'nowrap', lineHeight: 1.15}}>3 hit live: needless restarts, client errors</div>
       </div>
     </BandShell>
   );
@@ -170,13 +170,12 @@ export const R11Locks: React.FC<{durationSec: number; beats: {replicas: At; prim
 // ---------- row 12: escalated to a human, 35 of 95; editor's note on the on-air "80%" (band)
 export const R12Esc: React.FC<{durationSec: number; beats?: {note?: At}}> = ({beats}) => {
   const {t} = useT();
-  const lit = Math.round(interpolate(t, [0.4, 1.6], [0, 35], clamp));
   const noteAt = beats?.note?.at ?? 1e9;
   const n = ease(t, noteAt, 0.35);
   return (
     <BandShell>
       <div style={{position: 'absolute', left: 28, right: 28, top: 0, bottom: 0, display: 'flex', alignItems: 'center', gap: 28, opacity: 1 - n}}>
-        <div style={{fontSize: 124, fontWeight: 800, color: AMBER, lineHeight: 1, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums'}}>{lit}<span style={{fontSize: 64, color: DIM}}> of 95</span></div>
+        <div style={{fontSize: 124, fontWeight: 800, color: AMBER, lineHeight: 1, whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums'}}>35<span style={{fontSize: 64, color: DIM}}> of 95</span></div>
         <div>
           <div style={{fontSize: 56, fontWeight: 800, whiteSpace: 'nowrap', lineHeight: 1.1}}>runs escalated to a human</div>
           <div style={{fontFamily: MONO, fontSize: 44, color: DIM}}>gpt-6.2-sol</div>
@@ -280,7 +279,7 @@ export const R13Axes14: React.FC<{durationSec: number; beats: {goal: At; bars: A
         </div>
       </div>
       {sw > 0 ? <div style={{position: 'absolute', inset: 0, opacity: sw}}><Track1Bars t={t} at={beats.bars.at} /></div> : null}
-      <SourceLine text={t < beats.bars.at ? 'pgaibench.dev · Safety vs. Usefulness' : 'pgaibench.dev · Track 1, Figure 1'} />
+      <SourceLine text={t < beats.bars.at ? 'pgaibench.dev · Track 1 · our mapping' : 'pgaibench.dev · Track 1, Figure 1'} />
     </Shell>
   );
 };

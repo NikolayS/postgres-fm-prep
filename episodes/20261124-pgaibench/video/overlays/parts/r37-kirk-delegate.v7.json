@@ -1,0 +1,25 @@
+{
+  "id": "r37-kirk-delegate",
+  "row": 37,
+  "outStart": 3030.8,
+  "duration": 8.2,
+  "dur": 8.2,
+  "file": "r37-kirk-delegate-v7.mov",
+  "placement": "center",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/center-in.wav",
+      "at": 0.05,
+      "gain": 1
+    },
+    {
+      "file": "sfx/center-out.wav",
+      "at": 7.82,
+      "gain": 0.7
+    }
+  ],
+  "source": "on air (Kirk), his exact words; scene: https://postgres.ai/blog/20261123-pgaibench hero (AaaPipeline3D)",
+  "words": "Kirk: \"responsibility we can safely delegate\" (3120.87) \"not simply how intelligent the AI is\" (3123.53)",
+  "builder": "illus-1"
+}

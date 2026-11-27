@@ -98,7 +98,9 @@ const ScopeTag: React.FC<{f: number; g: G; bold: boolean}> = ({f, g, bold}) => {
 };
 
 // DO NOT RESTART: a big red button with a hazard frame; it goes down just before "Yeah."
-const Button: React.FC<{f: number; g: G; bold: boolean}> = ({f, g, bold}) => {
+// sign: optional text (fact-check variant "NO RESTART NEEDED": the task needed no restart; the ticket never
+// said "do not restart"). The font shrinks so a longer text fits the same button.
+const Button: React.FC<{f: number; g: G; bold: boolean; sign?: string}> = ({f, g, bold, sign = 'DO NOT RESTART'}) => {
   if (f < W.doNot || f >= S[4]) return null;
   const {z, FT, H} = g, w = 1040 * z, h = 220 * z;
   const p = pop(f, W.doNot, 8, 240), down = f >= PRESS ? Math.min(1, (f - PRESS + 1) / 2) : 0;
@@ -106,7 +108,7 @@ const Button: React.FC<{f: number; g: G; bold: boolean}> = ({f, g, bold}) => {
   return (
     <div style={{position: 'absolute', left: 960 - w / 2, top: FT + (H - h) / 2, width: w, height: h, transform: `scale(${bold ? 2 - p : 0.3 + 0.7 * p})`, opacity: Math.min(1, p * 2)}}>
       <div style={{position: 'absolute', inset: 0, borderRadius: 44 * z, background: 'repeating-linear-gradient(45deg,#ffd400 0 30px,#1d1d1d 30px 60px)', boxShadow: `0 ${16 * z}px 40px rgba(0,0,0,.3)`}} />
-      <div style={{position: 'absolute', left: 30 * z, right: 30 * z, top: (22 + 20 * down) * z, bottom: (22 - 6 * down) * z, borderRadius: 30 * z, background: RED, boxShadow: `0 ${(18 - 16 * down) * z}px 0 ${DARK}, inset 0 ${8 * z}px 0 rgba(255,255,255,.35), 0 0 ${80 * glow}px ${30 * glow}px rgba(255,60,60,${0.8 * glow})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: font, fontWeight: 900, fontSize: 96 * z, letterSpacing: 4 * z}}>DO NOT RESTART</div>
+      <div style={{position: 'absolute', left: 30 * z, right: 30 * z, top: (22 + 20 * down) * z, bottom: (22 - 6 * down) * z, borderRadius: 30 * z, background: RED, boxShadow: `0 ${(18 - 16 * down) * z}px 0 ${DARK}, inset 0 ${8 * z}px 0 rgba(255,255,255,.35), 0 0 ${80 * glow}px ${30 * glow}px rgba(255,60,60,${0.8 * glow})`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontFamily: font, fontWeight: 900, fontSize: 96 * z * Math.min(1, 14 / sign.length), letterSpacing: 4 * z, whiteSpace: 'nowrap'}}>{sign}</div>
     </div>
   );
 };
@@ -155,7 +157,7 @@ const Terminal: React.FC<{f: number}> = ({f}) => {
   );
 };
 
-export const Dyn: React.FC<{variant: Variant}> = ({variant: v}) => {
+export const Dyn: React.FC<{variant: Variant; sign?: string}> = ({variant: v, sign}) => {
   useFonts();
   const f = useCurrentFrame();
   if (v === 'restrained') return <DynSmall variant={v} />;
@@ -199,7 +201,7 @@ export const Dyn: React.FC<{variant: Variant}> = ({variant: v}) => {
             <Safe f={f} g={g} bold={bold} />
             <Stamps f={f} g={g} bold={bold} />
             <ScopeTag f={f} g={g} bold={bold} />
-            <Button f={f} g={g} bold={bold} />
+            <Button f={f} g={g} bold={bold} sign={sign} />
             <Errors f={f} g={g} bold={bold} />
           </div>
         </AbsoluteFill>

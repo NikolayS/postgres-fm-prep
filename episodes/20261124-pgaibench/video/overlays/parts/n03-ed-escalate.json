@@ -1,0 +1,23 @@
+{
+  "id": "n03-ed-escalate",
+  "outStart": 940,
+  "duration": 8.8,
+  "dur": 8.8,
+  "file": "n03-ed-escalate.mov",
+  "placement": "band",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/typing-1694ms.wav",
+      "at": 0.04,
+      "gain": 1
+    },
+    {
+      "file": "sfx/typing-1223ms.wav",
+      "at": 2.084,
+      "gain": 1
+    }
+  ],
+  "builder": "illus-1",
+  "source": "for-nik/85-verify-fact-findings.md S7; Editor's note"
+}
