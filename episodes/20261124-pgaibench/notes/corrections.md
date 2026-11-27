@@ -9,7 +9,7 @@ Draft, 2026-11-25, for Nik's approval. Source of truth: the post https://postgre
 | 10:55 | Nik | "now it's, like, 18 tasks" (also 13:18 "those 18 cases", 45:05, Kirk 45:16 "these 18 tests") | "10 unquantized models across 19 live scenarios"; "14 core public tasks, 2 exploratory tasks ..., and 3 held-out tasks" | Scenario card: 19, with an Editor's note line |
 | 12:07 | Kirk | "now your read replica crashes because nothing's finishing" | Async standby query q20 client p99 "spikes 18.0x (2.91 to 52.58 ms)" | L9 split card: 18.0x slower |
 | 16:27 | Nik | "in three cases it led to downtime on, on replica" | "Three runs broke live primaries" (C18); the restart was on the primary, the effect on the standby | Strip worded to match both |
-| 17:08 | Nik | "Max slots per transaction is one of them" | max_locks_per_transaction | Card shows max_locks_per_transaction |
+| 17:08 | Nik | "max_locks_per_transaction is one of them" | none: Nik said max_locks_per_transaction; "max slots" was a transcription error (fixed in the captions, 2026-11-27) | Card shows max_locks_per_transaction |
 | 17:40 | Kirk, Nik | "Like 80% escalation almost, right?" / "Yeah" | "gpt-6.2-sol escalated 35 runs to humans" (of 95); no 80% | Escalation strip with an Editor's note |
 | 25:11 | Nik | "it removed half of harm- harmful actions" ... "from giving the results of testing back to AI" | "Clone gate ($0 LLM): stopped 6 of 13 harms (46.2%)"; the gate halts the change | Clone-gate card: 6 of 13 |
 | 37:41 | Nik | pg_repack lock waits and "idle in transaction session timeout" | (Postgres docs) a session waiting for a lock is active, wait event Lock; lock_timeout or pg_repack --wait-timeout limit it | none |

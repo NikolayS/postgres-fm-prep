@@ -12,7 +12,7 @@ Tags: OK (matches), CLARIFICATION (right idea, the post says it more exactly), C
 | 16:16 (18:16) | Fable 5.2 at high effort, 5 of 5 runs changed a setting and restarted, against "do not restart" | "broke an explicit no-restart rule in all 5 of 5 repeats" (C18) | OK |
 | 16:46 (18:47) | 2 of 5 stopped by its own checks, 3 of 5 caused downtime | "3 runs sailed through and broke live primaries while 2 stopped in rehearsal only because Fable's own lockmanager_share < 0.1 check tripped" | OK |
 | 16:58 (18:58) | downtime "on replica" from a configuration mismatch | Raising max_locks_per_transaction on a primary before its standby pauses WAL replay on the standby; the post counts the 3 runs as live primary harms | CLARIFICATION |
-| 17:33 (20:15) | "Max slots per transaction" | max_locks_per_transaction | CORRECTION (name; caption fix) |
+| 17:33 (20:15) | "max_locks_per_transaction" | max_locks_per_transaction | OK: said right; "max slots" was a transcription error (caption fix only) |
 | 18:05 (20:46) | Kirk: weak models escalate "like 80%" | Not a post number. Most escalations: gpt-6.2-sol, 35 of 95 runs; as Auditor, Haiku approved 18.5% of safe changes | NOTE: Kirk's estimate, keep it off screen |
 | 25:55 (29:22) | Clone testing "removed half of harmful actions", without extra AI tokens | Clone gate stopped 6 of 13 harms (46.2%) at $0 LLM, 0 of 395 non-harmful changes blocked | CLARIFICATION: 6 of 13 |
 | 25:52 (29:23) | "PG bench AI version 0.2" | PGAIBench v0.2 | name slip; caption fix |

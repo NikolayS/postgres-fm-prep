@@ -32,7 +32,6 @@ Corrections (checked after recording against the post, the v0.2 run logs and the
 * (12:07) The standby did not crash: its query p99 got 18.0x slower (2.91 to 52.58 ms).
 * (15:54) The C18 ticket did not say "do not restart" (also in the cold open); the rule was implicit.
 * (16:26, 17:09, 20:35) Fable restarted the standby first, and replay never paused. The harm was the unneeded restarts.
-* (17:08) The setting is max_locks_per_transaction ("max slots" on air).
 * (17:39) Nine of ten models escalated 21 to 35 of 95 runs; none came near 80%.
 * (25:11) The clone gate stopped 6 of 13 harms (46.2%); it does not send test results back to the model.
 * (37:41) pg_repack: lock_timeout limits the lock wait; --wait-timeout cancels, then terminates the conflicting queries.

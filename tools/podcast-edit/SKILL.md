@@ -262,6 +262,7 @@ bun $S/subtitles.ts build src.words.json --audio-map podcast.time-map.json \
 bun $S/subtitles.ts check final.srt --map final.time-map.json  # caption rules report
 bun $S/subtitles.ts transcript-txt podcast.transcript.md --out podcast.transcript.txt  # website transcript
 bun $S/subtitles.ts qa final final.mp4 --source src.m4a --n 10  # spot check by ear and by audio match
+bun $S/qa/captions-audio.ts final.cues.json --media final.mp4 --fixes fixes.json --glossary prompt.txt  # every cue vs the whole audio
 bun test tests/subtitles.test.ts                          # golden files, round trip
 ```
 

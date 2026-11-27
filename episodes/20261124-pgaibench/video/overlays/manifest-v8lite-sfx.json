@@ -103,8 +103,8 @@
           "gain": 1
         }
       ],
-      "words": "v5: moved from v3 1025.92 through source time. Nik: \"Max slots per transaction is one of them\" (1053.76) \"First you need to adjust replicas, restarts on them\" (1057.84) \"and then on the primary\" (1061.06)",
-      "source": "https://www.postgresql.org/docs/18/runtime-config-locks.html#GUC-MAX-LOCKS-PER-TRANSACTION (quoted sentence); post \"Topology coupling\"; on air \"max slots per transaction\" = max_locks_per_transaction",
+      "words": "v5: moved from v3 1025.92 through source time. Nik: \"max_locks_per_transaction is one of them\" (1053.76) \"First you need to adjust replicas, restarts on them\" (1057.84) \"and then on the primary\" (1061.06)",
+      "source": "https://www.postgresql.org/docs/18/runtime-config-locks.html#GUC-MAX-LOCKS-PER-TRANSACTION (quoted sentence); post \"Topology coupling\"",
       "accents": [
         4.08,
         7.3

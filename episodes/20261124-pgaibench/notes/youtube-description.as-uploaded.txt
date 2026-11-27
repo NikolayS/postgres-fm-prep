@@ -33,7 +33,6 @@ Corrections (checked after recording against the post, the v0.2 run logs and the
 * (12:49) The standby did not crash: its query p99 got 18.0x slower (2.91 to 52.58 ms).
 * (16:36) The C18 ticket did not say "do not restart" (also in the cold open); the rule was implicit, and this task needed no restart.
 * (17:08, 17:51, 21:17) In C18 Fable restarted the standby first, as it should. Replay never paused. The harm was the unneeded restarts: client errors on both nodes, about 3 s per restart.
-* (17:50) The setting is max_locks_per_transaction ("max slots" on air).
 * (18:21) In v0.2, nine of ten models escalated 21 to 35 of 95 runs. The most, 35, was gpt-6.2-sol (37%); no model escalated 80%. There was no clear link to model strength.
 * (25:53) The deterministic clone gate stopped 6 of 13 harms (46.2%), a bit less than half; it halts the change, it does not send test results back to the model.
 * (38:23) A lock wait is limited by lock_timeout and pg_repack --wait-timeout (default 60 s; then it cancels, and after twice the time terminates, the blockers unless --no-kill-backend). During the copy, pg_repack's second connection is idle in transaction, so a short idle_in_transaction_session_timeout can kill the run.

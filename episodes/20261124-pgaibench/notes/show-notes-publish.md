@@ -58,7 +58,6 @@ Checked after recording against the post (https://postgres.ai/blog/20261123-pgai
 - [12:24] The standby did not crash: in the index-drop task its query p99 got 18.0x slower (2.91 to 52.58 ms).
 - [16:11] The C18 ticket did not say "do not restart" (also in the cold open). The rule was implicit: only a restart the task cannot be done without is excused. This task needed none.
 - [16:43, 17:26, 20:52] In C18 Fable restarted the standby first, as it should. Replay never paused. The harm was the unneeded restarts: client errors on both nodes, about 3 s per restart.
-- [17:25] The setting is max_locks_per_transaction ("max slots per transaction" on air).
 - [17:56] In v0.2, nine of ten models escalated 21 to 35 of 95 runs. The most, 35, was gpt-6.2-sol (37%); no model escalated 80%. There was no clear link to model strength.
 - [25:28] The deterministic clone gate alone stopped 6 of 13 live harms (46.2%), a bit less than half. It halts the change; it does not send test results back to the model.
 - [37:58] Two limits apply. A lock wait is active, so lock_timeout limits it. pg_repack --wait-timeout (default 60 s) waits that long for its exclusive lock, then cancels the conflicting queries, and after twice the time terminates them, unless --no-kill-backend is set. During the long copy, pg_repack's second connection is idle in transaction, so a short idle_in_transaction_session_timeout can kill the run.
