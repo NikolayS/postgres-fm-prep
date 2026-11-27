@@ -108,7 +108,7 @@ export function revealBursts(frames: Uint8Array[], W: number, H: number, fps: nu
 export async function measureReveal(file: string, win = 3): Promise<Burst[]> {
   const p = (await $`ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate,width,height -of json ${file}`.json()) as { streams: { r_frame_rate: string; width: number; height: number }[] };
   const [a, b] = p.streams[0].r_frame_rate.split("/").map(Number), W = Math.round(p.streams[0].width / 4), H = Math.round(p.streams[0].height / 4);
-  const raw = new Uint8Array(await $`ffmpeg -v error -t ${win} -i ${file} -vf alphaextract,scale=${W}:${H}:flags=area,format=gray -f rawvideo -`.arrayBuffer());
+  const raw = new Uint8Array(await $`ffmpeg -nostdin -v error -t ${win} -i ${file} -vf alphaextract,scale=${W}:${H}:flags=area,format=gray -f rawvideo -`.arrayBuffer());
   const frames: Uint8Array[] = [];
   for (let i = 0; (i + 1) * W * H <= raw.length; i++) frames.push(raw.subarray(i * W * H, (i + 1) * W * H));
   // A line that pops in at once still gets a short typing burst.
@@ -123,7 +123,7 @@ export async function measureExit(file: string, win = 4): Promise<number> {
   // Start on a frame boundary so frame i is at t0 + i / fps (ProRes is intra-only: exact seek).
   const t0 = Math.max(0, Math.floor((D - win) * fps) / fps);
   const W = 64, H = 36;
-  const raw = new Uint8Array(await $`ffmpeg -v error -ss ${t0.toFixed(4)} -i ${file} -vf alphaextract,scale=${W}:${H}:flags=area,format=gray -f rawvideo -`.arrayBuffer());
+  const raw = new Uint8Array(await $`ffmpeg -nostdin -v error -ss ${t0.toFixed(4)} -i ${file} -vf alphaextract,scale=${W}:${H}:flags=area,format=gray -f rawvideo -`.arrayBuffer());
   const alpha: number[] = [];
   for (let i = 0; (i + 1) * W * H <= raw.length; i++) {
     let s = 0;
@@ -135,7 +135,7 @@ export async function measureExit(file: string, win = 4): Promise<number> {
 
 // The typing sound cut to one line: dur plus a short tail, faded out.
 export async function trimTyping(src: string, dur: number, out: string) {
-  await $`ffmpeg -y -v error -i ${src} -t ${(dur + TYPING_TAIL).toFixed(3)} -af afade=t=out:st=${Math.max(0, dur - 0.04).toFixed(3)}:d=${(TYPING_TAIL + 0.04).toFixed(3)} -c:a pcm_s16le ${out}`;
+  await $`ffmpeg -nostdin -y -v error -i ${src} -t ${(dur + TYPING_TAIL).toFixed(3)} -af afade=t=out:st=${Math.max(0, dur - 0.04).toFixed(3)}:d=${(TYPING_TAIL + 0.04).toFixed(3)} -c:a pcm_s16le ${out}`;
 }
 
 function findBursts(mdir: string, o: Overlay, base: string): Burst[] | undefined {

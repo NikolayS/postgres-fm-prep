@@ -370,6 +370,6 @@ if (import.meta.main) {
   const enc = still !== undefined
     ? ["-frames:v", "1"]
     : ["-map", "0:a?", "-c:v", "libx264", "-preset", flag("--preset") ?? "medium", "-crf", "19", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart"];
-  await $`ffmpeg -y -v error ${seek} -i ${input} ${loops} -filter_complex_script ${graphFile} -map [${out}] ${enc} ${len} ${output}`;
+  await $`ffmpeg -nostdin -y -v error ${seek} -i ${input} ${loops} -filter_complex_script ${graphFile} -map [${out}] ${enc} ${len} ${output}`;
   console.log(`wrote ${output}`);
 }

@@ -24,5 +24,5 @@ ev.push({f: end + 6, file: 'L-punch-rough.wav', gain: 1});
 const inputs = ev.flatMap((e) => ['-i', `${SFX}/${e.file}`]);
 const parts = ev.map((e, i) => `[${i + 1}:a]aformat=sample_rates=48000:channel_layouts=stereo,${e.dur ? `atrim=0:${e.dur.toFixed(3)},afade=t=out:st=${(e.dur - 0.08).toFixed(3)}:d=0.08,` : ''}volume=${e.gain}dB,adelay=${Math.round((e.f / fps) * 1000)}:all=1[a${i}]`);
 const filter = `${parts.join(';')};${ev.map((_, i) => `[a${i}]`).join('')}amix=inputs=${ev.length}:normalize=0,apad,atrim=0:23,loudnorm=I=-16:TP=-1.5:LRA=11[out]`;
-await $`ffmpeg -loglevel error -y -i ${IN} ${inputs} -filter_complex ${filter} -map 0:v -map [out] -c:v copy -c:a aac -b:a 192k -ar 48000 -movflags +faststart -shortest ${OUT}`;
+await $`ffmpeg -nostdin -loglevel error -y -i ${IN} ${inputs} -filter_complex ${filter} -map 0:v -map [out] -c:v copy -c:a aac -b:a 192k -ar 48000 -movflags +faststart -shortest ${OUT}`;
 console.log('events', ev.length);

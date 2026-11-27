@@ -37,7 +37,7 @@ async function hear(pcm: Float32Array, a: number, b: number, name: string) {
   const s = Math.max(0, Math.floor(a * R)), e = Math.min(pcm.length, Math.floor(b * R));
   const wav = `${work}/${name}.f32`;
   await Bun.write(wav, pcm.slice(s, e).buffer);
-  await $`ffmpeg -y -v error -f f32le -ar ${R} -ac 1 -i ${wav} ${work}/${name}.wav`;
+  await $`ffmpeg -nostdin -y -v error -f f32le -ar ${R} -ac 1 -i ${wav} ${work}/${name}.wav`;
   return toks((await whisperWords(`${work}/${name}.wav`)).filter((w) => w.type === "word")).map((x) => ({ ...x, m: x.m + s / R }));
 }
 // LCS alignment: indices of a matched in b.

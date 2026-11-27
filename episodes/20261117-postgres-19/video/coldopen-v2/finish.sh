@@ -17,7 +17,7 @@ for ((i=0; i<n; i++)); do in+=(-i "$K"); ms=$(printf "%.0f" $(echo "${T[$i]}*100
 fc+=";${mix}amix=inputs=$((n+1)):normalize=0:duration=first[am]"
 fo=$(printf "%.3f" $(echo "$D-0.5"|bc))
 fc+=";[v$n]fade=t=in:st=0:d=0.3,fade=t=out:st=$fo:d=0.5,format=yuv420p[vo];[am]afade=t=in:d=0.05,afade=t=out:st=$fo:d=0.5[ao]"
-ffmpeg -v error -y "${in[@]}" -filter_complex "$fc" -map "[vo]" -map "[ao]" -t "$D" -c:v libx264 -profile:v high -r 25 -crf 19 -preset medium -c:a pcm_s16le "$OUT.raw.mov"
-I=$(ffmpeg -i "$OUT.raw.mov" -af ebur128 -f null - 2>&1 | grep "I:" | tail -1 | awk '{print $2}'); g=$(echo "-16 - ($I)"|bc -l)
-ffmpeg -v error -y -i "$OUT.raw.mov" -c:v copy -af "volume=${g}dB,alimiter=limit=0.75:level=false" -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"; rm -f "$OUT.raw.mov"
+ffmpeg -nostdin -v error -y "${in[@]}" -filter_complex "$fc" -map "[vo]" -map "[ao]" -t "$D" -c:v libx264 -profile:v high -r 25 -crf 19 -preset medium -c:a pcm_s16le "$OUT.raw.mov"
+I=$(ffmpeg -nostdin -i "$OUT.raw.mov" -af ebur128 -f null - 2>&1 | grep "I:" | tail -1 | awk '{print $2}'); g=$(echo "-16 - ($I)"|bc -l)
+ffmpeg -nostdin -v error -y -i "$OUT.raw.mov" -c:v copy -af "volume=${g}dB,alimiter=limit=0.75:level=false" -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"; rm -f "$OUT.raw.mov"
 echo "$OUT $(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT") gain $g"

@@ -32,7 +32,7 @@ async function duration(f: string) {
 }
 
 async function lufs(f: string): Promise<number> {
-  const out = await $`ffmpeg -hide_banner -nostats -i ${f} -af ebur128 -f null -`.nothrow().quiet();
+  const out = await $`ffmpeg -nostdin -hide_banner -nostats -i ${f} -af ebur128 -f null -`.nothrow().quiet();
   const m = out.stderr.toString().match(/I:\s+(-?[\d.]+) LUFS\s*\n\s*Threshold/);
   if (!m) throw new Error(`no loudness for ${f}`);
   return Number(m[1]);
@@ -115,7 +115,7 @@ export function toFinal(t: number, C: number, freezes: Freeze[]): number {
 
 // Loudest momentary (400 ms) loudness of a short sound, for SFX levels.
 async function momentaryMax(f: string): Promise<number> {
-  const out = await $`ffmpeg -hide_banner -nostats -v verbose -i ${f} -af apad=pad_dur=0.5,ebur128=framelog=verbose -f null -`.nothrow().quiet();
+  const out = await $`ffmpeg -nostdin -hide_banner -nostats -v verbose -i ${f} -af apad=pad_dur=0.5,ebur128=framelog=verbose -f null -`.nothrow().quiet();
   const ms = [...out.stderr.toString().matchAll(/ M:\s*(-?[\d.]+)/g)].map((m) => Number(m[1])).filter((v) => v > -70);
   if (!ms.length) throw new Error(`no loudness for ${f}`);
   return Math.max(...ms);
@@ -342,7 +342,7 @@ if (import.meta.main) {
   const flat = inputs.flat();
   await Bun.write(join(work, "inputs.json"), JSON.stringify(flat)); // to re-run a graph by hand
   await Bun.write(join(work, "audio.txt"), `${ga.join(";\n")};\n[mix]loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json[out]`);
-  const p1 = await $`ffmpeg -hide_banner -nostats ${flat} -filter_complex_script ${join(work, "audio.txt")} -map [out] -f null -`.nothrow().quiet();
+  const p1 = await $`ffmpeg -nostdin -hide_banner -nostats ${flat} -filter_complex_script ${join(work, "audio.txt")} -map [out] -f null -`.nothrow().quiet();
   const js = p1.stderr.toString().match(/\{[^{}]*"input_i"[^{}]*\}/);
   if (!js) throw new Error(`loudnorm pass 1 failed:\n${p1.stderr.toString().slice(-2000)}`);
   const m = JSON.parse(js[0]);
@@ -362,12 +362,12 @@ if (import.meta.main) {
     // Re-make only the sound of an existing render (same inputs and timing), then remux.
     const m4a = join(work, "audio.m4a"), tmp = output.replace(/\.mp4$/, ".remux.mp4");
     await Bun.write(join(work, "audio2.txt"), ga.join(";\n"));
-    await $`ffmpeg -y -v error ${flat} -filter_complex_script ${join(work, "audio2.txt")} -map [aout] -t ${total.toFixed(3)} -c:a aac -b:a 192k ${m4a}`;
-    await $`ffmpeg -y -v error -i ${output} -i ${m4a} -map 0:v -map 1:a -c copy -movflags +faststart ${tmp}`;
+    await $`ffmpeg -nostdin -y -v error ${flat} -filter_complex_script ${join(work, "audio2.txt")} -map [aout] -t ${total.toFixed(3)} -c:a aac -b:a 192k ${m4a}`;
+    await $`ffmpeg -nostdin -y -v error -i ${output} -i ${m4a} -map 0:v -map 1:a -c copy -movflags +faststart ${tmp}`;
     await $`mv ${tmp} ${output}`;
     console.log(`remuxed new audio into ${output}`);
     process.exit(0);
   }
-  await $`ffmpeg -y -v error ${flat} -filter_complex_script ${graphFile} -map [${vout}] -map [aout] -t ${total.toFixed(3)} -c:v libx264 -preset ${flag("--preset") ?? "medium"} -crf 19 -pix_fmt yuv420p -r ${fps} -c:a aac -b:a 192k -movflags +faststart ${output}`;
+  await $`ffmpeg -nostdin -y -v error ${flat} -filter_complex_script ${graphFile} -map [${vout}] -map [aout] -t ${total.toFixed(3)} -c:v libx264 -preset ${flag("--preset") ?? "medium"} -crf 19 -pix_fmt yuv420p -r ${fps} -c:a aac -b:a 192k -movflags +faststart ${output}`;
   console.log(`wrote ${output} (${total.toFixed(2)} s; ${freezes.length} freezes, ${overlays.length} overlays, ${si} sfx)`);
 }

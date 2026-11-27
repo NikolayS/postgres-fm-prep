@@ -34,7 +34,7 @@ export function quietEdges(L: Level[], f: number, quiet = QUIET_DB): { outEnd: n
 // 10 ms levels of an input's sound in [t-0.3, t+0.3).
 export async function edgeLevels(input: string, t: number): Promise<Level[]> {
   const a = Math.max(0, t - 0.3), R = 16000, H = R / 100;
-  const pcm = new Float32Array(await $`ffmpeg -v error -ss ${a.toFixed(3)} -t 0.6 -i ${input} -vn -ac 1 -ar ${R} -f f32le -`.arrayBuffer());
+  const pcm = new Float32Array(await $`ffmpeg -nostdin -v error -ss ${a.toFixed(3)} -t 0.6 -i ${input} -vn -ac 1 -ar ${R} -f f32le -`.arrayBuffer());
   const out: Level[] = [];
   for (let k = 0; (k + 1) * H <= pcm.length; k++) {
     let e = 0;

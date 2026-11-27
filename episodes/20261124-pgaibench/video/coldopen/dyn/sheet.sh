@@ -9,4 +9,4 @@ sel=$(for f in $F; do printf "eq(n\\,%s)+" "$f"; done); sel=${sel%+}
 in=(); fc=""; k=0
 for v in "$@"; do in+=(-i "$v"); fc+="[$k:v]select='$sel',scale=384:-1,pad=iw+6:ih+6:3:3:black,tile=7x3[t$k];"; k=$((k+1)); done
 fc+="$(for ((i=0;i<k;i++)); do printf "[t%s]" $i; done)vstack=inputs=$k,pad=iw:ih+0[o]"
-ffmpeg -v error -y "${in[@]}" -filter_complex "$fc" -map "[o]" -frames:v 1 -fps_mode vfr "$OUT"
+ffmpeg -nostdin -v error -y "${in[@]}" -filter_complex "$fc" -map "[o]" -frames:v 1 -fps_mode vfr "$OUT"

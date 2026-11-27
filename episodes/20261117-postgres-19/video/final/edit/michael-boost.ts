@@ -80,12 +80,12 @@ if (import.meta.main) {
   const pre = chain(merged, nik, db);
   if (printOnly) { console.log(pre); process.exit(0); }
   console.log(`Michael: ${merged.length} output ranges, ${merged.reduce((s, [a, b]) => s + b - a, 0).toFixed(0)} s, +${db} dB; Nik: ${nik.length} ranges, +${NIK_DB} dB`);
-  const p1 = Bun.spawnSync(["ffmpeg", "-hide_banner", "-nostats", "-i", src, "-vn", "-filter_complex", `[0:a]${pre},${LN}:print_format=json`, "-f", "null", "-"], { stderr: "pipe" });
+  const p1 = Bun.spawnSync(["ffmpeg", "-nostdin", "-hide_banner", "-nostats", "-i", src, "-vn", "-filter_complex", `[0:a]${pre},${LN}:print_format=json`, "-f", "null", "-"], { stderr: "pipe" });
   const js = [...p1.stderr.toString().matchAll(/\{[^{}]*"input_i"[^{}]*\}/g)].at(-1);
   if (!js) throw new Error(`loudnorm pass 1 failed:\n${p1.stderr.toString().slice(-2000)}`);
   const j = JSON.parse(js[0]);
   const ln2 = `${LN}:measured_I=${j.input_i}:measured_TP=${j.input_tp}:measured_LRA=${j.input_lra}:measured_thresh=${j.input_thresh}:offset=${j.target_offset}:linear=true`;
-  const p2 = Bun.spawnSync(["ffmpeg", "-v", "error", "-y", "-i", src, "-filter_complex", `[0:a]${pre},${ln2},aresample=48000[a]`, "-map", "0:v", "-map", "[a]", "-c:v", "copy",
+  const p2 = Bun.spawnSync(["ffmpeg", "-nostdin", "-v", "error", "-y", "-i", src, "-filter_complex", `[0:a]${pre},${ln2},aresample=48000[a]`, "-map", "0:v", "-map", "[a]", "-c:v", "copy",
     "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", out], { stderr: "inherit" });
   if (p2.exitCode !== 0) process.exit(p2.exitCode ?? 1);
   writeFileSync(out.replace(/\.[^.]+$/, ".michael.json"), JSON.stringify(merged.map(([a, b]) => [Number(a.toFixed(3)), Number(b.toFixed(3))])));

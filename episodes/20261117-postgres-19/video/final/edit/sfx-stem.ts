@@ -27,7 +27,7 @@ export function toV5(t: number, cuts: Cut[]): number | null {
 
 // The same measurement as compose.ts momentaryMax.
 async function momentaryMax(f: string): Promise<number> {
-  const out = await $`ffmpeg -hide_banner -nostats -v verbose -i ${f} -af apad=pad_dur=0.5,ebur128=framelog=verbose -f null -`.nothrow().quiet();
+  const out = await $`ffmpeg -nostdin -hide_banner -nostats -v verbose -i ${f} -af apad=pad_dur=0.5,ebur128=framelog=verbose -f null -`.nothrow().quiet();
   const ms = [...out.stderr.toString().matchAll(/ M:\s*(-?[\d.]+)/g)].map((m) => Number(m[1])).filter((v) => v > -70);
   if (!ms.length) throw new Error(`no loudness for ${f}`);
   return Math.max(...ms);
@@ -62,7 +62,7 @@ if (import.meta.main) {
   const graph = `${ga.join(";\n")};\n[0:a]${[...Array(n).keys()].map((i) => `[s${i + 1}]`).join("")}amix=inputs=${n + 1}:normalize=0:duration=first[out]`;
   const gf = out + ".graph.txt";
   await Bun.write(gf, graph);
-  await $`ffmpeg -y -v error ${ins} -filter_complex_script ${gf} -map [out] -f f32le -ar 48000 -ac 2 ${out}`;
+  await $`ffmpeg -nostdin -y -v error ${ins} -filter_complex_script ${gf} -map [out] -f f32le -ar 48000 -ac 2 ${out}`;
   await Bun.write(out + ".tsv", "id\tsound\tbody_v5_s\tgain\n" + rows.join("\n") + "\n");
   console.log(`${n} sounds -> ${out} (${out}.tsv)`);
 }

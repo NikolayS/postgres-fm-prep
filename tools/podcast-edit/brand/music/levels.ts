@@ -4,7 +4,7 @@
 // the cue's own 98th percentile). Bands: log-spaced 60 Hz..10 kHz, Goertzel over a 2048 window.
 const [inp, out, fpsS, nbS] = Bun.argv.slice(2);
 const fps = Number(fpsS ?? 25), NB = Number(nbS ?? 12), SR = 24000, N = 1024;
-const p = Bun.spawn(["ffmpeg", "-v", "error", "-i", inp, "-ac", "1", "-ar", String(SR), "-f", "f32le", "-"], { stdout: "pipe" });
+const p = Bun.spawn(["ffmpeg", "-nostdin", "-v", "error", "-i", inp, "-ac", "1", "-ar", String(SR), "-f", "f32le", "-"], { stdout: "pipe" });
 const x = new Float32Array(await new Response(p.stdout).arrayBuffer());
 const frames = Math.ceil((x.length / SR) * fps);
 const freqs = Array.from({ length: NB }, (_, i) => 60 * Math.pow(10000 / 60, i / (NB - 1)));

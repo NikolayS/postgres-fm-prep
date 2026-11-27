@@ -22,5 +22,5 @@ else
   w=400; h=290; x0=$(( faceX - 200 ))
 fi
 (( x0 < 0 )) && x0=0
-ffmpeg -loglevel error -y -i "$tmp" -filter_complex "[0]format=rgba,geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='if($O+$P,0,clip((alpha(X,Y)-40)*4,0,255))',format=rgba,split[c][a];[a]alphaextract[al];[c]format=yuv444p,hqdn3d=1.5:1.5:3:3,eq=$eq,unsharp=5:5:0.4:5:5:0.0,format=rgba[cc];[cc][al]alphamerge,crop=$w:$h:$x0:0" "$out"
+ffmpeg -nostdin -loglevel error -y -i "$tmp" -filter_complex "[0]format=rgba,geq=r='r(X,Y)':g='g(X,Y)':b='b(X,Y)':a='if($O+$P,0,clip((alpha(X,Y)-40)*4,0,255))',format=rgba,split[c][a];[a]alphaextract[al];[c]format=yuv444p,hqdn3d=1.5:1.5:3:3,eq=$eq,unsharp=5:5:0.4:5:5:0.0,format=rgba[cc];[cc][al]alphamerge,crop=$w:$h:$x0:0" "$out"
 echo "wrote $out"

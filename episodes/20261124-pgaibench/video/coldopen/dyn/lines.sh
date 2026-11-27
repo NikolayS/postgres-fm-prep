@@ -46,6 +46,6 @@ for i in "${!LINES[@]}"; do
 if [ -z "${ONLY:-}" ] || [[ " $ONLY " == *" 1 "* ]]; then
   d="$W/lines/L1n"; mkdir -p "$d"; bash "$D0/cut.sh" "$d/h.mov" "161.30 168.18"
   bun "$R/tools/layout.ts" "$R/coldopen-layout.json" "$d/h.mov" "$d/pic.mp4" --preset fast > "$d/layout.log" 2>&1
-  ffmpeg -v error -y -i "$W/lines/L1.mp4" -i "$d/pic.mp4" -filter_complex "[1:v]crop=820:470:990:212[n];[0:v][n]overlay=990:212:shortest=1[v]" \
+  ffmpeg -nostdin -v error -y -i "$W/lines/L1.mp4" -i "$d/pic.mp4" -filter_complex "[1:v]crop=820:470:990:212[n];[0:v][n]overlay=990:212:shortest=1[v]" \
     -map "[v]" -map 0:a -c:v libx264 -crf 14 -preset medium -pix_fmt yuv420p -r 25 -c:a copy "$d/L1.mp4" && mv "$d/L1.mp4" "$W/lines/L1.mp4"
 fi

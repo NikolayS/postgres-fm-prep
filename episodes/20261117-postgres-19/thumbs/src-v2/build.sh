@@ -13,11 +13,11 @@ if [ "$1" = "--heads" ] || [ ! -f heads/nik.png ]; then
   for a in nik:1057.4:24 mic:raw:656 kirk:1541.8:1288; do   # person : final-video seconds : tile x
     IFS=: read p t x <<<"$a"
     if [ $p = mic ]; then   # MA is from the raw Zoom recording (0:24.2), not the final video: 640x360 tile, scaled to the same 608x342 frame
-      ffmpeg -v error -ss 24.2 -i "$RAW" -frames:v 1 -vf "crop=640:360:640:360" -y work/mic-raw640.png
+      ffmpeg -nostdin -v error -ss 24.2 -i "$RAW" -frames:v 1 -vf "crop=640:360:640:360" -y work/mic-raw640.png
       "${REALESRGAN:?set REALESRGAN to the realesrgan-ncnn-vulkan binary}" -i work/mic-raw640.png -o work/mic-x4big.png -n realesrgan-x4plus
       python3 -c "from PIL import Image as I; I.open('work/mic-raw640.png').resize((608,342),I.LANCZOS).save('work/mic-raw.png'); I.open('work/mic-x4big.png').resize((2432,1368),I.LANCZOS).save('work/mic-x4.png')"
     else
-      ffmpeg -v error -ss $t -i "$V" -frames:v 1 -vf "crop=608:342:$x:300" -y work/$p-raw.png
+      ffmpeg -nostdin -v error -ss $t -i "$V" -frames:v 1 -vf "crop=608:342:$x:300" -y work/$p-raw.png
       "${REALESRGAN:?set REALESRGAN to the realesrgan-ncnn-vulkan binary}" -i work/$p-raw.png -o work/$p-x4.png -n realesrgan-x4plus
     fi
     work/seg "$PWD/work/$p-x4.png" "$PWD/work/$p-cut.png"

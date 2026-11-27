@@ -50,12 +50,12 @@ const label = async (name: string, tag: string, color: string, sub: string) => {
 // Encode one clip: picture + label, 25 fps, 48 kHz stereo, loudness to -16 LUFS (linear gain).
 async function clip(src: string, ss: number | null, t: number | null, png: string, dst: string) {
   const inArgs = [...(ss !== null ? ["-ss", ss.toFixed(3)] : []), ...(t !== null ? ["-t", t.toFixed(3)] : []), "-i", src];
-  const m = (await $`ffmpeg -hide_banner -nostats ${inArgs} -af ebur128 -f null -`.nothrow().quiet()).stderr.toString().match(/I:\s+(-?[\d.]+) LUFS\s*\n\s*Threshold/);
+  const m = (await $`ffmpeg -nostdin -hide_banner -nostats ${inArgs} -af ebur128 -f null -`.nothrow().quiet()).stderr.toString().match(/I:\s+(-?[\d.]+) LUFS\s*\n\s*Threshold/);
   const gain = m ? -16 - Number(m[1]) : 0;
-  await $`ffmpeg -y -v error ${inArgs} -i ${png} -filter_complex ${`[0:v]scale=${W}:${H},fps=${FPS},format=yuv420p[v0];[v0][1:v]overlay=0:0[v];[0:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gain.toFixed(2)}dB,afade=t=in:d=0.05,areverse,afade=t=in:d=0.08,areverse[a]`} -map [v] -map [a] -c:v libx264 -preset fast -crf 20 -c:a aac -b:a 192k ${dst}`;
+  await $`ffmpeg -nostdin -y -v error ${inArgs} -i ${png} -filter_complex ${`[0:v]scale=${W}:${H},fps=${FPS},format=yuv420p[v0];[v0][1:v]overlay=0:0[v];[0:a]aresample=48000,aformat=channel_layouts=stereo,volume=${gain.toFixed(2)}dB,afade=t=in:d=0.05,areverse,afade=t=in:d=0.08,areverse[a]`} -map [v] -map [a] -c:v libx264 -preset fast -crf 20 -c:a aac -b:a 192k ${dst}`;
 }
 const gap = join(work, "gap.mp4");
-await $`ffmpeg -y -v error -f lavfi -i color=c=black:s=${W}x${H}:r=${FPS}:d=1 -f lavfi -i anullsrc=r=48000:cl=stereo -t 1 -c:v libx264 -preset fast -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k ${gap}`;
+await $`ffmpeg -nostdin -y -v error -f lavfi -i color=c=black:s=${W}x${H}:r=${FPS}:d=1 -f lavfi -i anullsrc=r=48000:cl=stereo -t 1 -c:v libx264 -preset fast -crf 20 -pix_fmt yuv420p -c:a aac -b:a 192k ${gap}`;
 
 const list: string[] = [];
 const render = resolve(dirname(Bun.main), "render.ts");
@@ -71,6 +71,6 @@ for (const [i, r] of picked.entries()) {
   console.error(`${n}: old ${fmt(t0)}-${fmt(t1)} (source ${fmt(s0)}-${fmt(s1)}) score ${r.score} ${r.cat} "${r.text}"`);
 }
 await Bun.write(join(work, "list.txt"), list.map((f) => `file '${f}'`).join("\n"));
-await $`ffmpeg -y -v error -f concat -safe 0 -i ${join(work, "list.txt")} -c copy -movflags +faststart ${out}`;
+await $`ffmpeg -nostdin -y -v error -f concat -safe 0 -i ${join(work, "list.txt")} -c copy -movflags +faststart ${out}`;
 await Bun.write(out.replace(/\.mp4$/, ".json"), JSON.stringify(picked.map((r, i) => ({ n: i + 1, oldOut: r.out, srcA: r.srcA, srcB: r.srcB, cat: r.cat, text: r.text, oldScore: r.score, oldFlags: r.flags })), null, 1));
 console.log(`wrote ${out} (${picked.length} joins)`);

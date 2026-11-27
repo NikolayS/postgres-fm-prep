@@ -67,7 +67,7 @@ export async function loadTranscript(path: string): Promise<Transcript> {
 
 // Decode a media file to interleaved float32 PCM (48 kHz stereo by default).
 export async function decodePcm(media: string, channels = 2, rate = RATE): Promise<Float32Array> {
-  const buf = await $`ffmpeg -v error -i ${media} -vn -ac ${channels} -ar ${rate} -f f32le -`.arrayBuffer();
+  const buf = await $`ffmpeg -nostdin -v error -i ${media} -vn -ac ${channels} -ar ${rate} -f f32le -`.arrayBuffer();
   return new Float32Array(buf);
 }
 
@@ -122,7 +122,7 @@ export async function scribe(audio: string, speakers = 2, raw?: string): Promise
 export async function whisperWords(audio: string, model = `${process.env.HOME}/.whisper-models/ggml-small.bin`): Promise<Word[]> {
   const base = audio.replace(/\.[^.\/]+$/, "") + ".whisper";
   const wav = `${base}.wav`;
-  await $`ffmpeg -y -v error -i ${audio} -vn -ac 1 -ar 16000 ${wav}`;
+  await $`ffmpeg -nostdin -y -v error -i ${audio} -vn -ac 1 -ar 16000 ${wav}`;
   await $`whisper-cli -m ${model} -f ${wav} -ojf -sow -ml 1 -of ${base}`.quiet();
   const raw: any = await Bun.file(`${base}.json`).json();
   return raw.transcription

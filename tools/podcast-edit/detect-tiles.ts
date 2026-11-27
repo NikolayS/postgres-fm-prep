@@ -94,7 +94,7 @@ export function tilesInFrame(f: Uint8Array, W: number, H: number): Rect[] {
 }
 
 async function frameAt(video: string, t: number, w: number, h: number): Promise<Uint8Array> {
-  const buf = await $`ffmpeg -v error -ss ${t} -i ${video} -frames:v 1 -f rawvideo -pix_fmt gray -`.arrayBuffer();
+  const buf = await $`ffmpeg -nostdin -v error -ss ${t} -i ${video} -frames:v 1 -f rawvideo -pix_fmt gray -`.arrayBuffer();
   if (buf.byteLength !== w * h) throw new Error(`frame at ${t}: got ${buf.byteLength} bytes`);
   return new Uint8Array(buf);
 }
@@ -102,7 +102,7 @@ async function frameAt(video: string, t: number, w: number, h: number): Promise<
 // Small gray frames [start, start + dur) at `fps`.
 async function sample(video: string, start: number, dur: number | null, fps: number): Promise<Uint8Array[]> {
   const t = dur === null ? [] : ["-ss", String(start), "-t", String(dur)];
-  const raw = new Uint8Array(await $`ffmpeg -v error ${t} -i ${video} -vf fps=${fps},scale=${SW}:${SH}:flags=area -f rawvideo -pix_fmt gray -`.arrayBuffer());
+  const raw = new Uint8Array(await $`ffmpeg -nostdin -v error ${t} -i ${video} -vf fps=${fps},scale=${SW}:${SH}:flags=area -f rawvideo -pix_fmt gray -`.arrayBuffer());
   const out: Uint8Array[] = [];
   for (let i = 0; (i + 1) * SW * SH <= raw.length; i++) out.push(raw.subarray(i * SW * SH, (i + 1) * SW * SH));
   return out;

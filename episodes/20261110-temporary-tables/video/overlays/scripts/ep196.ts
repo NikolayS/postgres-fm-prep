@@ -266,7 +266,7 @@ if (import.meta.main) {
       const p = Bun.spawn(['bunx', 'remotion', 'render', 'src/index.ts', b.it.comp, file, '--codec', 'prores', '--prores-profile', '4444', '--image-format', 'png', '--pixel-format', 'yuva444p10le', '--log', 'error', `--props=${join(OUT, 'props', `${b.it.id}.props.json`)}`], {cwd: ROOT, stdout: 'inherit', stderr: 'inherit'});
       const code = await p.exited;
       if (code === 0 && existsSync(file)) {
-        const q8 = Bun.spawnSync(['ffmpeg', '-v', 'error', '-y', '-i', file, '-c:v', 'prores_ks', '-profile:v', '4', '-qscale:v', '8', '-pix_fmt', 'yuva444p10le', '-alpha_bits', '16', '-vendor', 'apl0', `${final}.q8.mov`]);
+        const q8 = Bun.spawnSync(['ffmpeg', '-nostdin', '-v', 'error', '-y', '-i', file, '-c:v', 'prores_ks', '-profile:v', '4', '-qscale:v', '8', '-pix_fmt', 'yuva444p10le', '-alpha_bits', '16', '-vendor', 'apl0', `${final}.q8.mov`]);
         if (q8.exitCode === 0) { renameSync(`${final}.q8.mov`, final); unlinkSync(file); console.log(`ok ${b.it.id}`); } else console.log(`FAIL q8 ${b.it.id}`);
       } else console.log(`FAIL ${b.it.id}`);
     }

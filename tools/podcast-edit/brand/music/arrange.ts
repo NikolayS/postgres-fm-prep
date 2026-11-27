@@ -25,7 +25,7 @@ function caf(buf: Buffer) {
   return { prime, frames, beats };
 }
 async function decode(path: string, ch = 2): Promise<Float32Array> {
-  const p = Bun.spawn(["ffmpeg", "-v", "error", "-i", path, "-f", "f32le", "-ac", String(ch), "-ar", String(SR), "-"], { stdout: "pipe" });
+  const p = Bun.spawn(["ffmpeg", "-nostdin", "-v", "error", "-i", path, "-f", "f32le", "-ac", String(ch), "-ar", String(SR), "-"], { stdout: "pipe" });
   const ab = await new Response(p.stdout).arrayBuffer(); await p.exited;
   return new Float32Array(ab);
 }

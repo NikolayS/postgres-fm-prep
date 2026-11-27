@@ -16,7 +16,7 @@ const { values, positionals } = parseArgs({ args: Bun.argv.slice(2), allowPositi
 const [mixPath, edited, cutsPath, wordsPath, out] = positionals;
 if (!out) { console.error("usage: bun level.ts <mix> <edited.mp4> <cuts.json> <words.json> <out.wav> [--offset 13] [--gain speaker_1=1.6,speaker_0=-1.6]"); process.exit(2); }
 const SR = Number(values.sr), OFF = Number(values.offset);
-const pcm = async (f: string) => new Float32Array(await $`ffmpeg -v error -i ${f} -vn -ac 2 -ar ${SR} -c:a pcm_f32le -f f32le pipe:1`.arrayBuffer());
+const pcm = async (f: string) => new Float32Array(await $`ffmpeg -nostdin -v error -i ${f} -vn -ac 2 -ar ${SR} -c:a pcm_f32le -f f32le pipe:1`.arrayBuffer());
 const [M, T] = await Promise.all([pcm(mixPath), pcm(edited)]); // interleaved stereo
 const frames = M.length / 2, tf = T.length / 2;
 const at = (lag: number, i0: number, n: number, step = 1) => { let s = 0; for (let i = i0; i < i0 + n; i += step) s += (M[2 * (i + lag)] + M[2 * (i + lag) + 1]) * (T[2 * i] + T[2 * i + 1]); return s; };
@@ -55,5 +55,5 @@ for (let i = 0; i < tf && i + best < frames; i++) {
 }
 for (const x of M) peak = Math.max(peak, Math.abs(x));
 const raw = `${out}.f32`; await Bun.write(raw, M.buffer);
-await $`ffmpeg -v error -y -f f32le -ar ${SR} -ac 2 -i ${raw} -c:a pcm_f32le ${out} && rm ${raw}`;
+await $`ffmpeg -nostdin -v error -y -f f32le -ar ${SR} -ac 2 -i ${raw} -c:a pcm_f32le ${out} && rm ${raw}`;
 console.log(`talk lag ${(best / SR).toFixed(4)} s, talk gain ${(20 * Math.log10(g)).toFixed(2)} dB, gains ${values.gain}, peak ${(20 * Math.log10(peak)).toFixed(2)} dBFS -> ${out}`);

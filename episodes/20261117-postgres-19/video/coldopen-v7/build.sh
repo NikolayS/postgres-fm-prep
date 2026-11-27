@@ -64,7 +64,7 @@ for s in "${S[@]}"; do set -- $s; ms=$(printf "%.0f" "$(echo "$2*1000" | bc -l)"
   in+=(-i "$1"); af+=";[$k:a]aresample=48000,aformat=channel_layouts=stereo$tr,volume=$3dB,volume=-7dB,adelay=$ms|$ms[x$k]"; mix+="[x$k]"; k=$((k+1)); done
 n=$(echo "$mix" | grep -o '\[' | wc -l | tr -d ' ')
 af+=";${mix}amix=inputs=$n:normalize=0:duration=longest,atrim=0:$(f3 "$END-0.08"),apad=whole_dur=$END,afade=t=in:d=0.05,afade=t=out:st=$(f3 "$END-0.6"):d=0.5[ao]"
-nice -n 15 ffmpeg -v error -y "${in[@]}" -filter_complex "$af" -map 0:v -map "[ao]" -t $END -c:v libx264 -threads 4 -profile:v high -pix_fmt yuv420p -r 25 -crf 18 -preset medium -c:a pcm_s16le "$OUT.raw.mov"
-I=$(ffmpeg -i "$OUT.raw.mov" -af ebur128 -f null - 2>&1 | grep "I:" | tail -1 | awk '{print $2}'); g=$(echo "-16 - ($I)" | bc -l)
-ffmpeg -v error -y -i "$OUT.raw.mov" -c:v copy -af "volume=${g}dB,alimiter=limit=0.75:level=false" -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"; rm -f "$OUT.raw.mov"
+nice -n 15 ffmpeg -nostdin -v error -y "${in[@]}" -filter_complex "$af" -map 0:v -map "[ao]" -t $END -c:v libx264 -threads 4 -profile:v high -pix_fmt yuv420p -r 25 -crf 18 -preset medium -c:a pcm_s16le "$OUT.raw.mov"
+I=$(ffmpeg -nostdin -i "$OUT.raw.mov" -af ebur128 -f null - 2>&1 | grep "I:" | tail -1 | awk '{print $2}'); g=$(echo "-16 - ($I)" | bc -l)
+ffmpeg -nostdin -v error -y -i "$OUT.raw.mov" -c:v copy -af "volume=${g}dB,alimiter=limit=0.75:level=false" -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"; rm -f "$OUT.raw.mov"
 echo "$OUT $(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT") s, button $TB s, gain $g dB"

@@ -8,7 +8,7 @@ CO="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"; BODY="${BODY:-$E/preview/e
 for f in "$CO" "$BODY"; do ffprobe -v error -show_entries stream=codec_name,width,height,r_frame_rate,sample_rate,channels -of csv=p=0 "$f"; done
 L=$(mktemp); printf "file '%s'\nfile '%s'\n" "$CO" "$BODY" > "$L"
 # The concat list sits in a temp dir: both paths must be absolute. Fail loudly (no "&&" chain under set -e).
-ffmpeg -v error -y -f concat -safe 0 -i "$L" -c copy -movflags +faststart "$OUT.part.mp4"; rm -f "$L"; mv "$OUT.part.mp4" "$OUT"
+ffmpeg -nostdin -v error -y -f concat -safe 0 -i "$L" -c copy -movflags +faststart "$OUT.part.mp4"; rm -f "$L"; mv "$OUT.part.mp4" "$OUT"
 D=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$CO")
 python3 "$E/video/final/edit/set_times.py" "$D"
 echo "$OUT $(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT") s; cold open $D s"

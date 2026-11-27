@@ -28,7 +28,7 @@ const C = Number(values.card), TAIL = Number(values.tail), DUCK = Number(values.
 const MUSIC_LUFS = Number(values["music-lufs"]), FADE = 10, SR = 44100;
 const plan = await Bun.file(cutsPath).json();
 const dur = async (f: string) => Number((await $`ffprobe -v error -show_entries format=duration -of csv=p=0 ${f}`.text()).trim());
-const lufs = async (f: string) => Number((await $`ffmpeg -hide_banner -nostats -i ${f} -af ebur128 -f null -`.nothrow().quiet()).stderr.toString().match(/I:\s+(-?[\d.]+) LUFS\s*\n\s*Threshold/)![1]);
+const lufs = async (f: string) => Number((await $`ffmpeg -nostdin -hide_banner -nostats -i ${f} -af ebur128 -f null -`.nothrow().quiet()).stderr.toString().match(/I:\s+(-?[\d.]+) LUFS\s*\n\s*Threshold/)![1]);
 const talkLen = values["trim-end"] ? Number(values["trim-end"]) : await dur(edited);
 const showEnd = C + talkLen, total = showEnd + TAIL;
 const db = (expr: string) => `volume='pow(10,(${expr})/20)':eval=frame`;
@@ -45,15 +45,15 @@ const g = [
   `[voice][mi][mo]amix=inputs=3:normalize=0:duration=first,atrim=end=${total.toFixed(3)},asetpts=N/SR/TB,afade=t=in:d=${FADE}:curve=ipar,afade=t=out:st=${(total - FADE).toFixed(3)}:d=${FADE},aresample=192000,alimiter=limit=0.70:level=false:attack=1:release=50,aresample=48000[mix]`,
 ];
 const inputs = ["-i", edited, "-i", values.intro, "-i", values.outro];
-const p1 = await $`ffmpeg -hide_banner -nostats ${inputs} -filter_complex ${g.join(";") + ";[mix]loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json[out]"} -map [out] -f null -`.nothrow().quiet();
+const p1 = await $`ffmpeg -nostdin -hide_banner -nostats ${inputs} -filter_complex ${g.join(";") + ";[mix]loudnorm=I=-16:TP=-1.5:LRA=11:print_format=json[out]"} -map [out] -f null -`.nothrow().quiet();
 const m = JSON.parse(p1.stderr.toString().match(/\{[^{}]*"input_i"[^{}]*\}/)![0]);
 const ln = `loudnorm=I=-16:TP=-1.5:LRA=11:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true`;
 const wav = `${outBase}.wav`, mp3 = `${outBase}.mp3`;
-await $`ffmpeg -y -v error ${inputs} -filter_complex ${g.join(";") + `;[mix]${ln},aresample=192000,alimiter=limit=0.75:level=false:attack=1:release=50,aresample=${SR}[out]`} -map [out] -c:a pcm_s16le ${wav}`;
+await $`ffmpeg -nostdin -y -v error ${inputs} -filter_complex ${g.join(";") + `;[mix]${ln},aresample=192000,alimiter=limit=0.75:level=false:attack=1:release=50,aresample=${SR}[out]`} -map [out] -c:a pcm_s16le ${wav}`;
 const meta = values.title ? ["-metadata", `title=${values.title}`, "-metadata", `artist=${values.artist}`, "-metadata", `album=${values.artist}`] : [];
 // --cover: square artwork as the ID3 front cover (APIC).
 const art = values.cover ? ["-i", values.cover, "-map", "0:a", "-map", "1:v", "-c:v", "copy", "-disposition:v", "attached_pic", "-metadata:s:v", "title=Album cover", "-metadata:s:v", "comment=Cover (front)"] : [];
-await $`ffmpeg -y -v error -i ${wav} ${art} -c:a libmp3lame -b:a 192k ${meta} -id3v2_version 3 ${mp3}`;
+await $`ffmpeg -nostdin -y -v error -i ${wav} ${art} -c:a libmp3lame -b:a 192k ${meta} -id3v2_version 3 ${mp3}`;
 
 // Time map: the kept source pieces, sample-exact, shifted by the intro.
 const rows: { audioStart: number; audioEnd: number; srcStart: number; srcEnd: number }[] = [];

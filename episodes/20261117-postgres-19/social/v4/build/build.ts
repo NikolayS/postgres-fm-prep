@@ -48,7 +48,7 @@ if (all || want.has("hero")) {
   await Bun.write(`${TMP}/hero.html`, S["s00-hero"]);
   await p.goto(`file://${TMP}/hero.html`, { waitUntil: "networkidle" });
   await p.evaluate(() => document.fonts.ready);
-  const enc = Bun.spawn(["ffmpeg", "-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", String(FPS), "-i", "-",
+  const enc = Bun.spawn(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", String(FPS), "-i", "-",
     "-f", "lavfi", "-t", String(DUR), "-i", "anullsrc=r=48000:cl=stereo",
     "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p", "-c:a", "aac", "-shortest",
     "-movflags", "+faststart", `${OUT}/xa-hero.mp4`], { stdin: "pipe" });
@@ -59,8 +59,8 @@ if (all || want.has("hero")) {
   enc.stdin.end(); await enc.exited; await p.close();
   // check strip: frame 0, 0.7 s, mid-build, hold, last frame (must match frame 0 for the loop)
   const at = [0, 2.0, 4.3, 5.4, DUR - 0.1];
-  for (let i = 0; i < at.length; i++) await run(["ffmpeg", "-y", "-loglevel", "error", "-ss", at[i].toFixed(3), "-i", `${OUT}/xa-hero.mp4`, "-frames:v", "1", "-vf", "scale=430:-1", `${TMP}/hchk${i}.png`]);
-  await run(["ffmpeg", "-y", "-loglevel", "error", ...at.flatMap((_, i) => ["-i", `${TMP}/hchk${i}.png`]), "-filter_complex", `${at.map((_, i) => `[${i}:v]`).join("")}hstack=inputs=${at.length}`, `${OUT}/xa-hero.check.png`]);
+  for (let i = 0; i < at.length; i++) await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-ss", at[i].toFixed(3), "-i", `${OUT}/xa-hero.mp4`, "-frames:v", "1", "-vf", "scale=430:-1", `${TMP}/hchk${i}.png`]);
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", ...at.flatMap((_, i) => ["-i", `${TMP}/hchk${i}.png`]), "-filter_complex", `${at.map((_, i) => `[${i}:v]`).join("")}hstack=inputs=${at.length}`, `${OUT}/xa-hero.check.png`]);
   console.log("wrote xa-hero.mp4, xa-hero.check.png");
 }
 
@@ -112,15 +112,15 @@ if (all || want.has("clip")) {
   f += `[${iEnd}:v]trim=0:${(HOLD + XF).toFixed(2)},fps=30,format=yuv420p,setpts=PTS-STARTPTS[endv];`;
   f += `[b${CAPS.length}]format=yuv420p[main];[main][endv]xfade=transition=fade:duration=${XF}:offset=${(LEN - XF / 2).toFixed(2)}[vout];`;
   f += `[aud]apad=pad_dur=${HOLD + XF}[aout]`;
-  await run(["ffmpeg", "-y", "-loglevel", "error", ...inputs, "-filter_complex", f, "-map", "[vout]", "-map", "[aout]",
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", ...inputs, "-filter_complex", f, "-map", "[vout]", "-map", "[aout]",
     "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
     "-t", (LEN + HOLD).toFixed(2), "-movflags", "+faststart", `${OUT}/xc-kirk.mp4`]);
   // check strip: first 1.5 s, the jump cut, last 1.5 s of speech
   let acc = 0; const joins = SEG.slice(0, -1).map(([a, b]) => (acc += b - a));
   const at = [0.1, 1.0, ...joins.flatMap(j => [j - 0.15, j + 0.15]), LEN - 0.5, LEN + 0.5];
-  for (let i = 0; i < at.length; i++) await run(["ffmpeg", "-y", "-loglevel", "error", "-ss", at[i].toFixed(2), "-i", `${OUT}/xc-kirk.mp4`, "-frames:v", "1", "-vf", "scale=270:-1", `${TMP}/chk${i}.png`]);
-  await run(["ffmpeg", "-y", "-loglevel", "error", ...at.flatMap((_, i) => ["-i", `${TMP}/chk${i}.png`]), "-filter_complex", `${at.map((_, i) => `[${i}:v]`).join("")}hstack=inputs=${at.length}`, `${OUT}/xc-kirk.check.png`]);
-  await run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "3", "-i", `${OUT}/xc-kirk.mp4`, "-frames:v", "1", `${OUT}/xc-kirk.poster.png`]);
+  for (let i = 0; i < at.length; i++) await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-ss", at[i].toFixed(2), "-i", `${OUT}/xc-kirk.mp4`, "-frames:v", "1", "-vf", "scale=270:-1", `${TMP}/chk${i}.png`]);
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", ...at.flatMap((_, i) => ["-i", `${TMP}/chk${i}.png`]), "-filter_complex", `${at.map((_, i) => `[${i}:v]`).join("")}hstack=inputs=${at.length}`, `${OUT}/xc-kirk.check.png`]);
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-ss", "3", "-i", `${OUT}/xc-kirk.mp4`, "-frames:v", "1", `${OUT}/xc-kirk.poster.png`]);
   console.log(`wrote xc-kirk.mp4: ${(LEN + HOLD).toFixed(1)} s`);
 }
 

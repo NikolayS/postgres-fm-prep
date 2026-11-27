@@ -11,6 +11,6 @@ for line in $ids; do
   free=$(df -k "$O" | tail -1 | awk '{print $4}'); if (( free < 4200000 )); then echo "LOW DISK, stop at $id"; exit 3; fi
   bun scripts/ep196.ts ../../../01-edited.cuts.json --render $id 2>&1 | grep -E "^(ok|FAIL)"
   [[ -f "$f" ]] || { echo "missing $f"; continue; }
-  ffmpeg -v error -y -i "$f" -c:v prores_ks -profile:v 4 -qscale:v 8 -pix_fmt yuva444p10le -alpha_bits 16 -vendor apl0 "$f.tmp.mov" && mv "$f.tmp.mov" "$f" && touch "$f.q8done" && echo "q8 $id $(stat -f %z "$f")"
+  ffmpeg -nostdin -v error -y -i "$f" -c:v prores_ks -profile:v 4 -qscale:v 8 -pix_fmt yuva444p10le -alpha_bits 16 -vendor apl0 "$f.tmp.mov" && mv "$f.tmp.mov" "$f" && touch "$f.q8done" && echo "q8 $id $(stat -f %z "$f")"
 done
 echo ALL DONE

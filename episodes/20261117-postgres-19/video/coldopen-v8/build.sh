@@ -33,21 +33,21 @@ clean() { case $1 in
 COMP="acompressor=threshold=-24dB:ratio=3:attack=5:release=120:makeup=2"
 list=""; k=0
 for b in "${BITES[@]}"; do set -- $b; k=$((k+1))
-  ffmpeg -v error -y -i dialog.wav -af "atrim=$1:$2,asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,$(clean $3),$COMP" $T/b$k.wav
-  L=$(ffmpeg -nostats -i $T/b$k.wav -af ebur128 -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}')
-  ffmpeg -v error -y -i $T/b$k.wav -af "volume=$(f3 "-18 - ($L)")dB" $T/v$k.wav; list+="file 'v$k.wav'"$'\n'
+  ffmpeg -nostdin -v error -y -i dialog.wav -af "atrim=$1:$2,asetpts=PTS-STARTPTS,aresample=48000,aformat=channel_layouts=stereo,$(clean $3),$COMP" $T/b$k.wav
+  L=$(ffmpeg -nostdin -nostats -i $T/b$k.wav -af ebur128 -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}')
+  ffmpeg -nostdin -v error -y -i $T/b$k.wav -af "volume=$(f3 "-18 - ($L)")dB" $T/v$k.wav; list+="file 'v$k.wav'"$'\n'
 done
-printf "%s" "$list" > $T/list.txt; ffmpeg -v error -y -f concat -safe 0 -i $T/list.txt -c pcm_s16le $T/voice-m.wav
+printf "%s" "$list" > $T/list.txt; ffmpeg -nostdin -v error -y -f concat -safe 0 -i $T/list.txt -c pcm_s16le $T/voice-m.wav
 ms0=$(printf "%.0f" "$(echo "$TT*1000" | bc -l)")
-ffmpeg -v error -y -i $T/voice-m.wav -af "adelay=$ms0|$ms0,apad=whole_dur=$END" -t $END $T/voice.wav
+ffmpeg -nostdin -v error -y -i $T/voice-m.wav -af "adelay=$ms0|$ms0,apad=whole_dur=$END" -t $END $T/voice.wav
 
 # ---- music: funk (Apple Loops Disco Funk), 120 -> 128 BPM ----
 bun "$R/tools/podcast-edit/brand/music/arrange.ts" "$H/music/b-funk.json" b-funk.wav >/dev/null
-ffmpeg -v error -y -i b-funk.wav -af "aresample=48000,atempo=$(f3 "128/120"),volume=-7dB" -t $END $T/mus1.wav
-LM=$(ffmpeg -nostats -i $T/mus1.wav -af "atrim=$TT:$(m 34.0),ebur128" -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}')
+ffmpeg -nostdin -v error -y -i b-funk.wav -af "aresample=48000,atempo=$(f3 "128/120"),volume=-7dB" -t $END $T/mus1.wav
+LM=$(ffmpeg -nostdin -nostats -i $T/mus1.wav -af "atrim=$TT:$(m 34.0),ebur128" -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}')
 BED=$(f3 "e(l(10)*((-18 - $BED_LU) - ($LM))/20)")
 VOL="if(lt(t,$TT-0.1),1,if(lt(t,$TT+0.15),1-(1-$BED)*(t-$TT+0.1)/0.25,if(lt(t,$TB-0.05),$BED,1)))"
-ffmpeg -v error -y -i $T/mus1.wav -i $T/voice.wav -filter_complex "[0:a]volume='$VOL':eval=frame[mb];[mb][1:a]sidechaincompress=threshold=0.03:ratio=2:attack=20:release=300:makeup=1[mo]" -map "[mo]" $T/music.wav
+ffmpeg -nostdin -v error -y -i $T/mus1.wav -i $T/voice.wav -filter_complex "[0:a]volume='$VOL':eval=frame[mb];[mb][1:a]sidechaincompress=threshold=0.03:ratio=2:attack=20:release=300:makeup=1[mo]" -map "[mo]" $T/music.wav
 
 # ---- SFX (gains in dB); quieter while someone speaks ----
 S=(); add() { S+=("$1 $2 $3 ${4:-}"); }
@@ -68,24 +68,24 @@ in=(); af=""; mix=""; k=0
 for s in "${S[@]}"; do set -- $s; ms=$(printf "%.0f" "$(echo "$2*1000" | bc -l)"); tr=""
   if [ -n "${4:-}" ]; then tr=",atrim=0:$4,afade=t=out:st=$(f3 "$4-0.05"):d=0.05"; fi
   in+=(-i "$1"); af+="[$k:a]aresample=48000,aformat=channel_layouts=stereo$tr,volume=$3dB,volume=-7dB,adelay=$ms|$ms[x$k];"; mix+="[x$k]"; k=$((k+1)); done
-ffmpeg -v error -y "${in[@]}" -filter_complex "${af}${mix}amix=inputs=$k:normalize=0:duration=longest,apad=whole_dur=$END" -t $END $T/sfx.wav
-ffmpeg -v error -y -i $T/music.wav -i $T/sfx.wav -filter_complex "amix=inputs=2:normalize=0:duration=longest" -t $END $T/bg.wav
+ffmpeg -nostdin -v error -y "${in[@]}" -filter_complex "${af}${mix}amix=inputs=$k:normalize=0:duration=longest,apad=whole_dur=$END" -t $END $T/sfx.wav
+ffmpeg -nostdin -v error -y -i $T/music.wav -i $T/sfx.wav -filter_complex "amix=inputs=2:normalize=0:duration=longest" -t $END $T/bg.wav
 
 # ---- mix, -16 LUFS ----
 check_disk "$WORK"
-ffmpeg -v error -y -framerate 25 -i ${FRAMES_DIR:-fr8}/%04d.jpg -i $T/voice.wav -i $T/bg.wav -filter_complex "[1:a][2:a]amix=inputs=2:normalize=0:duration=longest,atrim=0:$(f3 "$END-0.08"),apad=whole_dur=$END,afade=t=in:d=0.05,afade=t=out:st=$(f3 "$END-0.6"):d=0.5[ao]" \
+ffmpeg -nostdin -v error -y -framerate 25 -i ${FRAMES_DIR:-fr8}/%04d.jpg -i $T/voice.wav -i $T/bg.wav -filter_complex "[1:a][2:a]amix=inputs=2:normalize=0:duration=longest,atrim=0:$(f3 "$END-0.08"),apad=whole_dur=$END,afade=t=in:d=0.05,afade=t=out:st=$(f3 "$END-0.6"):d=0.5[ao]" \
   -map 0:v -map "[ao]" -t $END -c:v libx264 -threads 4 -profile:v high -pix_fmt yuv420p -r 25 -crf 18 -preset medium -c:a pcm_s16le "$OUT.raw.mov"
-I=$(ffmpeg -nostats -i "$OUT.raw.mov" -af ebur128 -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}'); g=$(echo "-16 - ($I)" | bc -l)
-ffmpeg -v error -y -i "$OUT.raw.mov" -c:v copy -af "volume=${g}dB,alimiter=limit=0.75:level=false" -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"; rm -f "$OUT.raw.mov"
+I=$(ffmpeg -nostdin -nostats -i "$OUT.raw.mov" -af ebur128 -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}'); g=$(echo "-16 - ($I)" | bc -l)
+ffmpeg -nostdin -v error -y -i "$OUT.raw.mov" -c:v copy -af "volume=${g}dB,alimiter=limit=0.75:level=false" -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"; rm -f "$OUT.raw.mov"
 echo "$OUT $(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT") s, button $TB s, bed $BED (music $LM LUFS at full), gain $g dB"
 
 # ---- checks: voice over background per bite; whisper on the final mix ----
 WM=${WHISPER_MODEL:-$HOME/.cache/whisper-cpp/ggml-large-v3-turbo-q5_0.bin}
 printf "%-20s %8s %8s %6s  %s\n" bite voice bg "v-bg" "whisper (final mix)"
 for b in "${BITES[@]}"; do set -- $b; a=$(m $1); e=$(m $2)
-  lv=$(ffmpeg -nostats -i $T/voice.wav -af "atrim=$a:$e,ebur128" -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}')
-  lb=$(ffmpeg -nostats -i $T/bg.wav -af "atrim=$a:$e,ebur128" -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}')
-  ffmpeg -v error -y -ss $a -to $e -i "$OUT" -ar 16000 -ac 1 $T/w.wav
+  lv=$(ffmpeg -nostdin -nostats -i $T/voice.wav -af "atrim=$a:$e,ebur128" -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}')
+  lb=$(ffmpeg -nostdin -nostats -i $T/bg.wav -af "atrim=$a:$e,ebur128" -f null - 2>&1 | grep -E "^\s+I:" | tail -1 | awk '{print $2}')
+  ffmpeg -nostdin -v error -y -ss $a -to $e -i "$OUT" -ar 16000 -ac 1 $T/w.wav
   w=$(whisper-cli -m "$WM" -l en -nt -np -f $T/w.wav 2>/dev/null | tr -s ' \n' ' ')
   printf "%-20s %8s %8s %6s  %s\n" "$4($3)" "$lv" "$lb" "$(f3 "$lv - ($lb)")" "$w"
 done

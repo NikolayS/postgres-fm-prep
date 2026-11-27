@@ -16,7 +16,7 @@ bun tools/compose.ts 21-layout.json 01-edited.mp4 43-audio.mp4 --intro "$O/music
 
 # final = edited + 14; splice.ts widens the window to keyframes
 bun $S/splice.ts 25-final-v5.mp4 44-video.mp4 --from 1584.1 --to 1763.9 --with 43-chunk.mp4 --with-at 1574 --preset fast 2>&1 | grep -E "window|wrote"
-ffmpeg -v error -y -i 44-video.mp4 -i 43-audio.mp4 -map 0:v -map 1:a -c copy -movflags +faststart 25-final-v6.part.mp4
+ffmpeg -nostdin -v error -y -i 44-video.mp4 -i 43-audio.mp4 -map 0:v -map 1:a -c copy -movflags +faststart 25-final-v6.part.mp4
 mv 25-final-v6.part.mp4 25-final-v6.mp4
 rm -f "$R/44-video.mp4"
 ffprobe -v error -show_entries stream=codec_type,duration,nb_frames -of csv=p=0 25-final-v6.mp4

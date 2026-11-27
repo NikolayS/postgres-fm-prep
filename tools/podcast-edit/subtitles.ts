@@ -504,7 +504,7 @@ const qnorm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 const QR = 8000; // sample rate for the audio match
 
 async function pcm(media: string, a: number, dur: number) {
-  const buf = await $`ffmpeg -v error -ss ${Math.max(0, a)} -t ${dur} -i ${media} -vn -ac 1 -ar ${QR} -f f32le -`.arrayBuffer();
+  const buf = await $`ffmpeg -nostdin -v error -ss ${Math.max(0, a)} -t ${dur} -i ${media} -vn -ac 1 -ar ${QR} -f f32le -`.arrayBuffer();
   return new Float32Array(buf);
 }
 
@@ -527,7 +527,7 @@ async function locate(source: string, src: number, media: string, t: number) {
 
 async function hear(media: string, a: number, b: number, work: string, name: string) {
   const wav = `${work}/${name}.wav`, base = `${work}/${name}`;
-  await $`ffmpeg -y -v error -ss ${a} -t ${b - a} -i ${media} -vn -ac 1 -ar 16000 ${wav}`;
+  await $`ffmpeg -nostdin -y -v error -ss ${a} -t ${b - a} -i ${media} -vn -ac 1 -ar 16000 ${wav}`;
   await $`whisper-cli -m ${process.env.HOME}/.whisper-models/ggml-small.bin -f ${wav} -ojf -ml 1 -sow -of ${base}`.quiet();
   const raw: any = await Bun.file(`${base}.json`).json();
   return raw.transcription

@@ -9,4 +9,4 @@ for s in "$@"; do a=${s% *}; b=${s#* }; d=$(printf "%.3f" $(echo "$b-$a"|bc))
   fc+="[$i:v]setpts=PTS-STARTPTS,fps=25[v$i];[$i:a]asetpts=PTS-STARTPTS,aresample=48000,afade=t=in:d=0.03,afade=t=out:st=$(printf "%.3f" $(echo "$d-0.04"|bc)):d=0.04[a$i];"
   cat+="[v$i][a$i]"; i=$((i+1)); done
 fc+="${cat}concat=n=$i:v=1:a=1[v][a]"
-ffmpeg -v error -y "${in[@]}" -filter_complex "$fc" -map "[v]" -map "[a]" -c:v libx264 -crf 16 -preset fast -pix_fmt yuv420p -r 25 -c:a pcm_s16le "$out"
+ffmpeg -nostdin -v error -y "${in[@]}" -filter_complex "$fc" -map "[v]" -map "[a]" -c:v libx264 -crf 16 -preset fast -pix_fmt yuv420p -r 25 -c:a pcm_s16le "$out"

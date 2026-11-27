@@ -132,10 +132,10 @@ const longSeg = (target: number) => {
   return best;
 };
 const grab = async (file: string, t: number) =>
-  new Uint8Array(await $`ffmpeg -v error -ss ${t.toFixed(3)} -i ${file} -frames:v 1 -vf scale=64:36,format=gray -f rawvideo -`.arrayBuffer());
+  new Uint8Array(await $`ffmpeg -nostdin -v error -ss ${t.toFixed(3)} -i ${file} -frames:v 1 -vf scale=64:36,format=gray -f rawvideo -`.arrayBuffer());
 const mad = (x: Uint8Array, y: Uint8Array) => x.reduce((s, v, i) => s + Math.abs(v - y[i]), 0) / x.length;
 const pcmAt = async (file: string, t: number, dur: number) =>
-  new Float32Array(await $`ffmpeg -v error -ss ${t.toFixed(4)} -t ${dur} -i ${file} -vn -ac 1 -ar 16000 -f f32le -`.arrayBuffer());
+  new Float32Array(await $`ffmpeg -nostdin -v error -ss ${t.toFixed(4)} -t ${dur} -i ${file} -vn -ac 1 -ar 16000 -f f32le -`.arrayBuffer());
 function bestLag(a: Float32Array, b: Float32Array, maxLag: number) {
   let best = 0, bestC = -Infinity;
   for (let lag = -maxLag; lag <= maxLag; lag++) {
@@ -181,7 +181,7 @@ function align(a: string[], b: string[]) {
 if (!values["no-transcribe"]) {
   // ---- 3. Full re-transcription ----
   const audio = `${work}/edited.mp3`;
-  await $`ffmpeg -y -v error -i ${out} -vn -ac 1 -ar 22050 -b:a 64k ${audio}`;
+  await $`ffmpeg -nostdin -y -v error -i ${out} -vn -ac 1 -ar 22050 -b:a 64k ${audio}`;
   const got = (values.engine === "elevenlabs" ? await scribe(audio, 2, `${work}/edited.raw.json`) : await whisperWords(audio)).filter((w) => w.type === "word");
   await Bun.write(`${work}/edited.words.json`, JSON.stringify(got));
   const A = keptWords.map((w) => norm(w.text)), B = got.map((w) => norm(w.text));
@@ -215,7 +215,7 @@ for (const j of pick) {
   const row: any = { random: random.includes(j), out: fmt(j.out), cut: `${fmt(j.srcEnd)}-${fmt(j.srcStart)}`, clickRatio: +(local / ref).toFixed(2) };
   if (!values["no-transcribe"]) {
     const clip = `${work}/join-${j.out.toFixed(2)}.wav`;
-    await $`ffmpeg -y -v error -ss ${Math.max(0, j.out - 2).toFixed(3)} -t 4 -i ${out} -vn -ac 1 -ar 16000 ${clip}`;
+    await $`ffmpeg -nostdin -y -v error -ss ${Math.max(0, j.out - 2).toFixed(3)} -t 4 -i ${out} -vn -ac 1 -ar 16000 ${clip}`;
     const heard = (values.engine === "elevenlabs" ? await scribe(clip, 2) : await whisperWords(clip)).filter((w) => w.type === "word").map((w) => norm(w.text));
     // Expected: kept words that sit fully inside the middle 2.8 s of the clip.
     const lo = toSource(Math.max(0, j.out - 1.4)), hi = toSource(j.out + 1.4);

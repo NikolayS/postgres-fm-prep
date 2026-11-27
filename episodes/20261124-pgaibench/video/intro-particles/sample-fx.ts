@@ -12,7 +12,7 @@ const raw = async (file: string) => new Uint8Array(await Bun.file(file).arrayBuf
 const frameOf = async (f: number) => {
   const p = `/tmp/fxs-${process.pid}-${f}.rgba`;
   const vf = `select=eq(n\\,${f})`;
-  await $`ffmpeg -v error -y -i ${video} -vf ${vf} -frames:v 1 -pix_fmt rgba -f rawvideo ${p}`;
+  await $`ffmpeg -nostdin -v error -y -i ${video} -vf ${vf} -frames:v 1 -pix_fmt rgba -f rawvideo ${p}`;
   const b = await raw(p); await $`rm -f ${p}`; return b;
 };
 const pi = 'public/pi3';

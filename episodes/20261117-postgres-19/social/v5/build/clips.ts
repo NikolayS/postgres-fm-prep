@@ -88,14 +88,14 @@ for (const c of CLIPS.filter(c => all || want.has(c.name.slice(3)))) {
   f += `[b${CAPS.length}]format=yuv420p[main];[main][endv]xfade=transition=fade:duration=${XF}:offset=${(LEN - XF / 2).toFixed(2)}[vout];`;
   f += `[aud]apad=pad_dur=${HOLD + XF}[aout]`;
   const out = `${OUT}/${c.name}.mp4`;
-  await run(["ffmpeg", "-y", "-loglevel", "error", ...inputs, "-filter_complex", f, "-map", "[vout]", "-map", "[aout]",
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", ...inputs, "-filter_complex", f, "-map", "[vout]", "-map", "[aout]",
     "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
     "-t", (LEN + HOLD).toFixed(2), "-movflags", "+faststart", out]);
   let acc = 0; const joins = SEG.slice(0, -1).map(([a, b]) => (acc += b - a));
   const at = [0.1, ...joins.flatMap(j => [j - 0.15, j + 0.15]), LEN - 0.5, LEN + 0.5];
-  for (let i = 0; i < at.length; i++) await run(["ffmpeg", "-y", "-loglevel", "error", "-ss", at[i].toFixed(2), "-i", out, "-frames:v", "1", "-vf", "scale=270:-1", `${TMP}/${c.name}-chk${i}.png`]);
-  await run(["ffmpeg", "-y", "-loglevel", "error", ...at.flatMap((_, i) => ["-i", `${TMP}/${c.name}-chk${i}.png`]), "-filter_complex", `${at.map((_, i) => `[${i}:v]`).join("")}hstack=inputs=${at.length}`, `${OUT}/${c.name}.check.png`]);
-  await run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "0.1", "-i", out, "-frames:v", "1", `${OUT}/${c.name}.poster.png`]);
+  for (let i = 0; i < at.length; i++) await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-ss", at[i].toFixed(2), "-i", out, "-frames:v", "1", "-vf", "scale=270:-1", `${TMP}/${c.name}-chk${i}.png`]);
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", ...at.flatMap((_, i) => ["-i", `${TMP}/${c.name}-chk${i}.png`]), "-filter_complex", `${at.map((_, i) => `[${i}:v]`).join("")}hstack=inputs=${at.length}`, `${OUT}/${c.name}.check.png`]);
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-ss", "0.1", "-i", out, "-frames:v", "1", `${OUT}/${c.name}.poster.png`]);
   console.log(`wrote ${out}: ${(LEN + HOLD).toFixed(1)} s`);
 }
 await browser.close();

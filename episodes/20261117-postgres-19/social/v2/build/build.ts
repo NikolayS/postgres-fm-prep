@@ -46,7 +46,7 @@ if (all || want.has("hero")) {
   await Bun.write(`${TMP}/hero.html`, S["s00-hero"]);
   await p.goto(`file://${TMP}/hero.html`, { waitUntil: "networkidle" });
   await p.evaluate(() => document.fonts.ready);
-  const enc = Bun.spawn(["ffmpeg", "-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", String(FPS), "-i", "-",
+  const enc = Bun.spawn(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-f", "image2pipe", "-framerate", String(FPS), "-i", "-",
     "-f", "lavfi", "-t", String(DUR), "-i", "anullsrc=r=48000:cl=stereo",
     "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p", "-c:a", "aac", "-shortest",
     "-movflags", "+faststart", `${OUT}/x1-hero.mp4`], { stdin: "pipe" });
@@ -107,14 +107,14 @@ if (all || want.has("clip")) {
   f += `[${iEnd}:v]trim=0:${(HOLD + XF).toFixed(2)},fps=30,format=yuv420p,setpts=PTS-STARTPTS[endv];`;
   f += `[b${CAPS.length}]format=yuv420p[main];[main][endv]xfade=transition=fade:duration=${XF}:offset=${(LEN - XF / 2).toFixed(2)}[vout];`;
   f += `[aud]apad=pad_dur=${HOLD + XF}[aout]`;
-  await run(["ffmpeg", "-y", "-loglevel", "error", ...inputs, "-filter_complex", f, "-map", "[vout]", "-map", "[aout]",
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", ...inputs, "-filter_complex", f, "-map", "[vout]", "-map", "[aout]",
     "-c:v", "libx264", "-crf", "18", "-preset", "medium", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k",
     "-t", (LEN + HOLD).toFixed(2), "-movflags", "+faststart", `${OUT}/x6-kirk-1975.mp4`]);
   // check strip: first 1.5 s, the jump cut, last 1.5 s of speech
   const at = [0.1, 0.8, 1.4, SEG[0][1] - SEG[0][0] - 0.3, SEG[0][1] - SEG[0][0] + 0.3, LEN - 1.4, LEN - 0.4, LEN + 1.5];
-  for (let i = 0; i < at.length; i++) await run(["ffmpeg", "-y", "-loglevel", "error", "-ss", at[i].toFixed(2), "-i", `${OUT}/x6-kirk-1975.mp4`, "-frames:v", "1", "-vf", "scale=270:-1", `${TMP}/chk${i}.png`]);
-  await run(["ffmpeg", "-y", "-loglevel", "error", ...at.flatMap((_, i) => ["-i", `${TMP}/chk${i}.png`]), "-filter_complex", `${at.map((_, i) => `[${i}:v]`).join("")}hstack=inputs=${at.length}`, `${OUT}/x6-kirk-1975.check.png`]);
-  await run(["ffmpeg", "-y", "-loglevel", "error", "-ss", "3", "-i", `${OUT}/x6-kirk-1975.mp4`, "-frames:v", "1", `${OUT}/x6-kirk-1975.poster.png`]);
+  for (let i = 0; i < at.length; i++) await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-ss", at[i].toFixed(2), "-i", `${OUT}/x6-kirk-1975.mp4`, "-frames:v", "1", "-vf", "scale=270:-1", `${TMP}/chk${i}.png`]);
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", ...at.flatMap((_, i) => ["-i", `${TMP}/chk${i}.png`]), "-filter_complex", `${at.map((_, i) => `[${i}:v]`).join("")}hstack=inputs=${at.length}`, `${OUT}/x6-kirk-1975.check.png`]);
+  await run(["ffmpeg", "-nostdin", "-y", "-loglevel", "error", "-ss", "3", "-i", `${OUT}/x6-kirk-1975.mp4`, "-frames:v", "1", `${OUT}/x6-kirk-1975.poster.png`]);
   console.log(`wrote x6-kirk-1975.mp4: ${(LEN + HOLD).toFixed(1)} s`);
 }
 

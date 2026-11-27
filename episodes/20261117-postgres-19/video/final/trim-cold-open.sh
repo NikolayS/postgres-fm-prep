@@ -9,7 +9,7 @@
 set -euo pipefail
 IN="$1"; OUT="$2"; END="$3"; GAIN="${4:-2.5}"; FADE="${5:-0.06}"
 ST=$(echo "$END - $FADE" | bc -l)
-ffmpeg -v error -y -i "$IN" -t "$END" -map 0:v -map 0:a -c:v libx264 -preset slow -crf 17 -pix_fmt yuv420p -r 25 \
+ffmpeg -nostdin -v error -y -i "$IN" -t "$END" -map 0:v -map 0:a -c:v libx264 -preset slow -crf 17 -pix_fmt yuv420p -r 25 \
   -af "afade=t=out:st=$ST:d=$FADE,volume=${GAIN}dB,aresample=192000,alimiter=limit=0.75:level=false:attack=1:release=50,aresample=48000" \
   -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"
 ffprobe -v error -show_entries stream=codec_type,duration -of csv=p=0 "$OUT"

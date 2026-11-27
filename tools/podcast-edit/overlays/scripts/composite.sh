@@ -45,6 +45,6 @@ for spec in $SFX; do
 done
 fc+="${mix}amix=inputs=$cnt:normalize=0:duration=first[aout]"
 
-ffmpeg -hide_banner -loglevel error -y "${inputs[@]}" -filter_complex "$fc" \
+ffmpeg -nostdin -hide_banner -loglevel error -y "${inputs[@]}" -filter_complex "$fc" \
   -map "[vout]" -map "[aout]" -c:v libx264 -crf 18 -preset medium -pix_fmt yuv420p -r $FPS -c:a aac -b:a 192k -movflags +faststart "$OUT"
 echo "wrote $OUT"

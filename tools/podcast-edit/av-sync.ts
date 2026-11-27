@@ -6,14 +6,14 @@ const [edited, final, mapPath] = Bun.argv.slice(2);
 const map = await Bun.file(mapPath).json();
 const toFinal = (t: number) => map.card + t + map.freezes.filter((f: any) => f.edited < t).reduce((a: number, f: any) => a + f.sec, 0);
 async function env(f: string, t: number, d: number) {
-  const pcm = new Float32Array(await $`ffmpeg -v error -ss ${t} -t ${d} -i ${f} -vn -ac 1 -ar 8000 -f f32le -`.arrayBuffer());
+  const pcm = new Float32Array(await $`ffmpeg -nostdin -v error -ss ${t} -t ${d} -i ${f} -vn -ac 1 -ar 8000 -f f32le -`.arrayBuffer());
   const out: number[] = []; // 1 ms envelope
   for (let i = 0; i + 8 <= pcm.length; i += 8) { let s = 0; for (let j = i; j < i + 8; j++) s += Math.abs(pcm[j]); out.push(s); }
   return out;
 }
 async function motion(f: string, t: number, d: number, crop: string) {
   const W = 96, H = 64;
-  const raw = new Uint8Array(await $`ffmpeg -v error -ss ${t} -t ${d} -i ${f} -vf crop=${crop},scale=${W}:${H} -f rawvideo -pix_fmt gray -`.arrayBuffer());
+  const raw = new Uint8Array(await $`ffmpeg -nostdin -v error -ss ${t} -t ${d} -i ${f} -vf crop=${crop},scale=${W}:${H} -f rawvideo -pix_fmt gray -`.arrayBuffer());
   const n = Math.floor(raw.length / (W * H)), out: number[] = [];
   for (let i = 1; i < n; i++) { let s = 0; for (let j = 0; j < W * H; j++) s += Math.abs(raw[i * W * H + j] - raw[(i - 1) * W * H + j]); out.push(s); }
   return out;

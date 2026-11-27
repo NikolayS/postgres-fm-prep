@@ -173,7 +173,7 @@ if (values["plan-only"]) process.exit(0);
 
 // ---- 5. Audio: gains, sample-exact splice with equal-power crossfades in valleys (lib.ts) ----
 const raw = `${work}/src.s16`;
-if (!(await Bun.file(raw).exists())) await $`ffmpeg -y -v error -i ${media} -vn -ac 2 -ar ${RATE} -f s16le ${raw}`;
+if (!(await Bun.file(raw).exists())) await $`ffmpeg -nostdin -y -v error -i ${media} -vn -ac 2 -ar ${RATE} -f s16le ${raw}`;
 const src = new Int16Array(await Bun.file(raw).arrayBuffer());
 for (const g of gains) console.error(`gain ${fmt(g.start)} ${g.db.toFixed(1)} dB: ${g.text}`);
 let outPcm = assembleAudio(src, 2, RATE, { audio: pieces, segments: segs, cuts: [], gains }, db);
@@ -186,14 +186,14 @@ await Bun.write(`${work}/edited.s16`, outPcm);
 const pcmIn = ["-f", "s16le", "-ar", String(RATE), "-ac", "2", "-i", `${work}/edited.s16`];
 // TP -2.0 before AAC: the encoder adds about 0.3 dB of peak, so the file lands near -1.5 dBTP.
 const LN = "loudnorm=I=-16:TP=-2.0:LRA=11";
-const pass1 = await $`ffmpeg -hide_banner -nostats ${pcmIn} -af ${LN + ":print_format=json"} -f null -`.quiet().nothrow();
+const pass1 = await $`ffmpeg -nostdin -hide_banner -nostats ${pcmIn} -af ${LN + ":print_format=json"} -f null -`.quiet().nothrow();
 const m = JSON.parse(pass1.stderr.toString().match(/\{[\s\S]*\}/)![0]);
 const ln2 = `${LN}:measured_I=${m.input_i}:measured_TP=${m.input_tp}:measured_LRA=${m.input_lra}:measured_thresh=${m.input_thresh}:offset=${m.target_offset}:linear=true:print_format=json`;
-await $`ffmpeg -y -hide_banner -nostats ${pcmIn} -af ${ln2} -ar ${RATE} -c:a pcm_s16le ${work}/edited.wav`.quiet();
+await $`ffmpeg -nostdin -y -hide_banner -nostats ${pcmIn} -af ${ln2} -ar ${RATE} -c:a pcm_s16le ${work}/edited.wav`.quiet();
 
 // ---- 7. Video: drop the cut frames, mux with the new audio ---------------------------
 const sel = segs.map(([a, b]) => `between(n\\,${a - srcStartFrame}\\,${b - 1 - srcStartFrame})`).join("+");
 await Bun.write(`${work}/video.filter`, `[0:v]select='${sel}',setpts=N/(${FPS}*TB)[v]`);
 console.error("encoding video ...");
-await $`ffmpeg -y -v error -stats -ss ${(srcStartFrame / FPS).toFixed(3)} -t ${((srcEndFrame - srcStartFrame) / FPS + 1).toFixed(2)} -i ${media} -i ${work}/edited.wav -/filter_complex ${work}/video.filter -map [v] -map 1:a -c:v libx264 -preset ${values.preset} -crf ${values.crf} -pix_fmt yuv420p -r ${FPS} -c:a aac -b:a 192k -movflags +faststart -shortest ${out}`;
+await $`ffmpeg -nostdin -y -v error -stats -ss ${(srcStartFrame / FPS).toFixed(3)} -t ${((srcEndFrame - srcStartFrame) / FPS + 1).toFixed(2)} -i ${media} -i ${work}/edited.wav -/filter_complex ${work}/video.filter -map [v] -map 1:a -c:v libx264 -preset ${values.preset} -crf ${values.crf} -pix_fmt yuv420p -r ${FPS} -c:a aac -b:a 192k -movflags +faststart -shortest ${out}`;
 console.error(`done: ${out}`);

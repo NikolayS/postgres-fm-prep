@@ -20,7 +20,7 @@ MD=$(ffprobe -v error -show_entries format=duration -of csv=p=0 v3.layout.mp4)
 
 # 1. Opening: intro.ts frames over 2.8 s of each host's own Zoom tile (cropped clear of Zoom's label).
 for p in "nik 1638.9 660:0" "michael 151.0 660:360" "kirk 151.0 20:0"; do set -- $p
-  [ -s v4/seq/$1/0001.png ] || { mkdir -p v4/seq/$1; ffmpeg -v error -y -ss $2 -t 2.8 -i "$SOURCE" -vf "fps=25,crop=600:338:$3,scale=1920:1080:flags=lanczos" v4/seq/$1/%04d.png; }
+  [ -s v4/seq/$1/0001.png ] || { mkdir -p v4/seq/$1; ffmpeg -nostdin -v error -y -ss $2 -t 2.8 -i "$SOURCE" -vf "fps=25,crop=600:338:$3,scale=1920:1080:flags=lanczos" v4/seq/$1/%04d.png; }
 done
 TD=v4/intro; { [ $TD/0000.png -nt "$H/intro.ts" ] && [ $TD/0000.png -nt "$H/intro.json" ]; } || bun "$H/intro.ts" $TD v4/seq
 TT=$(bun -e 'console.log((await Bun.file(process.argv[1]).json()).end)' "$H/intro.json")
@@ -46,7 +46,7 @@ for s in "${SEG[@]}"; do set -- $s; a=$1; b=$2; who=$3
   CUTS+=("$(f3 "$TT+$at")"); at=$(f3 "$at+$b-$a"); i=$((i+1))
 done
 fc+="${cat}concat=n=$i:v=1:a=1[mv][ma]"
-ffmpeg -v error -y -i v3.layout.mp4 -i v3.src.mov -filter_complex "$fc" -map "[mv]" -map "[ma]" -c:v libx264 -threads 4 -crf 16 -preset fast -pix_fmt yuv420p -r 25 -c:a pcm_s16le v4/montage-$V.mov
+ffmpeg -nostdin -v error -y -i v3.layout.mp4 -i v3.src.mov -filter_complex "$fc" -map "[mv]" -map "[ma]" -c:v libx264 -threads 4 -crf 16 -preset fast -pix_fmt yuv420p -r 25 -c:a pcm_s16le v4/montage-$V.mov
 
 # 3. Compose: opening + montage + held last frame.
 in=(-framerate 25 -i $TD/%04d.png -i v4/montage-$V.mov -i v4/music-$V.wav)
@@ -80,7 +80,7 @@ for s in "${SFX[@]}"; do set -- $s; ms=$(printf "%.0f" "$(echo "$2*1000" | bc -l
   in+=(-i "$FX/$1.wav"); af+=";[$k:a]aresample=48000,aformat=channel_layouts=stereo$tr,volume=$(($3+MG))dB,adelay=$ms|$ms[x$k]"; mix+="[x$k]"; k=$((k+1)); done
 n=$(echo "$mix" | grep -o '\[' | wc -l | tr -d ' ')
 af+=";${mix}amix=inputs=$n:normalize=0:duration=longest,atrim=0:$END,afade=t=out:st=$fo:d=0.6[ao]"
-ffmpeg -v error -y "${in[@]}" -filter_complex "$vf;$af" -map "[vo]" -map "[ao]" -c:v libx264 -threads 4 -profile:v high -r 25 -crf 19 -preset medium -c:a pcm_s16le "$OUT.raw.mov"
-I=$(ffmpeg -i "$OUT.raw.mov" -af ebur128 -f null - 2>&1 | grep "I:" | tail -1 | awk '{print $2}'); g=$(echo "-16 - ($I)" | bc -l)
-ffmpeg -v error -y -i "$OUT.raw.mov" -c:v copy -af "volume=${g}dB,alimiter=limit=0.75:level=false" -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"; rm -f "$OUT.raw.mov"
+ffmpeg -nostdin -v error -y "${in[@]}" -filter_complex "$vf;$af" -map "[vo]" -map "[ao]" -c:v libx264 -threads 4 -profile:v high -r 25 -crf 19 -preset medium -c:a pcm_s16le "$OUT.raw.mov"
+I=$(ffmpeg -nostdin -i "$OUT.raw.mov" -af ebur128 -f null - 2>&1 | grep "I:" | tail -1 | awk '{print $2}'); g=$(echo "-16 - ($I)" | bc -l)
+ffmpeg -nostdin -v error -y -i "$OUT.raw.mov" -c:v copy -af "volume=${g}dB,alimiter=limit=0.75:level=false" -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"; rm -f "$OUT.raw.mov"
 echo "$OUT $(ffprobe -v error -show_entries format=duration -of csv=p=0 "$OUT") s, opening $TT s, montage $at s, button $TB s, gain $g dB"

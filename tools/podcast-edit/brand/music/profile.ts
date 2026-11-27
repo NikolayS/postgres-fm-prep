@@ -9,7 +9,7 @@ for (const p of Bun.argv.slice(2)) {
     if (t === "uuid") { const ps = buf.toString("utf8", d + 20, d + s).split("\0"); const i = ps.indexOf("beat count"); if (i >= 0) beats = +ps[i + 1]; }
     if (s < 0) break; o = d + s;
   }
-  const pr = Bun.spawn(["ffmpeg", "-v", "error", "-i", p, "-f", "f32le", "-ac", "1", "-ar", "44100", "-"], { stdout: "pipe" });
+  const pr = Bun.spawn(["ffmpeg", "-nostdin", "-v", "error", "-i", p, "-f", "f32le", "-ac", "1", "-ar", "44100", "-"], { stdout: "pipe" });
   const x = new Float32Array(await new Response(pr.stdout).arrayBuffer()).subarray(prime, prime + frames);
   const step = frames / beats / 2, row: string[] = [];
   let peak = 0; for (const v of x) peak = Math.max(peak, Math.abs(v));

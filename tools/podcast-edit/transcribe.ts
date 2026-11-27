@@ -29,13 +29,13 @@ const duration = Number((await $`ffprobe -v error -show_entries format=duration 
 let words: Word[];
 if (values.engine === "elevenlabs") {
   const audio = `${tmp}/audio.mp3`;
-  await $`ffmpeg -y -v error -i ${media} -vn -ac 1 -ar 22050 -b:a 64k ${audio}`;
+  await $`ffmpeg -nostdin -y -v error -i ${media} -vn -ac 1 -ar 22050 -b:a 64k ${audio}`;
   console.error(`uploading ${audio} to ElevenLabs Scribe ...`);
   words = await scribe(audio, Number(values.speakers), `${tmp}/raw.json`);
 } else {
   // whisper.cpp with a disfluent prompt so it keeps more fillers.
   const wav = `${tmp}/audio.wav`;
-  await $`ffmpeg -y -v error -i ${media} -vn -ac 1 -ar 16000 ${wav}`;
+  await $`ffmpeg -nostdin -y -v error -i ${media} -vn -ac 1 -ar 16000 ${wav}`;
   const prompt = "Um, uh, so, like, I mean, uh, you know, um, the the, it's a, it's a, hmm.";
   await $`whisper-cli -m ${values.model} -f ${wav} -ojf -sow -ml 1 --prompt ${prompt} -of ${tmp}/whisper`.quiet();
   const raw: any = await Bun.file(`${tmp}/whisper.json`).json();

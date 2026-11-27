@@ -20,7 +20,7 @@ if (Number(disk.stdout.toString().trim().split('\n').at(-1)!.split(/\s+/)[3]) < 
 const photo = resolve(import.meta.dir, '../../../preview/assets/nik-michael-london.png');
 const info = Bun.spawnSync(['ffprobe','-v','error','-select_streams','v:0','-show_entries','stream=width,height','-of','json',photo]);
 const {width:w,height:h} = JSON.parse(info.stdout.toString()).streams[0];
-const decode = Bun.spawnSync(['ffmpeg','-v','error','-i',photo,'-f','rawvideo','-pix_fmt','rgb24','-'], {maxBuffer: 64*1024*1024});
+const decode = Bun.spawnSync(['ffmpeg','-nostdin','-v','error','-i',photo,'-f','rawvideo','-pix_fmt','rgb24','-'], {maxBuffer: 64*1024*1024});
 if (decode.exitCode) throw new Error(decode.stderr.toString());
 const pixels=decode.stdout;
 // Longest run of rows with >20% nonblack pixels excludes black UI and home indicator.
@@ -56,7 +56,7 @@ try {
   temp=mkdtempSync(join(tmpdir(),'london-card-'));
   const png=join(temp,'card.png');await page.screenshot({path:png,omitBackground:true});
   // Transparent except the photo (centre, y 250-890); the hosts move around it (layout.json centers.london).
-  const p=Bun.spawn(['ffmpeg','-v','error','-y','-loop','1','-framerate','25','-i',png,'-t',String(dur),'-vf',`format=rgba,fade=t=in:st=0:d=0.4:alpha=1,fade=t=out:st=${dur-.4}:d=0.4:alpha=1`,'-an','-c:v','png','-pix_fmt','rgba',out],{stdout:'inherit',stderr:'inherit'});
+  const p=Bun.spawn(['ffmpeg','-nostdin','-v','error','-y','-loop','1','-framerate','25','-i',png,'-t',String(dur),'-vf',`format=rgba,fade=t=in:st=0:d=0.4:alpha=1,fade=t=out:st=${dur-.4}:d=0.4:alpha=1`,'-an','-c:v','png','-pix_fmt','rgba',out],{stdout:'inherit',stderr:'inherit'});
   if(await p.exited) throw new Error('ffmpeg failed');
  }
 } finally {await browser.close();if(temp) rmSync(temp,{recursive:true,force:true});}

@@ -75,10 +75,10 @@ if (import.meta.main) {
     const keep = at - a;
     console.log(`window ${a.toFixed(3)}..end: show ${keep.toFixed(2)} s, hold ${X} s, crossfade into ${v.outro}`);
     if (v["dry-run"]) process.exit(0);
-    if (a > 0) { await $`ffmpeg -y -v error -i ${input} -map 0:v -c copy -frames:v ${Math.round(a * fps)} -video_track_timescale ${ts} ${join(work, "head.mp4")}`; parts.push("head.mp4"); }
+    if (a > 0) { await $`ffmpeg -nostdin -y -v error -i ${input} -map 0:v -c copy -frames:v ${Math.round(a * fps)} -video_track_timescale ${ts} ${join(work, "head.mp4")}`; parts.push("head.mp4"); }
     const g = `[0:v]trim=duration=${keep.toFixed(3)},setpts=PTS-STARTPTS,tpad=stop_mode=clone:stop_duration=${X},format=yuv420p,setsar=1,fps=${fps},settb=1/${fps}[a];` +
       `[1:v]format=yuv420p,setsar=1,fps=${fps},settb=1/${fps}[b];[a][b]xfade=transition=fade:duration=${X}:offset=${keep.toFixed(3)}[v]`;
-    await $`ffmpeg -y -v error -ss ${a} -i ${input} -i ${v.outro} -filter_complex ${g} -map [v] ${enc} ${join(work, "tail.mp4")}`;
+    await $`ffmpeg -nostdin -y -v error -ss ${a} -i ${input} -i ${v.outro} -filter_complex ${g} -map [v] ${enc} ${join(work, "tail.mp4")}`;
     parts.push("tail.mp4");
     expectFrames = null;
   } else {
@@ -88,31 +88,31 @@ if (import.meta.main) {
     const n = (w.fb ?? src.frames) - w.fa;
     console.log(`window ${w.a.toFixed(3)}..${w.fb === null ? "end" : w.b.toFixed(3)} (${n} frames; asked ${from}..${to})`);
     if (v["dry-run"]) process.exit(0);
-    if (w.fa > 0) { await $`ffmpeg -y -v error -i ${input} -map 0:v -c copy -frames:v ${w.fa} -video_track_timescale ${ts} ${join(work, "head.mp4")}`; parts.push("head.mp4"); }
+    if (w.fa > 0) { await $`ffmpeg -nostdin -y -v error -i ${input} -map 0:v -c copy -frames:v ${w.fa} -video_track_timescale ${ts} ${join(work, "head.mp4")}`; parts.push("head.mp4"); }
     const mid = join(work, "mid.mp4");
     if (v.with) {
       const off = w.a - Number(v["with-at"] ?? 0);
       if (off < 0) { console.error("--with clip starts after the window"); process.exit(2); }
       const clip = await probe(v.with);
       if (clip.duration + 1e-3 < off + n / fps) { console.error(`--with clip is ${clip.duration.toFixed(2)} s; the window needs ${(off + n / fps).toFixed(2)} s`); process.exit(2); }
-      await $`ffmpeg -y -v error -ss ${off} -i ${v.with} -map 0:v -frames:v ${n} ${enc} ${mid}`;
+      await $`ffmpeg -nostdin -y -v error -ss ${off} -i ${v.with} -map 0:v -frames:v ${n} ${enc} ${mid}`;
     } else {
       const g = v.at
         ? `[0:v]split[base][x];[x]${v.vf}[fx];[base][fx]overlay=${v.at}[v]`
         : `[0:v]${v.vf}[v]`;
-      await $`ffmpeg -y -v error -ss ${w.a} -i ${input} -filter_complex ${g} -map [v] -frames:v ${n} ${enc} ${mid}`;
+      await $`ffmpeg -nostdin -y -v error -ss ${w.a} -i ${input} -filter_complex ${g} -map [v] -frames:v ${n} ${enc} ${mid}`;
     }
     parts.push("mid.mp4");
-    if (w.fb !== null) { await $`ffmpeg -y -v error -ss ${w.b} -i ${input} -map 0:v -c copy -video_track_timescale ${ts} ${join(work, "rest.mp4")}`; parts.push("rest.mp4"); }
+    if (w.fb !== null) { await $`ffmpeg -nostdin -y -v error -ss ${w.b} -i ${input} -map 0:v -c copy -video_track_timescale ${ts} ${join(work, "rest.mp4")}`; parts.push("rest.mp4"); }
   }
 
   await Bun.write(join(work, "list.txt"), parts.map((f) => `file '${f}'`).join("\n") + "\n");
   const video = join(work, "video.mp4");
-  await $`ffmpeg -y -v error -f concat -safe 0 -i ${join(work, "list.txt")} -c copy ${video}`;
+  await $`ffmpeg -nostdin -y -v error -f concat -safe 0 -i ${join(work, "list.txt")} -c copy ${video}`;
   const sound = v.audio ?? input;
   const tmp = output.replace(/\.mp4$/, "") + ".tmp.mp4";
-  if ((await probe(sound)).hasAudio) await $`ffmpeg -y -v error -i ${video} -i ${sound} -map 0:v -map 1:a -c copy -movflags +faststart ${tmp}`;
-  else await $`ffmpeg -y -v error -i ${video} -c copy -movflags +faststart ${tmp}`;
+  if ((await probe(sound)).hasAudio) await $`ffmpeg -nostdin -y -v error -i ${video} -i ${sound} -map 0:v -map 1:a -c copy -movflags +faststart ${tmp}`;
+  else await $`ffmpeg -nostdin -y -v error -i ${video} -c copy -movflags +faststart ${tmp}`;
   await $`mv ${tmp} ${output}`;
   const got = await probe(output);
   const ok = expectFrames === null || got.frames === expectFrames;

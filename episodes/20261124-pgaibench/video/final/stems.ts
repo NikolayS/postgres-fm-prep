@@ -20,7 +20,7 @@ const { values, positionals } = parseArgs({ args: Bun.argv.slice(2), allowPositi
 const [body, edited, cutsPath, wordsPath, out] = positionals;
 if (!out) { console.error("usage: bun stems.ts <body.mp4> <edited.mp4> <cuts.json> <words.json> <out-dir> [--offset 13]"); process.exit(2); }
 const SR = 16000, OFF = Number(values.offset);
-const pcm = async (f: string) => { const b = await $`ffmpeg -v error -i ${f} -vn -ac 1 -ar ${SR} -c:a pcm_f32le -f f32le pipe:1`.arrayBuffer(); return new Float32Array(b); };
+const pcm = async (f: string) => { const b = await $`ffmpeg -nostdin -v error -i ${f} -vn -ac 1 -ar ${SR} -c:a pcm_f32le -f f32le pipe:1`.arrayBuffer(); return new Float32Array(b); };
 const [B, T0] = await Promise.all([pcm(body), pcm(edited)]);
 // The talk sits near --offset, but encoder priming and the card crossfade move it by some ms:
 // find the exact lag by cross-correlation over 60 s of talk (search +-0.5 s around --offset).
@@ -51,7 +51,7 @@ const spk = Object.fromEntries(values.speakers!.split(",").map((kv) => kv.split(
 await $`mkdir -p ${out}`;
 const write = async (name: string, x: Float32Array) => {
   const raw = `${out}/${name}.f32`; await Bun.write(raw, x.buffer);
-  await $`ffmpeg -v error -y -f f32le -ar ${SR} -ac 1 -i ${raw} -c:a pcm_f32le ${out}/${name}.wav && rm ${raw}`;
+  await $`ffmpeg -nostdin -v error -y -f f32le -ar ${SR} -ac 1 -i ${raw} -c:a pcm_f32le ${out}/${name}.wav && rm ${raw}`;
 };
 for (const [id, name] of Object.entries(spk)) {
   const v = new Float32Array(B.length);
