@@ -36,6 +36,10 @@ Here are some links to things they mentioned:
 - [27:49] Mirroring in PgCat: https://github.com/postgresml/pgcat#mirroring
 - [37:14] pg_repack: https://github.com/reorg/pg_repack
 
+### AI tools
+
+- [33:48] Jev, a fast judgment model from TypeSafe (the example for quick risk analysis): https://typesafe.ai
+
 ### Testing on clones
 
 - [25:04] DBLab Engine (thin clones and branching): https://github.com/postgres-ai/database-lab-engine
@@ -47,7 +51,7 @@ Here are some links to things they mentioned:
 - [12:28] Index maintenance: https://postgres.fm/episodes/index-maintenance
 - [27:20] Postgres 19 (plan flips): https://postgres.fm/episodes/postgres-19
 
-19 links. All opened (HTTP 200) on 2026-11-24.
+20 links. All opened (HTTP 200) on 2026-11-24; the TypeSafe link on 2026-11-27.
 
 ## Corrections
 
@@ -94,11 +98,11 @@ With credit to:
 | BUFFERS by default | 08:27 "we spent with Michael two years talking that buffers is needed" | 200 |
 | Index maintenance | 12:11 "We have an episode about index maintenance" | 200 |
 | Postgres 19 | 27:03 "last week talking about Postgres 19, plan flips" | 200 |
+| Jev (TypeSafe) | 33:31 "Like, for example, Jev is one of the ways how" (name confirmed by Nik 2026-11-27) | 200 |
 
 ## Open items for the host
 
 1. Episode number 198 and the slug (proposed `pgaibench`).
 2. Title: options in `../thumbs/titles.md`.
 3. Credit line: Nik thanks David Ventimiglia (Supabase) on air for feedback on the post (spelled as in the post). Link him? Not added.
-4. "Jeff" at 33:31 (source 39:00): probably Jev; whisper also hears "Jeff". Check by ear before captions.
-5. The 10:52 time for the scenarios link is where the tasks are first described ("Those tasks ... 18 tasks"); the post counts 19 live scenarios (see `fact-check.md`).
+4. The 10:52 time for the scenarios link is where the tasks are first described ("Those tasks ... 18 tasks"); the post counts 19 live scenarios (see `fact-check.md`).

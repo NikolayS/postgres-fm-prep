@@ -42,6 +42,7 @@ Key links (time of the first mention):
 * AAA and AI Control results (31:59) https://pgaibench.dev/control/
 * DBLab Engine (24:47) https://github.com/postgres-ai/database-lab-engine
 * DBLab Forge (24:55) https://postgres.ai/products/dblab-forge
+* Jev by TypeSafe (33:31) https://typesafe.ai
 * DBA-Bench (48:35) https://arxiv.org/abs/2607.22165
 
 Related episodes:

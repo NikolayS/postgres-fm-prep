@@ -47,7 +47,7 @@ Judgment cuts total: 317 s.
 - 14:56 (source): 'Max slots per transaction' = max_locks_per_transaction (caption fix)
 - 29:22 (source): 'PG bench AI version 0.2' = PGAIBench v0.2 (caption fix)
 - 31:55 (source): 'PGDoc, PGCat' = PgDog, PgCat (caption fix)
-- 40:42 (source): 'Jeff' = Jev? check by ear before captions
+- 40:42 (source): "Jev" (TypeSafe), confirmed by Nik 2026-11-27; the transcript spells it Jev
 - 43:49 (source): slip: 'neither analyst nor actor have access to production'; in AAA only the Actor writes to production. Editor's note candidate
 - 56:25 (source): 'DBLup4' = DBLab Forge; 'PGI bench' = PGAIBench; 'DBAbench' = DBA-Bench (caption fixes)
 - 24:35 (source): swear (fly), inside cut c12
