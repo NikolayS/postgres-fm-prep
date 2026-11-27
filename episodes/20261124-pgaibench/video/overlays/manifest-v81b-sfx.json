@@ -1,0 +1,310 @@
+{
+ "video": "v5/pgfm198-edited.mp4",
+ "cuts": "/Users/nik/Documents/Zoom/2026-11-24 10.37.15 .fm recording/review/v5/pgfm198-edited.cuts.json",
+ "fps": 25,
+ "width": 1920,
+ "height": 1080,
+ "timeBase": "edited.mp4 seconds, before intro and freeze shifts",
+ "band": {
+  "x": 120,
+  "y": 744,
+  "w": 1480,
+  "h": 144
+ },
+ "layout": "center placement: hosts move to place.<host>.center (right column, x 1630) in layout.json",
+ "overlays": [
+  {
+   "id": "r06-scenarios",
+   "row": 6,
+   "outStart": 655.08,
+   "duration": 51.28,
+   "dur": 51.28,
+   "file": "hold/r06-scenarios.mov",
+   "placement": "center",
+   "freezeSec": 0,
+   "sfx": [
+    {
+     "file": "sfx/center-in.wav",
+     "at": 0.05,
+     "gain": 1
+    }
+   ],
+   "accents": [
+    3.6
+   ],
+   "source": "https://postgres.ai/blog/20261123-pgaibench (Track 1 test matrix: 10 models, 19 live scenarios x 5 repeats, 949 episodes; 14 core + 2 exploratory O3, S1 + 3 held-out)",
+   "words": "Nik: \"It was originally, I think, 20\" (673.56) ... \"18 tasks\" (676.68)",
+   "builder": "illus-1",
+   "vetoable": "on air \"18 tasks\"; the post says 19 live scenarios (14 core public, 2 exploratory, 3 held-out)"
+  },
+  {
+   "id": "v2-r07b-l9-split",
+   "builder": "illus-2",
+   "freezeSec": 0,
+   "row": 7,
+   "file": "hold/v2-r07b-l9-split.mov",
+   "outStart": 722.74,
+   "dur": 73.2,
+   "duration": 73.2,
+   "placement": "center",
+   "sfx": [
+    {
+     "file": "sfx/center-in.wav",
+     "at": 0.05,
+     "gain": 1
+    }
+   ],
+   "words": "v5: moved from v3 724.58 through source time. Kirk: \"you turn around\" (747.06) \"Oh, no one's using this\" (748.10) \"Drop all these indexes\" (750.14) \"now your read replica crashes\" (751.86) \"nothing's finishing\" (753.78)",
+   "source": "https://postgres.ai/blog/20261123-pgaibench L9 bullet (2,625 -> 3,040 TPS, +16%, 0 SQL errors, pooled p99 1.19x, q20 client p99 18.0x 2.91 -> 52.58 ms, pg_stat_statements mean 188x, three indexes: two on (k), one on (v)); TPS line = Figure 4 panel A 1 Hz trace",
+   "accents": [
+    3.08,
+    6.72
+   ],
+   "v3": "/Users/nik/Documents/Zoom/2026-11-24 10.37.15 .fm recording/review/overlays/out-v2/parts/v2-r07b-l9-split.v5.json"
+  },
+  {
+   "id": "n03-ed-escalate",
+   "outStart": 940,
+   "duration": 8.8,
+   "dur": 8.8,
+   "file": "n03-ed-escalate.mov",
+   "placement": "band",
+   "freezeSec": 0,
+   "sfx": [],
+   "builder": "illus-1",
+   "source": "for-nik/85-verify-fact-findings.md S7; Editor's note"
+  },
+  {
+   "id": "n04-ed-c18",
+   "outStart": 961,
+   "duration": 12,
+   "dur": 12,
+   "file": "n04-ed-c18.mov",
+   "placement": "band",
+   "freezeSec": 0,
+   "sfx": [],
+   "builder": "illus-1",
+   "source": "for-nik/85-verify-fact-findings.md B1, B2; Editor's note"
+  },
+  {
+   "id": "v2-r11-maxlocks",
+   "builder": "illus-2",
+   "freezeSec": 0,
+   "row": 11,
+   "file": "hold/v2-r11-maxlocks.mov",
+   "outStart": 1028.76,
+   "dur": 11.0,
+   "duration": 11.0,
+   "placement": "center",
+   "sfx": [
+    {
+     "file": "sfx/center-in.wav",
+     "at": 0.05,
+     "gain": 1
+    }
+   ],
+   "words": "v5: moved from v3 1025.92 through source time. Nik: \"Max slots per transaction is one of them\" (1053.76) \"First you need to adjust replicas, restarts on them\" (1057.84) \"and then on the primary\" (1061.06)",
+   "source": "https://www.postgresql.org/docs/18/runtime-config-locks.html#GUC-MAX-LOCKS-PER-TRANSACTION (quoted sentence); post \"Topology coupling\"; on air \"max slots per transaction\" = max_locks_per_transaction",
+   "accents": [
+    4.08,
+    7.3
+   ],
+   "v3": "/Users/nik/Documents/Zoom/2026-11-24 10.37.15 .fm recording/review/overlays/out-v2/parts/v2-r11-maxlocks.v5.json"
+  },
+  {
+   "id": "v2-r12-escalate",
+   "builder": "illus-2",
+   "freezeSec": 0,
+   "row": 12,
+   "file": "v2-r12-escalate-v7.mov",
+   "outStart": 1055.08,
+   "dur": 12.72,
+   "duration": 12.72,
+   "placement": "band",
+   "sfx": [],
+   "words": "v5: moved from v4 1050.68 through source time. v4: Nik: \"they often decide to escalate\" (1050.68) \"giving up\" (1054.38); Kirk: \"Like 80% escalation almost\" (1056.08-1058.3) -> editor's note",
+   "source": "https://postgres.ai/blog/20261123-pgaibench result 2 (\"gpt-6.2-sol escalated 35 runs to humans\"; \"0 harms across 95 runs each\"); 35/95 = 36.8%",
+   "accents": [
+    5.4
+   ]
+  },
+  {
+   "id": "v2-r13b14a-axes-track1",
+   "builder": "illus-2",
+   "freezeSec": 0,
+   "row": 13,
+   "file": "hold/v2-r13b14a-axes-track1.mov",
+   "outStart": 1143.76,
+   "dur": 43.6,
+   "duration": 43.6,
+   "placement": "center",
+   "sfx": [
+    {
+     "file": "sfx/center-in.wav",
+     "at": 0.05,
+     "gain": 1
+    }
+   ],
+   "words": "v8.1: Nik: \"So we started drawing on two axis, and you see the graphs right now\" (final 19:46.2). Axes (safety, usefulness, the goal), then Track 1 Figure 1 (models acting alone, 949 live runs).",
+   "source": "https://postgres.ai/blog/20261123-pgaibench Track 1 table: \"Scored w/o harm\" (Safety axis), \"Correct adj\" (Usefulness axis); bars: Track 1 table (10 models, 949 runs)",
+   "accents": []
+  },
+  {
+   "id": "r15-funnel",
+   "row": 15,
+   "outStart": 1187.86,
+   "duration": 11.6,
+   "dur": 11.6,
+   "file": "hold/r15-funnel.mov",
+   "placement": "center",
+   "freezeSec": 0,
+   "sfx": [],
+   "accents": [
+    4
+   ],
+   "source": "https://postgres.ai/blog/20261123-pgaibench (execution funnel: 949 episodes, 552 entered rehearsal, 408 on the live primary, 13 harmful = 3.2%)",
+   "words": "Nik: \"it's, it's not safe\" (1216.58); Kirk: \"It's being overly cautious\" (1224.46) ends it",
+   "builder": "illus-1"
+  },
+  {
+   "id": "r22a-aaa-intro",
+   "row": 22,
+   "outStart": 1918.04,
+   "duration": 93.04,
+   "dur": 93.04,
+   "file": "hold/r22a-aaa-intro.mov",
+   "placement": "center",
+   "freezeSec": 0,
+   "sfx": [
+    {
+     "file": "sfx/center-in.wav",
+     "at": 0.05,
+     "gain": 1
+    }
+   ],
+   "source": "https://postgres.ai/blog/20261123-pgaibench (hero: the AaaPipeline3D scene, same geometry, colors, camera and labels)",
+   "words": "Nik: \"three As, triple A, AAA\" (1974.26) ... \"already evolved architecture\" (1983.70) \"third version maybe\" (1987.34)",
+   "builder": "illus-1"
+  },
+  {
+   "id": "n02-jev-typesafe",
+   "row": 22,
+   "outStart": 2011.55,
+   "duration": 3,
+   "dur": 3,
+   "file": "n02-jev-typesafe.mov",
+   "placement": "band",
+   "freezeSec": 0,
+   "sfx": [],
+   "builder": "illus-1",
+   "words": "Nik: \"Jev\" (v5 2011.60; src 2441.52)",
+   "source": "on air (Nik names the model); TypeSafe is the company, Jev its model"
+  },
+  {
+   "id": "r24-editor-note",
+   "row": 24,
+   "outStart": 2185.44,
+   "duration": 21.84,
+   "dur": 21.84,
+   "file": "hold/r24-editor-note.mov",
+   "placement": "center",
+   "freezeSec": 0,
+   "sfx": [
+    {
+     "file": "sfx/center-in.wav",
+     "at": 0.05,
+     "gain": 1
+    }
+   ],
+   "source": "https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D, \"no write access\" on Analyst and Auditor, \"Actor deterministic \u00b7 sole write path\")",
+   "words": "Nik: \"But all of them have access to, of course, proposed CR\" (2258.08)",
+   "builder": "illus-1"
+  },
+  {
+   "id": "n05-ed-repack",
+   "outStart": 2262.8,
+   "duration": 12,
+   "dur": 12,
+   "file": "n05-ed-repack.mov",
+   "placement": "band",
+   "freezeSec": 0,
+   "sfx": [],
+   "builder": "illus-1",
+   "source": "for-nik/85-verify-fact-findings.md S1; Editor's note"
+  },
+  {
+   "id": "n08-auditor-small",
+   "outStart": 2337.3,
+   "duration": 9.5,
+   "dur": 9.5,
+   "file": "n08-auditor-small-v7b.mov",
+   "placement": "band",
+   "freezeSec": 0,
+   "sfx": [],
+   "builder": "illus-1",
+   "source": "Nik (2335.36) + the post; for-nik/83 item 36:44"
+  },
+  {
+   "id": "n06-ed-onepass",
+   "outStart": 2407.6,
+   "duration": 9.52,
+   "dur": 9.52,
+   "file": "n06-ed-onepass.mov",
+   "placement": "band",
+   "freezeSec": 0,
+   "sfx": [],
+   "builder": "illus-1",
+   "source": "for-nik/85-verify-fact-findings.md S2; Editor's note"
+  },
+  {
+   "id": "r28c-replay-note",
+   "row": 28,
+   "outStart": 2431.2,
+   "duration": 10,
+   "dur": 10,
+   "file": "r28c-replay-note-v7.mov",
+   "placement": "band",
+   "freezeSec": 0,
+   "sfx": [],
+   "source": "https://postgres.ai/blog/20261123-pgaibench (replay finding 1: \"When we replayed the models' primary changes through AAA (retrospective and in-sample) ... blocked 12 of 13 measured harms (-92.3%)\"; \"We replayed all 408 scored Track 1 primary CRs offline through both AAA gates using their recorded rehearsal telemetry\")",
+   "words": "Kirk: \"different actor to run it in production\" (2506.82); Nik: \"Yes.\" (2508.52)",
+   "builder": "illus-1",
+   "vetoable": "Editor's note: on air Kirk asks \"Did it then tell a different actor to run it in production?\" and Nik says \"Yes.\"; the post: \"We replayed all 408 scored Track 1 primary CRs offline through both AAA gates\" (retrospective and in-sample)"
+  },
+  {
+   "id": "r28a-dots",
+   "row": 28,
+   "outStart": 2523.24,
+   "duration": 36.92,
+   "dur": 36.92,
+   "file": "hold/r28a-dots.mov",
+   "placement": "center",
+   "freezeSec": 0,
+   "sfx": [
+    {
+     "file": "sfx/center-in.wav",
+     "at": 0.05,
+     "gain": 1
+    }
+   ],
+   "accents": [
+    3.2
+   ],
+   "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 3; replay finding 1: gate 6 of 13, Auditor 6 of 7 remaining, 1 held-out claude-opus-5.5 miss)",
+   "words": "Kirk: \"So now that we used AAA as our process\" (2602.82) \"gave it over to the actor again to run it in production\" (2610.78) \"got rid of 100% of the errors\" (2614.14; \"100%\" 2614.86 = stamp); Nik: \"Uh, no. One harm left in Opus 5.5\" (2617.30; \"no.\" 2617.50 = count 1)",
+   "builder": "illus-1"
+  },
+  {
+   "id": "n07-ed-pg18stats",
+   "outStart": 3010.4,
+   "duration": 10,
+   "dur": 10,
+   "file": "n07-ed-pg18stats.mov",
+   "placement": "band",
+   "freezeSec": 0,
+   "sfx": [],
+   "builder": "illus-1",
+   "source": "for-nik/85-verify-fact-findings.md S3; Editor's note"
+  }
+ ]
+}
