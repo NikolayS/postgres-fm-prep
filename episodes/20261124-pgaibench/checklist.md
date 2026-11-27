@@ -20,7 +20,7 @@ The ordered list is [`RELEASE_CHECKLIST.md`](../../RELEASE_CHECKLIST.md). Status
 | 12 | Level the voices | Done (video and podcast): spread 0.0 dB |
 | 13 | QA | Done: qa.ts passed (audio, eyes, strips with 42 crops, sfx 36 sounds); frames checked |
 | 14 | Package | Done: 3 title options, 3 thumbnails and the square cover (new tile order), podcast MP3 (54:04), notes and chapters with v2 times |
-| 15 | Report | Thumbnail B chosen by Nik (A and C not chosen). Waiting for Nik: cold-open pick, title (T2 recommended to fit B), Editor's note (veto or keep), approval of the edit |
+| 15 | Report | Thumbnail B chosen by Nik (A and C not chosen); title T1 chosen by Nik 2026-11-27. Waiting for Nik: cold-open pick, Editor's note (veto or keep), approval of the edit |
 
 ## 1-11. Release
 

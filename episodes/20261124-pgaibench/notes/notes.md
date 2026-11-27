@@ -103,6 +103,5 @@ With credit to:
 ## Open items for the host
 
 1. Episode number 198 and the slug (proposed `pgaibench`).
-2. Title: options in `../thumbs/titles.md`.
-3. Credit line: Nik thanks David Ventimiglia (Supabase) on air for feedback on the post (spelled as in the post). Link him? Not added.
-4. The 10:52 time for the scenarios link is where the tasks are first described ("Those tasks ... 18 tasks"); the post counts 19 live scenarios (see `fact-check.md`).
+2. Credit line: Nik thanks David Ventimiglia (Supabase) on air for feedback on the post (spelled as in the post). Link him? Not added.
+3. The 10:52 time for the scenarios link is where the tasks are first described ("Those tasks ... 18 tasks"); the post counts 19 live scenarios (see `fact-check.md`).

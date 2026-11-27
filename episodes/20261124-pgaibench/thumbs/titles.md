@@ -10,7 +10,7 @@ Rules: RELEASE_CHECKLIST.md section 3 and the growth rules. Title under about 50
 | T2 | AI changes to production Postgres: 13 harms to 1 | 48 | The measured result as the promise; pairs with B |
 | T3 | Letting AI change production Postgres, safely | 45 | How-to angle (AAA) |
 
-Recommendation: T2 with thumbnail A (the thumbnail asks, the title answers with the number).
+Chosen by Nik (2026-11-27): T1, with thumbnail B. (Earlier recommendation: T2.)
 
 ## Thumbnail concepts (channel style: episode 196 template)
 
