@@ -9,7 +9,8 @@ const a = src.indexOf("## Episode description"), b = src.indexOf("## Link check"
 if (a < 0 || b < 0) throw new Error("notes.md: missing '## Episode description' or '## Link check'");
 let body = src.slice(a, b).split("\n").filter((l) => !/^\d+ links\. All opened/.test(l)).join("\n");
 body = body.replace("Here are some links to things they mentioned:", "Here are some links to things they mentioned (times in brackets are podcast times):");
-const res = `${title}\n\n${body.trimEnd()}\n`;
+const TIP = "Tip: watch on YouTube. Since episode 193, the video shows charts and illustrations as we talk."; // as published for episode 197
+const res = `${title}\n\n${TIP}\n\n${body.trimEnd()}\n`;
 for (const bad of ["DRAFT", "number to confirm", "notes.edited.md", "set_times", "Open items"]) if (res.includes(bad)) throw new Error(`publish text still has "${bad}"`);
 await Bun.write(out, res);
 console.log(`${out}: ${res.split("\n").length} lines, ${(res.match(/https?:\/\//g) ?? []).length} URLs`);

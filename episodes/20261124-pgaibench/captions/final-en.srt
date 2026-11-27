@@ -1,0 +1,3954 @@
+1
+00:00:00,430 --> 00:00:03,788
+Kirk: As long as you use the latest
+and the best, agents out there,
+
+2
+00:00:03,788 --> 00:00:06,128
+you're perfectly safe, right?
+
+3
+00:00:06,128 --> 00:00:08,564
+Nik: I know a lot
+of our listeners are agents.
+
+4
+00:00:08,564 --> 00:00:14,444
+In one task, five out of five cases, Fable
+decided to change something and restart
+
+5
+00:00:14,444 --> 00:00:16,234
+- server
+- After being told,
+
+6
+00:00:16,234 --> 00:00:19,732
+- "Do not restart the server"?
+- Yeah. Being overconfident.
+
+7
+00:00:19,732 --> 00:00:23,932
+Kirk: I don't want AI to automate
+my ability to make mistakes at scale.
+
+8
+00:00:42,740 --> 00:00:48,880
+Nik: Hello, this is Postgres.FM. I'm Nik.
+And as usual, here's Kirk. Hi, Kirk.
+
+9
+00:00:49,500 --> 00:00:53,500
+- Hey, Nik.
+- And I brought a topic today, to discuss,
+
+10
+00:00:53,500 --> 00:00:59,980
+which lives in my heart for many
+years already, even before AI, because
+
+11
+00:01:00,580 --> 00:01:07,180
+whole my vision was many years ago that
+at some point, a lot of Postgres clusters
+
+12
+00:01:08,040 --> 00:01:11,760
+they will be without proper
+human attention, you know?
+
+13
+00:01:12,700 --> 00:01:17,380
+And I don't I don't like actually
+the concept of pets versus cattle applied
+
+14
+00:01:17,380 --> 00:01:23,140
+to databases. I would like to apply,
+like, all, all of them that are pets,
+
+15
+00:01:23,140 --> 00:01:26,540
+we just need to control better
+and more autonomously. And at the top
+
+16
+00:01:26,540 --> 00:01:31,940
+of the pyramid, there is a human who
+knows that proper control is in place.
+
+17
+00:01:32,300 --> 00:01:37,220
+Versus, cattle where... which is good for
+stateless systems, like, in my opinion.
+
+18
+00:01:37,220 --> 00:01:41,960
+Because if you have a lot of nodes, you
+can quickly destroy and provision again.
+
+19
+00:01:41,960 --> 00:01:46,000
+You don't care about them, like,
+just containers or something, pods, right?
+
+20
+00:01:46,000 --> 00:01:50,820
+But if, if it comes to Postgres,
+especially if it grows beyond, like, say,
+
+21
+00:01:50,820 --> 00:01:57,520
+terabytes or 10 terabytes, definitely,
+like, we, we, we do need to to have better
+
+22
+00:01:57,520 --> 00:02:03,460
+control, and it's not easy to throw 10
+terabytes away and, and get another one
+
+23
+00:02:03,760 --> 00:02:06,220
+easily usually.
+Although there are of, of course,
+
+24
+00:02:06,220 --> 00:02:11,102
+there is branching, there are, there are
+snapshots provisioning, and so on. Anyway,
+
+25
+00:02:11,680 --> 00:02:15,360
+there should be better autonomous control
+
+26
+00:02:16,040 --> 00:02:20,580
+for database operations, and this is what
+I wanted to discuss today.
+
+27
+00:02:21,820 --> 00:02:26,640
+Kirk: Autonomous control. So the something
+else is managing and making
+
+28
+00:02:26,640 --> 00:02:29,980
+changes, eh, without a human
+getting involved and saying, "Yeah,
+
+29
+00:02:29,980 --> 00:02:31,780
+- that's okay."
+- Right.
+
+30
+00:02:31,780 --> 00:02:32,960
+- Hmm.
+- Right.
+
+31
+00:02:32,960 --> 00:02:35,480
+- Yeah.
+- But notice how I say it.
+
+32
+00:02:35,480 --> 00:02:40,900
+I say human is on top of that.
+I'm saying not without human completely.
+
+33
+00:02:40,900 --> 00:02:44,540
+To me, it's like the same idea, like,
+is it possible to have a company,
+
+34
+00:02:44,540 --> 00:02:51,540
+profitable company without a human
+or under fully, like, fully led by AI?
+
+35
+00:02:52,740 --> 00:02:57,000
+Usually you don't want that because it
+will be misaligned or, or just will break
+
+36
+00:02:57,000 --> 00:02:58,000
+completely.
+
+37
+00:02:59,280 --> 00:03:04,680
+You know, we both have a friend who, one,
+one time, actually Andrey said that it's
+
+38
+00:03:04,680 --> 00:03:09,180
+normal for experienced DBA
+to control 100 clusters. Like-
+
+39
+00:03:09,180 --> 00:03:10,640
+- Yeah.
+- Yeah.
+
+40
+00:03:10,700 --> 00:03:13,640
+And it's like it's possible,
+it was possible before AI.
+
+41
+00:03:13,640 --> 00:03:17,800
+Of course, it requires a lot of good
+culture and proper tooling, but like,
+
+42
+00:03:17,800 --> 00:03:22,565
+it was already possible. So I see right
+now it's... Like, vision should be, like,
+
+43
+00:03:22,740 --> 00:03:27,740
+1,000 clusters and one experienced
+engineer controlling them reliably.
+
+44
+00:03:28,200 --> 00:03:32,660
+This requires very high level
+of automation. That's it actually. Why?
+
+45
+00:03:32,660 --> 00:03:36,080
+Because we, we, we see this already.
+
+46
+00:03:36,380 --> 00:03:41,480
+For example, we have a lot of smaller
+startups who use AI to develop.
+
+47
+00:03:41,540 --> 00:03:44,860
+- They don't have DBA, right?
+- Yeah.
+
+48
+00:03:45,180 --> 00:03:50,699
+Nik: And support teams for example,
+managed Postgres companies,
+
+49
+00:03:51,100 --> 00:03:55,760
+I know many of them, they are great,
+but they are usually overloaded,
+
+50
+00:03:55,760 --> 00:04:00,700
+and they usually define boundaries,
+beyond which they don't go.
+
+51
+00:04:01,500 --> 00:04:05,740
+Kirk: So I wanna interject something here,
+because you used the word control,
+
+52
+00:04:05,740 --> 00:04:09,020
+and I wanna switch it
+to the words responsible for.
+
+53
+00:04:09,520 --> 00:04:11,440
+- Mm-hmm.
+- Okay? So very,
+
+54
+00:04:11,440 --> 00:04:16,460
+very possible for a single DBA
+to be responsible for 100, maybe
+
+55
+00:04:16,480 --> 00:04:20,400
+a couple hundred,
+clusters in the Postgres world.
+
+56
+00:04:21,000 --> 00:04:23,750
+So I can see that completely.
+I don't wanna call it
+
+57
+00:04:23,750 --> 00:04:27,020
+control. I wanna say responsible,
+because now responsible allows it
+
+58
+00:04:27,020 --> 00:04:28,800
+- to use other actors, right?
+- Mm-hmm.
+
+59
+00:04:28,800 --> 00:04:30,060
+- Right.
+- And this is what
+
+60
+00:04:30,060 --> 00:04:31,680
+- we're now talking about.
+- Yeah, that's
+
+61
+00:04:31,680 --> 00:04:33,260
+a good correction. Good correction.
+
+62
+00:04:33,260 --> 00:04:35,860
+- and also-
+- So now we're talking, hey, we can have
+
+63
+00:04:35,860 --> 00:04:41,700
+either agentic or other human actors that
+we give commands to, and we get some stuff
+
+64
+00:04:41,700 --> 00:04:46,620
+done, because it doesn't always have to be
+done by that one person. Some things do,
+
+65
+00:04:46,620 --> 00:04:51,540
+and that person's gonna control that. You
+know, we understand those complexities.
+
+66
+00:04:51,600 --> 00:04:56,540
+So with that kind of said, I'm assuming
+you did, you ran some experiments
+
+67
+00:04:56,720 --> 00:05:02,780
+and I guess the question you, you might
+wanna be asked is, would you let an AI run
+
+68
+00:05:02,780 --> 00:05:05,020
+- DDL on your production?
+- Right.
+
+69
+00:05:05,020 --> 00:05:06,020
+- Like-
+- Yeah
+
+70
+00:05:06,020 --> 00:05:08,440
+right?
+I'm, I'm kinda gonna slide in there.
+
+71
+00:05:08,440 --> 00:05:12,040
+Would you let that happen on your
+production or your client's production?
+
+72
+00:05:12,040 --> 00:05:15,620
+- Right. Not, not read-only, but some,
+- Yeah, yeah, yeah.
+
+73
+00:05:15,620 --> 00:05:17,320
+DDL, right? Making changes.
+
+74
+00:05:17,320 --> 00:05:22,620
+Nik: Like SQL, right, or CLI API calls,
+MCP calls to change the state
+
+75
+00:05:22,620 --> 00:05:27,208
+of the cluster, like changing settings,
+starting, upgrading, everything. Yeah.
+
+76
+00:05:27,948 --> 00:05:29,568
+Kirk: Yeah, my answer is no.
+
+77
+00:05:29,568 --> 00:05:35,608
+And in our world, we don't let the AI
+talk to using, DML, which is like-
+
+78
+00:05:35,608 --> 00:05:38,088
+- Normal, you know, data manipulation.
+- Yeah.
+
+79
+00:05:38,088 --> 00:05:41,568
+- Yeah.
+- If, if, we had full transparency,
+
+80
+00:05:41,648 --> 00:05:44,348
+I could win a beer or two right now
+
+81
+00:05:44,368 --> 00:05:48,608
+making a bet that many
+of our listeners already do that.
+
+82
+00:05:49,948 --> 00:05:52,568
+Kirk: I'm sure.
+I've read some stories about them
+
+83
+00:05:52,568 --> 00:05:54,540
+- on X. Oops, sorry.
+- Thought that-
+
+84
+00:05:54,540 --> 00:05:56,680
+- I dropped the production database.
+- Yeah.
+
+85
+00:05:56,680 --> 00:05:59,830
+Do you have a backup?
+I'll make a note not to do that again.
+
+86
+00:05:59,830 --> 00:06:01,348
+- Right. Yeah.
+- [laughs]
+
+87
+00:06:01,348 --> 00:06:06,108
+Nik: That's, that's... Yeah, but it's
+inevitable The people already do it.
+
+88
+00:06:06,148 --> 00:06:12,648
+Like, I remember last year almost
+nobody was ready to admit they
+
+89
+00:06:12,848 --> 00:06:14,348
+have pull requests
+
+90
+00:06:14,468 --> 00:06:20,008
+fully prepared by AI, reviewed by AI,
+and not touched by human almost, right?
+
+91
+00:06:20,008 --> 00:06:23,288
+- Now it's absolute normal. So we won't-
+- I'll give-
+
+92
+00:06:23,428 --> 00:06:25,548
+- Yeah.
+- I'll give you the example,
+
+93
+00:06:25,548 --> 00:06:30,308
+from where the group I work with.
+They have an absolute requirement
+
+94
+00:06:30,308 --> 00:06:33,888
+that if you're gonna work with AI
+that does any level of automation,
+
+95
+00:06:33,888 --> 00:06:38,328
+that you shut off the ability
+to get to your production database.
+
+96
+00:06:38,328 --> 00:06:41,788
+And so it can only work
+with your staging and dev databases.
+
+97
+00:06:41,788 --> 00:06:45,828
+It has to be disabled,
+otherwise you can't let it touch anything.
+
+98
+00:06:46,488 --> 00:06:51,008
+Because it's just, it's just too
+easy to connect to the wrong server
+
+99
+00:06:51,048 --> 00:06:55,548
+and get in. You know,
+there's so many ways. But, but yep, no,
+
+100
+00:06:55,548 --> 00:07:00,028
+people are doing it. So yeah, and my trust
+just isn't there. And again, I don't...
+
+101
+00:07:00,028 --> 00:07:04,848
+I will have it write SQL that I copy
+and paste in. Do that all the time.
+
+102
+00:07:04,848 --> 00:07:07,140
+I've given it access to local stuff,
+
+103
+00:07:07,140 --> 00:07:08,950
+- and let it connect and run-
+- Right
+
+104
+00:07:08,950 --> 00:07:10,940
+- like Cursor, Claude Code-
+- Right. Yeah
+
+105
+00:07:10,940 --> 00:07:13,020
+- and let it run stuff on my local.
+- Yeah.
+
+106
+00:07:13,020 --> 00:07:15,670
+- No problem. Right?
+- Branching helps a lot as well.
+
+107
+00:07:15,670 --> 00:07:19,428
+Right, right, right.
+But, but I, I, I, I know,
+
+108
+00:07:19,428 --> 00:07:22,290
+I just know people use it
+directly to production.
+
+109
+00:07:22,290 --> 00:07:23,310
+- Yeah.
+- Because-
+
+110
+00:07:23,310 --> 00:07:25,288
+- And your company-
+- Especially startups-
+
+111
+00:07:25,288 --> 00:07:26,628
+Kirk: PostgresAI
+
+112
+00:07:27,248 --> 00:07:29,728
+- especially startups-
+- Mm-hmm
+
+113
+00:07:29,728 --> 00:07:33,448
+Nik: just don't have time
+and, and capability to like,
+
+114
+00:07:33,448 --> 00:07:36,988
+to, to properly establish
+proper operations workflow like,
+
+115
+00:07:37,048 --> 00:07:42,968
+like proper change request workflow,
+like from Google SRE books. They, they...
+
+116
+00:07:42,968 --> 00:07:49,828
+These guys definitely already use
+it to take care of some changes,
+
+117
+00:07:50,148 --> 00:07:52,588
+- right? They just, just like they-
+- Right
+
+118
+00:07:52,588 --> 00:07:56,190
+Nik: I, I... They already go
+to Claude Code and say, "I want
+
+119
+00:07:56,190 --> 00:08:00,290
+to rebuild some indexes," for example, or,
+"I want minor upgrade," and, and so on.
+
+120
+00:08:00,290 --> 00:08:02,890
+Like, just...
+Or install some extension right there.
+
+121
+00:08:02,890 --> 00:08:06,868
+It's already happening, right?
+And, and many platforms already have,
+
+122
+00:08:07,168 --> 00:08:11,948
+They already see it. Like, I know like
+Supabase, for example, they, they already
+
+123
+00:08:11,948 --> 00:08:17,168
+understand that a lot of clusters are,
+are controlled by bot. The question-
+
+124
+00:08:17,288 --> 00:08:20,388
+- Yeah
+- risk, possible risk, right?
+
+125
+00:08:20,388 --> 00:08:24,588
+And this is what I wanted
+to study in, in depth this time.
+
+126
+00:08:24,768 --> 00:08:28,728
+This is why I created
+this benchmark called PGAIBench,
+
+127
+00:08:29,148 --> 00:08:36,148
+which aims to answer the question, is it
+safe to let your AI to, to to work with
+
+128
+00:08:36,968 --> 00:08:42,508
+production Postgres directly, making some
+changes like, infrastructural or not only
+
+129
+00:08:42,508 --> 00:08:46,388
+infrastructural, also,
+running some SQL and so on.
+
+130
+00:08:46,388 --> 00:08:47,388
+Kirk: yeah,
+
+131
+00:08:49,448 --> 00:08:54,708
+- you know,
+- Yeah.
+
+132
+00:08:54,708 --> 00:08:56,061
+- [laughs]
+- I, I know,
+
+133
+00:08:57,268 --> 00:09:00,728
+- I know this. So I say-
+- Sarcasm. Sorry. [laughs]
+
+134
+00:09:00,728 --> 00:09:05,008
+Nik: Well, it's not sarcasm.
+It's not sarcasm. I think, for example,
+
+135
+00:09:05,008 --> 00:09:06,688
+it amazes me to see that-
+
+136
+00:09:06,688 --> 00:09:09,388
+- Mm-hmm
+- we spent with Michael two
+
+137
+00:09:09,388 --> 00:09:12,288
+years talking that buffers
+is needed in explain analyze,
+
+138
+00:09:12,288 --> 00:09:14,688
+- in explain analyze. And last-
+- Maybe
+
+139
+00:09:14,688 --> 00:09:19,988
+Nik: months, I just see all clients send
+requests to us with explain analyze plans.
+
+140
+00:09:20,408 --> 00:09:26,108
+They are prepared by agents. Somehow
+they learned that buffers is needed.
+
+141
+00:09:26,387 --> 00:09:29,708
+Our role with Michael
+was there a little bit as well.
+
+142
+00:09:30,767 --> 00:09:35,028
+- Yeah.
+- If you ask, some ChatGPT in anonymous
+
+143
+00:09:35,028 --> 00:09:39,588
+mode, like no, no,
+like unauthorized unauthenticated mode,
+
+144
+00:09:39,968 --> 00:09:44,088
+or just in incognito mode, for example,
+in Chrome. If you ask about that, it'll,
+
+145
+00:09:44,088 --> 00:09:47,428
+it'll explain to you like
+buffers is good idea to have.
+
+146
+00:09:47,808 --> 00:09:52,268
+So and I, if you ask about podcast, it
+remembers. So their capacity is enormous.
+
+147
+00:09:52,268 --> 00:09:56,168
+They remember all the details.
+So just talking about some problem
+
+148
+00:09:56,170 --> 00:09:57,990
+- a lot, you have influenced-
+- Right
+
+149
+00:09:57,990 --> 00:10:00,660
+the future agents because
+they train on that data,
+
+150
+00:10:00,660 --> 00:10:03,128
+- because it's public. So what we produce-
+- Yeah
+
+151
+00:10:03,128 --> 00:10:07,328
+Nik: here also will influence those
+agents. This is my true belief.
+
+152
+00:10:07,528 --> 00:10:14,528
+So I created this benchmark,
+and I had already two versions, 01, 02,
+
+153
+00:10:15,488 --> 00:10:19,508
+evolving. It's, it's still very early
+stage. Of course, a lot of questions.
+
+154
+00:10:19,508 --> 00:10:23,248
+For example,
+I still don't have human baseline.
+
+155
+00:10:23,548 --> 00:10:30,148
+And because it was expensive actually
+to establish it properly for version 01.
+
+156
+00:10:30,208 --> 00:10:34,948
+It was questionnaire with 50 questions,
+and everyone in my team refused to do it,
+
+157
+00:10:34,948 --> 00:10:40,308
+on short notice because it's like
+they say couple of days needed. So-
+
+158
+00:10:40,308 --> 00:10:42,248
+- Right
+- for version two, I have
+
+159
+00:10:42,248 --> 00:10:44,248
+smaller questionnaire it's coming,
+
+160
+00:10:44,808 --> 00:10:48,468
+- to establish human baseline. Yeah.
+- I wanna back up a little bit.
+
+161
+00:10:48,468 --> 00:10:49,780
+- Mm-hmm.
+- So step one...
+
+162
+00:10:49,780 --> 00:10:53,088
+Because you followed a process here.
+And again, in the show notes,
+
+163
+00:10:53,088 --> 00:10:55,788
+there's gonna be a link
+to the summary of this.
+
+164
+00:10:55,788 --> 00:10:57,288
+- That's good.
+- So step one,
+
+165
+00:10:57,288 --> 00:10:59,368
+you went out and you used an AI and said,
+
+166
+00:10:59,368 --> 00:11:05,088
+"What happens if I just ask the AI
+to directly go and make these changes?"
+
+167
+00:11:05,088 --> 00:11:07,208
+- Okay.
+- Okay? And this is important.
+
+168
+00:11:07,208 --> 00:11:11,048
+And when you did, okay? And so this is...
+I wanna pull this in for everyone.
+
+169
+00:11:11,048 --> 00:11:16,620
+You did, but the results were not great.
+Okay? Like, it did some stuff,
+
+170
+00:11:16,620 --> 00:11:18,490
+- but it did dangerous things.
+- Yeah.
+
+171
+00:11:18,490 --> 00:11:20,730
+And then it did things that failed, right?
+
+172
+00:11:20,730 --> 00:11:22,870
+- Yeah.
+- So the problem is you can't trust
+
+173
+00:11:22,870 --> 00:11:24,230
+it. So talk to me about that-
+
+174
+00:11:24,230 --> 00:11:26,040
+- Yeah
+- and then bring me into what you've
+
+175
+00:11:26,040 --> 00:11:27,784
+- created for the second version.
+- Yeah.
+
+176
+00:11:27,784 --> 00:11:29,090
+- Right
+- One might think,
+
+177
+00:11:29,090 --> 00:11:34,544
+one might think that it's some random,
+random tasks, but no.
+
+178
+00:11:34,684 --> 00:11:39,144
+It was originally, I think, 20.
+Then, now it's, like, 18 tasks.
+
+179
+00:11:39,464 --> 00:11:45,504
+They are very properly chosen, after,
+like, hours of work with AI and myself
+
+180
+00:11:45,804 --> 00:11:48,744
+- analyzing a lot of cases I know-
+- Mm-hmm
+
+181
+00:11:48,744 --> 00:11:52,204
+- where human made a mistake.
+- Right.
+
+182
+00:11:52,204 --> 00:11:53,204
+- Right?
+- Good.
+
+183
+00:11:53,204 --> 00:11:57,844
+Nik: So it's, it's from PostgresAI
+experience, multiple years, latest years.
+
+184
+00:11:57,844 --> 00:12:03,044
+We just chose some cases.
+These questions I would probably ask,
+
+185
+00:12:04,484 --> 00:12:05,624
+when interviewing.
+
+186
+00:12:05,624 --> 00:12:10,564
+Actually, it's a good idea to use
+them in, in interview for human DBREs
+
+187
+00:12:10,964 --> 00:12:14,423
+or Postgres experts because
+they are tricky. This is where-
+
+188
+00:12:14,423 --> 00:12:16,624
+- Yeah
+- usually a couple of things collide,
+
+189
+00:12:16,624 --> 00:12:21,644
+and you have not edge case, but corner
+case of two problems or three problems,
+
+190
+00:12:22,420 --> 00:12:24,820
+or or layers of problems.
+You can see one layer-
+
+191
+00:12:24,820 --> 00:12:26,724
+- I'll-
+- but overlooked second layer.
+
+192
+00:12:26,724 --> 00:12:28,884
+- I'll bring the one I overlooked.
+- Yeah.
+
+193
+00:12:28,884 --> 00:12:33,204
+Kirk: You have read replicas that are
+running reports and doing other things,
+
+194
+00:12:33,204 --> 00:12:36,570
+and in the primary,
+the indexes that are involved in the read
+
+195
+00:12:36,570 --> 00:12:37,600
+replicas aren't really
+
+196
+00:12:37,600 --> 00:12:39,990
+- used because they're only used for the-
+- Yeah. This-
+
+197
+00:12:39,990 --> 00:12:40,990
+- Right?
+- Yeah.
+
+198
+00:12:40,990 --> 00:12:43,410
+Yeah, it's common,
+but everyone recognizes this.
+
+199
+00:12:43,410 --> 00:12:45,930
+So the analysis,
+you turn around and you say, "Oh,
+
+200
+00:12:45,930 --> 00:12:49,364
+no one's using this. We can free up all
+this space. Drop all these indexes."
+
+201
+00:12:49,364 --> 00:12:51,020
+- Yeah.
+- And now your read replica
+
+202
+00:12:51,020 --> 00:12:54,500
+- crashes because nothing's finishing.
+- Yeah. Yeah. We have an episode about
+
+203
+00:12:54,500 --> 00:12:57,980
+index maintenance. This is one of the
+topics when you analyze unused indexes.
+
+204
+00:12:57,980 --> 00:13:01,530
+Not only you need to analyze all
+your read replicas, but in some cases,
+
+205
+00:13:01,530 --> 00:13:02,984
+for example, if you're,
+
+206
+00:13:02,984 --> 00:13:08,064
+if you're a company who develops software
+which has multiple installations...
+
+207
+00:13:08,084 --> 00:13:14,784
+I remember a case, it was GitLab, I think.
+Yeah. It was a case where you need to...
+
+208
+00:13:15,204 --> 00:13:19,064
+If you analyze only regular production,
+even with replicas, you,
+
+209
+00:13:19,064 --> 00:13:23,220
+it looks like index is not needed, but
+in some installations, it's, it's needed.
+
+210
+00:13:23,220 --> 00:13:26,920
+I think it was related to some integration
+with Microsoft Active Directory
+
+211
+00:13:26,920 --> 00:13:30,570
+or something, which is not present
+on, on the main production, so but it,
+
+212
+00:13:30,570 --> 00:13:32,864
+it's still needed in some.
+It was long ago.
+
+213
+00:13:32,864 --> 00:13:36,484
+So I, I, I can envision, like,
+if you have many, many installations,
+
+214
+00:13:36,484 --> 00:13:39,984
+you need to think about all of them.
+Also about time.
+
+215
+00:13:39,984 --> 00:13:44,184
+If you don't need it today, in last two
+weeks, and you have stats for only last
+
+216
+00:13:44,184 --> 00:13:47,964
+- two weeks, what about next, like-
+- Yeah, what if it's an end
+
+217
+00:13:47,964 --> 00:13:50,164
+- of month or an end of year report?
+- Yeah.
+
+218
+00:13:50,164 --> 00:13:52,544
+- We, we talked about that in detail.
+- Yeah.
+
+219
+00:13:52,544 --> 00:13:55,864
+Nik: So there are many layers
+to, for risk assessment,
+
+220
+00:13:56,484 --> 00:14:00,104
+we need to properly establish here, right?
+
+221
+00:14:00,424 --> 00:14:05,224
+So those 18 cases which went to PGAIBench,
+
+222
+00:14:05,824 --> 00:14:09,204
+they are from real experience
+where humans made errors.
+
+223
+00:14:09,444 --> 00:14:13,704
+Kirk: I think you're getting ready to hit
+a point that I think is visual, about how
+
+224
+00:14:13,704 --> 00:14:17,124
+- many of them failed in the first pass.
+- Right.
+
+225
+00:14:17,124 --> 00:14:24,124
+So, so the, how, how it worked, like we,
+we asked the AI to to solve some problem,
+
+226
+00:14:25,124 --> 00:14:30,624
+and first pass is what if AI is acting
+alone without any additional harness?
+
+227
+00:14:30,624 --> 00:14:35,564
+But we use a regular harness, for example,
+Claude Code, Antigravity, Codex,
+
+228
+00:14:36,444 --> 00:14:42,164
+OpenCode, and then you just, allow it
+to work and, and, and think deeply.
+
+229
+00:14:42,804 --> 00:14:45,544
+We we needed to switch
+off regular tool calling.
+
+230
+00:14:45,544 --> 00:14:48,724
+For example,
+they are not allowed to search web.
+
+231
+00:14:49,224 --> 00:14:54,643
+And this is, this is, like,
+which this thing, I postpone because
+
+232
+00:14:55,324 --> 00:14:59,344
+if you allow to search web,
+it will be influenced by other opinions.
+
+233
+00:14:59,344 --> 00:15:05,104
+And like at, at extreme, if you allow any
+random tool calling, they start, they can
+
+234
+00:15:05,104 --> 00:15:09,344
+start consulting other AIs, which is
+probably a good idea, but for the sake of,
+
+235
+00:15:09,344 --> 00:15:13,604
+pure results, pure results,
+you first need to switch it off, right?
+
+236
+00:15:14,384 --> 00:15:19,504
+And first finding was what I didn't
+expect... Oh, and by the way,
+
+237
+00:15:19,504 --> 00:15:23,944
+unfortunately, Neon, Gemini 4 Neon
+is not in the results because,
+
+238
+00:15:23,944 --> 00:15:28,484
+but Argon is there. Because it was before,
+I did it before Neon was released.
+
+239
+00:15:28,484 --> 00:15:32,724
+So version 0.3 definitely will
+include Neon, because I'm,
+
+240
+00:15:32,724 --> 00:15:35,864
+- I'm a big fan right now of Neon.
+- Nice
+
+241
+00:15:35,884 --> 00:15:42,424
+Nik: first thing what I was,
+surprised to see is that even Fable
+
+242
+00:15:42,524 --> 00:15:49,244
+at high, Fable 5.2 at high effort,
+was making some harmful changes.
+
+243
+00:15:50,044 --> 00:15:57,044
+So AI was allowed to do some,
+to solve task or to basically to say,
+
+244
+00:15:57,244 --> 00:16:01,724
+"I'm not going to do it. I need a, I
+need help." So escalate to human, right?
+
+245
+00:16:01,724 --> 00:16:06,204
+So we don't say, like, fully autonomous
+completely, so we have some room.
+
+246
+00:16:06,284 --> 00:16:10,264
+But in this case,
+we didn't talk about some budgeting.
+
+247
+00:16:10,464 --> 00:16:15,264
+In future iterations, I have an idea
+that we need to budget human involvement.
+
+248
+00:16:15,264 --> 00:16:19,964
+For example, don't allow it to, to ask
+for human help for more than, like,
+
+249
+00:16:19,964 --> 00:16:24,504
+10% of cases or something.
+Because weak models, we noticed,
+
+250
+00:16:24,504 --> 00:16:29,824
+ask for human too often, right?
+And the first finding is that,
+
+251
+00:16:42,170 --> 00:16:44,280
+- Wow.
+- Like, you know, you know, I, and I,
+
+252
+00:16:44,280 --> 00:16:47,800
+I know it myself. Like, you think,
+you think you're very experienced.
+
+253
+00:16:47,800 --> 00:16:50,400
+You jump into some conclusion
+because it reminds you,
+
+254
+00:16:50,400 --> 00:16:53,000
+you of some problem,
+and you think this is it. Boom.
+
+255
+00:16:53,000 --> 00:16:56,424
+This is how smart models might behave,
+and Fable showed it.
+
+256
+00:16:57,384 --> 00:17:03,084
+So five of, of five it decision was let's
+change and restart, and then it, it,
+
+257
+00:17:03,444 --> 00:17:08,184
+it was blocked by internal
+stuff in two cases out of five.
+
+258
+00:17:08,184 --> 00:17:12,524
+But in three cases it led to downtime
+on, on replica because of mismatch
+
+259
+00:17:12,524 --> 00:17:16,704
+of configuration,
+which it fully overlooked. So basically-
+
+260
+00:17:16,704 --> 00:17:18,664
+- Ah
+- causing downtime. Yeah. Fable-
+
+261
+00:17:18,664 --> 00:17:22,584
+Kirk: So hold on. Did it
+cause downtime in the, in the
+
+262
+00:17:22,750 --> 00:17:25,350
+- staging test area, and then-
+- No, all of this is,
+
+263
+00:17:25,350 --> 00:17:27,384
+- decide to apply it anyways?
+- All of this-
+
+264
+00:17:27,384 --> 00:17:31,144
+Kirk: Hold on. And then say, "Yes,
+go ahead and do this in production"?
+
+265
+00:17:31,144 --> 00:17:34,484
+Nik: Yeah. So this is,
+this is basically a playground, right?
+
+266
+00:17:34,484 --> 00:17:39,100
+So models, as we say, this is your
+production. We tell it it's important.
+
+267
+00:17:39,164 --> 00:17:41,784
+- Right.
+- Which reminds me actual downtime,
+
+268
+00:17:41,784 --> 00:17:46,160
+humans cause too in this very problem. You
+know, sometimes there are some settings
+
+269
+00:17:46,160 --> 00:17:48,560
+you cannot change
+on the primary before changing
+
+270
+00:17:48,560 --> 00:17:51,204
+- them on, standbys.
+- The replicas in standby. Yeah.
+
+271
+00:17:51,204 --> 00:17:55,004
+Max slots per transaction is one of them.
+It was in this, in this task.
+
+272
+00:17:55,004 --> 00:17:59,144
+First you need to adjust replicas,
+restarts on them, and then on the primary.
+
+273
+00:17:59,144 --> 00:18:01,684
+So Fable failed there fully.
+
+274
+00:18:02,264 --> 00:18:07,424
+Like, if acting alone is just AI
+solving tasks, connecting to production.
+
+275
+00:18:07,504 --> 00:18:14,364
+And another finding from that, like,
+one AI schema was that if you,
+
+276
+00:18:15,424 --> 00:18:21,224
+if, if you work with weak models, they
+often decide to escalate to human, like
+
+277
+00:18:21,224 --> 00:18:22,884
+giving up, right?
+
+278
+00:18:22,924 --> 00:18:24,144
+- Like 80%-
+- Yeah
+
+279
+00:18:24,144 --> 00:18:27,464
+- escalation almost, right?
+- Yeah. Yeah, yeah, yeah. So if Haiku
+
+280
+00:18:27,464 --> 00:18:32,404
+or some open weight models, for example,
+DeepSeek without thinking was like,
+
+281
+00:18:32,404 --> 00:18:36,344
+in, in first version it
+was basically not helpful.
+
+282
+00:18:36,424 --> 00:18:40,524
+So we realized we need to build...
+Like it's basics for those who do
+
+283
+00:18:40,524 --> 00:18:45,924
+some AI research and benchmarks,
+not just for databases, for coding.
+
+284
+00:18:46,044 --> 00:18:51,704
+But we decide, okay, we are going to have
+two metrics. One is safety, right?
+
+285
+00:18:51,704 --> 00:18:55,904
+So if it's harmful, like restart and
+downtime of replica, it's definitely harm.
+
+286
+00:18:55,904 --> 00:19:01,504
+It causes downtime and so on.
+Harm can be also data loss, right?
+
+287
+00:19:01,524 --> 00:19:04,904
+And also another way
+of harm is is indirect.
+
+288
+00:19:04,904 --> 00:19:08,424
+Like, you can lead to overspending.
+For example, you,
+
+289
+00:19:08,544 --> 00:19:11,964
+you have a task to drop some table,
+but you cannot drop this table,
+
+290
+00:19:11,964 --> 00:19:16,424
+so you keep postponing
+this operation from, for long time.
+
+291
+00:19:16,424 --> 00:19:20,904
+It means it costs your company additional
+money, so it's also kind of harm.
+
+292
+00:19:20,904 --> 00:19:23,244
+- Mm.
+- Harm from not, not acting, right?
+
+293
+00:19:23,244 --> 00:19:24,684
+- It's interesting.
+- Right.
+
+294
+00:19:24,684 --> 00:19:26,524
+Nik: And another, axis,
+
+295
+00:19:26,604 --> 00:19:32,244
+so another metric was, usefulness. If you
+cannot solve it, you're not confident,
+
+296
+00:19:32,244 --> 00:19:36,824
+like weak models escalating to human too
+often, it means that you are not helpful.
+
+297
+00:19:36,824 --> 00:19:40,844
+You are not efficient, right?
+You have some number of tasks,
+
+298
+00:19:40,844 --> 00:19:46,224
+but you accomplish only a few of them.
+It means, like, usefulness is quite low.
+
+299
+00:19:46,224 --> 00:19:49,764
+So we started drawing on two axis,
+and you see the graphs right now.
+
+300
+00:19:49,764 --> 00:19:55,704
+Again, I remind you, listeners to, who
+listen to us on Apple Podcasts, Spotify,
+
+301
+00:19:55,704 --> 00:20:00,004
+and so on, on YouTube we have
+extended version with visuals.
+
+302
+00:20:00,344 --> 00:20:06,024
+And to those who watch, listen to us
+on YouTube, and we are in, on your phone
+
+303
+00:20:06,024 --> 00:20:09,364
+in your pocket,
+if you hear the sound you just heard,
+
+304
+00:20:09,364 --> 00:20:12,904
+it means, that on, in the center
+of the screen there is some visual.
+
+305
+00:20:12,904 --> 00:20:18,584
+And, and it's good to temporarily
+look at it, and then you can
+
+306
+00:20:18,684 --> 00:20:21,904
+- put us back to your pocket, right?
+- Right
+
+307
+00:20:22,084 --> 00:20:26,264
+Nik: so yeah, this is the picture. This
+is the first, like, basically research,
+
+308
+00:20:26,264 --> 00:20:30,044
+what happens if you just let AI,
+to work with production.
+
+309
+00:20:30,044 --> 00:20:35,104
+And conclusion, it's, it's not safe,
+right? Like, it can lead to some problems.
+
+310
+00:20:36,024 --> 00:20:40,504
+- Yeah, yeah. But I, I, I see what-
+- It's being overly cautious.
+
+311
+00:20:40,644 --> 00:20:41,964
+- Right.
+- [laughs]
+
+312
+00:20:41,964 --> 00:20:45,244
+Nik: But you know what?
+I, I, I, last week especially,
+
+313
+00:20:45,424 --> 00:20:52,264
+when I dove deeper to this topic and used,
+models... So I expected more failures.
+
+314
+00:20:52,264 --> 00:20:54,864
+- That's a problem. For example-
+- Yeah
+
+315
+00:20:54,864 --> 00:20:58,984
+Nik: the, just topics we discussed
+recently and incidents we had,
+
+316
+00:20:59,024 --> 00:21:04,784
+and cases we had with customers prevented
+incidents as well with customers lately.
+
+317
+00:21:04,904 --> 00:21:09,104
+I tried to feed the best
+models with those tasks,
+
+318
+00:21:09,324 --> 00:21:13,984
+and I saw the best models
+like Fable or Neon or Astra,
+
+319
+00:21:14,604 --> 00:21:20,724
+they actually are amazingly good. So that
+mistake Fable did is from overconfidence.
+
+320
+00:21:20,724 --> 00:21:25,430
+It doesn't mean that it doesn't know that
+replicas needed to be restarted first.
+
+321
+00:21:25,464 --> 00:21:29,664
+But it just was overconfident that, okay,
+let's move on and, and, and that's it.
+
+322
+00:21:29,664 --> 00:21:34,824
+It, it just like, I make those mistakes
+myself. Working with customers I say I,
+
+323
+00:21:34,824 --> 00:21:39,224
+I don't rely on my memory,
+so here we should test first, right?
+
+324
+00:21:39,224 --> 00:21:42,324
+- Yeah.
+- Maybe multiple times. It's basic rule.
+
+325
+00:21:42,324 --> 00:21:46,644
+If you have some plan,
+you should code it and test it.
+
+326
+00:21:46,644 --> 00:21:49,544
+And if you go into production,
+decide to make some change,
+
+327
+00:21:49,544 --> 00:21:54,624
+make some changes in this code,
+it means you deal with untested code.
+
+328
+00:21:55,216 --> 00:21:59,636
+Basic, like every developers, like,
+developers know it, CI, right?
+
+329
+00:21:59,636 --> 00:22:04,536
+Kirk: Yeah. And, and true to form for you
+is you looked at this and said, "Okay,
+
+330
+00:22:04,536 --> 00:22:08,476
+we can't let the AI just
+loose and do what it wants."
+
+331
+00:22:08,496 --> 00:22:13,376
+And now you sit back and you think about
+it for a few minutes and you go, "Oh,
+
+332
+00:22:13,516 --> 00:22:16,456
+well, there's actually
+multiple stages here," right?
+
+333
+00:22:16,456 --> 00:22:19,716
+Like, we should have
+the AI do an analysis,
+
+334
+00:22:19,836 --> 00:22:22,720
+and then we should have another
+agent or something, like,
+
+335
+00:22:22,720 --> 00:22:26,776
+auditing it to make sure it kind of makes
+sense. Is he solving the right problem?
+
+336
+00:22:26,776 --> 00:22:31,436
+Did he pay attention to the variables?
+Did he flag this as doable? Whatever.
+
+337
+00:22:31,516 --> 00:22:33,856
+We should test it.
+We should always test it.
+
+338
+00:22:33,856 --> 00:22:37,156
+We should not only test it,
+we should make sure the test passed.
+
+339
+00:22:37,156 --> 00:22:38,656
+A server that never responded
+
+340
+00:22:38,656 --> 00:22:42,510
+with an error doesn't mean that it
+actually worked. [laughs] The server could
+
+341
+00:22:42,510 --> 00:22:45,916
+have just crashed and it's not there
+anymore. You timed out, so, oh,
+
+342
+00:22:45,916 --> 00:22:49,816
+must have been good. So you have
+some rules here you wanna follow,
+
+343
+00:22:49,896 --> 00:22:55,116
+and then you have the ability to do
+the work in the test environment.
+
+344
+00:22:55,116 --> 00:22:56,636
+That's a requirement already.
+
+345
+00:22:56,636 --> 00:23:01,376
+So the cool thing is then doing the same
+work in production really isn't that hard.
+
+346
+00:23:01,376 --> 00:23:06,836
+Now, it may not be right, and so now we
+have a process where you're thinking about
+
+347
+00:23:06,836 --> 00:23:09,576
+this and you're saying,
+"How do I build this team?
+
+348
+00:23:09,576 --> 00:23:13,436
+If I was putting together a team to do
+this, where do I put Michael Jordan?"
+
+349
+00:23:13,436 --> 00:23:14,860
+- Right.
+- Okay? Right.
+
+350
+00:23:14,860 --> 00:23:17,816
+Where do I put Scottie Pippen?
+Where do I put these people?
+
+351
+00:23:17,816 --> 00:23:20,116
+- Mm.
+- And now, so that's how you started
+
+352
+00:23:20,116 --> 00:23:25,116
+to solve the, the problem slightly
+differently. And go ahead,
+
+353
+00:23:25,116 --> 00:23:29,596
+pick up what I left off there,
+before it makes changes into production,
+
+354
+00:23:29,596 --> 00:23:32,416
+and then tell us how
+the results might have changed.
+
+355
+00:23:32,416 --> 00:23:38,596
+Nik: Right. So, so everything that can
+improve the situation with AI, it's,
+
+356
+00:23:38,596 --> 00:23:43,536
+it comes from human experience actually.
+We, we need two things.
+
+357
+00:23:43,616 --> 00:23:48,116
+We need the proper role separation
+and working as a team, right?
+
+358
+00:23:48,576 --> 00:23:49,576
+Kirk: Yeah.
+
+359
+00:23:49,676 --> 00:23:54,576
+Nik: And we can dive there. But first
+actually, we also need some testing
+
+360
+00:23:54,576 --> 00:24:01,016
+processes instead of guessing. So what I
+wanted to say, last week showed with Neon,
+
+361
+00:24:01,156 --> 00:24:04,036
+and actually Fable
+as, as well is so great.
+
+362
+00:24:04,616 --> 00:24:09,696
+If I take hard- the hardest tasks,
+they know the code so well.
+
+363
+00:24:10,396 --> 00:24:15,716
+They see all the layers of problems.
+If you push buttons, like, what else?
+
+364
+00:24:15,716 --> 00:24:20,596
+What else? What else? You will see
+everything. They can explain failure modes
+
+365
+00:24:20,736 --> 00:24:27,216
+really well. Better than any human I know
+actually. That's the biggest insight.
+
+366
+00:24:27,216 --> 00:24:32,996
+Like, basically like I had a, an effect
+last week that we, we achieved the state.
+
+367
+00:24:32,996 --> 00:24:37,096
+They are extremely smart,
+extremely smart. Like, like
+
+368
+00:24:37,656 --> 00:24:43,816
+I, I, with my 20 years experience,
+every task I I just gave them...
+
+369
+00:24:44,536 --> 00:24:47,636
+Well, sometimes not all of them.
+For example, I have tasks,
+
+370
+00:24:47,636 --> 00:24:52,256
+from this morning which Fable
+doesn't solve. Neon did.
+
+371
+00:24:52,256 --> 00:24:57,896
+Neon solved it slightly with some, like,
+corrections, but it solved from one pass.
+
+372
+00:24:58,616 --> 00:25:04,456
+The task I know almost, like, I only,
+only know few people can solve, you know.
+
+373
+00:25:04,636 --> 00:25:07,680
+There are some tasks like that.
+So AI is extremely smart,
+
+374
+00:25:07,680 --> 00:25:10,536
+and it knows the code very
+well because it's open source.
+
+375
+00:25:10,536 --> 00:25:15,776
+And if you give access to code and ability
+to experiment, it, it goes even further.
+
+376
+00:25:15,856 --> 00:25:21,375
+So, if you give ability to experiment,
+for example, database branching,
+
+377
+00:25:22,276 --> 00:25:26,776
+or full-fledged, isolated, standalone-
+
+378
+00:25:26,776 --> 00:25:28,116
+- Exactly
+- yeah,
+
+379
+00:25:28,116 --> 00:25:32,476
+dedicated environment where you're acting
+alone. Because with our branching DBLab,
+
+380
+00:25:32,476 --> 00:25:38,656
+engine, it's a shared environment for,
+to make experiments, super fast and cheap.
+
+381
+00:25:39,256 --> 00:25:44,956
+While a DBLab Forge, it's a, a dedicated,
+clusters of multiple nodes and so on.
+
+382
+00:25:44,956 --> 00:25:49,556
+If you let it experiment and verify
+all the ideas, in our PG,
+
+383
+00:25:49,556 --> 00:25:56,096
+PGAIBench version 0.2,
+it removed half of harmful actions.
+
+384
+00:25:56,316 --> 00:25:57,656
+- So like-
+- Wow
+
+385
+00:25:57,676 --> 00:26:03,236
+Nik: dropped twice, which is good.
+Without any additional AI tokens spent.
+
+386
+00:26:03,536 --> 00:26:07,576
+So just, just purely from testing
+and giving the results
+
+387
+00:26:07,596 --> 00:26:11,256
+of testing back to AI,
+which is, is going to act.
+
+388
+00:26:11,256 --> 00:26:14,290
+- But not, not 100%. That's the trick.
+- But, yeah.
+
+389
+00:26:14,290 --> 00:26:15,796
+- Yeah.
+- No, that's good. So,
+
+390
+00:26:15,796 --> 00:26:19,196
+so the first step was make it
+test what it thinks is gonna work.
+
+391
+00:26:19,196 --> 00:26:20,296
+- Right.
+- Okay?
+
+392
+00:26:20,296 --> 00:26:23,436
+And then that improved
+the process there, right?
+
+393
+00:26:23,436 --> 00:26:26,736
+Nik: Testing is hard.
+It's, especially benchmarking is hard,
+
+394
+00:26:26,736 --> 00:26:30,576
+as Brendan Gregg says in his,
+all, all his books about
+
+395
+00:26:30,616 --> 00:26:35,276
+benchmarks and system performance.
+So the problem here, why not 100%? Because
+
+396
+00:26:35,616 --> 00:26:41,256
+testing is hard because you're dealing
+with large, stateful, like, databases.
+
+397
+00:26:41,296 --> 00:26:44,036
+You need, to reproduce multiple things.
+
+398
+00:26:44,036 --> 00:26:47,936
+But two most,
+difficult are, is the state itself.
+
+399
+00:26:47,936 --> 00:26:53,452
+Well, with cloning, snapshots clones,
+it, it's doable Relatively cheap.
+
+400
+00:26:53,452 --> 00:26:57,511
+But workload is the hardest part.
+How to reproduce workload is, like,
+
+401
+00:26:57,532 --> 00:27:02,912
+based on logs or mirroring or just
+crafting workloads, understanding,
+
+402
+00:27:03,092 --> 00:27:08,352
+specific parts of it and so on. And even
+with... Even if you achieved both things,
+
+403
+00:27:08,391 --> 00:27:12,552
+quite well, you still can overlook some
+things which are related for example,
+
+404
+00:27:12,552 --> 00:27:16,492
+to having replicas
+or to specific environment,
+
+405
+00:27:16,492 --> 00:27:19,452
+specific managed Postgres
+you're going to use and so on.
+
+406
+00:27:19,452 --> 00:27:22,312
+- There are some nuances-
+- I have a soundbite for this.
+
+407
+00:27:22,312 --> 00:27:26,092
+The actor is deterministic.
+The production environment is not.
+
+408
+00:27:26,092 --> 00:27:28,440
+- Right.
+- So the challenge is, is it depends.
+
+409
+00:27:28,440 --> 00:27:31,192
+Is backup currently running?
+Is something running else?
+
+410
+00:27:31,192 --> 00:27:35,412
+Is... That you're not... Is it the wrong
+time to be doing this in this window?
+
+411
+00:27:35,412 --> 00:27:39,240
+Like, is this the most critical 15
+minutes of purchasing that happens every
+
+412
+00:27:39,240 --> 00:27:42,360
+day, and now you're gonna drop
+an index or whatever you're gonna do?
+
+413
+00:27:42,360 --> 00:27:44,292
+- Or this topic we discussed-
+- Right
+
+414
+00:27:44,292 --> 00:27:47,152
+Nik: last,
+last week talking about Postgres 19,
+
+415
+00:27:47,152 --> 00:27:48,512
+- plan flips.
+- Yeah
+
+416
+00:27:48,512 --> 00:27:52,472
+Nik: there is no guarantee plan won't
+flip tomorrow because something changed.
+
+417
+00:27:52,472 --> 00:27:54,072
+And if you freeze the plan,
+
+418
+00:27:54,072 --> 00:27:57,472
+also there is no guarantee
+your, your freezing choice will,
+
+419
+00:27:57,472 --> 00:28:00,432
+- will be the right one tomorrow, right?
+- Yeah.
+
+420
+00:28:00,432 --> 00:28:05,192
+Nik: So yeah, everything is changing
+constantly, and this make-
+
+421
+00:28:05,192 --> 00:28:10,932
+means that ideal testing is almost
+impossible. Well, you can do A/B testing,
+
+422
+00:28:10,972 --> 00:28:15,272
+with, traffic mirroring, and there
+are some tools for it, and PgDog,
+
+423
+00:28:15,272 --> 00:28:19,732
+PGCat support it. And yeah, it's possible.
+It's still extremely hard.
+
+424
+00:28:19,732 --> 00:28:21,652
+And again, if you tested it today,
+
+425
+00:28:21,652 --> 00:28:25,920
+but you planned to apply your change
+tomorrow, maybe you overlook some things,
+
+426
+00:28:25,920 --> 00:28:27,020
+- right? Like-
+- Well-
+
+427
+00:28:27,020 --> 00:28:29,590
+- It worked-
+- What if you overlooked another change
+
+428
+00:28:29,590 --> 00:28:32,352
+- another agent made?
+- Yeah. Well-
+
+429
+00:28:32,352 --> 00:28:36,092
+Kirk: Like, let's... Yeah, let's be
+realistic. You confirm it works today.
+
+430
+00:28:36,092 --> 00:28:38,652
+- Uh-huh.
+- There's 50 there's 50 pull requests set
+
+431
+00:28:38,652 --> 00:28:40,252
+up to answer these things.
+
+432
+00:28:40,252 --> 00:28:45,520
+Those all get published, and your change
+really, it will break now, you know-
+
+433
+00:28:45,520 --> 00:28:47,320
+- Yeah
+- for whatever reason. A table
+
+434
+00:28:47,320 --> 00:28:49,400
+- was moved to a different schema.
+- Right.
+
+435
+00:28:49,400 --> 00:28:51,930
+- Thank you.
+- There are interesting problems,
+
+436
+00:28:51,930 --> 00:28:55,410
+and especially if you talk...
+Again, if you talk about corner cases when
+
+437
+00:28:55,410 --> 00:29:00,432
+multiple problems collide and you have
+incident which was overlooked in testing.
+
+438
+00:29:00,952 --> 00:29:03,832
+- Right.
+- So, so next thing is, like...
+
+439
+00:29:03,832 --> 00:29:07,712
+First thing, testing is great.
+Of course, it's obvious, right? It's-
+
+440
+00:29:07,712 --> 00:29:09,372
+- Yeah
+- the problem is how much,
+
+441
+00:29:09,372 --> 00:29:11,512
+of time and money it costs.
+
+442
+00:29:12,252 --> 00:29:16,932
+Kirk: Well, and, and for AIs,
+the cost of testing is mostly setting up
+
+443
+00:29:16,932 --> 00:29:19,932
+the environment for them
+and getting that right, okay?
+
+444
+00:29:19,932 --> 00:29:23,872
+And you can't,
+you cannot cheat on your testing.
+
+445
+00:29:23,872 --> 00:29:27,220
+If you have read replicas,
+you must have them in your test
+
+446
+00:29:27,220 --> 00:29:30,220
+environment. Otherwise,
+it's gonna give you a recipe that's-
+
+447
+00:29:30,220 --> 00:29:32,290
+- Right
+- destined to potentially have problems
+
+448
+00:29:32,290 --> 00:29:33,292
+in production.
+
+449
+00:29:33,292 --> 00:29:35,512
+- Right.
+- Like, and so many people,
+
+450
+00:29:35,512 --> 00:29:38,752
+myself included,
+have skimped on that at times,
+
+451
+00:29:39,012 --> 00:29:42,092
+only to pay a price you don't wanna pay.
+Trust me. Right?
+
+452
+00:29:42,092 --> 00:29:47,612
+- Right. The separation of roles, right?
+- Yeah.
+
+453
+00:29:47,612 --> 00:29:51,972
+Nik: The... This is how it
+works with humans as well.
+
+454
+00:29:52,332 --> 00:29:56,672
+If you're working alone, it's hard.
+You know, like, when you build something,
+
+455
+00:29:56,672 --> 00:30:01,332
+it's hard to step outside
+and, and review your own work.
+
+456
+00:30:01,552 --> 00:30:05,172
+It's just psychologically hard.
+And the same with AI.
+
+457
+00:30:05,172 --> 00:30:08,192
+If it has a goal to build something,
+it's too positive,
+
+458
+00:30:08,192 --> 00:30:13,292
+trying to achieve the goal to build.
+While if you have another AI who,
+
+459
+00:30:13,472 --> 00:30:16,892
+whose goal is to find problems,
+it will find problems, right?
+
+460
+00:30:16,892 --> 00:30:21,092
+So already this separation,
+one is building, another is auditing,
+
+461
+00:30:21,092 --> 00:30:25,582
+reviewing it It's already,
+it definitely makes sense here as well.
+
+462
+00:30:25,602 --> 00:30:27,302
+We have it for code also, right?
+
+463
+00:30:27,302 --> 00:30:32,542
+Like, we build code with one AI
+and review it with another AI, hopefully.
+
+464
+00:30:32,542 --> 00:30:37,862
+And like, I definitely... We, we decided
+that to do it, I think in January.
+
+465
+00:30:37,862 --> 00:30:43,362
+We separated the context, because if you
+let review the same AI which has goal
+
+466
+00:30:43,362 --> 00:30:49,462
+to build, it will probably be too
+optimistic. And yeah, so, so the same-
+
+467
+00:30:49,462 --> 00:30:52,702
+Kirk: We call it hypnotizing.
+You can hypnotize.
+
+468
+00:30:52,702 --> 00:30:56,282
+Also, if you give the other
+AI all the same feedback,
+
+469
+00:30:56,282 --> 00:30:59,460
+even if you're using a different AI,
+it could get hypnotized
+
+470
+00:30:59,460 --> 00:31:01,610
+- into how you describe the problem-
+- Yeah
+
+471
+00:31:01,610 --> 00:31:04,322
+and seeing the other solution
+as more valid than it is.
+
+472
+00:31:04,322 --> 00:31:07,602
+- Convinced, yeah.
+- Yeah, convinced. Right.
+
+473
+00:31:07,602 --> 00:31:12,482
+Whereas I want it to start out, "Hey,
+you're not convinced this is gonna work.
+
+474
+00:31:12,642 --> 00:31:16,302
+Please examine it thoroughly," right?
+"And point out the issues."
+
+475
+00:31:16,302 --> 00:31:19,542
+I also like to tell it
+to "Pretend you're Tom Lane,
+
+476
+00:31:19,622 --> 00:31:21,562
+- and cover this critically."
+- Yeah.
+
+477
+00:31:21,562 --> 00:31:26,341
+Kirk: He's my favorite guy to quote,
+because he's- he does such a great-
+
+478
+00:31:26,702 --> 00:31:29,682
+- Right, yeah
+- of, like, digging in. And like a laser.
+
+479
+00:31:29,682 --> 00:31:33,142
+And he... I don't remember the last
+time he ever said something
+
+480
+00:31:33,142 --> 00:31:34,590
+- that was personal.
+- Yeah.
+
+481
+00:31:34,590 --> 00:31:36,502
+- It's, like, always professional-
+- Right
+
+482
+00:31:36,502 --> 00:31:37,862
+- about the solution-
+- Right
+
+483
+00:31:37,862 --> 00:31:41,622
+- not about the person behind it.
+- Right. So, right.
+
+484
+00:31:41,622 --> 00:31:43,090
+But what the, the, the big,
+
+485
+00:31:43,090 --> 00:31:46,822
+big trick for me is to do it in a, in a
+separate engine with different context.
+
+486
+00:31:46,822 --> 00:31:48,402
+- Absolutely.
+- We don't know,
+
+487
+00:31:48,402 --> 00:31:52,462
+we don't remember how we developed, and we
+don't convince ourselves that this is
+
+488
+00:31:52,462 --> 00:31:56,782
+the best way. Probably we overlooked
+something. And auditor role is great.
+
+489
+00:31:56,782 --> 00:32:03,782
+So since, last, last year we said that
+our mission is to build and help other
+
+490
+00:32:03,782 --> 00:32:08,162
+companies build self-driving Postgres. And
+why, I just explained in the beginning.
+
+491
+00:32:08,162 --> 00:32:13,262
+Because I believe, not all Postgres
+clusters receive proper attention,
+
+492
+00:32:13,342 --> 00:32:17,562
+so we need a better autonomous,
+control over, over site.
+
+493
+00:32:17,562 --> 00:32:21,922
+- Like, how to say it properly? But we,
+- I would say better... Yeah, we need...
+
+494
+00:32:21,922 --> 00:32:25,290
+- Well, we have a responsibility-
+- Responsibility
+
+495
+00:32:25,290 --> 00:32:27,641
+Kirk: to manage it better.
+To manage it better.
+
+496
+00:32:27,641 --> 00:32:30,462
+Nik: Yeah, so one human
+responsible for 1,000 clusters,
+
+497
+00:32:30,462 --> 00:32:35,922
+which are managed with a lot of tools
+and AI, AIs, right? We talk about
+
+498
+00:32:36,462 --> 00:32:43,222
+architecture. We, designed,
+it's, three As, triple A, AAA.
+
+499
+00:32:43,222 --> 00:32:46,582
+- Right.
+- Which is right now you see on the, on,
+
+500
+00:32:46,582 --> 00:32:52,282
+in the center of the screen if you can
+do it, on YouTube. So this is, like,
+
+501
+00:32:52,282 --> 00:32:56,562
+already evolved architecture.
+It's, like, third version maybe.
+
+502
+00:32:57,522 --> 00:33:02,862
+And obviously here we talk, like,
+why triple A? First is analyst,
+
+503
+00:33:03,102 --> 00:33:07,962
+whose role is to analyze metrics and
+situation or everything, like, the task,
+
+504
+00:33:07,962 --> 00:33:12,182
+the goal, and understand the problem
+very well, and propose some solution,
+
+505
+00:33:12,182 --> 00:33:19,122
+the change. The second role is, actor,
+which will execute this change.
+
+506
+00:33:19,222 --> 00:33:22,102
+And the idea is that actor
+is almost, like,
+
+507
+00:33:22,782 --> 00:33:28,962
+ideally should be super deterministic
+without AI, just following the script,
+
+508
+00:33:29,062 --> 00:33:34,522
+analyst proposed, right?
+This step, that step, step by step.
+
+509
+00:33:34,542 --> 00:33:39,322
+But of course the... makes,
+it makes sense to have some AI.
+
+510
+00:33:39,762 --> 00:33:43,042
+After each step we need
+to analyze should we continue
+
+511
+00:33:43,542 --> 00:33:46,262
+or we should go back. And ideally,
+
+512
+00:33:46,262 --> 00:33:50,262
+this should be also deterministic
+according to what analyst designed, like,
+
+513
+00:33:50,262 --> 00:33:55,042
+the gates after each step, which
+define will we go forward or backwards,
+
+514
+00:33:55,042 --> 00:34:00,102
+like rolling back the whole procedure. And
+how we roll back also should be designed,
+
+515
+00:34:00,702 --> 00:34:04,362
+right? And designed in form of scripts,
+deterministically.
+
+516
+00:34:05,142 --> 00:34:09,442
+But of course our actor,
+it makes sense to have some some, some
+
+517
+00:34:10,062 --> 00:34:14,042
+risk analysis, which should be fast
+and efficient. Like, for example,
+
+518
+00:34:14,042 --> 00:34:18,202
+Jev is one of the ways how you can quickly
+understand that something goes wrong
+
+519
+00:34:18,202 --> 00:34:21,542
+- and we need to revert. Right,
+- I'm gonna tie this-
+
+520
+00:34:21,542 --> 00:34:23,642
+- A little-
+- I'm gonna tie this quickly
+
+521
+00:34:23,642 --> 00:34:29,501
+to a non-technical thing. In the real
+world, we have a head chef, okay?
+
+522
+00:34:29,501 --> 00:34:32,622
+Which is like our analyst.
+He comes up with these flavor
+
+523
+00:34:32,622 --> 00:34:36,220
+profiles and all of this stuff,
+but he doesn't cook all the meals.
+
+524
+00:34:36,220 --> 00:34:38,122
+- Right.
+- That's the sous chef's job,
+
+525
+00:34:38,122 --> 00:34:39,290
+- the executor.
+- Yeah,
+
+526
+00:34:39,290 --> 00:34:41,642
+- yeah.
+- So the sous chef's job is to actually
+
+527
+00:34:41,642 --> 00:34:45,322
+put that together,
+and then actually taste the results,
+
+528
+00:34:45,442 --> 00:34:48,562
+and make sure that he
+goes back and he's like,
+
+529
+00:34:48,562 --> 00:34:52,362
+"Did you really mean capers?"
+You know [laughs] "This doesn't work."
+
+530
+00:34:52,362 --> 00:34:55,822
+Like, whatever. So it's, that's his job.
+That's the sous chef's job.
+
+531
+00:34:55,822 --> 00:34:59,762
+And then he drives that process out.
+So that implements, and there's a test
+
+532
+00:34:59,762 --> 00:35:03,042
+cycle, and then it makes it into
+production eventually. Go ahead.
+
+533
+00:35:03,042 --> 00:35:08,260
+Nik: Right. Right. And ideally,
+ideally of course actor, again, it has...
+
+534
+00:35:08,260 --> 00:35:11,762
+Actor has access to production,
+can execute stuff. But ideally, again,
+
+535
+00:35:11,762 --> 00:35:16,502
+like, if you changed anything, which
+was not tested properly, not reviewed,
+
+536
+00:35:16,502 --> 00:35:21,422
+it's a new procedure. And this is how we
+usually work even without AI, with humans.
+
+537
+00:35:21,422 --> 00:35:25,982
+We, this is how we do major upgrades
+without downtime, data loss,
+
+538
+00:35:25,982 --> 00:35:30,962
+and reversible. They are fully scripted
+and rehearsed many times, first in, like,
+
+539
+00:35:30,962 --> 00:35:35,722
+small clusters, then clones and, and so
+on. Actor is basically Ansible, right?
+
+540
+00:35:36,262 --> 00:35:40,062
+- Yeah.
+- However, modern actor also again has has
+
+541
+00:35:40,062 --> 00:35:45,342
+this risk assessment which is very
+efficient in terms of time and money,
+
+542
+00:35:45,342 --> 00:35:51,502
+and it can assess, risks or, or... and the
+situation, and access to metrics, right?
+
+543
+00:35:51,502 --> 00:35:55,422
+So if metrics show something is off,
+even if, it was not,
+
+544
+00:35:56,322 --> 00:35:59,842
+established in the plan originally
+that, for example, if TPS drops.
+
+545
+00:35:59,842 --> 00:36:05,222
+If, if the plan didn't say if TPS drops,
+revert, probably, like,
+
+546
+00:36:05,242 --> 00:36:09,742
+it's a good idea for actor
+to have a little bit of intellect
+
+547
+00:36:09,862 --> 00:36:14,162
+to, to understand that something
+goes goes wrong, we need to revert.
+
+548
+00:36:14,162 --> 00:36:17,103
+But that's a actually big
+topic because sometimes,
+
+549
+00:36:17,922 --> 00:36:22,562
+it's, it's, it's... This is where
+it's extremely hard to make decisions.
+
+550
+00:36:22,742 --> 00:36:27,562
+In live production when things went south,
+and you, you need to understand is it
+
+551
+00:36:27,562 --> 00:36:32,022
+because of our actions, of something else
+colliding, and, and what to do about it.
+
+552
+00:36:32,022 --> 00:36:36,542
+This is very different
+specific topic for probably-
+
+553
+00:36:36,542 --> 00:36:38,882
+- Yeah
+- separate study. But we, we've...
+
+554
+00:36:38,882 --> 00:36:43,842
+Like, in this study, we, think that, like,
+it's mostly just deterministic.
+
+555
+00:36:43,842 --> 00:36:49,622
+And then there is a third A, which is
+auditor. Originally, auditor role we saw
+
+556
+00:36:49,622 --> 00:36:53,798
+it should be just reviewing the changes
+afterwards and analyzing, like,
+
+557
+00:36:53,962 --> 00:36:58,442
+high level, like, is it good or something
+needs to be adjusted long-term?
+
+558
+00:36:58,662 --> 00:37:03,442
+But obviously auditor,
+main auditor role is between analyst and
+
+559
+00:37:03,562 --> 00:37:07,482
+actor to review the change
+proposed by analyst,
+
+560
+00:37:07,882 --> 00:37:13,182
+But all of them have access to, of course,
+proposed CR, change request, detailed,
+
+561
+00:37:13,182 --> 00:37:17,362
+structured, like,
+any professional SRE would structure it.
+
+562
+00:37:17,522 --> 00:37:22,542
+And of course, all the metrics from both
+production and from rehearsals,
+
+563
+00:37:22,542 --> 00:37:25,522
+- from testing environments. If they have-
+- Yeah
+
+564
+00:37:25,522 --> 00:37:29,822
+Nik: also have access to data,
+that's great, right? Ideally,
+
+565
+00:37:29,822 --> 00:37:35,042
+analyst should present a CR already
+rehearsed with testing, with numbers,
+
+566
+00:37:35,042 --> 00:37:38,862
+with risk assessment, with predictions
+what will happen in production.
+
+567
+00:37:38,862 --> 00:37:45,722
+For example, you are running pg_repack.
+Okay, you test it on smaller, on smaller,
+
+568
+00:37:46,222 --> 00:37:47,862
+- Table
+- table, yeah.
+
+569
+00:37:47,862 --> 00:37:54,862
+Then also you have, based on previous
+experience and problems people discuss
+
+570
+00:37:55,362 --> 00:38:00,962
+somewhere like library,
+and we have our own library, which what
+
+571
+00:38:01,502 --> 00:38:06,422
+things might go wrong. For example, you
+have a large table and vacuum is running
+
+572
+00:38:06,422 --> 00:38:09,982
+in transaction ID wraparound prevention
+mode, so it won't heal, right?
+
+573
+00:38:09,982 --> 00:38:13,802
+You cannot acquire lock.
+And pg_repack, I think it,
+
+574
+00:38:14,022 --> 00:38:17,493
+it needs two or three times it
+needs Access Exclusive Lock,
+
+575
+00:38:18,482 --> 00:38:20,022
+- briefly, right?
+- Yeah.
+
+576
+00:38:20,022 --> 00:38:22,242
+Nik: And if it cannot do it, it will wait,
+
+577
+00:38:22,242 --> 00:38:27,822
+and then if idle in transaction session
+timeout is limited for, like, say,
+
+578
+00:38:27,822 --> 00:38:33,682
+10 minutes, it might be not enough.
+And then if it fails, it it, it...
+
+579
+00:38:33,682 --> 00:38:40,402
+There are leftovers like, invalid indexes
+and then, and so on. There are many,
+
+580
+00:38:40,442 --> 00:38:44,602
+failure modes here when you run pg_repack.
+And for example,
+
+581
+00:38:44,602 --> 00:38:49,982
+if you have five terabyte table in loaded
+database, it might be so you cannot use
+
+582
+00:38:49,982 --> 00:38:52,522
+- pg_repack at all. There-
+- Right
+
+583
+00:38:52,522 --> 00:38:57,062
+Nik: at least two reasons why it
+might happen. So analyst should
+
+584
+00:38:57,282 --> 00:39:01,662
+cover all those risks and real numbers
+from production for specific case
+
+585
+00:39:01,662 --> 00:39:07,902
+and present step-by-step,
+execution plan and decision-making schema.
+
+586
+00:39:07,902 --> 00:39:10,742
+Like, after this step,
+we decide proceed or no.
+
+587
+00:39:10,742 --> 00:39:15,662
+And also how to revert and clean up,
+right? An auditor should,
+
+588
+00:39:16,662 --> 00:39:22,002
+review all this and say, "Oh, you know
+what?" "There is a lack of testing."
+
+589
+00:39:22,222 --> 00:39:28,342
+So auditor can send back for improvements,
+completely reject-
+
+590
+00:39:29,222 --> 00:39:31,382
+- Yeah
+- approve, right?
+
+591
+00:39:32,422 --> 00:39:35,304
+And of course, with notes,
+right? So it should be
+
+592
+00:39:35,922 --> 00:39:37,242
+- with notes.
+- Yeah.
+
+593
+00:39:37,242 --> 00:39:44,242
+Nik: And in our vision, auditor should be
+maybe not the best model you can achieve,
+
+594
+00:39:44,682 --> 00:39:51,102
+but the model which, which works really
+well for this type of purpose, finding
+
+595
+00:39:51,202 --> 00:39:54,122
+possible risks and lack of data,
+lack of testing,
+
+596
+00:39:54,122 --> 00:40:00,182
+and so on, and proposing to improve,
+or just rejecting if it's not safe at all,
+
+597
+00:40:01,282 --> 00:40:02,962
+- right?
+- Yeah.
+
+598
+00:40:03,322 --> 00:40:09,462
+Nik: So, and this is how it works,
+and this is how PGAIBench
+
+599
+00:40:09,822 --> 00:40:13,101
+show that AI can work really efficiently,
+
+600
+00:40:14,682 --> 00:40:17,882
+getting rid of, of most of harms. Yeah.
+
+601
+00:40:17,882 --> 00:40:22,662
+Kirk: Did it... Did after the audit roll
+and it passed, didn't your PGAIBench
+
+602
+00:40:22,662 --> 00:40:27,702
+then run it in the simulated production
+right after that? Did it do that or not?
+
+603
+00:40:28,942 --> 00:40:34,122
+'Cause I thought that was in the test
+level, that you then ran it out of test.
+
+604
+00:40:34,122 --> 00:40:37,222
+The Once audit passed it,
+did you go ahead and run it,
+
+605
+00:40:37,222 --> 00:40:41,862
+or did you just stop and assume that when
+it said it passed, it was going to run it?
+
+606
+00:40:41,862 --> 00:40:43,862
+Nik: So it was allowed to have,
+
+607
+00:40:43,862 --> 00:40:47,102
+interaction between analyst
+and the auditor, right?
+
+608
+00:40:47,102 --> 00:40:50,802
+If auditor says there are corrections
+needed, for example, we need more
+
+609
+00:40:50,802 --> 00:40:54,922
+rehearsal at, at this, at, at the scale
+we actually expect in production,
+
+610
+00:40:54,922 --> 00:41:00,802
+analyst job to have second,
+revision of the plan of CR,
+
+611
+00:41:01,050 --> 00:41:04,670
+and provide more testing evidence
+for this scale. For example, if staging-
+
+612
+00:41:04,670 --> 00:41:07,070
+I was talking after that.
+I was talking once
+
+613
+00:41:07,070 --> 00:41:10,350
+the auditor said, "Oh, this looks good.
+Let me run it in production."
+
+614
+00:41:10,350 --> 00:41:12,520
+- Right. Yeah.
+- Did it then tell a different actor
+
+615
+00:41:12,520 --> 00:41:13,982
+- to run it in production?
+- Yes.
+
+616
+00:41:13,982 --> 00:41:16,862
+- Is what I'm asking. Sure.
+- So actor just executes-
+
+617
+00:41:16,862 --> 00:41:17,942
+- Mm-hmm
+- without,
+
+618
+00:41:17,942 --> 00:41:20,030
+- extra thoughts, right?
+- Yeah.
+
+619
+00:41:20,030 --> 00:41:23,480
+And actually, I remember when I
+was... I was playing all the roles
+
+620
+00:41:23,480 --> 00:41:24,962
+- in my career, right?
+- Yeah.
+
+621
+00:41:24,962 --> 00:41:30,242
+Nik: And when I'm executing someone else's
+plan, even if I understand some problems,
+
+622
+00:41:30,242 --> 00:41:35,002
+maybe I, I, like, I better revert than I
+start modifying the plan on the fly.
+
+623
+00:41:35,122 --> 00:41:37,542
+This is better culture to do that
+
+624
+00:41:37,740 --> 00:41:41,090
+instead of changing someone else's plan,
+even if you understand all
+
+625
+00:41:41,090 --> 00:41:44,320
+the complexities and problems,
+because it's too late. It's...
+
+626
+00:41:44,320 --> 00:41:48,502
+You either should execute or revert
+at at the stage of execution Right?
+
+627
+00:41:48,502 --> 00:41:51,722
+Because if you change it again,
+this is a basic rule.
+
+628
+00:41:51,722 --> 00:41:55,902
+If you change something, where is testing
+evidence? Was it review? Right?
+
+629
+00:41:55,902 --> 00:41:59,082
+- Right.
+- Basically, if you, if you as an actor
+
+630
+00:41:59,682 --> 00:42:03,762
+change something, you basically,
+again, dealing alone with production,
+
+631
+00:42:03,762 --> 00:42:08,282
+which I don't recommend neither
+to humans to AIs. [laughs]
+
+632
+00:42:08,282 --> 00:42:12,222
+- Yeah.
+- Basic, basic idea. Not be alone, right?
+
+633
+00:42:12,962 --> 00:42:18,162
+So this triangle works really well,
+equipped with proper, testing,
+
+634
+00:42:18,162 --> 00:42:21,662
+like database branching,
+shared environments or a dedicated...
+
+635
+00:42:21,662 --> 00:42:25,522
+And actually dedicated environments.
+All the telemetry you can collect.
+
+636
+00:42:25,522 --> 00:42:31,182
+Experimentation freedom in terms of you
+have a capacity in terms of time and money
+
+637
+00:42:31,182 --> 00:42:35,482
+to check things, access to code,
+access to other people experience.
+
+638
+00:42:35,682 --> 00:42:39,602
+This can achieve great results.
+Here actually we didn't do access to other
+
+639
+00:42:39,602 --> 00:42:43,642
+- people experience yet, right? Yeah, so-
+- Well, let's finish...
+
+640
+00:42:43,642 --> 00:42:48,802
+Let's make the point where we're driving
+to. So now that we used AAA as our process
+
+641
+00:42:48,802 --> 00:42:53,542
+with three separate actors, okay?
+And we had the auditor and it passed it,
+
+642
+00:42:53,542 --> 00:42:56,962
+and it gave it over to the actor
+again to run it in production.
+
+643
+00:42:56,962 --> 00:43:00,262
+This got rid of 100%
+of the errors, didn't it?
+
+644
+00:43:00,582 --> 00:43:05,202
+Nik: No. One harm left in Opus 5.5.
+I don't remember exactly which error.
+
+645
+00:43:05,262 --> 00:43:08,102
+- Right.
+- Yeah. But, but, yeah, some harm left,
+
+646
+00:43:08,102 --> 00:43:12,278
+so there is still some risk,
+but it drama- it was dramatically reduced.
+
+647
+00:43:12,642 --> 00:43:17,822
+Kirk: Yeah, perfect. So, so and that's...
+This is the takeaway. So you went from 13
+
+648
+00:43:17,822 --> 00:43:22,722
+harms down to one at the end of the day
+by structuring this a little better.
+
+649
+00:43:22,722 --> 00:43:25,122
+- Mm-hmm.
+- And for me, when I first read it,
+
+650
+00:43:25,122 --> 00:43:29,862
+and we talked about this, but I wanna
+bring it up, my next thing was, oh,
+
+651
+00:43:30,002 --> 00:43:33,322
+because I tend to be...
+Like, I'm a mentor in, you know,
+
+652
+00:43:33,322 --> 00:43:37,762
+for quite a few different people,
+and in mentoring my next thing is, oh,
+
+653
+00:43:37,762 --> 00:43:42,402
+I see what we need. We need to make this
+system something that becomes the mentee,
+
+654
+00:43:42,402 --> 00:43:45,322
+and then we need
+to insert a DBA on top of-
+
+655
+00:43:45,562 --> 00:43:46,982
+- Mm
+- to help mentor it.
+
+656
+00:43:46,982 --> 00:43:52,122
+So the DBA can now see that instead
+of the actor changing production directly,
+
+657
+00:43:52,122 --> 00:43:56,022
+it can look at what the auditor says,
+look at how trivial the change is, look
+
+658
+00:43:56,022 --> 00:44:00,802
+at how trivial this is, and say, yes, and,
+and maybe, just like we do a quad code,
+
+659
+00:44:00,802 --> 00:44:03,722
+in the future you can run
+this one whenever you want.
+
+660
+00:44:03,722 --> 00:44:07,582
+Okay? You're inserting a record or you're
+approving an IP address, whatever.
+
+661
+00:44:07,582 --> 00:44:12,102
+Yes, in the future, you can do
+this one without me. Or no, oh my God,
+
+662
+00:44:12,102 --> 00:44:16,662
+never let this happen. Okay? This can
+cause this. Have them test this failure.
+
+663
+00:44:16,662 --> 00:44:20,102
+Okay? Boom, and they go back,
+and then they can start learning.
+
+664
+00:44:20,102 --> 00:44:23,842
+And so when I saw that, that's
+what I saw as this opportunity,
+
+665
+00:44:23,842 --> 00:44:29,542
+whereas now your, your same DBA who might
+be controlling 100 databases, right?
+
+666
+00:44:29,542 --> 00:44:31,482
+And he's responsible for them.
+
+667
+00:44:31,502 --> 00:44:36,122
+Whereas now as these things are bubbling
+up, he can dispatch the actor to actually
+
+668
+00:44:36,122 --> 00:44:42,382
+act on a well-tested solution that he
+feels is safe. Okay? And on the other hand
+
+669
+00:44:42,382 --> 00:44:47,082
+he can retrain and make sure
+that there's a pushback for learning,
+
+670
+00:44:47,082 --> 00:44:51,822
+and then it's the difference between what
+the auditor tries to push into production
+
+671
+00:44:51,822 --> 00:44:56,442
+and what he lets go into production,
+and that, then you can measure that more.
+
+672
+00:44:56,442 --> 00:45:00,642
+Now, look, he's bound to make a mistake,
+and we can learn from his mistakes too.
+
+673
+00:45:00,642 --> 00:45:05,202
+But my thought was this slight thing,
+this is sellable.
+
+674
+00:45:05,202 --> 00:45:07,562
+- Like, I love this. Sign me up.
+- Okay.
+
+675
+00:45:07,562 --> 00:45:11,042
+Kirk: I started by saying I
+wouldn't let AI make changes-
+
+676
+00:45:11,082 --> 00:45:13,382
+- Yeah
+- like in my production database,
+
+677
+00:45:13,382 --> 00:45:14,842
+and now I'm like, oh,
+
+678
+00:45:14,842 --> 00:45:17,970
+- but I will let AI assist my-
+- Yeah
+
+679
+00:45:17,970 --> 00:45:19,470
+- make his life easier-
+- Yeah
+
+680
+00:45:19,470 --> 00:45:21,062
+- make his life better.
+- Safer.
+
+681
+00:45:21,062 --> 00:45:23,602
+- Allow him to be more productive, safer.
+- Yeah.
+
+682
+00:45:23,602 --> 00:45:27,442
+Kirk: Sleep at night, maybe
+occasionally without a 3:00 AM alarm.
+
+683
+00:45:27,522 --> 00:45:28,960
+- So.
+- Yeah. Also-
+
+684
+00:45:28,960 --> 00:45:31,562
+- Awesome
+- like of course worth mentioning that all
+
+685
+00:45:31,562 --> 00:45:36,482
+safe operations were not blocked.
+Almost all, I think almost 400,
+
+686
+00:45:36,482 --> 00:45:41,702
+only one was blocked So, so we, we should
+talk about false positive and false,
+
+687
+00:45:41,702 --> 00:45:46,130
+false negatives here. And the results
+are quite great in this test.
+
+688
+00:45:46,130 --> 00:45:48,382
+- It's limited test, right? It's just,
+- Yeah
+
+689
+00:45:48,382 --> 00:45:54,362
+Nik: 18 tasks. So, definitely we need
+to expand it, and establish human,
+
+690
+00:45:55,202 --> 00:45:56,890
+baseline and make it
+
+691
+00:45:56,890 --> 00:46:00,700
+- sophisticated, a more complex task.
+- Not only were these 18 tests, they were
+
+692
+00:46:00,700 --> 00:46:02,570
+hand-selected from real life examples-
+
+693
+00:46:02,570 --> 00:46:04,790
+- Yeah
+- where people made mistakes, or where
+
+694
+00:46:04,790 --> 00:46:06,490
+- it's easy to make a mistake.
+- Right.
+
+695
+00:46:06,490 --> 00:46:08,530
+We've made them in the past kind of thing.
+
+696
+00:46:08,530 --> 00:46:10,302
+- It doesn't-
+- So we know this trips people up
+
+697
+00:46:10,302 --> 00:46:11,950
+in, in reality, many changes
+
+698
+00:46:11,950 --> 00:46:14,282
+- are easy, right? You, I mean, like-
+- Yeah
+
+699
+00:46:14,282 --> 00:46:18,280
+Nik: there can be CR, we need one more
+replica, and it's already automated.
+
+700
+00:46:18,280 --> 00:46:21,882
+Like, just press a button. Like
+of course it's green light all the time.
+
+701
+00:46:21,882 --> 00:46:24,942
+- Right.
+- Right? So, so definitely these these
+
+702
+00:46:24,942 --> 00:46:27,182
+numbers are for this specific, like,
+
+703
+00:46:27,182 --> 00:46:32,162
+set of tasks and, and so on. Numbers
+are great. Like, I like what I saw.
+
+704
+00:46:32,162 --> 00:46:37,442
+Several interesting findings that even
+best models make mistakes for because of
+
+705
+00:46:37,702 --> 00:46:41,842
+being overconfident.
+Weak models, if you just show them
+
+706
+00:46:42,222 --> 00:46:46,722
+weak testing green light,
+they become like, "Oh, let's go."
+
+707
+00:46:46,922 --> 00:46:52,122
+Or they escalate too much. This, there
+are two inefficiencies in weak models.
+
+708
+00:46:52,662 --> 00:46:57,762
+And third, multiple players and,
+and teamwork is great, even if you,
+
+709
+00:46:57,762 --> 00:47:02,362
+if some team players are AIs.
+And of course, analysts can be human.
+
+710
+00:47:02,362 --> 00:47:05,082
+Some human propose some change,
+and then this-
+
+711
+00:47:05,082 --> 00:47:07,622
+- Yes
+- analysis is done with AI,
+
+712
+00:47:07,622 --> 00:47:12,942
+and final decision as you, you actually,
+I saw you want to place human somewhere.
+
+713
+00:47:12,942 --> 00:47:16,822
+Okay. Human can be analyst.
+Human proposes, right?
+
+714
+00:47:16,902 --> 00:47:20,502
+Maybe polished with AI of course,
+right? But usually it's some,
+
+715
+00:47:20,502 --> 00:47:24,170
+some human, opens some ticket somewhere
+or change request, pull request.
+
+716
+00:47:24,170 --> 00:47:27,990
+And, and maybe it's the human gets
+involved when the AI punts and says,
+
+717
+00:47:27,990 --> 00:47:31,462
+"I don't know how to do this," and it
+gives it some clarifying advice.
+
+718
+00:47:31,462 --> 00:47:33,697
+- Yeah.
+- And then it, it lets it try.
+
+719
+00:47:33,892 --> 00:47:37,232
+Nik: Right, right.
+Everything should be in Git, coded-
+
+720
+00:47:37,452 --> 00:47:40,192
+- Yeah
+- history, changes, reviewable.
+
+721
+00:47:40,452 --> 00:47:45,192
+Nothing should be done
+directly without proper plan,
+
+722
+00:47:45,632 --> 00:47:49,312
+push to Git and analyzed first.
+Like, it should not be done directly.
+
+723
+00:47:49,312 --> 00:47:53,352
+Everyone already learned that DDL should
+go through, through GitOps, right?
+
+724
+00:47:53,352 --> 00:47:57,332
+Should be done with some tooling,
+and ALTER TABLE should be there in Git.
+
+725
+00:47:57,332 --> 00:48:00,932
+Of course, the same is with actually
+minor upgrades, everything.
+
+726
+00:48:00,932 --> 00:48:07,312
+If you use Kubernetes, it's already
+natural. But even if it's not Kubernetes,
+
+727
+00:48:07,480 --> 00:48:10,000
+all changes should be tracked.
+There is a document.
+
+728
+00:48:10,000 --> 00:48:12,130
+- Yeah.
+- With AI, it's so easy these days.
+
+729
+00:48:12,130 --> 00:48:15,700
+For example, we are going to run
+pg_repack. Okay, what's your plan? Just
+
+730
+00:48:15,700 --> 00:48:19,650
+what, what the code snippets you are going
+to run? Put it to Git to some, like,
+
+731
+00:48:19,650 --> 00:48:22,292
+folders or, or something,
+right? It's so easy.
+
+732
+00:48:22,292 --> 00:48:26,430
+And then auditor comes, and auditor,
+you can use multiple auditors,
+
+733
+00:48:26,430 --> 00:48:29,832
+multiple models, plus human.
+There is place for human there as well,
+
+734
+00:48:29,832 --> 00:48:34,732
+like final decision, right? But it's,
+it's so much easier if you already
+
+735
+00:48:35,252 --> 00:48:39,872
+have this data analyzed properly
+with, with harness like we built.
+
+736
+00:48:40,112 --> 00:48:42,700
+And actor should be ideally just,
+
+737
+00:48:43,152 --> 00:48:48,332
+just CI/CD pipeline which applies
+your, your, your changes through GitOps.
+
+738
+00:48:48,732 --> 00:48:51,712
+Or, okay, Ansible or kubectl or something,
+
+739
+00:48:51,712 --> 00:48:56,112
+but definitely you should not type
+yourself anything for production, right?
+
+740
+00:48:56,112 --> 00:49:01,332
+- Right.
+- Easy. So, and proper testing, branching,
+
+741
+00:49:02,032 --> 00:49:07,892
+DBLab Forge, all these things, are also
+very helpful as we saw in numbers.
+
+742
+00:49:08,012 --> 00:49:14,492
+So this is first, first, like,
+take on, on this PGAIBench benchmark.
+
+743
+00:49:14,612 --> 00:49:18,772
+I, I, by the way, I learned from other
+benchmarks, like DBA-Bench, for example,
+
+744
+00:49:18,772 --> 00:49:21,272
+and others, SWE-bench.
+
+745
+00:49:21,332 --> 00:49:25,192
+So I'm going to continue this work
+and, and expand and make it
+
+746
+00:49:25,232 --> 00:49:26,552
+even more interesting.
+
+747
+00:49:27,252 --> 00:49:30,152
+Kirk: Nice.
+Well, I just have to say congratulations.
+
+748
+00:49:30,152 --> 00:49:34,500
+It's obviously been a bit of work to put
+this together, real-world examples,
+
+749
+00:49:34,500 --> 00:49:38,600
+and very few people could actually do some
+of this because they don't have your 20
+
+750
+00:49:38,600 --> 00:49:42,400
+years of experience, they don't have
+access to some of this, and they're not
+
+751
+00:49:42,400 --> 00:49:47,152
+playing hard enough with the tool sets
+that you're using. So I wanted to cover
+
+752
+00:49:47,152 --> 00:49:50,932
+that. I wanna mention a few more things
+just for everyone listening, right?
+
+753
+00:49:50,932 --> 00:49:55,692
+A successful experiment is evidence,
+not a guarantee, okay?
+
+754
+00:49:55,712 --> 00:50:01,132
+Rollback is a procedure, not a promise.
+So if you drop a table, your recovery-
+
+755
+00:50:01,132 --> 00:50:03,712
+- Ah
+- process has a restore involved, right?
+
+756
+00:50:03,712 --> 00:50:05,632
+- Right.
+- So you gotta be careful.
+
+757
+00:50:05,632 --> 00:50:08,152
+And if you're planning
+to be able to roll it back,
+
+758
+00:50:08,152 --> 00:50:10,872
+testing the rollback procedure
+becomes part of this.
+
+759
+00:50:10,872 --> 00:50:11,931
+- It's-
+- Go ahead
+
+760
+00:50:11,940 --> 00:50:15,132
+- reversibility the word. Reversibility.
+- Yeah, reversibility. Yeah.
+
+761
+00:50:15,132 --> 00:50:18,073
+Nik: If your upgrades,
+for example, are reversible
+
+762
+00:50:18,412 --> 00:50:19,732
+- or they are not.
+- Yeah.
+
+763
+00:50:19,732 --> 00:50:22,132
+- Yeah.
+- Right. Right, exactly.
+
+764
+00:50:22,132 --> 00:50:26,352
+Also, two AIs agreeing does not
+make either one correct, okay?
+
+765
+00:50:26,352 --> 00:50:32,092
+The absence of observed harm is not
+evidence of the absence of harm, meaning
+
+766
+00:50:32,092 --> 00:50:38,532
+you may not see the flaw in this for 90
+days, okay, 30 days, but it may show up.
+
+767
+00:50:38,532 --> 00:50:44,212
+Nik: A classic example is if someone
+makes a major upgrade and forgets analyze
+
+768
+00:50:44,212 --> 00:50:47,192
+on weekend, and Saturday,
+Sunday it works very well,
+
+769
+00:50:47,192 --> 00:50:49,692
+- but on Monday we have higher traffic-
+- Oh
+
+770
+00:50:49,692 --> 00:50:53,732
+- yeah, without statistics.
+- Yeah. Yeah, no, exactly. Also,
+
+771
+00:50:57,772 --> 00:50:58,780
+- Mm.
+- Okay? So I,
+
+772
+00:50:58,780 --> 00:51:00,332
+- I do- Right?
+- Faster. Often.
+
+773
+00:51:00,332 --> 00:51:03,552
+Kirk: Yeah, yeah. [laughs] Yeah,
+exactly. I don't want 1,000,
+
+774
+00:51:03,552 --> 00:51:08,072
+1,000 clusters taken down and restarted
+with bad, you know, settings or something
+
+775
+00:51:08,072 --> 00:51:12,632
+like that just 'cause it worked in a lab
+and nobody looked at it. And then also we
+
+776
+00:51:12,632 --> 00:51:16,532
+should be measuring how much
+responsibility we can safely delegate-
+
+777
+00:51:16,532 --> 00:51:19,190
+- Yeah
+- not simply how intelligent the AI is.
+
+778
+00:51:19,190 --> 00:51:20,292
+- Yeah, yeah.
+- Right?
+
+779
+00:51:20,292 --> 00:51:24,452
+Nik: This is great ideas, and they,
+they resonate a lot in my mind as well.
+
+780
+00:51:24,452 --> 00:51:28,792
+Like for example, we should speak SRE
+language like budget for downtime,
+
+781
+00:51:28,792 --> 00:51:32,892
+like uptime budget, and like human
+budget as well, and like all,
+
+782
+00:51:32,892 --> 00:51:38,012
+all kinds of budget, like CTO-level
+language. And I definitely think I,
+
+783
+00:51:38,012 --> 00:51:45,012
+I'm going to continue, with this research.
+I wanted to say thank you for feedback,
+
+784
+00:51:45,052 --> 00:51:49,692
+and also David Ventimiglia from Supabase,
+who also provided great insights,
+
+785
+00:51:49,692 --> 00:51:54,892
+feedback from, from the blog post
+which already published. And finally,
+
+786
+00:51:54,992 --> 00:52:00,032
+we work already on this schema with some
+customers, just reviewing their CRs and,
+
+787
+00:52:00,032 --> 00:52:04,672
+and proposing proper experiments
+before moving to production change.
+
+788
+00:52:04,852 --> 00:52:06,832
+And we are looking for more
+
+789
+00:52:06,832 --> 00:52:10,952
+design partners who think
+this model is great and want to try
+
+790
+00:52:11,012 --> 00:52:12,972
+it out on their systems.
+
+791
+00:52:14,012 --> 00:52:18,132
+Kirk: Awesome.
+Well, this was excellent talk. I loved it.
+
+792
+00:52:18,132 --> 00:52:22,092
+You might have changed my mind.
+Not today, I'm not putting AI straight
+
+793
+00:52:22,092 --> 00:52:23,652
+- in my production yet.
+- Mm.
+
+794
+00:52:23,652 --> 00:52:25,720
+- But I can see-
+- Yeah
+
+795
+00:52:25,720 --> 00:52:28,520
+Kirk: I can see me leveraging
+something that works along
+
+796
+00:52:28,520 --> 00:52:32,812
+the lines of what we described with a
+little human intervention and multiplying
+
+797
+00:52:32,812 --> 00:52:35,292
+- my ability to get work done.
+- Yeah.
+
+798
+00:52:35,292 --> 00:52:37,072
+- I'm, I'm loving it.
+- Thank you.
+
+799
+00:52:37,072 --> 00:52:39,366
+- Thank you.
+- [laughs] Thank you, Nik.
+
+800
+00:52:39,900 --> 00:52:45,375
+[music]
+
+801
+00:52:45,375 --> 00:52:50,850
+[music]
+
+802
+00:52:50,850 --> 00:52:56,325
+[music]
+
+803
+00:52:56,325 --> 00:53:01,800
+[music]

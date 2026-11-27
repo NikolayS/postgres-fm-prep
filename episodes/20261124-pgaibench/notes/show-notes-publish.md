@@ -1,5 +1,7 @@
 # Can AI safely change production Postgres?
 
+Tip: watch on YouTube. Since episode 193, the video shows charts and illustrations as we talk.
+
 ## Episode description
 
 Nik and Kirk discuss whether AI can safely change production Postgres. Nik built PGAIBench to measure it: 10 models, 19 tasks, most of them from real production failures, and live two-node Postgres 18.7 clusters under load. Acting alone, even top models caused harm. Then we talk about AAA (Analyst, Auditor, Actor): separate roles, rehearsal on a clone, an independent reviewer, and a deterministic executor. In a retrospective, in-sample replay of the recorded changes, it would have blocked 12 of 13 harmful changes and still approved 377 of 378 safe or unclassified ones.

@@ -5,7 +5,7 @@ Source, data and prompts: https://github.com/NikolayS/pgaibench
 Postgres changes made by AI, measured: acting alone, 10 models caused 13 harmful changes in 408 live primary changes. Replayed offline through AAA (Analyst, Auditor, Actor; retrospective and in-sample), 12 of the 13 would have been blocked, and 377 of 378 safe or unclassified changes still approved.
 PGAIBench v0.2: 19 live scenarios, live two-node Postgres 18.7 clusters under load, 5 repeats per task.
 
-Postgres.FM episode 198. Nik and Kirk discuss whether AI can safely change production Postgres. Nik built PGAIBench to measure it, with tasks taken mostly from real production failures. Even a top model, acting alone, restarted nodes without need in 5 of 5 runs of one task. Then we talk about AAA: an Analyst that proposes, a deterministic Actor that rehearses on a live clone and applies only approved steps, and an independent Auditor in between.
+Postgres.FM episode 198. Nik and Kirk discuss whether AI can safely change production Postgres. Nik built PGAIBench to measure it, with tasks taken mostly from real production failures. Acting alone, even a top model restarted nodes without need in 5 of 5 runs of one task. Then AAA: an Analyst proposes, an independent Auditor reviews, and a deterministic Actor rehearses on a live clone and applies only approved steps.
 
 Chapters:
 00:00 Cold open
@@ -28,17 +28,17 @@ Chapters:
 46:31 Findings, limits, and GitOps for database changes
 49:29 Kirk's rules for safe automation
 
-Corrections (checked after recording against the post; the C18 points against the v0.2 run logs and the preregistration):
+Corrections (checked after recording against the post, the v0.2 run logs and the preregistration; full text in the show notes):
 * (11:37) v0.2 has 19 live scenarios (14 core, 2 exploratory, 3 held-out), not 18.
 * (12:49) The standby did not crash: its query p99 got 18.0x slower (2.91 to 52.58 ms).
-* (16:36) The C18 ticket did not say "do not restart" (also in the cold open). The rule was implicit: only a restart the task cannot be done without is excused. This task needed none.
-* (17:08, 17:51, 21:17) In C18 Fable restarted the standby first, as it should. Replay never paused. The harm was the unneeded restarts: client errors on both nodes, about 3 s per restart.
+* (16:36) The C18 ticket did not say "do not restart" (also in the cold open); the rule was implicit.
+* (17:08, 17:51, 21:17) Fable restarted the standby first, and replay never paused. The harm was the unneeded restarts.
 * (17:50) The setting is max_locks_per_transaction ("max slots" on air).
-* (18:21) In v0.2, nine of ten models escalated 21 to 35 of 95 runs. The most, 35, was gpt-6.2-sol (37%); no model escalated 80%. There was no clear link to model strength.
-* (25:53) The deterministic clone gate stopped 6 of 13 harms (46.2%), a bit less than half; it halts the change, it does not send test results back to the model.
-* (38:23) Two limits apply. A lock wait is active, so lock_timeout limits it. pg_repack --wait-timeout (default 60 s) waits that long for its exclusive lock, then cancels the conflicting queries, and after twice the time terminates them, unless --no-kill-backend is set. During the long copy, pg_repack's second connection is idle in transaction, so a short idle_in_transaction_session_timeout can kill the run.
-* (41:10) 13 -> 1 is a replay: the 408 recorded primary changes were replayed offline through AAA (in-sample), not run live a second time. In v0.2 the Analyst and Auditor ran tool-free; revise loops are planned (Track 3).
-* (50:37) True for upgrades to Postgres 17 and older, and for dump/restore or logical replication. Since Postgres 18, pg_upgrade keeps most optimizer statistics, but not extended statistics: run vacuumdb --all --analyze-in-stages --missing-stats-only, then vacuumdb --all --analyze-only.
+* (18:21) Nine of ten models escalated 21 to 35 of 95 runs; none came near 80%.
+* (25:53) The clone gate stopped 6 of 13 harms (46.2%); it does not send test results back to the model.
+* (38:23) pg_repack: lock_timeout limits the lock wait; --wait-timeout cancels, then terminates the conflicting queries.
+* (41:10) 13 to 1 is an offline, in-sample replay of the 408 recorded changes through AAA, not a second live run.
+* (50:37) Since Postgres 18, pg_upgrade keeps most optimizer statistics (not extended statistics).
 
 Key links (time of the first mention):
 * PGAIBench (08:26) https://pgaibench.dev/
@@ -51,7 +51,7 @@ Key links (time of the first mention):
 * SWE-bench (49:19) https://www.swebench.com/
 
 Thanks to David Ventimiglia (Supabase) for feedback on the post (51:45).
-Design partners: if your team runs Postgres at scale and wants safe AI-driven operations, or has real failure cases for the benchmark, write to contact@postgres.ai
+Design partners: run Postgres at scale and want safe AI-driven operations, or have real failure cases for the benchmark? Write to contact@postgres.ai
 
 Related episodes:
 * BUFFERS by default https://postgres.fm/episodes/buffers-by-default
@@ -60,7 +60,9 @@ Related episodes:
 
 Full show notes: https://postgres.fm/episodes/pgaibench
 
-Subscribe for a new episode every week.
+Subscribe for a new Postgres episode every Friday: https://www.youtube.com/@PostgresTV?sub_confirmation=1
+
+[Check out the subtitles – we edit them! YouTube auto-translates them from English to other languages; try it and share it with people interested in Postgres!]
 
 ~~~
 

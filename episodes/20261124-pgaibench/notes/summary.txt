@@ -1,1 +1,1 @@
-Nik and Kirk discuss whether AI can safely change production Postgres: what PGAIBench found when models acted alone, and how AAA (Analyst, Auditor, Actor) cut live harms from 13 to 1.
+Nik and Kirk discuss whether AI can safely change production Postgres: what PGAIBench found when models acted alone, and how AAA (Analyst, Auditor, Actor) would have blocked 12 of the 13 harms in an offline replay.

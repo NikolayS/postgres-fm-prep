@@ -1,0 +1,3154 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.987
+[music]
+
+00:00:05.987 --> 00:00:11.973
+[music]
+
+00:00:11.973 --> 00:00:17.960
+[music]
+
+00:00:18.260 --> 00:00:24.400
+<v Nik>Hello, this is Postgres.FM. I'm Nik.
+And as usual, here's Kirk. Hi, Kirk.</v>
+
+00:00:25.020 --> 00:00:29.020
+<v Kirk>Hey, Nik.</v>
+<v Nik>And I brought a topic today, to discuss,</v>
+
+00:00:29.020 --> 00:00:35.500
+<v Nik>which lives in my heart for many
+years already, even before AI, because</v>
+
+00:00:36.100 --> 00:00:42.700
+<v Nik>whole my vision was many years ago that
+at some point, a lot of Postgres clusters</v>
+
+00:00:43.560 --> 00:00:47.280
+<v Nik>they will be without proper
+human attention, you know?</v>
+
+00:00:48.220 --> 00:00:52.900
+<v Nik>And I don't I don't like actually
+the concept of pets versus cattle applied</v>
+
+00:00:52.900 --> 00:00:58.660
+<v Nik>to databases. I would like to apply,
+like, all, all of them that are pets,</v>
+
+00:00:58.660 --> 00:01:02.060
+<v Nik>we just need to control better
+and more autonomously. And at the top</v>
+
+00:01:02.060 --> 00:01:07.460
+<v Nik>of the pyramid, there is a human who
+knows that proper control is in place.</v>
+
+00:01:07.820 --> 00:01:12.740
+<v Nik>Versus, cattle where... which is good for
+stateless systems, like, in my opinion.</v>
+
+00:01:12.740 --> 00:01:17.480
+<v Nik>Because if you have a lot of nodes, you
+can quickly destroy and provision again.</v>
+
+00:01:17.480 --> 00:01:21.520
+<v Nik>You don't care about them, like,
+just containers or something, pods, right?</v>
+
+00:01:21.520 --> 00:01:26.340
+<v Nik>But if, if it comes to Postgres,
+especially if it grows beyond, like, say,</v>
+
+00:01:26.340 --> 00:01:33.040
+<v Nik>terabytes or 10 terabytes, definitely,
+like, we, we, we do need to to have better</v>
+
+00:01:33.040 --> 00:01:38.980
+<v Nik>control, and it's not easy to throw 10
+terabytes away and, and get another one</v>
+
+00:01:39.280 --> 00:01:41.740
+<v Nik>easily usually.
+Although there are of, of course,</v>
+
+00:01:41.740 --> 00:01:46.622
+<v Nik>there is branching, there are, there are
+snapshots provisioning, and so on. Anyway,</v>
+
+00:01:47.200 --> 00:01:50.880
+<v Nik>there should be better autonomous control</v>
+
+00:01:51.560 --> 00:01:56.100
+<v Nik>for database operations, and this is what
+I wanted to discuss today.</v>
+
+00:01:57.340 --> 00:02:02.160
+<v Kirk>Autonomous control. So the something
+else is managing and making</v>
+
+00:02:02.160 --> 00:02:05.500
+<v Kirk>changes, eh, without a human
+getting involved and saying, "Yeah,</v>
+
+00:02:05.500 --> 00:02:07.300
+<v Kirk>that's okay."</v>
+<v Nik>Right.</v>
+
+00:02:07.300 --> 00:02:08.480
+<v Kirk>Hmm.</v>
+<v Nik>Right.</v>
+
+00:02:08.480 --> 00:02:11.000
+<v Kirk>Yeah.</v>
+<v Nik>But notice how I say it.</v>
+
+00:02:11.000 --> 00:02:16.420
+<v Nik>I say human is on top of that.
+I'm saying not without human completely.</v>
+
+00:02:16.420 --> 00:02:20.060
+<v Nik>To me, it's like the same idea, like,
+is it possible to have a company,</v>
+
+00:02:20.060 --> 00:02:27.060
+<v Nik>profitable company without a human
+or under fully, like, fully led by AI?</v>
+
+00:02:28.260 --> 00:02:32.520
+<v Nik>Usually you don't want that because it
+will be misaligned or, or just will break</v>
+
+00:02:32.520 --> 00:02:33.520
+<v Nik>completely.</v>
+
+00:02:34.800 --> 00:02:40.200
+<v Nik>You know, we both have a friend who, one,
+one time, actually Andrey said that it's</v>
+
+00:02:40.200 --> 00:02:44.700
+<v Nik>normal for experienced DBA
+to control 100 clusters. Like-</v>
+
+00:02:44.700 --> 00:02:46.160
+<v Kirk>Yeah.</v>
+<v Nik>Yeah.</v>
+
+00:02:46.220 --> 00:02:49.160
+<v Nik>And it's like it's possible,
+it was possible before AI.</v>
+
+00:02:49.160 --> 00:02:53.320
+<v Nik>Of course, it requires a lot of good
+culture and proper tooling, but like,</v>
+
+00:02:53.320 --> 00:02:58.085
+<v Nik>it was already possible. So I see right
+now it's... Like, vision should be, like,</v>
+
+00:02:58.260 --> 00:03:03.260
+<v Nik>1,000 clusters and one experienced
+engineer controlling them reliably.</v>
+
+00:03:03.720 --> 00:03:08.180
+<v Nik>This requires very high level
+of automation. That's it actually. Why?</v>
+
+00:03:08.180 --> 00:03:11.600
+<v Nik>Because we, we, we see this already.</v>
+
+00:03:11.900 --> 00:03:17.000
+<v Nik>For example, we have a lot of smaller
+startups who use AI to develop.</v>
+
+00:03:17.060 --> 00:03:20.380
+<v Nik>They don't have DBA, right?</v>
+<v Kirk>Yeah.</v>
+
+00:03:20.700 --> 00:03:26.219
+<v Nik>And support teams for example,
+managed Postgres companies,</v>
+
+00:03:26.620 --> 00:03:31.280
+<v Nik>I know many of them, they are great,
+but they are usually overloaded,</v>
+
+00:03:31.280 --> 00:03:36.220
+<v Nik>and they usually define boundaries,
+beyond which they don't go.</v>
+
+00:03:37.020 --> 00:03:41.260
+<v Kirk>So I wanna interject something here,
+because you used the word control,</v>
+
+00:03:41.260 --> 00:03:44.540
+<v Kirk>and I wanna switch it
+to the words responsible for.</v>
+
+00:03:45.040 --> 00:03:46.960
+<v Nik>Mm-hmm.</v>
+<v Kirk>Okay? So very,</v>
+
+00:03:46.960 --> 00:03:51.980
+<v Kirk>very possible for a single DBA
+to be responsible for 100, maybe</v>
+
+00:03:52.000 --> 00:03:55.920
+<v Kirk>a couple hundred,
+clusters in the Postgres world.</v>
+
+00:03:56.520 --> 00:03:59.270
+<v Kirk>So I can see that completely.
+I don't wanna call it</v>
+
+00:03:59.270 --> 00:04:02.540
+<v Kirk>control. I wanna say responsible,
+because now responsible allows it</v>
+
+00:04:02.540 --> 00:04:04.320
+<v Kirk>to use other actors, right?</v>
+<v Nik>Mm-hmm.</v>
+
+00:04:04.320 --> 00:04:05.580
+<v Nik>Right.</v>
+<v Kirk>And this is what</v>
+
+00:04:05.580 --> 00:04:07.200
+<v Kirk>we're now talking about.</v>
+<v Nik>Yeah, that's</v>
+
+00:04:07.200 --> 00:04:08.780
+<v Nik>a good correction. Good correction.</v>
+
+00:04:08.780 --> 00:04:11.380
+<v Nik>and also-</v>
+<v Kirk>So now we're talking, hey, we can have</v>
+
+00:04:11.380 --> 00:04:17.220
+<v Kirk>either agentic or other human actors that
+we give commands to, and we get some stuff</v>
+
+00:04:17.220 --> 00:04:22.140
+<v Kirk>done, because it doesn't always have to be
+done by that one person. Some things do,</v>
+
+00:04:22.140 --> 00:04:27.060
+<v Kirk>and that person's gonna control that. You
+know, we understand those complexities.</v>
+
+00:04:27.120 --> 00:04:32.060
+<v Kirk>So with that kind of said, I'm assuming
+you did, you ran some experiments</v>
+
+00:04:32.240 --> 00:04:38.300
+<v Kirk>and I guess the question you, you might
+wanna be asked is, would you let an AI run</v>
+
+00:04:38.300 --> 00:04:40.540
+<v Kirk>DDL on your production?</v>
+<v Nik>Right.</v>
+
+00:04:40.540 --> 00:04:41.540
+<v Kirk>Like-</v>
+<v Nik>Yeah</v>
+
+00:04:41.540 --> 00:04:43.960
+<v Kirk>right?
+I'm, I'm kinda gonna slide in there.</v>
+
+00:04:43.960 --> 00:04:47.560
+<v Kirk>Would you let that happen on your
+production or your client's production?</v>
+
+00:04:47.560 --> 00:04:51.140
+<v Nik>Right. Not, not read-only, but some,</v>
+<v Kirk>Yeah, yeah, yeah.</v>
+
+00:04:51.140 --> 00:04:52.840
+<v Kirk>DDL, right? Making changes.</v>
+
+00:04:52.840 --> 00:04:58.140
+<v Nik>Like SQL, right, or CLI API calls,
+MCP calls to change the state</v>
+
+00:04:58.140 --> 00:05:02.728
+<v Nik>of the cluster, like changing settings,
+starting, upgrading, everything. Yeah.</v>
+
+00:05:03.468 --> 00:05:05.088
+<v Kirk>Yeah, my answer is no.</v>
+
+00:05:05.088 --> 00:05:11.128
+<v Kirk>And in our world, we don't let the AI
+talk to using, DML, which is like-</v>
+
+00:05:11.128 --> 00:05:13.608
+<v Kirk>Normal, you know, data manipulation.</v>
+<v Nik>Yeah.</v>
+
+00:05:13.608 --> 00:05:17.088
+<v Kirk>Yeah.</v>
+<v Nik>If, if, we had full transparency,</v>
+
+00:05:17.168 --> 00:05:19.868
+<v Nik>I could win a beer or two right now</v>
+
+00:05:19.888 --> 00:05:24.128
+<v Nik>making a bet that many
+of our listeners already do that.</v>
+
+00:05:25.468 --> 00:05:28.088
+<v Kirk>I'm sure.
+I've read some stories about them</v>
+
+00:05:28.088 --> 00:05:30.060
+<v Kirk>on X. Oops, sorry.</v>
+<v Nik>Thought that-</v>
+
+00:05:30.060 --> 00:05:32.200
+<v Kirk>I dropped the production database.</v>
+<v Nik>Yeah.</v>
+
+00:05:32.200 --> 00:05:35.350
+<v Kirk>Do you have a backup?
+I'll make a note not to do that again.</v>
+
+00:05:35.350 --> 00:05:36.868
+<v Nik>- Right. Yeah.
+- [laughs]</v>
+
+00:05:36.868 --> 00:05:41.628
+<v Nik>That's, that's... Yeah, but it's
+inevitable The people already do it.</v>
+
+00:05:41.668 --> 00:05:48.168
+<v Nik>Like, I remember last year almost
+nobody was ready to admit they</v>
+
+00:05:48.368 --> 00:05:49.868
+<v Nik>have pull requests</v>
+
+00:05:49.988 --> 00:05:55.528
+<v Nik>fully prepared by AI, reviewed by AI,
+and not touched by human almost, right?</v>
+
+00:05:55.528 --> 00:05:58.808
+<v Nik>Now it's absolute normal. So we won't-</v>
+<v Kirk>I'll give-</v>
+
+00:05:58.948 --> 00:06:01.068
+<v Nik>Yeah.</v>
+<v Kirk>I'll give you the example,</v>
+
+00:06:01.068 --> 00:06:05.828
+<v Kirk>from where the group I work with.
+They have an absolute requirement</v>
+
+00:06:05.828 --> 00:06:09.408
+<v Kirk>that if you're gonna work with AI
+that does any level of automation,</v>
+
+00:06:09.408 --> 00:06:13.848
+<v Kirk>that you shut off the ability
+to get to your production database.</v>
+
+00:06:13.848 --> 00:06:17.308
+<v Kirk>And so it can only work
+with your staging and dev databases.</v>
+
+00:06:17.308 --> 00:06:21.348
+<v Kirk>It has to be disabled,
+otherwise you can't let it touch anything.</v>
+
+00:06:22.008 --> 00:06:26.528
+<v Kirk>Because it's just, it's just too
+easy to connect to the wrong server</v>
+
+00:06:26.568 --> 00:06:31.068
+<v Kirk>and get in. You know,
+there's so many ways. But, but yep, no,</v>
+
+00:06:31.068 --> 00:06:35.548
+<v Kirk>people are doing it. So yeah, and my trust
+just isn't there. And again, I don't...</v>
+
+00:06:35.548 --> 00:06:40.368
+<v Kirk>I will have it write SQL that I copy
+and paste in. Do that all the time.</v>
+
+00:06:40.368 --> 00:06:42.660
+<v Kirk>I've given it access to local stuff,</v>
+
+00:06:42.660 --> 00:06:44.470
+<v Kirk>and let it connect and run-</v>
+<v Nik>Right</v>
+
+00:06:44.470 --> 00:06:46.460
+<v Kirk>like Cursor, Claude Code-</v>
+<v Nik>Right. Yeah</v>
+
+00:06:46.460 --> 00:06:48.540
+<v Kirk>and let it run stuff on my local.</v>
+<v Nik>Yeah.</v>
+
+00:06:48.540 --> 00:06:51.190
+<v Kirk>No problem. Right?</v>
+<v Nik>Branching helps a lot as well.</v>
+
+00:06:51.190 --> 00:06:54.948
+<v Nik>Right, right, right.
+But, but I, I, I, I know,</v>
+
+00:06:54.948 --> 00:06:57.810
+<v Nik>I just know people use it
+directly to production.</v>
+
+00:06:57.810 --> 00:06:58.830
+<v Kirk>Yeah.</v>
+<v Nik>Because-</v>
+
+00:06:58.830 --> 00:07:00.808
+<v Kirk>And your company-</v>
+<v Nik>Especially startups-</v>
+
+00:07:00.808 --> 00:07:02.148
+<v Kirk>PostgresAI</v>
+
+00:07:02.768 --> 00:07:05.248
+<v Nik>especially startups-</v>
+<v Kirk>Mm-hmm</v>
+
+00:07:05.248 --> 00:07:08.968
+<v Nik>just don't have time
+and, and capability to like,</v>
+
+00:07:08.968 --> 00:07:12.508
+<v Nik>to, to properly establish
+proper operations workflow like,</v>
+
+00:07:12.568 --> 00:07:18.488
+<v Nik>like proper change request workflow,
+like from Google SRE books. They, they...</v>
+
+00:07:18.488 --> 00:07:25.348
+<v Nik>These guys definitely already use
+it to take care of some changes,</v>
+
+00:07:25.668 --> 00:07:28.108
+<v Nik>right? They just, just like they-</v>
+<v Kirk>Right</v>
+
+00:07:28.108 --> 00:07:31.710
+<v Nik>I, I... They already go
+to Claude Code and say, "I want</v>
+
+00:07:31.710 --> 00:07:35.810
+<v Nik>to rebuild some indexes," for example, or,
+"I want minor upgrade," and, and so on.</v>
+
+00:07:35.810 --> 00:07:38.410
+<v Nik>Like, just...
+Or install some extension right there.</v>
+
+00:07:38.410 --> 00:07:42.388
+<v Nik>It's already happening, right?
+And, and many platforms already have,</v>
+
+00:07:42.688 --> 00:07:47.468
+<v Nik>They already see it. Like, I know like
+Supabase, for example, they, they already</v>
+
+00:07:47.468 --> 00:07:52.688
+<v Nik>understand that a lot of clusters are,
+are controlled by bot. The question-</v>
+
+00:07:52.808 --> 00:07:55.908
+<v Kirk>Yeah</v>
+<v Nik>risk, possible risk, right?</v>
+
+00:07:55.908 --> 00:08:00.108
+<v Nik>And this is what I wanted
+to study in, in depth this time.</v>
+
+00:08:00.288 --> 00:08:04.248
+<v Nik>This is why I created
+this benchmark called PGAIBench,</v>
+
+00:08:04.668 --> 00:08:11.668
+<v Nik>which aims to answer the question, is it
+safe to let your AI to, to to work with</v>
+
+00:08:12.488 --> 00:08:18.028
+<v Nik>production Postgres directly, making some
+changes like, infrastructural or not only</v>
+
+00:08:18.028 --> 00:08:21.908
+<v Nik>infrastructural, also,
+running some SQL and so on.</v>
+
+00:08:21.908 --> 00:08:26.588
+<v Kirk>yeah, as long as you use the latest
+and the best, you know, agents out there,</v>
+
+00:08:26.588 --> 00:08:29.930
+<v Kirk>you're perfectly safe, right?</v>
+<v Nik>Yeah.</v>
+
+00:08:29.930 --> 00:08:32.480
+<v Kirk>- [laughs]
+- I know, I know a lot of our listeners</v>
+
+00:08:32.480 --> 00:08:36.248
+<v Nik>are agents. I know this. So I say-</v>
+<v Kirk>Sarcasm. Sorry. [laughs]</v>
+
+00:08:36.248 --> 00:08:40.528
+<v Nik>Well, it's not sarcasm.
+It's not sarcasm. I think, for example,</v>
+
+00:08:40.528 --> 00:08:42.208
+<v Nik>it amazes me to see that-</v>
+
+00:08:42.208 --> 00:08:44.908
+<v Kirk>Mm-hmm</v>
+<v Nik>we spent with Michael two</v>
+
+00:08:44.908 --> 00:08:47.808
+<v Nik>years talking that buffers
+is needed in explain analyze,</v>
+
+00:08:47.808 --> 00:08:50.208
+<v Nik>in explain analyze. And last-</v>
+<v Kirk>Maybe</v>
+
+00:08:50.208 --> 00:08:55.508
+<v Nik>months, I just see all clients send
+requests to us with explain analyze plans.</v>
+
+00:08:55.928 --> 00:09:01.628
+<v Nik>They are prepared by agents. Somehow
+they learned that buffers is needed.</v>
+
+00:09:01.907 --> 00:09:05.228
+<v Nik>Our role with Michael
+was there a little bit as well.</v>
+
+00:09:06.287 --> 00:09:10.548
+<v Kirk>Yeah.</v>
+<v Nik>If you ask, some ChatGPT in anonymous</v>
+
+00:09:10.548 --> 00:09:15.108
+<v Nik>mode, like no, no,
+like unauthorized unauthenticated mode,</v>
+
+00:09:15.488 --> 00:09:19.608
+<v Nik>or just in incognito mode, for example,
+in Chrome. If you ask about that, it'll,</v>
+
+00:09:19.608 --> 00:09:22.948
+<v Nik>it'll explain to you like
+buffers is good idea to have.</v>
+
+00:09:23.328 --> 00:09:27.788
+<v Nik>So and I, if you ask about podcast, it
+remembers. So their capacity is enormous.</v>
+
+00:09:27.788 --> 00:09:31.688
+<v Nik>They remember all the details.
+So just talking about some problem</v>
+
+00:09:31.690 --> 00:09:33.510
+<v Nik>a lot, you have influenced-</v>
+<v Kirk>Right</v>
+
+00:09:33.510 --> 00:09:36.180
+<v Nik>the future agents because
+they train on that data,</v>
+
+00:09:36.180 --> 00:09:38.648
+<v Nik>because it's public. So what we produce-</v>
+<v Kirk>Yeah</v>
+
+00:09:38.648 --> 00:09:42.848
+<v Nik>here also will influence those
+agents. This is my true belief.</v>
+
+00:09:43.048 --> 00:09:50.048
+<v Nik>So I created this benchmark,
+and I had already two versions, 01, 02,</v>
+
+00:09:51.008 --> 00:09:55.028
+<v Nik>evolving. It's, it's still very early
+stage. Of course, a lot of questions.</v>
+
+00:09:55.028 --> 00:09:58.768
+<v Nik>For example,
+I still don't have human baseline.</v>
+
+00:09:59.068 --> 00:10:05.668
+<v Nik>And because it was expensive actually
+to establish it properly for version 01.</v>
+
+00:10:05.728 --> 00:10:10.468
+<v Nik>It was questionnaire with 50 questions,
+and everyone in my team refused to do it,</v>
+
+00:10:10.468 --> 00:10:15.828
+<v Nik>on short notice because it's like
+they say couple of days needed. So-</v>
+
+00:10:15.828 --> 00:10:17.768
+<v Kirk>Right</v>
+<v Nik>for version two, I have</v>
+
+00:10:17.768 --> 00:10:19.768
+<v Nik>smaller questionnaire it's coming,</v>
+
+00:10:20.328 --> 00:10:23.988
+<v Nik>to establish human baseline. Yeah.</v>
+<v Kirk>I wanna back up a little bit.</v>
+
+00:10:23.988 --> 00:10:25.300
+<v Nik>Mm-hmm.</v>
+<v Kirk>So step one...</v>
+
+00:10:25.300 --> 00:10:28.608
+<v Kirk>Because you followed a process here.
+And again, in the show notes,</v>
+
+00:10:28.608 --> 00:10:31.308
+<v Kirk>there's gonna be a link
+to the summary of this.</v>
+
+00:10:31.308 --> 00:10:32.808
+<v Nik>That's good.</v>
+<v Kirk>So step one,</v>
+
+00:10:32.808 --> 00:10:34.888
+<v Kirk>you went out and you used an AI and said,</v>
+
+00:10:34.888 --> 00:10:40.608
+<v Kirk>"What happens if I just ask the AI
+to directly go and make these changes?"</v>
+
+00:10:40.608 --> 00:10:42.728
+<v Nik>Okay.</v>
+<v Kirk>Okay? And this is important.</v>
+
+00:10:42.728 --> 00:10:46.568
+<v Kirk>And when you did, okay? And so this is...
+I wanna pull this in for everyone.</v>
+
+00:10:46.568 --> 00:10:52.140
+<v Kirk>You did, but the results were not great.
+Okay? Like, it did some stuff,</v>
+
+00:10:52.140 --> 00:10:54.010
+<v Kirk>but it did dangerous things.</v>
+<v Nik>Yeah.</v>
+
+00:10:54.010 --> 00:10:56.250
+<v Kirk>And then it did things that failed, right?</v>
+
+00:10:56.250 --> 00:10:58.390
+<v Nik>Yeah.</v>
+<v Kirk>So the problem is you can't trust</v>
+
+00:10:58.390 --> 00:10:59.750
+<v Kirk>it. So talk to me about that-</v>
+
+00:10:59.750 --> 00:11:01.560
+<v Nik>Yeah</v>
+<v Kirk>and then bring me into what you've</v>
+
+00:11:01.560 --> 00:11:03.304
+<v Kirk>created for the second version.</v>
+<v Nik>Yeah.</v>
+
+00:11:03.304 --> 00:11:04.610
+<v Kirk>Right</v>
+<v Nik>One might think,</v>
+
+00:11:04.610 --> 00:11:10.064
+<v Nik>one might think that it's some random,
+random tasks, but no.</v>
+
+00:11:10.204 --> 00:11:14.664
+<v Nik>It was originally, I think, 20.
+Then, now it's, like, 18 tasks.</v>
+
+00:11:14.984 --> 00:11:21.024
+<v Nik>They are very properly chosen, after,
+like, hours of work with AI and myself</v>
+
+00:11:21.324 --> 00:11:24.264
+<v Nik>analyzing a lot of cases I know-</v>
+<v Kirk>Mm-hmm</v>
+
+00:11:24.264 --> 00:11:27.724
+<v Nik>where human made a mistake.</v>
+<v Kirk>Right.</v>
+
+00:11:27.724 --> 00:11:28.724
+<v Nik>Right?</v>
+<v Kirk>Good.</v>
+
+00:11:28.724 --> 00:11:33.364
+<v Nik>So it's, it's from PostgresAI
+experience, multiple years, latest years.</v>
+
+00:11:33.364 --> 00:11:38.564
+<v Nik>We just chose some cases.
+These questions I would probably ask,</v>
+
+00:11:40.004 --> 00:11:41.144
+<v Nik>when interviewing.</v>
+
+00:11:41.144 --> 00:11:46.084
+<v Nik>Actually, it's a good idea to use
+them in, in interview for human DBREs</v>
+
+00:11:46.484 --> 00:11:49.943
+<v Nik>or Postgres experts because
+they are tricky. This is where-</v>
+
+00:11:49.943 --> 00:11:52.144
+<v Kirk>Yeah</v>
+<v Nik>usually a couple of things collide,</v>
+
+00:11:52.144 --> 00:11:57.164
+<v Nik>and you have not edge case, but corner
+case of two problems or three problems,</v>
+
+00:11:57.940 --> 00:12:00.340
+<v Nik>or layers of problems.
+You can see one layer-</v>
+
+00:12:00.340 --> 00:12:02.244
+<v Kirk>I'll-</v>
+<v Nik>but overlooked second layer.</v>
+
+00:12:02.244 --> 00:12:04.404
+<v Kirk>I'll bring the one I overlooked.</v>
+<v Nik>Yeah.</v>
+
+00:12:04.404 --> 00:12:08.724
+<v Kirk>You have read replicas that are
+running reports and doing other things,</v>
+
+00:12:08.724 --> 00:12:12.090
+<v Kirk>and in the primary,
+the indexes that are involved in the read</v>
+
+00:12:12.090 --> 00:12:13.120
+<v Kirk>replicas aren't really</v>
+
+00:12:13.120 --> 00:12:15.510
+<v Kirk>used because they're only used for the-</v>
+<v Nik>Yeah. This-</v>
+
+00:12:15.510 --> 00:12:16.510
+<v Kirk>Right?</v>
+<v Nik>Yeah.</v>
+
+00:12:16.510 --> 00:12:18.930
+<v Kirk>Yeah, it's common,
+but everyone recognizes this.</v>
+
+00:12:18.930 --> 00:12:21.450
+<v Kirk>So the analysis,
+you turn around and you say, "Oh,</v>
+
+00:12:21.450 --> 00:12:24.884
+<v Kirk>no one's using this. We can free up all
+this space. Drop all these indexes."</v>
+
+00:12:24.884 --> 00:12:26.540
+<v Nik>Yeah.</v>
+<v Kirk>And now your read replica</v>
+
+00:12:26.540 --> 00:12:30.020
+<v Kirk>crashes because nothing's finishing.</v>
+<v Nik>Yeah. Yeah. We have an episode about</v>
+
+00:12:30.020 --> 00:12:33.500
+<v Nik>index maintenance. This is one of the
+topics when you analyze unused indexes.</v>
+
+00:12:33.500 --> 00:12:37.050
+<v Nik>Not only you need to analyze all
+your read replicas, but in some cases,</v>
+
+00:12:37.050 --> 00:12:38.504
+<v Nik>for example, if you're,</v>
+
+00:12:38.504 --> 00:12:43.584
+<v Nik>if you're a company who develops software
+which has multiple installations...</v>
+
+00:12:43.604 --> 00:12:50.304
+<v Nik>I remember a case, it was GitLab, I think.
+Yeah. It was a case where you need to...</v>
+
+00:12:50.724 --> 00:12:54.584
+<v Nik>If you analyze only regular production,
+even with replicas, you,</v>
+
+00:12:54.584 --> 00:12:58.740
+<v Nik>it looks like index is not needed, but
+in some installations, it's, it's needed.</v>
+
+00:12:58.740 --> 00:13:02.440
+<v Nik>I think it was related to some integration
+with Microsoft Active Directory</v>
+
+00:13:02.440 --> 00:13:06.090
+<v Nik>or something, which is not present
+on the main production, so but it,</v>
+
+00:13:06.090 --> 00:13:08.384
+<v Nik>it's still needed in some.
+It was long ago.</v>
+
+00:13:08.384 --> 00:13:12.004
+<v Nik>So I, I, I can envision, like,
+if you have many, many installations,</v>
+
+00:13:12.004 --> 00:13:15.504
+<v Nik>you need to think about all of them.
+Also about time.</v>
+
+00:13:15.504 --> 00:13:19.704
+<v Nik>If you don't need it today, in last two
+weeks, and you have stats for only last</v>
+
+00:13:19.704 --> 00:13:23.484
+<v Nik>two weeks, what about next, like-</v>
+<v Kirk>Yeah, what if it's an end</v>
+
+00:13:23.484 --> 00:13:25.684
+<v Kirk>of month or an end of year report?</v>
+<v Nik>Yeah.</v>
+
+00:13:25.684 --> 00:13:28.064
+<v Nik>We, we talked about that in detail.</v>
+<v Kirk>Yeah.</v>
+
+00:13:28.064 --> 00:13:31.384
+<v Nik>So there are many layers
+to, for risk assessment,</v>
+
+00:13:32.004 --> 00:13:35.624
+<v Nik>we need to properly establish here, right?</v>
+
+00:13:35.944 --> 00:13:40.744
+<v Nik>So those 18 cases which went to PGAIBench,</v>
+
+00:13:41.344 --> 00:13:44.724
+<v Nik>they are from real experience
+where humans made errors.</v>
+
+00:13:44.964 --> 00:13:49.224
+<v Kirk>I think you're getting ready to hit
+a point that I think is visual, about how</v>
+
+00:13:49.224 --> 00:13:52.644
+<v Kirk>many of them failed in the first pass.</v>
+<v Nik>Right.</v>
+
+00:13:52.644 --> 00:13:59.644
+<v Nik>So, so the, how, how it worked, like we,
+we asked the AI to to solve some problem,</v>
+
+00:14:00.644 --> 00:14:06.144
+<v Nik>and first pass is what if AI is acting
+alone without any additional harness?</v>
+
+00:14:06.144 --> 00:14:11.084
+<v Nik>But we use a regular harness, for example,
+Claude Code, Antigravity, Codex,</v>
+
+00:14:11.964 --> 00:14:17.684
+<v Nik>OpenCode, and then you just, allow it
+to work and, and, and think deeply.</v>
+
+00:14:18.324 --> 00:14:21.064
+<v Nik>We we needed to switch
+off regular tool calling.</v>
+
+00:14:21.064 --> 00:14:24.244
+<v Nik>For example,
+they are not allowed to search web.</v>
+
+00:14:24.744 --> 00:14:30.163
+<v Nik>And this is, this is, like,
+which this thing, I postpone because</v>
+
+00:14:30.844 --> 00:14:34.864
+<v Nik>if you allow to search web,
+it will be influenced by other opinions.</v>
+
+00:14:34.864 --> 00:14:40.624
+<v Nik>And like at, at extreme, if you allow any
+random tool calling, they start, they can</v>
+
+00:14:40.624 --> 00:14:44.864
+<v Nik>start consulting other AIs, which is
+probably a good idea, but for the sake of,</v>
+
+00:14:44.864 --> 00:14:49.124
+<v Nik>pure results, pure results,
+you first need to switch it off, right?</v>
+
+00:14:49.904 --> 00:14:55.024
+<v Nik>And first finding was what I didn't
+expect... Oh, and by the way,</v>
+
+00:14:55.024 --> 00:14:59.464
+<v Nik>unfortunately, Neon, Gemini 4 Neon
+is not in the results because,</v>
+
+00:14:59.464 --> 00:15:04.004
+<v Nik>but Argon is there. Because it was before,
+I did it before Neon was released.</v>
+
+00:15:04.004 --> 00:15:08.244
+<v Nik>So version 0.3 definitely will
+include Neon, because I'm,</v>
+
+00:15:08.244 --> 00:15:11.384
+<v Nik>I'm a big fan right now of Neon.</v>
+<v Kirk>Nice</v>
+
+00:15:11.404 --> 00:15:17.944
+<v Nik>first thing what I was,
+surprised to see is that even Fable</v>
+
+00:15:18.044 --> 00:15:24.764
+<v Nik>at high, Fable 5.2 at high effort,
+was making some harmful changes.</v>
+
+00:15:25.564 --> 00:15:32.564
+<v Nik>So AI was allowed to do some,
+to solve task or to basically to say,</v>
+
+00:15:32.764 --> 00:15:37.244
+<v Nik>"I'm not going to do it. I need a, I
+need help." So escalate to human, right?</v>
+
+00:15:37.244 --> 00:15:41.724
+<v Nik>So we don't say, like, fully autonomous
+completely, so we have some room.</v>
+
+00:15:41.804 --> 00:15:45.784
+<v Nik>But in this case,
+we didn't talk about some budgeting.</v>
+
+00:15:45.984 --> 00:15:50.784
+<v Nik>In future iterations, I have an idea
+that we need to budget human involvement.</v>
+
+00:15:50.784 --> 00:15:55.484
+<v Nik>For example, don't allow it to, to ask
+for human help for more than, like,</v>
+
+00:15:55.484 --> 00:16:00.024
+<v Nik>10% of cases or something.
+Because weak models, we noticed,</v>
+
+00:16:00.024 --> 00:16:06.724
+<v Nik>ask for human too often, right? And
+the first finding is that, in one task,</v>
+
+00:16:07.004 --> 00:16:11.484
+<v Nik>five out of five cases, Fable decided
+to change something and restart</v>
+
+00:16:11.484 --> 00:16:13.864
+<v Nik>server</v>
+<v Kirk>After being told,</v>
+
+00:16:13.864 --> 00:16:15.384
+<v Kirk>"Do not restart the server"?</v>
+
+00:16:15.384 --> 00:16:17.710
+<v Nik>Yeah. Being overconfident.</v>
+<v Kirk>Wow.</v>
+
+00:16:17.710 --> 00:16:21.460
+<v Nik>Like, you know, you know, I, and I,
+I know it myself. Like, you, you think,</v>
+
+00:16:21.460 --> 00:16:23.150
+<v Nik>you think you're very experienced.</v>
+
+00:16:23.150 --> 00:16:25.800
+<v Nik>You jump into some conclusion
+because it reminds you,</v>
+
+00:16:25.800 --> 00:16:28.444
+<v Nik>you of some problem,
+and you think this is it. Boom.</v>
+
+00:16:28.444 --> 00:16:31.944
+<v Nik>This is how smart models might behave,
+and Fable showed it.</v>
+
+00:16:32.904 --> 00:16:38.604
+<v Nik>So five of, of five it decision was let's
+change and restart, and then it, it,</v>
+
+00:16:38.964 --> 00:16:43.704
+<v Nik>it was blocked by internal
+stuff in two cases out of five.</v>
+
+00:16:43.704 --> 00:16:48.044
+<v Nik>But in three cases it led to downtime
+on, on replica because of mismatch</v>
+
+00:16:48.044 --> 00:16:52.224
+<v Nik>of configuration,
+which it fully overlooked. So basically-</v>
+
+00:16:52.224 --> 00:16:54.184
+<v Kirk>Ah</v>
+<v Nik>causing downtime. Yeah. Fable-</v>
+
+00:16:54.184 --> 00:16:58.104
+<v Kirk>So hold on. Did it
+cause downtime in the, in the</v>
+
+00:16:58.270 --> 00:17:00.870
+<v Kirk>staging test area, and then-</v>
+<v Nik>No, all of this is,</v>
+
+00:17:00.870 --> 00:17:02.904
+<v Kirk>decide to apply it anyways?</v>
+<v Nik>All of this-</v>
+
+00:17:02.904 --> 00:17:06.664
+<v Kirk>Hold on. And then say, "Yes,
+go ahead and do this in production"?</v>
+
+00:17:06.664 --> 00:17:10.004
+<v Nik>Yeah. So this is,
+this is basically a playground, right?</v>
+
+00:17:10.004 --> 00:17:14.620
+<v Nik>So models, as we say, this is your
+production. We tell it it's important.</v>
+
+00:17:14.684 --> 00:17:17.304
+<v Kirk>Right.</v>
+<v Nik>Which reminds me actual downtime,</v>
+
+00:17:17.304 --> 00:17:21.680
+<v Nik>humans cause too in this very problem. You
+know, sometimes there are some settings</v>
+
+00:17:21.680 --> 00:17:24.080
+<v Nik>you cannot change
+on the primary before changing</v>
+
+00:17:24.080 --> 00:17:26.724
+<v Nik>them on, standbys.</v>
+<v Kirk>The replicas in standby. Yeah.</v>
+
+00:17:26.724 --> 00:17:30.524
+<v Nik>Max slots per transaction is one of them.
+It was in this, in this task.</v>
+
+00:17:30.524 --> 00:17:34.664
+<v Nik>First you need to adjust replicas,
+restarts on them, and then on the primary.</v>
+
+00:17:34.664 --> 00:17:37.204
+<v Nik>So Fable failed there fully.</v>
+
+00:17:37.784 --> 00:17:42.944
+<v Nik>Like, if acting alone is just AI
+solving tasks, connecting to production.</v>
+
+00:17:43.024 --> 00:17:49.884
+<v Nik>And another finding from that, like,
+one AI schema was that if you,</v>
+
+00:17:50.944 --> 00:17:56.744
+<v Nik>if, if you work with weak models, they
+often decide to escalate to human, like</v>
+
+00:17:56.744 --> 00:17:58.404
+<v Nik>giving up, right?</v>
+
+00:17:58.444 --> 00:17:59.664
+<v Kirk>Like 80%-</v>
+<v Nik>Yeah</v>
+
+00:17:59.664 --> 00:18:02.984
+<v Kirk>escalation almost, right?</v>
+<v Nik>Yeah. Yeah, yeah, yeah. So if Haiku</v>
+
+00:18:02.984 --> 00:18:07.924
+<v Nik>or some open weight models, for example,
+DeepSeek without thinking was like,</v>
+
+00:18:07.924 --> 00:18:11.864
+<v Nik>in, in first version it
+was basically not helpful.</v>
+
+00:18:11.944 --> 00:18:16.044
+<v Nik>So we, we, we realized we need to build...
+Like it's, it's basics for those who do</v>
+
+00:18:16.044 --> 00:18:21.444
+<v Nik>some AI research and benchmarks,
+not just for databases, for coding.</v>
+
+00:18:21.564 --> 00:18:27.224
+<v Nik>But we decide, okay, we are going to have
+two metrics. One is safety, right?</v>
+
+00:18:27.224 --> 00:18:31.424
+<v Nik>So if it's harmful, like restart and
+downtime of replica, it's definitely harm.</v>
+
+00:18:31.424 --> 00:18:37.024
+<v Nik>It causes downtime and so on.
+Harm can be also data loss, right?</v>
+
+00:18:37.044 --> 00:18:40.424
+<v Nik>And also another way
+of harm is is indirect.</v>
+
+00:18:40.424 --> 00:18:43.944
+<v Nik>Like, you can lead to overspending.
+For example, you,</v>
+
+00:18:44.064 --> 00:18:47.484
+<v Nik>you have a task to drop some table,
+but you cannot drop this table,</v>
+
+00:18:47.484 --> 00:18:51.944
+<v Nik>so you keep postponing
+this operation from, for long time.</v>
+
+00:18:51.944 --> 00:18:56.424
+<v Nik>It means it costs your company additional
+money, so it's also kind of harm.</v>
+
+00:18:56.424 --> 00:18:58.764
+<v Kirk>Mm.</v>
+<v Nik>Harm from not, not acting, right?</v>
+
+00:18:58.764 --> 00:19:00.204
+<v Nik>It's interesting.</v>
+<v Kirk>Right.</v>
+
+00:19:00.204 --> 00:19:02.044
+<v Nik>And another, axis,</v>
+
+00:19:02.124 --> 00:19:07.764
+<v Nik>so another metric was, usefulness. If you
+cannot solve it, you're not confident,</v>
+
+00:19:07.764 --> 00:19:12.344
+<v Nik>like weak models escalating to human too
+often, it means that you are not helpful.</v>
+
+00:19:12.344 --> 00:19:16.364
+<v Nik>You are not efficient, right?
+You have some number of tasks,</v>
+
+00:19:16.364 --> 00:19:21.744
+<v Nik>but you accomplish only a few of them.
+It means, like, usefulness is quite low.</v>
+
+00:19:21.744 --> 00:19:25.284
+<v Nik>So we started drawing on two axis,
+and you see the graphs right now.</v>
+
+00:19:25.284 --> 00:19:31.224
+<v Nik>Again, I remind you, listeners to, who
+listen to us on Apple Podcasts, Spotify,</v>
+
+00:19:31.224 --> 00:19:35.524
+<v Nik>and so on, on YouTube we have
+extended version with visuals.</v>
+
+00:19:35.864 --> 00:19:41.544
+<v Nik>And to those who watch, listen to us
+on YouTube, and we are in, on your phone</v>
+
+00:19:41.544 --> 00:19:44.884
+<v Nik>in your pocket,
+if you hear the sound you just heard,</v>
+
+00:19:44.884 --> 00:19:48.424
+<v Nik>it means, that on, in the center
+of the screen there is some visual.</v>
+
+00:19:48.424 --> 00:19:54.104
+<v Nik>And, and it's good to temporarily
+look at it, and then you can</v>
+
+00:19:54.204 --> 00:19:57.424
+<v Nik>put us back to your pocket, right?</v>
+<v Kirk>Right</v>
+
+00:19:57.604 --> 00:20:01.784
+<v Nik>so yeah, this is the picture. This
+is the first, like, basically research,</v>
+
+00:20:01.784 --> 00:20:05.564
+<v Nik>what happens if you just let AI,
+to work with production.</v>
+
+00:20:05.564 --> 00:20:10.624
+<v Nik>And conclusion, it's, it's not safe,
+right? Like, it can lead to some problems.</v>
+
+00:20:11.544 --> 00:20:16.024
+<v Nik>Yeah, yeah. But I, I, I see what-</v>
+<v Kirk>It's being overly cautious.</v>
+
+00:20:16.164 --> 00:20:17.484
+<v Nik>- Right.
+- [laughs]</v>
+
+00:20:17.484 --> 00:20:20.764
+<v Nik>But you know what?
+I, I, I, last week especially,</v>
+
+00:20:20.944 --> 00:20:27.784
+<v Nik>when I dove deeper to this topic and used,
+models... So I expected more failures.</v>
+
+00:20:27.784 --> 00:20:30.384
+<v Nik>That's a problem. For example-</v>
+<v Kirk>Yeah</v>
+
+00:20:30.384 --> 00:20:34.504
+<v Nik>the, just topics we discussed
+recently and incidents we had,</v>
+
+00:20:34.544 --> 00:20:40.304
+<v Nik>and cases we had with customers prevented
+incidents as well with customers lately.</v>
+
+00:20:40.424 --> 00:20:44.624
+<v Nik>I tried to feed the best
+models with those tasks,</v>
+
+00:20:44.844 --> 00:20:49.504
+<v Nik>and I saw the best models
+like Fable or Neon or Astra,</v>
+
+00:20:50.124 --> 00:20:56.244
+<v Nik>they actually are amazingly good. So that
+mistake Fable did is from overconfidence.</v>
+
+00:20:56.244 --> 00:21:00.950
+<v Nik>It doesn't mean that it doesn't know that
+replicas needed to be restarted first.</v>
+
+00:21:00.984 --> 00:21:05.184
+<v Nik>But it just was overconfident that, okay,
+let's move on and, and, and that's it.</v>
+
+00:21:05.184 --> 00:21:10.344
+<v Nik>It, it just like, I make those mistakes
+myself. Working with customers I say I,</v>
+
+00:21:10.344 --> 00:21:14.744
+<v Nik>I don't rely on my memory,
+so here we should test first, right?</v>
+
+00:21:14.744 --> 00:21:17.844
+<v Kirk>Yeah.</v>
+<v Nik>Maybe multiple times. It's basic rule.</v>
+
+00:21:17.844 --> 00:21:22.164
+<v Nik>If you have some plan,
+you should code it and test it.</v>
+
+00:21:22.164 --> 00:21:25.064
+<v Nik>And if you go into production,
+decide to make some change,</v>
+
+00:21:25.064 --> 00:21:30.144
+<v Nik>make some changes in this code,
+it means you deal with untested code.</v>
+
+00:21:30.736 --> 00:21:35.156
+<v Nik>Basic, like every developers, like,
+developers know it, CI, right?</v>
+
+00:21:35.156 --> 00:21:40.056
+<v Kirk>Yeah. And, and true to form for you
+is you looked at this and said, "Okay,</v>
+
+00:21:40.056 --> 00:21:43.996
+<v Kirk>we can't let the AI just
+loose and do what it wants."</v>
+
+00:21:44.016 --> 00:21:48.896
+<v Kirk>And now you sit back and you think about
+it for a few minutes and you go, "Oh,</v>
+
+00:21:49.036 --> 00:21:51.976
+<v Kirk>well, there's actually
+multiple stages here," right?</v>
+
+00:21:51.976 --> 00:21:55.236
+<v Kirk>Like, we should have
+the AI do an analysis,</v>
+
+00:21:55.356 --> 00:21:58.240
+<v Kirk>and then we should have another
+agent or something, like,</v>
+
+00:21:58.240 --> 00:22:02.296
+<v Kirk>auditing it to make sure it kind of makes
+sense. Is he solving the right problem?</v>
+
+00:22:02.296 --> 00:22:06.956
+<v Kirk>Did he pay attention to the variables?
+Did he flag this as doable? Whatever.</v>
+
+00:22:07.036 --> 00:22:09.376
+<v Kirk>We should test it.
+We should always test it.</v>
+
+00:22:09.376 --> 00:22:12.676
+<v Kirk>We should not only test it,
+we should make sure the test passed.</v>
+
+00:22:12.676 --> 00:22:14.176
+<v Kirk>A server that never responded</v>
+
+00:22:14.176 --> 00:22:18.030
+<v Kirk>with an error doesn't mean that it
+actually worked. [laughs] The server could</v>
+
+00:22:18.030 --> 00:22:21.436
+<v Kirk>have just crashed and it's not there
+anymore. You timed out, so, oh,</v>
+
+00:22:21.436 --> 00:22:25.336
+<v Kirk>must have been good. So you have
+some rules here you wanna follow,</v>
+
+00:22:25.416 --> 00:22:30.636
+<v Kirk>and then you have the ability to do
+the work in the test environment.</v>
+
+00:22:30.636 --> 00:22:32.156
+<v Kirk>That's a requirement already.</v>
+
+00:22:32.156 --> 00:22:36.896
+<v Kirk>So the cool thing is then doing the same
+work in production really isn't that hard.</v>
+
+00:22:36.896 --> 00:22:42.356
+<v Kirk>Now, it may not be right, and so now we
+have a process where you're thinking about</v>
+
+00:22:42.356 --> 00:22:45.096
+<v Kirk>this and you're saying,
+"How do I build this team?</v>
+
+00:22:45.096 --> 00:22:48.956
+<v Kirk>If I was putting together a team to do
+this, where do I put Michael Jordan?"</v>
+
+00:22:48.956 --> 00:22:50.380
+<v Nik>Right.</v>
+<v Kirk>Okay? Right.</v>
+
+00:22:50.380 --> 00:22:53.336
+<v Kirk>Where do I put Scottie Pippen?
+Where do I put these people?</v>
+
+00:22:53.336 --> 00:22:55.636
+<v Nik>Mm.</v>
+<v Kirk>And now, so that's how you started</v>
+
+00:22:55.636 --> 00:23:00.636
+<v Kirk>to solve the, the problem slightly
+differently. And go ahead,</v>
+
+00:23:00.636 --> 00:23:05.116
+<v Kirk>pick up what I left off there,
+before it makes changes into production,</v>
+
+00:23:05.116 --> 00:23:07.936
+<v Kirk>and then tell us how
+the results might have changed.</v>
+
+00:23:07.936 --> 00:23:14.116
+<v Nik>Right. So, so everything that can
+improve the situation with AI, it's,</v>
+
+00:23:14.116 --> 00:23:19.056
+<v Nik>it comes from human experience actually.
+We, we need two things.</v>
+
+00:23:19.136 --> 00:23:23.636
+<v Nik>We need the proper role separation
+and working as a team, right?</v>
+
+00:23:24.096 --> 00:23:25.096
+<v Kirk>Yeah.</v>
+
+00:23:25.196 --> 00:23:30.096
+<v Nik>And we can dive there. But first
+actually, we also need some testing</v>
+
+00:23:30.096 --> 00:23:36.536
+<v Nik>processes instead of guessing. So what I
+wanted to say, last week showed with Neon,</v>
+
+00:23:36.676 --> 00:23:39.556
+<v Nik>and actually Fable
+as, as well is so great.</v>
+
+00:23:40.136 --> 00:23:45.216
+<v Nik>If I take hard- the hardest tasks,
+they know the code so well.</v>
+
+00:23:45.916 --> 00:23:51.236
+<v Nik>They see all the layers of problems.
+If you push buttons, like, what else?</v>
+
+00:23:51.236 --> 00:23:56.116
+<v Nik>What else? What else? You will see
+everything. They can explain failure modes</v>
+
+00:23:56.256 --> 00:24:02.736
+<v Nik>really well. Better than any human I know
+actually. That's the biggest insight.</v>
+
+00:24:02.736 --> 00:24:08.516
+<v Nik>Like, basically like I had a, an effect
+last week that we, we achieved the state.</v>
+
+00:24:08.516 --> 00:24:12.616
+<v Nik>They are extremely smart,
+extremely smart. Like, like</v>
+
+00:24:13.176 --> 00:24:19.336
+<v Nik>I, I, with my 20 years experience,
+every task I I just gave them...</v>
+
+00:24:20.056 --> 00:24:23.156
+<v Nik>Well, sometimes not all of them.
+For example, I have tasks,</v>
+
+00:24:23.156 --> 00:24:27.776
+<v Nik>from this morning which Fable
+doesn't solve. Neon did.</v>
+
+00:24:27.776 --> 00:24:33.416
+<v Nik>Neon solved it slightly with some, like,
+corrections, but it solved from one pass.</v>
+
+00:24:34.136 --> 00:24:39.976
+<v Nik>The task I know almost, like, I only,
+only know few people can solve, you know.</v>
+
+00:24:40.156 --> 00:24:43.200
+<v Nik>There are some tasks like that.
+So AI is extremely smart,</v>
+
+00:24:43.200 --> 00:24:46.056
+<v Nik>and it knows the code very
+well because it's open source.</v>
+
+00:24:46.056 --> 00:24:51.296
+<v Nik>And if you give access to code and ability
+to experiment, it, it goes even further.</v>
+
+00:24:51.376 --> 00:24:56.895
+<v Nik>So, if you give ability to experiment,
+for example, database branching,</v>
+
+00:24:57.796 --> 00:25:02.296
+<v Nik>or full-fledged, isolated, standalone-</v>
+
+00:25:02.296 --> 00:25:03.636
+<v Kirk>Exactly</v>
+<v Nik>yeah,</v>
+
+00:25:03.636 --> 00:25:07.996
+<v Nik>dedicated environment where you're acting
+alone. Because with our branching DBLab,</v>
+
+00:25:07.996 --> 00:25:14.176
+<v Nik>engine, it's a shared environment for,
+to make experiments, super fast and cheap.</v>
+
+00:25:14.776 --> 00:25:20.476
+<v Nik>While a DBLab Forge, it's a, a dedicated,
+clusters of multiple nodes and so on.</v>
+
+00:25:20.476 --> 00:25:25.076
+<v Nik>If you let it experiment and verify
+all the ideas, in our PG,</v>
+
+00:25:25.076 --> 00:25:31.616
+<v Nik>PGAIBench version 0.2,
+it removed half of harmful actions.</v>
+
+00:25:31.836 --> 00:25:33.176
+<v Nik>So like-</v>
+<v Kirk>Wow</v>
+
+00:25:33.196 --> 00:25:38.756
+<v Nik>dropped twice, which is good.
+Without any additional AI tokens spent.</v>
+
+00:25:39.056 --> 00:25:43.096
+<v Nik>So just, just purely from testing
+and giving the results</v>
+
+00:25:43.116 --> 00:25:46.776
+<v Nik>of testing back to AI,
+which is, is going to act.</v>
+
+00:25:46.776 --> 00:25:49.810
+<v Nik>But not, not 100%. That's the trick.</v>
+<v Kirk>But, yeah.</v>
+
+00:25:49.810 --> 00:25:51.316
+<v Nik>Yeah.</v>
+<v Kirk>No, that's good. So,</v>
+
+00:25:51.316 --> 00:25:54.716
+<v Kirk>so the first step was make it
+test what it thinks is gonna work.</v>
+
+00:25:54.716 --> 00:25:55.816
+<v Nik>Right.</v>
+<v Kirk>Okay?</v>
+
+00:25:55.816 --> 00:25:58.956
+<v Kirk>And then that improved
+the process there, right?</v>
+
+00:25:58.956 --> 00:26:02.256
+<v Nik>Testing is hard.
+It's, especially benchmarking is hard,</v>
+
+00:26:02.256 --> 00:26:06.096
+<v Nik>as Brendan Gregg says in his,
+all, all his books about</v>
+
+00:26:06.136 --> 00:26:10.796
+<v Nik>benchmarks and system performance.
+So the problem here, why not 100%? Because</v>
+
+00:26:11.136 --> 00:26:16.776
+<v Nik>testing is hard because you're dealing
+with large, stateful, like, databases.</v>
+
+00:26:16.816 --> 00:26:19.556
+<v Nik>You need, to reproduce multiple things.</v>
+
+00:26:19.556 --> 00:26:23.456
+<v Nik>But two most,
+difficult are, is the state itself.</v>
+
+00:26:23.456 --> 00:26:28.972
+<v Nik>Well, with cloning, snapshots clones,
+it, it's doable Relatively cheap.</v>
+
+00:26:28.972 --> 00:26:33.031
+<v Nik>But workload is the hardest part.
+How to reproduce workload is, like,</v>
+
+00:26:33.052 --> 00:26:38.432
+<v Nik>based on logs or mirroring or just
+crafting workloads, understanding,</v>
+
+00:26:38.612 --> 00:26:43.872
+<v Nik>specific parts of it and so on. And even
+with... Even if you achieved both things,</v>
+
+00:26:43.911 --> 00:26:48.072
+<v Nik>quite well, you still can overlook some
+things which are related for example,</v>
+
+00:26:48.072 --> 00:26:52.012
+<v Nik>to having replicas
+or to specific environment,</v>
+
+00:26:52.012 --> 00:26:54.972
+<v Nik>specific managed Postgres
+you're going to use and so on.</v>
+
+00:26:54.972 --> 00:26:57.832
+<v Nik>There are some nuances-</v>
+<v Kirk>I have a soundbite for this.</v>
+
+00:26:57.832 --> 00:27:01.612
+<v Kirk>The actor is deterministic.
+The production environment is not.</v>
+
+00:27:01.612 --> 00:27:03.960
+<v Nik>Right.</v>
+<v Kirk>So the challenge is, is it depends.</v>
+
+00:27:03.960 --> 00:27:06.712
+<v Kirk>Is backup currently running?
+Is something running else?</v>
+
+00:27:06.712 --> 00:27:10.932
+<v Kirk>Is... That you're not... Is it the wrong
+time to be doing this in this window?</v>
+
+00:27:10.932 --> 00:27:14.760
+<v Kirk>Like, is this the most critical 15
+minutes of purchasing that happens every</v>
+
+00:27:14.760 --> 00:27:17.880
+<v Kirk>day, and now you're gonna drop
+an index or whatever you're gonna do?</v>
+
+00:27:17.880 --> 00:27:19.812
+<v Nik>Or this topic we discussed-</v>
+<v Kirk>Right</v>
+
+00:27:19.812 --> 00:27:22.672
+<v Nik>last,
+last week talking about Postgres 19,</v>
+
+00:27:22.672 --> 00:27:24.032
+<v Nik>plan flips.</v>
+<v Kirk>Yeah</v>
+
+00:27:24.032 --> 00:27:27.992
+<v Nik>there is no guarantee plan won't
+flip tomorrow because something changed.</v>
+
+00:27:27.992 --> 00:27:29.592
+<v Nik>And if you freeze the plan,</v>
+
+00:27:29.592 --> 00:27:32.992
+<v Nik>also there is no guarantee
+your, your freezing choice will,</v>
+
+00:27:32.992 --> 00:27:35.952
+<v Nik>will be the right one tomorrow, right?</v>
+<v Kirk>Yeah.</v>
+
+00:27:35.952 --> 00:27:40.712
+<v Nik>So yeah, everything is changing
+constantly, and this make-</v>
+
+00:27:40.712 --> 00:27:46.452
+<v Nik>means that ideal testing is almost
+impossible. Well, you can do A/B testing,</v>
+
+00:27:46.492 --> 00:27:50.792
+<v Nik>with, traffic mirroring, and there
+are some tools for it, and PgDog,</v>
+
+00:27:50.792 --> 00:27:55.252
+<v Nik>PGCat support it. And yeah, it's possible.
+It's still extremely hard.</v>
+
+00:27:55.252 --> 00:27:57.172
+<v Nik>And again, if you tested it today,</v>
+
+00:27:57.172 --> 00:28:01.440
+<v Nik>but you planned to apply your change
+tomorrow, maybe you overlook some things,</v>
+
+00:28:01.440 --> 00:28:02.540
+<v Nik>right? Like-</v>
+<v Kirk>Well-</v>
+
+00:28:02.540 --> 00:28:05.110
+<v Nik>It worked-</v>
+<v Kirk>What if you overlooked another change</v>
+
+00:28:05.110 --> 00:28:07.872
+<v Kirk>another agent made?</v>
+<v Nik>Yeah. Well-</v>
+
+00:28:07.872 --> 00:28:11.612
+<v Kirk>Like, let's... Yeah, let's be
+realistic. You confirm it works today.</v>
+
+00:28:11.612 --> 00:28:14.172
+<v Nik>Uh-huh.</v>
+<v Kirk>There's 50 there's 50 pull requests set</v>
+
+00:28:14.172 --> 00:28:15.772
+<v Kirk>up to answer these things.</v>
+
+00:28:15.772 --> 00:28:21.040
+<v Kirk>Those all get published, and your change
+really, it will break now, you know-</v>
+
+00:28:21.040 --> 00:28:22.840
+<v Nik>Yeah</v>
+<v Kirk>for whatever reason. A table</v>
+
+00:28:22.840 --> 00:28:24.920
+<v Kirk>was moved to a different schema.</v>
+<v Nik>Right.</v>
+
+00:28:24.920 --> 00:28:27.450
+<v Kirk>Thank you.</v>
+<v Nik>There are interesting problems,</v>
+
+00:28:27.450 --> 00:28:30.930
+<v Nik>and especially if you talk...
+Again, if you talk about corner cases when</v>
+
+00:28:30.930 --> 00:28:35.952
+<v Nik>multiple problems collide and you have
+incident which was overlooked in testing.</v>
+
+00:28:36.472 --> 00:28:39.352
+<v Kirk>Right.</v>
+<v Nik>So, so next thing is, like...</v>
+
+00:28:39.352 --> 00:28:43.232
+<v Nik>First thing, testing is great.
+Of course, it's obvious, right? It's-</v>
+
+00:28:43.232 --> 00:28:44.892
+<v Kirk>Yeah</v>
+<v Nik>the problem is how much,</v>
+
+00:28:44.892 --> 00:28:47.032
+<v Nik>of time and money it costs.</v>
+
+00:28:47.772 --> 00:28:52.452
+<v Kirk>Well, and, and for AIs,
+the cost of testing is mostly setting up</v>
+
+00:28:52.452 --> 00:28:55.452
+<v Kirk>the environment for them
+and getting that right, okay?</v>
+
+00:28:55.452 --> 00:28:59.392
+<v Kirk>And you can't,
+you cannot cheat on your testing.</v>
+
+00:28:59.392 --> 00:29:02.740
+<v Kirk>If you have read replicas,
+you must have them in your test</v>
+
+00:29:02.740 --> 00:29:05.740
+<v Kirk>environment. Otherwise,
+it's gonna give you a recipe that's-</v>
+
+00:29:05.740 --> 00:29:07.810
+<v Nik>Right</v>
+<v Kirk>destined to potentially have problems</v>
+
+00:29:07.810 --> 00:29:08.812
+<v Kirk>in production.</v>
+
+00:29:08.812 --> 00:29:11.032
+<v Nik>Right.</v>
+<v Kirk>Like, and so many people,</v>
+
+00:29:11.032 --> 00:29:14.272
+<v Kirk>myself included,
+have skimped on that at times,</v>
+
+00:29:14.532 --> 00:29:17.612
+<v Kirk>only to pay a price you don't wanna pay.
+Trust me. Right?</v>
+
+00:29:17.612 --> 00:29:23.132
+<v Nik>Right. The separation of roles, right?</v>
+<v Kirk>Yeah.</v>
+
+00:29:23.132 --> 00:29:27.492
+<v Nik>The... This is how it
+works with humans as well.</v>
+
+00:29:27.852 --> 00:29:32.192
+<v Nik>If you're working alone, it's hard.
+You know, like, when you build something,</v>
+
+00:29:32.192 --> 00:29:36.852
+<v Nik>it's hard to step outside
+and, and review your own work.</v>
+
+00:29:37.072 --> 00:29:40.692
+<v Nik>It's just psychologically hard.
+And the same with AI.</v>
+
+00:29:40.692 --> 00:29:43.712
+<v Nik>If it has a goal to build something,
+it's too positive,</v>
+
+00:29:43.712 --> 00:29:48.812
+<v Nik>trying to achieve the goal to build.
+While if you have another AI who,</v>
+
+00:29:48.992 --> 00:29:52.412
+<v Nik>whose goal is to find problems,
+it will find problems, right?</v>
+
+00:29:52.412 --> 00:29:56.612
+<v Nik>So already this separation,
+one is building, another is auditing,</v>
+
+00:29:56.612 --> 00:30:01.102
+<v Nik>reviewing it It's already,
+it definitely makes sense here as well.</v>
+
+00:30:01.122 --> 00:30:02.822
+<v Nik>We have it for code also, right?</v>
+
+00:30:02.822 --> 00:30:08.062
+<v Nik>Like, we build code with one AI
+and review it with another AI, hopefully.</v>
+
+00:30:08.062 --> 00:30:13.382
+<v Nik>And like, I definitely... We, we decided
+that to do it, I think in January.</v>
+
+00:30:13.382 --> 00:30:18.882
+<v Nik>We separated the context, because if you
+let review the same AI which has goal</v>
+
+00:30:18.882 --> 00:30:24.982
+<v Nik>to build, it will probably be too
+optimistic. And yeah, so, so the same-</v>
+
+00:30:24.982 --> 00:30:28.222
+<v Kirk>We call it hypnotizing.
+You can hypnotize.</v>
+
+00:30:28.222 --> 00:30:31.802
+<v Kirk>Also, if you give the other
+AI all the same feedback,</v>
+
+00:30:31.802 --> 00:30:34.980
+<v Kirk>even if you're using a different AI,
+it could get hypnotized</v>
+
+00:30:34.980 --> 00:30:37.130
+<v Kirk>into how you describe the problem-</v>
+<v Nik>Yeah</v>
+
+00:30:37.130 --> 00:30:39.842
+<v Kirk>and seeing the other solution
+as more valid than it is.</v>
+
+00:30:39.842 --> 00:30:43.122
+<v Nik>Convinced, yeah.</v>
+<v Kirk>Yeah, convinced. Right.</v>
+
+00:30:43.122 --> 00:30:48.002
+<v Kirk>Whereas I want it to start out, "Hey,
+you're not convinced this is gonna work.</v>
+
+00:30:48.162 --> 00:30:51.822
+<v Kirk>Please examine it thoroughly," right?
+"And point out the issues."</v>
+
+00:30:51.822 --> 00:30:55.062
+<v Kirk>I also like to tell it
+to "Pretend you're Tom Lane,</v>
+
+00:30:55.142 --> 00:30:57.082
+<v Kirk>and cover this critically."</v>
+<v Nik>Yeah.</v>
+
+00:30:57.082 --> 00:31:01.861
+<v Kirk>He's my favorite guy to quote,
+because he's- he does such a great-</v>
+
+00:31:02.222 --> 00:31:05.202
+<v Nik>Right, yeah</v>
+<v Kirk>of, like, digging in. And like a laser.</v>
+
+00:31:05.202 --> 00:31:08.662
+<v Kirk>And he... I don't remember the last
+time he ever said something</v>
+
+00:31:08.662 --> 00:31:10.110
+<v Kirk>that was personal.</v>
+<v Nik>Yeah.</v>
+
+00:31:10.110 --> 00:31:12.022
+<v Kirk>It's, like, always professional-</v>
+<v Nik>Right</v>
+
+00:31:12.022 --> 00:31:13.382
+<v Kirk>about the solution-</v>
+<v Nik>Right</v>
+
+00:31:13.382 --> 00:31:17.142
+<v Kirk>not about the person behind it.</v>
+<v Nik>Right. So, right.</v>
+
+00:31:17.142 --> 00:31:18.610
+<v Nik>But what the, the, the big,</v>
+
+00:31:18.610 --> 00:31:22.342
+<v Nik>big trick for me is to do it in a, in a
+separate engine with different context.</v>
+
+00:31:22.342 --> 00:31:23.922
+<v Kirk>Absolutely.</v>
+<v Nik>We don't know,</v>
+
+00:31:23.922 --> 00:31:27.982
+<v Nik>we don't remember how we developed, and we
+don't convince ourselves that this is</v>
+
+00:31:27.982 --> 00:31:32.302
+<v Nik>the best way. Probably we overlooked
+something. And auditor role is great.</v>
+
+00:31:32.302 --> 00:31:39.302
+<v Nik>So since, last, last year we said that
+our mission is to build and help other</v>
+
+00:31:39.302 --> 00:31:43.682
+<v Nik>companies build self-driving Postgres. And
+why, I just explained in the beginning.</v>
+
+00:31:43.682 --> 00:31:48.782
+<v Nik>Because I believe, not all Postgres
+clusters receive proper attention,</v>
+
+00:31:48.862 --> 00:31:53.082
+<v Nik>so we need a better autonomous,
+control over, over site.</v>
+
+00:31:53.082 --> 00:31:57.442
+<v Nik>Like, how to say it properly? But we,</v>
+<v Kirk>I would say better... Yeah, we need...</v>
+
+00:31:57.442 --> 00:32:00.810
+<v Kirk>Well, we have a responsibility-</v>
+<v Nik>Responsibility</v>
+
+00:32:00.810 --> 00:32:03.161
+<v Kirk>to manage it better.
+To manage it better.</v>
+
+00:32:03.161 --> 00:32:05.982
+<v Nik>Yeah, so one human
+responsible for 1,000 clusters,</v>
+
+00:32:05.982 --> 00:32:11.442
+<v Nik>which are managed with a lot of tools
+and AI, AIs, right? We talk about</v>
+
+00:32:11.982 --> 00:32:18.742
+<v Nik>architecture. We, designed,
+it's, three As, triple A, AAA.</v>
+
+00:32:18.742 --> 00:32:22.102
+<v Kirk>Right.</v>
+<v Nik>Which is right now you see on the, on,</v>
+
+00:32:22.102 --> 00:32:27.802
+<v Nik>in the center of the screen if you can
+do it, on YouTube. So this is, like,</v>
+
+00:32:27.802 --> 00:32:32.082
+<v Nik>already evolved architecture.
+It's, like, third version maybe.</v>
+
+00:32:33.042 --> 00:32:38.382
+<v Nik>And obviously here we talk, like,
+why triple A? First is analyst,</v>
+
+00:32:38.622 --> 00:32:43.482
+<v Nik>whose role is to analyze metrics and
+situation or everything, like, the task,</v>
+
+00:32:43.482 --> 00:32:47.702
+<v Nik>the goal, and understand the problem
+very well, and propose some solution,</v>
+
+00:32:47.702 --> 00:32:54.642
+<v Nik>the change. The second role is, actor,
+which will execute this change.</v>
+
+00:32:54.742 --> 00:32:57.622
+<v Nik>And the idea is that actor
+is almost, like,</v>
+
+00:32:58.302 --> 00:33:04.482
+<v Nik>ideally should be super deterministic
+without AI, just following the script,</v>
+
+00:33:04.582 --> 00:33:10.042
+<v Nik>analyst proposed, right?
+This step, that step, step by step.</v>
+
+00:33:10.062 --> 00:33:14.842
+<v Nik>But of course the... makes,
+it makes sense to have some AI.</v>
+
+00:33:15.282 --> 00:33:18.562
+<v Nik>After each step we need
+to analyze should we continue</v>
+
+00:33:19.062 --> 00:33:21.782
+<v Nik>or we should go back. And ideally,</v>
+
+00:33:21.782 --> 00:33:25.782
+<v Nik>this should be also deterministic
+according to what analyst designed, like,</v>
+
+00:33:25.782 --> 00:33:30.562
+<v Nik>the gates after each step, which
+define will we go forward or backwards,</v>
+
+00:33:30.562 --> 00:33:35.622
+<v Nik>like rolling back the whole procedure. And
+how we roll back also should be designed,</v>
+
+00:33:36.222 --> 00:33:39.882
+<v Nik>right? And designed in form of scripts,
+deterministically.</v>
+
+00:33:40.662 --> 00:33:44.962
+<v Nik>But of course our actor,
+it makes sense to have some some, some</v>
+
+00:33:45.582 --> 00:33:49.562
+<v Nik>risk analysis, which should be fast
+and efficient. Like, for example,</v>
+
+00:33:49.562 --> 00:33:53.722
+<v Nik>Jev is one of the ways how you can quickly
+understand that something goes wrong</v>
+
+00:33:53.722 --> 00:33:57.062
+<v Nik>and we need to revert. Right,</v>
+<v Kirk>I'm gonna tie this-</v>
+
+00:33:57.062 --> 00:33:59.162
+<v Nik>A little-</v>
+<v Kirk>I'm gonna tie this quickly</v>
+
+00:33:59.162 --> 00:34:05.021
+<v Kirk>to a non-technical thing. In the real
+world, we have a head chef, okay?</v>
+
+00:34:05.021 --> 00:34:08.142
+<v Kirk>Which is like our analyst.
+He comes up with these flavor</v>
+
+00:34:08.142 --> 00:34:11.740
+<v Kirk>profiles and all of this stuff,
+but he doesn't cook all the meals.</v>
+
+00:34:11.740 --> 00:34:13.642
+<v Nik>Right.</v>
+<v Kirk>That's the sous chef's job,</v>
+
+00:34:13.642 --> 00:34:14.810
+<v Kirk>the executor.</v>
+<v Nik>Yeah,</v>
+
+00:34:14.810 --> 00:34:17.162
+<v Nik>yeah.</v>
+<v Kirk>So the sous chef's job is to actually</v>
+
+00:34:17.162 --> 00:34:20.842
+<v Kirk>put that together,
+and then actually taste the results,</v>
+
+00:34:20.962 --> 00:34:24.082
+<v Kirk>and make sure that he
+goes back and he's like,</v>
+
+00:34:24.082 --> 00:34:27.882
+<v Kirk>"Did you really mean capers?"
+You know [laughs] "This doesn't work."</v>
+
+00:34:27.882 --> 00:34:31.342
+<v Kirk>Like, whatever. So it's, that's his job.
+That's the sous chef's job.</v>
+
+00:34:31.342 --> 00:34:35.282
+<v Kirk>And then he drives that process out.
+So that implements, and there's a test</v>
+
+00:34:35.282 --> 00:34:38.562
+<v Kirk>cycle, and then it makes it into
+production eventually. Go ahead.</v>
+
+00:34:38.562 --> 00:34:43.780
+<v Nik>Right. Right. And ideally,
+ideally of course actor, again, it has...</v>
+
+00:34:43.780 --> 00:34:47.282
+<v Nik>Actor has access to production,
+can execute stuff. But ideally, again,</v>
+
+00:34:47.282 --> 00:34:52.022
+<v Nik>like, if you changed anything, which
+was not tested properly, not reviewed,</v>
+
+00:34:52.022 --> 00:34:56.942
+<v Nik>it's a new procedure. And this is how we
+usually work even without AI, with humans.</v>
+
+00:34:56.942 --> 00:35:01.502
+<v Nik>We, this is how we do major upgrades
+without downtime, data loss,</v>
+
+00:35:01.502 --> 00:35:06.482
+<v Nik>and reversible. They are fully scripted
+and rehearsed many times, first in, like,</v>
+
+00:35:06.482 --> 00:35:11.242
+<v Nik>small clusters, then clones and, and so
+on. Actor is basically Ansible, right?</v>
+
+00:35:11.782 --> 00:35:15.582
+<v Kirk>Yeah.</v>
+<v Nik>However, modern actor also again has has</v>
+
+00:35:15.582 --> 00:35:20.862
+<v Nik>this risk assessment which is very
+efficient in terms of time and money,</v>
+
+00:35:20.862 --> 00:35:27.022
+<v Nik>and it can assess, risks or, or... and the
+situation, and access to metrics, right?</v>
+
+00:35:27.022 --> 00:35:30.942
+<v Nik>So if metrics show something is off,
+even if, it was not,</v>
+
+00:35:31.842 --> 00:35:35.362
+<v Nik>established in the plan originally
+that, for example, if TPS drops.</v>
+
+00:35:35.362 --> 00:35:40.742
+<v Nik>If, if the plan didn't say if TPS drops,
+revert, probably, like,</v>
+
+00:35:40.762 --> 00:35:45.262
+<v Nik>it's a good idea for actor
+to have a little bit of intellect</v>
+
+00:35:45.382 --> 00:35:49.682
+<v Nik>to, to understand that something
+goes goes wrong, we need to revert.</v>
+
+00:35:49.682 --> 00:35:52.623
+<v Nik>But that's a actually big
+topic because sometimes,</v>
+
+00:35:53.442 --> 00:35:58.082
+<v Nik>it's, it's, it's... This is where
+it's extremely hard to make decisions.</v>
+
+00:35:58.262 --> 00:36:03.082
+<v Nik>In live production when things went south,
+and you, you need to understand is it</v>
+
+00:36:03.082 --> 00:36:07.542
+<v Nik>because of our actions, of something else
+colliding, and, and what to do about it.</v>
+
+00:36:07.542 --> 00:36:12.062
+<v Nik>This is very different
+specific topic for probably-</v>
+
+00:36:12.062 --> 00:36:14.402
+<v Kirk>Yeah</v>
+<v Nik>separate study. But we, we've...</v>
+
+00:36:14.402 --> 00:36:19.362
+<v Nik>Like, in this study, we, think that, like,
+it's mostly just deterministic.</v>
+
+00:36:19.362 --> 00:36:25.142
+<v Nik>And then there is a third A, which is
+auditor. Originally, auditor role we saw</v>
+
+00:36:25.142 --> 00:36:29.318
+<v Nik>it should be just reviewing the changes
+afterwards and analyzing, like,</v>
+
+00:36:29.482 --> 00:36:33.962
+<v Nik>high level, like, is it good or something
+needs to be adjusted long-term?</v>
+
+00:36:34.182 --> 00:36:38.962
+<v Nik>But obviously auditor,
+main auditor role is between analyst and</v>
+
+00:36:39.082 --> 00:36:43.002
+<v Nik>actor to review the change
+proposed by analyst,</v>
+
+00:36:43.402 --> 00:36:48.702
+<v Nik>But all of them have access to, of course,
+proposed CR, change request, detailed,</v>
+
+00:36:48.702 --> 00:36:52.882
+<v Nik>structured, like,
+any professional SRE would structure it.</v>
+
+00:36:53.042 --> 00:36:58.062
+<v Nik>And of course, all the metrics from both
+production and from rehearsals,</v>
+
+00:36:58.062 --> 00:37:01.042
+<v Nik>from testing environments. If they have-</v>
+<v Kirk>Yeah</v>
+
+00:37:01.042 --> 00:37:05.342
+<v Nik>also have access to data,
+that's great, right? Ideally,</v>
+
+00:37:05.342 --> 00:37:10.562
+<v Nik>analyst should present a CR already
+rehearsed with testing, with numbers,</v>
+
+00:37:10.562 --> 00:37:14.382
+<v Nik>with risk assessment, with predictions
+what will happen in production.</v>
+
+00:37:14.382 --> 00:37:21.242
+<v Nik>For example, you are running pg_repack.
+Okay, you test it on smaller, on smaller,</v>
+
+00:37:21.742 --> 00:37:23.382
+<v Kirk>Table</v>
+<v Nik>table, yeah.</v>
+
+00:37:23.382 --> 00:37:30.382
+<v Nik>Then also you have, based on previous
+experience and problems people discuss</v>
+
+00:37:30.882 --> 00:37:36.482
+<v Nik>somewhere like library,
+and we have our own library, which what</v>
+
+00:37:37.022 --> 00:37:41.942
+<v Nik>things might go wrong. For example, you
+have a large table and vacuum is running</v>
+
+00:37:41.942 --> 00:37:45.502
+<v Nik>in transaction ID wraparound prevention
+mode, so it won't heal, right?</v>
+
+00:37:45.502 --> 00:37:49.322
+<v Nik>You cannot acquire lock.
+And pg_repack, I think it,</v>
+
+00:37:49.542 --> 00:37:53.013
+<v Nik>it needs two or three times it
+needs Access Exclusive Lock,</v>
+
+00:37:54.002 --> 00:37:55.542
+<v Nik>briefly, right?</v>
+<v Kirk>Yeah.</v>
+
+00:37:55.542 --> 00:37:57.762
+<v Nik>And if it cannot do it, it will wait,</v>
+
+00:37:57.762 --> 00:38:03.342
+<v Nik>and then if idle in transaction session
+timeout is limited for, like, say,</v>
+
+00:38:03.342 --> 00:38:09.202
+<v Nik>10 minutes, it might be not enough.
+And then if it fails, it it, it...</v>
+
+00:38:09.202 --> 00:38:15.922
+<v Nik>There are leftovers like, invalid indexes
+and then, and so on. There are many,</v>
+
+00:38:15.962 --> 00:38:20.122
+<v Nik>failure modes here when you run pg_repack.
+And for example,</v>
+
+00:38:20.122 --> 00:38:25.502
+<v Nik>if you have five terabyte table in loaded
+database, it might be so you cannot use</v>
+
+00:38:25.502 --> 00:38:28.042
+<v Nik>pg_repack at all. There-</v>
+<v Kirk>Right</v>
+
+00:38:28.042 --> 00:38:32.582
+<v Nik>at least two reasons why it
+might happen. So analyst should</v>
+
+00:38:32.802 --> 00:38:37.182
+<v Nik>cover all those risks and real numbers
+from production for specific case</v>
+
+00:38:37.182 --> 00:38:43.422
+<v Nik>and present step-by-step,
+execution plan and decision-making schema.</v>
+
+00:38:43.422 --> 00:38:46.262
+<v Nik>Like, after this step,
+we decide proceed or no.</v>
+
+00:38:46.262 --> 00:38:51.182
+<v Nik>And also how to revert and clean up,
+right? An auditor should,</v>
+
+00:38:52.182 --> 00:38:57.522
+<v Nik>review all this and say, "Oh, you know
+what?" "There is a lack of testing."</v>
+
+00:38:57.742 --> 00:39:03.862
+<v Nik>So auditor can send back for improvements,
+completely reject-</v>
+
+00:39:04.742 --> 00:39:06.902
+<v Kirk>Yeah</v>
+<v Nik>approve, right?</v>
+
+00:39:07.942 --> 00:39:10.824
+<v Nik>And of course, with notes,
+right? So it should be</v>
+
+00:39:11.442 --> 00:39:12.762
+<v Nik>with notes.</v>
+<v Kirk>Yeah.</v>
+
+00:39:12.762 --> 00:39:19.762
+<v Nik>And in our vision, auditor should be
+maybe not the best model you can achieve,</v>
+
+00:39:20.202 --> 00:39:26.622
+<v Nik>but the model which, which works really
+well for this type of purpose, finding</v>
+
+00:39:26.722 --> 00:39:29.642
+<v Nik>possible risks and lack of data,
+lack of testing,</v>
+
+00:39:29.642 --> 00:39:35.702
+<v Nik>and so on, and proposing to improve,
+or just rejecting if it's not safe at all,</v>
+
+00:39:36.802 --> 00:39:38.482
+<v Nik>right?</v>
+<v Kirk>Yeah.</v>
+
+00:39:38.842 --> 00:39:44.982
+<v Nik>So, and this is how it works,
+and this is how PGAIBench</v>
+
+00:39:45.342 --> 00:39:48.621
+<v Nik>show that AI can work really efficiently,</v>
+
+00:39:50.202 --> 00:39:53.402
+<v Nik>getting rid of, of most of harms. Yeah.</v>
+
+00:39:53.402 --> 00:39:58.182
+<v Kirk>Did it... Did after the audit roll
+and it passed, didn't your PGAIBench</v>
+
+00:39:58.182 --> 00:40:03.222
+<v Kirk>then run it in the simulated production
+right after that? Did it do that or not?</v>
+
+00:40:04.462 --> 00:40:09.642
+<v Kirk>'Cause I thought that was in the test
+level, that you then ran it out of test.</v>
+
+00:40:09.642 --> 00:40:12.742
+<v Kirk>The Once audit passed it,
+did you go ahead and run it,</v>
+
+00:40:12.742 --> 00:40:17.382
+<v Kirk>or did you just stop and assume that when
+it said it passed, it was going to run it?</v>
+
+00:40:17.382 --> 00:40:19.382
+<v Nik>So it was allowed to have,</v>
+
+00:40:19.382 --> 00:40:22.622
+<v Nik>interaction between analyst
+and the auditor, right?</v>
+
+00:40:22.622 --> 00:40:26.322
+<v Nik>If auditor says there are corrections
+needed, for example, we need more</v>
+
+00:40:26.322 --> 00:40:30.442
+<v Nik>rehearsal at, at this, at, at the scale
+we actually expect in production,</v>
+
+00:40:30.442 --> 00:40:36.322
+<v Nik>analyst job to have second,
+revision of the plan of CR,</v>
+
+00:40:36.570 --> 00:40:40.190
+<v Nik>and provide more testing evidence
+for this scale. For example, if staging-</v>
+
+00:40:40.190 --> 00:40:42.590
+<v Kirk>I was talking after that.
+I was talking once</v>
+
+00:40:42.590 --> 00:40:45.870
+<v Kirk>the auditor said, "Oh, this looks good.
+Let me run it in production."</v>
+
+00:40:45.870 --> 00:40:48.040
+<v Nik>Right. Yeah.</v>
+<v Kirk>Did it then tell a different actor</v>
+
+00:40:48.040 --> 00:40:49.502
+<v Kirk>to run it in production?</v>
+<v Nik>Yes.</v>
+
+00:40:49.502 --> 00:40:52.382
+<v Kirk>Is what I'm asking. Sure.</v>
+<v Nik>So actor just executes-</v>
+
+00:40:52.382 --> 00:40:53.462
+<v Kirk>Mm-hmm</v>
+<v Nik>without,</v>
+
+00:40:53.462 --> 00:40:55.550
+<v Nik>extra thoughts, right?</v>
+<v Kirk>Yeah.</v>
+
+00:40:55.550 --> 00:40:59.000
+<v Nik>And actually, I remember when I
+was... I was playing all the roles</v>
+
+00:40:59.000 --> 00:41:00.482
+<v Nik>in my career, right?</v>
+<v Kirk>Yeah.</v>
+
+00:41:00.482 --> 00:41:05.762
+<v Nik>And when I'm executing someone else's
+plan, even if I understand some problems,</v>
+
+00:41:05.762 --> 00:41:10.522
+<v Nik>maybe I, I, like, I better revert than I
+start modifying the plan on the fly.</v>
+
+00:41:10.642 --> 00:41:13.062
+<v Nik>This is better culture to do that</v>
+
+00:41:13.260 --> 00:41:16.610
+<v Nik>instead of changing someone else's plan,
+even if you understand all</v>
+
+00:41:16.610 --> 00:41:19.840
+<v Nik>the complexities and problems,
+because it's too late. It's...</v>
+
+00:41:19.840 --> 00:41:24.022
+<v Nik>You either should execute or revert
+at at the stage of execution Right?</v>
+
+00:41:24.022 --> 00:41:27.242
+<v Nik>Because if you change it again,
+this is a basic rule.</v>
+
+00:41:27.242 --> 00:41:31.422
+<v Nik>If you change something, where is testing
+evidence? Was it review? Right?</v>
+
+00:41:31.422 --> 00:41:34.602
+<v Kirk>Right.</v>
+<v Nik>Basically, if you, if you as an actor</v>
+
+00:41:35.202 --> 00:41:39.282
+<v Nik>change something, you basically,
+again, dealing alone with production,</v>
+
+00:41:39.282 --> 00:41:43.802
+<v Nik>which I don't recommend neither
+to humans to AIs. [laughs]</v>
+
+00:41:43.802 --> 00:41:47.742
+<v Kirk>Yeah.</v>
+<v Nik>Basic, basic idea. Not be alone, right?</v>
+
+00:41:48.482 --> 00:41:53.682
+<v Nik>So this triangle works really well,
+equipped with proper, testing,</v>
+
+00:41:53.682 --> 00:41:57.182
+<v Nik>like database branching,
+shared environments or a dedicated...</v>
+
+00:41:57.182 --> 00:42:01.042
+<v Nik>And actually dedicated environments.
+All the telemetry you can collect.</v>
+
+00:42:01.042 --> 00:42:06.702
+<v Nik>Experimentation freedom in terms of you
+have a capacity in terms of time and money</v>
+
+00:42:06.702 --> 00:42:11.002
+<v Nik>to check things, access to code,
+access to other people experience.</v>
+
+00:42:11.202 --> 00:42:15.122
+<v Nik>This can achieve great results.
+Here actually we didn't do access to other</v>
+
+00:42:15.122 --> 00:42:19.162
+<v Nik>people experience yet, right? Yeah, so-</v>
+<v Kirk>Well, let's finish...</v>
+
+00:42:19.162 --> 00:42:24.322
+<v Kirk>Let's make the point where we're driving
+to. So now that we used AAA as our process</v>
+
+00:42:24.322 --> 00:42:29.062
+<v Kirk>with three separate actors, okay?
+And we had the auditor and it passed it,</v>
+
+00:42:29.062 --> 00:42:32.482
+<v Kirk>and it gave it over to the actor
+again to run it in production.</v>
+
+00:42:32.482 --> 00:42:35.782
+<v Kirk>This got rid of 100%
+of the errors, didn't it?</v>
+
+00:42:36.102 --> 00:42:40.722
+<v Nik>No. One harm left in Opus 5.5.
+I don't remember exactly which error.</v>
+
+00:42:40.782 --> 00:42:43.622
+<v Kirk>Right.</v>
+<v Nik>Yeah. But, but, yeah, some harm left,</v>
+
+00:42:43.622 --> 00:42:47.798
+<v Nik>so there is still some risk,
+but it drama- it was dramatically reduced.</v>
+
+00:42:48.162 --> 00:42:53.342
+<v Kirk>Yeah, perfect. So, so and that's...
+This is the takeaway. So you went from 13</v>
+
+00:42:53.342 --> 00:42:58.242
+<v Kirk>harms down to one at the end of the day
+by structuring this a little better.</v>
+
+00:42:58.242 --> 00:43:00.642
+<v Nik>Mm-hmm.</v>
+<v Kirk>And for me, when I first read it,</v>
+
+00:43:00.642 --> 00:43:05.382
+<v Kirk>and we talked about this, but I wanna
+bring it up, my next thing was, oh,</v>
+
+00:43:05.522 --> 00:43:08.842
+<v Kirk>because I tend to be...
+Like, I'm a mentor in, you know,</v>
+
+00:43:08.842 --> 00:43:13.282
+<v Kirk>for quite a few different people,
+and in mentoring my next thing is, oh,</v>
+
+00:43:13.282 --> 00:43:17.922
+<v Kirk>I see what we need. We need to make this
+system something that becomes the mentee,</v>
+
+00:43:17.922 --> 00:43:20.842
+<v Kirk>and then we need
+to insert a DBA on top of-</v>
+
+00:43:21.082 --> 00:43:22.502
+<v Nik>Mm</v>
+<v Kirk>to help mentor it.</v>
+
+00:43:22.502 --> 00:43:27.642
+<v Kirk>So the DBA can now see that instead
+of the actor changing production directly,</v>
+
+00:43:27.642 --> 00:43:31.542
+<v Kirk>it can look at what the auditor says,
+look at how trivial the change is, look</v>
+
+00:43:31.542 --> 00:43:36.322
+<v Kirk>at how trivial this is, and say, yes, and,
+and maybe, just like we do a quad code,</v>
+
+00:43:36.322 --> 00:43:39.242
+<v Kirk>in the future you can run
+this one whenever you want.</v>
+
+00:43:39.242 --> 00:43:43.102
+<v Kirk>Okay? You're inserting a record or you're
+approving an IP address, whatever.</v>
+
+00:43:43.102 --> 00:43:47.622
+<v Kirk>Yes, in the future, you can do
+this one without me. Or no, oh my God,</v>
+
+00:43:47.622 --> 00:43:52.182
+<v Kirk>never let this happen. Okay? This can
+cause this. Have them test this failure.</v>
+
+00:43:52.182 --> 00:43:55.622
+<v Kirk>Okay? Boom, and they go back,
+and then they can start learning.</v>
+
+00:43:55.622 --> 00:43:59.362
+<v Kirk>And so when I saw that, that's
+what I saw as this opportunity,</v>
+
+00:43:59.362 --> 00:44:05.062
+<v Kirk>whereas now your, your same DBA who might
+be controlling 100 databases, right?</v>
+
+00:44:05.062 --> 00:44:07.002
+<v Kirk>And he's responsible for them.</v>
+
+00:44:07.022 --> 00:44:11.642
+<v Kirk>Whereas now as these things are bubbling
+up, he can dispatch the actor to actually</v>
+
+00:44:11.642 --> 00:44:17.902
+<v Kirk>act on a well-tested solution that he
+feels is safe. Okay? And on the other hand</v>
+
+00:44:17.902 --> 00:44:22.602
+<v Kirk>he can retrain and make sure
+that there's a pushback for learning,</v>
+
+00:44:22.602 --> 00:44:27.342
+<v Kirk>and then it's the difference between what
+the auditor tries to push into production</v>
+
+00:44:27.342 --> 00:44:31.962
+<v Kirk>and what he lets go into production,
+and that, then you can measure that more.</v>
+
+00:44:31.962 --> 00:44:36.162
+<v Kirk>Now, look, he's bound to make a mistake,
+and we can learn from his mistakes too.</v>
+
+00:44:36.162 --> 00:44:40.722
+<v Kirk>But my thought was this slight thing,
+this is sellable.</v>
+
+00:44:40.722 --> 00:44:43.082
+<v Kirk>Like, I love this. Sign me up.</v>
+<v Nik>Okay.</v>
+
+00:44:43.082 --> 00:44:46.562
+<v Kirk>I started by saying I
+wouldn't let AI make changes-</v>
+
+00:44:46.602 --> 00:44:48.902
+<v Nik>Yeah</v>
+<v Kirk>like in my production database,</v>
+
+00:44:48.902 --> 00:44:50.362
+<v Kirk>and now I'm like, oh,</v>
+
+00:44:50.362 --> 00:44:53.490
+<v Kirk>but I will let AI assist my-</v>
+<v Nik>Yeah</v>
+
+00:44:53.490 --> 00:44:54.990
+<v Kirk>make his life easier-</v>
+<v Nik>Yeah</v>
+
+00:44:54.990 --> 00:44:56.582
+<v Kirk>make his life better.</v>
+<v Nik>Safer.</v>
+
+00:44:56.582 --> 00:44:59.122
+<v Kirk>Allow him to be more productive, safer.</v>
+<v Nik>Yeah.</v>
+
+00:44:59.122 --> 00:45:02.962
+<v Kirk>Sleep at night, maybe
+occasionally without a 3:00 AM alarm.</v>
+
+00:45:03.042 --> 00:45:04.480
+<v Kirk>So.</v>
+<v Nik>Yeah. Also-</v>
+
+00:45:04.480 --> 00:45:07.082
+<v Kirk>Awesome</v>
+<v Nik>like of course worth mentioning that all</v>
+
+00:45:07.082 --> 00:45:12.002
+<v Nik>safe operations were not blocked.
+Almost all, I think almost 400,</v>
+
+00:45:12.002 --> 00:45:17.222
+<v Nik>only one was blocked So, so we, we should
+talk about false positive and false,</v>
+
+00:45:17.222 --> 00:45:21.650
+<v Nik>false negatives here. And the results
+are quite great in this test.</v>
+
+00:45:21.650 --> 00:45:23.902
+<v Nik>It's limited test, right? It's just,</v>
+<v Kirk>Yeah</v>
+
+00:45:23.902 --> 00:45:29.882
+<v Nik>18 tasks. So, definitely we need
+to expand it, and establish human,</v>
+
+00:45:30.722 --> 00:45:32.410
+<v Nik>baseline and make it</v>
+
+00:45:32.410 --> 00:45:36.220
+<v Nik>sophisticated, a more complex task.</v>
+<v Kirk>Not only were these 18 tests, they were</v>
+
+00:45:36.220 --> 00:45:38.090
+<v Kirk>hand-selected from real life examples-</v>
+
+00:45:38.090 --> 00:45:40.310
+<v Nik>Yeah</v>
+<v Kirk>where people made mistakes, or where</v>
+
+00:45:40.310 --> 00:45:42.010
+<v Kirk>it's easy to make a mistake.</v>
+<v Nik>Right.</v>
+
+00:45:42.010 --> 00:45:44.050
+<v Kirk>We've made them in the past kind of thing.</v>
+
+00:45:44.050 --> 00:45:45.822
+<v Nik>It doesn't-</v>
+<v Kirk>So we know this trips people up</v>
+
+00:45:45.822 --> 00:45:47.470
+<v Nik>in, in reality, many changes</v>
+
+00:45:47.470 --> 00:45:49.802
+<v Nik>are easy, right? You, I mean, like-</v>
+<v Kirk>Yeah</v>
+
+00:45:49.802 --> 00:45:53.800
+<v Nik>there can be CR, we need one more
+replica, and it's already automated.</v>
+
+00:45:53.800 --> 00:45:57.402
+<v Nik>Like, just press a button. Like
+of course it's green light all the time.</v>
+
+00:45:57.402 --> 00:46:00.462
+<v Kirk>Right.</v>
+<v Nik>Right? So, so definitely these these</v>
+
+00:46:00.462 --> 00:46:02.702
+<v Nik>numbers are for this specific, like,</v>
+
+00:46:02.702 --> 00:46:07.682
+<v Nik>set of tasks and, and so on. Numbers
+are great. Like, I like what I saw.</v>
+
+00:46:07.682 --> 00:46:12.962
+<v Nik>Several interesting findings that even
+best models make mistakes for because of</v>
+
+00:46:13.222 --> 00:46:17.362
+<v Nik>being overconfident.
+Weak models, if you just show them</v>
+
+00:46:17.742 --> 00:46:22.242
+<v Nik>weak testing green light,
+they become like, "Oh, let's go."</v>
+
+00:46:22.442 --> 00:46:27.642
+<v Nik>Or they escalate too much. This, there
+are two inefficiencies in weak models.</v>
+
+00:46:28.182 --> 00:46:33.282
+<v Nik>And third, multiple players and,
+and teamwork is great, even if you,</v>
+
+00:46:33.282 --> 00:46:37.882
+<v Nik>if some team players are AIs.
+And of course, analysts can be human.</v>
+
+00:46:37.882 --> 00:46:40.602
+<v Nik>Some human propose some change,
+and then this-</v>
+
+00:46:40.602 --> 00:46:43.142
+<v Kirk>Yes</v>
+<v Nik>analysis is done with AI,</v>
+
+00:46:43.142 --> 00:46:48.462
+<v Nik>and final decision as you, you actually,
+I saw you want to place human somewhere.</v>
+
+00:46:48.462 --> 00:46:52.342
+<v Nik>Okay. Human can be analyst.
+Human proposes, right?</v>
+
+00:46:52.422 --> 00:46:56.022
+<v Nik>Maybe polished with AI of course,
+right? But usually it's some,</v>
+
+00:46:56.022 --> 00:46:59.690
+<v Nik>some human, opens some ticket somewhere
+or change request, pull request.</v>
+
+00:46:59.690 --> 00:47:03.510
+<v Kirk>And, and maybe it's the human gets
+involved when the AI punts and says,</v>
+
+00:47:03.510 --> 00:47:06.982
+<v Kirk>"I don't know how to do this," and it
+gives it some clarifying advice.</v>
+
+00:47:06.982 --> 00:47:09.217
+<v Nik>Yeah.</v>
+<v Kirk>And then it, it lets it try.</v>
+
+00:47:09.412 --> 00:47:12.752
+<v Nik>Right, right.
+Everything should be in Git, coded-</v>
+
+00:47:12.972 --> 00:47:15.712
+<v Kirk>Yeah</v>
+<v Nik>history, changes, reviewable.</v>
+
+00:47:15.972 --> 00:47:20.712
+<v Nik>Nothing should be done
+directly without proper plan,</v>
+
+00:47:21.152 --> 00:47:24.832
+<v Nik>push to Git and analyzed first.
+Like, it should not be done directly.</v>
+
+00:47:24.832 --> 00:47:28.872
+<v Nik>Everyone already learned that DDL should
+go through, through GitOps, right?</v>
+
+00:47:28.872 --> 00:47:32.852
+<v Nik>Should be done with some tooling,
+and ALTER TABLE should be there in Git.</v>
+
+00:47:32.852 --> 00:47:36.452
+<v Nik>Of course, the same is with actually
+minor upgrades, everything.</v>
+
+00:47:36.452 --> 00:47:42.832
+<v Nik>If you use Kubernetes, it's already
+natural. But even if it's not Kubernetes,</v>
+
+00:47:43.000 --> 00:47:45.520
+<v Nik>all changes should be tracked.
+There is a document.</v>
+
+00:47:45.520 --> 00:47:47.650
+<v Kirk>Yeah.</v>
+<v Nik>With AI, it's so easy these days.</v>
+
+00:47:47.650 --> 00:47:51.220
+<v Nik>For example, we are going to run
+pg_repack. Okay, what's your plan? Just</v>
+
+00:47:51.220 --> 00:47:55.170
+<v Nik>what, what the code snippets you are going
+to run? Put it to Git to some, like,</v>
+
+00:47:55.170 --> 00:47:57.812
+<v Nik>folders or, or something,
+right? It's so easy.</v>
+
+00:47:57.812 --> 00:48:01.950
+<v Nik>And then auditor comes, and auditor,
+you can use multiple auditors,</v>
+
+00:48:01.950 --> 00:48:05.352
+<v Nik>multiple models, plus human.
+There is place for human there as well,</v>
+
+00:48:05.352 --> 00:48:10.252
+<v Nik>like final decision, right? But it's,
+it's so much easier if you already</v>
+
+00:48:10.772 --> 00:48:15.392
+<v Nik>have this data analyzed properly
+with, with harness like we built.</v>
+
+00:48:15.632 --> 00:48:18.220
+<v Nik>And actor should be ideally just,</v>
+
+00:48:18.672 --> 00:48:23.852
+<v Nik>just CI/CD pipeline which applies
+your, your, your changes through GitOps.</v>
+
+00:48:24.252 --> 00:48:27.232
+<v Nik>Or, okay, Ansible or kubectl or something,</v>
+
+00:48:27.232 --> 00:48:31.632
+<v Nik>but definitely you should not type
+yourself anything for production, right?</v>
+
+00:48:31.632 --> 00:48:36.852
+<v Kirk>Right.</v>
+<v Nik>Easy. So, and proper testing, branching,</v>
+
+00:48:37.552 --> 00:48:43.412
+<v Nik>DBLab Forge, all these things, are also
+very helpful as we saw in numbers.</v>
+
+00:48:43.532 --> 00:48:50.012
+<v Nik>So this is first, first, like,
+take on, on this PGAIBench benchmark.</v>
+
+00:48:50.132 --> 00:48:54.292
+<v Nik>I, I, by the way, I learned from other
+benchmarks, like DBA-Bench, for example,</v>
+
+00:48:54.292 --> 00:48:56.792
+<v Nik>and others, SWE-bench.</v>
+
+00:48:56.852 --> 00:49:00.712
+<v Nik>So I'm going to continue this work
+and, and expand and make it</v>
+
+00:49:00.752 --> 00:49:02.072
+<v Nik>even more interesting.</v>
+
+00:49:02.772 --> 00:49:05.672
+<v Kirk>Nice.
+Well, I just have to say congratulations.</v>
+
+00:49:05.672 --> 00:49:10.020
+<v Kirk>It's obviously been a bit of work to put
+this together, real-world examples,</v>
+
+00:49:10.020 --> 00:49:14.120
+<v Kirk>and very few people could actually do some
+of this because they don't have your 20</v>
+
+00:49:14.120 --> 00:49:17.920
+<v Kirk>years of experience, they don't have
+access to some of this, and they're not</v>
+
+00:49:17.920 --> 00:49:22.672
+<v Kirk>playing hard enough with the tool sets
+that you're using. So I wanted to cover</v>
+
+00:49:22.672 --> 00:49:26.452
+<v Kirk>that. I wanna mention a few more things
+just for everyone listening, right?</v>
+
+00:49:26.452 --> 00:49:31.212
+<v Kirk>A successful experiment is evidence,
+not a guarantee, okay?</v>
+
+00:49:31.232 --> 00:49:36.652
+<v Kirk>Rollback is a procedure, not a promise.
+So if you drop a table, your recovery-</v>
+
+00:49:36.652 --> 00:49:39.232
+<v Nik>Ah</v>
+<v Kirk>process has a restore involved, right?</v>
+
+00:49:39.232 --> 00:49:41.152
+<v Nik>Right.</v>
+<v Kirk>So you gotta be careful.</v>
+
+00:49:41.152 --> 00:49:43.672
+<v Kirk>And if you're planning
+to be able to roll it back,</v>
+
+00:49:43.672 --> 00:49:46.392
+<v Kirk>testing the rollback procedure
+becomes part of this.</v>
+
+00:49:46.392 --> 00:49:47.451
+<v Nik>It's-</v>
+<v Kirk>Go ahead</v>
+
+00:49:47.460 --> 00:49:50.652
+<v Nik>reversibility the word. Reversibility.</v>
+<v Kirk>Yeah, reversibility. Yeah.</v>
+
+00:49:50.652 --> 00:49:53.593
+<v Nik>If your upgrades,
+for example, are reversible</v>
+
+00:49:53.932 --> 00:49:55.252
+<v Nik>or they are not.</v>
+<v Kirk>Yeah.</v>
+
+00:49:55.252 --> 00:49:57.652
+<v Nik>Yeah.</v>
+<v Kirk>Right. Right, exactly.</v>
+
+00:49:57.652 --> 00:50:01.872
+<v Kirk>Also, two AIs agreeing does not
+make either one correct, okay?</v>
+
+00:50:01.872 --> 00:50:07.612
+<v Kirk>The absence of observed harm is not
+evidence of the absence of harm, meaning</v>
+
+00:50:07.612 --> 00:50:14.052
+<v Kirk>you may not see the flaw in this for 90
+days, okay, 30 days, but it may show up.</v>
+
+00:50:14.052 --> 00:50:19.732
+<v Nik>A classic example is if someone
+makes a major upgrade and forgets analyze</v>
+
+00:50:19.732 --> 00:50:22.712
+<v Nik>on weekend, and Saturday,
+Sunday it works very well,</v>
+
+00:50:22.712 --> 00:50:25.212
+<v Nik>but on Monday we have higher traffic-</v>
+<v Kirk>Oh</v>
+
+00:50:25.212 --> 00:50:28.412
+<v Nik>yeah, without statistics.</v>
+<v Kirk>Yeah. Yeah, no, exactly.</v>
+
+00:50:28.412 --> 00:50:31.792
+<v Kirk>Also, I don't want AI to automate
+my ability to make mistakes</v>
+
+00:50:31.792 --> 00:50:33.352
+<v Kirk>at scale.</v>
+<v Nik>Mm.</v>
+
+00:50:33.352 --> 00:50:35.852
+<v Kirk>I do- Right?</v>
+<v Nik>Faster. Often.</v>
+
+00:50:35.852 --> 00:50:39.072
+<v Kirk>Yeah, yeah. [laughs] Yeah,
+exactly. I don't want 1,000,</v>
+
+00:50:39.072 --> 00:50:43.592
+<v Kirk>1,000 clusters taken down and restarted
+with bad, you know, settings or something</v>
+
+00:50:43.592 --> 00:50:48.152
+<v Kirk>like that just 'cause it worked in a lab
+and nobody looked at it. And then also we</v>
+
+00:50:48.152 --> 00:50:52.052
+<v Kirk>should be measuring how much
+responsibility we can safely delegate-</v>
+
+00:50:52.052 --> 00:50:54.710
+<v Nik>Yeah</v>
+<v Kirk>not simply how intelligent the AI is.</v>
+
+00:50:54.710 --> 00:50:55.812
+<v Nik>Yeah, yeah.</v>
+<v Kirk>Right?</v>
+
+00:50:55.812 --> 00:50:59.972
+<v Nik>This is great ideas, and they,
+they resonate a lot in my mind as well.</v>
+
+00:50:59.972 --> 00:51:04.312
+<v Nik>Like for example, we should speak SRE
+language like budget for downtime,</v>
+
+00:51:04.312 --> 00:51:08.412
+<v Nik>like uptime budget, and like human
+budget as well, and like all,</v>
+
+00:51:08.412 --> 00:51:13.532
+<v Nik>all kinds of budget, like CTO-level
+language. And I definitely think I,</v>
+
+00:51:13.532 --> 00:51:20.532
+<v Nik>I'm going to continue, with this research.
+I wanted to say thank you for feedback,</v>
+
+00:51:20.572 --> 00:51:25.212
+<v Nik>and also David Ventimiglia from Supabase,
+who also provided great insights,</v>
+
+00:51:25.212 --> 00:51:30.412
+<v Nik>feedback from, from the blog post
+which already published. And finally,</v>
+
+00:51:30.512 --> 00:51:35.552
+<v Nik>we work already on this schema with some
+customers, just reviewing their CRs and,</v>
+
+00:51:35.552 --> 00:51:40.192
+<v Nik>and proposing proper experiments
+before moving to production change.</v>
+
+00:51:40.372 --> 00:51:42.352
+<v Nik>And we are looking for more</v>
+
+00:51:42.352 --> 00:51:46.472
+<v Nik>design partners who think
+this model is great and want to try</v>
+
+00:51:46.532 --> 00:51:48.492
+<v Nik>it out on their systems.</v>
+
+00:51:49.532 --> 00:51:53.652
+<v Kirk>Awesome.
+Well, this was excellent talk. I loved it.</v>
+
+00:51:53.652 --> 00:51:57.612
+<v Kirk>You might have changed my mind.
+Not today, I'm not putting AI straight</v>
+
+00:51:57.612 --> 00:51:59.172
+<v Kirk>in my production yet.</v>
+<v Nik>Mm.</v>
+
+00:51:59.172 --> 00:52:01.240
+<v Kirk>But I can see-</v>
+<v Nik>Yeah</v>
+
+00:52:01.240 --> 00:52:04.040
+<v Kirk>I can see me leveraging
+something that works along</v>
+
+00:52:04.040 --> 00:52:08.332
+<v Kirk>the lines of what we described with a
+little human intervention and multiplying</v>
+
+00:52:08.332 --> 00:52:10.812
+<v Kirk>my ability to get work done.</v>
+<v Nik>Yeah.</v>
+
+00:52:10.812 --> 00:52:12.592
+<v Kirk>I'm, I'm loving it.</v>
+<v Nik>Thank you.</v>
+
+00:52:12.592 --> 00:52:14.886
+<v Nik>Thank you.</v>
+<v Kirk>[laughs] Thank you, Nik.</v>
+
+00:52:15.400 --> 00:52:21.080
+[music]
+
+00:52:21.080 --> 00:52:26.760
+[music]
+
+00:52:26.760 --> 00:52:32.440
+[music]
+
+00:52:32.440 --> 00:52:38.120
+[music]
