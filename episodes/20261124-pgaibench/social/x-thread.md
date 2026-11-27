@@ -4,7 +4,7 @@ DRAFT v1, 2026-11-27. Nothing is posted. Nik posts from his accounts. Rules (`to
 
 Handles: Nik https://x.com/samokhvalov, the show https://x.com/PostgresFM. Kirk has no X account on https://postgres.fm/people (checked for episode 197), so plain "Kirk Wolak". Michael is not on this episode.
 
-Before posting: replace `VIDEO_ID` with the YouTube id, and check that https://postgres.fm/episodes/pgaibench returns 200 (404 on 2026-11-27, before the page exists). Character counts are X counts (a link = 23; limit 280).
+Before posting: check that https://postgres.fm/episodes/pgaibench returns 200 (404 on 2026-11-27, before the page exists). Character counts are X counts (a link = 23; limit 280).
 
 Media (review folder `for-nik/`, not in git): the YouTube thumbnail `32-thumb-b-let-ai-touch-production.png`; the speaker clip `67-social-clip-kirk-mistakes-at-scale.mp4` (1080x1350, 28.6 s, burned captions, ends on postgres.fm). Overlay stills come from the final video at the given times.
 
@@ -50,7 +50,7 @@ Offline replay (in-sample): 12 of 13 harms blocked, 377 of 378 safe or unclassif
 Would you let AI run DDL on your production Postgres?
 
 PGAIBench v0.2: https://pgaibench.dev
-Watch: https://youtu.be/VIDEO_ID
+Watch: https://youtu.be/VxHu3MQLhyo
 Listen: https://postgres.fm/episodes/pgaibench
 Post: https://postgres.ai/blog/20261123-pgaibench
 ```

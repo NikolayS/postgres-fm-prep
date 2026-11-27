@@ -6,7 +6,7 @@ Tag: type "@" and pick Kirk Wolak (https://www.linkedin.com/in/kirk-wolak-770673
 
 Media, in this order: the speaker clip `67-social-clip-kirk-mistakes-at-scale.mp4`, then the YouTube thumbnail `32-thumb-b-let-ai-touch-production.png` (review folder).
 
-Before posting: replace `VIDEO_ID`; check that https://postgres.fm/episodes/pgaibench returns 200.
+Before posting: check that https://postgres.fm/episodes/pgaibench returns 200.
 
 ## Post
 
@@ -28,7 +28,7 @@ Would you let AI run DDL on your production Postgres? Links in the first comment
 
 ```
 PGAIBench v0.2: https://pgaibench.dev
-Watch: https://youtu.be/VIDEO_ID
+Watch: https://youtu.be/VxHu3MQLhyo
 Listen (any podcast app): https://postgres.fm/episodes/pgaibench
 Post: https://postgres.ai/blog/20261123-pgaibench
 ```

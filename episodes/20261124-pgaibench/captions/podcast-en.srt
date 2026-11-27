@@ -1142,7 +1142,7 @@ is not in the results because,
 
 234
 00:14:59,464 --> 00:15:04,004
-but Argon is there. Because it was before,
+but Carbon is there. Because it was before,
 I did it before Neon was released.
 
 235
