@@ -123,11 +123,13 @@ export function entryInSequence(overlays: Overlay[]): string[] {
   return overlays.filter((o) => f.has(o) && (o.sfx ?? []).some(isEntry)).map((o) => o.id ?? o.file);
 }
 
-// Overlays that begin a sequence (or stand alone) without a sound in their first ENTRY_MAX s
-// (audio listeners would miss them).
+// Cards (not band notes or strips) that begin a sequence of cards, or stand alone, without a sound
+// in their first ENTRY_MAX s (audio listeners would miss them). Band notes and strips may enter
+// silently (Nik, 2026-11-27, episode 198 v8), so they neither need a sound nor start a sequence.
 export function missingSfx(overlays: Overlay[]): string[] {
-  const f = followers(overlays);
-  return overlays.filter((o) => !f.has(o) && !(o.sfx ?? []).some((s) => s.at >= 0 && s.at <= ENTRY_MAX)).map((o) => o.id ?? o.file);
+  const cards = overlays.filter((o) => o.placement !== "band");
+  const f = followers(cards);
+  return cards.filter((o) => !f.has(o) && !(o.sfx ?? []).some((s) => s.at >= 0 && s.at <= ENTRY_MAX)).map((o) => o.id ?? o.file);
 }
 
 // Line reveals of a wipe strip from alpha frames (W x H, 0-255, frame i at i / fps): text lines

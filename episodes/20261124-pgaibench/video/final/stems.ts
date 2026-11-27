@@ -20,8 +20,14 @@ const { values, positionals } = parseArgs({ args: Bun.argv.slice(2), allowPositi
 const [body, edited, cutsPath, wordsPath, out] = positionals;
 if (!out) { console.error("usage: bun stems.ts <body.mp4> <edited.mp4> <cuts.json> <words.json> <out-dir> [--offset 13]"); process.exit(2); }
 const SR = 16000, OFF = Number(values.offset);
-const pcm = async (f: string) => { const b = await $`ffmpeg -nostdin -v error -i ${f} -vn -ac 1 -ar ${SR} -c:a pcm_f32le -f f32le pipe:1`.arrayBuffer(); return new Float32Array(b); };
-const [B, T0] = await Promise.all([pcm(body), pcm(edited)]);
+// Decode to a temp file, one input at a time: two concurrent ~200 MB stdout pipes stalled this
+// script (0% CPU, no child process) on 2026-11-27.
+const pcm = async (f: string) => {
+  const tmp = `${out}.${process.pid}.pcm`;
+  await $`ffmpeg -nostdin -y -v error -i ${f} -vn -ac 1 -ar ${SR} -c:a pcm_f32le -f f32le ${tmp}`;
+  const b = await Bun.file(tmp).arrayBuffer(); await $`rm -f ${tmp}`; return new Float32Array(b);
+};
+const B = await pcm(body), T0 = await pcm(edited);
 // The talk sits near --offset, but encoder priming and the card crossfade move it by some ms:
 // find the exact lag by cross-correlation over 60 s of talk (search +-0.5 s around --offset).
 const lagAt = (lag: number, i0: number, n: number) => { let s = 0; for (let i = i0; i < i0 + n; i++) s += B[i + lag] * T0[i]; return s; };

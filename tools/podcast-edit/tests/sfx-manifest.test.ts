@@ -159,3 +159,20 @@ describe("sequences: one entry sound per run of overlays", () => {
     expect(entryInSequence(sequenceSfx([c("a", 10, 5), c("b", 15, 4)]))).toEqual([]);
   });
 });
+
+// Nik, 2026-11-27 (episode 198, v8): band notes and strips may enter silently; only center cards
+// (and other non-band cards) need the entry sound, on the first of their sequence.
+describe("missingSfx: silent band notes", () => {
+  const c = (id: string, outStart: number, sfx: Overlay["sfx"] = []): Overlay => ({ id, file: `${id}.mov`, placement: "center", outStart, dur: 5, sfx });
+  const b = (id: string, outStart: number): Overlay => ({ id, file: `${id}.mov`, placement: "band", outStart, dur: 5, sfx: [] });
+  test("a band note without a sound is not missing one", () => {
+    expect(missingSfx([b("n1", 10), b("n2", 100)])).toEqual([]);
+  });
+  test("a center card after a silent band note in the same run still needs its entry sound", () => {
+    expect(missingSfx([b("n1", 10), c("c1", 16)])).toEqual(["c1"]);
+    expect(missingSfx([b("n1", 10), c("c1", 16, [{ file: "sfx/center-in.wav", at: 0.05 }])])).toEqual([]);
+  });
+  test("a center card that follows another center card in a sequence stays silent", () => {
+    expect(missingSfx([c("c1", 10, [{ file: "sfx/center-in.wav", at: 0.05 }]), c("c2", 16)])).toEqual([]);
+  });
+});

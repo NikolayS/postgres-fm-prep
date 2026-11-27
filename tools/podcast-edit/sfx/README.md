@@ -16,6 +16,8 @@ convention below to an overlay manifest; `compose.ts` mixes the result.
 
 ## Convention
 
+- Band notes and strips may enter silently (Nik, 2026-11-27, episode 198 v8);
+  `qa.ts` asks for an entry sound only on center, photo and full cards.
 - Sequences: overlays that follow one another (start within `SEQ_GAP` = 3 s
   of the previous end, or the same `group` id in the manifest) are one
   sequence. Only its first overlay gets the entry sound (IN or typing); the
