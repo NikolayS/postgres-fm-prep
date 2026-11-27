@@ -15,10 +15,10 @@ const fmt = (t: number) => { t = Math.floor(t); const h = Math.floor(t / 3600), 
 const shift = (txt: string, add: number) => txt.replace(/\b(\d\d):(\d\d)\b/g, (_, m, s) => fmt(Number(m) * 60 + Number(s) + add));
 // YouTube: chapters "MM:SS title" and link times "(MM:SS)".
 let yt = await Bun.file(join(N, "youtube-description.edited.txt")).text();
-yt = yt.split("\n").map((l) => /^\d\d:\d\d /.test(l) || /\(\d\d:\d\d\)/.test(l) ? shift(l, CARD + CO) : l).join("\n");
+yt = yt.split("\n").map((l) => /^\d\d:\d\d /.test(l) || /\(\d\d:\d\d(, \d\d:\d\d)*\)/.test(l) ? shift(l, CARD + CO) : l).join("\n");
 yt = yt.replace(/^(\d\d:\d\d|\d:\d\d:\d\d) /m, (x) => `00:00 Cold open\n${x}`);
 await Bun.write(join(N, "youtube-description.txt"), yt);
 // notes.md: "[MM:SS]" link times only.
-const nt = (await Bun.file(join(N, "notes.edited.md")).text()).replace(/\[(\d\d:\d\d)\]/g, (_, t) => `[${shift(t, CARD)}]`);
+const nt = (await Bun.file(join(N, "notes.edited.md")).text()).replace(/\[(\d\d:\d\d(?:, \d\d:\d\d)*)\]/g, (_, t) => `[${shift(t, CARD)}]`);
 await Bun.write(join(N, "notes.md"), nt);
 console.log(`video = edited + ${CARD + CO} s; podcast = edited + ${CARD} s`);

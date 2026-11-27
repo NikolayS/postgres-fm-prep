@@ -10,7 +10,7 @@ Postgres.FM episode 198. Nik and Kirk discuss whether AI can safely change produ
 Chapters:
 00:00 One engineer, 1,000 Postgres clusters
 04:18 Would you let AI run DDL on production?
-07:44 PGAIBench: tasks from real Postgres incidents
+07:44 PGAIBench: is it safe to let AI change production Postgres?
 10:04 Step one: AI acting alone
 11:45 The trap: indexes used only on replicas
 13:36 How the benchmark runs
@@ -27,26 +27,30 @@ Chapters:
 45:49 Findings, limits, and GitOps for database changes
 48:47 Kirk's rules for safe automation
 
-Corrections (checked against the post after recording):
+Corrections (checked after recording against the post; the C18 points against the v0.2 run logs and the preregistration):
 * (10:55) v0.2 has 19 live scenarios (14 core, 2 exploratory, 3 held-out), not 18.
 * (12:07) The standby did not crash: its query p99 got 18.0x slower (2.91 to 52.58 ms).
 * (15:54) The C18 ticket did not say "do not restart" (also in the cold open). The rule was implicit: only a restart the task cannot be done without is excused. This task needed none.
-* (16:25, 20:34) In C18 Fable restarted the standby first, as it should. Replay never paused. The harm was the unneeded restarts: client errors on both nodes, about 3 s per restart.
+* (16:26, 17:09, 20:35) In C18 Fable restarted the standby first, as it should. Replay never paused. The harm was the unneeded restarts: client errors on both nodes, about 3 s per restart.
 * (17:08) The setting is max_locks_per_transaction ("max slots" on air).
 * (17:39) In v0.2, nine of ten models escalated 21 to 35 of 95 runs. The most, 35, was gpt-6.2-sol (37%); no model escalated 80%. There was no clear link to model strength.
 * (25:11) The deterministic clone gate stopped 6 of 13 harms (46.2%), a bit less than half; it halts the change, it does not send test results back to the model.
-* (37:41) Two limits apply. A lock wait is active: lock_timeout or pg_repack --wait-timeout limits it. During the long copy, pg_repack's second connection is idle in transaction, so a short idle_in_transaction_session_timeout can kill the run.
+* (37:41) Two limits apply. A lock wait is active, so lock_timeout limits it. pg_repack --wait-timeout (default 60 s) waits that long for its exclusive lock, then cancels the conflicting queries, and after twice the time terminates them, unless --no-kill-backend is set. During the long copy, pg_repack's second connection is idle in transaction, so a short idle_in_transaction_session_timeout can kill the run.
 * (40:28) 13 -> 1 is a replay: the 408 recorded primary changes were replayed offline through AAA (in-sample), not run live a second time. In v0.2 the Analyst and Auditor ran tool-free; revise loops are planned (Track 3).
 * (49:55) True for upgrades to Postgres 17 and older, and for dump/restore or logical replication. Since Postgres 18, pg_upgrade keeps most optimizer statistics, but not extended statistics: run vacuumdb --all --analyze-in-stages --missing-stats-only, then vacuumdb --all --analyze-only.
 
 Key links (time of the first mention):
 * PGAIBench (07:44) https://pgaibench.dev/
 * PGAIBench on GitHub (07:44) https://github.com/NikolayS/pgaibench
-* AAA and AI Control results (31:59) https://pgaibench.dev/control/
 * DBLab Engine (24:47) https://github.com/postgres-ai/database-lab-engine
 * DBLab Forge (24:55) https://postgres.ai/products/dblab-forge
+* AAA and AI Control results (31:59) https://pgaibench.dev/control/
 * Jev by TypeSafe (33:31) https://typesafe.ai
 * DBA-Bench (48:35) https://arxiv.org/abs/2607.22165
+* SWE-bench (48:37) https://www.swebench.com/
+
+Thanks to David Ventimiglia (Supabase) for feedback on the post (51:03).
+Design partners: if your team runs Postgres at scale and wants safe AI-driven operations, or has real failure cases for the benchmark, write to contact@postgres.ai
 
 Related episodes:
 * BUFFERS by default https://postgres.fm/episodes/buffers-by-default

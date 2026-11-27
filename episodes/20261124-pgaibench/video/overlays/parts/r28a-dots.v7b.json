@@ -1,0 +1,33 @@
+{
+  "id": "r28a-dots",
+  "row": 28,
+  "outStart": 2523.24,
+  "duration": 19.4,
+  "dur": 19.4,
+  "file": "r28a-dots-v7b.mov",
+  "placement": "center",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/center-in.wav",
+      "at": 0.05,
+      "gain": 1
+    },
+    {
+      "file": "sfx/accent.wav",
+      "at": 3.2,
+      "gain": 1
+    },
+    {
+      "file": "sfx/center-out.wav",
+      "at": 19.02,
+      "gain": 0.7
+    }
+  ],
+  "accents": [
+    3.2
+  ],
+  "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 3; replay finding 1: gate 6 of 13, Auditor 6 of 7 remaining, 1 held-out claude-opus-5.5 miss)",
+  "words": "Kirk: \"So now that we used AAA as our process\" (2602.82) \"gave it over to the actor again to run it in production\" (2610.78) \"got rid of 100% of the errors\" (2614.14; \"100%\" 2614.86 = stamp); Nik: \"Uh, no. One harm left in Opus 5.5\" (2617.30; \"no.\" 2617.50 = count 1)",
+  "builder": "illus-1"
+}

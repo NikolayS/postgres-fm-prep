@@ -15,6 +15,8 @@ const lerp = (f: number, a: number, b: number, v0: number, v1: number) => interp
 const pop = (f: number, at: number, damping = 9, stiffness = 220) => spring({frame: f - at, fps: FPS, config: {damping, stiffness, mass: 0.6}});
 const rnd = (k: number) => { const x = Math.sin(k * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
 const RED = '#e0262b', DARK = '#7d1013';
+// the layout background's gradient (bg.png sampled at x 10), without the header
+const PLAIN = 'linear-gradient(to bottom, #f081e4 0%, #f18de6 25%, #f39deb 50%, #f6bef1 75%, #fadef7 100%)';
 const font = 'Lato, "Helvetica Neue", Arial, sans-serif', mono = '"JetBrains Mono", Menlo, monospace';
 
 const useFonts = () => {
@@ -189,12 +191,13 @@ export const Dyn: React.FC<{variant: Variant; sign?: string}> = ({variant: v, si
       {pic}
     </AbsoluteFill>
   );
-  // during a whip the picture moves sideways; a copy one frame-width away fills the side it uncovers
+  // during a whip the picture moves sideways; the plain layout pink (no tiles, no header) fills the side it
+  // uncovers, so no frame shows a second copy of a host (a copy of the picture put Kirk on the right)
   const wrap = c.tx !== 0 ? c.tx - Math.sign(c.tx) * 1920 : 0;
   return (
     <AbsoluteFill style={{background: '#000', overflow: 'hidden'}}>
       {term ? <Terminal f={f} /> : (<AbsoluteFill style={{filter: c.blur > 0.5 ? `blur(${c.blur}px)` : undefined}}>
-        {wrap !== 0 ? <AbsoluteFill style={{transform: `translate(${wrap + sh.x}px, ${sh.y}px) scale(1, ${sy})`, filter: `brightness(${bright})`}}>{scene}</AbsoluteFill> : null}
+        {wrap !== 0 ? <AbsoluteFill style={{transform: `translate(${wrap + sh.x}px, ${sh.y}px) scale(1, ${sy})`, filter: `brightness(${bright})`, background: PLAIN}} /> : null}
         <AbsoluteFill style={{transform: `translate(${c.tx + sh.x}px, ${sh.y}px) scale(1, ${sy})`, filter: `brightness(${bright})`}}>
           {scene}
           <div style={{position: 'absolute', left: 0, top: 0, width: 1920, height: 900, overflow: 'hidden'}}>

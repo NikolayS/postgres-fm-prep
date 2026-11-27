@@ -1,0 +1,25 @@
+{
+  "id": "r23a-aaa-auditor",
+  "row": 23,
+  "outStart": 2161.16,
+  "duration": 13.52,
+  "dur": 13.52,
+  "file": "r23a-aaa-auditor-v7b.mov",
+  "placement": "center",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/center-in.wav",
+      "at": 0.05,
+      "gain": 1
+    },
+    {
+      "file": "sfx/center-out.wav",
+      "at": 13.14,
+      "gain": 0.7
+    }
+  ],
+  "source": "https://postgres.ai/blog/20261123-pgaibench (Figure 2; AAA: \"Auditor (review) ... returns a verdict (approve, request_changes, or reject)\")",
+  "words": "Nik: \"And then there is a third A, which is auditor\" (2228.64) \"Originally, auditor role\" (2232.08)",
+  "builder": "illus-1"
+}

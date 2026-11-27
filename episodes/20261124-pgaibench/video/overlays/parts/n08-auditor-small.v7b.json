@@ -1,0 +1,23 @@
+{
+  "id": "n08-auditor-small",
+  "outStart": 2337.3,
+  "duration": 9.5,
+  "dur": 9.5,
+  "file": "n08-auditor-small-v7b.mov",
+  "placement": "band",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/typing-2033ms.wav",
+      "at": 0.45,
+      "gain": 0.5
+    },
+    {
+      "file": "sfx/typing-1234ms.wav",
+      "at": 2.833,
+      "gain": 0.5
+    }
+  ],
+  "builder": "illus-1",
+  "source": "Nik (2335.36) + the post; for-nik/83 item 36:44"
+}

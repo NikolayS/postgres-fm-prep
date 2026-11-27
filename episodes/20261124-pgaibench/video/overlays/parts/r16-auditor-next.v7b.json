@@ -1,0 +1,25 @@
+{
+  "id": "r16-auditor-next",
+  "row": 16,
+  "outStart": 1298,
+  "duration": 6.5,
+  "dur": 6.5,
+  "file": "r16-auditor-next-v7b.mov",
+  "placement": "center",
+  "freezeSec": 0,
+  "sfx": [
+    {
+      "file": "sfx/center-in.wav",
+      "at": 0.05,
+      "gain": 1
+    },
+    {
+      "file": "sfx/center-out.wav",
+      "at": 6.14,
+      "gain": 0.7
+    }
+  ],
+  "source": "https://postgres.ai/blog/20261123-pgaibench (hero: AaaPipeline3D; AAA: \"Auditor (review). An independent model ...\")",
+  "words": "Kirk: \"another agent or something\" (1331.60) \"like, auditing it\" (1333.86)",
+  "builder": "illus-1"
+}

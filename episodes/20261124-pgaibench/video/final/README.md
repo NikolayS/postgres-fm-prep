@@ -38,3 +38,7 @@ Media stay outside git, in the recording's `review/` folder (`<review>` below).
 - The title-card text ends by y 890. In episodes 196 and 197 the name labels sat at about y 970; the bottom-180 px rule now applies to cards too.
 
 **Show notes to paste:** `bun video/final/publish-notes.ts notes/notes.md notes/show-notes-publish.md` after `set_times.ts`. It keeps the description, links and corrections only (podcast times) and fails if draft text is left.
+
+**v7 opening (2026-11-27):** cold open B1 (`05-cold-open-fix-b1.mp4`: sign NO RESTART NEEDED, whip frames with plain pink fill) and particle intro A3-b1 (button NO RESTART NEEDED; same seed, bed unchanged; kept in `review/intro-b1/`). `head.sh particle <intro-A3-b1.mp4> <bed3.wav> 17.96 30`, then `-af volume=-0.7dB` = head-g. Run `level.ts` and `stems.ts` with stdin closed (`</dev/null`) when they run in the background: with an open stdin, level.ts waited for 28 min with no output.
+
+**v7b:** `render-body7b.sh` renders from `pgfm198-edited.v7b.mp4`: the v5 edit with Kirk's tile at edited 2905.3-2907.7 s (a yawn) replaced by the 2.4 s before it, played backwards, with 0.16 s alpha fades (picture only; times and audio unchanged). Manifest `manifest-v7b-sfx.json`: r16, r23a, r28a re-rendered, n08 added, typing at gain 0.5 on the band notes that play over speech.

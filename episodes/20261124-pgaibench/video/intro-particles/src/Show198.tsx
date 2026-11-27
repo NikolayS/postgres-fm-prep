@@ -79,7 +79,7 @@ const RestartButton: React.FC<{q: number}> = ({q}) => {
       </svg>
       {/* the rule, on the pedestal: ends by y 898 */}
       <div style={{...font, position: 'absolute', left: BTN.x - w / 2 + 10, top: BTN.top + 12, width: w - 20, height: 104, background: PLUM, borderRadius: 8,
-        color: '#ffcc4d', fontSize: 46, lineHeight: '50px', textAlign: 'center', paddingTop: 2, letterSpacing: 1}}>DO NOT<br />RESTART</div>
+        color: '#ffcc4d', fontSize: 34, lineHeight: '44px', textAlign: 'center', paddingTop: 8, letterSpacing: 1, whiteSpace: 'nowrap'}}>NO RESTART<br />NEEDED</div>
     </div>
   );
 };
