@@ -260,7 +260,7 @@ The replicas in standby. Yeah.
 
 **Nik** [00:17:26]
 
-Max slots per transaction is one of them. It was in this task. First you need to adjust replicas, restarts on them, and then on the primary. So Fable failed there fully. Like, if acting alone is just AI solving tasks, connecting to production. And another finding from that, like, one AI schema was that if you, if you work with weak models, they often decide to escalate to human, like giving up, right?
+max_locks_per_transaction is one of them. It was in this task. First you need to adjust replicas, restarts on them, and then on the primary. So Fable failed there fully. Like, if acting alone is just AI solving tasks, connecting to production. And another finding from that, like, one AI schema was that if you, if you work with weak models, they often decide to escalate to human, like giving up, right?
 
 **Kirk** [00:17:58]
 

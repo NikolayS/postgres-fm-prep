@@ -23,7 +23,7 @@ decided to change something and restart</v>
 <v Kirk>"Do not restart the server"?</v>
 <v Nik>Yeah. Being overconfident.</v>
 
-00:00:19.732 --> 00:00:23.932
+00:00:19.732 --> 00:00:23.908
 <v Kirk>I don't want AI to automate
 my ability to make mistakes at scale.</v>
 
@@ -505,19 +505,20 @@ changes like, infrastructural or not only</v>
 <v Nik>infrastructural, also,
 running some SQL and so on.</v>
 
-00:08:46.388 --> 00:08:47.388
-<v Kirk>yeah,</v>
+00:08:46.388 --> 00:08:51.068
+<v Kirk>yeah, as long as you use the latest
+and the best, you know, agents out there,</v>
 
-00:08:49.448 --> 00:08:54.708
-<v Kirk>you know,</v>
+00:08:51.068 --> 00:08:54.410
+<v Kirk>you're perfectly safe, right?</v>
 <v Nik>Yeah.</v>
 
-00:08:54.708 --> 00:08:56.061
+00:08:54.410 --> 00:08:56.960
 <v Kirk>- [laughs]
-- I, I know,</v>
+- I know, I know a lot of our listeners</v>
 
-00:08:57.268 --> 00:09:00.728
-<v Nik>I know this. So I say-</v>
+00:08:56.960 --> 00:09:00.728
+<v Nik>are agents. I know this. So I say-</v>
 <v Kirk>Sarcasm. Sorry. [laughs]</v>
 
 00:09:00.728 --> 00:09:05.008
@@ -927,8 +928,8 @@ expect... Oh, and by the way,</v>
 is not in the results because,</v>
 
 00:15:23.944 --> 00:15:28.484
-<v Nik>but Carbon is there. Because it was before,
-I did it before Neon was released.</v>
+<v Nik>but Carbon is there. Because it was
+before, I did it before Neon was released.</v>
 
 00:15:28.484 --> 00:15:32.724
 <v Nik>So version 0.3 definitely will
@@ -974,27 +975,41 @@ for human help for more than, like,</v>
 <v Nik>10% of cases or something.
 Because weak models, we noticed,</v>
 
-00:16:24.504 --> 00:16:29.824
-<v Nik>ask for human too often, right?
-And the first finding is that,</v>
+00:16:24.504 --> 00:16:31.204
+<v Nik>ask for human too often, right? And
+the first finding is that, in one task,</v>
 
-00:16:42.170 --> 00:16:44.280
+00:16:31.484 --> 00:16:35.964
+<v Nik>five out of five cases, Fable decided
+to change something and restart</v>
+
+00:16:35.964 --> 00:16:38.344
+<v Nik>server</v>
+<v Kirk>After being told,</v>
+
+00:16:38.344 --> 00:16:39.864
+<v Kirk>"Do not restart the server"?</v>
+
+00:16:39.864 --> 00:16:42.190
+<v Nik>Yeah. Being overconfident.</v>
 <v Kirk>Wow.</v>
-<v Nik>Like, you know, you know, I, and I,</v>
 
-00:16:44.280 --> 00:16:47.800
-<v Nik>I know it myself. Like, you think,
-you think you're very experienced.</v>
+00:16:42.190 --> 00:16:45.940
+<v Nik>Like, you know, you know, I, and I,
+I know it myself. Like, you, you think,</v>
 
-00:16:47.800 --> 00:16:50.400
+00:16:45.940 --> 00:16:47.630
+<v Nik>you think you're very experienced.</v>
+
+00:16:47.630 --> 00:16:50.280
 <v Nik>You jump into some conclusion
 because it reminds you,</v>
 
-00:16:50.400 --> 00:16:53.000
+00:16:50.280 --> 00:16:52.924
 <v Nik>you of some problem,
 and you think this is it. Boom.</v>
 
-00:16:53.000 --> 00:16:56.424
+00:16:52.924 --> 00:16:56.424
 <v Nik>This is how smart models might behave,
 and Fable showed it.</v>
 
@@ -1059,7 +1074,7 @@ on the primary before changing</v>
 <v Kirk>The replicas in standby. Yeah.</v>
 
 00:17:51.204 --> 00:17:55.004
-<v Nik>Max slots per transaction is one of them.
+<v Nik>max_locks_per_transaction is one of them.
 It was in this, in this task.</v>
 
 00:17:55.004 --> 00:17:59.144
@@ -3022,15 +3037,19 @@ Sunday it works very well,</v>
 <v Nik>but on Monday we have higher traffic-</v>
 <v Kirk>Oh</v>
 
-00:50:49.692 --> 00:50:53.732
+00:50:49.692 --> 00:50:52.892
 <v Nik>yeah, without statistics.</v>
-<v Kirk>Yeah. Yeah, no, exactly. Also,</v>
+<v Kirk>Yeah. Yeah, no, exactly.</v>
 
-00:50:57.772 --> 00:50:58.780
+00:50:52.892 --> 00:50:56.272
+<v Kirk>Also, I don't want AI to automate
+my ability to make mistakes</v>
+
+00:50:56.272 --> 00:50:57.832
+<v Kirk>at scale.</v>
 <v Nik>Mm.</v>
-<v Kirk>Okay? So I,</v>
 
-00:50:58.780 --> 00:51:00.332
+00:50:57.832 --> 00:51:00.332
 <v Kirk>I do- Right?</v>
 <v Nik>Faster. Often.</v>
 

@@ -90,26 +90,35 @@ export function composePieces(edited: Piece[], m: ComposeMap): Piece[] {
 
 // Source words -> output tokens. A word is kept when at least `minKeep` of it is inside kept
 // pieces; its start is the first kept point; a word across a freeze keeps its kept length.
+// Pieces are in output order. When the source goes back (a cold open reuses body audio), the
+// word is used again: each use gets its own token (episode 198 lost body words to the cold open).
 export function mapWords(words: Word[], pieces: Piece[], speakers: Record<string, string>, minKeep = 0.5): Tok[] {
   const out: Tok[] = [];
   for (const w of words) {
     const dur = w.end - w.start;
-    let kept = 0, first: number | undefined, last = 0, src = w.start;
+    let kept = 0, first: number | undefined, last = 0, src = w.start, prevEnd = -Infinity;
+    const emit = () => {
+      if (first !== undefined && !(dur > 0 && kept / dur < minKeep - 1e-9)) {
+        const t: Tok = { text: w.text, start: first, end: dur > 0 ? Math.min(last, first + kept) : first, speaker: speakers[w.speaker] ?? w.speaker, src };
+        if (w.type === "event") t.event = true;
+        out.push(t);
+      }
+      kept = 0; first = undefined; last = 0; src = w.start;
+    };
     for (const p of pieces) {
       if (dur <= 0) {
-        if (w.start >= p.srcStart && w.start < p.srcEnd) { first = last = p.outStart + (w.start - p.srcStart); break; }
+        if (w.start >= p.srcStart && w.start < p.srcEnd) { first = last = p.outStart + (w.start - p.srcStart); emit(); }
         continue;
       }
       const a = Math.max(w.start, p.srcStart), b = Math.min(w.end, p.srcEnd);
       if (b <= a) continue;
+      if (a < prevEnd - 1e-9) emit(); // the source went back: a new use of this word
       kept += b - a;
       if (first === undefined) { first = p.outStart + (a - p.srcStart); src = a; }
       last = p.outStart + (b - p.srcStart);
+      prevEnd = b;
     }
-    if (first === undefined || (dur > 0 && kept / dur < minKeep - 1e-9)) continue;
-    const t: Tok = { text: w.text, start: first, end: dur > 0 ? Math.min(last, first + kept) : first, speaker: speakers[w.speaker] ?? w.speaker, src };
-    if (w.type === "event") t.event = true;
-    out.push(t);
+    emit();
   }
   return out.sort((a, b) => a.start - b.start);
 }

@@ -1142,8 +1142,8 @@ is not in the results because,
 
 234
 00:14:59,464 --> 00:15:04,004
-but Carbon is there. Because it was before,
-I did it before Neon was released.
+but Carbon is there. Because it was
+before, I did it before Neon was released.
 
 235
 00:15:04,004 --> 00:15:08,244
@@ -1325,7 +1325,7 @@ on the primary before changing
 
 271
 00:17:26,724 --> 00:17:30,524
-Max slots per transaction is one of them.
+max_locks_per_transaction is one of them.
 It was in this, in this task.
 
 272

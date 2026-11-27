@@ -70,5 +70,9 @@
  [
   "Andrei",
   "Andrey"
+ ],
+ [
+  "Max slots per transaction",
+  "max_locks_per_transaction"
  ]
 ]

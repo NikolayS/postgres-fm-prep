@@ -57,6 +57,15 @@ describe("time maps", () => {
     expect(out[0].src).toBe(1); // source time of that output start, for the audio check
   });
 
+  test("a source word used twice (cold open and body) gets a token at each use", () => {
+    // Episode 198: the cold-open lines reuse body audio; the body lost those words (8:46, 16:29, 50:57).
+    const pieces = [{ srcStart: 10, srcEnd: 12, outStart: 0 }, { srcStart: 9.5, srcEnd: 12.5, outStart: 40 }];
+    const w = (text: string, start: number) => ({ text, start, end: start + 0.4, speaker: "s", type: "word" as const });
+    const out = mapWords([w("as", 10.2), w("long", 11)], pieces, {});
+    expect(out.map((t) => [t.text, +t.start.toFixed(3)])).toEqual([["as", 0.2], ["long", 1], ["as", 40.7], ["long", 41.5]]);
+    expect(out.every((t) => t.end - t.start <= 0.4 + 1e-6)).toBe(true);
+  });
+
   test("audio map rows map source to podcast time", async () => {
     const { toks } = await fixture("audio");
     const hello = toks.find((t) => t.text === "Hello,")!;

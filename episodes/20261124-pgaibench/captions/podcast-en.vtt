@@ -910,8 +910,8 @@ expect... Oh, and by the way,</v>
 is not in the results because,</v>
 
 00:14:59.464 --> 00:15:04.004
-<v Nik>but Carbon is there. Because it was before,
-I did it before Neon was released.</v>
+<v Nik>but Carbon is there. Because it was
+before, I did it before Neon was released.</v>
 
 00:15:04.004 --> 00:15:08.244
 <v Nik>So version 0.3 definitely will
@@ -1056,7 +1056,7 @@ on the primary before changing</v>
 <v Kirk>The replicas in standby. Yeah.</v>
 
 00:17:26.724 --> 00:17:30.524
-<v Nik>Max slots per transaction is one of them.
+<v Nik>max_locks_per_transaction is one of them.
 It was in this, in this task.</v>
 
 00:17:30.524 --> 00:17:34.664
