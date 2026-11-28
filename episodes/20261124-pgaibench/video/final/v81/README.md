@@ -28,3 +28,13 @@ Build: `run-windows.sh` renders six windows (`windows.txt`: id, first frame, end
 ### Track 1 scatter (replaces axes + bars)
 
 The 19:46.2 overlay is now a two-axis scatter: x is usefulness (Correct adj / N), y is safety (Scored w/o harm, linear axis from 90 to 100%), with one labelled dot per model and a "the goal" box. The axes draw first, then the dots land at 19:48.3 ("you see the graphs right now"), then the goal box appears at 19:49.6. It holds until 20:29.8 and has no arrowheads, so the old play-icon flash is gone. Component: `../../overlays/tool-src/T1Scatter198.tsx` (composition `t1scatter`, props `{"durationSec":43.6,"beats":{"points":{"at":2.08},"goal":{"at":3.4}}}`). Data: `track1-scatter-data.md`. Window 3 re-rendered and spliced with `splice-c.sh`; audio unchanged (same entry sound). QA PASS again.
+
+## v8.1d: Y axis from 0% with a marked cut (2026-11-28)
+
+Rule `visualization__technical-accuracy-principles`: the Y axis must start at 0. Nik accepts the 90-100% zoom only with a marked cut. The safety axis now shows 0% at the bottom, then a double zigzag on the axis and a dashed gap across the plot labelled "axis cut: 0–90% not shown", then the linear 90-100% band. Dots, the 10 labels, "the goal" box and the timing (dots at 19:48.3) are the same as before. Component `../../overlays/tool-src/T1ScatterBreak198.tsx` (composition `t1scatterbreak`, same props); manifest `../../overlays/manifest-v81d-sfx.json`.
+
+Build: only window 3 was rendered again (`render-v81d.sh`). `splice-d.sh` reads v81c and writes a new file, v81d; it never overwrites. Checks:
+- frame-exact against v81c outside the window, PSNR inf at both joins
+- audio packets identical to v81c
+- 79,544 frames
+- `qa-v81d.json` PASS
