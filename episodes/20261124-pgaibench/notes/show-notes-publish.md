@@ -65,16 +65,3 @@ Checked after recording against the post (https://postgres.ai/blog/20261123-pgai
 - [50:12] True for upgrades to Postgres 17 and older, and for dump/restore or logical replication. Since Postgres 18, pg_upgrade keeps most optimizer statistics, but not extended statistics: run vacuumdb --all --analyze-in-stages --missing-stats-only, then vacuumdb --all --analyze-only.
 
 What did you like or not like? What should we discuss next time? Let us know via a YouTube comment, on social media (https://postgres.fm/people), or by commenting on our Google doc (https://docs.google.com/document/d/1PNGSn_d0A7gTR4C0p6geQyHOTgdpitKCRvafCNnT-44/edit#heading=h.v4ncheatetql)!
-
-~~~
-
-Postgres FM is produced by:
-
-- Michael Christofides, founder of pgMustard: https://pgmustard.com/
-- Nikolay Samokhvalov, founder of PostgresAI: https://postgres.ai/
-- Kirk Wolak, Software Architect at KiraSoft: https://www.kirasoft.com/
-
-With credit to:
-
-- Jessie Draws for the elephant artwork
-- Intro and outro music: our own arrangement of Apple Loops from GarageBand (royalty-free under the GarageBand licence)
