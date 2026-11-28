@@ -6,7 +6,7 @@
 
 - **Question:** Can AI safely change production Postgres, and what does it take: PGAIBench results with models acting alone, and the AAA protocol (Analyst, Auditor, Actor).
 - **Hosts:** Nikolay Samokhvalov and Kirk Wolak (co-hosts). Michael Christofides did not take part in this recording.
-- **Status:** Recorded 2026-11-24 (Zoom, 60:17 raw). Final video = v8.1b (53:01.83): v8-lite plus the Track 1 two-axis scatter at 19:46 and key overlays held through their explanation (`video/final/v81/README.md`, `qa-v81b.json` PASS). Scheduled public 2026-11-27 16:30 PT: YouTube https://youtu.be/tXzR8dKueVA, Transistor episode 3771943 (https://share.transistor.fm/s/e0874881, page https://postgres.fm/episodes/can-ai-safely-change-production-postgres). v7b (49 overlays) is rejected. Podcast MP3 52:38.12. Captions in `captions/`, social drafts in `social/`.
+- **Status:** Recorded 2026-11-24 (Zoom, 60:17 raw). Final video = v8.1b (53:01.83): v8-lite plus the Track 1 two-axis scatter at 19:46 and key overlays held through their explanation (`video/final/v81/README.md`, `qa-v81b.json` PASS). Publication cancelled by Nik on 2026-11-27 at 16:05 PT: YouTube https://youtu.be/tXzR8dKueVA set to Private; Transistor episode 3771943 is back to draft (no published_at). v7b (49 overlays) is rejected. Podcast MP3 52:38.12. Captions in `captions/`, social drafts in `social/`.
 - **Recording date:** 2026-11-24, 10:37 PT (18:37 UTC); the show starts at 00:53 of the recording.
 - **Episode number:** 198.
 
