@@ -28,8 +28,6 @@ const EPISODE = /^https?:\/\/(www\.)?postgres\.fm\/episodes\//;
 
 const FEEDBACK = { text: "What did you like or not like? What should we discuss next time? Let us know via a YouTube comment, on social media, or by commenting on our Google doc!",
   social: "https://postgres.fm/people", doc: "https://docs.google.com/document/d/1PNGSn_d0A7gTR4C0p6geQyHOTgdpitKCRvafCNnT-44/edit#heading=h.v4ncheatetql" };
-const PRODUCERS = [["Michael Christofides, founder of pgMustard", "https://pgmustard.com/"], ["Nikolay Samokhvalov, founder of PostgresAI", "https://postgres.ai/"], ["Kirk Wolak, Software Architect at KiraSoft", "https://www.kirasoft.com/"]];
-const CREDITS = ["Jessie Draws for the elephant artwork", "Intro and outro music: our own arrangement of Apple Loops from GarageBand (royalty-free under the GarageBand licence)"];
 
 // ---- Times ---------------------------------------------------------------------------------
 const secs = (hms: string) => hms.split(":").map(Number).reduce((a, b) => a * 60 + b, 0);
@@ -83,21 +81,17 @@ export function buildNotes(n: Notes, m: Maps): Out {
   const md = [`# ${n.title}`, "", ...(n.number ? [[`Postgres.FM episode ${n.number}.`, n.byline].filter(Boolean).join(" "), ""] : []), "## Episode description", "", n.summary, "",
     "## Links", "", intro, "", "Times are podcast times of the first mention.", "",
     ...groups(n.links).flatMap(([g, ls]) => [`### ${g}`, "", ...ls.map((l) => `- ${pod(l)}${l.title}: ${l.url}`), ""]),
-    "~~~", "", `${FEEDBACK.text.replace("social media,", `social media (${FEEDBACK.social}),`).replace("Google doc!", `Google doc (${FEEDBACK.doc})!`)}`, "", "~~~", "",
-    "Postgres FM is produced by:", "", ...PRODUCERS.map(([t, u]) => `- ${t}: ${u}`), "", "With credit to:", "", ...CREDITS.map((c) => `- ${c}`), ""].join("\n");
+    "~~~", "", `${FEEDBACK.text.replace("social media,", `social media (${FEEDBACK.social}),`).replace("Google doc!", `Google doc (${FEEDBACK.doc})!`)}`, ""].join("\n");
 
   const li = (l: Link) => `<li>${esc(pod(l) + l.title)} <a href="${esc(l.url)}">${esc(l.url)}</a></li>`;
   const html = `<div>${esc(n.summary)}<br>&nbsp;<br>${intro}&nbsp;<br>Times are podcast times of the first mention.</div>` +
     groups(n.links).map(([g, ls]) => `<div><br><strong>${esc(g)}</strong></div><ul>${ls.map(li).join("")}</ul>`).join("") +
-    `<div><br></div><div>~~~<br><br>What did you like or not like? What should we discuss next time? Let us know via a YouTube comment, on <a href="${FEEDBACK.social}">social media,</a> or by commenting on <a href="${FEEDBACK.doc}">our Google doc</a>!</div>` +
-    `<div><br>~~~<br><br>Postgres FM is produced by:</div><ul>${PRODUCERS.map(([t, u]) => `<li>${esc(t.replace(/(pgMustard|PostgresAI|KiraSoft)$/, ""))}<a href="${u}">${t.match(/(pgMustard|PostgresAI|KiraSoft)$/)![0]}</a></li>`).join("")}</ul>` +
-    `<div><br></div><div>With credit to:</div><ul>${CREDITS.map((c) => `<li>${esc(c)}</li>`).join("")}</ul>`;
+    `<div><br></div><div>~~~<br><br>What did you like or not like? What should we discuss next time? Let us know via a YouTube comment, on <a href="${FEEDBACK.social}">social media,</a> or by commenting on <a href="${FEEDBACK.doc}">our Google doc</a>!</div>`;
 
   // YouTube shows plain text: no markdown, no HTML; a "0:34" time is a link to that moment.
   const youtube = [n.summary, "", intro, "Times are video times of the first mention.", "",
     ...groups(n.links).flatMap(([g, ls]) => [g, ...ls.map((l) => `${vid(l)}${l.title}: ${l.url}`), ""]),
-    "~~~", "", FEEDBACK.text.replace("social media,", `social media (${FEEDBACK.social}),`).replace("Google doc!", `Google doc (${FEEDBACK.doc})!`), "", "~~~", "",
-    "Postgres FM is produced by:", ...PRODUCERS.map(([t, u]) => `${t}: ${u}`), "", "With credit to:", ...CREDITS, ""].join("\n");
+    "~~~", "", FEEDBACK.text.replace("social media,", `social media (${FEEDBACK.social}),`).replace("Google doc!", `Google doc (${FEEDBACK.doc})!`), ""].join("\n");
   return { md, html, youtube };
 }
 

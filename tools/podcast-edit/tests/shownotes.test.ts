@@ -71,5 +71,11 @@ describe("outputs", () => {
     expect(out.html).toContain("Set pd_prune_xid &lt;on insert&gt;");
     expect(out.youtube).toContain("0:19 Set pd_prune_xid <on insert>: https://github.com/postgres/postgres/commit/378a216");
     expect(out.youtube).not.toMatch(/^#|\*\*|<(a|div|li|ul|br|strong)\b/m);
+  });  test("no producers or credits block: every output ends with the feedback line", async () => {
+    const out = buildNotes(notes(), await maps());
+    for (const t of [out.md, out.html, out.youtube]) {
+      expect(t).not.toMatch(/produced by|With credit to|Jessie Draws|GarageBand/i);
+      expect(t.trimEnd()).toMatch(/Google doc(<\/a>| \(https:[^)]+\))!(<\/div>)?$/);
+    }
   });
 });
