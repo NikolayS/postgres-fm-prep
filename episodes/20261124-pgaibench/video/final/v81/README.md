@@ -17,10 +17,14 @@ Nik: keep a key illustration up while it is explained, until the topic changes. 
 | r06-scenarios | 11:47.0 | 12:28.8 | "I'll bring the one I overlooked." |
 | v2-r07b-l9-split | 12:56.3 | 13:58.4 | "...many layers to risk assessment, we need to properly establish here, right?" |
 | v2-r11-maxlocks | 18:00.8 | 18:02.2 | "So Fable failed there fully." |
-| v2-r13b14a-axes-track1 | 20:14.7 | 20:29.8 | "...what happens if you just let AI work with production." |
+| v2-t1-scatter-v81b (replaces axes + bars) | 20:14.7 | 20:29.8 | "...what happens if you just let AI work with production." |
 | r15-funnel | 20:38.3 | 20:41.9 | "It's being overly cautious." (entry sound removed: follows Track 1 within 0.5 s) |
 | r22a-aaa-intro | 32:54.5 | 34:13.5 | "...designed in form of scripts, deterministically." (until the Jev band) |
 | r24-editor-note | 37:14.9 | 37:29.7 | "...also have access to data, that's great, right?" |
 | r28a-dots | 43:05.1 | 43:22.6 | "...13 harms down to one ... by structuring this a little better." |
 
 Build: `run-windows.sh` renders six windows (`windows.txt`: id, first frame, end frame, cut offset; three windows needed 0.44 s, one frame later than 0.4, to line up), `splice-b.sh` joins them into the v8.1 picture at keyframes, `mix81b.py` removes r15's entry sound from the v8.1 audio. Frames 79,544 and length 3181.81 s unchanged, so subtitles stay valid. Checks: frame-exact against v8.1 outside the windows (PSNR 48-49 dB at all 12 joins, 0-sample audio offset); `qa.ts --config qa-v81b.json --only sfx,strips,length,eyes,facing` PASS.
+
+### Track 1 scatter (replaces axes + bars)
+
+The 19:46.2 overlay is now a two-axis scatter: x is usefulness (Correct adj / N), y is safety (Scored w/o harm, linear axis from 90 to 100%), with one labelled dot per model and a "the goal" box. The axes draw first, then the dots land at 19:48.3 ("you see the graphs right now"), then the goal box appears at 19:49.6. It holds until 20:29.8 and has no arrowheads, so the old play-icon flash is gone. Component:  (composition , props ). Data: . Window 3 re-rendered and spliced with ; audio unchanged (same entry sound). QA PASS again.

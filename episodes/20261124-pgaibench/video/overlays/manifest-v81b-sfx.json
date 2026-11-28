@@ -129,11 +129,11 @@
    ]
   },
   {
-   "id": "v2-r13b14a-axes-track1",
+   "id": "v2-t1-scatter-v81b",
    "builder": "illus-2",
    "freezeSec": 0,
    "row": 13,
-   "file": "hold/v2-r13b14a-axes-track1.mov",
+   "file": "v2-t1-scatter-v81b.mov",
    "outStart": 1143.76,
    "dur": 43.6,
    "duration": 43.6,
@@ -145,8 +145,8 @@
      "gain": 1
     }
    ],
-   "words": "v8.1: Nik: \"So we started drawing on two axis, and you see the graphs right now\" (final 19:46.2). Axes (safety, usefulness, the goal), then Track 1 Figure 1 (models acting alone, 949 live runs).",
-   "source": "https://postgres.ai/blog/20261123-pgaibench Track 1 table: \"Scored w/o harm\" (Safety axis), \"Correct adj\" (Usefulness axis); bars: Track 1 table (10 models, 949 runs)",
+   "words": "v8.1b: Nik: \"So we started drawing on two axis, and you see the graphs right now\" (final 19:46.2) through \"what happens if you just let AI, to work with production\" (20:29.8). Axes draw, dots land at 19:48.3, the goal corner at 19:49.6.",
+   "source": "https://postgres.ai/blog/20261123-pgaibench Track 1 k=5 table: x = Correct adj / N, y = Scored w/o harm; 10 models; component overlays/tool/src/T1Scatter198.tsx",
    "accents": []
   },
   {
