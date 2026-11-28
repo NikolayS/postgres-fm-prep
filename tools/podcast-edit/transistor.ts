@@ -10,6 +10,7 @@
 //        [--summary-file summary.txt] [--video-url https://www.youtube.com/watch?v=...] [--publish] [--dry-run]
 //   bun transistor.ts --show 32147 --episode <id> [--description-file f] [--transcript-file f] [--dry-run]
 //        [--publish] (update an existing episode: only the fields given; --publish alone publishes it)
+//        [--schedule 2026-11-28T00:30:00Z] (instead of --publish: status scheduled at that time; same minute as YouTube)
 // The API key comes from TRANSISTOR_API_KEY. It goes only to api.transistor.fm, never to the
 // presigned upload URL, and it is never printed. --dry-run sends nothing and prints the plan.
 import { basename } from "path";
@@ -18,7 +19,7 @@ import { parseArgs } from "util";
 export const API = "https://api.transistor.fm/v1";
 export type Opts = {
   show: string; episode?: string; title?: string; number?: number; season?: number; audio?: string;
-  description?: string; transcriptText?: string; summary?: string; videoUrl?: string; publish?: boolean; dryRun?: boolean;
+  description?: string; transcriptText?: string; summary?: string; videoUrl?: string; publish?: boolean; schedule?: string; dryRun?: boolean;
 };
 export type Deps = { fetch: typeof fetch; key?: string; readFile: (p: string) => Promise<Uint8Array>; log: (s: string) => void };
 
@@ -34,6 +35,8 @@ export async function release(o: Opts, d: Deps): Promise<{ id?: string; status: 
   const hide = (s: string) => (d.key ? s.split(d.key).join("***") : s);
   const log = (s: string) => d.log(hide(s));
   if (!o.episode && (!o.title || !o.audio)) throw new Error("a new episode needs --title and --audio");
+  if (o.publish && o.schedule) throw new Error("give --publish or --schedule, not both");
+  if (o.schedule && !/^\d{4}-\d\d-\d\dT\d\d:\d\d(:\d\d(\.\d+)?)?(Z|[+-]\d\d:\d\d)$/.test(o.schedule)) throw new Error("--schedule needs an ISO time with a zone, e.g. 2026-11-28T00:30:00Z");
   if (!o.dryRun && !d.key) throw new Error("TRANSISTOR_API_KEY is not set");
 
   async function api(method: string, path: string, body?: URLSearchParams) {
@@ -49,12 +52,13 @@ export async function release(o: Opts, d: Deps): Promise<{ id?: string; status: 
   const content = { summary: o.summary, description: o.description, transcript_text: o.transcriptText, video_url: o.videoUrl };
   if (o.dryRun) {
     if (o.episode && [...fields(content)].length) log(`PATCH ${API}/episodes/${o.episode}: ${size(fields(content))}`);
-    else {
+    else if (!o.episode) {
       log(`GET ${API}/episodes/authorize_upload (filename=${basename(o.audio!)})`);
       log(`PUT <presigned upload URL>: ${o.audio}`);
       log(`POST ${API}/episodes: ${size(fields({ show_id: o.show, title: o.title, number: o.number, season: o.season, audio_url: "<audio_url>", ...content }))}`);
     }
     if (o.publish) log(`PATCH ${API}/episodes/${o.episode ?? "<new id>"}/publish: episode[status]=published`);
+    if (o.schedule) log(`PATCH ${API}/episodes/${o.episode ?? "<new id>"}/publish: episode[status]=scheduled, episode[published_at]=${o.schedule}`);
     log("dry run: nothing sent");
     return { id: o.episode, status: "dry-run" };
   }
@@ -74,7 +78,7 @@ export async function release(o: Opts, d: Deps): Promise<{ id?: string; status: 
     if ([...f].length) {
       const r = await api("PATCH", `/episodes/${id}`, f);
       status = r.data?.attributes?.status ?? status;
-    } else if (!o.publish) throw new Error("nothing to do: give --audio, --description-file, --transcript-file, --summary-file, --video-url or --publish");
+    } else if (!o.publish && !o.schedule) throw new Error("nothing to do: give --audio, --description-file, --transcript-file, --summary-file, --video-url or --publish");
   } else {
     const r = await api("POST", "/episodes", fields({ show_id: o.show, title: o.title, number: o.number, season: o.season, audio_url: await upload(o.audio!), ...content }));
     id = String(r.data.id);
@@ -86,6 +90,11 @@ export async function release(o: Opts, d: Deps): Promise<{ id?: string; status: 
     status = r.data?.attributes?.status ?? "published";
     log(`episode ${id}: ${status}`);
   }
+  if (o.schedule) {
+    const r = await api("PATCH", `/episodes/${id}/publish`, new URLSearchParams({ "episode[status]": "scheduled", "episode[published_at]": o.schedule }));
+    status = r.data?.attributes?.status ?? "scheduled";
+    log(`episode ${id}: ${status} for ${o.schedule}`);
+  }
   return { id, status };
 }
 
@@ -96,7 +105,7 @@ if (import.meta.main) {
       show: { type: "string" }, episode: { type: "string" }, title: { type: "string" }, number: { type: "string" }, season: { type: "string" },
       audio: { type: "string" }, "description-file": { type: "string" }, "transcript-file": { type: "string" },
       "summary-file": { type: "string" }, "video-url": { type: "string" },
-      publish: { type: "boolean" }, "dry-run": { type: "boolean" },
+      publish: { type: "boolean" }, schedule: { type: "string" }, "dry-run": { type: "boolean" },
     },
   });
   if (!v.show) { console.error("usage: see the header of transistor.ts"); process.exit(2); }
@@ -105,7 +114,7 @@ if (import.meta.main) {
     const r = await release({
       show: v.show, episode: v.episode, title: v.title, number: v.number ? Number(v.number) : undefined, season: v.season ? Number(v.season) : undefined,
       audio: v.audio, description: await text(v["description-file"]), transcriptText: await text(v["transcript-file"]),
-      summary: (await text(v["summary-file"]))?.trim(), videoUrl: v["video-url"], publish: v.publish, dryRun: v["dry-run"],
+      summary: (await text(v["summary-file"]))?.trim(), videoUrl: v["video-url"], publish: v.publish, schedule: v.schedule, dryRun: v["dry-run"],
     }, { fetch, key: process.env.TRANSISTOR_API_KEY, readFile: async (p) => new Uint8Array(await Bun.file(p).arrayBuffer()), log: (s) => console.log(s) });
     console.log(`result: episode ${r.id ?? "-"} ${r.status}`);
   } catch (e) {

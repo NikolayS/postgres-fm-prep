@@ -367,7 +367,9 @@ the captions, notes and transcript again.
    `--episode <id>` updates the description or transcript of an existing
    episode. Do not run two writers on one episode at the same time.
 8. **Publish**: only after the host approves the draft:
-   `bun $S/transistor.ts --show 32147 --episode <id> --publish`. With no
+   `bun $S/transistor.ts --show 32147 --episode <id> --publish`, or
+   `--schedule <ISO time with zone>` (status scheduled; use the same minute
+   as the YouTube schedule, e.g. 2026-11-28T00:30:00Z for 16:30 PT). With no
    other fields it sends only the publish call (before 2026-11-10 it sent an
    empty PATCH first and failed with "episode is missing"). Then check the
    postgres.fm page, the share page and the RSS feed (the feed is cached for

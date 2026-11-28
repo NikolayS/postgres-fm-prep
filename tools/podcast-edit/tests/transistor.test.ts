@@ -124,3 +124,30 @@ describe("safety", () => {
     expect(m.calls).toEqual([]);
   });
 });
+
+describe("schedule", () => {
+  test("--episode <id> --schedule <time> sends one publish call with status scheduled and published_at", async () => {
+    const m = mock({ "/v1/episodes/555/publish": () => new Response(JSON.stringify({ data: { id: "555", attributes: { status: "scheduled" } } }), { status: 200 }) });
+    const r = await release({ show: "32147", episode: "555", schedule: "2026-11-28T00:30:00Z" }, m.deps);
+    expect(m.calls.map((c) => `${c.method} ${c.url}`)).toEqual(["PATCH https://api.transistor.fm/v1/episodes/555/publish"]);
+    expect(form(m.calls[0])).toEqual({ "episode[status]": "scheduled", "episode[published_at]": "2026-11-28T00:30:00Z" });
+    expect(r).toEqual({ id: "555", status: "scheduled" });
+  });
+  test("--schedule with --publish is an error", async () => {
+    const m = mock();
+    await expect(release({ show: "32147", episode: "555", publish: true, schedule: "2026-11-28T00:30:00Z" }, m.deps)).rejects.toThrow("--publish or --schedule");
+    expect(m.calls.length).toBe(0);
+  });
+  test("--schedule needs a time with a zone", async () => {
+    const m = mock();
+    await expect(release({ show: "32147", episode: "555", schedule: "2026-11-27 16:30" }, m.deps)).rejects.toThrow("ISO time with a zone");
+    expect(m.calls.length).toBe(0);
+  });
+  test("--episode <id> --schedule --dry-run only prints the schedule call", async () => {
+    const m = mock();
+    const r = await release({ show: "32147", episode: "555", schedule: "2026-11-28T00:30:00Z", dryRun: true }, m.deps);
+    expect(m.calls.length).toBe(0);
+    expect(m.logs.join("\n")).toContain("episode[status]=scheduled, episode[published_at]=2026-11-28T00:30:00Z");
+    expect(r.status).toBe("dry-run");
+  });
+});

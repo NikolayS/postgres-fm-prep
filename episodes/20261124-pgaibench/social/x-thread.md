@@ -50,7 +50,7 @@ Offline replay (in-sample): 12 of 13 harms blocked, 377 of 378 safe or unclassif
 Would you let AI run DDL on your production Postgres?
 
 PGAIBench v0.2: https://pgaibench.dev
-Watch: https://youtu.be/VxHu3MQLhyo
+Watch: https://youtu.be/tXzR8dKueVA
 Listen: https://postgres.fm/episodes/pgaibench
 Post: https://postgres.ai/blog/20261123-pgaibench
 ```
