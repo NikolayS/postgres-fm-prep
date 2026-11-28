@@ -56,7 +56,7 @@ Related episodes:
 * Index maintenance https://postgres.fm/episodes/index-maintenance
 * Postgres 19 https://postgres.fm/episodes/postgres-19
 
-Full show notes: https://postgres.fm/episodes/pgaibench
+Full show notes: https://postgres.fm/episodes/can-ai-safely-change-production-postgres
 
 Subscribe for a new Postgres episode every Friday: https://www.youtube.com/@PostgresTV?sub_confirmation=1
 
